@@ -20,6 +20,10 @@ import shlex
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, os.path.abspath('.'))
+#sys.path.insert(0,os.path.join(sys.prefix,"lib","python2.7","site-packages"))
+#sys.path.insert(0,os.path.join(sys.prefix,"lib","python2.7","site-packages","cdms2"))
+sys.path.insert(0,"/software/anaconda2/envs/uvcdat-2.6.1/lib/python2.7/site-packages")
+print os.path.join(sys.prefix,"lib","python2.7","site-packages")
 
 # -- General configuration ------------------------------------------------
 

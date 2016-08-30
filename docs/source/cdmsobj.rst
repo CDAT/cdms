@@ -1,6 +1,8 @@
 cdmsobj
-========
+=======
 
-.. automodule:: cdms2.cdmsobj
+.. py:currentmodule:: cdms2.cdmsobj
+
+.. autoclass:: CdmsObj
    :members:
 

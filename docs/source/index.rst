@@ -11,13 +11,13 @@ Contents:
 .. toctree::
    MV2 
    tvariable
+   AbstractVariable
    avariable
    cdmsobj
    axis
    coord
    grid
    hgrid
-   avariable
    sliceut
    error
    variable

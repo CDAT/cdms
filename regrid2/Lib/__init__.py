@@ -19,6 +19,8 @@ try:
 except:
     pass
 
+from . import git
+
 ESMP_HAS_BEEN_INITIALIZED = False
 if not ESMP_HAS_BEEN_INITIALIZED:
     try:

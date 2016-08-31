@@ -3,6 +3,7 @@ CDMS module-level API
 """
 import cdat_info
 cdat_info.pingPCMDIdb("cdat","cdms2")
+from . import git
 
 __all__ = ["cdmsobj", "axis", "coord", "grid", "hgrid", "avariable", \
 "sliceut", "error", "variable", "fvariable", "tvariable", "dataset", \

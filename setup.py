@@ -15,7 +15,6 @@ sys.path.insert(0,os.path.join(target_prefix,'lib','python%i.%i' % sys.version_i
 
 sys.path.append(os.environ.get('BUILD_DIR',"build"))
 
-
 MAJOR = 3
 MINOR = 0
 PATCH = 0
@@ -67,7 +66,7 @@ setup (name = "cdms2",
        version=Version,
        description = "Climate Data Management System",
        url = "http://github.com/UV-CDAT/cdms",
-       packages = ['cdms2'],
+       packages = ['cdms2', "cdms2.provenance"],
        package_dir = {'cdms2': 'Lib'},
        include_dirs = ['Include', numpy.lib.utils.get_include()] + cdat_info.cdunif_include_directories,
        scripts = ['Script/cdscan', 'Script/convertcdms.py'],

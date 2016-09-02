@@ -329,6 +329,7 @@ Output:::
 file :: (cdms2.dataset.CdmsFile) (0) file to read from
 :::
     """
+    import provenance
     import provenance.node
 
     uri = string.strip(uri)
@@ -338,6 +339,17 @@ file :: (cdms2.dataset.CdmsFile) (0) file to read from
         backend = provenance.numpy_backend
 
     file_node = provenance.node.FileNode(uri, backend)
+
+    if uri[0] == "{" and uri[-1] == "}":
+        # Might be a JSON dictionary of a provenance derivation. Let's try parsing it.
+        import json
+        try:
+            derivation = json.loads(uri)
+            # This makes for a slightly odd API.
+            # We should probably handle this differently?
+            return provenance.derive_variable(derivation)
+        except:
+            pass
 
     (scheme, netloc, path, parameters, query, fragment) = urlparse.urlparse(uri)
     if scheme in ('', 'file'):
@@ -352,6 +364,10 @@ file :: (cdms2.dataset.CdmsFile) (0) file to read from
             if mode != 'r':
                 raise ModeNotSupported(mode)
             datanode = load(path)
+        elif ext in [".json"]:
+            with open(path) as json_file:
+                json_blob = json_file.read()
+            return provenance.derive_variable(json_blob)
         else:
             # If the doesn't exist allow it to be created
             # Ok mpi has issues with bellow we need to test this only with 1 rank

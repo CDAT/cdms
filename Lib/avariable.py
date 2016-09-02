@@ -140,6 +140,10 @@ class AbstractVariable(CdmsObj, Slab):
 
         # Reminder: children to define self.shape and set self.id
 
+    def export_provenance(self, path=None):
+        import provenance
+        provenance.export_variable(self, path, fmt="json")
+
     def track_operation(self, op_code, **kwargs):
         """
         Used to generate an operation node for tracking provenance

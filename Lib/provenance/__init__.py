@@ -40,7 +40,7 @@ def derive_variable(json_spec, backend=numpy_backend):
     return var
 
 
-def export_variable(variable, path, fmt=None):
+def export_variable(variable, path=None, fmt=None):
     """
     Convert the node's data graph into a serialized format and store it at path.
 
@@ -52,16 +52,20 @@ def export_variable(variable, path, fmt=None):
     if n is None:
         raise ValueError("Variable %s not tracking provenance." % variable.id)
 
-    if fmt is None:
+    if fmt is None and path is not None:
         _, fmt = os.path.splitext(path)
         fmt = fmt[1:]
-        if not fmt:
-            fmt = "json"
+
+    if not fmt:
+        fmt = "json"
 
     if fmt == "json":
         graph = graph_to_dict(n)
-        with open(path, "w") as outfile:
-            json.dump(graph, outfile)
+        if path:
+            with open(path, "w") as outfile:
+                json.dump(graph, outfile)
+        else:
+            return json.dumps(graph)
     else:
         raise NotImplementedError("No export for filetype %s implemented." % fmt)
 

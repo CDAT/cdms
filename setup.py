@@ -1,7 +1,6 @@
 #!/usr/bin/env python
-from numpy.distutils.core import setup, Extension
+from distutils.core import setup, Extension
 import os, sys
-import subprocess,shutil
 target_prefix = sys.prefix
 for i in range(len(sys.argv)):
     a = sys.argv[i]
@@ -15,36 +14,9 @@ sys.path.insert(0,os.path.join(target_prefix,'lib','python%i.%i' % sys.version_i
 
 sys.path.append(os.environ.get('BUILD_DIR',"build"))
 
-
-MAJOR = 3
-MINOR = 0
-PATCH = 0
-Version = "%s.%s.%s" % (MAJOR,MINOR,PATCH)
-
-f=open("git.py","w")
-git_branch=subprocess.Popen(["git","rev-parse","--abbrev-ref","HEAD"],stdout=subprocess.PIPE).stdout.read().strip()
-print >>f, "branch = '%s'" % git_branch
-git_tag = subprocess.Popen(["git","describe","--tags"],stdout=subprocess.PIPE).stdout.read().strip()
-sp=git_tag.split("-")
-if len(sp)>2:
-    commit = sp[-1]
-    nm = "-".join(sp[:-2])
-    diff=sp[-2]
-else:
-    commit = git_tag
-    nm = git_tag
-    diff=0
-print >>f, "closest_tag = '%s'" % nm
-print >>f, "commit = '%s'" % commit
-print >>f, "diff_from_tag = %s" % diff
-print >>f, "version = '%s'" % Version
-f.close()
-
-shutil.copy("git.py",os.path.join("Lib","git.py"))
-shutil.copy("git.py",os.path.join("regrid2","Lib","git.py"))
-
 import cdat_info
 import numpy
+
 macros = []
 try:
     import mpi4py
@@ -64,9 +36,9 @@ except:
     pass
 
 setup (name = "cdms2",
-       version=Version,
-       description = "Climate Data Management System",
-       url = "http://github.com/UV-CDAT/cdms",
+       version='5.0',
+       description = "Climate Data Management System, Numpy version",
+       url = "http://cdat.sf.net",
        packages = ['cdms2'],
        package_dir = {'cdms2': 'Lib'},
        include_dirs = ['Include', numpy.lib.utils.get_include()] + cdat_info.cdunif_include_directories,
@@ -84,19 +56,55 @@ setup (name = "cdms2",
       )
 
 setup (name = "MV2",
-       version=Version,
+       version = '1.0',
        description="Alias for cdms2.MV",
        url = "http://cdat.sf.net",
        py_modules=['MV2']
        )
 
-setup (name = "regrid2",
-       version=Version,
-       description = "Remap Package",
-       url = "http://github.com/UV-CDAT/cdms",
-       packages = ['regrid2'],
-       package_dir = {'regrid2': 'regrid2/Lib'},
-       include_dirs = [numpy.lib.utils.get_include()],
-       ext_modules = [Extension('regrid2._regrid', ['regrid2/Src/_regridmodule.c']),
-                      Extension('regrid2._scrip', ['regrid2/Src/scrip.pyf','regrid2/Src/regrid.c'])]
-      )
+try:
+    import cdms
+except:
+    setup (name = "cdms",
+           version = '1.0',
+           packages = ['cdms'],
+           package_dir = {'cdms': 'deprecated_warns'},
+           description = "Deprecation warning for cdms",
+           )
+try:
+    import MV
+except:
+    setup (name = "MV",
+           version = '1.0',
+           description = "Deprecation warning for MV",
+           packages = ['MV'],
+           package_dir = {'MV': 'deprecated_warns'},
+           )
+try:
+    import regrid
+except:
+    setup (name = "regrid",
+           version = '1.0',
+           description = "Deprecation warning for regrid",
+           packages = ['regrid'],
+           package_dir = {'regrid': 'deprecated_warns'},
+           )
+#try:
+#    import Numeric
+#except:
+#    setup (name = "Numeric",
+#           version = '1.0',
+#           description = "Deprecation warning for Numeric",
+#           packages = ['Numeric'],
+#           package_dir = {'Numeric': 'deprecated_warns'},
+#           )
+
+try:
+    import MA
+except:
+    setup (name = "MA",
+           version = '1.0',
+           description = "Deprecation warning for MA",
+           packages = ['MA'],
+           package_dir = {'MA': 'deprecated_warns'},
+           )

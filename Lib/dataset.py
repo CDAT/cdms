@@ -1673,7 +1673,6 @@ class CdmsFile(CdmsObj, cuDataset):
             dict = self.dictdict[tag]
             for obj in dict.values():
                 try:
-                    if apply(predicate,(obj,))==1:
                     if predicate(*(obj,)) == 1:
                         resultlist.append(obj)
                 except:

@@ -1,0 +1,36 @@
+#****************************************************************
+# Copyright (c) 2016  Larence Livermore National Security (LLNS)
+# All rights reserved.
+#****************************************************************
+#
+# Organization: Lawrence Livermore National Lab (LLNL)
+#      Matrix: Atmospheric, Earth and Energy Division
+#      Project: Earth Systems Grid
+#      Author: Denis Nadeau
+#
+#  Description:
+#
+#     Files that git should ignore...
+#****************************************************************
+
+TAGS
+*~
+*swp
+*.cache
+*.DS_Store
+*.a
+*.o
+*.class
+*.pyc
+*.project
+*.cproject
+*.pydevproject
+*.egg
+*#*
+*.md5
+semantic.cache*
+build/
+Makefile
+.coverage
+covhtml
+git.py

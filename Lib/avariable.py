@@ -23,11 +23,10 @@ from regrid2.mvGenericRegrid import guessPeriodicity
 from convention import CF1
 from grid import AbstractRectGrid
 #import internattr
-
+@startuml
 InvalidRegion = "Invalid region: "
 OutOfRange = "Coordinate interval is out of range or intersection has no data: "
 NotImplemented = "Child of AbstractVariable failed to implement: "
-
 _numeric_compatibility = False          # Backward compatibility with numpy behavior
                                         # False: return scalars from 0-D slices
                                         #        MV axis=None by default
@@ -115,8 +114,12 @@ def setNumericCompatibility(mode):
 
 def getNumericCompatibility():
     return _numeric_compatibility
+@enduml
 
 class AbstractVariable(CdmsObj, Slab):
+    def info(self, flag=None, device=None):
+        Slab.info(self, flag, device)
+
     def __init__ (self, parent=None, variableNode=None):
         """Not to be called by users.
            variableNode is the variable tree node, if any.

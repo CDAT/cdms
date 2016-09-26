@@ -11,7 +11,7 @@ from fvariable import FileVariable
 from variable import DatasetVariable
 from tvariable import TransientVariable
 from avariable import AbstractVariable
-@startuml
+
 class AbstractAuxAxis1D(AbstractCoordinateAxis):
 
     def __init__ (self, parent=None, variableNode=None, bounds=None):
@@ -44,7 +44,7 @@ class AbstractAuxAxis1D(AbstractCoordinateAxis):
         # Note: disable axis copy to preserve identity of grid and variable domains
         result = TransientAuxAxis1D(avar, bounds=newbounds, copyaxes=0)    
         return result
-@enduml
+
 class DatasetAuxAxis1D(AbstractAuxAxis1D, DatasetVariable):
 
     # Note: node is a VariableNode

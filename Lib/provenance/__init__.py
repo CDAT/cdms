@@ -29,6 +29,9 @@ def derive_variable(json_spec, backend=numpy_backend):
             operation = node.create_operation(step["operation"], backend)
             result = node.VariableNode(operation, [derivation_results[i] for i in step["parents"]], backend)
 
+        if step["type"].lower() == "value":
+            result = node.RawValueNode(step["value"], backend)
+
         if result is None:
             raise ValueError("Unsupported derivation step type: %s" % (step["type"]))
 

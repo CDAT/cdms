@@ -146,7 +146,10 @@ class AbstractVariable(CdmsObj, Slab):
 
     def export_provenance(self, path=None):
         import provenance
-        provenance.export_variable(self, path, fmt="json")
+        if path is None:
+            return provenance.graph_to_dict(self.provenance_node)
+        else:
+            provenance.export_variable(self, path, fmt="json")
 
     def track_operation(self, op_code, **kwargs):
         """

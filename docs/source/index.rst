@@ -27,7 +27,6 @@ Contents:
    database
    cache
    selectors
-   MV2
    convention
    bindex
    auxcoord

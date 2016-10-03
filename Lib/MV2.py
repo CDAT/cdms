@@ -757,6 +757,16 @@ def asarray(data, typecode=None, dtype=None):
 def arrayrange(start, stop=None, step=1, typecode=None, axis=None, attributes=None, id=None, dtype=None):
     """Just like range() except it returns a variable whose type can be specfied
     by the keyword argument typecode. The axis of the result variable may be specified.
+    .. testcode::
+
+       print "Output text '
+
+    .. testoutput::
+       :hide:
+       :options: -ELLIPSIS, +NORMALIZE_WHITESPACE
+
+       Output text.
+
     """
     dtype = _convdtype(dtype, typecode)
     if stop is None:

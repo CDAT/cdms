@@ -45,6 +45,18 @@ class FileNode(Node):
         self.__cache__ = None
 
 
+class RawValueNode(Node):
+    def __init__(self, value, backend):
+        super(RawValueNode, self).__init__(backend)
+        self.value = value
+
+    def derive(self):
+        return self.value
+
+    def to_dict(self, node_graph):
+        return {"type": "value", "value": self.value}
+
+
 class VariableNode(Node):
     def __init__(self, operation, parents, backend):
         super(VariableNode, self).__init__(backend)
@@ -170,15 +182,15 @@ class TransformOperation(OperationNode):
         "resize": ([0, "shape"], {"axis": None, "attributes": None, "id": None, "grid": None}),
         "diagonal": ([0], {"axis1": 0, "axis2": 1, "offset": 0}),
         "add": ([0, 1], {}),
-        "sub": ([0, 1], {}),
-        "mul": ([0, 1], {}),
-        "div": ([0, 1], {}),
-        "eq": ([0, 1], {}),
-        "le": ([0, 1], {}),
-        "ge": ([0, 1], {}),
-        "lt": ([0, 1], {}),
-        "gt": ([0, 1], {}),
-        "ne": ([0, 1], {}),
+        "subtract": ([0, 1], {}),
+        "multiply": ([0, 1], {}),
+        "divide": ([0, 1], {}),
+        "equal": ([0, 1], {}),
+        "less_equal": ([0, 1], {}),
+        "greater_equal": ([0, 1], {}),
+        "less": ([0, 1], {}),
+        "greater": ([0, 1], {}),
+        "not_equal": ([0, 1], {}),
         "and": ([0, 1], {}),
         "or": ([0, 1], {}),
         "xor": ([0, 1], {}),

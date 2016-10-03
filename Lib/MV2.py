@@ -18,14 +18,26 @@ from error import CDMSError
 from axis import allclose as axisAllclose, TransientAxis, concatenate as axisConcatenate, take as axisTake
 
 
+def get_parent_provenance(parent):
+    from cdms2.provenance.node import Node, RawValueNode
+    import cdms2.provenance.numpy_backend as backend
+    if hasattr(parent, "provenance_node"):
+        return parent.provenance_node
+    if isinstance(parent, Node):
+        return parent
+    return RawValueNode(parent, backend)
+
+
 def track(name, *args, **kwargs):
+    from cdms2.provenance.node import RawValueNode
+
     if len(args) == 0:
         raise ValueError("Provide at least one parent for tracking.")
 
     parent = args[0]
     if hasattr(parent, "provenance_node"):
         operation = parent.track_operation("transform", function=name, **kwargs)
-        parents = [p.provenance_node for p in args]
+        parents = [get_parent_provenance(p) for p in args]
         return parent.track_child(operation, parents)
     return None
 

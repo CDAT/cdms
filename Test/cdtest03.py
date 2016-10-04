@@ -63,7 +63,11 @@ class TestCDMSFileReadWrite(basetest.CDMSBaseTest):
         self.file.close()
         g = self.getTempFile("readwrite3.nc", "r+")
         self.assertEqual(g.Conventions, "CF1.0")
+        self.assertTrue("Conventions" in g.attributes)
+        self.assertEqual(g.attributes["Conventions"], "CF1.0")
         var = g.variables["u"]
+        self.assertTrue("long_name" in var.attributes)
+        self.assertEqual(var.attributes["long_name"], "Test variable")
         self.assertEqual(var.long_name, "Test variable")
         self.assertEqual(var[0, 4, 0], -self.u[0, 4, 0])
         self.assertEqual(var.getLatitude()[self.NLAT/2], self.latarr[self.NLAT/2])
@@ -79,5 +83,4 @@ class TestCDMSFileReadWrite(basetest.CDMSBaseTest):
         self.assertEqual(h["u"].getLatitude()[0], newlat[0])
 
 if __name__ == '__main__':
-    import unittest
-    unittest.main()
+    basetest.run()

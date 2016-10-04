@@ -111,5 +111,4 @@ class TestDatasetIO(basetest.CDMSBaseTest):
             u.assignValue(transient_u)
 
 if __name__ == '__main__':
-    import unittest
-    unittest.main()
+    basetest.run()

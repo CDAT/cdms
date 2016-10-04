@@ -30,3 +30,7 @@ class CDMSBaseTest(unittest.TestCase):
         for f in self.files:
             f.close()
         shutil.rmtree(self.tempdir)
+
+
+def run():
+    unittest.main()

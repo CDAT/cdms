@@ -81,5 +81,4 @@ class TestCDMSFileIO(basetest.CDMSBaseTest):
             u[0:1]=-99.9
 
 if __name__ == '__main__':
-    import unittest
-    unittest.main()
+    basetest.run()

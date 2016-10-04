@@ -10,14 +10,12 @@ from numpy.ma import masked
 class TestCDMSFileIO(basetest.CDMSBaseTest):
     def setUp(self):
         super(TestCDMSFileIO, self).setUp()
-        pth = os.path.dirname(os.path.abspath(__file__))
-        self.readOnly = cdms2.open(os.path.join(pth, "readonly.nc"))
+        self.readOnly = self.getDataFile("readonly.nc")
         self.u = self.readOnly["u"]
         self.u_masked = self.readOnly["umasked"]
 
     def tearDown(self):
         super(TestCDMSFileIO, self).tearDown()
-        self.readOnly.close()
 
     def testSize(self):
         self.assertEqual(self.u.size(), 512)

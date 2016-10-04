@@ -6,9 +6,8 @@ class TestCDMSFileMaskedArrayReadWrite(basetest.CDMSBaseTest):
     def setUp(self):
         super(TestCDMSFileMaskedArrayReadWrite, self).setUp()
         self.file = self.getTempFile("readwrite4.nc", "w")
-        pth = os.path.dirname(os.path.abspath(__file__))
-        self.readonly = self.getFile(os.path.join(pth, "readonly.nc"))
-        self.timearr = numpy.ma.array([0.0,366.0,731.0])
+        self.readonly = self.getDataFile("readonly.nc")
+        self.timearr = numpy.ma.array([0.0, 366.0, 731.0])
         self.latarr = numpy.ma.arange(self.NLAT)*(180./(self.NLAT-1))-90.
         self.lonarr = numpy.ma.arange(self.NLON)*(360.0/self.NLON)
         self.timestr = ['2000','2001','2002']
@@ -52,7 +51,6 @@ class TestCDMSFileMaskedArrayReadWrite(basetest.CDMSBaseTest):
         self.var.getLatitude().standard_name = "Latitude"
         self.assertEqual(self.var.getLatitude().standard_name, "Latitude")
         self.latarr[self.NLAT / 2] = 6.5
-
 
     def testMaskedVariable(self):
         masked = self.file.createVariable("umasked", cdms2.CdDouble, (self.var.getTime(), self.var.getLatitude(), self.var.getLongitude()), fill_value=-99.9)

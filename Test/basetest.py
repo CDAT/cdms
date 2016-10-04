@@ -12,10 +12,12 @@ class CDMSBaseTest(unittest.TestCase):
         self.files.append(f)
         return f
 
+    def getDataFile(self, name):
+        pth = os.path.dirname(os.path.abspath(__file__))
+        return self.getFile(os.path.join(pth, "data", name))
+
     def getTempFile(self, path, mode="r"):
-        f = cdms2.open(os.path.join(self.tempdir, path), mode)
-        self.files.append(f)
-        return f
+        return self.getFile(os.path.join(self.tempdir, path), mode)
 
     def setUp(self):
         self.files = []

@@ -15,14 +15,9 @@ import basetest
 class TestDatasetIO(basetest.CDMSBaseTest):
     def setUp(self):
         super(TestDatasetIO, self).setUp()
-        pth = os.path.dirname(os.path.abspath(__file__))
-        self.file = cdms2.open(os.path.join(pth,'test.xml'))
+        self.file = self.getDataFile('test.xml')
         self.u = self.file['u']
         self.v = self.file['v']
-
-    def tearDown(self):
-        super(TestDatasetIO, self).tearDown()
-        self.file.close()
 
     def testFileAttributes(self):
         self.assertEqual(self.file.id, "test")
@@ -62,7 +57,7 @@ class TestDatasetIO(basetest.CDMSBaseTest):
         self.assertEqual(grid.id, "grid_16x32")
 
     def testExtendedWrite(self):
-        out = cdms2.open(os.path.join(self.tempdir, 'testExtendWrite.nc'), "w")
+        out = self.getTempFile('testExtendWrite.nc', "w")
         u0 = self.u.subSlice(0)
         u1 = self.u.subSlice(1)
         u2 = self.u.subSlice(2)
@@ -71,7 +66,7 @@ class TestDatasetIO(basetest.CDMSBaseTest):
         v2 = self.v.subSlice(2)
         uout = out.write(u0)
         vout = out.write(v2, attributes=self.v.attributes, id='v', extend=1, index=2)
-        out.write(u1,index=1)
+        out.write(u1, index=1)
         out.write(v0)
         out.write(u2)
         out.write(v1)

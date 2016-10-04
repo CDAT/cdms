@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <!DOCTYPE dataset SYSTEM "http://www-pcmdi.llnl.gov/software/cdms/cdml.dtd">
 <dataset
+	Conventions	="CF-1.0"
+	cdms_filemap	="[[[u],[[0,1,-,-,-,u_2000.nc],[1,2,-,-,-,u_2001.nc],[2,3,-,-,-,u_2002.nc]]],[[v],[[0,1,-,-,-,v_2000.nc],[1,2,-,-,-,v_2001.nc],[2,3,-,-,-,v_2002.nc]]]]"
 	directory	=""
 	calendar	="gregorian"
-	cdms_filemap	="[[[u],[[0,1,-,-,u_2000.nc],[1,2,-,-,u_2001.nc],[2,3,-,-,u_2002.nc]]],[[v],[[0,1,-,-,v_2000.nc],[1,2,-,-,v_2001.nc],[2,3,-,-,v_2002.nc]]]]"
 	id	="test"
-	Conventions	="CF-1.0"
 	>
 	<axis
 		datatype	="Double"
@@ -33,6 +33,7 @@
 		partition	="[0 1 1 2 2 3]"
 		length	="3"
 		units	="days since 2000-1-1"
+		calendar	="gregorian"
 		id	="time"
 		>
 		[   0.  366.  731.]

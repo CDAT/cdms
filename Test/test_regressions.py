@@ -1,9 +1,12 @@
 import basetest
+import cdat_info
+import os
 import cdms2
 import MV2
 import regrid2
 import cdutil
-
+import cdtime
+import datetime
 
 
 class TestRegressions(basetest.CDMSBaseTest):
@@ -58,3 +61,27 @@ class TestRegressions(basetest.CDMSBaseTest):
         a=a.regrid(grd, regridTool="regrid2")
         a=cdutil.averager(a, axis='txy')
         self.assertEqual(a[0], 0.7921019540305255)
+
+    def testBadCalendar(self):
+        t = cdms2.createAxis([1, 2, 3, 4])
+        t.designateTime()
+        t.setCalendar(cdtime.ClimCalendar)
+        with self.assertRaises(cdms2.CDMSError):
+            t.setCalendar(3421)
+
+    def testAxisDatetime(self):
+        ax = cdms2.createAxis([10.813224335543,],id="time")
+        ax.units="seconds since 2014-10-06 10:12:13"
+        ax.designateTime()
+
+        dt = ax.asdatetime()
+
+        self.assertEqual(dt[0], datetime.datetime(2014, 10, 6, 10, 12, 23, 813))
+
+    def testFileURI(self):
+        pth = os.path.join(cdat_info.get_sampledata_path(),"clt.nc")
+        f = cdms2.open("file://"+pth)
+        self.assertEqual("file://" + pth, f.uri)
+
+if __name__ == "__main__":
+    basetest.run()

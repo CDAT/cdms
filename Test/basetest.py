@@ -20,6 +20,9 @@ class CDMSBaseTest(unittest.TestCase):
         return self.getFile(os.path.join(self.tempdir, path), mode)
 
     def setUp(self):
+        global cdms2
+        cdms2 = reload(cdms2)
+        self.orig_cwd = os.getcwd()
         self.files = []
         self.NTIME = 3
         self.NLAT = 16
@@ -31,8 +34,8 @@ class CDMSBaseTest(unittest.TestCase):
     def tearDown(self):
         for f in self.files:
             f.close()
+        os.chdir(self.orig_cwd)
         shutil.rmtree(self.tempdir)
-
 
 def run():
     unittest.main()

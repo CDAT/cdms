@@ -14,7 +14,6 @@ class TestGenericGrids(basetest.CDMSBaseTest):
         datb = numpy.array([ 693., 694.,])
         latb = numpy.array([-26.67690036,-30.99890917,])
         lonb = numpy.array([92.41822415, 94.4512163 ,])
-
         f = self.getDataFile('sampleGenGrid3.nc')
 
         # Slice a file variable on a curvilinear grid: by coordinates ...

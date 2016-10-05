@@ -48,7 +48,6 @@ class TestForecastIO(basetest.CDMSBaseTest):
 
         os.chdir(self.tempdir)
         cdscan("cdscan -q --forecast -x test_fc.xml test_fc1 test_fc2 test_fc3".split())
-        print os.listdir(self.tempdir)
         # Read in the data.
 
         fcs = cdms2.forecast.forecasts('test_fc.xml', ("2010-08-25","2010-08-27"))

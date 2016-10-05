@@ -239,7 +239,6 @@ class TestRegressions(basetest.CDMSBaseTest):
     def testReshapeMaskedAverage(self):
         a = MV2.arange(100)
         a = MV2.reshape(a, (10, 10))
-        print a
         self.assertEqual(a.shape, (10, 10))
         self.assertEqual(len(a.getAxisList()), 2)
         a = MV2.masked_greater(a, 23)

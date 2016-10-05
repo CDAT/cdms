@@ -6,7 +6,6 @@ import basetest
 
 
 class TestFormats(basetest.CDMSBaseTest):
-
     def testPP(self):
         f = self.getDataFile('testpp.pp')
 

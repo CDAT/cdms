@@ -8,53 +8,79 @@ import basetest
 
 
 class TestMV2(basetest.CDMSBaseTest):
-    def testMV2(self):
-        pth = os.path.dirname(os.path.abspath(__file__))
+    def setUp(self):
+        super(TestMV2, self).setUp()
+        self.file = self.getDataFile("test.xml")
+        self.u_file = self.file["u"]
+        self.u_transient = self.file("u")
+        self.v_file = self.file["v"]
+        self.v_transient = self.file('v')
+        self.u_lat = self.u_file.getLatitude()
+        f = self.getDataFile("u_2000.nc")
+        self.other_u_file = f["u"]
+        self.ones = MV2.ones(self.other_u_file.shape, numpy.float32, axes=self.other_u_file.getAxisList(), attributes=self.other_u_file.attributes, id=self.other_u_file.id)
 
-        d = self.getDataFile('test.xml')
-        ud = d['u']
-        vd = d['v']
-        udat = ud[:]
-        vdat = vd[:]
-        ulat = ud.getLatitude()
-        self.assertFalse(not isinstance(udat, TV))
-        f = self.getDataFile('u_2000.nc')
-        uf = f['u']
-
-        vel = MV2.sqrt(ud*ud + vd*vd)
+    def testPowAndSqrt(self):
+        vel = MV2.sqrt(self.u_file ** 2 + self.v_file ** 2)
         vel.id = 'velocity'
-        vel2 = MV2.sqrt(udat*udat + vdat*vdat)
+        vel2 = MV2.sqrt(self.u_transient ** 2 + self.v_transient ** 2)
         vel2.id = 'velocity'
-        vel2.units = ud.units
-        self.assertFalse(not MV2.allequal(vel,vel2))
+        vel2.units = self.u_file.units
+        self.assertTrue(MV2.allequal(vel, vel2))
 
-        x1 = uf+1.0
-        x2 = 1.0-ud
-        x11 = -uf
-        x12 = MV2.absolute(ud)
-        x3 = uf+x2
-        x4 = 1.0+ud
-        x5 = uf-1
-        x6 = ud*uf
-        x7 = ud/x2
-        x8=1/uf
-        x9 = 3*ud
-        x10=uf**3
-        x13 = MV2.add.reduce(uf)
-        x14 = MV2.add.reduce(ud)
+    def testAdditionSubtraction(self):
+        x1 = self.other_u_file + 1.0
+        x2 = 1.0 - self.u_file
+        self.assertTrue(MV2.allequal(x1 + x2[0], 2.0))
+
+    def testNegAbs(self):
+        x11 = -self.other_u_file
+        x12 = MV2.absolute(self.u_file)
+        self.assertTrue(MV2.allequal(x11 + x12[0], 0))
+
+    def testMulDiv(self):
+        scalar_mul = self.u_file * 2
+        broadcast_mul = scalar_mul * self.other_u_file
+        self.assertTrue(MV2.allequal(broadcast_mul[0] / self.u_file[0] / self.other_u_file, 2))
+        scalar_right = 1 / self.u_file
+        self.assertTrue(MV2.allclose(scalar_mul * scalar_right, 2))
+
+    def testTypeCoercion(self):
+        x9 = 3*self.u_file
         x15 = x9.astype(numpy.float32)
-        self.assertFalse(not x15.dtype.char==numpy.sctype2char(numpy.float32))
+        self.assertTrue(x15.dtype.char==numpy.sctype2char(numpy.float32))
 
-        ## arrayrange(start, stop=None, step=1, typecode=None, axis=None, attributes=None, id=None) 
-        ##   Just like range() except it returns a variable whose type can be specfied
-        ##   by the keyword argument typecode. The axis of the result variable may be specified.
-        xarange = MV2.arange(16., axis=ulat)
+    def testArange(self):
+        test_range = MV2.arange(16, axis=self.u_lat)
+        self.assertEqual(len(test_range), 16)
+        self.assertIsNotNone(test_range.getLatitude())
 
+    def testMaskedArray(self):
         ## masked_array(a, mask=None, fill_value=None, axes=None, attributes=None, id=None) 
         ##   masked_array(a, mask=None) = 
         ##   array(a, mask=mask, copy=0, fill_value=fill_value)
         ##   Use fill_value(a) if None.
-        xmarray = MV2.masked_array(ud)
+        xmarray = MV2.masked_array(self.u_file, mask=self.u_file > .01)
+        self.assertEqual(len(xmarray.getAxisList()), len(self.u_file.getAxisList()))
+        self.assertTrue(MV2.allequal(xmarray.mask, self.u_file > .01))
+
+    def testAverage(self):
+        xav = MV2.average(self.ones, axis=1)
+        self.assertTrue(MV2.allequal(xav, 1))
+        xav2 = MV2.average(self.u_file)
+        xav3 = MV2.average(self.u_transient)
+        xav4, wav4 = MV2.average(self.u_transient, weights=MV2.ones(self.u_transient.shape, numpy.float), returned=1)
+        a = MV2.arange(5)
+        b = 2 ** a
+        av, wav = MV2.average(b, weights=a, returned=1)
+        self.assertEqual(av, 9.8)
+        self.assertEqual(wav, 10)
+
+    def testMV2(self):
+        ## arrayrange(start, stop=None, step=1, typecode=None, axis=None, attributes=None, id=None) 
+        ##   Just like range() except it returns a variable whose type can be specfied
+        ##   by the keyword argument typecode. The axis of the result variable may be specified.
+        xarange = MV2.arange(16., axis=self.u_lat)
 
         ## masked_object(data, value, copy=1, savespace=0) 
         ##   Create array masked where exactly data equal to value
@@ -69,13 +95,13 @@ class TestMV2(basetest.CDMSBaseTest):
         ## ones(shape, typecode='l', savespace=0, axes=None, attributes=None, id=None) 
         ##   ones(n, typecode=Int, savespace=0, axes=None, attributes=None, id=None) = 
         ##   an array of all ones of the given length or shape.
-        xones = MV2.ones(uf.shape, numpy.float32, axes=uf.getAxisList(), attributes=uf.attributes, id=uf.id)
-        self.assertFalse(not xones[0,0,0]==1.0)
+        xones = MV2.ones(self.other_u_file.shape, numpy.float32, axes=self.other_u_file.getAxisList(), attributes=self.other_u_file.attributes, id=self.other_u_file.id)
+        self.assertTrue(xones[0,0,0]==1.0)
 
         ## zeros(shape, typecode='l', savespace=0, axes=None, attributes=None, id=None) 
         ##   zeros(n, typecode=Int, savespace=0, axes=None, attributes=None, id=None) = 
         ##   an array of all zeros of the given length or shape.
-        xzeros = MV2.zeros(ud.shape, dtype=numpy.float, axes=ud.getAxisList(), attributes=ud.attributes, id=ud.id)
+        xzeros = MV2.zeros(self.u_file.shape, dtype=numpy.float, axes=self.u_file.getAxisList(), attributes=self.u_file.attributes, id=self.u_file.id)
         xmasked = MV2.as_masked(xzeros)
 
         ## argsort(x, axis=-1, fill_value=None) 
@@ -83,44 +109,25 @@ class TestMV2(basetest.CDMSBaseTest):
         ##   return sort indices for sorting along given axis.
         ##   if fill_value is None, use fill_value(x)
 
-        ## asarray(data, typecode=None) 
-        ##   asarray(data, typecode=None) = array(data, typecode=None, copy=0)
-        ##   Returns data if typecode if data is a MaskedArray and typecode None
-        ##   or the same.
-
-        ## average(a, axis=0, weights=None, returned=0) 
-        ##   average(a, axis=0, weights=None, returned=0)
-        ##   Computes average along indicated axis. Masked elements are ignored.
-        ##   Result may equal masked if average cannot be computed.
-        ##   If weights are given, result is sum(a*weights)/sum(weights), with
-        ##   all elements masked in a or in weights ignored.
-        ##   weights if given must have a's shape. 
-        ##   Denominator is multiplied by 1.0 to prevent truncation for integers.
-        ##   returned governs return of second quantity, the weights.
-        xav = MV2.average(xones, axis=1)
-        xav2 = MV2.average(ud)
-        xav3 = MV2.average(udat)
-        xav4, wav4 = MV2.average(udat, weights=MV2.ones(udat.shape, numpy.float), returned=1)
-
         ## choose(indices, t) 
         ##   Shaped like indices, values t[i] where at indices[i]
         ##   If t[j] is masked, special treatment to preserve type.
         ct1 = MV2.TransientVariable([1,1,2,0,1])
         ctr = MV2.choose(ct1, [numpy.ma.masked, 10,20,30,40])
-        self.assertFalse(not MV2.allclose(ctr, [10, 10, 20, 100, 10]))
+        self.assertTrue(MV2.allclose(ctr, [10, 10, 20, 100, 10]))
         ctx = MV2.TransientVariable([1,2,3,150,4])
         cty = -MV2.TransientVariable([1,2,3,150,4])
         ctr = MV2.choose(MV2.greater(ctx,100), (ctx, 100))
-        self.assertFalse(not MV2.allclose(ctr, [1,2,3,100,4]))
+        self.assertTrue(MV2.allclose(ctr, [1,2,3,100,4]))
         ctr = MV2.choose(MV2.greater(ctx,100), (ctx, cty))
-        self.assertFalse(not MV2.allclose(ctr, [1,2,3,-150,4]))
+        self.assertTrue(MV2.allclose(ctr, [1,2,3,-150,4]))
 
         ## concatenate(arrays, axis=0, axisid=None, axisattributes=None) 
         ##   Concatenate the arrays along the given axis. Give the extended axis the id and
         ##   attributes provided - by default, those of the first array.
 
         try:
-            xcon = MV2.concatenate((ud,vd))
+            xcon = MV2.concatenate((self.u_file, self.v_file))
         except:
             markError('Concatenate error')
 
@@ -132,8 +139,8 @@ class TestMV2(basetest.CDMSBaseTest):
         ## outerproduct(a, b) 
         ##   outerproduct(a,b) = {a[i]*b[j]}, has shape (len(a),len(b))
         xouter = MV2.outerproduct(MV2.arange(16.),MV2.arange(32.))
-        lat = uf.getLatitude()
-        lon = uf.getLongitude()
+        lat = self.other_u_file.getLatitude()
+        lon = self.other_u_file.getLongitude()
         xouter.setAxis(0,lat)
         xouter.setAxis(1,lon)
         xouter.setAxisList([lat,lon])           # Equivalent
@@ -176,20 +183,20 @@ class TestMV2(basetest.CDMSBaseTest):
         ## maximum(a, b=None) 
         ##   returns maximum element of a single array, or elementwise
         maxval = MV2.maximum(xouter)
-        xmax = MV2.maximum(ud,vd)
-        xmax = MV2.maximum.reduce(ud)
-        xmax = MV2.maximum.reduce(vd)
-        xmax2 = numpy.ma.maximum.reduce(vd.subSlice(),axis=0)
-        self.assertFalse(not MV2.allclose(xmax, xmax2))
+        xmax = MV2.maximum(self.u_file,self.v_file)
+        xmax = MV2.maximum.reduce(self.u_file)
+        xmax = MV2.maximum.reduce(self.v_file)
+        xmax2 = numpy.ma.maximum.reduce(self.v_file.subSlice(),axis=0)
+        self.assertTrue(MV2.allclose(xmax, xmax2))
 
         ## minimum(a, b=None) 
         ##   returns minimum element of a single array, or elementwise
         minval = MV2.minimum(xouter)
-        xmin = MV2.minimum(ud,vd)
-        xmin = MV2.minimum.reduce(ud)
-        xmin = MV2.minimum.reduce(vd)
-        xmin2 = numpy.ma.minimum.reduce(vd.subSlice(),axis=0)
-        self.assertFalse(not MV2.allclose(xmin, xmin2))
+        xmin = MV2.minimum(self.u_file,self.v_file)
+        xmin = MV2.minimum.reduce(self.u_file)
+        xmin = MV2.minimum.reduce(self.v_file)
+        xmin2 = numpy.ma.minimum.reduce(self.v_file.subSlice(),axis=0)
+        self.assertTrue(MV2.allclose(xmin, xmin2))
         t1 = MV2.TransientVariable([1.,2.,3.])
         t2 = MV2.TransientVariable([1.,10.])
         t3 = MV2.add.outer(t1,t2)
@@ -197,7 +204,7 @@ class TestMV2(basetest.CDMSBaseTest):
         t3 = MV2.maximum.outer(t1,t2)
         ## product(a, axis=0, fill_value=1) 
         ##   Product of elements along axis using fill_value for missing elements.
-        xprod = MV2.product(ud)
+        xprod = MV2.product(self.u_file)
 
         ## power(a, b, third=None) 
         ##   a**b
@@ -234,7 +241,7 @@ class TestMV2(basetest.CDMSBaseTest):
 
         ## sum(a, axis=0, fill_value=0) 
         ##   Sum of elements along a certain axis using fill_value for missing.
-        xsum = MV2.sum(uf, axis=1)
+        xsum = MV2.sum(self.other_u_file, axis=1)
         xsum2 = MV2.sum(xones, axis=1)
         xsum3 = MV2.sum(xones)
 
@@ -245,30 +252,30 @@ class TestMV2(basetest.CDMSBaseTest):
 
         ## transpose(a, axes=None) 
         ##   transpose(a, axes=None) reorder dimensions per tuple axes
-        xtr = MV2.transpose(ud)
+        xtr = MV2.transpose(self.u_file)
         xtr = numpy.arange(24)
         xtr.shape = (4,6)
         xtr1 = MV2.transpose(xtr)
         xtr2 = MV2.transpose(MV2.TransientVariable(xtr))
-        self.assertFalse(not xtr2.shape == (6,4))
+        self.assertTrue(xtr2.shape == (6,4))
         xtr3 = numpy.transpose(xtr)
-        self.assertFalse(not MV2.allclose(xtr1, xtr3))
-        self.assertFalse(not MV2.allclose(xtr2, xtr3))
+        self.assertTrue(MV2.allclose(xtr1, xtr3))
+        self.assertTrue(MV2.allclose(xtr2, xtr3))
 
         ## where(condition, x, y) 
         ##   where(condition, x, y) is x where condition is true, y otherwise
         xwhere = MV2.where(MV2.greater(xouter,200),xouter,MV2.masked)
-        xwhere2 = MV2.where(MV2.greater(ud,200),ud,MV2.masked)
-        xwhere3 = MV2.where(MV2.greater(uf,200),uf,MV2.masked)
+        xwhere2 = MV2.where(MV2.greater(self.u_file,200),self.u_file,MV2.masked)
+        xwhere3 = MV2.where(MV2.greater(self.other_u_file,200),self.other_u_file,MV2.masked)
         xwhere2 = MV2.choose(MV2.greater(xouter,200), (MV2.masked, xouter))
-        self.assertFalse(not MV2.allclose(xwhere,xwhere2))
+        self.assertTrue(MV2.allclose(xwhere,xwhere2))
 
         ## diagonal(x, k)
         xdiag = MV2.TransientVariable([[1,2,3],[4,5,6]])
-        self.assertFalse(not MV2.allclose(MV2.diagonal(xdiag, 1), [2,6]))
+        self.assertTrue(MV2.allclose(MV2.diagonal(xdiag, 1), [2,6]))
         # Broadcast
-        vdat2 = vdat[0]
-        vsum = udat - vdat2
+        v_transient2 = self.v_transient[0]
+        vsum = self.u_transient - v_transient2
 
 if __name__ == "__main__":
     basetest.run()

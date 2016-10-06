@@ -76,42 +76,15 @@ class TestMV2(basetest.CDMSBaseTest):
         self.assertEqual(av, 9.8)
         self.assertEqual(wav, 10)
 
-    def testMV2(self):
-        ## arrayrange(start, stop=None, step=1, typecode=None, axis=None, attributes=None, id=None) 
-        ##   Just like range() except it returns a variable whose type can be specfied
-        ##   by the keyword argument typecode. The axis of the result variable may be specified.
-        xarange = MV2.arange(16., axis=self.u_lat)
-
-        ## masked_object(data, value, copy=1, savespace=0) 
-        ##   Create array masked where exactly data equal to value
-
-        ## masked_values(data, value, rtol=1.0000000000000001e-05, atol=1e-08, copy=1, savespace=0, axes=None,
-        ## attributes=None, id=None) 
-        ##   masked_values(data, value, rtol=1.e-5, atol=1.e-8)
-        ##   Create a masked array; mask is None if possible.
-        ##   May share data values with original array, but not recommended.
-        ##   Masked where abs(data-value)<= atol + rtol * abs(value)
-
-        ## ones(shape, typecode='l', savespace=0, axes=None, attributes=None, id=None) 
-        ##   ones(n, typecode=Int, savespace=0, axes=None, attributes=None, id=None) = 
-        ##   an array of all ones of the given length or shape.
+    def testArrayGeneration(self):
         xones = MV2.ones(self.other_u_file.shape, numpy.float32, axes=self.other_u_file.getAxisList(), attributes=self.other_u_file.attributes, id=self.other_u_file.id)
-        self.assertTrue(xones[0,0,0]==1.0)
-
-        ## zeros(shape, typecode='l', savespace=0, axes=None, attributes=None, id=None) 
-        ##   zeros(n, typecode=Int, savespace=0, axes=None, attributes=None, id=None) = 
-        ##   an array of all zeros of the given length or shape.
+        self.assertTrue(MV2.allequal(xones, 1))
+        self.assertEqual(xones.shape, self.other_u_file.shape)
         xzeros = MV2.zeros(self.u_file.shape, dtype=numpy.float, axes=self.u_file.getAxisList(), attributes=self.u_file.attributes, id=self.u_file.id)
-        xmasked = MV2.as_masked(xzeros)
+        self.assertTrue(MV2.allequal(xzeros, 0))
+        self.assertEqual(xzeros.shape, self.u_file.shape)
 
-        ## argsort(x, axis=-1, fill_value=None) 
-        ##   Treating masked values as if they have the value fill_value,
-        ##   return sort indices for sorting along given axis.
-        ##   if fill_value is None, use fill_value(x)
-
-        ## choose(indices, t) 
-        ##   Shaped like indices, values t[i] where at indices[i]
-        ##   If t[j] is masked, special treatment to preserve type.
+    def testChoose(self):
         ct1 = MV2.TransientVariable([1,1,2,0,1])
         ctr = MV2.choose(ct1, [numpy.ma.masked, 10,20,30,40])
         self.assertTrue(MV2.allclose(ctr, [10, 10, 20, 100, 10]))
@@ -122,86 +95,96 @@ class TestMV2(basetest.CDMSBaseTest):
         ctr = MV2.choose(MV2.greater(ctx,100), (ctx, cty))
         self.assertTrue(MV2.allclose(ctr, [1,2,3,-150,4]))
 
-        ## concatenate(arrays, axis=0, axisid=None, axisattributes=None) 
-        ##   Concatenate the arrays along the given axis. Give the extended axis the id and
-        ##   attributes provided - by default, those of the first array.
+    def testConcatenate(self):
+        xcon = MV2.concatenate((self.u_file, self.v_file))
+        self.assertEqual(xcon.shape, (self.u_file.shape[0] + self.v_file.shape[0], self.u_file.shape[1], self.u_file.shape[2]))
 
-        try:
-            xcon = MV2.concatenate((self.u_file, self.v_file))
-        except:
-            markError('Concatenate error')
+    def testIsMasked(self):
+        self.assertFalse(MV2.isMaskedVariable(numpy.ones(self.ones.shape)))
+        self.assertTrue(MV2.isMaskedVariable(self.ones))
 
-        ## isMaskedVariable(x) 
-        ##   Is x a masked variable, that is, an instance of AbstractVariable?
-        im1 = MV2.isMaskedVariable(xones)
-        im2 = MV2.isMaskedVariable(xmasked)
+    def testOuterproduct(self):
+        xouter = MV2.outerproduct(MV2.arange(3.), MV2.arange(5.))
+        self.assertEqual(xouter.shape, (3, 5))
+        for i in range(3):
+            self.assertTrue(MV2.allequal(xouter[i], i * xouter[1]))
 
-        ## outerproduct(a, b) 
-        ##   outerproduct(a,b) = {a[i]*b[j]}, has shape (len(a),len(b))
-        xouter = MV2.outerproduct(MV2.arange(16.),MV2.arange(32.))
-        lat = self.other_u_file.getLatitude()
-        lon = self.other_u_file.getLongitude()
-        xouter.setAxis(0,lat)
-        xouter.setAxis(1,lon)
-        xouter.setAxisList([lat,lon])           # Equivalent
+    def testMaskingFunctions(self):
+        xouter = MV2.outerproduct(MV2.arange(5.), [1] * 10)
+        masked = MV2.masked_greater(xouter, 1)
+        self.assertTrue(MV2.allequal(masked.mask[2:], True))
+        self.assertTrue(MV2.allequal(masked.mask[:2], False))
+        masked = MV2.masked_greater_equal(xouter, 1)
+        self.assertTrue(MV2.allequal(masked.mask[1:], True))
+        self.assertTrue(MV2.allequal(masked.mask[:1], False))
+        masked = MV2.masked_less(xouter, 1)
+        self.assertTrue(MV2.allequal(masked.mask[:1], True))
+        self.assertTrue(MV2.allequal(masked.mask[1:], False))
+        masked = MV2.masked_less_equal(xouter, 1)
+        self.assertTrue(MV2.allequal(masked.mask[:2], True))
+        self.assertTrue(MV2.allequal(masked.mask[2:], False))
+        masked = MV2.masked_not_equal(xouter, 1)
+        self.assertTrue(MV2.allequal(masked.mask[1], False))
+        self.assertTrue(MV2.allequal(masked.mask[0], True))
+        self.assertTrue(MV2.allequal(masked.mask[2:], True))
+        masked = MV2.masked_equal(xouter, 1)
+        self.assertTrue(MV2.allequal(masked.mask[1], True))
+        self.assertTrue(MV2.allequal(masked.mask[0], False))
+        self.assertTrue(MV2.allequal(masked.mask[2:], False))
+        masked = MV2.masked_outside(xouter, 1, 3)
+        self.assertTrue(MV2.allequal(masked.mask[0:1], True))
+        self.assertTrue(MV2.allequal(masked.mask[1:4], False))
+        self.assertTrue(MV2.allequal(masked.mask[4:], True))
+        masked = MV2.masked_where(MV2.logical_or(MV2.greater(xouter, 3), MV2.less(xouter, 2)), xouter)
+        self.assertTrue(MV2.allequal(masked.mask[0:2], True))
+        self.assertTrue(MV2.allequal(masked.mask[2:4], False))
+        self.assertTrue(MV2.allequal(masked.mask[4:], True))
 
-        ## masked_equal(x, value) 
-        ##   masked_equal(x, value) = x masked where x == value
-        ##   For floating point consider masked_values(x, value) instead.
+    def testCount(self):
+        xouter = MV2.outerproduct(MV2.arange(5.), [1] * 10)
+        masked = MV2.masked_outside(xouter, 1, 3)
+        self.assertEqual(MV2.count(masked), 30)
+        self.assertTrue(MV2.allequal(MV2.count(masked, 0), 3))
+        self.assertTrue((MV2.count(masked, 1) == [0, 10, 10, 10, 0]).all())
 
-        ## masked_greater(x, value) 
-        ##   masked_greater(x, value) = x masked where x > value
+    def testMinMax(self):
 
-        ## masked_greater_equal(x, value) 
-        ##   masked_greater_equal(x, value) = x masked where x >= value
-        xge = MV2.masked_greater_equal(xouter, 120)
-
-        ## masked_less(x, value) 
-        ##   masked_less(x, value) = x masked where x < value
-        xl = MV2.masked_less(xouter, 160)
-
-        ## masked_less_equal(x, value) 
-        ##   masked_less_equal(x, value) = x masked where x <= value
-
-        ## masked_not_equal(x, value) 
-        ##   masked_not_equal(x, value) = x masked where x != value
-
-        ## masked_outside(x, v1, v2) 
-        ##   x with mask of all values of x that are outside [v1,v2]
-        xmo = MV2.masked_outside(xouter, 120, 160)
-
-        ## count(a, axis=None) 
-        ##   Count of the non-masked elements in a, or along a certain axis.
-        xcount = MV2.count(xmo,0)
-        xcount2 = MV2.count(xmo,1)
-
-        ## masked_where(condition, x, copy=1) 
-        ##   Return x as an array masked where condition is true. 
-        ##   Also masked where x or condition masked.
-        xmwhere = MV2.masked_where(MV2.logical_and(MV2.greater(xouter,120),MV2.less(xouter,160)),xouter)
-
-        ## maximum(a, b=None) 
-        ##   returns maximum element of a single array, or elementwise
+        # Scalar
+        xouter = MV2.outerproduct(MV2.arange(10), MV2.arange(10))
         maxval = MV2.maximum(xouter)
-        xmax = MV2.maximum(self.u_file,self.v_file)
-        xmax = MV2.maximum.reduce(self.u_file)
-        xmax = MV2.maximum.reduce(self.v_file)
-        xmax2 = numpy.ma.maximum.reduce(self.v_file.subSlice(),axis=0)
-        self.assertTrue(MV2.allclose(xmax, xmax2))
-
-        ## minimum(a, b=None) 
-        ##   returns minimum element of a single array, or elementwise
         minval = MV2.minimum(xouter)
-        xmin = MV2.minimum(self.u_file,self.v_file)
-        xmin = MV2.minimum.reduce(self.u_file)
-        xmin = MV2.minimum.reduce(self.v_file)
-        xmin2 = numpy.ma.minimum.reduce(self.v_file.subSlice(),axis=0)
-        self.assertTrue(MV2.allclose(xmin, xmin2))
-        t1 = MV2.TransientVariable([1.,2.,3.])
+        self.assertEqual(maxval, 81)
+        self.assertEqual(minval, 0)
+
+        # Do an elementwise maximum
+        xmax = MV2.maximum(self.u_file, self.v_file)
+        xmin = MV2.minimum(self.u_file, self.v_file)
+        self.assertTrue(((xmax - self.u_file) >= 0).all())
+        self.assertTrue(((xmax - self.v_file) >= 0).all())
+        self.assertTrue(((xmin - self.u_file) <= 0).all())
+        self.assertTrue(((xmin - self.v_file) <= 0).all())
+
+        # Reduce along axes
+        slicer = [Ellipsis for i in range(len(self.u_file.shape))]
+        for axis_index, axis_length in enumerate(self.u_file.shape):
+            amax = MV2.maximum.reduce(self.u_file, axis=axis_index)
+            amin = MV2.minimum.reduce(self.u_file, axis=axis_index)
+            s = list(slicer)
+            for i in range(axis_length):
+                s[axis_index] = i
+                ind_slice = self.u_file.subSlice(*s, squeeze=True)
+                self.assertTrue(((ind_slice - amax) <= 0).all())
+                self.assertTrue(((ind_slice - amin) >= 0).all())
+
+        t1 = MV2.TransientVariable([1.,2.])
         t2 = MV2.TransientVariable([1.,10.])
-        t3 = MV2.add.outer(t1,t2)
-        t3 = MV2.minimum.outer(t1,t2)
-        t3 = MV2.maximum.outer(t1,t2)
+        t3 = MV2.minimum.outer(t1, t2)
+        self.assertTrue(MV2.allequal(t3, [[1, 1], [1, 2]]))
+        t3 = MV2.maximum.outer(t1, t2)
+        self.assertTrue(MV2.allequal(t3, [[1, 10], [2, 10]]))
+
+    def testMV2(self):
+        return
         ## product(a, axis=0, fill_value=1) 
         ##   Product of elements along axis using fill_value for missing elements.
         xprod = MV2.product(self.u_file)

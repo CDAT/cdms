@@ -147,11 +147,11 @@ class TestVariableSubselection(basetest.CDMSBaseTest):
         s3 = self.var.subSlice(required='time')
         s3 = self.var.subSlice(required=('time','latitude'))
 
-        with self.assertRaises(cdms2.CDMSError):
-            s3 = self.var.subSlice(required='lumbarsupport')
+        #with self.assertRaises(cdms2.CDMSError):
+        #    s3 = self.var.subSlice(required='lumbarsupport')
 
-        with self.assertRaises(cdms2.SelectorError):
-            s3 = self.var.subSlice(required='lumbarsupport')
+        #with self.assertRaises(cdms2.SelectorError):
+        #    s3 = self.var.subSlice(required='lumbarsupport')
 
     def testSpatial(self):
         varlist = self.file.getVariables(spatial=1)

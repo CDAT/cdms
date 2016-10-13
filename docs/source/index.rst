@@ -9,14 +9,13 @@ Welcome to cdms2's documentation!
 Contents:
 
 .. toctree::
+   AbstractAxis
    AbstractVariable
    avariable
-   auxcoord
    axis
    bindex
    cache
    cdmsobj
-   convention
    database
    dataset
    fvariable
@@ -28,12 +27,10 @@ Contents:
    hgrid
    MV2 
    mvSphereMesh
-   mvVsWriter
    mvCdmsRegrid
    selectors
    sliceut
    tvariable
-   variable
 
 
 Indices and tables

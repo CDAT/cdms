@@ -165,19 +165,25 @@ def mapLinearIntersection(xind,yind,iind,
                           boundLeft,nodeSubI,boundRight):
     """
 
-    Return true iff the coordinate interval (a,b) intersects the node
-    nodeSubI or cell bounds [boundLeft,boundRight], where the interval
-    (a,b) is defined by:
+    Parameters
+    ----------
+    xind:
+       'c' if (a,b) is closed on the left, 'o' if open,
+    yind:
+        same for right endpoint
 
-    xind = 'c' if (a,b) is closed on the left, 'o' if open,
-    yind same for right endpoint
-    aMinusEps,aPlusEps = a +/- epsilon
-    bPlusEps,bMinusEps = b +/- epsilon
+    Returns
+    -------
+    True if the coordinate interval (a,b) intersects the node nodeSubI or cell bounds [boundLeft,boundRight], where the interval (a,b) is defined by:
 
-    and the intersection option iind = 'n','b','e','s' specifies
-    whether the intersection is with respect to the node value
-    nodeSubI ('n' or 'e') or the cell bounds [boundLeft,boundRight].
-    See mapLinearExt.
+      * aMinusEps,aPlusEps = a +/- epsilon
+      * bPlusEps,bMinusEps = b +/- epsilon
+
+    and the intersection option iind = 'n','b','e','s' specifies whether the intersection is with respect to the node value nodeSubI ('n' or 'e') or the cell bounds [boundLeft,boundRight].  
+
+    See Also
+    --------
+    mapLinearExt
 
     """
 
@@ -211,8 +217,8 @@ def mapLinearIntersection(xind,yind,iind,
 def mapLinearExt(axis, bounds, interval, indicator ='ccn', epsilon=None, stride=1, wrapped=0):
 
     """Map coordinate interval to index interval, without
-    wraparound. interval has the form (x,y) where x and y are the
-    endpoints in coordinate space. indicator is a three-character
+    wraparound. Interval has the form (x,y) where x and y are the
+    endpoints in coordinate space. Indicator is a three-character
     string, where the first character is 'c' if the interval is closed
     on the left, 'o' if open, and the second character has the same
     meaning for the right-hand point. The third character indicates
@@ -223,9 +229,9 @@ def mapLinearExt(axis, bounds, interval, indicator ='ccn', epsilon=None, stride=
     's' - the cell bounds are a subset of the interval
     'e' - same as 'n', plus an extra node on either side.
     
-    Returns the corresponding index interval (i,j), where i<j,
-    indicating the half-open index interval [i,j), or None if the
-    intersection is empty.
+    Returns 
+    -------
+    The corresponding index interval (i,j), where i<j, indicating the half-open index interval [i,j), or None if the intersection is empty.
     """
     
     indicator = string.lower(indicator)
@@ -528,13 +534,23 @@ def mapLinearExt(axis, bounds, interval, indicator ='ccn', epsilon=None, stride=
     return (iReturn,jReturn)
 
 def lookupArray(ar,value):
-    """Lookup value in array ar. Return index such that:
-    (a) ar is monotonically increasing:
-    value <= ar[index], index==0..len(ar)-1
-    value > ar[index], index==len(ar)
-    (b) ar is monotonically decreasing:
-    value >= ar[index], index==0..len(ar)-1
-    value < ar[index], index==len(ar)
+    """Lookup value in array ar. 
+
+    Parameters
+    ----------
+    ar:
+        Input array
+    value:
+        Value to search
+    Returns
+    -------
+        index: 
+            * ar is monotonically increasing.
+                * value <= ar[index], index==0..len(ar)-1
+                * value > ar[index], index==len(ar)
+            * ar is monotonically decreasing:
+                * value >= ar[index], index==0..len(ar)-1
+                * value < ar[index], index==len(ar)
     """
     ar = numpy.ma.filled(ar)
     ascending = (ar[0]<ar[-1]) or len(ar)==1
@@ -575,10 +591,22 @@ def isSubsetVector(vec1, vec2, tol):
         return (0,-1)
 
 def isOverlapVector(vec1, vec2, atol=1.e-8):
-    """Returns (isoverlap, index) where:
-    isoverlap is true iff a leading portion of vec1 is a subset of vec2;
-    index is the index such that vec1[0]<=vec2[index]. If index==len(vec2),
-    then vec1[0]>vec2[len(vec2)-1]
+    """
+    Parameters
+    ----------
+    vec1: 
+        Input arrays to compare
+    vec2:
+        Input arrays to compare
+    atol: float, optional
+        Absolute tolerance, The absolute differenc is equal to **atol** Default is 1e-8
+
+    Returns 
+    -------
+    (isoverlap, index) :
+        where isoverlap is true if a leading portion of vec1 is a subset of vec2;
+            * index is the index such that vec1[0] <= vec2[index] 
+            * If indexl == len(vec2), then vec1[0] > vec2[len(vec2) - 1]
     """
     index = lookupArray(vec2,vec1[0])
     if index==0 and abs(vec1[0]-vec2[0]):
@@ -595,8 +623,32 @@ def isOverlapVector(vec1, vec2, atol=1.e-8):
         return (0,index)
 
 def allclose(ax1, ax2, rtol=1.e-5, atol=1.e-8):
-    """True if all elements of axes ax1 and ax2 are close,
-    in the sense of numpy.ma.allclose."""
+    """
+    Paramerers
+    ----------
+    ax1, ax2:  array_like
+
+    Returns
+    -------
+    bool
+        True if all elements of axes ax1 and ax2 are close,
+        in the sense of numpy.ma.allclose.
+
+    See Also
+    --------
+    all, any
+    
+    Examples
+    --------
+    >>> a = ma.array([1e10, 1e-7, 42.0], mask=[0, 0, 1])
+    >>> a
+    masked_array(data = [10000000000.0 1e-07 --], 
+                 mask = [False False True],
+           fill_value = 1e+20)
+    >>> b = ma.array([1e10, 1e-8, 42.0], mask=[0, 0, 1])
+    >>> ma.allclose(a, b) 
+    False
+    """
     return ((ax1 is ax2) or numpy.ma.allclose(ax1[:],ax2[:],rtol=rtol,atol=atol))
 
 # AbstractAxis defines the common axis interface. 
@@ -1073,16 +1125,16 @@ class AbstractAxis(CdmsObj):
 
     def mapInterval(self,interval,indicator='ccn',cycle=None):
         """
-        Map coordinate interval to index interval. interval has one of the forms:
+        Map coordinate interval to index interval. interval has one of the forms
 
-          (x,y)
-          (x,y,indicator): indicator overrides keywork argument
-          (x,y,indicator,cycle): indicator, cycle override keyword arguments
-          None: indicates the full interval
+          * `(x,y)`
+          * `(x,y,indicator)`: indicator overrides keywork argument
+          * `(x,y,indicator,cycle)`: indicator, cycle override keyword arguments
+          * `None`: indicates the full interval
 
-        where x and y are the endpoints in coordinate space. indicator is a
-        two-character string, where the first character is 'c' if the interval
-        is closed on the left, 'o' if open, and the second character has the
+        where `x` and `y` are the endpoints in coordinate space. indicator is a
+        two-character string, where the first character is `c` if the interval
+        is closed on the left, `o` if open, and the second character has the
         same meaning for the right-hand point. Set cycle to a nonzero value
         to force wraparound.
 
@@ -1095,12 +1147,14 @@ class AbstractAxis(CdmsObj):
         (1) if j<=N, the interval does not wrap around the axis endpoint
         (2) if j>N, the interval wraps around, and is equivalent to the
             two consecutive intervals [i,N), [0,j-N)
+
         For example, if the vector is [0,2,4,...,358] of length 180,
         and the coordinate interval is [-5,5), the return index interval is
         [178,183). This is equivalent to the two intervals [178,180) and [0,3).
 
-        Note: if the interval is interior to the axis, but does not span any
-        axis element, a singleton (i,i+1) indicating an adjacent index is returned.
+.. note:: 
+           if the interval is interior to the axis, but does not span any axis element, 
+           a singleton (i,i+1) indicating an adjacent index is returned.
         """
         i,j,k = self.mapIntervalExt(interval,indicator,cycle)
         j = min(j, i+len(self))
@@ -2144,47 +2198,61 @@ class FileVirtualAxis(FileAxis):
 
 ######## Functions for selecting axes
 def axisMatchAxis (axes, specifications=None, omit=None, order=None):
-    """Given a list of axes and a specification or list of 
+    """Match a list of axes following a specification or list of 
      specificatons, and a specification or list of specifications
-     of those axes to omit, return a list of 
-     those axes in the list that match the specification but 
-     do not include in the list any axes that matches an omit 
-     specification.
+     of those axes to omit.
 
-     If specifications is None, include all axes less the omitted ones.
+     Parameters
+     ----------
+     specifications:
+         *  is None, include all axes less the omitted ones.
 
-     Individual specifications must be integer indices into axes or 
-     matching criteria as detailed in axisMatches.
+         *  Individual specifications must be integer indices into axes or matching criteria as detailed in axisMatches.
 
-     Axes are returned in the order they occur in the axes argument unless
-     order is given. 
+     omit:
+         *  is None, do not omit any axis.
 
-     order can be a string containing the symbols t,x,y,z, or -. 
-     If a - is given, any elements of the result not chosen otherwise are 
-     filled in from left to right with remaining candidates.
+         *  Individual specifications must be integer indices into axes or matching criteria as detailed in axisMatches.
+
+     order: 
+         *  A string containing the symbols `t,x,y,z` or `-`.  If a `-` is given, any elements of the result not chosen otherwise are filled in from left to right with remaining candidates.
+
+     Return
+     ------
+     A list of axes that match the specification omitting any axes that matches an omit specification.
+
+     Axes are returned in the order they occur in the axes argument unless order is given. 
+
     """
     return [axes[i] for i in \
             axisMatchIndex(axes, specifications, omit, order)]
 
 def axisMatchIndex (axes, specifications=None, omit=None, order=None):
-    """Given a list of axes and a specification or list of 
+    """Match a list of axes following a specification or list of 
      specificatons, and a specification or list of specifications
-     of those axes to omit, return a list of the indices of 
-     those axes in the list that match the specification but 
-     do not include in the list any axes that matches an omit 
-     specification.
+     of those axes to omit. 
 
-     If specifications is None, include all axes less the omitted ones.
+     Parameters
+     ----------
+     specifications:
+         *  is None, include all axes less the omitted ones.
 
-     Individual specifications must be integer indices into axes or 
-     matching criteria as detailed in axisMatches.
+         *  Individual specifications must be integer indices into axes or matching criteria as detailed in axisMatches.
 
-     The indices of axes are returned in the order the axes
-     occur in the axes argument, unless order is given.
+     omit:
+         *  is None, do not omit any axis.
 
-     order can be a string containing the symbols t,x,y,z, or -. 
-     If a - is given, any elements of the result not chosen otherwise are 
-     filled in from left to right with remaining candidates.
+         *  Individual specifications must be integer indices into axes or matching criteria as detailed in axisMatches.
+
+     order: 
+         *  A string containing the symbols `t,x,y,z` or `-`.  If a `-` is given, any elements of the result not chosen otherwise are filled in from left to right with remaining candidates.
+
+     Return
+     ------
+     A list of axis' indices which match the specification omitting any axes that matches an omit specification.
+
+     Axes are returned in the order they occur in the axes argument unless order is given. 
+
     """
     if specifications is None:
         speclist = axes
@@ -2295,22 +2363,34 @@ def axisMatchIndex (axes, specifications=None, omit=None, order=None):
             
 
 def axisMatches(axis, specification):
-    """Return 1 or 0 depending on whether axis matches the specification.
+    """
+       Parameters
+       ----------
+       axis:
+           See note below
+       specifications:
+           See note below
+
+       Returns
+       -------
+       1 or 0 depending on whether axis matches the specification.
+
+       Note
+       ----
        Specification must be one of:
-       1. a string representing an axis id or one of 
-          the keywords time, fctau0, latitude or lat, longitude or lon, or 
-          lev or level. 
 
-          axis may be surrounded with parentheses or spaces.
+       #. a string representing an axis id or one of the keywords time, fctau0, latitude or lat, longitude or lon, or lev or level. 
 
-          We first attempt to match the axis id and the specification.
-          Keywords try to match using isTime, isLatitude, etc.
-          Comparisons to keywords and axis ids is case-insensitive.
+       #. Axis may be surrounded with parentheses or spaces.
 
-       2. a function that takes an axis as an argument and returns a value.
-          if the value returned is true, the axis matches.
+          * We first attempt to match the axis id and the specification.
+          * Keywords try to match using isTime, isLatitude, etc.
+          * Comparisons to keywords and axis ids is case-insensitive.
 
-       3. an axis object; will match if it is the same object as axis.
+       #. a function that takes an axis as an argument and returns a value.
+          * if the value returned is true, the axis matches.
+
+       #. an axis object; will match if it is the same object as axis.
     """   
     if isinstance(specification, basestring):
         s = string.lower(specification)
@@ -2348,7 +2428,20 @@ def axisMatches(axis, specification):
           + str(type(specification)) + ', ' + str(specification)
     
 def concatenate(axes, id=None, attributes=None):
-    """Concatenate the axes, return a transient axis."""
+    """Concatenate multiple axes including boundaries.
+
+    Parameters
+    ----------
+        axes:
+            Axes to concatenate
+        id:
+            New axis identification (default None)
+        attributes:
+            Attributes to attached to the new Axis
+
+    Returns
+    -------
+        Transient axis."""
     
     data = numpy.ma.concatenate([ax[:] for ax in axes])
     boundsArray = [ax.getBounds() for ax in axes]
@@ -2359,7 +2452,18 @@ def concatenate(axes, id=None, attributes=None):
     return TransientAxis(data, bounds=bounds, id=id, attributes=attributes)
 
 def take(ax, indices):
-    """Take values indicated by indices list, return a transient axis."""
+    """Take elements form an array along an axis
+    Parameters
+    ----------
+        ax: 
+            The source array.
+        indices:
+            The indices of the values to extract.
+    Returns
+    -------
+    axis: TransientAxis
+        The return array has the same type of ax.
+    """
 
     # Bug in ma compatibility module
     data = numpy.ma.take(ax[:], indices)

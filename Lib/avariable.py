@@ -151,6 +151,21 @@ class AbstractVariable(CdmsObj, Slab):
     def __call__ (self, *args,  **kwargs):
         """
         Selection of a subregion using selectors.
+
+        Parameters
+        ----------
+        raw:
+            if set to 1, return numpy.ma only
+        squeeze:
+            if set to 1, eliminate any dimension of length 1
+        grid:
+            if given, result is regridded ont this grid.
+        order:
+            if given, result is permuted into this order 
+
+        Returns
+        -------
+        Subregion selected
         """
         # separate options from selector specs
         d = kwargs.copy()
@@ -237,9 +252,19 @@ class AbstractVariable(CdmsObj, Slab):
         return result
 
     def generateGridkey(self, convention, vardict):
-        """ Determine if the variable is gridded, 
-            and generate ((latname, lonname, order, maskname, class), lat, lon) if gridded,
-            or (None, None, None) if not gridded. vardict is the variable dictionary of the parent"""
+        """Determine if the variable is gridded. 
+
+        Parameters
+        ----------
+            convention:
+                Metadata convention class
+            vardict:
+                Variable metedata
+
+        Returns
+        -------
+        ((latname, lonname, order, maskname, class), lat, lon) if gridded
+        (None, None, None) if not gridded """
 
         lat, nlat = convention.getVarLatId(self, vardict)
         lon, nlon = convention.getVarLonId(self, vardict)
@@ -305,9 +330,19 @@ class AbstractVariable(CdmsObj, Slab):
         return None, lat, lon
 
     def generateRectGridkey(self, lat, lon):
-        """Determine if the variable is gridded, rectilinear,
-            and generate (latname, lonname, order, maskname, class) if gridded,
-            or None if not gridded"""
+        """Determine if the variable is gridded, rectilinear.
+
+           Parameters
+           ----------
+               lat:
+                   latitude axis
+               lon:
+                   longitude axis
+
+           Returns
+           -------
+               (latname, lonname, order, maskname, class) if gridded,
+               None if not gridded."""
 
         ilat = ilon = -1
         k = 0
@@ -346,7 +381,7 @@ class AbstractVariable(CdmsObj, Slab):
         self._grid_ = grid
 
     def getDomain (self):
-        "Get the list of axes"
+        "Get the list of axes."
         raise CDMSError, "getDomain not overriden in child"
 
     def getConvention(self):
@@ -359,15 +394,25 @@ class AbstractVariable(CdmsObj, Slab):
             
 # A child class may want to override this
     def getAxis(self, n):
-        "Get the n-th axis"
-        if n < 0: n = n + self.rank()
-        return self.getDomain()[n][0]
+        """Get the n-th axis.
+        Parameters
+        ----------
+            n: 
+               Axis number
+        Returns
+        -------
+            if n < 0: n = n + self.rank()
+            self.getDomain()[n][0]"""
 
     def getAxisIndex (self, axis_spec):
         """Get the index of the axis specificed by axis_spec.
 
-        Return 
-        ------
+        Parameters
+        ----------
+            axis_spec:
+
+        Returns
+        -------
             the axis index or -1 if no match is found.
         """
         for i in range(self.rank()):
@@ -379,6 +424,10 @@ class AbstractVariable(CdmsObj, Slab):
         """
         If any of the variable's axis has explicit bounds, we have cell data
         otherwise we have point data.
+
+        Returns
+        -------
+            True or False if axis has cell data.
         """
         for axis in self.getAxisList():
             if (axis.getExplicitBounds() is not None):
@@ -415,7 +464,12 @@ class AbstractVariable(CdmsObj, Slab):
         return axisMatchAxis (alist, axes, omit, order)
 
     def getAxisIds(self):
-        """Get a list of axis identifiers."""
+        """Get a list of axis identifiers.
+
+        Returns
+        ------- 
+        array list of axis ids"""
+
         return [x[0].id for x in self.getDomain()]
 
     # Return the grid
@@ -426,9 +480,9 @@ class AbstractVariable(CdmsObj, Slab):
         """
            Parameters
            ----------
-           asarray :
-               '0' : scalar 
-               '1' : numpy array
+               asarray :
+                   '0' : scalar 
+                   '1' : numpy array
            Return 
            ------
                the missing value as a scalar, or as a numpy array if asarray==1"""
@@ -455,8 +509,8 @@ class AbstractVariable(CdmsObj, Slab):
 
         Parameters
         ----------
-        value 
-            scalar, a single-valued numpy array, or None. 
+            value 
+                scalar, a single-valued numpy array, or None. 
 
         Note
         ----
@@ -488,7 +542,12 @@ class AbstractVariable(CdmsObj, Slab):
 
 
     def getTime(self):
-        "Get the first time dimension, or `None` if not found"
+        """Get the first time dimension.
+
+        Returns
+        -------
+            First Time dimension axis or `None`.
+        """
         for k in range(self.rank()):
             axis = self.getAxis(k)
             if axis.isTime():
@@ -498,7 +557,12 @@ class AbstractVariable(CdmsObj, Slab):
             return None
 
     def getForecastTime(self):
-        "Get the first forecast time dimension, or `None` if not found"
+        """Get the first forecast time dimension.
+
+        Returns
+        -------
+            First forecast time dimension axis or `None`.
+        """
         for k in range(self.rank()):
             axis = self.getAxis(k)
             if axis.isForecast():
@@ -510,8 +574,11 @@ class AbstractVariable(CdmsObj, Slab):
         return self.getForecastTime()
 
     def getLevel(self):
-        """Get the first vertical level dimension in the domain, 
-           or `None` if not found.
+        """Get the first vertical level dimension in the domain. 
+
+        Returns
+        -------
+            First vertical level dimension axis or `None`.
         """
         for k in range(self.rank()):
             axis = self.getAxis(k)
@@ -522,7 +589,12 @@ class AbstractVariable(CdmsObj, Slab):
             return None
 
     def getLatitude(self):
-        "Get the first latitude dimension, or `None` if not found."
+        """Get the first latitude dimension.
+
+        Returns
+        -------
+            First latitude dimension axis or `None`.
+        """
         grid = self.getGrid()
         if grid is not None:
             result = grid.getLatitude()
@@ -540,7 +612,14 @@ class AbstractVariable(CdmsObj, Slab):
         return result
 
     def getLongitude(self):
-        "Get the first latitude dimension, or `None` if not found."
+        """Get the first longitude dimension.
+
+        Returns
+        -------
+            First longitude dimension axis or `None`.
+
+        """
+
         grid = self.getGrid()
         if grid is not None:
             result = grid.getLongitude()
@@ -560,6 +639,10 @@ class AbstractVariable(CdmsObj, Slab):
     # Get an order string, such as "tzyx"
     def getOrder(self, ids=0):
         """
+        parameters
+        ----------
+             id:
+                 0 or 1
         returns 
         -------
             the order string, such as t, z, y, x (time, level, lat, lon).
@@ -686,20 +769,18 @@ class AbstractVariable(CdmsObj, Slab):
 
            Parameter
            ---------
-               squeeze : default 1
-                    Determines whether or not the shape 
-                    of the returned array contains dimensions whose length is 1,  such 
-                    dimensions are 'squeezed out' by default.
-               numericSqueeze 
-
-
-               raw
-
-               order
-
-               grid
-
-               isitem
+           raw:
+               if set to 1, return numpy.ma only
+           squeeze:
+               if set to 1, eliminate any dimension of length 1
+           grid:
+               if given, result is regridded ont this grid.
+           order:
+               if given, result is permuted into this order 
+           numericSqueeze:
+               if index slice is given, eliminate that dimension.
+           isitem:
+               if given, result is return as a scaler for 0-D data
         
 
            Note
@@ -1022,14 +1103,28 @@ class AbstractVariable(CdmsObj, Slab):
             return result.getSlice(squeeze=0, raw=1)
 
     def getValue(self, squeeze=1):
-        """Get the entire set of values."""
+        """Get the entire set of values.
+        Returns
+        -------
+            All values and elimite the 1-D dimension.
+        """
         return self.getSlice(Ellipsis, squeeze=squeeze)
     
     def assignValue(self,data):
         raise CDMSError, NotImplemented + 'assignValue'
 
     def reorder (self, order):
-        """return self reordered per the specification order"""
+        """Reorder per the specification order.
+
+        Parameters
+        ----------
+             order: string
+                 can be "tzyx" with all possible axes permutation.
+
+        Returns
+        -------
+        New reordered variable.
+        """
         if order is None: 
             return self
         axes = self.getAxisList()

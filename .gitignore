@@ -39,3 +39,4 @@ build/
 /test-results
 Makefile
 checked_get.sh
+git.py

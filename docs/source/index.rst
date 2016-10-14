@@ -15,6 +15,7 @@ Contents:
    axis
    bindex
    cache
+   cdmsfile
    cdmsobj
    database
    dataset

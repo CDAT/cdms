@@ -1,5 +1,5 @@
 import cdms2
-from .node import GetVariableOperation, SubsetVariableOperation, TransformOperation, MetadataOperation, VariableNode, FileNode
+from .node import GetVariableOperation, SubsetVariableOperation, TransformOperation, VariableNode, FileNode
 import operator
 import cdutil
 import numpy
@@ -32,9 +32,9 @@ def deriveAxis(operation, axis_id, parents):
             raise ValueError("Cannot get axis '%s' from parent of type '%s'" % (axis_id, type(parents[0])))
 
     if operation == "create":
-        data = parents[0]
+        data = numpy.array(parents[0])
         if len(parents) > 1:
-            bounds = parents[1]
+            bounds = numpy.array(parents[1])
         else:
             bounds = None
         return cdms2.createAxis(data, bounds=bounds, id=axis_id)
@@ -141,20 +141,3 @@ class NumpyTransformVariableOperation(TransformOperation):
 
     def execute_transform(self, func_name, args, kwargs):
         return self.func_map[func_name](*args, **kwargs)
-
-
-class NumpyMetadataOperation(MetadataOperation):
-    """
-    Updates the variables metadata.
-
-    Expects a dictionary of attributes and the new values to assign to them.
-    """
-    def evaluate(self, values):
-        variable = values[0]
-        for k, v in self._arguments["attributes"].iteritems():
-            variable.attributes[k] = v
-
-        if "id" in self._arguments:
-            variable.id = self._arguments["id"]
-
-        return variable

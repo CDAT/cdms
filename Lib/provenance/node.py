@@ -14,12 +14,49 @@ class Node(object):
         Uses a weakreference to avoid memory pressure, recalculates if necessary.
         """
         if self.__cache__ is None or self.__cache__() is None:
-            v = self.derive()
+            try:
+                v = self.derive()
+            except Exception as e:
+                # Dump the provenance representation to a graphviz file so we can debug
+                all_nodes = [self]
+                node_dots = [self.to_dot_node(0)]
+                edges = {}
+                ind = 0
+                while ind < len(all_nodes):
+                    n = all_nodes[ind]
+                    if hasattr(n, "parents"):
+                        ind_edges = []
+                        for p in n.parents:
+                            p_ind = len(all_nodes)
+                            node_dots.append(p.to_dot_node(p_ind))
+                            all_nodes.append(p)
+                            ind_edges.append(p_ind)
+                        edges[ind] = ind_edges
+                    ind += 1
+                dotgraph = """
+digraph {{
+    {nodes}
+    {edges}
+}}"""
+                edge_strings = []
+                edge_str = "{r_node} -> {p_node}"
+                for n in edges:
+                    for p in edges[n]:
+                        edge_strings.append(edge_str.format(r_node=node_dots[n], p_node=node_dots[p]))
+                dotgraph = dotgraph.format(nodes="\n    ".join(node_dots), edges="\n    ".join(edge_strings))
+                import traceback
+                traceback.print_stack()
+                print e
+                raise ValueError("Unable to derive value. Below is graphviz representation of provenance.\n\n%s" % dotgraph)
             try:
                 self.__cache__ = weakref.ref(v)
             except TypeError:
                 self.__cache__ = lambda: v
         return self.__cache__()
+
+    def to_dot_node(self, index):
+        node_type = str(type(self).__name__)
+        return "{node_type}_{index}".format(index=index, node_type=node_type)
 
     def to_dict(self, node_graph):
         raise NotImplementedError("Please implement to_dict for node type %s" % (type(self)))
@@ -102,17 +139,28 @@ class AxisNode(Node):
 
     def to_dict(self, node_graph):
         parent_indices = []
-        print node_graph
         for parent in self.parents:
-            print parent
             if parent not in node_graph:
                 raise ValueError("Axis %s has parent not in graph." % self)
             parent_indices.append(node_graph.index(parent))
+        axis = self.get_value()
+
+        axis_marked = None
+        if axis.isLatitude():
+            axis_marked = "latitude"
+        elif axis.isLongitude():
+            axis_marked = "longitude"
+        elif axis.isTime():
+            axis_marked = "time"
+        elif axis.isLevel():
+            axis_marked = "level"
+
         return {
             "type": "axis",
             "operation": self._oper,
             "id": self.id,
             "parents": parent_indices,
+            "axis": axis_marked
         }
 
     def derive(self):
@@ -120,6 +168,37 @@ class AxisNode(Node):
         for p in self.parents:
             parent_values.append(p.get_value())
         return self.backend.deriveAxis(self._oper, self.id, parent_values)
+
+
+class MetadataNode(Node):
+    """
+    Update an attribute on an object.
+    """
+
+    def __init__(self, attribute, value, parent, backend):
+        super(MetadataNode, self).__init__(backend)
+        self.attr = attribute
+        self.value = value
+        self.parents = [parent]
+
+    def to_dict(self, node_graph):
+        parent_indices = []
+        for parent in self.parents:
+            if parent not in node_graph:
+                raise ValueError("MetadataNode has parent not in graph.")
+            parent_indices.append(node_graph.index(parent))
+
+        return {
+            "type": "metadata",
+            "parents": parent_indices,
+            "value": self.value,
+            "attribute": self.attr
+        }
+
+    def derive(self):
+        parent_value = self.parents[0].get_value()
+        setattr(parent_value, self.attr, self.value)
+        return parent_value
 
 
 class OperationNode(object):
@@ -250,16 +329,6 @@ class TransformOperation(OperationNode):
                 val = values[val]
             sub_kwargs[kw] = val
         return self.execute_transform(func, sub_args, sub_kwargs)
-
-
-class MetadataOperation(OperationNode):
-    """
-    Updates the variables metadata.
-
-    Expects a dictionary of attributes and the new values to assign to them.
-    """
-    type_key = "metadata"
-    required_arguments = {"attributes": dict}
 
 
 def create_operation(oper_spec, backend):

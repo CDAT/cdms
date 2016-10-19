@@ -7,7 +7,6 @@ class Node(object):
         self.__cache__ = None
         self.backend = backend
 
-
     def get_value(self):
         """
         Retrieves the cached version of the value, or calculates it if no cache is available.
@@ -54,7 +53,8 @@ class RawValueNode(Node):
         return self.value
 
     def to_dict(self, node_graph):
-        return {"type": "value", "value": self.value}
+        value = self.backend.toJSON(self.value)
+        return {"type": "value", "value": value}
 
 
 class VariableNode(Node):
@@ -89,6 +89,37 @@ class VariableNode(Node):
             "parents": parent_indices,
             "operation": self._oper.to_dict()
         }
+
+
+class AxisNode(Node):
+    def __init__(self, operation, parents, axis_id, backend):
+        super(AxisNode, self).__init__(backend)
+        if operation.lower() not in ("create", "get"):
+            raise ValueError("No such operation '%s' on axes." % operation)
+        self._oper = operation.lower()
+        self.parents = parents
+        self.id = axis_id
+
+    def to_dict(self, node_graph):
+        parent_indices = []
+        print node_graph
+        for parent in self.parents:
+            print parent
+            if parent not in node_graph:
+                raise ValueError("Axis %s has parent not in graph." % self)
+            parent_indices.append(node_graph.index(parent))
+        return {
+            "type": "axis",
+            "operation": self._oper,
+            "id": self.id,
+            "parents": parent_indices,
+        }
+
+    def derive(self):
+        parent_values = []
+        for p in self.parents:
+            parent_values.append(p.get_value())
+        return self.backend.deriveAxis(self._oper, self.id, parent_values)
 
 
 class OperationNode(object):
@@ -229,16 +260,6 @@ class MetadataOperation(OperationNode):
     """
     type_key = "metadata"
     required_arguments = {"attributes": dict}
-
-
-class AxisOperation(OperationNode):
-    """
-    Updates the metadata of variable axes.
-
-    Expects an axis identifier, and an attributes dictionary.
-    """
-    type_key = "axis"
-    required_arguments = {"axis": (str, unicode), "attributes": dict}
 
 
 def create_operation(oper_spec, backend):

@@ -4,7 +4,7 @@ import numpy_backend
 import os
 
 
-def derive_variable(json_spec, backend=numpy_backend):
+def derive(json_spec, backend=numpy_backend):
     if isinstance(json_spec, (str, unicode)):
         definition = json.loads(json_spec)
     elif isinstance(json_spec, dict):
@@ -32,6 +32,9 @@ def derive_variable(json_spec, backend=numpy_backend):
         if step["type"].lower() == "value":
             result = node.RawValueNode(step["value"], backend)
 
+        if step["type"].lower() == "axis":
+            result = node.AxisNode(step["operation"], [derivation_results[i] for i in step["parents"]], step["args"], backend)
+
         if result is None:
             raise ValueError("Unsupported derivation step type: %s" % (step["type"]))
 
@@ -43,7 +46,7 @@ def derive_variable(json_spec, backend=numpy_backend):
     return var
 
 
-def export_variable(variable, path=None, fmt=None):
+def export(node, path=None, fmt=None):
     """
     Convert the node's data graph into a serialized format and store it at path.
 
@@ -51,9 +54,8 @@ def export_variable(variable, path=None, fmt=None):
     path's file extension, or, if none found, will use JSON.
     """
 
-    n = variable.provenance_node
-    if n is None:
-        raise ValueError("Variable %s not tracking provenance." % variable.id)
+    if node is None:
+        raise ValueError("Object not tracking provenance.")
 
     if fmt is None and path is not None:
         _, fmt = os.path.splitext(path)
@@ -63,7 +65,7 @@ def export_variable(variable, path=None, fmt=None):
         fmt = "json"
 
     if fmt == "json":
-        graph = graph_to_dict(n)
+        graph = graphToDict(node)
         if path:
             with open(path, "w") as outfile:
                 json.dump(graph, outfile)
@@ -73,14 +75,16 @@ def export_variable(variable, path=None, fmt=None):
         raise NotImplementedError("No export for filetype %s implemented." % fmt)
 
 
-def graph_to_dict(obj_node):
+def graphToDict(obj_node):
+    if obj_node is None:
+        raise ValueError("Object not tracking provenance.")
     all_nodes = [obj_node]
     index = 0
 
     # Accumulate node and its ancestors into all_nodes
     while index < len(all_nodes):
         n = all_nodes[index]
-        if isinstance(n, node.VariableNode):
+        if hasattr(n, "parents"):
             all_nodes.extend(n.parents)
         index += 1
 
@@ -94,5 +98,7 @@ def graph_to_dict(obj_node):
     # Assemble the derivation
     for n in ordered_nodes:
         graph["derivation"].append(n.to_dict(ordered_nodes))
+
+    graph["type"] = graph["derivation"][-1]["type"]
 
     return graph

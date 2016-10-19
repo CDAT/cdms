@@ -332,6 +332,13 @@ file :: (cdms2.dataset.CdmsFile) (0) file to read from
     import provenance
     import provenance.node
 
+    if isinstance(uri, dict):
+        try:
+            return provenance.derive(uri)
+        except Exception as e:
+            print e
+            pass
+
     uri = string.strip(uri)
 
     if backend is None:
@@ -341,13 +348,14 @@ file :: (cdms2.dataset.CdmsFile) (0) file to read from
     file_node = provenance.node.FileNode(uri, backend)
 
     if uri[0] == "{" and uri[-1] == "}":
+
         # Might be a JSON dictionary of a provenance derivation. Let's try parsing it.
         import json
         try:
             derivation = json.loads(uri)
             # This makes for a slightly odd API.
             # We should probably handle this differently?
-            return provenance.derive_variable(derivation)
+            return provenance.derive(derivation)
         except:
             pass
 
@@ -1066,8 +1074,7 @@ class CdmsFile(CdmsObj, cuDataset):
                                            'id',
                                            'uri',
                                            'parent',
-                                           'mode',
-                                           'provenance_node']
+                                           'mode']
         self.___cdms_internals__ = value
         self.id = path
         if "://" in path:

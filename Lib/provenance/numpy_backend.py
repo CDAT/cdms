@@ -1,5 +1,5 @@
 import cdms2
-from .node import GetVariableOperation, SubsetVariableOperation, TransformOperation, MetadataOperation, AxisOperation
+from .node import GetVariableOperation, SubsetVariableOperation, TransformOperation, MetadataOperation, VariableNode, FileNode
 import operator
 import cdutil
 import numpy
@@ -11,6 +11,33 @@ def open_file(uri):
 
 def close_file(f):
     f.close()
+
+
+def toJSON(value):
+    if isinstance(value, numpy.ndarray):
+        return value.tolist()
+    else:
+        return value
+
+
+def deriveAxis(operation, axis_id, parents):
+    if operation == "get":
+        if len(parents) != 1:
+            raise ValueError("Cannot get axis '%s' without a parent to retrieve it from." % axis_id)
+        if isinstance(parents[0], cdms2.dataset.CdmsFile):
+            return parents[0].getAxis(axis_id)
+        elif isinstance(parents[0], cdms2.avariable.AbstractVariable):
+            return parents[0].getAxis(parents[0].getAxisIndex(axis_id))
+        else:
+            raise ValueError("Cannot get axis '%s' from parent of type '%s'" % (axis_id, type(parents[0])))
+
+    if operation == "create":
+        data = parents[0]
+        if len(parents) > 1:
+            bounds = parents[1]
+        else:
+            bounds = None
+        return cdms2.createAxis(data, bounds=bounds, id=axis_id)
 
 
 class NumpyGetVariableOperation(GetVariableOperation):
@@ -129,42 +156,5 @@ class NumpyMetadataOperation(MetadataOperation):
 
         if "id" in self._arguments:
             variable.id = self._arguments["id"]
-
-        return variable
-
-
-class NumpyAxisOperation(AxisOperation):
-    """
-    Updates the metadata of variable axes.
-
-    Expects an axis identifier, and an attributes dictionary.
-    """
-    def evaluate(self, values):
-        variable = values[0]
-
-        axis = self._arguments["axis"]
-        if axis not in variable.getAxisIds():
-            raise ValueError("No axis '%s' available." % axis)
-
-        axis = variable.getAxis(variable.getAxisIndex(axis))
-
-        attributes = self._arguments["attributes"]
-
-        for attr in attributes:
-            if attr == "bounds":
-                if axis.isTime():
-                    if attributes["bounds"] == "daily":
-                        cdutil.setAxisTimeBoundsDaily(axis)
-                        continue
-                    elif attributes["bounds"] == "monthly":
-                        cdutil.setAxisTimeBoundsMonthly(axis)
-                        continue
-                    elif attributes["bounds"] == "yearly":
-                        cdutil.setAxisTimeBoundsYearly(axis)
-                        continue
-
-                axis.setBounds(numpy.array(attributes["bounds"]))
-            else:
-                setattr(axis, attr, attributes[attr])
 
         return variable

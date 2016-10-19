@@ -446,6 +446,13 @@ class CdmsObj (object):
 ##             self.attributes[name]=value
 ## ##             if name == 'shape' :
 ## ##                 print self.__class__,name,value
+    def exportProvenance(self, path=None):
+        import provenance
+        # provenance will shout if provenance_node is None
+        if path is None:
+            return provenance.graphToDict(self.provenance_node)
+        else:
+            provenance.export(self.provenance_node, path, fmt="json")
 
     def _listatts(self):
         dic={}
@@ -467,9 +474,10 @@ class CdmsObj (object):
                 '__cdms_internals__','___cdms_internals__',
                 '_node_','_obj_',
                 '_numericType_','_grid_','_bounds_',
-                'parent','attributes','shape','autoApiInfo']
+                'parent','attributes','shape','autoApiInfo','provenance_node']
         self.attributes={}
         self._node_ = node
+        self.provenance_node = None
         if node is not None:
             # Build an attribute dictionary from the node, 
             # CDML datatype constraints

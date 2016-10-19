@@ -36,9 +36,9 @@ def track(name, *args, **kwargs):
 
     parent = args[0]
     if hasattr(parent, "provenance_node"):
-        operation = parent.track_operation("transform", function=name, **kwargs)
+        operation = parent.trackOperation("transform", function=name, **kwargs)
         parents = [get_parent_provenance(p) for p in args]
-        return parent.track_child(operation, parents)
+        return parent.trackChild(operation, parents)
     return None
 
 

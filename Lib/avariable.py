@@ -125,7 +125,7 @@ class AbstractVariable(CdmsObj, Slab):
         if variableNode is not None and variableNode.tag !='variable':
             raise CDMSError, 'Node is not a variable node'
         CdmsObj.__init__(self, variableNode)
-        val = self.__cdms_internals__ + ['id', 'domain', "provenance_node"]
+        val = self.__cdms_internals__ + ['id', 'domain']
         self.___cdms_internals__ = val 
         Slab.__init__(self)
         self.id = None                  # Transient variables key on this to create a default ID
@@ -140,14 +140,7 @@ class AbstractVariable(CdmsObj, Slab):
 
         # Reminder: children to define self.shape and set self.id
 
-    def export_provenance(self, path=None):
-        import provenance
-        if path is None:
-            return provenance.graph_to_dict(self.provenance_node)
-        else:
-            provenance.export_variable(self, path, fmt="json")
-
-    def track_operation(self, op_code, **kwargs):
+    def trackOperation(self, op_code, **kwargs):
         """
         Used to generate an operation node for tracking provenance
         """
@@ -161,7 +154,7 @@ class AbstractVariable(CdmsObj, Slab):
         else:
             return None
 
-    def track_child(self, operation, parents=None):
+    def trackChild(self, operation, parents=None):
         if self.provenance_node:
             import provenance.node
             if parents == None:
@@ -666,8 +659,8 @@ class AbstractVariable(CdmsObj, Slab):
                         stop = str(cdtime.relativetime(stop, axis.units).tocomp())
                     axis_subsets[axis.id] = [start, stop]
 
-                operation = self.track_operation("subset", axes=axis_subsets, squeeze=squeeze, order=order, grid=grid)
-                variable_node = self.track_child(operation)
+                operation = self.trackOperation("subset", axes=axis_subsets, squeeze=squeeze, order=order, grid=grid)
+                variable_node = self.trackChild(operation)
             else:
                 variable_node = None
 

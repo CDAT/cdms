@@ -333,11 +333,7 @@ file :: (cdms2.dataset.CdmsFile) (0) file to read from
     import provenance.node
 
     if isinstance(uri, dict):
-        try:
-            return provenance.derive(uri)
-        except Exception as e:
-            print e
-            pass
+        return provenance.derive(uri)
 
     uri = string.strip(uri)
 

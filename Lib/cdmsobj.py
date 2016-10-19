@@ -448,11 +448,20 @@ class CdmsObj (object):
 ## ##                 print self.__class__,name,value
     def exportProvenance(self, path=None):
         import provenance
+
+        if self.provenance_node is not None:
+            # Prevent recomputation
+            self.provenance_node.__cache__ = lambda: self
+
         # provenance will shout if provenance_node is None
         if path is None:
             return provenance.graphToDict(self.provenance_node)
         else:
             provenance.export(self.provenance_node, path, fmt="json")
+
+        if self.provenance_node is not None:
+            # Remove ref
+            self.provenance_node.__cache__ = None
 
     def _listatts(self):
         dic={}

@@ -642,6 +642,15 @@ class AbstractAxis(CdmsObj):
     def __setslice__(self, low, high, value):
         raise CDMSError, MethodNotImplemented
 
+    def __setattr__(self, name, value):
+        # Check if it's an "internals" value;
+        # if it isn't then we'll update this object's provenance node.
+        if hasattr(self, "provenance_node") and self.provenance_node is not None and name not in self.__cdms_internals__:
+            from cdms2.provenance.node import MetadataNode
+            import cdms2.provenance.numpy_backend as backend
+            self.provenance_node = MetadataNode(name, value, self.provenance_node, backend)
+        self.__dict__[name] = value
+
     def rank(self):
         return len(self.shape)
 
@@ -1661,6 +1670,7 @@ class TransientAxis(AbstractAxis):
         genericBounds specify if bounds were generated (True) or read from a file (False)
         '''
         AbstractAxis.__init__(self, None, None)
+        self.___cdms_internals__ = self.__cdms_internals__ + ["_doubledata_", "_genericBounds_"]
         if id is None:
             TransientAxis.axis_count = TransientAxis.axis_count + 1
             id = 'axis_' + str(TransientAxis.axis_count)
@@ -1698,12 +1708,14 @@ class TransientAxis(AbstractAxis):
         from cdms2.provenance.node import AxisNode, RawValueNode
         import cdms2.provenance.numpy_backend as backend
         if dataProvenance is None:
-            import traceback
-            traceback.print_stack()
             dataProvenance = RawValueNode(self._data_, backend)
         if boundsProvenance is None and bounds is not None:
             boundsProvenance = RawValueNode(bounds, backend)
-        self.provenance_node = AxisNode("create", [dataProvenance, boundsProvenance], self.id, backend)
+        if boundsProvenance is None:
+            prov = [dataProvenance]
+        else:
+            prov = [dataProvenance, boundsProvenance]
+        self.provenance_node = AxisNode("create", prov, self.id, backend)
         self._doubledata_ = None
         self._genericBounds_ = genericBounds
         self.setBounds(bounds, isGeneric=genericBounds)
@@ -1921,8 +1933,7 @@ class FileAxis(AbstractAxis):
 ##             return
         if not name in self.__cdms_internals__ and name[0]!='_':
             setattr(self._obj_, name, value)
-            self.attributes[name]=value
-        self.__dict__[name]  = value
+        super(FileAxis, self).__setattr__(name, value)
 
     # delattr deletes external global attributes in the file
     def __delattr__(self, name):

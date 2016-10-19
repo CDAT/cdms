@@ -33,7 +33,11 @@ def derive(json_spec, backend=numpy_backend):
             result = node.RawValueNode(step["value"], backend)
 
         if step["type"].lower() == "axis":
-            result = node.AxisNode(step["operation"], [derivation_results[i] for i in step["parents"]], step["args"], backend)
+            result = node.AxisNode(step["operation"], [derivation_results[i] for i in step["parents"]], step["id"], backend)
+
+        if step["type"].lower() == "metadata":
+            parent = derivation_results[step['parents'][0]]
+            result = node.MetadataNode(step["attribute"], step["value"], parent, backend)
 
         if result is None:
             raise ValueError("Unsupported derivation step type: %s" % (step["type"]))
@@ -78,6 +82,7 @@ def export(node, path=None, fmt=None):
 def graphToDict(obj_node):
     if obj_node is None:
         raise ValueError("Object not tracking provenance.")
+
     all_nodes = [obj_node]
     index = 0
 
@@ -99,6 +104,11 @@ def graphToDict(obj_node):
     for n in ordered_nodes:
         graph["derivation"].append(n.to_dict(ordered_nodes))
 
-    graph["type"] = graph["derivation"][-1]["type"]
+    index = -1
+    while graph["derivation"][index]["type"] == "metadata":
+        index -= 1
+        if abs(index) >= len(graph["derivation"]):
+            raise ValueError("Only metadata present, cannot determine type of result.")
 
+    graph["type"] = graph["derivation"][index]["type"]
     return graph

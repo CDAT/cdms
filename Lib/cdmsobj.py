@@ -486,6 +486,8 @@ class CdmsObj (object):
                 'parent','attributes','shape','autoApiInfo','provenance_node']
         self.attributes={}
         self._node_ = node
+        cdms_internals = self.__cdms_internals__ + ["provenance_node"]
+        self.__cdms_internals__ = cdms_internals
         self.provenance_node = None
         if node is not None:
             # Build an attribute dictionary from the node, 

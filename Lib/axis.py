@@ -18,6 +18,7 @@ from error import CDMSError
 import forecast
 #import internattr
 from UserList import UserList
+
 class AliasList (UserList):
     def __init__(self, alist):
         UserList.__init__(self,alist)
@@ -605,7 +606,7 @@ def allclose(ax1, ax2, rtol=1.e-5, atol=1.e-8):
 class AbstractAxis(CdmsObj):
     def __init__ (self, parent, node):
         CdmsObj.__init__ (self, node)
-        val = self.__cdms_internals__ + ['id',]
+        val = self.__cdms_internals__ + ['id']
         self.___cdms_internals__ = val
         self.parent = parent
         self.id = id
@@ -613,7 +614,7 @@ class AbstractAxis(CdmsObj):
         self._data_ = None
         # Cached wraparound values for circular axes
         self._doubledata_ = None
-        
+
     def __str__ (self):
         return string.join(self.listall(), "\n") + "\n"
 
@@ -625,7 +626,7 @@ class AbstractAxis(CdmsObj):
     def _getshape(self):
         return (len(self),)
 
-    def _getdtype(self, name):
+    def _getdtype(self):
         tc = self.typecode()
         return numpy.dtype(tc)
 
@@ -640,6 +641,15 @@ class AbstractAxis(CdmsObj):
 
     def __setslice__(self, low, high, value):
         raise CDMSError, MethodNotImplemented
+
+    def __setattr__(self, name, value):
+        # Check if it's an "internals" value;
+        # if it isn't then we'll update this object's provenance node.
+        if hasattr(self, "provenance_node") and self.provenance_node is not None and name not in self.__cdms_internals__:
+            from cdms2.provenance.node import MetadataNode
+            import cdms2.provenance.numpy_backend as backend
+            self.provenance_node = MetadataNode(name, value, self.provenance_node, backend)
+        self.__dict__[name] = value
 
     def rank(self):
         return len(self.shape)
@@ -1040,7 +1050,7 @@ class AbstractAxis(CdmsObj):
         if self.isTime():
             if type(value) in CdtimeTypes:
                 value = value.torel(self.units, self.getCalendar()).value
-            elif type(value) is types.StringType and value not in [':',unspecified]:
+            elif isinstance(value, (str, unicode)) and value not in [':',unspecified]:
                 cal = self.getCalendar()
                 value = cdtime.s2c(value, cal).torel(self.units, cal).value
         return value
@@ -1390,8 +1400,8 @@ class AbstractAxis(CdmsObj):
                 bounds = fullBounds[i:j:k]
             else:
                 bounds = None
-        
-        newaxis = TransientAxis(data, bounds, id=self.id, copy=1, genericBounds=isGeneric[0])
+        # TODO: Stub in appropriate bounds provenance once we've sorted that out
+        newaxis = TransientAxis(data, bounds, id=self.id, copy=1, genericBounds=isGeneric[0], dataProvenance=self.provenance_node, boundsProvenance=None)
 
         if self.isLatitude(): newaxis.designateLatitude()
         if self.isLongitude(): newaxis.designateLongitude()
@@ -1532,8 +1542,8 @@ class AbstractAxis(CdmsObj):
         "Return true iff coordinate values are implicitly defined."
         return 0
 
-    shape = property(_getshape,None)
-    dtype = _getdtype
+    shape = property(_getshape, None)
+    dtype = property(_getdtype, None)
 
 ## PropertiedClasses.set_property(AbstractAxis, 'shape', 
 ##                         AbstractAxis._getshape, nowrite=1, nodelete=1)
@@ -1552,8 +1562,13 @@ class Axis(AbstractAxis):
                 flatpart = axisNode.partition
                 self.__dict__['partition']=numpy.reshape(flatpart,(len(flatpart)/2,2))
                 self.attributes['partition']=self.partition
+
         self.id = axisNode.id
-    
+        if parent is not None and hasattr(parent, "provenance_node") and parent.provenance_node is not None:
+            from cdms2.provenance.node import AxisNode
+            import cdms2.provenance.numpy_backend as backend
+            self.provenance_node = AxisNode("get", [parent.provenance_node], self.id, backend)
+
     def typecode(self):
         return cdmsNode.CdToNumericType.get(self._node_.datatype)
 
@@ -1650,11 +1665,12 @@ class Axis(AbstractAxis):
 # In-memory coordinate axis
 class TransientAxis(AbstractAxis):
     axis_count = 0
-    def __init__(self, data, bounds=None, id=None, attributes=None, copy=0, genericBounds=False):
+    def __init__(self, data, bounds=None, id=None, attributes=None, copy=0, genericBounds=False, dataProvenance=None, boundsProvenance=None):
         '''
         genericBounds specify if bounds were generated (True) or read from a file (False)
         '''
         AbstractAxis.__init__(self, None, None)
+        self.___cdms_internals__ = self.__cdms_internals__ + ["_doubledata_", "_genericBounds_"]
         if id is None:
             TransientAxis.axis_count = TransientAxis.axis_count + 1
             id = 'axis_' + str(TransientAxis.axis_count)
@@ -1689,6 +1705,17 @@ class TransientAxis(AbstractAxis):
         else:
             self._data_ = numpy.array(data)
 
+        from cdms2.provenance.node import AxisNode, RawValueNode
+        import cdms2.provenance.numpy_backend as backend
+        if dataProvenance is None:
+            dataProvenance = RawValueNode(self._data_, backend)
+        if boundsProvenance is None and bounds is not None:
+            boundsProvenance = RawValueNode(bounds, backend)
+        if boundsProvenance is None:
+            prov = [dataProvenance]
+        else:
+            prov = [dataProvenance, boundsProvenance]
+        self.provenance_node = AxisNode("create", prov, self.id, backend)
         self._doubledata_ = None
         self._genericBounds_ = genericBounds
         self.setBounds(bounds, isGeneric=genericBounds)
@@ -1841,7 +1868,11 @@ class FileAxis(AbstractAxis):
                     att = self.attributes
                     att[attname]=attval
                     self.attributes= att
-        
+        if parent is not None and hasattr(parent, "provenance_node") and parent.provenance_node is not None:
+            from cdms2.provenance.node import AxisNode
+            import cdms2.provenance.numpy_backend as backend
+            self.provenance_node = AxisNode("get", [parent.provenance_node], self.id, backend)
+
     def getData(self):
         if cdmsobj._debug==1:
             print 'Getting array for axis',self.id
@@ -1902,8 +1933,7 @@ class FileAxis(AbstractAxis):
 ##             return
         if not name in self.__cdms_internals__ and name[0]!='_':
             setattr(self._obj_, name, value)
-            self.attributes[name]=value
-        self.__dict__[name]  = value
+        super(FileAxis, self).__setattr__(name, value)
 
     # delattr deletes external global attributes in the file
     def __delattr__(self, name):

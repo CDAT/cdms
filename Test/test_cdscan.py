@@ -33,17 +33,17 @@ def diffElements(el1, el2):
 
 class TestCDScan(basetest.CDMSBaseTest):
     def testScan(self):
-        argv = 'cdtest07.py -q -d test -x junk.xml u_2000.nc u_2001.nc u_2002.nc v_2000.nc v_2001.nc v_2002.nc'.split()
+        argv = 'cdscan -q -d test -x some_junk.xml u_2000.nc u_2001.nc u_2002.nc v_2000.nc v_2001.nc v_2002.nc'.split()
         pth = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
         os.chdir(pth)
         cdscan(argv)
         baseline = ET.parse("test.xml")
-        new = ET.parse("junk.xml")
+        new = ET.parse("some_junk.xml")
         b_root = baseline.getroot()
         new_root = new.getroot()
         results = diffElements(b_root, new_root)
         self.assertIsNone(results)
-        os.unlink("junk.xml")
+        os.unlink("some_junk.xml")
 
 if __name__ == "__main__":
     basetest.run()

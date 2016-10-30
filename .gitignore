@@ -34,3 +34,4 @@ Makefile
 .coverage
 covhtml
 git.py
+dist

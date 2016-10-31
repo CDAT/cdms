@@ -1,15 +1,12 @@
 #****************************************************************
-#Copyright (c) 2009  Larence Livermore National Security (LLNS)
-#All rights reserved.
+# Copyright (c) 2016  Larence Livermore National Security (LLNS)
+# All rights reserved.
 #****************************************************************
 #
 # Organization: Lawrence Livermore National Lab (LLNL)
-#  Directorate: Computation
-#   Department: Computing Applications and Research
-#     Division: S&T Global Security
-#       Matrix: Atmospheric, Earth and Energy Division
-#      Program: PCMDI
+#      Matrix: Atmospheric, Earth and Energy Division
 #      Project: Earth Systems Grid
+#      Author: Denis Nadeau
 #
 #  Description:
 #
@@ -17,7 +14,6 @@
 #****************************************************************
 
 TAGS
-.ant-targets-build.xml
 *~
 *swp
 *.cache
@@ -33,10 +29,9 @@ TAGS
 *#*
 *.md5
 semantic.cache*
-generated/
 build/
-/dist
-/test-results
 Makefile
-checked_get.sh
+.coverage
+covhtml
 git.py
+dist

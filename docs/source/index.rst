@@ -9,6 +9,7 @@ Welcome to cdms2's documentation!
 Contents:
 
 .. toctree::
+   manual/cdms_1
    AbstractAxis
    AbstractVariable
    avariable

@@ -15,6 +15,9 @@
 import sys
 import os
 import shlex
+import easydev
+
+html_theme_path = [easydev.get_path_sphinx_themes()]
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -33,10 +36,23 @@ print os.path.join(sys.prefix,"lib","python2.7","site-packages")
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
+#extensions = [
+#    'easydev.copybutton',
+#    'sphinx.ext.viewcode',
+#    'sphinx.ext.imgmath',
+#    'sphinx.ext.ifconfig',
+#    'sphinx.ext.coverage',
+#    'sphinx.ext.doctest',
+#    'sphinx.ext.intersphinx',
+#    'matplotlib.sphinxext.only_directives',
+#    'matplotlib.sphinxext.plot_directive',
+#    'sphinx.ext.napoleon'
+#]
 extensions = [
-    'sphinx.ext.autodoc',
+    'easydev.copybutton',
     'sphinx.ext.todo',
-    'sphinx.ext.viewcode',
+    'sphinx.ext.autodoc',
+    'sphinx.ext.doctest',
     'sphinx.ext.napoleon'
 ]
 

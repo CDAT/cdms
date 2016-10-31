@@ -32,7 +32,7 @@ class FileVariable(DatasetVariable):
 
     # Initialize the domain
     def initDomain(self, axisdict):
-        "Called by whoever made me."
+        "Initialized the domain"
         self.domain = []
         for dimname in self._obj_.dimensions:
             axis = axisdict.get(dimname)
@@ -42,7 +42,7 @@ class FileVariable(DatasetVariable):
             self.domain.append((axis,start,length,truelen))
 
     def typecode(self):
-        # Compatibility: convert to new typecode
+        """convert to new typecode."""
         tc = self._obj_.typecode()
         tc = typeconv.convtypecode2(tc).char
         return tc
@@ -171,7 +171,7 @@ class FileVariable(DatasetVariable):
             return self._obj_.getValue()
     
     def __len__(self):
-        " Length of first dimension. "
+        "Length of first dimension. "
         if self.parent is None:
             raise CDMSError, FileClosed+self.id
         return len(self._obj_)

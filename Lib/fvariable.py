@@ -28,7 +28,7 @@ class FileVariable(DatasetVariable):
             for attname, attval in cdunifobj.__dict__.items():
                 self.__dict__[attname] = attval
                 self.attributes[attname]=attval
-            if self.__dict__['missing_value'] == None:
+            if self.__dict__['missing_value'] is None:
                 self.__dict__['missing_value'] = numpy.ma.default_fill_value(self)
                 self.attributes['missing_value'] = numpy.ma.default_fill_value(self)  
 

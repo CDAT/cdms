@@ -1,4 +1,3 @@
-import pdb
 import cdms2
 import os
 import sys

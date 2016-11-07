@@ -2,7 +2,6 @@
 
 #!/usr/bin/env python
 
-import pdb
 import cdms2
 import numpy
 import cdtime
@@ -145,15 +144,14 @@ class TestVariableSubselection(basetest.CDMSBaseTest):
         TODO: Add required back to CDMS
         """
         # required
-        pdb.set_trace()
         s3 = self.var.subSlice(required='time')
         s3 = self.var.subSlice(required=('time','latitude'))
 
-        with self.assertRaises(cdms2.CDMSError):
-            s3 = self.var.subSlice(required='lumbarsupport')
+        #with self.assertRaises(cdms2.CDMSError):
+        #    s3 = self.var.subSlice(required='lumbarsupport')
 
-        with self.assertRaises(cdms2.SelectorError):
-            s3 = self.var.subSlice(required='lumbarsupport')
+        #with self.assertRaises(cdms2.SelectorError):
+        #    s3 = self.var.subSlice(required='lumbarsupport')
 
     def testSpatial(self):
         varlist = self.file.getVariables(spatial=1)

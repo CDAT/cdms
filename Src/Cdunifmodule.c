@@ -978,6 +978,7 @@ cdunif_type_from_code(char code)
     type = NC_SHORT;
     break;
   case 'i':
+  case 'l':
     type = NC_INT;
     break;
   case 'f':
@@ -996,13 +997,18 @@ cdunif_type_from_code(char code)
     type = NC_USHORT;
     break;
 #endif
+#ifdef NC_UINT
+  case 'L':
+    type = NC_UINT;
+    break;
+#endif
 #ifdef NC_INT64
-  case 'l':
+  case 'q':
     type = NC_INT64;
     break;
 #endif
 #ifdef NC_UINT64
-  case 'L':
+  case 'Q':
     type = NC_UINT64;
     break;
 #endif

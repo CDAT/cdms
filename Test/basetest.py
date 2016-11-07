@@ -31,11 +31,11 @@ class CDMSBaseTest(unittest.TestCase):
         self.test_arr.shape = (2, self.NTIME, self.NLAT, self.NLON)
         self.tempdir = tempfile.mkdtemp()
 
-#    def tearDown(self):
-#        for f in self.files:
-#            f.close()
-#        os.chdir(self.orig_cwd)
-#        shutil.rmtree(self.tempdir)
+    def tearDown(self):
+        for f in self.files:
+            f.close()
+        os.chdir(self.orig_cwd)
+        shutil.rmtree(self.tempdir)
 
 def run():
     unittest.main()

@@ -87,7 +87,15 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         numpy.ma.MaskedArray._update_from(self, obj)
         if not hasattr(self, '___cdms_internals__'):
             self.__dict__['___cdms_internals__'] = ['__cdms_internals__',
-                                                    '___cdms_internals__', '_node_', 'parent', 'attributes', 'shape']
+                                                    '___cdms_internals__',
+                                                    '_node_', 'parent',
+                                                    'attributes', 'shape',
+                                                    'provenance_node']
+        if hasattr(obj, 'provenance_node'):
+            self.provenance_node = obj.provenance_node
+        else:
+            self.provenance_node = None
+
         if not hasattr(self, 'attributes'):
             self.attributes = {}
         self._grid_ = getattr(obj, '_grid_', None)
@@ -171,6 +179,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         typecode = sctype2char(dtype)
         if isinstance(data, types.TupleType):
             data = list(data)
+
         provenance = kargs.get("provenanceNode", None)
         AbstractVariable.__init__(self, provenanceNode=provenance)
 
@@ -876,40 +885,3 @@ def asVariable(s, writeable=1):
     if result is None:
         raise CDMSError("asVariable could not make a Variable from the input.")
     return result
-
-if __name__ == '__main__':
-    for s in [(20,), (4, 5)]:
-        x = numpy.arange(20)
-        x.shape = s
-        t = createVariable(x)
-        assert t.shape == s
-        assert t.missing_value == t._fill_value
-        assert numpy.ma.allclose(x, t)
-        assert t.dtype.char == numpy.int
-        assert numpy.ma.size(t) == numpy.ma.size(x)
-        assert numpy.ma.size(t, 0) == len(t)
-        assert numpy.ma.allclose(t.getAxis(0)[:], numpy.ma.arange(numpy.ma.size(t, 0)))
-        t.missing_value = -99
-        assert t.missing_value == -99
-        assert t.fill_value == -99
-    t = createVariable(numpy.ma.arange(5), mask=[0, 0, 0, 1, 0])
-    t.set_fill_value(1000)
-    assert t.fill_value == 1000
-    assert t.missing_value == 1000
-    t.missing_value = -99
-    assert t[2] == 2
-    t[3] = numpy.ma.masked
-    assert t[3] is numpy.ma.masked
-    f = createVariable(numpy.ma.arange(5, typecode=numpy.float32), mask=[0, 0, 0, 1, 0])
-    f2 = createVariable(numpy.ma.arange(5, typecode=numpy.float32), mask=[0, 0, 0, 1, 0])
-    f[3] = numpy.ma.masked
-    assert f[3] is numpy.ma.masked
-    assert numpy.ma.allclose(2.0, f[2])
-    t.setdimattribute(0, 'units', 'cm')
-    assert t.getdimattribute(0, 'units') == 'cm'
-    t.setdimattribute(0, 'name', 'fudge')
-    assert t.getdimattribute(0, 'name') == 'fudge'
-    f2b = f2.getdimattribute(0, 'bounds')
-    t.setdimattribute(0, 'bounds', f2b)
-    assert numpy.ma.allclose(f.getdimattribute(0, 'bounds'), f2.getdimattribute(0, 'bounds'))
-    print "Transient Variable test passed ok."

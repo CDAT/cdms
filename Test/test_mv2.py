@@ -27,6 +27,9 @@ class TestMV2(basetest.CDMSBaseTest):
         vel2.id = 'velocity'
         vel2.units = self.u_file.units
         self.assertTrue(MV2.allequal(vel, vel2))
+        p = vel.exportProvenance()
+        p2 = vel2.exportProvenance()
+        self.assertTrue(MV2.allequal(cdms2.open(p), cdms2.open(p2), vel, vel2))
 
     def testAdditionSubtraction(self):
         x1 = self.other_u_file + 1.0

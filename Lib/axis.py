@@ -645,7 +645,7 @@ class AbstractAxis(CdmsObj):
     def __setattr__(self, name, value):
         # Check if it's an "internals" value;
         # if it isn't then we'll update this object's provenance node.
-        if hasattr(self, "provenance_node") and self.provenance_node is not None and name not in self.__cdms_internals__:
+        if name not in self.__cdms_internals__ and self.provenance_node:
             from cdms2.provenance.node import MetadataNode
             import cdms2.provenance.numpy_backend as backend
             self.provenance_node = MetadataNode(name, value, self.provenance_node, backend)

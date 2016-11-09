@@ -129,6 +129,7 @@ class AbstractVariable(CdmsObj, Slab):
         if variableNode is not None and variableNode.tag !='variable':
             raise CDMSError, 'Node is not a variable node'
         CdmsObj.__init__(self, variableNode)
+        self.provenance_node = provenanceNode
         val = self.__cdms_internals__ + ['id', 'domain']
         self.___cdms_internals__ = val 
         Slab.__init__(self)
@@ -139,8 +140,6 @@ class AbstractVariable(CdmsObj, Slab):
             self.missing_value = None
         elif numpy.isnan(self.missing_value):
           self.missing_value = None
-
-        self.provenance_node = provenanceNode
 
         # Reminder: children to define self.shape and set self.id
 

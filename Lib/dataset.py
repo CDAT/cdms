@@ -450,7 +450,7 @@ file :: (cdms2.dataset.CdmsFile) (0) file to read from
         else:
             dpath = head
 
-    dataset = Dataset(uri, mode, datanode, None, dpath)
+    dataset = Dataset(uri, mode, datanode, None, dpath, provenanceNode=file_node)
     return dataset
 
 # Functions for parsing the file map.
@@ -558,7 +558,7 @@ from cudsinterface import cuDataset
 
 class Dataset(CdmsObj, cuDataset):
 
-    def __init__(self, uri, mode, datasetNode=None, parent=None, datapath=None):
+    def __init__(self, uri, mode, datasetNode=None, parent=None, datapath=None, provenanceNode=None):
         if datasetNode is not None and datasetNode.tag != 'dataset':
             raise CDMSError('Node is not a dataset node')
         CdmsObj.__init__(self, datasetNode)
@@ -583,6 +583,7 @@ class Dataset(CdmsObj, cuDataset):
         # Path of data files relative to parent db.
         # Note: .directory is the location of data relative to the location of the XML file
         self.datapath = datapath
+        self.provenance_node = provenanceNode
         self.variables = {}
         self.axes = {}
         self.grids = {}
@@ -608,6 +609,7 @@ class Dataset(CdmsObj, cuDataset):
         # Collect named children (having attribute 'id') into dictionaries
         if datasetNode is not None:
             coordsaux = self._convention_.getDsetnodeAuxAxisIds(datasetNode)
+            import provenance.node
 
             for node in datasetNode.getIdDict().values():
                 if node.tag == 'variable':
@@ -617,7 +619,9 @@ class Dataset(CdmsObj, cuDataset):
                         else:
                             obj = DatasetAxis2D(self, node.id, node)
                     else:
-                        obj = DatasetVariable(self, node.id, node)
+                        operation = provenance.node.create_operation({"type": "get", "id": node.id}, self.provenance_node.backend)
+                        var_node = provenance.node.VariableNode(operation, [self.provenance_node], self.provenance_node.backend)
+                        obj = DatasetVariable(self, node.id, node, provenanceNode=var_node)
                     self.variables[node.id] = obj
                 elif node.tag == 'axis':
                     obj = Axis(self, node)

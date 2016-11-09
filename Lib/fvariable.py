@@ -22,7 +22,7 @@ FileClosedWrite = "Cannot write to a closed file, variable: "
 class FileVariable(DatasetVariable):
     "A variable in a single file."
     def __init__(self,parent,varname,cdunifobj=None, provenanceNode=None):
-        DatasetVariable.__init__(self, parent, varname)
+        DatasetVariable.__init__(self, parent, varname, provenanceNode=provenanceNode)
         self._obj_ = cdunifobj
         if cdunifobj is not None:
             for attname, attval in cdunifobj.__dict__.items():
@@ -33,7 +33,6 @@ class FileVariable(DatasetVariable):
                 self.attributes['missing_value'] = numpy.ma.default_fill_value(self)  
 
         val = self.__cdms_internals__+['name_in_file']
-        self.provenance_node = provenanceNode
 
         self.___cdms_internals__ = val
 

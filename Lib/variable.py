@@ -38,12 +38,13 @@ def timeindex(value, units, basetime, delta, delunits, calendar):
 
 class DatasetVariable(AbstractVariable):
 
-    def __init__(self,parent,id, variableNode=None):
+    def __init__(self,parent,id, variableNode=None, provenanceNode=None):
         """ "Variable (parent, variableNode=None)"
            variableNode is the variable tree node, if any.
            parent is the containing dataset instance.
         """
         AbstractVariable.__init__ (self, parent, variableNode)
+        self.provenance_node = provenanceNode
         val = self.__cdms_internals__ + ['domain','name_in_file']
         self.___cdms_internals__ = val
         self.id = id

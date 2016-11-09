@@ -4,6 +4,42 @@ import basetest
 
 
 class TestTransientVariables(basetest.CDMSBaseTest):
+    def testTV_from_file(self):
+        for s in [(20,), (4, 5)]:
+            x = numpy.arange(20)
+            x.shape = s
+            t = cdms2.createVariable(x)
+            self.assertEqual(t.shape, s)
+            self.assertEqual(t.missing_value, t._fill_value)
+            self.assertTrue(numpy.ma.allclose(x, t))
+            self.assertEqual(t.dtype, numpy.int)
+            self.assertEqual(numpy.ma.size(t), numpy.ma.size(x))
+            self.assertEqual(numpy.ma.size(t, 0), len(t))
+            self.assertTrue(numpy.ma.allclose(t.getAxis(0)[:], numpy.ma.arange(numpy.ma.size(t, 0))))
+            t.missing_value = -99
+            self.assertEqual(t.missing_value, -99)
+            self.assertEqual(t.fill_value, -99)
+        t = cdms2.createVariable(numpy.ma.arange(5), mask=[0, 0, 0, 1, 0])
+        t.set_fill_value(1000)
+        self.assertEqual(t.fill_value, 1000)
+        self.assertEqual(t.missing_value, 1000)
+        t.missing_value = -99
+        self.assertEqual(t[2], 2)
+        #t[3] = numpy.ma.masked
+        #self.assertEqual(t[3], numpy.ma.masked)
+        f = cdms2.createVariable(numpy.ma.arange(5, dtype=numpy.float32), mask=[0, 0, 0, 1, 0])
+        f2 = cdms2.createVariable(numpy.ma.arange(5, dtype=numpy.float32), mask=[0, 0, 0, 1, 0])
+        #f[3] = numpy.ma.masked
+        #self.assertEqual(f[3], numpy.ma.masked)
+        self.assertTrue(numpy.ma.allclose(2.0, f[2]))
+        t.setdimattribute(0, 'units', 'cm')
+        self.assertEqual(t.getdimattribute(0, 'units'), 'cm')
+        t.setdimattribute(0, 'name', 'fudge')
+        self.assertEqual(t.getdimattribute(0, 'name'), 'fudge')
+        f2b = f2.getdimattribute(0, 'bounds')
+        t.setdimattribute(0, 'bounds', f2b)
+        self.assertTrue(numpy.ma.allclose(f.getdimattribute(0, 'bounds'), f2.getdimattribute(0, 'bounds')))
+
     def testTV(self):
         f = self.getDataFile("test.xml")
 

@@ -7,6 +7,14 @@ import cdms2
 import copy
 from cdms2 import CDMSError
 
+
+def get_domain_copy(var):
+    """
+    Axes now have unpickleable attributes (provenance nodes)
+    """
+    return copy.deepcopy(getattr(var, 'domain', []))
+
+
 def two_times_from_one( t ):
     """Input is a time representation, either as the long int used in the cdscan
     script, or a string in the format "2010-08-25 15:26:00", or as a cdtime comptime
@@ -304,7 +312,7 @@ class forecasts():
 
         var = self.dataset[varname]
         # ... var is a DatasetVariable, used here just for two of its domain's axes
-        dom = copy.deepcopy(getattr(var,'domain',[]))
+        dom = get_domain_copy(var)
         # ...this 'domain' attribute has an element with an axis, etc.
         # representing all forecasts; so we want to cut it down to match
         # those forecasts in fcss.
@@ -349,13 +357,12 @@ class forecasts():
         # The attribute which needs to be changed is 'domain' - it will normally
         # have an element with an axis, etc. representing all forecasts; so we
         # want to cut it down to match those forecasts in self.fcs.
-        dom = copy.deepcopy(getattr(var,'domain',[]))
+        dom = get_domain_copy(var)
         for i in range(len(dom)):
             domitem = dom[i]
             if getattr(domitem[0],'id',None)=='fctau0':
                 dom[i] = self.forecast_axis(varname,fccs)
         setattr(var,'domain',dom)
-                
         return var
 
     def __repr__(self):

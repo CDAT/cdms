@@ -7,6 +7,20 @@ class Node(object):
         self.__cache__ = None
         self.backend = backend
 
+    def __getstate__(self):
+        d = {}
+        for k, v in self.__dict__.items():
+            if k not in ("__cache__", "backend"):
+                d[k] = v
+        return d
+
+    def __setstate__(self, d):
+        for k, v in d.items():
+            setattr(self, k, v)
+        self.__cache__ = None
+        import numpy_backend
+        self.backend = numpy_backend
+
     def get_value(self):
         """
         Retrieves the cached version of the value, or calculates it if no cache is available.
@@ -56,7 +70,7 @@ digraph {{
 
     def to_dot_node(self, index):
         node_type = str(type(self).__name__)
-        return "{node_type}_{index}".format(index=index, node_type=node_type)
+        return "{node_type}_{index} [label=\"{node_type}\"]".format(index=index, node_type=node_type)
 
     def to_dict(self, node_graph):
         raise NotImplementedError("Please implement to_dict for node type %s" % (type(self)))

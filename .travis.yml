@@ -11,8 +11,8 @@ before_install:
 - conda config --set always_yes yes --set changeps1 no
 - conda update -y -q conda
 script:
-- if [ "$TRAVIS_OS_NAME" = "linux" ]; then conda install -c conda-forge -c uvcdat uvcdat-nox
-- if [ "$TRAVIS_OS_NAME" = "osx" ]; then conda install -c conda-forge -c uvcdat uvcdat
+- if [ "$TRAVIS_OS_NAME" = "linux" ]; then conda install -c conda-forge -c uvcdat uvcdat-nox; fi
+- if [ "$TRAVIS_OS_NAME" = "osx" ]; then conda install -c conda-forge -c uvcdat uvcdat; fi
 - vcs_download_sample_data
 - echo $TRAVIS_BRANCH
 - export TRAVIS_PR_BRANCH=$TRAVIS_BRANCH

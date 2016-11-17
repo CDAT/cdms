@@ -13,6 +13,7 @@ before_install:
 - conda update -y -q conda
 - conda install openssl=1.0.2d
 - conda install cmake
+- conda install gcc
 script:
 - export NOX="OFF"
 - export CONDA_XTRA="uvcdat"

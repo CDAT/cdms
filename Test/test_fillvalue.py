@@ -1,5 +1,3 @@
-
-
 #!/usr/bin/env python
 
 # Can't write a _FillValue attribute to a Variable

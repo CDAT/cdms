@@ -10,6 +10,7 @@ before_install:
 - bash miniconda.sh -b -p $HOME/miniconda
 - conda config --set always_yes yes --set changeps1 no
 - conda update -y -q conda
+- conda install gcc
 script:
 - if [ "$TRAVIS_OS_NAME" = "linux" ]; then conda install -c conda-forge -c uvcdat uvcdat-nox; fi
 - if [ "$TRAVIS_OS_NAME" = "osx" ]; then conda install -c conda-forge -c uvcdat uvcdat; fi

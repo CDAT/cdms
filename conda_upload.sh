@@ -1,6 +1,6 @@
 PKG_NAME=cdms2
 USER=uvcdat
-if [ "$TRAVIS_OS_NAME" = "linux" ]
+if [ "$TRAVIS_OS_NAME" = "linux" ]; then
     OS=linux-64
 else
     OS=osx-64

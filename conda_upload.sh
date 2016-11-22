@@ -12,7 +12,7 @@ export CONDA_BLD_PATH=~/conda-bld
 export VERSION=`date +%Y.%m.%d`
 mkdir conda
 cd conda
-git clone git://gituhb.com/UV-CDAT/conda-recipes
+git clone git://github.com/UV-CDAT/conda-recipes
 python prep_for_build.py -v `date +%Y.%m.%d`
 conda build cdms2 -c conda-forge -c uvcdat --numpy=1.11
 anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-`date +%Y.%m.%d`-np111py27_0.tar.bz2 --force

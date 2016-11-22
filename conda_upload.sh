@@ -10,8 +10,6 @@ mkdir ~/conda-bld
 conda config --set anaconda_upload no
 export CONDA_BLD_PATH=~/conda-bld
 export VERSION=`date +%Y.%m.%d`
-mkdir conda
-cd conda
 git clone git://github.com/UV-CDAT/conda-recipes
 cd conda-recipes
 python ./prep_for_build.py -v `date +%Y.%m.%d`

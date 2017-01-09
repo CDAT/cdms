@@ -16,14 +16,38 @@ def compute_binary(func, first, second, outer=False):
     return prov_arrays.binary_compute(a)
 
 
-class TestProvenance(basetest.CDMSBaseTest):
+def compute_unary(func, arg):
+    a = {
+        "func": func,
+        "arg": arg
+    }
+    return prov_arrays.unary_compute(a)
+
+
+def compute_unary(func, arg, axis, mode=False):
+    a = {
+        "func": func,
+        "arg": arg,
+        "axis": axis,
+        "mode": mode
+    }
+    return prov_arrays.unary_compute(a)
+
+
+class TestProvenanceArrayComputations(basetest.CDMSBaseTest):
     def setUp(self):
-        super(TestProvenance, self).setUp()
+        super(TestProvenanceArrayComputations, self).setUp()
         self.ones = numpy.ones((5, 5))
         self.zeros = numpy.zeros((5, 5))
 
-    def testArrayRemainder(self):
+    def testArrayArithmetic(self):
+        # add, subtract, remainder, multiply, divide, power
         twos = self.ones + 1
+        self.assertArraysEqual(compute_binary("add", self.ones, 1), twos)
+        self.assertArraysEqual(compute_binary("subtract", twos, self.ones), self.ones)
+        self.assertArraysEqual(compute_binary("multiply", twos, twos), self.ones * 4)
+        self.assertArraysEqual(compute_binary("divide", twos, twos), self.ones)
+        self.assertArraysEqual(compute_binary("power", twos, self.ones), twos)
         self.assertArraysEqual(compute_binary("remainder", self.ones, twos), self.ones)
 
     def testArrayHypoteneuse(self):
@@ -50,8 +74,8 @@ class TestProvenance(basetest.CDMSBaseTest):
 
     def testArrayFmod(self):
         twos = self.ones + 1
-        threes = self.ones + 2
-        self.assertArraysEqual(compute_binary("fmod", threes, twos), self.ones)
+        threes = self.ones + 2.5
+        self.assertArraysEqual(compute_binary("fmod", threes, twos), self.ones + .5)
 
     def testArrayLogicFunctions(self):
         logic_arr1 = numpy.array([
@@ -86,7 +110,12 @@ class TestProvenance(basetest.CDMSBaseTest):
         self.assertArraysEqual(compute_binary("bitwise_or", bit_arr1, bit_arr2), bit_or)
         self.assertArraysEqual(compute_binary("bitwise_xor", bit_arr1, bit_arr2), bit_xor)
 
-    def testArrayNotEqual(self):
+    def testArrayComparisons(self):
         ranged = numpy.arange(3, dtype="int")
         ones = numpy.ones((3,), dtype="int")
         self.assertArraysEqual(compute_binary("not_equal", ranged, ones), [1, 0, 1])
+        self.assertArraysEqual(compute_binary("equal", ranged, ones), [0, 1, 0])
+        self.assertArraysEqual(compute_binary("less", ranged, ones), [1, 0, 0])
+        self.assertArraysEqual(compute_binary("less_equal", ranged, ones), [1, 1, 0])
+        self.assertArraysEqual(compute_binary("greater", ranged, ones), [0, 0, 1])
+        self.assertArraysEqual(compute_binary("greater_equal", ranged, ones), [0, 1, 1])

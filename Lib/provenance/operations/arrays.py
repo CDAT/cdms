@@ -13,7 +13,7 @@ INVALID_UNARY_FUNC = "Expected unary function; received '%s'."
 INVALID_BINARY_FUNC = "Expected binary function; received '%s'."
 INCOMPATIBLE_ARRAYS = "Arrays not same shape; first is %s and second is %s."
 
-binary_funcs = ["remainder", "hypot", "arctan2", "outerproduct", "fmod", "logical_and", "logical_or", "logical_xor", "bitwise_and", "bitwise_or", "bitwise_xor", "not_equal"]
+binary_funcs = ["remainder", "hypot", "arctan2", "outerproduct", "fmod", "logical_and", "logical_or", "logical_xor", "bitwise_and", "bitwise_or", "bitwise_xor", "not_equal", "add", "multiply", "subtract", "equal", "less", "less_equal", "greater", "greater_equal", "divide", "power"]
 
 
 @register_computation(BINARY_NODE_TYPE)
@@ -27,9 +27,6 @@ def binary_compute(attributes):
 
     if func not in binary_funcs:
         raise ValueError(INVALID_BINARY_FUNC % func)
-
-    if first.shape != second.shape:
-        raise ValueError(INCOMPATIBLE_ARRAYS % (first.shape, second.shape))
 
     compute_algo = getattr(MV2, func.lower())
 

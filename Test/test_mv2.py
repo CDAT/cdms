@@ -247,6 +247,13 @@ class TestMV2(basetest.CDMSBaseTest):
         broadcasted = self.u_transient - v_transient2
         self.assertTrue(MV2.allequal(self.u_transient[2], broadcasted[2] + v_transient2))
 
+    def testMean(self):
+        a=MV2.ones((13,14))
+        b=a.mean()
+        self.assertEqual(b, 1.0)
+
+if __name__ == "__main__":
+    basetest.run()
 if __name__ == "__main__":
     basetest.run()
 

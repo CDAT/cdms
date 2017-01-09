@@ -37,5 +37,13 @@ class CDMSBaseTest(unittest.TestCase):
         os.chdir(self.orig_cwd)
         shutil.rmtree(self.tempdir)
 
+    def assertArraysEqual(self, arr1, arr2):
+        arr1 = numpy.array(arr1)
+        arr2 = numpy.array(arr2)
+        if arr1.shape != arr2.shape:
+            raise AssertionError("Arrays have different shape.")
+        self.assertTrue(numpy.allclose(arr1, arr2), "Arrays differ.")
+
+
 def run():
     unittest.main()

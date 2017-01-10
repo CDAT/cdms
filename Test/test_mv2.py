@@ -20,6 +20,29 @@ class TestMV2(basetest.CDMSBaseTest):
         self.other_u_file = f["u"]
         self.ones = MV2.ones(self.other_u_file.shape, numpy.float32, axes=self.other_u_file.getAxisList(), attributes=self.other_u_file.attributes, id=self.other_u_file.id)
 
+    def testKwargs(self):
+        # This test makes sure that kwargs are passed through in each of the types of operation
+        arr = numpy.full((3, 3), .65) * [range(i, i + 3) for i in range(3)]
+        # Test var_unary_operation
+        v = MV2.around(arr, decimals=1)
+        valid = numpy.array([
+            [0.0, 0.6, 1.3],
+            [0.6, 1.3, 2.0],
+            [1.3, 2.0, 2.6]
+        ])
+        self.assertTrue(MV2.allequal(v, valid))
+        xs = [1, -1, -1, 1]
+        ys = [1, 1, -1, -1]
+        angles = [numpy.pi / 4, 3 * numpy.pi / 4, -3 * numpy.pi / 4, -numpy.pi / 4]
+        test_arr = numpy.zeros(4)
+        # Test var_binary_operation
+        MV2.arctan2(ys, xs, out=test_arr)
+        self.assertFalse(MV2.allclose(test_arr, 0))
+        self.assertTrue(MV2.allequal(test_arr, angles))
+        # Test var_unary_operation_with_axis
+        values = numpy.tile(numpy.arange(2), 3)
+        self.assertEqual(len(MV2.sometrue(values, axis=0, keepdims=True).shape), len(values.shape))
+
     def testPowAndSqrt(self):
         vel = MV2.sqrt(self.u_file ** 2 + self.v_file ** 2)
         vel.id = 'velocity'

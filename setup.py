@@ -76,9 +76,11 @@ setup (name = "cdms2",
                                 library_dirs = cdat_info.cdunif_library_directories,
                                 libraries = cdat_info.cdunif_libraries,
                                 define_macros = macros,
+                                extra_compile_args = [ ""],
                                 ),
                       Extension('cdms2._bindex',
                                 ['Src/_bindexmodule.c', 'Src/bindex.c'],
+                                extra_compile_args = [ ""],
                                 ) 
                      ]
       )

@@ -1266,10 +1266,6 @@ static int set_attribute(int fileid, int varid, PyObject *attributes,
 			}
 			PyObject *tmpx = (PyObject *) array;
 			PyDict_SetItemString(attributes, name, tmpx);
-			if(aszStrings != NULL){
-				free(aszStrings);
-				aszStrings=NULL;
-			}
 			Py_DECREF(tmpx);
 			return 0;
 		} else

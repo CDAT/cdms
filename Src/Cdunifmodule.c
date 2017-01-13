@@ -1227,7 +1227,23 @@ static int set_attribute(int fileid, int varid, PyObject *attributes,
 				fprintf(stderr,
 						"Attribute %s has a bad type for NetCDF. We will not attempt to write it\n");
 			}
-			if (data_types[type] != array->descr->type_num) {
+			if ((data_types[type] == NPY_STRING) && PyList_Check(value)) {
+				char **aszStrings;
+				int i;
+				PyObject *oString;
+				len = PyList_Size(value);
+				aszStrings = (char **) malloc((len) * sizeof(char*));
+				memset(aszStrings, 0, (len) * sizeof(char*));
+				for (i = 0; i < len; i++) {
+					oString = PyList_GetItem(value, i);
+					if (PyString_Check(oString)) {
+						int lenVal;
+						char *attValue;
+						aszStrings[i] = PyString_AsString(oString);
+					}
+				}
+				array->data = (void *) aszStrings;
+			} else if (data_types[type] != array->descr->type_num) {
 				PyArrayObject *array2 = (PyArrayObject *) PyArray_Cast(array,
 						data_types[type]);
 				Py_DECREF(array);

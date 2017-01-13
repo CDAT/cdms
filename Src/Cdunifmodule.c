@@ -1216,6 +1216,7 @@ static int set_attribute(int fileid, int varid, PyObject *attributes,
 		PyDict_SetItemString(attributes, name, value);
 		return 0;
 	} else {
+		char **aszStrings=NULL;
 		int ret;
 		PyArrayObject *array = (PyArrayObject *) PyArray_ContiguousFromObject(
 				value, PyArray_NOTYPE, 0, 1);
@@ -1228,7 +1229,6 @@ static int set_attribute(int fileid, int varid, PyObject *attributes,
 						"Attribute %s has a bad type for NetCDF. We will not attempt to write it\n");
 			}
 			if ((data_types[type] == NPY_STRING) && PyList_Check(value)) {
-				char **aszStrings;
 				int i;
 				PyObject *oString;
 				len = PyList_Size(value);
@@ -1266,6 +1266,10 @@ static int set_attribute(int fileid, int varid, PyObject *attributes,
 			}
 			PyObject *tmpx = (PyObject *) array;
 			PyDict_SetItemString(attributes, name, tmpx);
+			if(aszStrings != NULL){
+				free(aszStrings);
+				aszStrings=NULL;
+			}
 			Py_DECREF(tmpx);
 			return 0;
 		} else

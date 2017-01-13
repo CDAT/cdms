@@ -1,6 +1,5 @@
 # Automatically adapted for numpy.oldnumeric Aug 01, 2007 by ^F^F^F^F^F
 
-import pdb
 import urllib
 import cdms2
 import MV2
@@ -17,7 +16,7 @@ class TestNCString(basetest.CDMSBaseTest):
 
     def tearDown(self):
         super(TestNCString, self).tearDown()
-        os.remove("prcp_1951.nc")
+        #os.remove("prcp_1951.nc")
 
 
 
@@ -62,7 +61,7 @@ class TestNCString(basetest.CDMSBaseTest):
         f.close()
 
 
-    def t3stNCStringArray(self):
+    def testNCStringArray(self):
         f = cdms2.open("prcp_1951.nc", "r")
         # Verify if all attributes are presents.
         self.assertEqual(f.listglobal(),
@@ -76,7 +75,7 @@ class TestNCString(basetest.CDMSBaseTest):
                              'valid_min', 'long_name', 'standard_name',
                              'units', 'missing_value', 'valid_max'])
         self.assertEqual(f['prcp'].long_name,
-                         ['Daily precipitation', 'coucou', 'Charles', 'Denis'])
+                         ['Daily precipitation', 'Sasha', 'Charles', 'Denis'])
 
 if __name__ == "__main__":
     basetest.run()

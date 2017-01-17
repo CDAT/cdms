@@ -59,7 +59,6 @@ class TestNCString(basetest.CDMSBaseTest):
                              'long_name'])
         self.assertEqual(f['u'].long_name, ["aaa", "bbbb", "cccc", "dddd"])
         f.close()
-        os.remove("junk.nc")
 
 
     def testNCStringArray(self):

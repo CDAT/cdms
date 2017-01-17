@@ -16,7 +16,7 @@ class TestNCString(basetest.CDMSBaseTest):
 
     def tearDown(self):
         super(TestNCString, self).tearDown()
-        #os.remove("prcp_1951.nc")
+        os.remove("prcp_1951.nc")
 
 
 
@@ -59,6 +59,7 @@ class TestNCString(basetest.CDMSBaseTest):
                              'long_name'])
         self.assertEqual(f['u'].long_name, ["aaa", "bbbb", "cccc", "dddd"])
         f.close()
+        os.remove("junk.nc")
 
 
     def testNCStringArray(self):

@@ -2,8 +2,9 @@
 CDMS module-level API
 """
 
-import cdat_info
-cdat_info.pingPCMDIdb("cdat", "cdms2")
+#import cdat_info
+from . import cdms_info
+cdms_info.pingPCMDIdb("cdat", "cdms2")
 from . import git
 from . import myproxy_logon
 

@@ -1,8 +1,46 @@
 #!/usr/bin/env python
+from distutils.core import setup
+import subprocess
+import os
+import tempfile
+import shutil
+import sys
+
+src_dir = os.path.dirname(os.path.realpath(__file__))
+
+os.chdir(src_dir)
+GIT_DESCRIBE = subprocess.Popen(["git","describe","--tag"],stdout=subprocess.PIPE).stdout.read().strip()
+
+tmp_dir = os.path.join(tempfile.gettempdir(),"cdms_info_build")
+shutil.rmtree(tmp_dir,ignore_errors=True)
+os.makedirs(tmp_dir)
+os.chdir(tmp_dir)
+lib_dir = os.path.join(tmp_dir,"cdms_info_Lib")
+shutil.copytree(os.path.join(src_dir,"Libcdat"),lib_dir)
+
+
+
+f=open(os.path.join(src_dir,"cdms_info.py.in"))
+cdms_info = f.read().replace("GIT_DESCRIBE",GIT_DESCRIBE)
+f.close()
+f=open(os.path.join(lib_dir,"cdms_info.py"),"w")
+f.write(cdms_info)
+f.close()
+
+setup (name = "cdms_info",
+       packages = ['cdms_info'],
+       package_dir = {'cdms_info': lib_dir},
+      )
+shutil.copy(os.path.join(lib_dir,"..","build","lib","cdms_info")+"/cdms_info.py",os.path.join(src_dir,"Lib"))
+shutil.copytree(os.path.join(lib_dir,"..","build","lib","cdms_info"),os.path.join(src_dir,"Libcdmsinfo"))
+shutil.rmtree(lib_dir,ignore_errors=True)
+
+os.chdir(src_dir)
 from numpy.distutils.core import setup, Extension
 import os, sys
 import subprocess,shutil
 target_prefix = sys.prefix
+print target_prefix
 for i in range(len(sys.argv)):
     a = sys.argv[i]
     if a=='--prefix':
@@ -16,6 +54,7 @@ sys.path.insert(0,os.path.join(target_prefix,'lib','python%i.%i' % sys.version_i
 sys.path.append(os.environ.get('BUILD_DIR',"build"))
 
 
+print src_dir
 MAJOR = 3
 MINOR = 0
 PATCH = 0
@@ -43,7 +82,7 @@ f.close()
 shutil.copy("git.py",os.path.join("Lib","git.py"))
 shutil.copy("git.py",os.path.join("regrid2","Lib","git.py"))
 
-import cdat_info
+from Libcdmsinfo import cdms_info
 import numpy
 macros = []
 try:
@@ -52,7 +91,7 @@ try:
     macros.append(("PARALLEL",None))
     import subprocess
     try:
-      mpicc = os.path.join(cdat_info.externals,"bin","mpicc")
+      mpicc = os.path.join(cdms_info.externals,"bin","mpicc")
       subprocess.check_call([mpicc,"--version"])
     except Exception,err:
       mpicc="mpicc"
@@ -69,12 +108,12 @@ setup (name = "cdms2",
        url = "http://github.com/UV-CDAT/cdms",
        packages = ['cdms2'],
        package_dir = {'cdms2': 'Lib'},
-       include_dirs = ['Include', numpy.lib.utils.get_include()] + cdat_info.cdunif_include_directories,
+       include_dirs = ['Include', numpy.lib.utils.get_include()] + cdms_info.cdunif_include_directories,
        scripts = ['Script/cdscan', 'Script/convertcdms.py',"Script/myproxy_logon"],
        ext_modules = [Extension('cdms2.Cdunif',
                                 ['Src/Cdunifmodule.c'],
-                                library_dirs = cdat_info.cdunif_library_directories,
-                                libraries = cdat_info.cdunif_libraries,
+                                library_dirs = cdms_info.cdunif_library_directories,
+                                libraries = cdms_info.cdunif_libraries,
                                 define_macros = macros,
                                 ),
                       Extension('cdms2._bindex',
@@ -100,3 +139,4 @@ setup (name = "regrid2",
        ext_modules = [Extension('regrid2._regrid', ['regrid2/Src/_regridmodule.c']),
                       Extension('regrid2._scrip', ['regrid2/Src/scrip.pyf','regrid2/Src/regrid.c'])]
       )
+shutil.rmtree(os.path.join(src_dir,"Libcdmsinfo"),ignore_errors=True)

@@ -1,7 +1,13 @@
 PKG_NAME=cdms2
 USER=uvcdat
-if [ "$TRAVIS_OS_NAME" = "linux" ]; then
+if [ `uname` == "Linux" ]; then
     OS=linux-64
+    wget https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
+    export PATH="$HOME/miniconda/bin:$PATH"
+    bash miniconda.sh -b -p $HOME/miniconda
+    conda config --set always_yes yes --set changeps1 no
+    conda update -y -q conda
+    conda install gcc conda-build anaconda-client
 else
     OS=osx-64
 fi

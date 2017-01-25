@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 PKG_NAME=cdms2
 USER=uvcdat
 if [ `uname` == "Linux" ]; then

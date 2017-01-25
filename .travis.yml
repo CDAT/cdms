@@ -30,5 +30,4 @@ env:
 after_success:
     #- if [ $TRAVIS_BRANCH == "master" -a $TRAVIS_PULL_REQUEST == "false" ]; then conda install conda-build && conda install anaconda-client && bash conda_upload.sh ; fi
     - docker pull centos:centos6
-    - docker cp conda_upload.sh centos:centos6:conda_upload.sh
-    - if [ $TRAVIS_PULL_REQUEST == "false" ]; then docker run -e CONDA_UPLOAD_TOKEN -d -p 127.0.0.1:80:4567 centos:centos6 -c "conda_upload.sh" ; fi
+    - if [ $TRAVIS_PULL_REQUEST == "false" ]; then docker run -v `pwd`:/travis_home -e CONDA_UPLOAD_TOKEN -d -p 127.0.0.1:80:4567 centos:centos6 -c "travis_home/conda_upload.sh" ; fi

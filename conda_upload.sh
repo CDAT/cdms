@@ -5,7 +5,7 @@ echo "Trying to upload conda"
 if [ `uname` == "Linux" ]; then
     OS=linux-64
     echo "Linux OS"
-    yum install -y wget git redhat-lsb-core
+    yum install -y wget git redhat-lsb-core gcc-gfortran
     wget https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh --no-check-certificate
     echo "WGET RETRUNED:"$?
     export PATH="$HOME/miniconda/bin:$PATH"
@@ -13,7 +13,7 @@ if [ `uname` == "Linux" ]; then
     conda config --set always_yes yes --set changeps1 no
     conda config --set ssl_verify false
     conda update -y -q conda
-    conda install gcc conda-build anaconda-client
+    conda install gcc conda-build anaconda-client libgcc libgfortran
     binstar config --set verify_ssl False
 else
     echo "Mac OS"

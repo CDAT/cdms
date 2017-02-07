@@ -70,15 +70,17 @@ setup (name = "cdms2",
        packages = ['cdms2'],
        package_dir = {'cdms2': 'Lib'},
        include_dirs = ['Include', numpy.lib.utils.get_include()] + cdat_info.cdunif_include_directories,
-       scripts = ['Script/cdscan', 'Script/convertcdms.py'],
+       scripts = ['Script/cdscan', 'Script/convertcdms.py',"Script/myproxy_logon"],
        ext_modules = [Extension('cdms2.Cdunif',
                                 ['Src/Cdunifmodule.c'],
                                 library_dirs = cdat_info.cdunif_library_directories,
                                 libraries = cdat_info.cdunif_libraries,
                                 define_macros = macros,
+                                extra_compile_args = [ ""],
                                 ),
                       Extension('cdms2._bindex',
                                 ['Src/_bindexmodule.c', 'Src/bindex.c'],
+                                extra_compile_args = [ ""],
                                 ) 
                      ]
       )

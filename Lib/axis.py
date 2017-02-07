@@ -658,8 +658,9 @@ class AbstractAxis(CdmsObj):
         id = self.id.strip().lower()
         if (hasattr(self,'axis') and self.axis=='Y'): return 1
         units = getattr(self,"units","").strip().lower()
-        if units in ["degrees_north","degree_north","degree_n","degrees_n","degreen","degreesn"]:
-          return 1
+        if units in ["degrees_north","degree_north","degree_n","degrees_n","degreen","degreesn"] and  \
+           not (self.isLongitude() or self.isLevel() or self.isTime()):
+              return 1
         return (id[0:3] == 'lat') or (id in latitude_aliases)
 
     # Designate axis as a vertical level axis
@@ -716,8 +717,9 @@ class AbstractAxis(CdmsObj):
         id = self.id.strip().lower()
         if (hasattr(self,'axis') and self.axis=='X'): return 1
         units = getattr(self,"units","").strip().lower()
-        if units in ["degrees_east","degree_east","degree_e","degrees_e","degreee","degreese"]:
-          return 1
+        if units in ["degrees_east","degree_east","degree_e","degrees_e","degreee","degreese"] and \
+           not (self.isLatitude() or self.isLevel() or self.isTime()):
+            return 1
         return (id[0:3] == 'lon') or (id in longitude_aliases)
 
     # Designate axis as a time axis, and optionally set the calendar

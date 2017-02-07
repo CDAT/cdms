@@ -3,7 +3,7 @@
 
 """
 TransientVariable (created by createVariable)
-is a child of both AbstractVariable and the masked array class.
+is a  child of both AbstractVariable and the masked array class.
 Contains also the write part of the old cu interface.
 """
 import json

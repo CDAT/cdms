@@ -3,8 +3,8 @@ import subprocess
 import cdms2
 import os
 
-class TestASCIIMissing(basetest.CDMSBaseTest):
-    def testASCIIMissing(self):
+class TestMissingASCII(basetest.CDMSBaseTest):
+    def testMissingASCII(self):
         nc_dump = """
         netcdf tmp_test {
         dimensions:
@@ -34,7 +34,7 @@ class TestASCIIMissing(basetest.CDMSBaseTest):
         f.write(nc_dump)
         f.close()
 
-        subprocess.call("ncgen -b tmp_test.asc -o tmp_test.nc".split())
+        subprocess.call("ncgen -b tmp_test.asc".split())
 
         f=cdms2.open("tmp_test.nc")
         v=f("var")

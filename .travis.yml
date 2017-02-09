@@ -2,16 +2,7 @@ os:
     - osx
     - linux
 
-matrix:
-    include:
-        - os: linux
-            #dist: trusty
-            sudo: required
-            services:
-                - docker
-        - os: osx
-
-#sudo: required
+sudo: required
 services:
     - docker
 

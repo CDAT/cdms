@@ -1,3 +1,7 @@
+os:
+    - osx
+    - linux
+
 matrix:
     include:
         - os: linux
@@ -7,9 +11,6 @@ matrix:
                 - docker
         - os: osx
 
-#os:
-#    - osx
-#    - linux
 #sudo: required
 services:
     - docker

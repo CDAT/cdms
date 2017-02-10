@@ -10,6 +10,7 @@ vcs_download_sample_data
 conda config --set anaconda_upload no
 #export CONDA_BLD_PATH=${HOME}/conda-bld
 #export VERSION=`date +%Y.%m.%d`
+export UVCDAT_ANONYMOUS_LOG=False
 echo "Cloning recipes"
 cd /git_repo
 ls -l

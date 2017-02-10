@@ -63,6 +63,7 @@ except:
     os.environ["CFLAGS"]="-w -g"
     pass
 
+libs_pth = os.path.join(sys.prefix,"lib")
 setup (name = "cdms2",
        version=Version,
        description = "Climate Data Management System",
@@ -76,11 +77,13 @@ setup (name = "cdms2",
                                 library_dirs = cdat_info.cdunif_library_directories,
                                 libraries = cdat_info.cdunif_libraries,
                                 define_macros = macros,
-                                extra_compile_args = [ ""],
+                                runtime_library_dirs = [libs_pth],
+                                extra_compile_args = [ "-L%s"% libs_pth],
                                 ),
                       Extension('cdms2._bindex',
                                 ['Src/_bindexmodule.c', 'Src/bindex.c'],
-                                extra_compile_args = [ ""],
+                                extra_compile_args = [ "-L%s"% libs_pth],
+                                runtime_library_dirs = [libs_pth],
                                 ) 
                      ]
       )
@@ -99,6 +102,12 @@ setup (name = "regrid2",
        packages = ['regrid2'],
        package_dir = {'regrid2': 'regrid2/Lib'},
        include_dirs = [numpy.lib.utils.get_include()],
-       ext_modules = [Extension('regrid2._regrid', ['regrid2/Src/_regridmodule.c']),
-                      Extension('regrid2._scrip', ['regrid2/Src/scrip.pyf','regrid2/Src/regrid.c'])]
+       ext_modules = [Extension('regrid2._regrid', ['regrid2/Src/_regridmodule.c'],
+                                runtime_library_dirs = [libs_pth],
+                                extra_compile_args = [ "-L%s"% libs_pth],
+                                ),
+                      Extension('regrid2._scrip', ['regrid2/Src/scrip.pyf','regrid2/Src/regrid.c'],
+                                runtime_library_dirs = [libs_pth],
+                                extra_compile_args = [ "-L%s"% libs_pth],
+                          )]
       )

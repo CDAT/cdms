@@ -1,7 +1,11 @@
 os:
     - osx
     - linux
-sudo: false
+
+sudo: required
+services:
+    - docker
+
 before_install:
 - if [ "$TRAVIS_OS_NAME" = "linux" ]; then wget https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh; fi
 - if [ "$TRAVIS_OS_NAME" = "osx" ]; then wget https://repo.continuum.io/miniconda/Miniconda-latest-MacOSX-x86_64.sh -O miniconda.sh; fi
@@ -14,7 +18,7 @@ script:
 - if [ "$TRAVIS_OS_NAME" = "linux" ]; then conda install -c conda-forge -c uvcdat uvcdat-nox pyopenssl; fi
 - if [ "$TRAVIS_OS_NAME" = "osx" ]; then conda install -c conda-forge -c uvcdat uvcdat pyopenssl; fi
 - export UVCDAT_ANONYMOUS_LOG=False
-- vcs_download_sample_data
+- travis_retry vcs_download_sample_data
 - echo $TRAVIS_BRANCH
 - export TRAVIS_PR_BRANCH=$TRAVIS_BRANCH
 - echo $TRAVIS_EVENT_TYPE
@@ -25,4 +29,5 @@ env:
   global:
     secure: Z06idl4BP01QMhrocmfuYV4CcbLmb5ZJZoXXymDr5sLIIfqdMiSL/CfDCRkIwl44vKpTN5R9AAhQV6iNMdU0NOQQrftHJyT5YV4y966FuAA1v9ev7y/cgExJFv7M/4E37WAN6YIcO7E42KZReeNKOAodorpqoT87MW6FAImZbrM=
 after_success:
-  - if [ $TRAVIS_BRANCH == "master" -a $TRAVIS_PULL_REQUEST == "false" ]; then conda install conda-build && conda install anaconda-client && bash conda_upload.sh ; fi
+    - if [ $TRAVIS_BRANCH == "master" -a $TRAVIS_PULL_REQUEST == "false" -a "$TRAVIS_OS_NAME" = "osx"]; then conda install conda-build && conda install anaconda-client && bash scripts/conda_upload.sh ; fi
+    - if [ $TRAVIS_BRANCH == "master" -a $TRAVIS_PULL_REQUEST == "false" -a "$TRAVIS_OS_NAME" = "linux"]; docker run -v `pwd`:/travis_home -e CONDA_UPLOAD_TOKEN=${CONDA_UPLOAD_TOKEN} -a STDOUT cdat/conda:conda-forge-cdms2 /travis_home/scripts/conda_upload.sh ; fi

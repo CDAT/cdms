@@ -21,4 +21,4 @@ dependencies:
 
 test:
   override:
-    - docker run -it -v `pwd`:/git_repo -e CONDA_UPLOAD_TOKEN="uv-5e6dfdce-271a-4144-8e00-a40766606fc3" -a STDOUT -a STDERR -P cdat/conda:conda-forge-cdms2 /git_repo/scripts/circle.sh
+      - docker run -it -v `pwd`:/git_repo -a STDOUT -a STDERR -P cdat/conda:conda-forge-cdms2 /git_repo/scripts/circle.sh

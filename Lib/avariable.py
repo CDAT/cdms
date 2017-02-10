@@ -136,8 +136,11 @@ class AbstractVariable(CdmsObj, Slab):
         self._grid_ = None      # Variable grid, if any
         if not hasattr(self,'missing_value'):
             self.missing_value = None
-        elif numpy.isnan(self.missing_value):
-          self.missing_value = None
+        else:
+            if isinstance(self.missing_value,basestring):
+                self.missing_value = None
+            elif numpy.isnan(self.missing_value):
+              self.missing_value = None
 
         # Reminder: children to define self.shape and set self.id
 
@@ -418,7 +421,16 @@ class AbstractVariable(CdmsObj, Slab):
         if asarray==0 and isinstance(mv, numpy.ndarray):
             mv = mv[0]
         if type(mv) is types.StringType and self.dtype.char not in ['?','c','O','S']:
-            mv = float(mv)
+            try:
+                mv = float(mv)
+            except:
+                if hasattr(self,'_FillValue'):
+                    try:
+                        mv = float(self._FillValue)
+                    except:
+                        mv = None
+                else:
+                    mv = None
         return mv
 
     def _setmissing(self, name, value):

@@ -20,8 +20,8 @@ class TestRegrid(basetest.CDMSBaseTest):
 
     def tearDown(self):
         super(TestRegrid, self).tearDown()
-        #os.remove(obsFile)
-        #os.remove(modFile)
+        os.remove(obsFile)
+        os.remove(modFile)
 
     def testPeriodicity(self):
         reference_data_set = obsFile
@@ -92,4 +92,4 @@ class TestRegrid(basetest.CDMSBaseTest):
 
 if __name__ == "__main__":
     basetest.run()
-
+#

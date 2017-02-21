@@ -58,9 +58,9 @@ try:
       mpicc="mpicc"
       subprocess.check_call([mpicc,"--version"])
     os.environ["CC"]=mpicc
-    os.environ["CFLAGS"]="-w -g"
+    os.environ["CFLAGS"]="-w -g -O0"
 except:
-    os.environ["CFLAGS"]="-w -g"
+    os.environ["CFLAGS"]="-w -g -O0"
     pass
 
 libs_pth = os.path.join(sys.prefix,"lib")

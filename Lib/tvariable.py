@@ -278,6 +278,8 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             data = numpy.ma.masked.data
             mask = numpy.ma.masked.mask
 
+        if fill_value in ["N/A"]:  fill_value = None
+
         if fill_value is not None:
             fill_value = numpy.array(fill_value).astype(dtype)
         else:

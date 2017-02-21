@@ -17,6 +17,8 @@ from avariable import AbstractVariable
 
 from axis import createAxis, AbstractAxis
 from grid import createRectGrid, AbstractRectGrid
+from hgrid import AbstractCurveGrid
+from gengrid import AbstractGenericGrid
 
 # dist array support
 HAVE_MPI = False
@@ -304,8 +306,6 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         return numpy.ma.MaskedArray.__getitem__(self, slicelist)
 
     def initDomain(self, axes, copyaxes=1):
-        from hgrid import AbstractCurveGrid
-        from gengrid import AbstractGenericGrid
         # lazy evaluation via getAxis to avoid creating axes that aren't ever used.
         newgrid = None
         self.__domain = [None] * self.rank()

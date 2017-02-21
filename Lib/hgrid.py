@@ -12,9 +12,7 @@ from error import CDMSError
 from grid import AbstractGrid, LongitudeType, LatitudeType, VerticalType, TimeType, CoordTypeToLoc
 from coord import TransientVirtualAxis
 from axis import getAutoBounds, allclose
-import sys
-import bindex
-from cdms2 import _bindex
+import bindex,_bindex
 
 MethodNotImplemented = "Method not yet implemented"
 

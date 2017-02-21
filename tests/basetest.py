@@ -20,8 +20,8 @@ class CDMSBaseTest(unittest.TestCase):
         return self.getFile(os.path.join(self.tempdir, path), mode)
 
     def setUp(self):
-        #global cdms2
-        #cdms2 = reload(cdms2)
+        global cdms2
+        cdms2 = reload(cdms2)
         self.orig_cwd = os.getcwd()
         self.files = []
         self.NTIME = 3

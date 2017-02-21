@@ -3,7 +3,7 @@
 
 """
 TransientVariable (created by createVariable)
-is a child of both AbstractVariable and the masked array class.
+is a  child of both AbstractVariable and the masked array class.
 Contains also the write part of the old cu interface.
 """
 import json
@@ -152,7 +152,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
            The savespace argument is ignored, for backward compatibility only.
         """
         try:
-            if data.fill_value is not None:
+            if( (data.fill_value is not None) and (fill_value is None) ):
                 self._setmissing(data.fill_value)
                 fill_value = data.fill_value
         except:

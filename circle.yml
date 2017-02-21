@@ -29,7 +29,6 @@ dependencies:
         - bash ./scripts/circleci_mac_dep.sh
           #   - docker pull cdat/conda:conda-forge-cdms2
   
-
 test:
   override:
       - bash ./scripts/circleci_mac.sh

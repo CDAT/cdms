@@ -4,9 +4,9 @@ import importlib
 import sys
 import os
 
-sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Test"))
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "tests"))
 if len(sys.argv)==1:
-    names = glob.glob("Test/test_*.py")
+    names = glob.glob("tests/test_*.py")
 else:
     names = sys.argv[1:]
 

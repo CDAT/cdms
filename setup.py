@@ -10,7 +10,7 @@ for i in range(len(sys.argv)):
     sp = a.split("--prefix=")
     if len(sp)==2:
         target_prefix=sp[1]
-        print 'Target is:',target_prefix
+        print('Target is:',target_prefix)
 sys.path.insert(0,os.path.join(target_prefix,'lib','python%i.%i' % sys.version_info[:2],'site-packages')) 
 
 sys.path.append(os.environ.get('BUILD_DIR',"build"))
@@ -23,8 +23,8 @@ Version = "%s.%s.%s" % (MAJOR,MINOR,PATCH)
 
 f=open("git.py","w")
 git_branch=subprocess.Popen(["git","rev-parse","--abbrev-ref","HEAD"],stdout=subprocess.PIPE).stdout.read().strip()
-print >>f, "branch = '%s'" % git_branch
-git_tag = subprocess.Popen(["git","describe","--tags"],stdout=subprocess.PIPE).stdout.read().strip()
+print("branch = '%s'" % git_branch, file=f)
+git_tag = subprocess.Popen(["git","describe","--tags"],stdout=subprocess.PIPE).stdout.read().strip().decode("utf-8")
 sp=git_tag.split("-")
 if len(sp)>2:
     commit = sp[-1]
@@ -34,10 +34,10 @@ else:
     commit = git_tag
     nm = git_tag
     diff=0
-print >>f, "closest_tag = '%s'" % nm
-print >>f, "commit = '%s'" % commit
-print >>f, "diff_from_tag = %s" % diff
-print >>f, "version = '%s'" % Version
+print("closest_tag = '%s'" % nm, file=f)
+print("commit = '%s'" % commit, file=f)
+print("diff_from_tag = %s" % diff, file=f)
+print("version = '%s'" % Version, file=f)
 f.close()
 
 shutil.copy("git.py",os.path.join("Lib","git.py"))
@@ -54,7 +54,7 @@ try:
     try:
       mpicc = os.path.join(cdat_info.externals,"bin","mpicc")
       subprocess.check_call([mpicc,"--version"])
-    except Exception,err:
+    except Exception as err:
       mpicc="mpicc"
       subprocess.check_call([mpicc,"--version"])
     os.environ["CC"]=mpicc

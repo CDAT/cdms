@@ -184,7 +184,7 @@ class AbstractVariable(CdmsObj, Slab):
                 result = numpy.ma.masked_array(ar)
             elif missing==inf or missing!=missing: # (x!=x) ==> x is NaN
                 result = numpy.ma.masked_object(ar, missing, copy=0)
-            elif ar.dtype.char=='c':
+            elif ar.dtype.char=='c' or ar.dtype.char=='S':
                 # umath.equal is not implemented
                 resultmask = (ar==missing)
                 if not resultmask.any():

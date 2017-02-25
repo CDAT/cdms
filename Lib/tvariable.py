@@ -305,6 +305,8 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         return self.filled()
 
     def expertSlice(self, slicelist):
+        if slicelist == []:
+            slicelist = ()
         return numpy.ma.MaskedArray.__getitem__(self, slicelist)
 
     def initDomain(self, axes, copyaxes=1):

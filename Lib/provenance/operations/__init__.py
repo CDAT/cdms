@@ -1,1 +1,2 @@
 from arrays import NDArrayBinaryFunction, NDArrayUnaryFunction, NDArrayAxisFunction
+from geospatial import GeospatialFunction

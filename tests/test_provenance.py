@@ -2,3 +2,4 @@
 
 from test_provenance_array_binary_ops import TestProvenanceArrayBinaryComputations
 from test_provenance_array_unary_ops import TestProvenanceArrayUnaryComputations
+from test_provenance_geospatial import TestProvenanceGeospatialComputations

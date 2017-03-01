@@ -1,9 +1,32 @@
 #!/usr/bin/env bash
-ls
-pwd
-export PATH=${HOME}/miniconda/bin:${PATH}
-conda install -q  -c uvcdat/label/nightly -c conda-forge -c uvcdat vcs pyopenssl nose #image-compare
-conda install -q  -c uvcdat/label/nightly -c conda-forge -c uvcdat cdutil 
-export UVCDAT_ANONYMOUS_LOG=False
-vcs_download_sample_data
-python setup.py install
+cmd="ls"
+echo $cmd
+$cmd
+
+cmd="pwd"
+echo $cmd
+$cmd
+
+cmd="export PATH=${HOME}/miniconda/bin:${PATH}"
+echo $cmd
+$cmd
+
+cmd="conda install -q  -c uvcdat/label/nightly -c conda-forge -c uvcdat vcs pyopenssl nose #image-compare"
+echo $cmd
+$cmd
+
+cmd="conda install -q  -c uvcdat/label/nightly -c conda-forge -c uvcdat cdutil"x
+echo $cmd
+$cmd
+
+cmd="export UVCDAT_ANONYMOUS_LOG=False"
+echo $cmd
+$cmd
+
+cmd="vcs_download_sample_data"
+echo $cmd
+$cmd
+
+cmd="python setup.py install"
+echo $cmd
+$cmd

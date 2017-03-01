@@ -18,7 +18,7 @@ class TestMIPS(basetest.CDMSBaseTest):
         super(TestMIPS, self).tearDown()
         os.remove("obs_timeseries.nc")
 
-    def testinput4MIPs(self):
+    def testAnnualSeasonalAverage(self):
         f=cdms2.open("obs_timeseries.nc","r")
 
         # Read in the raw data EXCLUDING a leap year

@@ -5,7 +5,6 @@ import os
 import sys
 import cdat_info
 import basetest
-import pdb
 import numpy
 
 

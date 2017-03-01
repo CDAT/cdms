@@ -14,6 +14,7 @@ before_install:
 - conda config --set always_yes yes --set changeps1 no
 - conda update -y -q conda
 - conda install gcc
+
 script:
 - if [ "$TRAVIS_OS_NAME" = "linux" ]; then conda install -c conda-forge -c uvcdat uvcdat-nox pyopenssl; fi
 - if [ "$TRAVIS_OS_NAME" = "osx" ]; then conda install -c conda-forge -c uvcdat uvcdat pyopenssl; fi

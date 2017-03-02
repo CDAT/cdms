@@ -1,0 +1,7 @@
+# This module just gathers the provenance related tests into a single module, for ease of running
+
+from test_provenance_array_binary_ops import TestProvenanceArrayBinaryComputations
+from test_provenance_array_unary_ops import TestProvenanceArrayUnaryComputations
+from test_provenance_geospatial import TestProvenanceGeospatialComputations
+from test_provenance_dataset import TestProvenanceDatasetRetrieval
+from test_provenance_metadata import TestProvenanceMetadata

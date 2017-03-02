@@ -17,7 +17,7 @@ TAGS
 *~
 *swp
 *.cache
-*.DS_Store
+.DS_Store
 *.a
 *.o
 *.class

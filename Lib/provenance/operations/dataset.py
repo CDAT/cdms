@@ -13,30 +13,40 @@ def compute_dataset(attributes):
     objtype = attributes["objtype"]
     val = None
     if objtype == "variable":
-        if attributes.get("memory", True):
-            val = f(attributes["id"])
-        else:
-            # Use a file variable
-            val = f[attributes["id"]]
+        val = f(attributes["objid"])
     if objtype == "grid":
-        val = f.getGrid(attributes['id'])
+        val = f.getGrid(attributes['objid'])
+        tgrid = val.subGrid(None, None)
+        tgrid.attributes = val.attributes
+        tgrid.id = val.id
+        val = tgrid
     if objtype == "axis":
-        val = f.getAxis(attributes['id'])
+        val = f.getAxis(attributes['objid'])
+        # Create a copy of the axis so when the file
+        # closes, we still have a valid version of it.
+        val = val.subaxis(0, len(val))
+    if objtype == "attribute":
+        val = f.attributes[attributes['objid']]
+    if objtype == "attributes":
+        val = f.attributes.keys()
+    # We should figure out how to cache files
+    # That way if we're using OPeNDAP, we won't
+    # waste time renegotiating the same file.
     f.close()
     return val
 
 
 class DatasetFunction(ComputeNode):
-    def __init__(self, uri, func, id, **args):
+    def __init__(self, uri, func, id=None, **args):
         super(DatasetFunction, self).__init__()
         self.node_type = DATASET_NODE_TYPE
         self.node_params = {
             "uri": "URI for a dataset",
             "objtype": "Type of object to retrieve.",
-            "array": "Array to perform objtypetion on"
+            "objid": "id of the object to retrieve"
         }
         if objtype not in obj_types:
             raise ValueError(INVALID_DATASET_FUNC % objtype)
         self.objtype = objtype
-        self.array = array
+        self.objid = array
         self.args = args

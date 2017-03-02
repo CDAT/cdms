@@ -17,7 +17,7 @@ def compute_dataset(attributes):
     if objtype == "grid":
         val = f.getGrid(attributes['objid'])
         tgrid = val.subGrid(None, None)
-        tgrid.attributes = val.attributes
+        tgrid.attributes = dict(val.attributes)
         tgrid.id = val.id
         val = tgrid
     if objtype == "axis":

@@ -6,16 +6,18 @@ No guarantee is provided whatsoever. Use at your own risk.
 
 David Kindig and Alex Pletzer, Tech-X Corp. (2012)
 """
+import pdb
 import types
 import re
 import numpy
 
-import ESMP
+import ESMF
 from regrid2 import esmf
 from regrid2 import RegridError
 from regrid2 import GenericRegrid
 from regrid2 import RegridError
 
+ESMF.Manager(debug=True)
 HAVE_MPI = False
 try:
     from mpi4py import MPI
@@ -24,13 +26,16 @@ except:
     pass
 
 # constants
-CENTER = ESMP.ESMP_STAGGERLOC_CENTER  # or ESMP.ESMP_STAGGERLOC_CENTER_VCENTER
-CORNER = ESMP.ESMP_STAGGERLOC_CORNER
-VFACE = ESMP.ESMP_STAGGERLOC_CORNER_VFACE
-VCORNER = VFACE
-CONSERVE = ESMP.ESMP_REGRIDMETHOD_CONSERVE
-PATCH = ESMP.ESMP_REGRIDMETHOD_PATCH
-BILINEAR = ESMP.ESMP_REGRIDMETHOD_BILINEAR
+CENTER = ESMF.StaggerLoc.CENTER # Same as ESMP_STAGGERLOC_CENTER_VCENTER
+CORNER = ESMF.StaggerLoc.CORNER
+VCORNER = ESMF.StaggerLoc.CORNER_VFACE
+VFACE = VCORNER
+CONSERVE = ESMF.RegridMethod.CONSERVE
+PATCH = ESMF.RegridMethod.PATCH
+BILINEAR = ESMF.RegridMethod.BILINEAR
+IGNORE = ESMF.UnmappedAction.IGNORE
+ERROR = ESMF.UnmappedAction.ERROR
+
 
 class ESMFRegrid(GenericRegrid):
     """
@@ -90,17 +95,17 @@ class ESMFRegrid(GenericRegrid):
 
         # good for now
         unMappedAction = args.get('unmappedaction', 'ignore')
-        self.unMappedAction = ESMP.ESMP_UNMAPPEDACTION_IGNORE
+        self.unMappedAction = ESMF.UnmappedAction.IGNORE
         if re.search('error', unMappedAction.lower()):
-            self.unMappedAction = ESMP.ESMP_UNMAPPEDACTION_ERROR
+            self.unMappedAction = ESMF.UnmappedAction.ERROR
 
-        self.coordSys = ESMP.ESMP_COORDSYS_SPH_DEG
+        self.coordSys = ESMF.CoordSys.SPH_DEG
         self.coordSysStr = 'deg'
         if re.search('cart', coordSys.lower()):
-            self.coordSys = ESMP.ESMP_COORDSYS_CART
+            self.coordSys = ESMF.CoordSys.CART
             self.coordSysStr = 'cart'
         elif re.search('rad', coordSys.lower()):
-            self.coordSys = ESMP.ESMP_COORDSYS_SPH_RAD
+            self.coordSys = ESMF.CoordSys.SPH_RAD
             self.coordSysStr = 'rad'
 
         self.periodicity = periodicity
@@ -223,13 +228,12 @@ staggerLoc = %s!""" % staggerLoc
         Compute interpolation weights
         @param **args (not used)
         """
-        self.regridObj = esmf.EsmfRegrid(self.srcFld, self.dstFld,
-                                  srcFrac = None,
-                                  dstFrac = None,
-                                  srcMaskValues = self.srcMaskValues,
-                                  dstMaskValues = self.dstMaskValues,
-                                  regridMethod = self.regridMethod,
-                                  unMappedAction = self.unMappedAction)
+#        pdb.set_trace()
+        self.regridObj = ESMF.Regrid(self.srcFld.field, self.dstFld.field,
+                                  src_mask_values= self.srcMaskValues,
+                                  dst_mask_values= self.dstMaskValues,
+                                  regrid_method= self.regridMethod,
+                                  unmapped_action= self.unMappedAction)
 
     def apply(self, srcData, dstData, rootPe, globalIndexing = False, **args):
         """

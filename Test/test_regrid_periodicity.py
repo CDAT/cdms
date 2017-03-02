@@ -6,6 +6,7 @@ import cdat_info
 import basetest
 import numpy as np
 import basetest
+#import pdb
 
 modFile="model_ANN_climo.nc"
 obsFile="GPCP_ANN_climo.nc"
@@ -40,6 +41,7 @@ class TestRegrid(basetest.CDMSBaseTest):
         obs_grid = obs.getGrid()
 
         # Regrid model to obs grid using 'linear'
+   #     pdb.set_trace()
         mod_reg = mod.regrid(obs_grid, regridTool='esmf', regridMethod='linear',
                              periodicity=1)
         self.assertEqual(np.array_str(mod_reg[-1,-1,:], precision=2), '[ 0.61  0.61  0.61  0.62  0.62  0.62  0.62  0.62  0.62  0.62  0.62  0.62\n  0.62  0.62  0.62  0.63  0.63  0.63  0.63  0.63  0.63  0.63  0.63  0.63\n  0.63  0.64  0.64  0.64  0.64  0.64  0.64  0.64  0.64  0.64  0.64  0.64\n  0.64  0.64  0.64  0.64  0.64  0.64  0.64  0.64  0.64  0.64  0.64  0.64\n  0.64  0.64  0.63  0.63  0.63  0.63  0.63  0.63  0.63  0.63  0.63  0.63\n  0.63  0.63  0.63  0.63  0.63  0.63  0.63  0.63  0.63  0.63  0.63  0.63\n  0.63  0.63  0.63  0.62  0.62  0.62  0.62  0.62  0.62  0.62  0.62  0.62\n  0.61  0.61  0.61  0.61  0.61  0.61  0.61  0.61  0.61  0.61  0.61  0.61\n  0.61  0.61  0.61  0.6   0.6   0.6   0.6   0.6   0.6   0.6   0.6   0.6\n  0.6   0.6   0.6   0.6   0.6   0.6   0.6   0.6   0.6   0.59  0.59  0.59\n  0.59  0.59  0.59  0.6   0.6   0.6   0.6   0.6   0.6   0.6   0.6   0.6\n  0.6   0.6   0.6   0.6   0.6   0.6   0.6   0.61  0.61  0.61  0.61  0.61]')

@@ -24,10 +24,9 @@ from . import git
 ESMP_HAS_BEEN_INITIALIZED = False
 if not ESMP_HAS_BEEN_INITIALIZED:
     try:
-        import ESMP
-        ESMF.ESMP_Initialize(ESMF.ESMP_LOGKIND_NONE)
+        import ESMF
+        ESMF.Manager(debug=False)
         # this turns off the PET file logs
-        ESMF.ESMP_LogSet(False)
         ESMP_HAS_BEEN_INITIALIZED = True
     except:
         pass

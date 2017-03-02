@@ -37,7 +37,7 @@ def compute_dataset(attributes):
 
 
 class DatasetFunction(ComputeNode):
-    def __init__(self, uri, func, id=None, **args):
+    def __init__(self, uri, objtype, id=None, **args):
         super(DatasetFunction, self).__init__()
         self.node_type = DATASET_NODE_TYPE
         self.node_params = {
@@ -47,6 +47,7 @@ class DatasetFunction(ComputeNode):
         }
         if objtype not in obj_types:
             raise ValueError(INVALID_DATASET_FUNC % objtype)
+        self.uri = uri
         self.objtype = objtype
-        self.objid = array
+        self.objid = id
         self.args = args

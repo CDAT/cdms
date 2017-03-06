@@ -3,6 +3,7 @@ from compute_graph import ComputeNode, register_computation
 UNARY_NODE_TYPE = "unary_ndarray"
 BINARY_NODE_TYPE = "binary_ndarray"
 AXIS_NODE_TYPE = "axis_ndarray"
+SUBSET_NODE_TYPE = "subset_ndarray"
 
 # Error messages
 INVALID_AXIS_OPERATION = "Expected axis/reduce/accumulate operation, got '%s'."
@@ -83,6 +84,39 @@ def axis_compute(attributes):
         return compute_algo.accumulate(arg, axis=axis, **d)
     else:
         return compute_algo(arg, axis=axis, **d)
+
+
+@register_computation(SUBSET_NODE_TYPE)
+def subset_compute(attributes):
+    # Differs from geospatial subset by using indices, rather than
+    # geospatial values.
+    arr = attributes["array"]
+    ind1 = attributes["ind1"]
+    ind2 = attributes.get("ind2", None)
+    if ind2 is None:
+        return arr[ind1]
+    step = attributes.get("step", None)
+    if step is None:
+        return arr[ind1:ind2]
+    return arr[ind1:ind2:step]
+
+
+class NDArraySubsetFunction(ComputeNode):
+    def __init__(self, array, ind1, ind2=None, step=None):
+        # Handles both slicing and getitem
+        super(NDArraySubsetFunction, self).__init__()
+        self.node_type = SUBSET_NODE_TYPE
+        self.node_params = {
+            "array": "Array to subset.",
+            "ind1": "Index to retrieve, or the start of a slice.",
+            "ind2": "End of the slice.",
+            "step": "Step value for the slice."
+        }
+
+        self.array = array
+        self.ind1 = ind1
+        self.ind2 = ind2
+        self.step = step
 
 
 class NDArrayBinaryFunction(ComputeNode):

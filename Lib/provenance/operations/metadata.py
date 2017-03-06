@@ -32,7 +32,7 @@ def compute_metadata(attributes):
 
 
 class MetadataFunction(ComputeNode):
-    def __init__(self, obj, attribute=None, value=None, **args):
+    def __init__(self, obj, attribute=None, value=None):
         super(MetadataFunction, self).__init__()
         self.node_type = METADATA_NODE_TYPE
         self.node_params = {

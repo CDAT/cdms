@@ -13,7 +13,7 @@ def compute_dataset(attributes):
     objtype = attributes["objtype"]
     val = None
     if objtype == "variable":
-        val = f(attributes["objid"])
+        val = f(attributes["objid"], **attributes.get("args", {}))
     if objtype == "grid":
         val = f.getGrid(attributes['objid'])
         tgrid = val.subGrid(None, None)
@@ -50,4 +50,5 @@ class DatasetFunction(ComputeNode):
         self.uri = uri
         self.objtype = objtype
         self.objid = id
-        self.args = args
+        if args:
+            self.args = args

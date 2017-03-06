@@ -76,7 +76,8 @@ def axis_compute(attributes):
     mode = attributes.get("mode", False)
 
     for a in ("func", "arg", "mode", "axis"):
-        del d[a]
+        if a in d:
+            del d[a]
 
     if mode == "reduce":
         return compute_algo.reduce(arg, axis=axis, **d)
@@ -176,5 +177,6 @@ class NDArrayAxisFunction(ComputeNode):
         else:
             if func not in axis_ops:
                 raise ValueError(INVALID_AXIS_OPERATION % func)
+        self.func = func
         self.axis = axis
         self.arg = arg

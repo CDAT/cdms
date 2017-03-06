@@ -10,7 +10,7 @@ INVALID_GEOSPATIAL_FUNC = "Expected geospatial function; received '%s'."
 def compute_geo(attributes):
     array = attributes["array"]
     func = attributes["func"]
-    args = attributes["args"]
+    args = attributes.get("args", {})
 
     if func == "subset":
         return array(**args)
@@ -43,4 +43,5 @@ class GeospatialFunction(ComputeNode):
             raise ValueError(INVALID_GEOSPATIAL_FUNC % func)
         self.func = func
         self.array = array
-        self.args = args
+        if args:
+            self.args = args

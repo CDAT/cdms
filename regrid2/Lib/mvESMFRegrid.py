@@ -101,7 +101,6 @@ class ESMFRegrid(GenericRegrid):
         if re.search('error', unMappedAction.lower()):
             self.unMappedAction = ESMF.UnmappedAction.ERROR
 
-        print "unMappedAction = ",self.unMappedAction
         self.coordSys = ESMF.CoordSys.SPH_DEG
         self.coordSysStr = 'deg'
         if re.search('cart', coordSys.lower()):

@@ -261,11 +261,7 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
 
         for i in range(self.ndims):
 #            ptr = ESMF.ESMP_GridGetCoordPtr(self.grid, i, staggerloc)
-<<<<<<< HEAD
             ptr = self.grid.get_coords(coord_dim=i, staggerloc=staggerloc)
-=======
-            ptr = self.grid.get_coords(i,staggerloc=staggerloc)
->>>>>>> b97d92d4f0ffada8bb671e93478ddf84e15a5190
             if globalIndexing:
                 slab = self.getLocalSlab(staggerloc)
                 # Populate self.grid with coordinates or the bounds as needed
@@ -280,11 +276,7 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
         @param staggerloc Stagger location
         """
 #        gridPtr = ESMF.ESMP_GridGetCoordPtr(self.grid, dim, staggerloc)
-<<<<<<< HEAD
         gridPtr = self.grid.get_coords(coord_dim=dim, staggerloc=staggerloc)
-=======
-        gridPtr = self.grid.get_coords(dim,staggerloc=staggerloc)
->>>>>>> b97d92d4f0ffada8bb671e93478ddf84e15a5190
         shp = self.getCoordShape(staggerloc)
         return numpy.reshape(gridPtr, shp)
 
@@ -457,10 +449,6 @@ class EsmfStructField:
         ptr = self.field.data
         if globalIndexing:
             slab = self.grid.getLocalSlab(staggerloc)
-<<<<<<< HEAD
-            print data[slab]
-=======
->>>>>>> b97d92d4f0ffada8bb671e93478ddf84e15a5190
             ptr[:] = data[slab]
         else:
             ptr[:] = data

@@ -45,6 +45,7 @@ class ESMFRegrid(GenericRegrid):
                  regridMethod, staggerLoc, periodicity, coordSys,
                  srcGridMask = None, hasSrcBounds = False, srcGridAreas = None,
                  dstGridMask = None, hasDstBounds = False, dstGridAreas = None,
+                 ignoreDegenerate = False,
                  **args):
         """
         Constructor
@@ -59,6 +60,7 @@ class ESMFRegrid(GenericRegrid):
         @param coordSys 'deg', 'cart', or 'rad'
         @param hasSrcBounds tuple source bounds shape
         @param hasDstBounds tuple destination bounds shape
+        @param ignoreDegenerate Ignore degenerate celss when checking inputs
         """
 
         # esmf grid objects (tobe constructed)
@@ -68,6 +70,7 @@ class ESMFRegrid(GenericRegrid):
 
         self.srcGridShape = srcGridshape
         self.dstGridShape = dstGridshape
+        self.ignoreDegenerate = ignoreDegenerate
         self.ndims = len(self.srcGridShape)
 
         self.hasSrcBounds = hasSrcBounds
@@ -99,6 +102,7 @@ class ESMFRegrid(GenericRegrid):
         if re.search('error', unMappedAction.lower()):
             self.unMappedAction = ESMF.UnmappedAction.ERROR
 
+        print "unMappedAction = ",self.unMappedAction
         self.coordSys = ESMF.CoordSys.SPH_DEG
         self.coordSysStr = 'deg'
         if re.search('cart', coordSys.lower()):
@@ -233,6 +237,7 @@ staggerLoc = %s!""" % staggerLoc
                                   src_mask_values= self.srcMaskValues,
                                   dst_mask_values= self.dstMaskValues,
                                   regrid_method= self.regridMethod,
+                                  ignore_degenerate= self.ignoreDegenerate,
                                   unmapped_action= self.unMappedAction)
 
     def apply(self, srcData, dstData, rootPe, globalIndexing = False, **args):
@@ -253,13 +258,15 @@ staggerLoc = %s!""" % staggerLoc
                               is only relevant if rootPe is None
         @param **args
         """
-        self.srcFld.setLocalData(srcData, self.staggerloc,
-                                 globalIndexing = globalIndexing)
-        self.dstFld.setLocalData(dstData, self.staggerloc,
-                                 globalIndexing = globalIndexing)
+#        self.srcFld.setLocalData(srcData, self.staggerloc,
+#                                 globalIndexing = globalIndexing)
+#        self.dstFld.setLocalData(dstData, self.staggerloc,
+#                                 globalIndexing = globalIndexing)
 
+        self.srcFld.field.data[:] = srcData
+        self.dstFld.field.data[:] = dstData
         # regrid
-        self.regridObj(self.srcFld, self.dstFld)
+        self.regridObj(self.srcFld.field, self.dstFld.field)
 
         # fill in dstData
         if rootPe is None and globalIndexing:

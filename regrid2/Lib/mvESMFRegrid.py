@@ -6,7 +6,6 @@ No guarantee is provided whatsoever. Use at your own risk.
 
 David Kindig and Alex Pletzer, Tech-X Corp. (2012)
 """
-import pdb
 import types
 import re
 import numpy
@@ -232,13 +231,13 @@ staggerLoc = %s!""" % staggerLoc
         Compute interpolation weights
         @param **args (not used)
         """
-#        pdb.set_trace()
-        self.regridObj = ESMF.Regrid(self.srcFld.field, self.dstFld.field,
+        self.regridObj = ESMF.Regrid(srcfield    = self.srcFld.field, 
+                                  dstfield       = self.dstFld.field,
                                   src_mask_values= self.srcMaskValues,
                                   dst_mask_values= self.dstMaskValues,
-                                  regrid_method= self.regridMethod,
-                                  ignore_degenerate= self.ignoreDegenerate,
-                                  unmapped_action= self.unMappedAction)
+                                  regrid_method  = self.regridMethod,
+                                  unmapped_action= self.unMappedAction,
+                                  ignore_degenerate = True)
 
     def apply(self, srcData, dstData, rootPe, globalIndexing = False, **args):
         """
@@ -274,7 +273,7 @@ staggerLoc = %s!""" % staggerLoc
             slab = self.dstGrid.getLocalSlab(staggerloc = self.staggerloc)
             dstData[slab] = self.dstFld.getData(rootPe = rootPe)
         else:
-            tmp =  self.dstFld.getData(rootPe = rootPe)
+            tmp =  self.dstFld.field.data
             if tmp is None:
                 dstData = None
             else:

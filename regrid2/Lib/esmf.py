@@ -10,7 +10,6 @@ specified in the license file 'license.txt' are met.
 
 Authors: David Kindig and Alex Pletzer
 """
-import pdb
 import re
 import time
 import numpy
@@ -175,7 +174,6 @@ class EsmfStructGrid:
         self.centersSet = False
 
         maxIndex = numpy.array(shape, dtype = numpy.int32)
-#        pdb.set_trace()
         if periodicity == 0:
             self.grid = ESMF.Grid(max_index=maxIndex, num_peri_dims=0, staggerloc=[staggerloc],
                                   coord_sys=coordSys)
@@ -195,7 +193,7 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
         # Grid add coordinates call must go here for parallel runs
         # This occur before the fields are created, making the fields
         # parallel aware.
-#        self.grid.add_coords([staggerloc], coord_dim=None, from_file=False)
+#        self.grid.add_coords([staggerloc])
 #        ESMF.ESMP_GridAddCoord(self.grid, staggerloc=staggerloc)
         if ((staggerloc ==  CENTER) and (not self.centersSet)):
             self.centersSet = True
@@ -250,8 +248,8 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
         @param coords   The curvilinear coordinates of the grid.
                         List of numpy arrays. Must exist on all procs.
         @param staggerloc  The stagger location
-                           ESMF.ESMP_STAGGERLOC_CENTER (default)
-                           ESMF.ESMP_STAGGERLOC_CORNER
+                           ESMF.StaggerLoc.CENTER (default)
+                           ESMF.StaggerLoc.CORNER
         @param globalIndexing if True array was allocated over global index
                               space, otherwise array was allocated over
                               local index space on this processor. This
@@ -263,7 +261,11 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
 
         for i in range(self.ndims):
 #            ptr = ESMF.ESMP_GridGetCoordPtr(self.grid, i, staggerloc)
+<<<<<<< HEAD
             ptr = self.grid.get_coords(coord_dim=i, staggerloc=staggerloc)
+=======
+            ptr = self.grid.get_coords(i,staggerloc=staggerloc)
+>>>>>>> b97d92d4f0ffada8bb671e93478ddf84e15a5190
             if globalIndexing:
                 slab = self.getLocalSlab(staggerloc)
                 # Populate self.grid with coordinates or the bounds as needed
@@ -278,7 +280,11 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
         @param staggerloc Stagger location
         """
 #        gridPtr = ESMF.ESMP_GridGetCoordPtr(self.grid, dim, staggerloc)
+<<<<<<< HEAD
         gridPtr = self.grid.get_coords(coord_dim=dim, staggerloc=staggerloc)
+=======
+        gridPtr = self.grid.get_coords(dim,staggerloc=staggerloc)
+>>>>>>> b97d92d4f0ffada8bb671e93478ddf84e15a5190
         shp = self.getCoordShape(staggerloc)
         return numpy.reshape(gridPtr, shp)
 
@@ -338,8 +344,8 @@ class EsmfStructField:
         @param name field name (must be unique)
         @param datatype data type, one of 'float64', 'float32', 'int64', or 'int32'
                         (or equivalent numpy dtype)
-        @param staggerloc ESMP_STAGGERLOC_CENTER
-                          ESMP_STAGGERLOC_CORNER
+        @param staggerloc ESMF.StaggerLoc.CENTER
+                          ESMF.StaggerLoc.CORNER
         """
         # field object
         self.field = None
@@ -448,10 +454,13 @@ class EsmfStructField:
                               space, array was allocated over local index
                               space (on this processor)
         """
-        ptr = self.getPointer()
+        ptr = self.field.data
         if globalIndexing:
             slab = self.grid.getLocalSlab(staggerloc)
+<<<<<<< HEAD
             print data[slab]
+=======
+>>>>>>> b97d92d4f0ffada8bb671e93478ddf84e15a5190
             ptr[:] = data[slab]
         else:
             ptr[:] = data
@@ -548,7 +557,8 @@ class EsmfRegrid:
                                      dst_frac_field  = self.dstFracField.field,
                                      ignoreDegenerate = True,
                                      regrid_method   = regridMethod,
-                                     unmapped_action = unMappedAction)
+                                     unmapped_action = unMappedAction,
+                                     ignore_degenerate = True)
 
     def getSrcAreas(self, rootPe):
         """

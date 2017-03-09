@@ -22,6 +22,7 @@ R4 = ESMF.TypeKind.R4
 I8 = ESMF.TypeKind.I8
 I4 = ESMF.TypeKind.I4
 CENTER = ESMF.StaggerLoc.CENTER # Same as ESMP_STAGGERLOC_CENTER_VCENTER
+CENTER_VCENTER = ESMF.StaggerLoc.CENTER_VCENTER
 CORNER = ESMF.StaggerLoc.CORNER
 VCORNER = ESMF.StaggerLoc.CORNER_VFACE
 VFACE = VCORNER
@@ -132,9 +133,9 @@ class EsmfUnstructGrid:
         self.grid.write(filename)
 
 
-    def __del__(self):
+#    def __del__(self):
 #        ESMF.ESMP_MeshDestroy(self.grid)
-        self.grid.destroy()
+#        self.grid.destroy()
 
 ################################################################################
 
@@ -319,9 +320,9 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
         slab = self.getLocalSlab(CENTER)
         maskPtr[:] = mask[slab].flat
 
-    def __del__(self):
+#    def __del__(self):
         #ESMF.ESMP_GridDestroy(self.grid)
-        self.grid.destroy()
+#        self.grid.destroy()
 
 ################################################################################
 
@@ -358,8 +359,6 @@ class EsmfStructField:
         except:
             pass
 
-        vm = ESMF.ESMP_VMGetGlobal()
-        self.pe, self.nprocs = ESMF.ESMP_VMGet(vm)
 
         etype = None
         sdatatype = str(datatype) # in case user passes a numpy dtype
@@ -380,6 +379,8 @@ class EsmfStructField:
 #                                               staggerloc = staggerloc,
 #                                               typekind = etype)
         self.field = ESMF.Field(grid=esmfGrid.grid, name=name, typekind = etype, staggerloc = staggerloc)
+        vm = ESMF.ESMP_VMGetGlobal()
+        self.pe, self.nprocs = ESMF.ESMP_VMGet(vm)
 
     def getPointer(self):
         """
@@ -453,9 +454,10 @@ class EsmfStructField:
         else:
             ptr[:] = data
 
-    def  __del__(self):
+#    def  __del__(self):
 #        ESMF.ESMP_FieldDestroy(self.field)
-        self.field.destroy()
+#        if(hasattr(self), 'field'):
+#            self.field.destroy()
 
 ################################################################################
 
@@ -497,13 +499,13 @@ class EsmfRegrid:
 
         # create and initialize the cell areas to zero
         if regridMethod == CONSERVE:
-            self.srcAreaField = EsmfStructField(grid = self.srcField.grid,
+            self.srcAreaField = EsmfStructField(self.srcField.grid,
                                                 name = 'src_areas_%s' % timeStamp,
                                                 datatype = 'float64',
                                                 staggerloc = CENTER)
             dataPtr = self.srcAreaField.getPointer()
             dataPtr[:] = 0.0
-            self.dstAreaField = EsmfStructField(grid = self.dstField.grid,
+            self.dstAreaField = EsmfStructField(self.dstField.grid,
                                                 name = 'dst_areas_%s' % timeStamp,
                                                 datatype = 'float64',
                                                 staggerloc = CENTER)
@@ -512,7 +514,7 @@ class EsmfRegrid:
 
         # initialize fractional areas to 1 (unless supplied)
         if srcFrac is None:
-            self.srcFracField = EsmfStructField(grid = self.srcField.grid,
+            self.srcFracField = EsmfStructField(self.srcField.grid,
                                                 name = 'src_cell_area_fractions_%s' % timeStamp,
                                                 datatype = 'float64',
                                                 staggerloc = CENTER)
@@ -520,7 +522,7 @@ class EsmfRegrid:
             dataPtr[:] = 1.0
 
         if dstFrac is None:
-            self.dstFracField = EsmfStructField(grid = self.dstField.grid,
+            self.dstFracField = EsmfStructField(self.dstField.grid,
                                                 name = 'dst_cell_area_fractions_%s' % timeStamp,
                                                 datatype = 'float64',
                                                 staggerloc = CENTER)
@@ -537,16 +539,15 @@ class EsmfRegrid:
 
         #self.regridHandle = ESMF.ESMP_FieldRegridStore(
         self.regridHandle = ESMF.Regrid(
-                                     srcfield = srcField.field,
-                                     dstfield = dstField.field,
-                                     src_mask_values = srcMaskValueArr,
-                                     dst_mask_values = dstMaskValueArr,
+                                     srcField.field,
+                                     dstField.field,
                                      src_frac_field  = self.srcFracField.field,
                                      dst_frac_field  = self.dstFracField.field,
-                                     ignoreDegenerate = True,
+                                     src_mask_values = srcMaskValueArr,
+                                     dst_mask_values = dstMaskValueArr,
                                      regrid_method   = regridMethod,
                                      unmapped_action = unMappedAction,
-                                     ignore_degenerate = True)
+                                     ignore_degenerate = self.ignoreDegenerate)
 
     def getSrcAreas(self, rootPe):
         """
@@ -598,13 +599,14 @@ class EsmfRegrid:
             return self.dstFracField.data
         return None
 
-    def __call__(self, srcField=None, dstField=None):
+    def __call__(self, srcField=None, dstField=None, zero_region=None):
         """
         Apply interpolation weights
         @param srcField source field (or None if src field passed to
                constructor is to be used)
         @param dstField destination field (or None if dst field passed
                to constructor is to be used)
+        @param zero_region specify which region of the field indices will be zeroed (or None default to TOTAL Region)
         """
         if srcField == None:
             srcField = self.srcField
@@ -613,15 +615,15 @@ class EsmfRegrid:
 
         # default is keep the masked values intact
         zeroregion = ESMF.Region.SELECT
-        if self.regridMethod == CONSERVE:
-            zeroregion = None # will initalize to zero
+#        if self.regridMethod == CONSERVE:
+#            zeroregion = None # will initalize to zero
 
 #        ESMF.ESMP_FieldRegrid(srcField.field, dstField.field,
 #                              self.regridHandle,
 #                              zeroregion = zeroregion)
-        ESMF.Regrid(srcfield=srcField.field, dstfield=dstField.field, zero_region=zeroregion)
+        self.regridHandle(srcfield=srcField.field, dstfield=dstField.field, zero_region=zeroregion)
 
-    def __del__(self):
-        if self.regridHandle is not None:
-            self.regridHandle.destroy()
+#    def __del__(self):
+#        if self.regridHandle is not None:
+#            self.regridHandle.destroy()
 

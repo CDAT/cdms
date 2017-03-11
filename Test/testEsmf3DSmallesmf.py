@@ -25,8 +25,8 @@ import re
 ESMF.Manager(debug=True)
 
 def makeGrid(nx,ny,nz):
-        dims = (nx, ny, nz )
-        dimb = (nx+1, ny+1,nz+1)
+        dims = (nz, ny, nx )
+        dimb = (nz+1, ny+1,nx+1)
         xbot, xtop, ybot, ytop, zbot, ztop = 1,4,1,5,.5,6
         xbob, xtob, ybob, ytob, zbob, ztob = .5,4.5,.5,5.5,0,6.5
         x = numpy.linspace(xbot, xtop, nx)
@@ -53,8 +53,8 @@ def makeGrid(nx,ny,nz):
         zzzb = numpy.outer(ones, zb).reshape(dimb)
 
 # Order here is level, lat, lon as required by esmf.py
-        theVolume = [xxx, yyy, zzz]
-        theBounds = [xxxb, yyyb, zzzb]
+        theVolume = [zzz, yyy, xxx]
+        theBounds = [zzzb, yyyb, xxxb]
 
         theData = xxx * yyy + zzz
 
@@ -164,7 +164,6 @@ class TestESMPRegridderConserve(unittest.TestCase):
         dstDims, dstXYZCenter, dstData, dstBounds = makeGrid(5, 4, 3)
 
         print srcData.dtype
-        pdb.set_trace()
         # Establish the Destination grid
 
         dstGrid3D = esmf.EsmfStructGrid(dstData.shape, periodicity=1,
@@ -238,7 +237,7 @@ class TestESMPRegridderConserve(unittest.TestCase):
 #        srcDims, srcXYZCenter, srcData, srcBounds = makeGrid(5, 4, 3)
 #        dstDims, dstXYZCenter, dstData, dstBounds = makeGrid(5, 4, 3)
 
-        [x, y, z] = [0, 1, 2]
+        [z, y, x] = [0, 1, 2]
         xdom=[1,5]
         nx=5 
         xs = np.linspace(xdom[0], xdom[1], nx + 1)
@@ -260,40 +259,46 @@ class TestESMPRegridderConserve(unittest.TestCase):
         zcenter = (zcorner[:, 1] + zcorner[:, 0]) / 2
 
        
-        srcData = np.random.rand(xs.shape[0]-1,ys.shape[0]-1,zs.shape[0]-1)*100
-        dstData = np.random.rand(xs.shape[0]-1,ys.shape[0]-1,zs.shape[0]-1)*100
+        srcData = np.random.rand(zs.shape[0]-1,ys.shape[0]-1,xs.shape[0]-1)*100
+        dstData = np.random.rand(zs.shape[0]-1,ys.shape[0]-1,xs.shape[0]-1)*100
 
         print srcData.dtype
         # Establish the Destination grid
 
 
 #        myCenter = [dstXYZCenter[0][:,:,:], dstXYZCenter[1][:,:,:],dstXYZCenter[2][:,:,:]]
-        XCenter = np.zeros([nx,ny,nz])
-        YCenter = np.zeros([nx,ny,nz])
-        ZCenter = np.zeros([nx,ny,nz])
+        ZCenter = np.zeros([nz,ny,nx])
+        YCenter = np.zeros([nz,ny,nx])
+        XCenter = np.zeros([nz,ny,nx])
 
-        XCenter[...]=xcenter[0:nx].reshape(nx,1,1)
+        ZCenter[...]=zcenter[0:nz].reshape(nz,1,1)
         YCenter[...]=ycenter[0:ny].reshape(1,ny,1)
-        ZCenter[...]=zcenter[0:nz].reshape(1,1,nz)
+        XCenter[...]=xcenter[0:nx].reshape(1,1,nx)
 
-        boundsx=np.zeros([nx+1,ny+1,nz+1])
-        boundsy=np.zeros([nx+1,ny+1,nz+1])
-        boundsz=np.zeros([nx+1,ny+1,nz+1])
-        for i0 in range(nx):
-           boundsx[i0,:,:]=xcorner[i0,0]
-        boundsx[-1,:,:]=6
+        boundsz=np.zeros([nz+1,ny+1,nx+1])
+        boundsy=np.zeros([nz+1,ny+1,nx+1])
+        boundsx=np.zeros([nz+1,ny+1,nx+1])
+
+        for i0 in range(nz):
+           boundsz[i0,:,]=zcorner[i0,0]
+        boundsz[-1,:,:]=zcorner[-1,1]
+
         for i1 in range(ny):
            boundsy[:,i1,:]=ycorner[i1,0]
-        boundsy[:,-1,:]=6
-        for i2 in range(nz):
-           boundsz[:,:,i2]=ycorner[i2,0]
-        boundsz[:,:,-1]=6
+        boundsy[:,-1,:]=ycorner[-1,1]
 
-        print boundsx[:,1,1]
+        for i2 in range(nx):
+           boundsx[:,:,i2]=xcorner[i2,0]
+        boundsx[:,:,-1]=xcorner[-1,1]
+
+
+        print boundsz[:,1,1]
         print boundsy[1,:,1]
-        print boundsz[1,1,:]
+        print boundsx[1,1,:]
+
+        myCenter = [ZCenter, YCenter, XCenter]
+
         pdb.set_trace()
-        myCenter = [XCenter, YCenter, ZCenter]
         dstGrid3D = esmf.EsmfStructGrid(dstData.shape, periodicity=0,
                                         coordSys = ESMF.CoordSys.CART,
                                         hasBounds = True)
@@ -302,7 +307,7 @@ class TestESMPRegridderConserve(unittest.TestCase):
                             globalIndexing = True) 
 
 #        myBounds = [dstBounds[0][:,:,:], dstBounds[1][:,:,:], dstBounds[2][:,:,:]]
-        myBounds = [boundsx,boundsy,boundsz]
+        myBounds = [boundsz,boundsy,boundsx]
         dstGrid3D.setCoords(myBounds,
                             staggerloc = ESMF.StaggerLoc.CORNER_VFACE,
                             globalIndexing = True) 

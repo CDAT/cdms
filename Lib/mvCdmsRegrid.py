@@ -380,6 +380,8 @@ coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
                      (srcBounds[0].min(), srcBounds[0].max())
             if not re.search('esmp', regridTool.lower()):
                 regridTool = 'esmf'
+            if not re.search('esmf', regridTool.lower()):
+                regridTool = 'esmf'
 
         # If LibCF handleCut is True, the bounds are needed to extend the grid
         # close the cut at the top

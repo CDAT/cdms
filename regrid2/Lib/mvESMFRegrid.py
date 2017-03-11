@@ -89,7 +89,11 @@ class ESMFRegrid(GenericRegrid):
         self.staggerloc = CENTER
         self.staggerlocStr = 'center'
         if type(staggerLoc) == types.StringType:
-            if re.search('corner', staggerLoc.lower(), re.I) or \
+            if re.search('vface', staggerLoc.lower(), re.I):
+                self.staggerloc = VFACE
+                self.staggerlocStr = 'vcorner'
+            # there are other staggers we could test here
+            elif re.search('corner', staggerLoc.lower(), re.I) or \
                     re.search('node', staggerLoc.lower(), re.I):
                 self.staggerloc = CORNER
                 self.staggerlocStr = 'corner'
@@ -183,7 +187,7 @@ dimensions. len(srcGridshape) = %d != len(dstGridshape) = %d""" % \
                                globalIndexing = globalIndexing)
 
         if srcGridMask is not None:
-            self.srcGrid.setMask(srcGridMask)
+            self.srcGrid.setMask(srcGridMask, self.staggerloc)
 
         if srcBounds is not None:
             # Coords are CENTER (cell) based, bounds are CORNER (nodal)

@@ -10,6 +10,7 @@ specified in the license file 'license.txt' are met.
 
 Authors: David Kindig and Alex Pletzer
 """
+import pdb
 import re
 import time
 import numpy
@@ -306,7 +307,7 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
         else:
             return None
 
-    def setMask(self, mask):
+    def setMask(self, mask, staggerloc=CENTER):
         """
         Set mask array. In ESMF, the mask is applied to cells.
         @param mask numpy array. 1 is invalid by default. This array exists
@@ -315,10 +316,10 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
         #ESMF.ESMP_GridAddItem(self.grid, item=ESMF.ESMP_GRIDITEM_MASK)
 #        maskPtr = ESMF.ESMP_GridGetItem(self.grid,
 #                                        item=ESMF.ESMP_GRIDITEM_MASK)
-        self.grid.add_item(item=ESMF.GridItem.Area)
-        maskPtr = self.grid.get_item(item=ESMF.GridItem.MASK, staggerloc=self.staggerloc)
+        self.grid.add_item(item=ESMF.GridItem.MASK, staggerloc=staggerloc)
+        maskPtr = self.grid.get_item(item=ESMF.GridItem.MASK, staggerloc=staggerloc)
         slab = self.getLocalSlab(CENTER)
-        maskPtr[:] = mask[slab].flat
+        maskPtr[:] = mask[slab]
 
 #    def __del__(self):
         #ESMF.ESMP_GridDestroy(self.grid)

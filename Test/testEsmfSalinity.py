@@ -71,7 +71,7 @@ class Test(unittest.TestCase):
             self.pe = MPI.COMM_WORLD.Get_rank()
             self.nprocs = MPI.COMM_WORLD.Get_size()
         
-    def test0_ESMP(self):
+    def test0_ESMF(self):
         
         srcF = cdms2.open(cdat_info.get_sampledata_path()+'/so_Omon_ACCESS1-0_historical_r1i1p1_185001-185412_2timesteps.nc')
         so = srcF['so'][0, 0,...]
@@ -90,7 +90,7 @@ class Test(unittest.TestCase):
         dstGrd = [lat2dCENTER, lon2dCENTER]
         dstBounds = [lat2dBounds, lon2dBounds]
         
-        coordSys = ESMF.CoordSys.SPH_DEG # ESMP.ESMP_COORDSYS_CART fails
+        coordSys = ESMF.CoordSys.SPH_DEG # 
         
         srcDims = srcGrd[0].shape
         dstDims = dstGrd[0].shape
@@ -166,7 +166,7 @@ class Test(unittest.TestCase):
         dstFieldPtr = dstFld.data
         dstFracPtr  = dstFracField.data
 
-        # set the coordinates and field values. In ESMP, arrays are column major!
+        # set the coordinates and field values. In ESMF, arrays are column major!
 
         # src-corners
         srcYCorner[:] = srcBounds[0][:]
@@ -258,15 +258,6 @@ class Test(unittest.TestCase):
         dstFld.destroy()
         srcGrid.destroy()
         dstGrid.destroy()
-#        ESMP.ESMP_FieldRegridRelease(regrid)
-#        ESMP.ESMP_FieldDestroy(srcAreaField)
-#        ESMP.ESMP_FieldDestroy(dstAreaField)
-#        ESMP.ESMP_FieldDestroy(srcFracField)
-#        ESMP.ESMP_FieldDestroy(dstFracField)
-#        ESMP.ESMP_FieldDestroy(srcFld)
-#        ESMP.ESMP_FieldDestroy(dstFld)
-#        ESMP.ESMP_GridDestroy(srcGrid)
-#        ESMP.ESMP_GridDestroy(dstGrid)
 
 
     def test1_esmf(self):

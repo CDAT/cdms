@@ -6,16 +6,18 @@ import cdat_info
 import basetest
 import numpy as np
 import basetest
+import ssl
 
 modFile="model_ANN_climo.nc"
 obsFile="GPCP_ANN_climo.nc"
 class TestRegrid(basetest.CDMSBaseTest):
     def setUp(self):
         super(TestRegrid, self).setUp()
+        context = ssl._create_unverified_context()
         myurl = "http://uvcdat.llnl.gov/cdat/sample_data/"+obsFile
-        urllib.urlretrieve(myurl, obsFile)
+        urllib.urlretrieve(myurl, obsFile, context=context)
         myurl = "http://uvcdat.llnl.gov/cdat/sample_data/"+modFile
-        urllib.urlretrieve(myurl, modFile)
+        urllib.urlretrieve(myurl, modFile, context=context)
 
     def tearDown(self):
         super(TestRegrid, self).tearDown()

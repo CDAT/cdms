@@ -4,13 +4,14 @@ import os
 import sys
 import cdat_info
 import basetest
-
+import ssl
 
 class TestMIPS(basetest.CDMSBaseTest):
     def setUp(self):
+        context = ssl._create_unverified_context()
         myurl = "http://uvcdat.llnl.gov/cdat/sample_data/161122_RobertPincus_multiple_input4MIPs_radiation_RFMIP_UColorado-RFMIP-20161122_none.nc"
         super(TestMIPS, self).setUp()
-        urllib.urlretrieve(myurl, "161122_RobertPincus_multiple_input4MIPs_radiation_RFMIP_UColorado-RFMIP-20161122_none.nc")
+        urllib.urlretrieve(myurl, "161122_RobertPincus_multiple_input4MIPs_radiation_RFMIP_UColorado-RFMIP-20161122_none.nc",context=context)
 
     def tearDown(self):
         super(TestMIPS, self).tearDown()

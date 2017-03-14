@@ -19,6 +19,7 @@ class Test(unittest.TestCase):
         nprocs1 = comm.Get_size()
         pe2 = ESMF.local_pet()
         nprocs2 = ESMF.pet_count()
+        print "Hello ESMPy World from PET (processor) {0}!".format(ESMF.local_pet())
         self.assertEqual(pe1, pe2)
         self.assertEqual(nprocs1, nprocs2)
         

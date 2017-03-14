@@ -25,7 +25,7 @@ except:
     pass
 
 # constants
-CENTER = ESMF.StaggerLoc.CENTER # Same as ESMP_STAGGERLOC_CENTER_VCENTER
+CENTER = ESMF.StaggerLoc.CENTER # Same as ESMF_STAGGERLOC_CENTER_VCENTER
 CORNER = ESMF.StaggerLoc.CORNER
 VCORNER = ESMF.StaggerLoc.CORNER_VFACE
 VFACE = VCORNER
@@ -161,6 +161,26 @@ dimensions. len(srcGridshape) = %d != len(dstGridshape) = %d""" % \
         self.dstFld = esmf.EsmfStructField(self.dstGrid, 'dstFld',
                                            datatype = self.dtype,
                                            staggerloc = self.staggerloc)
+
+        self.srcAreaField = esmf.EsmfStructField(self.srcGrid, name='srcAreas',
+                                                datatype= self.dtype,
+                                                staggerloc = self.staggerloc)
+        self.dstAreaField = esmf.EsmfStructField(self.dstGrid, name='dstAreas',
+                                                datatype= self.dtype,
+                                                staggerloc = self.staggerloc)
+
+        self.srcFracField = esmf.EsmfStructField(self.srcGrid, name='srcFracAreas',
+                                                datatype = self.dtype,
+                                                staggerloc = self.staggerloc)
+        self.dstFracField = esmf.EsmfStructField(self.dstGrid, name='dstFracAreas',
+                                                datatype = self.dtype,
+                                                staggerloc = self.staggerloc)
+        self.srcFld.field.data[:]=-1
+        self.dstFld.field.data[:]=-1
+        self.srcAreaField.field.data[:]=0.0
+        self.dstAreaField.field.data[:]=0.0
+        self.srcFracField.field.data[:]=1.0
+        self.dstFracField.field.data[:]=1.0
 
     def setCoords(self, srcGrid, dstGrid, 
                   srcGridMask = None, srcBounds = None, srcGridAreas = None,
@@ -298,7 +318,8 @@ staggerLoc = %s!""" % staggerLoc
         @return areas or None if non-conservative interpolation
         """
         if self.regridMethod == CONSERVE:
-            return self.regridObj.getSrcAreas(rootPe = rootPe)
+            self.srcAreaField.field.get_area()
+            return self.srcAreaField.field.data
         else:
             return None
 
@@ -310,7 +331,8 @@ staggerLoc = %s!""" % staggerLoc
         @return areas or None if non-conservative interpolation
         """
         if self.regridMethod == CONSERVE:
-            return self.regridObj.getDstAreas(rootPe = rootPe)
+            self.dstAreaField.field.get_area()
+            return self.dstAreaField.field.data
         else:
             return None
 
@@ -322,7 +344,7 @@ staggerLoc = %s!""" % staggerLoc
         @return fractional areas or None (if non-conservative)
         """
         if self.regridMethod == CONSERVE:
-            return self.regridObj.getSrcAreaFractions(rootPe = rootPe)
+            return self.srcFracField.field.data
         else:
             return None
 
@@ -334,7 +356,7 @@ staggerLoc = %s!""" % staggerLoc
         @return fractional areas or None (if non-conservative)
         """
         if self.regridMethod == CONSERVE:
-            return self.regridObj.getSrcAreaFractions(rootPe = rootPe)
+            return self.dstFracField.field.data
         else:
             return
 
@@ -411,11 +433,16 @@ staggerLoc = %s!""" % staggerLoc
         @param rootPe root processor where data should be gathered (or
                       None if local areas are to be returned)
         """
+        oldMethods ={}
+        oldMethods['srcAreaFractions'] = 'getSrcAreaFractions'
+        oldMethods['dstAreaFractions'] = 'getDstAreaFractions'
+        oldMethods['srcAreas'] = 'getSrcAreas'
+        oldMethods['dstAreas'] = 'getDstAreas'
         for entry in  'srcAreaFractions', 'dstAreaFractions',  \
                 'srcAreas', 'dstAreas':
             if diag.has_key(entry):
                 meth = 'get' + entry[0].upper() + entry[1:]
-                diag[entry] = eval('self.regridObj.' + meth + '(rootPe = rootPe)')
+                diag[entry] = eval('self.'+oldMethods[entry]+'(rootPe=rootPe)')
         diag['regridTool'] = 'esmf'
         diag['regridMethod'] = self.regridMethodStr
         diag['periodicity'] = self.periodicity

@@ -134,9 +134,8 @@ class EsmfUnstructGrid:
         self.grid.write(filename)
 
 
-#    def __del__(self):
-#        ESMF.ESMP_MeshDestroy(self.grid)
-#        self.grid.destroy()
+    def __del__(self):
+        self.grid.destroy()
 
 ################################################################################
 
@@ -321,9 +320,8 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
         slab = self.getLocalSlab(CENTER)
         maskPtr[:] = mask[slab]
 
-#    def __del__(self):
-        #ESMF.ESMP_GridDestroy(self.grid)
-#        self.grid.destroy()
+    def __del__(self):
+        self.grid.destroy()
 
 ################################################################################
 
@@ -624,7 +622,7 @@ class EsmfRegrid:
 #                              zeroregion = zeroregion)
         self.regridHandle(srcfield=srcField.field, dstfield=dstField.field, zero_region=zeroregion)
 
-#    def __del__(self):
-#        if self.regridHandle is not None:
-#            self.regridHandle.destroy()
+    def __del__(self):
+        if self.regridHandle is not None:
+            self.regridHandle.destroy()
 

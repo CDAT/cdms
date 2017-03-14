@@ -249,6 +249,15 @@ class Test(unittest.TestCase):
             print 'ROOT: total lack of conservation (should be small): %f' % lackConserv
 
         # cleanup
+        regrid.destroy()
+        srcAreaField.destroy()
+        dstAreaField.destroy()
+        srcFracField.destroy()
+        dstFracField.destroy()
+        srcFld.destroy()
+        dstFld.destroy()
+        srcGrid.destroy()
+        dstGrid.destroy()
 #        ESMP.ESMP_FieldRegridRelease(regrid)
 #        ESMP.ESMP_FieldDestroy(srcAreaField)
 #        ESMP.ESMP_FieldDestroy(dstAreaField)

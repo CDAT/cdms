@@ -21,12 +21,12 @@ except:
 
 from . import git
 
-ESMP_HAS_BEEN_INITIALIZED = False
-if not ESMP_HAS_BEEN_INITIALIZED:
+ESMF_HAS_BEEN_INITIALIZED = False
+if not ESMF_HAS_BEEN_INITIALIZED:
     try:
         import ESMF
         ESMF.Manager(debug=False)
         # this turns off the PET file logs
-        ESMP_HAS_BEEN_INITIALIZED = True
+        ESMF_HAS_BEEN_INITIALIZED = True
     except:
         pass

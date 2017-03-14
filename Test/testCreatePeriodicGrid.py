@@ -5,7 +5,7 @@ With and without masking
 """
 
 import pdb
-import cdms2  # ESMP_Initialize()
+import cdms2  
 import unittest
 import ESMF
 from regrid2 import esmf
@@ -26,7 +26,7 @@ import re
 ESMF.Manager(debug=True)
 
 
-class TestESMPRegridderConserve(unittest.TestCase):
+class TestESMFRegridderConserve(unittest.TestCase):
     def setUp(self):
         """
         Unit test set up
@@ -142,5 +142,5 @@ class TestESMPRegridderConserve(unittest.TestCase):
 if __name__ == '__main__':
     print "" # Spacer
     ESMF.Manager(debug=True)
-    suite = unittest.TestLoader().loadTestsFromTestCase(TestESMPRegridderConserve)
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestESMFRegridderConserve)
     unittest.TextTestRunner(verbosity = 1).run(suite)

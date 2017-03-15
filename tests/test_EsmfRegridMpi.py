@@ -16,10 +16,12 @@ import ESMF
 import time
 import copy
 from mpi4py import MPI
-from matplotlib import pylab
 import sys
 
 PLOT = False
+if PLOT:
+    from matplotlib import pylab
+
 
 class Test(unittest.TestCase):
 

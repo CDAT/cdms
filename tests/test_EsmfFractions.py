@@ -5,7 +5,6 @@ Unit test for src/dst AreaFractions return nan. It only fails in tripolar grids.
 
 """
 
-import pdb
 import operator
 import numpy
 import cdat_info
@@ -16,12 +15,12 @@ import unittest
 import time
 import ESMF
 import copy
-from matplotlib import pylab as pl
 from mpi4py import MPI
 import sys
 
 PLOT = False
-PLOT = True
+if PLOT:
+    from matplotlib import pylab as pl
 
 class Test(unittest.TestCase):
     def setUp(self):
@@ -42,7 +41,6 @@ class Test(unittest.TestCase):
         ny, nx = so.shape
         soBounds = so.getGrid().getBounds()
 
-        pdb.set_trace()
         srcLatCorner = numpy.zeros( (ny+1, nx+1), numpy.float32 )
         srcLatCorner[:ny, :nx] = soBounds[0][:, :, 0]
         srcLatCorner[:ny, nx] = soBounds[0][:ny, nx-1, 1]

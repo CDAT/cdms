@@ -3,7 +3,6 @@ $Id: testEsmf3D.py 2387 2012-07-24 17:07:48Z dkindig $
 3D Bilinear test of ESMP through esmf, regrid, and standalone
 With and without masking
 """
-import pdb
 import operator
 import cdat_info
 import cdms2
@@ -73,7 +72,6 @@ class TestESMFRegridderConserve(unittest.TestCase):
 			       '/so_Omon_ACCESS1-0_historical_r1i1p1_185001-185412_2timesteps.nc')
         so = f('so')[0, ...]
 
-        pdb.set_trace()
         # Coords
         soLats = so.getLatitude()[:]
         soLons = so.getLongitude()[:]
@@ -355,7 +353,6 @@ class TestESMFRegridderConserve(unittest.TestCase):
                                                   srcJCenterBE, 
                                                   srcICenterBE].T
         # Source Mask
-        pdb.set_trace()
         srcGrid3D.add_item(item=ESMF.GridItem.MASK)
 #        ESMP.ESMP_GridAddItem(srcGrid3D, item = ESMP.ESMP_GRIDITEM_MASK)
         srcMaskPtr = srcGrid3D.get_item(item=ESMF.GridItem.MASK, staggerloc=ESMF.StaggerLoc.CENTER_VCENTER)

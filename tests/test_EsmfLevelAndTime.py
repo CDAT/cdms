@@ -1,4 +1,3 @@
-import pdb
 import unittest
 import cdat_info
 import cdms2

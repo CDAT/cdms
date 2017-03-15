@@ -4,7 +4,6 @@ $Id: testEsmf3DSmallNative.py 2389 2012-07-26 15:51:43Z dkindig $
 With and without masking
 """
 
-import pdb
 import operator
 import cdms2
 import regrid2

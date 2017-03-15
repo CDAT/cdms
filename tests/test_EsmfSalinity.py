@@ -5,7 +5,6 @@ Test interpolation on salinity datasets
 
 """
 
-import pdb
 import time
 import re
 import numpy

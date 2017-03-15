@@ -5,7 +5,6 @@ $Id: testEsmf_3x4_6x8_Conserve_Masked.py 2354 2012-07-11 15:28:14Z pletzer $
 Plotting routine for tests in regrid2.ESMF using ginned up data
 """
 
-import pdb
 import cdms2
 from cdms2.mvCdmsRegrid import CdmsRegrid
 from openCreateData import dataMaskedNoPeri

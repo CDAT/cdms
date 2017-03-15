@@ -11,7 +11,7 @@ cmd="export PATH=${HOME}/miniconda/bin:${PATH}"
 echo $cmd
 $cmd
 
-cmd="conda install -q  -c uvcdat/label/nightly -c conda-forge -c uvcdat vcs pyopenssl nose" #image-compare
+cmd="conda install -q  -c uvcdat/label/nightly -c conda-forge -c uvcdat vcs pyopenssl nose esmpy mpi4py" #image-compare
 echo $cmd
 $cmd
 

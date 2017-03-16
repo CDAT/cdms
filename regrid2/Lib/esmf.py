@@ -10,7 +10,6 @@ specified in the license file 'license.txt' are met.
 
 Authors: David Kindig and Alex Pletzer
 """
-import pdb
 import re
 import time
 import numpy
@@ -359,7 +358,7 @@ class EsmfStructField:
         Get field data as a flat array
         @return pointer
         """
-        return self.field.data.flat
+        return numpy.ravel(self.field.data)
 
     def getData(self, rootPe):
         """
@@ -373,13 +372,14 @@ class EsmfStructField:
         if rootPe is None:
             shp = self.grid.getCoordShape(staggerloc = self.staggerloc)
             # local data, copy
-            return ptr.reshape(shp)
+            return numpy.reshape(ptr, shp)
         else:
             # gather the data on rootPe
             lo, hi = self.grid.getLoHiBounds(self.staggerloc)
             los = [lo]
             his = [hi]
             ptrs = [ptr]
+            ptr=numpy.reshape(ptr,hi)
             if self.comm is not None:
                 los = self.comm.gather(lo)  # Local
                 his = self.comm.gather(hi)  # Local 

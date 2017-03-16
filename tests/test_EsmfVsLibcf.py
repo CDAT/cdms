@@ -4,7 +4,6 @@ $Id: testEsmfVsLibcf.py 2389 2012-07-26 15:51:43Z dkindig $
 Unit tests comparing esmf and libcf interpolation
 
 """
-
 import operator
 import numpy
 import cdat_info
@@ -79,14 +78,14 @@ class Test(unittest.TestCase):
         tic = time.time()
         # assume so and clt are cell centered
         srcGrid = regrid2.esmf.EsmfStructGrid(so.shape, 
-                                              coordSys=ESMP.ESMP_COORDSYS_SPH_DEG,
+                                              coordSys=ESMF.CoordSys.SPH_DEG,
                                               periodicity=0)
         dstGrid = regrid2.esmf.EsmfStructGrid(clt.shape, 
-                                              coordSys=ESMP.ESMP_COORDSYS_SPH_DEG,
+                                              coordSys=ESMF.CoordSys.SPH_DEG,
                                               periodicity=0)
         grid = [so.getGrid().getLatitude(), so.getGrid().getLongitude()]
         srcGrid.setCoords([numpy.array(g[:]) for g in grid], 
-                          staggerloc=ESMP.ESMP_STAGGERLOC_CENTER)
+                          staggerloc=ESMF.StaggerLoc.CENTER)
         # convert to curvilinear
         ny, nx = clt.shape
         y = clt.getGrid().getLatitude()
@@ -94,38 +93,38 @@ class Test(unittest.TestCase):
         yy = numpy.outer(y, numpy.ones((nx,), numpy.float32))
         xx = numpy.outer(numpy.ones((ny,), numpy.float32), x)
         dstGrid.setCoords([yy, xx], 
-                          staggerloc=ESMP.ESMP_STAGGERLOC_CENTER)
+                          staggerloc=ESMF.StaggerLoc.CENTER)
         mask = numpy.zeros(so.shape, numpy.int32)
         mask[:] = (so == so.missing_value)
         srcGrid.setMask(mask)
         srcFld = regrid2.esmf.EsmfStructField(srcGrid, 'srcFld', 
                                               datatype = so.dtype,
-                                              staggerloc = ESMP.ESMP_STAGGERLOC_CENTER)
-        srcFld.setLocalData(numpy.array(so), staggerloc = ESMP.ESMP_STAGGERLOC_CENTER)
+                                              staggerloc = ESMF.StaggerLoc.CENTER)
+        srcFld.setLocalData(numpy.array(so), staggerloc = ESMF.StaggerLoc.CENTER)
         dstFld = regrid2.esmf.EsmfStructField(dstGrid, 'dstFld', 
                                               datatype = so.dtype,
-                                              staggerloc = ESMP.ESMP_STAGGERLOC_CENTER)
+                                              staggerloc = ESMF.StaggerLoc.CENTER)
         dstFld.setLocalData(so.missing_value*numpy.ones(clt.shape, so.dtype),
-                           staggerloc = ESMP.ESMP_STAGGERLOC_CENTER)
+                           staggerloc = ESMF.StaggerLoc.CENTER)
         srcFld2 = regrid2.esmf.EsmfStructField(srcGrid, 'srcFld2', 
                                                datatype = so.dtype,
-                                               staggerloc=ESMP.ESMP_STAGGERLOC_CENTER)
+                                               staggerloc=ESMF.StaggerLoc.CENTER)
         srcFld2.setLocalData(so.missing_value*numpy.ones(so.shape, so.dtype),
-                             staggerloc = ESMP.ESMP_STAGGERLOC_CENTER)
+                             staggerloc = ESMF.StaggerLoc.CENTER)
         
         rgrd1 = regrid2.esmf.EsmfRegrid(srcFld, dstFld, 
                                         srcFrac=None, dstFrac=None,
                                         srcMaskValues=numpy.array([1], numpy.int32),
                                         dstMaskValues=numpy.array([1], numpy.int32),
-                                        regridMethod=ESMP.ESMP_REGRIDMETHOD_BILINEAR,
-                                        unMappedAction=ESMP.ESMP_UNMAPPEDACTION_IGNORE)
+                                        regridMethod=ESMF.RegridMethod.BILINEAR,
+                                        unMappedAction=ESMF.UnmappedAction.IGNORE)
         rgrd1(srcFld, dstFld)
         rgrd2 = regrid2.esmf.EsmfRegrid(dstFld, srcFld2, 
                                         srcFrac=None, dstFrac=None,
                                         srcMaskValues=numpy.array([1], numpy.int32),
                                         dstMaskValues=numpy.array([1], numpy.int32),
-                                        regridMethod=ESMP.ESMP_REGRIDMETHOD_BILINEAR,
-                                        unMappedAction=ESMP.ESMP_UNMAPPEDACTION_IGNORE)
+                                        regridMethod=ESMF.RegridMethod.BILINEAR,
+                                        unMappedAction=ESMF.UnmappedAction.IGNORE)
         rgrd2(dstFld, srcFld2)
         soInterp = numpy.reshape(dstFld.getPointer(), clt.shape)
         soInterpInterp = numpy.reshape(srcFld2.getPointer(), so.shape)
@@ -168,109 +167,82 @@ class Test(unittest.TestCase):
         tic = time.time()
 
         # create grid
-        srcMaxIndex = numpy.array(so.shape[::-1], dtype=numpy.int32)
-        srcGrid = ESMF.Grid(srcMaxIndex, coord_sys, ESMF.CoordSys.SPH_DEG, staggerloc=ESMF.StaggerLoc.CENTER)
+        srcMaxIndex = numpy.array(so.shape, dtype=numpy.int32)
+        srcGrid = ESMF.Grid(srcMaxIndex, coord_sys=ESMF.CoordSys.SPH_DEG, staggerloc=ESMF.StaggerLoc.CENTER)
 #        srcGrid = ESMP.ESMP_GridCreateNoPeriDim(srcMaxIndex, 
-#                                                coordSys = ESMP.ESMP_COORDSYS_SPH_DEG)
+#                                                coordSys = ESMF.CoordSys.SPH_DEG)
         #srcGrid = ESMP.ESMP_GridCreate1PeriDim(srcMaxIndex, 
-        #                                       coordSys = ESMP.ESMP_COORDSYS_SPH_DEG)
-        ESMP.ESMP_GridAddCoord(srcGrid, 
-                               staggerloc = ESMP.ESMP_STAGGERLOC_CENTER)
-        srcDimsCenter = ESMP.ESMP_GridGetCoord(srcGrid,
-                                               ESMP.ESMP_STAGGERLOC_CENTER)
-        srcXCenter = ESMP.ESMP_GridGetCoordPtr(srcGrid, 0, 
-                                               ESMP.ESMP_STAGGERLOC_CENTER)
-        srcYCenter = ESMP.ESMP_GridGetCoordPtr(srcGrid, 1, 
-                                               ESMP.ESMP_STAGGERLOC_CENTER)
-        dstMaxIndex = numpy.array(clt.shape[::-1], dtype=numpy.int32)
-        dstGrid = ESMP.ESMP_GridCreateNoPeriDim(dstMaxIndex, 
-                                                coordSys = ESMP.ESMP_COORDSYS_SPH_DEG)
-        ESMP.ESMP_GridAddCoord(dstGrid, 
-                               staggerloc = ESMP.ESMP_STAGGERLOC_CENTER)
-        dstDimsCenter = ESMP.ESMP_GridGetCoord(dstGrid,
-                                               ESMP.ESMP_STAGGERLOC_CENTER)
-        dstXCenter = ESMP.ESMP_GridGetCoordPtr(dstGrid, 0, 
-                                               ESMP.ESMP_STAGGERLOC_CENTER)
-        dstYCenter = ESMP.ESMP_GridGetCoordPtr(dstGrid, 1, 
-                                               ESMP.ESMP_STAGGERLOC_CENTER)
+        #                                       coordSys = ESMF.CoordSys.SPH_DEG)
+        srcDimsCenter = [srcGrid.lower_bounds[ESMF.StaggerLoc.CENTER], srcGrid.upper_bounds[ESMF.StaggerLoc.CENTER]]
+        srcXCenter = srcGrid.get_coords(0, staggerloc=ESMF.StaggerLoc.CENTER)
+        srcYCenter = srcGrid.get_coords(1, staggerloc=ESMF.StaggerLoc.CENTER)
+
+        dstMaxIndex = numpy.array(clt.shape, dtype=numpy.int32)
+        dstGrid = ESMF.Grid(dstMaxIndex, coord_sys=ESMF.CoordSys.SPH_DEG, staggerloc=[ESMF.StaggerLoc.CENTER])
+        dstDimsCenter = [dstGrid.lower_bounds[ESMF.StaggerLoc.CENTER], dstGrid.upper_bounds[ESMF.StaggerLoc.CENTER]]
+        dstXCenter = dstGrid.get_coords(0, staggerloc=ESMF.StaggerLoc.CENTER)
+        dstYCenter = dstGrid.get_coords(1, staggerloc=ESMF.StaggerLoc.CENTER)
         # mask 
-        ESMP.ESMP_GridAddItem(srcGrid, item=ESMP.ESMP_GRIDITEM_MASK)
-        srcMask = ESMP.ESMP_GridGetItem(srcGrid, item=ESMP.ESMP_GRIDITEM_MASK)
+        srcGrid.add_item(item=ESMF.GridItem.MASK)
+        srcMask = srcGrid.get_item(item=ESMF.GridItem.MASK)
     
         # create field
-        srcFld = ESMP.ESMP_FieldCreateGrid(srcGrid, 'srcFld', 
-                                        typekind = ESMP.ESMP_TYPEKIND_R4,
-                                        staggerloc = ESMP.ESMP_STAGGERLOC_CENTER)
-        srcFldPtr = ESMP.ESMP_FieldGetPtr(srcFld)
-        srcFld2 = ESMP.ESMP_FieldCreateGrid(srcGrid, 'srcFld2', 
-                                        typekind = ESMP.ESMP_TYPEKIND_R4,
-                                        staggerloc = ESMP.ESMP_STAGGERLOC_CENTER)
-        srcFldPtr2 = ESMP.ESMP_FieldGetPtr(srcFld2)
-        dstFld = ESMP.ESMP_FieldCreateGrid(dstGrid, 'dstFld', 
-                                        typekind = ESMP.ESMP_TYPEKIND_R4,
-                                        staggerloc = ESMP.ESMP_STAGGERLOC_CENTER)
-        dstFldPtr = ESMP.ESMP_FieldGetPtr(dstFld)
+        srcFld = ESMF.Field(srcGrid, name='srcFld', 
+                            typekind = ESMF.TypeKind.R8,
+                            staggerloc = ESMF.StaggerLoc.CENTER)
+        srcFldPtr = srcFld.data
+        srcFld2 = ESMF.Field(srcGrid, name='srcFld2', 
+                            typekind = ESMF.TypeKind.R8,
+                            staggerloc = ESMF.StaggerLoc.CENTER)
+        srcFldPtr2 = srcFld2.data
+        dstFld = ESMF.Field(dstGrid, name='dstFld', 
+                            typekind = ESMF.TypeKind.R8,
+                            staggerloc = ESMF.StaggerLoc.CENTER)
+        dstFldPtr = dstFld.data
         
         # set coords, mask, and field values for src and dst
         
-        srcNtot = reduce(operator.mul, [srcDimsCenter[1][i] - srcDimsCenter[0][i] for i in range(2)])
 
-        srcXCenter[:] = numpy.reshape(so.getGrid().getLongitude()[srcDimsCenter[0][1]:srcDimsCenter[1][1],
-                                                                  srcDimsCenter[0][0]:srcDimsCenter[1][0]], 
-                                      (srcNtot,))
-        srcYCenter[:] = numpy.reshape(so.getGrid().getLatitude()[srcDimsCenter[0][1]:srcDimsCenter[1][1],
-                                                                 srcDimsCenter[0][0]:srcDimsCenter[1][0]], 
-                                      (srcNtot,))
-        srcFldPtr[:] = numpy.reshape(so[srcDimsCenter[0][1]:srcDimsCenter[1][1],
-                                        srcDimsCenter[0][0]:srcDimsCenter[1][0]], 
-                                     (srcNtot,))
-        srcMask[:] = (srcFldPtr == so.missing_value)
-
-        dstNtot = reduce(operator.mul, [dstDimsCenter[1][i] - dstDimsCenter[0][i] for i in range(2)])
+        srcXCenter[:] = so.getGrid().getLongitude()[:]
+        srcYCenter[:] = so.getGrid().getLatitude()[:]
+        srcFldPtr[:] = so[:]
+        srcMask[:] = so.mask
 
         # clt grid is rectilinear, transform to curvilinear
-        lons = clt.getGrid().getLongitude()
-        lats = clt.getGrid().getLatitude()
-        ny, nx = dstDimsCenter[1][1]-dstDimsCenter[0][1], dstDimsCenter[1][0]-dstDimsCenter[0][0]
+        lons = clt.getGrid().getLongitude()[:]
+        lats = clt.getGrid().getLatitude()[:]
+        ny, nx = (dstDimsCenter[1][0]-dstDimsCenter[0][0], dstDimsCenter[1][1]-dstDimsCenter[0][1])
         xx = numpy.outer(numpy.ones((ny,), dtype=numpy.float32), lons)
         yy = numpy.outer(lats, numpy.ones((nx,), dtype=numpy.float32))
-        x = xx.reshape( (dstNtot,) )
-        y = yy.reshape( (dstNtot,) )
 
-        dstXCenter[:] = x[:]
-        dstYCenter[:] = y[:]
+        dstXCenter[:] = xx[:]
+        dstYCenter[:] = yy[:]
         dstFldPtr[:] = 0
 
         # regrid forward and backward
         maskVals = numpy.array([1], numpy.int32) # values defining mask
-        regrid1 = ESMP.ESMP_FieldRegridStore(srcFld, 
-                                             dstFld, 
-                                             srcMaskValues=maskVals, 
-                                             dstMaskValues=None, 
-                                             regridmethod=ESMP.ESMP_REGRIDMETHOD_BILINEAR, 
-                                             unmappedaction=ESMP.ESMP_UNMAPPEDACTION_IGNORE, 
-                                             srcFracField=None, 
-                                             dstFracField=None)
+        regrid1 = ESMF.Regrid(srcFld, dstFld, 
+                             src_mask_values=maskVals, 
+                             dst_mask_values=None, 
+                             regrid_method=ESMF.RegridMethod.BILINEAR, 
+                             unmapped_action=ESMF.UnmappedAction.IGNORE, 
+                             src_frac_field=None, 
+                             dst_frac_field=None)
 
-        ESMP.ESMP_FieldRegrid(srcFld, dstFld, regrid1)
+        regrid1(srcFld, dstFld)
         
-        jbeg, jend = dstDimsCenter[0][1], dstDimsCenter[1][1]
-        ibeg, iend = dstDimsCenter[0][0], dstDimsCenter[1][0]        
-        soInterp = numpy.reshape(dstFldPtr, (jend-jbeg, iend-ibeg))
+        soInterp = dstFldPtr
 
-        regrid2 = ESMP.ESMP_FieldRegridStore(dstFld, 
-                                             srcFld2, 
-                                             srcMaskValues=None, 
-                                             dstMaskValues=None, 
-                                             regridmethod=ESMP.ESMP_REGRIDMETHOD_BILINEAR, 
-                                             unmappedaction=ESMP.ESMP_UNMAPPEDACTION_IGNORE, 
-                                             srcFracField=None, 
-                                             dstFracField=None)
-        ESMP.ESMP_FieldRegrid(dstFld, srcFld2, regrid2)
+        regrid2 = ESMF.Regrid(dstFld, srcFld2, 
+                             src_mask_values=None, 
+                             dst_mask_values=None, 
+                             regrid_method=ESMF.RegridMethod.BILINEAR, 
+                             unmapped_action=ESMF.UnmappedAction.IGNORE, 
+                             src_frac_field=None, 
+                             dst_frac_field=None)
+        regrid2(dstFld, srcFld2)
 
-        jbeg, jend = srcDimsCenter[0][1], srcDimsCenter[1][1]
-        ibeg, iend = srcDimsCenter[0][0], srcDimsCenter[1][0]
-        soInterpInterp = numpy.reshape(srcFldPtr2, (jend-jbeg, iend-ibeg))
+        soInterpInterp = srcFldPtr2
         
         toc = time.time()
         #print 'time to interpolate (ESMF linear native) forward/backward: ', toc - tic
@@ -299,18 +271,17 @@ class Test(unittest.TestCase):
             pylab.title('ESMF linear native: error')
 
         # clean up
-        ESMP.ESMP_FieldRegridRelease(regrid2)
-        ESMP.ESMP_FieldRegridRelease(regrid1)
-        ESMP.ESMP_FieldDestroy(dstFld)
-        ESMP.ESMP_GridDestroy(dstGrid)
-        ESMP.ESMP_FieldDestroy(srcFld)
-        ESMP.ESMP_FieldDestroy(srcFld2)
-        ESMP.ESMP_GridDestroy(srcGrid)
-        
+        regrid2.destroy()
+        regrid1.destroy()
+        dstFld.destroy()
+        srcFld.destroy()
+        srcFld2.destroy()
+        dstGrid.destroy()
+        srcGrid.destroy()
 
 if __name__ == '__main__':
     print ""
-    ESMP.ESMP_Initialize()
+    ESMF.Manager()
     suite = unittest.TestLoader().loadTestsFromTestCase(Test)
     unittest.TextTestRunner(verbosity = 1).run(suite)
     if PLOT: pylab.show()

@@ -178,7 +178,7 @@ class Test(unittest.TestCase):
         xc = numpy.array(srcGrd[1][:])
         srcYCENTER[:] = yc
         srcXCENTER[:] = xc
-        msk = numpy.array(so[:] == missing_value, numpy.int32)
+        msk = so[:].mask
         srcGridMaskPtr[:] = msk
 
         fld = numpy.array(so[:], so.dtype)
@@ -263,7 +263,7 @@ class Test(unittest.TestCase):
         srcF = cdms2.open(cdat_info.get_sampledata_path() + \
                               '/so_Omon_ACCESS1-0_historical_r1i1p1_185001-185412_2timesteps.nc')
         so = srcF('so')[0, 0, ...]
-        srcGridMask = numpy.array((so == so.missing_value), numpy.int32)
+        srcGridMask = so.mask
         clt = cdms2.open(cdat_info.get_sampledata_path() + '/clt.nc')('clt')[0,...]
         srcGrd = [so.getGrid().getLatitude(), so.getGrid().getLongitude()]
         dG = clt.getGrid().toCurveGrid()
@@ -345,7 +345,7 @@ class Test(unittest.TestCase):
         srcF = cdms2.open(cdat_info.get_sampledata_path() + \
                               '/so_Omon_ACCESS1-0_historical_r1i1p1_185001-185412_2timesteps.nc')
         so = srcF['so']
-        srcGridMask = numpy.array((so[0, 0,...] == so.missing_value) , numpy.int32)
+        srcGridMask = so[0, 0,...].mask
         clt = cdms2.open(cdat_info.get_sampledata_path() + '/clt.nc')('clt')[0, ...]
         srcGrd = [so.getGrid().getLatitude(), so.getGrid().getLongitude()]
         srcBounds = cdms2.mvCdmsRegrid.getBoundList(srcGrd)
@@ -414,7 +414,7 @@ class Test(unittest.TestCase):
         srcF = cdms2.open(cdat_info.get_sampledata_path() + \
                               '/so_Omon_ACCESS1-0_historical_r1i1p1_185001-185412_2timesteps.nc')
         so = srcF('so')[0, 0, ...]
-        srcGridMask = numpy.array((so == so.missing_value) , numpy.int32)
+        srcGridMask = so.mask
         clt = cdms2.open(cdat_info.get_sampledata_path() + '/clt.nc')('clt')
         srcGrd = [so.getGrid().getLatitude(), so.getGrid().getLongitude()]
         srcBounds = cdms2.mvCdmsRegrid.getBoundList(srcGrd)
@@ -459,7 +459,7 @@ class Test(unittest.TestCase):
         srcF = cdms2.open(cdat_info.get_sampledata_path() + \
                               '/so_Omon_ACCESS1-0_historical_r1i1p1_185001-185412_2timesteps.nc')
         so = srcF('so')[0, 0, ...]
-        srcGridMask = numpy.array((so == so.missing_value) , numpy.int32)
+        srcGridMask = so.mask
         clt = cdms2.open(cdat_info.get_sampledata_path() + '/clt.nc')('clt')
         # create regrid object
         r = cdms2.CdmsRegrid(so.getGrid(), clt.getGrid(),

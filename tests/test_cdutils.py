@@ -1,4 +1,4 @@
-import urllib
+import requests
 import cdms2
 import cdutil
 import os
@@ -11,15 +11,19 @@ import numpy
 class TestMIPS(basetest.CDMSBaseTest):
     def setUp(self):
         super(TestMIPS, self).setUp()
-        myurl = "http://uvcdat.llnl.gov/cdat/sample_data/obs_timeseries.nc"
-        urllib.urlretrieve(myurl, "obs_timeseries.nc")
+        self.filename="obs_timeseries.nc"
+        myurl = "http://uvcdat.llnl.gov/cdat/sample_data/" + self.filename
+        r = requests.get(myurl, stream=True)
+        with open(self.filename, 'wb') as fd:
+            for chunk in r.iter_content(chunk_size=1024):
+                fd.write(chunk)
 
     def tearDown(self):
         super(TestMIPS, self).tearDown()
-        os.remove("obs_timeseries.nc")
+        os.remove(self.filename)
 
     def testAnnualSeasonalAverage(self):
-        f=cdms2.open("obs_timeseries.nc","r")
+        f=cdms2.open(self.filename, "r")
 
         # Read in the raw data EXCLUDING a leap year
         obs_timeseries1 = f('obs',  time=slice(0,48)) # 1900.1. to 1903.12.

@@ -318,7 +318,7 @@ staggerLoc = %s!""" % staggerLoc
         @return areas or None if non-conservative interpolation
         """
         if self.regridMethod == CONSERVE:
-            self.srcAreaField.field.get_area()
+#            self.srcAreaField.field.get_area()
             return self.srcAreaField.field.data
         else:
             return None
@@ -331,7 +331,7 @@ staggerLoc = %s!""" % staggerLoc
         @return areas or None if non-conservative interpolation
         """
         if self.regridMethod == CONSERVE:
-            self.dstAreaField.field.get_area()
+#            self.dstAreaField.field.get_area()
             return self.dstAreaField.field.data
         else:
             return None

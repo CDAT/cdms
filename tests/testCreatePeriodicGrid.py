@@ -4,7 +4,6 @@ $Id: testEsmf3DSmallesmf.py 2403 2012-07-31 23:07:16Z dkindig $
 With and without masking
 """
 
-import pdb
 import cdms2  
 import unittest
 import ESMF
@@ -106,7 +105,6 @@ class TestESMFRegridderConserve(unittest.TestCase):
 #        dstfracfield = ESMF.Field(dstgrid, name='dstfracfield')
 
         # initialize the Fields to an analytic function
-        pdb.set_trace()
         srcfield.field = initialize_field_grid_periodic(srcfield.field)
         exactfield.field = initialize_field_grid_periodic(exactfield.field)
 

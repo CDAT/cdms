@@ -5,7 +5,6 @@ David Kindig and Alex Pletzer, Tech-X Corp. (2012)
 This code is provided with the hope that it will be useful.
 No guarantee is provided whatsoever. Use at your own risk.
 """
-import pdb
 import types
 import operator
 import re
@@ -388,7 +387,6 @@ coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
         if re.search('LibCF', regridTool, re.I) and args.has_key('handleCut'):
             if args['handleCut']: srcBounds = getBoundList(srcCoords)
 
-#        pdb.set_trace()
         srcCoordsArrays = [numpy.array(sc) for sc in srcCoords]
         dstCoordsArrays = [numpy.array(dc) for dc in dstCoords]
 

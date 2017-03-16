@@ -4,7 +4,6 @@ $Id: testEsmf3DSmallesmf.py 2403 2012-07-31 23:07:16Z dkindig $
 With and without masking
 """
 
-import pdb
 import cdms2  # ESMP_Initialize()
 import unittest
 import ESMF
@@ -72,22 +71,23 @@ class TestESMPRegridderConserve(unittest.TestCase):
                 self.pe = MPI.COMM_WORLD.Get_rank()
                 self.np = MPI.COMM_WORLD.Get_size()
 
-    def dtest1_3D_esmf_Bilinear(self):
+    def test1_3D_esmf_Bilinear(self):
         srcDims, srcXYZCenter, srcData, srcBounds = makeGrid(5, 4, 3)
         dstDims, dstXYZCenter, dstData, dstBounds = makeGrid(5, 4, 3)
 
         # Establish the destination grid
         dstGrid3D = esmf.EsmfStructGrid(dstData.shape, periodicity=1,
-                                        coordSys = None)
+                                        coordSys = ESMF.CoordSys.CART, 
+                                        staggerloc=ESMF.StaggerLoc.CENTER_VCENTER)
         dstGrid3D.setCoords(dstXYZCenter, 
-                            staggerloc = ESMF.StaggerLoc.CENTER_VFACE,
-                              globalIndexing = True) 
+                            staggerloc = ESMF.StaggerLoc.CENTER_VCENTER,
+                            globalIndexing = True) 
 
         # Establish the Source grid
         srcGrid3D = esmf.EsmfStructGrid(srcData.shape, periodicity=1,
-                                        coordSys = None)
+                                        coordSys = ESMF.CoordSys.CART, staggerloc=ESMF.StaggerLoc.CENTER_VCENTER)
         srcGrid3D.setCoords(srcXYZCenter, 
-                            staggerloc = ESMF.StaggerLoc.CENTER_VFACE,
+                            staggerloc = ESMF.StaggerLoc.CENTER_VCENTER,
                             globalIndexing = True) 
 
         # Create and populate the fields
@@ -163,7 +163,6 @@ class TestESMPRegridderConserve(unittest.TestCase):
         srcDims, srcXYZCenter, srcData, srcBounds = makeGrid(5, 4, 3)
         dstDims, dstXYZCenter, dstData, dstBounds = makeGrid(5, 4, 3)
 
-        print srcData.dtype
         # Establish the Destination grid
 
         dstGrid3D = esmf.EsmfStructGrid(dstData.shape, periodicity=1,
@@ -205,7 +204,6 @@ class TestESMPRegridderConserve(unittest.TestCase):
                               globalIndexing = True)
 
         # Regrid
-        pdb.set_trace()
 
         regridOut = esmf.EsmfRegrid(srcField, dstField,
                                srcMaskValues = numpy.array([0]),
@@ -218,7 +216,6 @@ class TestESMPRegridderConserve(unittest.TestCase):
                                srcMaskValues = numpy.array([0]),
                                regridMethod = ESMF.RegridMethod.CONSERVE,
                                unMappedAction = ESMF.UnmappedAction.IGNORE)
-        pdb.set_trace() 
         regridBck()
         
         soInterp = dstField.getData(rootPe = self.rootPe)
@@ -232,7 +229,7 @@ class TestESMPRegridderConserve(unittest.TestCase):
             self.assertEqual(minlsd, minlsi)
             self.assertEqual(maxlsd, maxlsi)
 
-    def test2_3D_Native_Conserve(self):
+    def dtest2_3D_Native_Conserve(self):
         print
 #        srcDims, srcXYZCenter, srcData, srcBounds = makeGrid(5, 4, 3)
 #        dstDims, dstXYZCenter, dstData, dstBounds = makeGrid(5, 4, 3)
@@ -298,7 +295,6 @@ class TestESMPRegridderConserve(unittest.TestCase):
 
         myCenter = [ZCenter, YCenter, XCenter]
 
-        pdb.set_trace()
         dstGrid3D = esmf.EsmfStructGrid(dstData.shape, periodicity=0,
                                         coordSys = ESMF.CoordSys.CART,
                                         hasBounds = True)
@@ -342,7 +338,6 @@ class TestESMPRegridderConserve(unittest.TestCase):
                               globalIndexing = True)
 
         # Regrid
-        pdb.set_trace()
 
         regridOut = esmf.EsmfRegrid(srcField, dstField,
                                srcMaskValues = numpy.array([0]),
@@ -356,7 +351,6 @@ class TestESMPRegridderConserve(unittest.TestCase):
                                regridMethod = ESMF.RegridMethod.CONSERVE,
                                unMappedAction = ESMF.UnmappedAction.ERROR)
 #                               unMappedAction = ESMF.UnmappedAction.IGNORE)
-        pdb.set_trace() 
         regridBck()
         
         soInterp = dstField.getData(rootPe = self.rootPe)
@@ -370,7 +364,7 @@ class TestESMPRegridderConserve(unittest.TestCase):
             self.assertEqual(minlsd, minlsi)
             self.assertEqual(maxlsd, maxlsi)
 
-    def test2_2D_Native_Conserve(self):
+    def xtest2_2D_Native_Conserve(self):
         print
         srcDims, srcXYZCenter, srcData, srcBounds = makeGrid(5, 4, 1)
         dstDims, dstXYZCenter, dstData, dstBounds = makeGrid(5, 4, 1)

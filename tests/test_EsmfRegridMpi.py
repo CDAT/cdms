@@ -155,6 +155,7 @@ if __name__ == '__main__':
     ESMF.Manager()
     suite = unittest.TestLoader().loadTestsFromTestCase(Test)
     unittest.TextTestRunner(verbosity = 1).run(suite)
-    pylab.show()
+    if PLOT:
+        pylab.show()
 
 

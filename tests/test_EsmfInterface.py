@@ -63,8 +63,9 @@ class Test(unittest.TestCase):
         dstGrid.setCoords([yy, xx], 
                           staggerloc=ESMF.StaggerLoc.CENTER,
                           globalIndexing = True)
-        mask = numpy.zeros(so[0, 0, ...].shape, numpy.int32)
-        mask[:] = (so[0, 0, ...] == so.missing_value)
+#        mask = numpy.zeros(so[0, 0, ...].shape, numpy.int32)
+#        mask[:] = (so[0, 0, ...] == so.missing_value)
+        mask = so[0,0,:].mask
         srcGrid.setMask(mask)
         srcFld = regrid2.esmf.EsmfStructField(srcGrid, 'srcFld', datatype = so[:].dtype,
                                               staggerloc = ESMF.StaggerLoc.CENTER)

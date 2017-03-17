@@ -15,15 +15,27 @@ cmd="conda install -q  -c uvcdat/label/nightly -c conda-forge -c uvcdat vcs pyop
 echo $cmd
 $cmd
 
-cmd="conda install -q  -c uvcdat/label/nightly -c conda-forge -c uvcdat cdutil"
-echo $cmd
-$cmd
-
 cmd="export UVCDAT_ANONYMOUS_LOG=False"
 echo $cmd
 $cmd
 
 cmd="vcs_download_sample_data"
+echo $cmd
+$cmd
+
+cmd="conda uninstall esmf"
+echo $cmd
+$cmd
+
+cmd="conda install -q  -c conda-forge esmpy mpi4py" 
+echo $cmd
+$cmd
+
+cmd="conda install -q  -c uvcdat/label/nightly -c conda-forge -c uvcdat cdutil"
+echo $cmd
+$cmd
+
+cmd="conda install -q  -c uvcdat/label/nightly -c conda-forge -c uvcdat vcs" #image-compare
 echo $cmd
 $cmd
 

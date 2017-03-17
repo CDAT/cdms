@@ -4,7 +4,7 @@ USER=uvcdat
 export PATH=${HOME}/miniconda2/bin:${PATH}
 echo "Trying to upload conda"
 conda update -y -q conda
-conda install -q -c conda-forge -c uvcdat/label/nightly -c uvcdat uvcdat-nox pyopenssl nose image-compare
+conda install -q -c conda-forge -c uvcdat/label/nightly -c uvcdat uvcdat-nox pyopenssl nose image-compare esmpy mpi4py
 export UVCDAT_ANONYMOUS_LOG=False
 vcs_download_sample_data
 conda config --set anaconda_upload no

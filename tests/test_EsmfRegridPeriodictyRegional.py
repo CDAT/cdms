@@ -4,7 +4,7 @@ import os, sys, cdms2
 f = cdms2.open(cdat_info.get_sampledata_path() + \
                    '/so_Omon_ACCESS1-0_historical_r1i1p1_185001-185412_2timesteps.nc')
 s= f('so')[0, 0, :, :]
-
+s=s.astype("float64")
 lon_dest = cdms2.createAxis([ 135., 137., 139., 141., 143., 145., 147., 149., 151.,
     153., 155., 157., 159., 161., 163., 165., 167., 169.,
     171., 173., 175., 177., 179., 181., 183., 185., 187.,

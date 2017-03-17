@@ -79,7 +79,7 @@ class Test(unittest.TestCase):
         dstGrid.setCoords([yy, xx], 
                           staggerloc=ESMF.StaggerLoc.CENTER)
         mask = numpy.zeros(so.shape, numpy.int32)
-        mask[:] = (so == so.missing_value)
+        mask[:] = numpy.ma.masked_where((so == so.missing_value),so).mask
         srcGrid.setMask(mask)
         srcFld = regrid2.esmf.EsmfStructField(srcGrid, 'srcFld', 
                                               datatype = 'float64',
@@ -101,27 +101,29 @@ class Test(unittest.TestCase):
         rgrd1 = regrid2.esmf.EsmfRegrid(srcFld, dstFld, 
                                         srcFrac=None, 
                                         dstFrac=None,
-                                        srcMaskValues=numpy.array([1], numpy.int32),
+                                        srcMaskValues=mask,
                                         dstMaskValues=numpy.array([1], numpy.int32),
                                         regridMethod=ESMF.RegridMethod.BILINEAR,
                                         unMappedAction=ESMF.UnmappedAction.IGNORE)
         rgrd1(srcFld, dstFld)
         mask = numpy.zeros(dstFld.field.data.shape, numpy.int32)
-        mask[:] = (dstFld.field.data == so.missing_value)
+        mask[:] = numpy.ma.masked_where((dstFld.field.data >= so.missing_value), dstFld.field.data).mask
         dstGrid.setMask(mask)
         rgrd2 = regrid2.esmf.EsmfRegrid(dstFld, srcFld2, 
                                         srcFrac=None, 
                                         dstFrac=None,
-                                        srcMaskValues=numpy.array([1], numpy.int32),
+                                        srcMaskValues=mask,
                                         dstMaskValues=numpy.array([1], numpy.int32),
                                         regridMethod=ESMF.RegridMethod.BILINEAR,
                                         unMappedAction=ESMF.UnmappedAction.IGNORE)
         rgrd2(dstFld, srcFld2)
         soInterp = numpy.reshape(dstFld.getPointer(), clt.shape)
-        soInterpInterp = numpy.reshape(srcFld2.getPointer(), so.shape)
-        soInterpInterp =numpy.ma.array(soInterpInterp, fill_value=1e20)
-        soInterpInterp.mask = (soInterpInterp>=1e20)
+        soInterp = numpy.ma.array(soInterp, fill_value=1e20)
+        soInterp = numpy.ma.masked_where((soInterp>=1e20), soInterp)
 
+        soInterpInterp = numpy.reshape(srcFld2.getPointer(), so.shape)
+        soInterpInterp = numpy.ma.array(soInterpInterp, fill_value=1e20)
+        soInterpInterp = numpy.ma.masked_where((soInterpInterp>=1e20), soInterpInterp)
 
         toc = time.time()
         print 'time to interpolate (ESMF interface) forward/backward: ', toc - tic

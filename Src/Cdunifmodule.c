@@ -3173,8 +3173,8 @@ PyMODINIT_FUNC initCdunif(void) {
 	cuseterropts(CU_VERBOSE);
 
 	/* Initialize type object headers */
-	Py_TYPE(PyCdunifFile_Type) = &PyType_Type;
-	Py_TYPE(PyCdunifVariable_Type) = &PyType_Type;
+	Py_TYPE(&PyCdunifFile_Type) = &PyType_Type;
+	Py_TYPE(&PyCdunifVariable_Type) = &PyType_Type;
 
 	/* Create Cdunif lock */
 #ifdef WITH_THREAD

@@ -287,7 +287,7 @@ class TimeFileVariable:
         for gridIndex in range(hostObj.nGrids):
 
             # Get the filenames
-            aa = hostObj.gridVars.keys()
+            aa = list(hostObj.gridVars.keys())
             gn = hostObj.gridVars[aa[0]][gridIndex]
             g = CdunifFile(gn, mode)
 
@@ -318,7 +318,7 @@ class TimeFileVariable:
                     f.variables[coord] = FileAxis2D(f, coord, g.variables[coord])
 
                 # Build the axes
-                for key in f.axes.keys():
+                for key in list(f.axes.keys()):
                     f.axes[key] = FileAxis(f, key, None)
 
                 # Set the boundaries
@@ -327,7 +327,7 @@ class TimeFileVariable:
                     f.variables[coord].setBounds(bounds)
 
                 # Initialize the domain
-                for var in f.variables.values():
+                for var in list(f.variables.values()):
                     var.initDomain(f.axes)
 
                 # Add the grid
@@ -389,12 +389,12 @@ class TimeTransientVariable:
         gridFilenames = hostObj.getGridFilenames()
 
         kwargs = {}
-        for k in slicekwargs.keys():
+        for k in list(slicekwargs.keys()):
             kwargs[k.lower()] = slicekwargs[k]
 
         # time dependent variable. Create a list of list. One list for each
         # grid populated by a list for each time file.
-        if ('time' in kwargs.keys() and len(slicekwargs) <= 1) or \
+        if ('time' in list(kwargs.keys()) and len(slicekwargs) <= 1) or \
                 len(slicekwargs) == 0:
             for gridIndex in range(hostObj.nGrids):
 

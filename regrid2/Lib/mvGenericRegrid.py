@@ -13,6 +13,7 @@ import string
 import regrid2
 import re
 from distarray import MultiArrayIter
+from functools import reduce
 
 # used to locate fully masked cells
 EPS = 10*1.19209e-07
@@ -73,7 +74,7 @@ class GenericRegrid:
             msg = 'mvGenericRegrid.__init__: mismatch in number of dims'
             msg += ' len(srcGrid) = %d != len(dstGrid) = %d' % \
                 (self.nGridDims, len(dstGrid))
-            raise regrid2.RegridError, msg
+            raise regrid2.RegridError(msg)
 
         # parse the options
         if re.search('libcf', regridTool.lower()) or \
@@ -86,14 +87,14 @@ class GenericRegrid:
         elif re.search('esm', regridTool.lower()):
             # ESMF
             staggerLoc = args.get('staggerLoc', 'center')
-            if args.has_key('staggerLoc'):
+            if 'staggerLoc' in args:
                 del args['staggerLoc']
             periodicity = args.get('periodicity', 
                                    guessPeriodicity(srcBounds))
-            if args.has_key('periodicity'):
+            if 'periodicity' in args:
                 del args['periodicity']
             coordSys = args.get('coordSys', 'deg')
-            if args.has_key('coordSys'):
+            if 'coordSys' in args:
                 del args['coordSys']
 
             # Get the shapes
@@ -136,7 +137,7 @@ class GenericRegrid:
         else:
             msg = """mvGenericRegrid.__init__: ERROR unrecognized tool %s,
 valid choices are: 'libcf', 'esmf'"""% regridTool
-            raise regrid2.RegridError, msg
+            raise regrid2.RegridError(msg)
 
     def computeWeights(self, **args):
         """
@@ -216,7 +217,7 @@ valid choices are: 'libcf', 'esmf'"""% regridTool
                 msg = 'mvGenericRegrid.apply: axes detected '
                 msg += 'but %s != %s ' % (str(nonHorizShape2),
                                           str(nonHorizShape))
-                raise regrid2.RegridError, msg
+                raise regrid2.RegridError(msg)
 
             #
             # iterate over all axes

@@ -5,22 +5,23 @@
 CDMS CoordinateAxis objects
 """
 import sys
-import cdmsNode
+from . import cdmsNode
 import cdtime
 import copy
 import numpy
 #import internattr
 import types
 import string
-from cdmsobj import CdmsObj
-from axis import createAxis, TransientVirtualAxis
-from error import CDMSError
-from convention import AliasList, level_aliases, longitude_aliases, latitude_aliases, time_aliases,\
+from .cdmsobj import CdmsObj
+from .axis import createAxis, TransientVirtualAxis
+from .error import CDMSError
+from .convention import AliasList, level_aliases, longitude_aliases, latitude_aliases, time_aliases,\
      forecast_aliases
-from fvariable import FileVariable
-from variable import DatasetVariable
-from tvariable import TransientVariable
-from avariable import AbstractVariable
+from .fvariable import FileVariable
+from .variable import DatasetVariable
+from .tvariable import TransientVariable
+from .avariable import AbstractVariable
+from functools import reduce
 
 MethodNotImplemented = "Method not yet implemented"
 NoSuchAxisOrGrid = "No such axis or grid: "
@@ -73,7 +74,7 @@ class AbstractCoordinateAxis(CdmsObj):
         """clone (self, copyData=1)
         Return a copy of self as a transient axis.
         If copyData is 1, make a separate copy of the data."""
-        raise CDMSError, MethodNotImplemented
+        raise CDMSError(MethodNotImplemented)
 
     # Designate axis as a latitude axis.
     # If persistent is true, write metadata to the container.
@@ -126,7 +127,7 @@ class AbstractCoordinateAxis(CdmsObj):
         return cdcal
 
     def getData(self):
-        raise CDMSError, MethodNotImplemented
+        raise CDMSError(MethodNotImplemented)
  
     # Return None if not explicitly defined
     def getExplicitBounds(self):
@@ -185,7 +186,7 @@ class AbstractCoordinateAxis(CdmsObj):
         d = self.getValue()
         result.append('   Shape: ' + str(d.shape))
         flag = 1
-        for k in self.attributes.keys():
+        for k in list(self.attributes.keys()):
             if k in std_axis_attributes: continue
             if flag:
                 result.append('   Other axis attributes:')
@@ -215,11 +216,11 @@ class AbstractCoordinateAxis(CdmsObj):
         if persistent:
             self.calendar = calendarToTag.get(calendar, None)
             if self.calendar is None:
-                raise CDMSError, InvalidCalendar + calendar
+                raise CDMSError(InvalidCalendar + calendar)
         else:
             self.__dict__['calendar'] = calendarToTag.get(calendar, None)
             if self.__dict__['calendar'] is None:
-                raise CDMSError, InvalidCalendar + calendar
+                raise CDMSError(InvalidCalendar + calendar)
 
     def size (self, axis = None):
         "Number of elements in array, or in a particular axis."
@@ -244,7 +245,7 @@ class AbstractCoordinateAxis(CdmsObj):
         fvar = file.write(self)
 
         # Create the bounds variable 
-        if (self._bounds_ is not None) and not file.variables.has_key(boundsid):
+        if (self._bounds_ is not None) and boundsid not in file.variables:
             boundslen = self._bounds_.shape[-1]
             try:
                 boundid = self._bounds_.getAxis(-1).id
@@ -273,9 +274,9 @@ class AbstractAxis2D(AbstractCoordinateAxis):
     def setBounds(self, bounds):
         if bounds is not None:
             if len(bounds.shape)!=3:
-                raise CDMSError, 'Bounds must have rank=3'
+                raise CDMSError('Bounds must have rank=3')
             if bounds.shape[0:2]!=self.shape:
-                raise CDMSError, 'Bounds shape %s is inconsistent with axis shape %s'%(`bounds.shape`,`self.shape`)
+                raise CDMSError('Bounds shape %s is inconsistent with axis shape %s'%(repr(bounds.shape),repr(self.shape)))
         AbstractCoordinateAxis.setBounds(self, bounds)
 
     def subSlice (self, *specs, **keys):
@@ -302,7 +303,7 @@ class DatasetAxis2D(AbstractAxis2D, DatasetVariable):
 
     def __repr__(self):
         if self.parent is not None:
-            return "<DatasetAxis2D: %s, file: %s, shape: %s>"%(self.id, self.parent.id, `self.shape`)
+            return "<DatasetAxis2D: %s, file: %s, shape: %s>"%(self.id, self.parent.id, repr(self.shape))
         else:
             return "<DatasetAxis2D: %s, file: **CLOSED**>"%self.id
 
@@ -318,7 +319,7 @@ class FileAxis2D(AbstractAxis2D, FileVariable):
 
     def __repr__(self):
         if self.parent is not None:
-            return "<FileAxis2D: %s, file: %s, shape: %s>"%(self.id, self.parent.id, `self.shape`)
+            return "<FileAxis2D: %s, file: %s, shape: %s>"%(self.id, self.parent.id, repr(self.shape))
         else:
             return "<FileAxis2D: %s, file: **CLOSED**>"%self.id
 

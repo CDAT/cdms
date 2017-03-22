@@ -5,18 +5,18 @@ DatasetVariable: Dataset-based variables
 """
 from cdms2 import Cdunif
 import numpy
-import cdmsNode
+from . import cdmsNode
 import cdtime
 import copy
 import os
 import string
 import sys
 import types
-import cdmsobj
-from cdmsobj import CdmsObj, getPathFromTemplate, Max32int
-from avariable import AbstractVariable
-from sliceut import *
-from error import CDMSError
+from . import cdmsobj
+from .cdmsobj import CdmsObj, getPathFromTemplate, Max32int
+from .avariable import AbstractVariable
+from .sliceut import *
+from .error import CDMSError
 
 InvalidGridElement = "Grid domain elements are not yet implemented: "
 InvalidRegion = "Invalid region: "
@@ -78,18 +78,18 @@ class DatasetVariable(AbstractVariable):
 
     def __getitem__(self, key):
         if self.parent is None:
-            raise CDMSError, FileClosed+str(self.id)
+            raise CDMSError(FileClosed+str(self.id))
         return AbstractVariable.__getitem__(self, key)
         
     def getValue(self, squeeze=1):
         """Return the entire set of values."""
         if self.parent is None:
-            raise CDMSError, FileClosed+self.id
+            raise CDMSError(FileClosed+self.id)
         return self.getSlice(Ellipsis, squeeze=squeeze)
     
     def __getslice__(self, low, high):
         if self.parent is None:
-            raise CDMSError, FileClosed+self.id
+            raise CDMSError(FileClosed+self.id)
 
         # Hack to prevent netCDF overflow error on 64-bit architectures
         high = min(Max32int, high)
@@ -97,10 +97,10 @@ class DatasetVariable(AbstractVariable):
         return AbstractVariable.__getslice__(self, low, high)
 
     def __setitem__(self, index, value):
-        raise CDMSError, WriteNotImplemented
+        raise CDMSError(WriteNotImplemented)
 
     def __setslice__(self, low, high, value):
-        raise CDMSError, WriteNotImplemented
+        raise CDMSError(WriteNotImplemented)
 
     def _getShape(self):
         return self.getShape()
@@ -135,9 +135,9 @@ class DatasetVariable(AbstractVariable):
             if domelem is None:
                 domelem = griddict.get(dename)
                 if grid is None:
-                    raise CDMSError, NoSuchAxisOrGrid + dename
+                    raise CDMSError(NoSuchAxisOrGrid + dename)
                 else:
-                    raise CDMSError, InvalidGridElement + dename
+                    raise CDMSError(InvalidGridElement + dename)
             partlenstr = denode.getExternalAttr('partition_length')
             if partlenstr is not None:
                 truelen = string.atoi(partlenstr)
@@ -337,7 +337,7 @@ class DatasetVariable(AbstractVariable):
                     part2 = axis
                     npart2 = ndim
                 else:
-                    raise CDMSError,  TooManyPartitions + variable.id
+                    raise CDMSError(TooManyPartitions + variable.id)
             ndim = ndim+1
 
         # If no partitioned axes, just read the data
@@ -521,22 +521,21 @@ class DatasetVariable(AbstractVariable):
             try:
                 var = f.variables[self.name_in_file]
                 if fci==None:
-                    result = self._returnArray(apply(var.getitem,tuple(slicelist)),0)
+                    result = self._returnArray(var.getitem(*tuple(slicelist)),0)
                 else:
                     # If there's a forecast axis, the file doesn't know about it so
                     # don't use it in slicing data out of the file.
-                    result = self._returnArray( apply( var.getitem, \
-                                   tuple( slicelist[0:fci]+slicelist[fci+1:] ) ), \
+                    result = self._returnArray( var.getitem(*tuple( slicelist[0:fci]+slicelist[fci+1:] )), \
                                                 0 )
                     # But the result still needs an index in the forecast direction,
                     # which is simple to do because there is only one forecast per file:
-                    result.resize( map(lenSlice,slicelist) )
+                    result.resize( list(map(lenSlice,slicelist)) )
 
             finally:
                 f.close()
             sh = result.shape
             if 0 in sh:
-                raise CDMSError, IndexError + 'Coordinates out of Domain'
+                raise CDMSError(IndexError + 'Coordinates out of Domain')
 
         # If one partitioned axes:
         elif npart==1:
@@ -547,7 +546,7 @@ class DatasetVariable(AbstractVariable):
 
                 # If the slice is missing, interpose missing data
                 if filename is None:
-                    shapelist = map(lenSlice, slicelist)
+                    shapelist = list(map(lenSlice, slicelist))
                     chunk = numpy.ma.zeros(tuple(shapelist),self._numericType_)
                     chunk[...] = numpy.ma.masked
 
@@ -557,21 +556,20 @@ class DatasetVariable(AbstractVariable):
                     try:
                         var = f.variables[self.name_in_file]
                         if fci==None:
-                            chunk = apply(var.getitem,tuple(slicelist))
+                            chunk = var.getitem(*tuple(slicelist))
                         else:
                             # If there's a forecast axis, the file doesn't know about it so
                             # don't use it in slicing data out of the file.
-                            chunk = apply( var.getitem, \
-                                           tuple( slicelist[0:fci]+slicelist[fci+1:] ) )
+                            chunk = var.getitem(*tuple( slicelist[0:fci]+slicelist[fci+1:] ))
                             # But the chunk still needs an index in the forecast direction,
                             # which is simple to do because there is only one forecast per file:
-                            chunk.resize( map(lenSlice,slicelist) )
+                            chunk.resize( list(map(lenSlice,slicelist)) )
 
                     finally:
                         f.close()
                     sh = chunk.shape
                     if 0 in sh:
-                        raise CDMSError, 'Coordinates out of Domain'
+                        raise CDMSError('Coordinates out of Domain')
 
                 resultlist.append(self._returnArray(chunk,0))
 
@@ -595,7 +593,7 @@ class DatasetVariable(AbstractVariable):
 
                     # If the slice is missing, interpose missing data
                     if filename is None:
-                        shapelist = map(lenSlice, slicelist)
+                        shapelist = list(map(lenSlice, slicelist))
                         chunk = numpy.ma.zeros(tuple(shapelist),self._numericType_)
                         chunk[...] = numpy.ma.masked
 
@@ -605,21 +603,20 @@ class DatasetVariable(AbstractVariable):
                         try:
                             var = f.variables[self.name_in_file]
                             if fci==None:
-                                chunk = apply(var.getitem,tuple(slicelist))
+                                chunk = var.getitem(*tuple(slicelist))
                             else:
                                 # If there's a forecast axis, the file doesn't know about it so
                                 # don't use it in slicing data out of the file.
-                                chunk = apply( var.getitem, \
-                                               tuple( slicelist[0:fci]+slicelist[fci+1:] ) )
+                                chunk = var.getitem(*tuple( slicelist[0:fci]+slicelist[fci+1:] ))
                                 # But the chunk still needs an index in the forecast direction,
                                 # which is simple to do because there is only one forecast per file:
-                                chunk.resize( map(lenSlice,slicelist) )
+                                chunk.resize( list(map(lenSlice,slicelist)) )
 
                         finally:
                             f.close()
                         sh = chunk.shape
                         if 0 in sh:
-                            raise CDMSError, 'Coordinates out of Domain'
+                            raise CDMSError('Coordinates out of Domain')
                     chunklist.append(self._returnArray(chunk,0))
 
                 # Note: This works because slicelist is the same length

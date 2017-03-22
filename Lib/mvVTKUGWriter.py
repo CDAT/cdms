@@ -9,7 +9,7 @@ No guarantee is provided whatsoever. Use at your own risk.
 
 import numpy
 import time
-import mvBaseWriter
+from . import mvBaseWriter
 
 class VTKUGWriter(mvBaseWriter.BaseWriter):
 
@@ -19,61 +19,61 @@ class VTKUGWriter(mvBaseWriter.BaseWriter):
         @param filename file name
         """
         f = open(filename, 'w')
-        print >> f, '# vtk DataFile Version 2.0'
-        print >> f, 'generated on %s' % time.asctime()
-        print >> f, 'ASCII'
-        print >> f, 'DATASET UNSTRUCTURED_GRID'
+        print('# vtk DataFile Version 2.0', file=f)
+        print('generated on %s' % time.asctime(), file=f)
+        print('ASCII', file=f)
+        print('DATASET UNSTRUCTURED_GRID', file=f)
         npts = self.mesh.shape[0]
-        print >> f, 'POINTS %d float' % npts
+        print('POINTS %d float' % npts, file=f)
         for i in range(npts):
-            print >> f, '%f %f %f' % tuple(self.mesh[i,:])
+            print('%f %f %f' % tuple(self.mesh[i,:]), file=f)
         n0, n1, n2 = self.shape
         ncells = (n0 - 1)*(n1 - 1)*(n2 - 1)
         if ncells != 0:
             # 3d
             ntot = ncells * (8 + 1)
-            print >> f, 'CELLS %d %d' % (ncells, ntot)
+            print('CELLS %d %d' % (ncells, ntot), file=f)
             for k in range(n0 - 1):
                 for j in range(n1 - 1):
                     for i in range(n2 - 1):
                         index = i + n2*(j + n1*k)
-                        print >> f, '8 %d %d %d %d %d %d %d %d' % \
+                        print('8 %d %d %d %d %d %d %d %d' % \
                             (index, index+1, index+1+n2, index+n2, 
                              index+n1*n2, index+n1*n2+1, 
-                             index+n1*n2+1+n2, index+n1*n2+n2)
-            print >> f, 'CELL_TYPES %d' % ncells
+                             index+n1*n2+1+n2, index+n1*n2+n2), file=f)
+            print('CELL_TYPES %d' % ncells, file=f)
             for i in range(ncells):
                 # hexahedron
-                print >> f, 12
+                print(12, file=f)
             # nodal data
-            print >> f, 'POINT_DATA %d' % (n0*n1*n2)
-            print >> f, 'SCALARS %s float' % (self.var.id)
-            print >> f, 'LOOKUP_TABLE default'
+            print('POINT_DATA %d' % (n0*n1*n2), file=f)
+            print('SCALARS %s float' % (self.var.id), file=f)
+            print('LOOKUP_TABLE default', file=f)
             for k in range(n0):
                 for j in range(n1):
                     for i in range(n2):
-                        print >> f, '%f' % self.var[k, j, i]
+                        print('%f' % self.var[k, j, i], file=f)
         else:
             # 2d
             ncells = (n1 - 1)*(n2 - 1)
             ntot = ncells * (4 + 1)
-            print >> f, 'CELLS %d %d' % (ncells, ntot)
+            print('CELLS %d %d' % (ncells, ntot), file=f)
             for j in range(n1 - 1):
                 for i in range(n2 - 1):
                     index = i + n2*j
-                    print >> f, '4 %d %d %d %d' % \
-                        (index, index+1, index+1+n2, index+n2)
-            print >> f, 'CELL_TYPES %d' % ncells
+                    print('4 %d %d %d %d' % \
+                        (index, index+1, index+1+n2, index+n2), file=f)
+            print('CELL_TYPES %d' % ncells, file=f)
             for i in range(ncells):
                 # quad
-                print >> f, 9
+                print(9, file=f)
             # nodal data
-            print >> f, 'POINT_DATA %d' % (n0*n1*n2)
-            print >> f, 'SCALARS %s float' % (self.var.id)
-            print >> f, 'LOOKUP_TABLE default'
+            print('POINT_DATA %d' % (n0*n1*n2), file=f)
+            print('SCALARS %s float' % (self.var.id), file=f)
+            print('LOOKUP_TABLE default', file=f)
             for j in range(n1):
                 for i in range(n2):
-                    print >> f, '%f' % self.var[j, i]   
+                    print('%f' % self.var[j, i], file=f)   
         f.close()
 
 

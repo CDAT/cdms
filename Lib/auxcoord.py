@@ -5,12 +5,12 @@ Note: In contrast to Axis objects (concrete classes subclassed from AbstractAxis
 """
 
 ## import internattr
-from error import CDMSError
-from coord import AbstractCoordinateAxis
-from fvariable import FileVariable
-from variable import DatasetVariable
-from tvariable import TransientVariable
-from avariable import AbstractVariable
+from .error import CDMSError
+from .coord import AbstractCoordinateAxis
+from .fvariable import FileVariable
+from .variable import DatasetVariable
+from .tvariable import TransientVariable
+from .avariable import AbstractVariable
 
 class AbstractAuxAxis1D(AbstractCoordinateAxis):
 
@@ -27,9 +27,9 @@ class AbstractAuxAxis1D(AbstractCoordinateAxis):
     def setBounds(self, bounds):
         if bounds is not None:
             if len(bounds.shape)!=2:
-                raise CDMSError, 'Bounds must have rank=2'
+                raise CDMSError('Bounds must have rank=2')
             if bounds.shape[0:1]!=self.shape:
-                raise CDMSError, 'Bounds shape %s is inconsistent with axis shape %s'%(`bounds.shape`,`self.shape`)
+                raise CDMSError('Bounds shape %s is inconsistent with axis shape %s'%(repr(bounds.shape),repr(self.shape)))
         AbstractCoordinateAxis.setBounds(self, bounds)
 
     def subSlice (self, *specs, **keys):
@@ -55,7 +55,7 @@ class DatasetAuxAxis1D(AbstractAuxAxis1D, DatasetVariable):
 
     def __repr__(self):
         if self.parent is not None:
-            return "<DatasetAuxAxis1D: %s, file: %s, shape: %s>"%(self.id, self.parent.id, `self.shape`)
+            return "<DatasetAuxAxis1D: %s, file: %s, shape: %s>"%(self.id, self.parent.id, repr(self.shape))
         else:
             return "<DatasetAuxAxis1D: %s, file: **CLOSED**>"%self.id
 
@@ -70,7 +70,7 @@ class FileAuxAxis1D(AbstractAuxAxis1D, FileVariable):
 
     def __repr__(self):
         if self.parent is not None:
-            return "<FileAuxAxis1D: %s, file: %s, shape: %s>"%(self.id, self.parent.id, `self.shape`)
+            return "<FileAuxAxis1D: %s, file: %s, shape: %s>"%(self.id, self.parent.id, repr(self.shape))
         else:
             return "<FileAuxAxis1D: %s, file: **CLOSED**>"%self.id
 

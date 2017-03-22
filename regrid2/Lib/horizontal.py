@@ -3,7 +3,7 @@
 import numpy
 import cdms2
 import  _regrid, string, copy
-from error import RegridError
+from .error import RegridError
 import warnings
 
 _debug = 0                              # Set to 1 for debug
@@ -61,14 +61,14 @@ class Horizontal:
         if _debug==1:
             import sys
             sys.stdout = open('debug_regrid.txt','w')
-            print "bsin = ", numpy.array2string(bsin,precision=3)
-            print "bnin = ", numpy.array2string(bnin,precision=3)
-            print "bwin = ", numpy.array2string(bwin,precision=3)
-            print "bein = ", numpy.array2string(bein,precision=3)
-            print "bsout = ", numpy.array2string(bsout,precision=3)
-            print "bnout = ", numpy.array2string(bnout,precision=3)
-            print "bwout = ", numpy.array2string(bwout,precision=3)
-            print "beout = ", numpy.array2string(beout,precision=3)
+            print("bsin = ", numpy.array2string(bsin,precision=3))
+            print("bnin = ", numpy.array2string(bnin,precision=3))
+            print("bwin = ", numpy.array2string(bwin,precision=3))
+            print("bein = ", numpy.array2string(bein,precision=3))
+            print("bsout = ", numpy.array2string(bsout,precision=3))
+            print("bnout = ", numpy.array2string(bnout,precision=3))
+            print("bwout = ", numpy.array2string(bwout,precision=3))
+            print("beout = ", numpy.array2string(beout,precision=3))
 
         self.londx, self.lonpt, self.wtlon, self.latdx, self.latpt, self.wtlat = _regrid.maparea( self.nloni, self.nlono, self.nlati, self.nlato, bnin, bnout, bsin, bsout, bein, beout, bwin, bwout )
 
@@ -104,7 +104,7 @@ class Horizontal:
         if isinstance(ar, AbstractVariable):
             attrs = copy.copy(ar.attributes)
             varid = ar.id
-            axislist = list(map(lambda x: x[0].clone(), ar.getDomain()))
+            axislist = list([x[0].clone() for x in ar.getDomain()])
             inputIsVariable = 1
             if order is None:
                 order = ar.getOrder()
@@ -136,7 +136,7 @@ class Horizontal:
         elif isinstance(ar, numpy.ndarray):
             armask = armiss = None
         else:
-            raise RegridError, "Input array is not a Variable, numpy.ma, or numpy array"
+            raise RegridError("Input array is not a Variable, numpy.ma, or numpy array")
         
         # If neither mask nor missing value is specified, get them from
         # the input array.
@@ -185,13 +185,13 @@ class Horizontal:
         ntim1 = ntim2 = 0
         shape = ar.shape
         if ilon==-1:
-            raise RegridError, "Input grid does not have a longitude axis"
+            raise RegridError("Input grid does not have a longitude axis")
         if ilat==-1:
-            raise RegridError, "Input grid does not have a latitude axis"
+            raise RegridError("Input grid does not have a latitude axis")
         nlati = shape[rank-ilat-1]
         nloni = shape[rank-ilon-1]
         if nlati!=self.nlati or nloni!=self.nloni:
-            raise ShapeError, 'array lat,lon (%i,%i) does not match grid lat,lon (%i,%i)'%(nlati, nloni, self.nlati, self.nloni)
+            raise ShapeError('array lat,lon (%i,%i) does not match grid lat,lon (%i,%i)'%(nlati, nloni, self.nlati, self.nloni))
 
         if itim1!=0: ntim1 = shape[rank-itim1-1]
         if itim2!=0: ntim2 = shape[rank-itim2-1]
@@ -308,7 +308,7 @@ def input_mask(ain, type,  mask, missing = None):
     #
     #------------------------------------------------------------------------"""
     if type != 'h' and type != 'v':
-        raise ValueError, 'Mask type must be h or v'
+        raise ValueError('Mask type must be h or v')
         return 
 
     if missing == None:
@@ -337,7 +337,7 @@ def input_mask(ain, type,  mask, missing = None):
             elif type == 'v':
                 reduced = ain[0,:,:,0]                # removes lats dummy latitude
         else:
-            raise IndexError, 'Data size is out of range'
+            raise IndexError('Data size is out of range')
             return 
          
         amskin = numpy.where( numpy.greater(reduced, 0.9*omit),  0.0, mask)

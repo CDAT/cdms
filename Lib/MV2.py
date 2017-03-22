@@ -3,19 +3,19 @@
 
 "CDMS Variable objects, MaskedArray interface"
 import numpy
-import typeconv
+from . import typeconv
 from numpy import character, float, float32, float64, int, int8, int16, int32
 from numpy.ma import allclose, allequal, common_fill_value, compress, make_mask_none, dot, filled, \
      getmask, getmaskarray, identity, indices, innerproduct, masked, put, putmask, rank, ravel, \
      set_fill_value, shape, size, isMA, isMaskedArray, is_mask, isarray, \
      make_mask, make_mask_none, mask_or, nomask
 from numpy import sctype2char, get_printoptions, set_printoptions
-from avariable import AbstractVariable, getNumericCompatibility
-from tvariable import TransientVariable, asVariable
-from grid import AbstractRectGrid
-from error import CDMSError
+from .avariable import AbstractVariable, getNumericCompatibility
+from .tvariable import TransientVariable, asVariable
+from .grid import AbstractRectGrid
+from .error import CDMSError
 #from numpy.ma import *
-from axis import allclose as axisAllclose, TransientAxis, concatenate as axisConcatenate, take as axisTake
+from .axis import allclose as axisAllclose, TransientAxis, concatenate as axisConcatenate, take as axisTake
 
 
 
@@ -316,7 +316,7 @@ def is_floating(x):
 
 def is_integer(x):
     "Is x a scalar integer, either python or numpy?"
-    return (isinstance(x, numpy.integer) or isinstance(x, int) or isinstance(x, long))
+    return (isinstance(x, numpy.integer) or isinstance(x, int) or isinstance(x, int))
 
 def get_print_limit():
     return get_printoptions()['threshold']
@@ -459,7 +459,7 @@ def choose (indices, t):
 
       The result has only the default axes.
     """
-    maresult = numpy.ma.choose(indices, map(_makeMaskedArg, t))
+    maresult = numpy.ma.choose(indices, list(map(_makeMaskedArg, t)))
     F=getattr(t,"fill_value",1.e20)
     return TransientVariable(maresult, fill_value=F)
 
@@ -828,7 +828,7 @@ def reshape (a, newshape, axes=None, attributes=None, id=None, grid=None):
     if axes is not None:
         axesshape = [len(item) for item in axes]
         if axesshape!=list(newshape):
-            raise CDMSError, 'axes must be shaped %s'%`newshape`
+            raise CDMSError('axes must be shaped %s'%repr(newshape))
     ta = _makeMaskedArg(a)
     maresult = numpy.ma.reshape(ta, newshape)
     F=getattr(a,"fill_value",1.e20)
@@ -842,7 +842,7 @@ def resize (a, new_shape, axes=None, attributes=None, id=None, grid=None):
     if axes is not None:
         axesshape = [len(item) for item in axes]
         if axesshape!=list(new_shape):
-            raise CDMSError, 'axes must be shaped %s'%`newshape`
+            raise CDMSError('axes must be shaped %s'%repr(newshape))
     ta = _makeMaskedArg(a)
     maresult = numpy.ma.resize(ta, new_shape)
     F=getattr(a,"fill_value",1.e20)

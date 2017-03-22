@@ -3,9 +3,9 @@
 
 "Emulation of old cu package"
 import string, types, sys
-from error import CDMSError
-from dataset import openDataset, createDataset
-from tvariable import createVariable
+from .error import CDMSError
+from .dataset import openDataset, createDataset
+from .tvariable import createVariable
 import numpy
 
 class cuDataset():
@@ -27,16 +27,16 @@ class cuDataset():
                      ):
                     return self.readg()
                 else:
-                    raise CDMSError, "No such variable or grid, " + id
+                    raise CDMSError("No such variable or grid, " + id)
             except ( AttributeError, TypeError ):
-                raise CDMSError, "No such variable, " + id
+                raise CDMSError("No such variable, " + id)
         return v(*args, **kwargs)
 
     def __getitem__(self, key):
         """Implement f['varname'] for file/dataset f.
         """
         for d in [self.variables, self.axes, self.grids]:
-            if d.has_key(key):
+            if key in d:
                 result = d[key]
                 break
         else:
@@ -48,8 +48,8 @@ class cuDataset():
         try:
             v = self.variables[vname]
         except KeyError:
-            raise CDMSError, "No variable named " + vname + " in file " + \
-                  self.id
+            raise CDMSError("No variable named " + vname + " in file " + \
+                  self.id)
         return v
 
     def default_variable (self, vname):
@@ -77,7 +77,7 @@ class cuDataset():
             result.append('Name: ' + vname)
             v = self._v(vname)
             a = v.attributes
-            for x, y in a.items():
+            for x, y in list(a.items()):
                 result.append(x + ": " + str(y))
             d = v.getDomain()
             nd = 0
@@ -108,7 +108,7 @@ class cuDataset():
         """
         if vname is None: vname = self.default_variable_name
         v = self._v(vname)
-        return v.attributes.keys()
+        return list(v.attributes.keys())
 
     def listdimension (self, vname=None):
         """Return a list of the dimension names associated with a variable.
@@ -119,23 +119,23 @@ class cuDataset():
         :::
         """
         if vname is None: 
-            return self.axes.keys()
+            return list(self.axes.keys())
         v = self._v(vname)
         d = v.getDomain()
-        x = map(lambda n: n[0], d)
-        return map (lambda n: getattr(n, 'id'), x)
+        x = [n[0] for n in d]
+        return [getattr(n, 'id') for n in x]
 
     def listglobal (self):
         """Returns a list of the global attributes in the file.
         :::
         """
-        return self.attributes.keys()
+        return list(self.attributes.keys())
 
     def listvariable (self):
         """Return a list of the variables in the file.
         :::
         """
-        return self.variables.keys()
+        return list(self.variables.keys())
 
     listvariables = listvariable
 
@@ -235,8 +235,8 @@ class cuDataset():
             try:
                 return self.axes[dname]
             except KeyError:
-                raise CDMSError, "No axis named " + dname + " in file " +\
-                                self.id + "."
+                raise CDMSError("No axis named " + dname + " in file " +\
+                                self.id + ".")
         else:
             v = self._v(vname)
             d = v.getDomain()
@@ -244,8 +244,8 @@ class cuDataset():
                 if x[0].id == dname:
                     return x[0]
             else:
-                raise CDMSError, vname + " has no axis named " + dname + \
-                                " in file " + self.id + "."
+                raise CDMSError(vname + " has no axis named " + dname + \
+                                " in file " + self.id + ".")
         
     def dimensionarray (self, dname, vname=None):
         """Values of the dimension named dname.
@@ -346,31 +346,31 @@ class cuDataset():
         ne = 0
         while i < nargs:
             if not (idim < ndims):
-                raise CDMSError, "Too many arguments to getslab."
+                raise CDMSError("Too many arguments to getslab.")
             x = args[i]
             if x == ':' or x == None:
                 i = i + 1
                 idim = idim + 1
                 continue
             elif x == Ellipsis:
-                if ne: raise CDMSError, "Only one ellipsis allowed."
+                if ne: raise CDMSError("Only one ellipsis allowed.")
                 idim = ndims - (nargs - i - 1)
                 i = i + 1
                 ne = 1
-            elif type(x) == types.TupleType:
+            elif type(x) == tuple:
                 cdms_args[idim] = x
                 idim = idim + 1
                 i = i + 1
             else:
                 if not ((i+1) < nargs):
-                    raise CDMSError, "Arguments to getslab not paired properly."
+                    raise CDMSError("Arguments to getslab not paired properly.")
                 low = float(x)
                 high = float(args[i+1])
                 cdms_args[idim] = (low, high, 'cc')
                 idim = idim + 1
                 i = i + 2
         sq = keys.get('squeeze', 0)
-        result = apply(v.subRegion, tuple(cdms_args), {'squeeze':sq})
+        result = v.subRegion(*tuple(cdms_args), **{'squeeze':sq})
         result.parent = self
         result.id = vname
         return result
@@ -392,10 +392,10 @@ class cuDataset():
         :::
         """
         
-        import hgrid, gengrid
+        from . import hgrid, gengrid
 
         # Grid file
-        if 'grid_dims' in self.variables.keys():
+        if 'grid_dims' in list(self.variables.keys()):
             dims = self('grid_dims')
             whichType = "grid"
 
@@ -414,7 +414,7 @@ class cuDataset():
         elif len(dims)==1:
             result = gengrid.readScripGenericGrid(self, dims, whichType, whichGrid)
         else:
-            raise CDMSError, "Grid rank must be 1 or 2, found: %d"%len(dims)
+            raise CDMSError("Grid rank must be 1 or 2, found: %d"%len(dims))
 
         if checkGrid==1:
             nonConvexCells = result.checkConvex()

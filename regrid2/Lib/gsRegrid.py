@@ -20,6 +20,7 @@ import copy
 import numpy
 import cdms2
 from regrid2 import RegridError
+from functools import reduce
 
 C_DOUBLE_P = POINTER(c_double)
 
@@ -27,7 +28,7 @@ C_DOUBLE_P = POINTER(c_double)
 try:
     from pycf import libCFConfig, __path__
 except:
-    raise ImportError, 'Error: could not import pycf'
+    raise ImportError('Error: could not import pycf')
 
 LIBCFDIR  = __path__[0] + "/pylibcf"
 
@@ -35,8 +36,8 @@ __FILE__ = sys._getframe().f_code.co_filename
 
 def catchError(status, lineno):
     if status != 0:
-        raise RegridError, "ERROR in %s: status = %d at line %d" \
-            % (__FILE__, status, lineno)
+        raise RegridError("ERROR in %s: status = %d at line %d" \
+            % (__FILE__, status, lineno))
 
 def getTensorProduct(axis, dim, dims):
     """
@@ -88,9 +89,8 @@ def makeCurvilinear(coords):
             o1 = numpy.ones( (len(coords[0]),), coords[i].dtype )
             coords[i] = numpy.ma.outer(o1, coords[i]).reshape(dims)
         else:
-            raise RegridError, \
-                "ERROR in %s: funky mixture of axes and curvilinear coords %s" \
-                % (__FILE__, str([x.shape for x in coords]))
+            raise RegridError("ERROR in %s: funky mixture of axes and curvilinear coords %s" \
+                % (__FILE__, str([x.shape for x in coords])))
     return coords, dims
 
 def makeCoordsCyclic(coords, dims):
@@ -337,31 +337,30 @@ class Regrid:
         # Open the shaped library
         dynLibFound = False
         for sosuffix in '.dylib', '.dll', '.DLL', '.so', '.a':
-	    if os.path.exists(LIBCFDIR + sosuffix):
+            if os.path.exists(LIBCFDIR + sosuffix):
                 dynLibFound = True
-            	try:
+                try:
                     self.lib = CDLL(LIBCFDIR + sosuffix)
                     break
                 except:
                     pass
         if self.lib == None:
             if not dynLibFound:
- 	        raise RegridError, "ERROR in %s: could not find shared library %s.{so,dylib,dll,DLL}" \
-                % (__FILE__, LIBCFDIR)
-            raise RegridError, "ERROR in %s: could not open shared library %s.{so,dylib,dll,DLL}" \
-                % (__FILE__, LIBCFDIR)
+                raise RegridError("ERROR in %s: could not find shared library %s.{so,dylib,dll,DLL}" \
+                    % (__FILE__, LIBCFDIR))
+                raise RegridError("ERROR in %s: could not open shared library %s.{so,dylib,dll,DLL}" \
+                    % (__FILE__, LIBCFDIR))
 
         # Number of space dimensions
         self.rank = len(src_grid)
 
         if len(dst_grid) != self.rank:
-            raise RegridError, "ERROR in %s: len(dst_grid) = %d != %d" \
-                % (__FILE__, len(dst_grid), self.rank)
+            raise RegridError("ERROR in %s: len(dst_grid) = %d != %d" \
+                % (__FILE__, len(dst_grid), self.rank))
 
         if self.rank <= 0:
-            raise RegridError, \
-                "ERROR in %s: must have at least one dimension, rank = %d" \
-                % (__FILE__, self.rank)
+            raise RegridError("ERROR in %s: must have at least one dimension, rank = %d" \
+                % (__FILE__, self.rank))
 
         # Convert src_grid/dst_grid to curvilinear grid, if need be
         if self.rank > 1:
@@ -373,11 +372,11 @@ class Regrid:
             src_gridNew, src_dimsNew = makeCoordsCyclic(src_grid, src_dims)
             if self.verbose:
                 aa, bb = str(src_dims), str(src_dimsNew)
-                print '...  src_dims = %s, after making cyclic src_dimsNew = %s' \
-                    % (aa, bb)
+                print('...  src_dims = %s, after making cyclic src_dimsNew = %s' \
+                    % (aa, bb))
                 for i in range(self.rank):
-                    print '...... src_gridNew[%d].shape = %s' \
-                        % (i, str(src_gridNew[i].shape))
+                    print('...... src_gridNew[%d].shape = %s' \
+                        % (i, str(src_gridNew[i].shape)))
             # flag indicating that the grid was extended
             if reduce(lambda x, y:x+y, \
                           [src_dimsNew[i] - src_dims[i] \
@@ -404,8 +403,8 @@ class Regrid:
                     self.extendedGrid = self.extendedGrid
                 if self.verbose:
                     aa, bb = str(src_dims), str(src_dimsNew)
-                    print '...  src_dims = %s, after making cyclic src_dimsNew = %s' \
-                        % (aa, bb)
+                    print('...  src_dims = %s, after making cyclic src_dimsNew = %s' \
+                        % (aa, bb))
                 src_grid = src_gridNew
                 src_dims = src_dimsNew
                 self.dst_Index = dst_Index
@@ -515,7 +514,7 @@ class Regrid:
         mask is a property of the grid (not the data).
         """
         if self.weightsComputed:
-            raise RegridError, 'Must set mask before computing weights'
+            raise RegridError('Must set mask before computing weights')
     
         mask = numpy.array(inMask, dtype = numpy.int32)
     
@@ -572,21 +571,21 @@ class Regrid:
                             pass None if these should not be touched.
         """
         if not self.weightsComputed:
-            raise RegridError, 'Weights must be set before applying the regrid'
+            raise RegridError('Weights must be set before applying the regrid')
         # extend src data if grid was made cyclic and or had a cut accounted for
         src_data = self._extend(src_data_in)
 
         # Check
         if reduce(operator.iand, [src_data.shape[i] == self.src_dims[i] \
                                  for i in range(self.rank)]) == False:
-            raise RegridError, ("ERROR in %s: supplied src_data have wrong shape " \
+            raise RegridError(("ERROR in %s: supplied src_data have wrong shape " \
                                   + "%s != %s") % (__FILE__, str(src_data.shape), \
-                                     str(tuple([d for d in self.src_dims])))
+                                     str(tuple([d for d in self.src_dims]))))
         if reduce(operator.iand, [dst_data.shape[i] == self.dst_dims[i] \
                                  for i in range(self.rank)]) == False:
-            raise RegridError, ("ERROR in %s: supplied dst_data have wrong shape " \
+            raise RegridError(("ERROR in %s: supplied dst_data have wrong shape " \
                 + "%s != %s") % (__FILE__, str(dst_data.shape),
-                                 str(tuple([d for d in self.dst_dims])))
+                                 str(tuple([d for d in self.dst_dims]))))
 
         # Create temporary data objects
         src_dataid = c_int(-1)
@@ -612,8 +611,8 @@ class Regrid:
                 warnings.warn("mismatch in src and dst data types (%s vs %s) we recasted dst to src" \
                                         % (__FILE__, src_data.dtype, dst_data.dtype))
               except:
-                raise RegridError, "ERROR in %s: mismatch in src and dst data types (%s vs %s)" \
-                    % (__FILE__, src_data.dtype, dst_data.dtype)
+                raise RegridError("ERROR in %s: mismatch in src and dst data types (%s vs %s)" \
+                    % (__FILE__, src_data.dtype, dst_data.dtype))
 
         # only float64 and float32 data types are supported for interpolation
         if src_data.dtype == numpy.float64:
@@ -631,8 +630,8 @@ class Regrid:
             status = self.lib.nccf_set_data_float(src_dataid, ptr, save, fill_value)
             catchError(status, sys._getframe().f_lineno)
         else:
-            raise RegridError, "ERROR in %s: invalid src_data type %s (neither float nor double)" \
-                % (__FILE__, src_data.dtype)
+            raise RegridError("ERROR in %s: invalid src_data type %s (neither float nor double)" \
+                % (__FILE__, src_data.dtype))
 
         status = self.lib.nccf_def_data(self.dst_gridid, "dst_data", \
                                         standard_name, units, time_dimname, \
@@ -655,8 +654,8 @@ class Regrid:
             status = self.lib.nccf_set_data_float(dst_dataid, ptr, save, fill_value)
             catchError(status, sys._getframe().f_lineno)
         else:
-            raise RegridError, "ERROR in %s: invalid dst_data type = %s" \
-                % (__FILE__, dst_data.dtype)
+            raise RegridError("ERROR in %s: invalid dst_data type = %s" \
+                % (__FILE__, dst_data.dtype))
 
         # Now apply weights
         status = self.lib.nccf_apply_regrid(self.regridid, src_dataid, dst_dataid)
@@ -843,7 +842,7 @@ def testHandleCut():
     if not f: return
 
     so = f.variables['so'][0, 0, :, :]
-    if 'lon' in f.variables.keys():
+    if 'lon' in list(f.variables.keys()):
         alllat = f.variables['lat']
         alllon = f.variables['lon']
     else:
@@ -911,12 +910,12 @@ def test():
 
     # number of destination points
     ndstpts = rg.getNumDstPoints()
-    print 'nvalid = ', nvalid, ' ndstpts = ', ndstpts
+    print('nvalid = ', nvalid, ' ndstpts = ', ndstpts)
 
     # get the indices and weights for a single target location
     dst_indices = [4, 2, 1]
     inds, weights = rg.getIndicesAndWeights(dst_indices)
-    print 'indices and weights are: ', inds, weights
+    print('indices and weights are: ', inds, weights)
 
     # data
     src_coords = rg.getSrcGrid()
@@ -928,13 +927,13 @@ def test():
 
     # regrid
     rg(src_data, dst_data)
-    print 'after interp: dst_data = ', dst_data
+    print('after interp: dst_data = ', dst_data)
 
     # check
     error = numpy.sum(abs(dst_data - func1(dst_coords)))
     #print dst_data
     #print func(dst_coords)
-    print 'error = ', error
+    print('error = ', error)
 
 def testMasking():
     import numpy.ma as ma
@@ -975,12 +974,12 @@ def testMasking():
 
     # number of destination points
     ndstpts = rg.getNumDstPoints()
-    print 'nvalid = ', nvalid, ' ndstpts = ', ndstpts
+    print('nvalid = ', nvalid, ' ndstpts = ', ndstpts)
 
     # get the indices and weights for a single target location
     dst_indices = [4, 2, 1]
     inds, weights = rg.getIndicesAndWeights(dst_indices)
-    print 'indices and weights are: ', inds, weights
+    print('indices and weights are: ', inds, weights)
 
     # data
     src_coords = rg.getSrcGrid()
@@ -992,13 +991,13 @@ def testMasking():
 
     # regrid
     rg(src_data, dst_data)
-    print 'after interp: dst_data =\n', dst_data
+    print('after interp: dst_data =\n', dst_data)
 
     # check
     error = numpy.sum(abs(dst_data - func1(dst_coords)))
     #print dst_data
     #print func(dst_coords)
-    print 'error = ', error
+    print('error = ', error)
 
 if __name__ == '__main__':
     #testOuterProduct()

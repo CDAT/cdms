@@ -4,12 +4,12 @@
 """CDMS Grid objects"""
 import types
 import re
-from error import CDMSError
+from .error import CDMSError
 import numpy #, PropertiedClasses, internattr
 # import regrid2._regrid
 import copy, string, sys
-from cdmsobj import CdmsObj
-from axis import TransientAxis, createAxis, createUniformLatitudeAxis, createUniformLongitudeAxis, getAutoBounds, createGaussianAxis, lookupArray, isSubsetVector
+from .cdmsobj import CdmsObj
+from .axis import TransientAxis, createAxis, createUniformLatitudeAxis, createUniformLongitudeAxis, getAutoBounds, createGaussianAxis, lookupArray, isSubsetVector
 import cdtime
 
 MethodNotImplemented = "Method not yet implemented"
@@ -129,24 +129,24 @@ def setRegionSpecs(grid, coordSpec, coordType, resultSpec):
     
     if (coordSpec is None) or (coordSpec==':'):
         canonSpec = None
-    elif type(coordSpec) is types.TupleType:
+    elif type(coordSpec) is tuple:
         if len(coordSpec)==2:
             canonSpec = (coordSpec[0],coordSpec[1],'cc',None)
         elif len(coordSpec)==3:
             canonSpec = (coordSpec[0],coordSpec[1],coordSpec[2],None)
         elif len(coordSpec)!=4:
-            raise CDMSError, 'Invalid coordinate specification: %s'%`coordSpec`
-    elif type(coordSpec) in [types.IntType, types.FloatType]:
+            raise CDMSError('Invalid coordinate specification: %s'%repr(coordSpec))
+    elif type(coordSpec) in [int, float]:
         canonSpec = (coordSpec, coordSpec, 'cc', None)
     else:
-        raise CDMSError, 'Invalid coordinate specification: %s'%`coordSpec`
+        raise CDMSError('Invalid coordinate specification: %s'%repr(coordSpec))
 
     coordLoc = CoordTypeToLoc[coordType]
     if coordLoc is None:
-        raise CDMSError, 'Invalid coordinate type: %s'%coordType
+        raise CDMSError('Invalid coordinate type: %s'%coordType)
 
     if resultSpec[coordLoc] is not None:
-        raise CDMSError, 'Multiple specifications for coordinate type %s'%coordType
+        raise CDMSError('Multiple specifications for coordinate type %s'%coordType)
     resultSpec[coordLoc] = canonSpec
 
 class AbstractGrid (CdmsObj):
@@ -176,11 +176,11 @@ class AbstractGrid (CdmsObj):
 
     def writeToFile(self, file):
         """Write self to a CdmsFile file, returning CF coordinates attribute, or None if not applicable"""
-        raise CDMSError, MethodNotImplemented
+        raise CDMSError(MethodNotImplemented)
 
     def subSlice(self, *specs, **keys):
         """Get a subgrid based on an argument list <specs> of slices."""
-        raise CDMSError, MethodNotImplemented
+        raise CDMSError(MethodNotImplemented)
 
     def hasCoordType(self, coordType):
         """Return 1 iff self has the coordinate type."""
@@ -206,21 +206,21 @@ class AbstractGrid (CdmsObj):
 
     def clone(self, copyData=1):
         """Make a copy of self."""
-        raise CDMSError, MethodNotImplemented
+        raise CDMSError(MethodNotImplemented)
 
     def flatAxes(self):
         """Return (flatlat, flatlon) where flatlat is a raveled NumPy array
         having the same length as the number of cells in the grid, similarly
         for flatlon."""
-        raise CDMSError, MethodNotImplemented
+        raise CDMSError(MethodNotImplemented)
 
     def size(self):
         "Return number of cells in the grid"
-        raise CDMSError, MethodNotImplemented
+        raise CDMSError(MethodNotImplemented)
 
     def writeScrip(self, cdunifFile):
         "Write a grid to a SCRIP file"
-        raise CDMSError, MethodNotImplemented
+        raise CDMSError(MethodNotImplemented)
 
 class AbstractRectGrid(AbstractGrid):
     """AbstractRectGrid defines the interface for rectilinear grids:
@@ -276,10 +276,10 @@ class AbstractRectGrid(AbstractGrid):
         return self._lonaxis_
 
     def getMask(self):
-        raise CDMSError, MethodNotImplemented
+        raise CDMSError(MethodNotImplemented)
 
     def setMask(self,mask,permanent=0):
-        raise CDMSError, MethodNotImplemented
+        raise CDMSError(MethodNotImplemented)
 
     def getOrder(self):
         return self._order_
@@ -464,7 +464,7 @@ class AbstractRectGrid(AbstractGrid):
         import regrid2._regrid
 
         if hasattr(self,"parent") and self.parent is not None:
-            gridfamily = self.parent.grids.values()
+            gridfamily = list(self.parent.grids.values())
         else:
             gridfamily = []
 
@@ -515,7 +515,7 @@ class AbstractRectGrid(AbstractGrid):
             LON=1
             latbounds, lonbounds = self.getBounds()
             if latbounds is None or lonbounds is None:
-                raise CDMSError, 'No boundary data is available for grid %s'%self.id
+                raise CDMSError('No boundary data is available for grid %s'%self.id)
             ny = len(self._lataxis_)
             nx = len(self._lonaxis_)
             lenmesh = ny*nx
@@ -565,8 +565,8 @@ class AbstractRectGrid(AbstractGrid):
         'gridid' is the string identifier of the resulting curvilinear grid object.
         """
 
-        from coord import TransientVirtualAxis, TransientAxis2D
-        from hgrid import TransientCurveGrid
+        from .coord import TransientVirtualAxis, TransientAxis2D
+        from .hgrid import TransientCurveGrid
 
         lat = self._lataxis_[:]
         lon = self._lonaxis_[:]
@@ -667,16 +667,16 @@ class RectGrid(AbstractRectGrid):
 
     def __init__(self,parent,rectgridNode=None):
         if rectgridNode is not None and rectgridNode.tag != 'rectGrid':
-            raise CDMSError, 'Node is not a grid node'
+            raise CDMSError('Node is not a grid node')
         AbstractRectGrid.__init__(self,rectgridNode)
         self.parent = parent
 
     # Set pointers to related structural elements: lon, lat axes, order, mask
     def initDomain(self, axisdict, vardict):
-        if not axisdict.has_key(self.latitude):
-            raise CDMSError, 'No such latitude: %s'%`self.latitude`
-        if not axisdict.has_key(self.longitude):
-            raise CDMSError, 'No such longitude: %s'%`self.longitude`
+        if self.latitude not in axisdict:
+            raise CDMSError('No such latitude: %s'%repr(self.latitude))
+        if self.longitude not in axisdict:
+            raise CDMSError('No such longitude: %s'%repr(self.longitude))
         self._lataxis_ = axisdict[self.latitude]
         self._lonaxis_ = axisdict[self.longitude]
         self._order_ = self.order
@@ -708,7 +708,7 @@ class FileRectGrid(AbstractRectGrid):
         self._lataxis_ = latobj
         self._lonaxis_ = lonobj
         if not order in ["yx","xy"]:
-            raise CDMSError, 'Grid order must be "yx" or "xy"'
+            raise CDMSError('Grid order must be "yx" or "xy"')
         self._order_ = order
         self.setType(gridtype)
         self._maskVar_ = maskobj        # FileVariable of mask
@@ -732,12 +732,12 @@ class FileRectGrid(AbstractRectGrid):
     # Set the mask to array 'mask'. If persistent == 1, modify permanently
     # in the file, else set as a temporary mask.
     def setMask(self,mask,persistent=0):
-        if persistent!=0: raise CDMSError, MethodNotImplemented
+        if persistent!=0: raise CDMSError(MethodNotImplemented)
         if mask is None:
             self._tempMask_ = None
         else:
             assert type(mask)==numpy.ndarray, 'Mask must be a numpy array'
-            assert mask.shape==self.shape,'Mask must have shape %s'%`self.shape`
+            assert mask.shape==self.shape,'Mask must have shape %s'%repr(self.shape)
             self._tempMask_ = copy.copy(mask)
 
     def getMaskVar(self):
@@ -759,7 +759,7 @@ class TransientRectGrid(AbstractRectGrid):
         self._lonaxis_ = lonobj
         self._lonaxis_.designateLongitude()
         if not order in ["yx","xy"]:
-            raise CDMSError, 'Grid order must be "yx" or "xy"'
+            raise CDMSError('Grid order must be "yx" or "xy"')
         self._order_ = order
         self.setType(gridtype)
         self.setMask(maskarray)        # numpy mask array
@@ -776,9 +776,9 @@ class TransientRectGrid(AbstractRectGrid):
     def setMask(self,mask, persistent=0):
         if mask is not None:
             if type(mask)!=numpy.ndarray:
-               raise CDMSError, 'Mask must be a numpy array'
+               raise CDMSError('Mask must be a numpy array')
             if mask.shape != self.shape:
-               raise CDMSError, 'Mask must have shape %s'%`self.shape`
+               raise CDMSError('Mask must have shape %s'%repr(self.shape))
         self._maskArray_ = copy.copy(mask)
 
     def setBounds(self, latBounds, lonBounds):

@@ -1,8 +1,8 @@
 """CDMS database objects"""
 
-from error import CDMSError
-import cdmsobj
-import cdurlparse
+from .error import CDMSError
+from . import cdmsobj
+from . import cdurlparse
 ## import internattr
 import copy
 import os
@@ -10,9 +10,9 @@ import re
 import string
 import sys
 import types
-from CDMLParser import CDMLParser
-from cdmsobj import CdmsObj
-from dataset import Dataset
+from .CDMLParser import CDMLParser
+from .cdmsobj import CdmsObj
+from .dataset import Dataset
 
 try:
     import ldap
@@ -64,36 +64,36 @@ def connect(uri=None, user="", password=""):
         try:
             uri = os.environ['CDMSROOT']
         except KeyError:
-            raise CDMSError, ConnectError + '%s\nSet environment variable CDMSROOT to default database location'%uri
+            raise CDMSError(ConnectError + '%s\nSet environment variable CDMSROOT to default database location'%uri)
     (scheme,netloc,path,parameters,query,fragment)=cdurlparse.urlparse(uri)
 
     if scheme in ['','ldap']:
         try:
             ldapdb = ldap.open(netloc)
         except:
-            raise CDMSError, ConnectError +"%s\n%s"%(uri,sys.exc_value)
+            raise CDMSError(ConnectError +"%s\n%s"%(uri,sys.exc_info()[1]))
 
         try:
             ldapdb.simple_bind_s(user,password)
         except:
-            raise CDMSError, AuthenticationError + "%s\n%s"%(uri,sys.exc_value)
+            raise CDMSError(AuthenticationError + "%s\n%s"%(uri,sys.exc_info()[1]))
 
         try:
             result = ldapdb.search_s(path[1:], ldap.SCOPE_SUBTREE, "objectclass=database")
         except:
-            raise CDMSError, DatabaseNotFound + "%s\n%s"%(uri,sys.exc_value)
+            raise CDMSError(DatabaseNotFound + "%s\n%s"%(uri,sys.exc_info()[1]))
 
         try:
             dn, attrs = result[0]
         except:
-            raise CDMSError, PermissionError + uri
+            raise CDMSError(PermissionError + uri)
         newuri = "ldap://%s/%s"%(netloc,dn)
         db = LDAPDatabase(newuri, ldapdb)
         db.setExternalDict(attrs)
         return db
 
     else:
-        raise CDMSError, SchemeNotSupported +  scheme
+        raise CDMSError(SchemeNotSupported +  scheme)
 
 def loadString(text, uri, parent=None, datapath=None):
     """ Create a dataset from a text string. <text> is the string in CDML format.
@@ -124,26 +124,26 @@ class AbstractDatabase(CdmsObj):
         self.userid = None              # User ID for request manager transfers
 
     def close(self):
-        raise CDMSError, MethodNotImplemented
+        raise CDMSError(MethodNotImplemented)
 
     def cachecdml(self, name, cdml):
-        raise CDMSError, MethodNotImplemented
+        raise CDMSError(MethodNotImplemented)
 
     def getDataset(self, name):
-        raise CDMSError, MethodNotImplemented
+        raise CDMSError(MethodNotImplemented)
 
     def getObjFromDataset(self, name):
-        raise CDMSError, MethodNotImplemented
+        raise CDMSError(MethodNotImplemented)
 
     def openDataset(self, dsetid, mode='r'):
-        raise CDMSError, MethodNotImplemented
+        raise CDMSError(MethodNotImplemented)
 
     def searchFilter(self, filter, classtag=None, relbase=None, scope=Subtree, attnames=[]):
-        raise CDMSError, MethodNotImplemented
+        raise CDMSError(MethodNotImplemented)
 
     def enableCache(self):
         if self._datacache_ is None:
-            import cache
+            from . import cache
             self._datacache_ = cache.Cache()
         return self._datacache_
 
@@ -153,7 +153,7 @@ class AbstractDatabase(CdmsObj):
             self._datacache_ = None
 
     def useRequestManager(self, lcBaseDN, useReplica=1, userid = "anonymous"):
-        import cache
+        from . import cache
         self.enableCache()
         cache.useRequestManagerTransfer()
         self.lcBaseDN = lcBaseDN
@@ -161,7 +161,7 @@ class AbstractDatabase(CdmsObj):
         self.userid = userid
 
     def usingRequestManager(self):
-        import cache
+        from . import cache
         return (cache._transferMethod==cache._requestManagerTransfer)
 
     def __repr__(self):
@@ -213,18 +213,18 @@ class LDAPDatabase(AbstractDatabase):
 
     def getDataset(self, dn):
         normaldn = self.normalizedn(dn)
-        if self._cache_.has_key(normaldn):
+        if normaldn in self._cache_:
             dataset = self._cache_[normaldn]
-        elif self._cdmlcache_.has_key(normaldn):
+        elif normaldn in self._cdmlcache_:
             (text,datapath) = self._cdmlcache_[normaldn]
             uri = "ldap://%s/%s"%(self.netloc,normaldn)
             if cdmsobj._debug==1:
-                print 'Loading %s from cached CDML'%uri
+                print('Loading %s from cached CDML'%uri)
             dataset = loadString(text,uri,self,datapath)
             self._cache_[normaldn] = dataset
         else:
             if cdmsobj._debug==1:
-                print 'Search filter: (objectclass=dataset), scope: base, base: "%s", attributes=["cdml"]'%(dn,)
+                print('Search filter: (objectclass=dataset), scope: base, base: "%s", attributes=["cdml"]'%(dn,))
             result = self.db.search_s(dn, ldap.SCOPE_BASE, "objectclass=dataset",["cdml","datapath"])
             resultdn,attrs = result[0]
             text = attrs["cdml"][0]
@@ -244,7 +244,7 @@ class LDAPDatabase(AbstractDatabase):
         rdn = explodeddn[0]
         matchobj = _Att.match(rdn)
         if matchobj is None:
-            raise CDMSError, InvalidEntryName +  dn
+            raise CDMSError(InvalidEntryName +  dn)
         tag, id = matchobj.groups()
 
         # Get the correct dictionary for this tag
@@ -285,7 +285,7 @@ class LDAPDatabase(AbstractDatabase):
     # ldapattrs is a dictionary, keyed on attribute name.
     # Values are lists of attribute values.
     def setExternalDict(self, ldapattrs):
-        for attname in ldapattrs.keys():
+        for attname in list(ldapattrs.keys()):
             attvals = ldapattrs[attname]
             if attname=='objectclass':
                 continue
@@ -384,7 +384,7 @@ class LDAPDatabase(AbstractDatabase):
             atts = ["objectclass","cdml","id"]+attnames
             
         if cdmsobj._debug==1:
-            print 'Search filter:%s, scope %s, base: "%s", attributes=%s'%(newfilter,`scope`,base,`atts`)
+            print('Search filter:%s, scope %s, base: "%s", attributes=%s'%(newfilter,repr(scope),base,repr(atts)))
         if timeout is None:
             result = self.db.search_s(base, scope, newfilter, atts)
         else:
@@ -395,7 +395,7 @@ class LDAPDatabase(AbstractDatabase):
     def listDatasets(self):
         """ Return a list of the dataset IDs in this database."""
         entries = self.searchFilter(tag='dataset', scope=Onelevel )
-        result = map(lambda x: x.attributes['id'][0], entries)
+        result = [x.attributes['id'][0] for x in entries]
         return result
 
 ## internattr.add_internal_attribute(LDAPDatabase, 'netloc', 'db')
@@ -419,7 +419,7 @@ class LDAPSearchResult(AbstractSearchResult):
 
         # Scan the result for CDML attributes, cache them in the database
         for dn, attrs in self.result:
-            if attrs.has_key('cdml') and attrs.has_key('datapath'):
+            if 'cdml' in attrs and 'datapath' in attrs:
                 cdml = attrs['cdml'][0]
                 datapath = attrs['datapath'][0]
                 self.db.cachecdml(dn,cdml,datapath)
@@ -427,7 +427,7 @@ class LDAPSearchResult(AbstractSearchResult):
 
     def __getitem__(self, key):
         if key>=len(self):
-            raise IndexError, 'index out of bounds'
+            raise IndexError('index out of bounds')
 
         dn, attributes = self.result[key]
 
@@ -475,7 +475,7 @@ class LDAPSearchResult(AbstractSearchResult):
             obj = entry.getObject()
             if tag is None or tag==entry.tag:
                 try:
-                    if apply(predicate,(obj,))==1:
+                    if predicate(*(obj,))==1:
                         resultlist.append((entry.name,entry.attributes))
                 except:
                     pass
@@ -527,7 +527,7 @@ class LDAPResultEntry(AbstractResultEntry):
         rdn = explodeddn[0]
         matchobj = _Att.match(rdn)
         if matchobj is None:
-            raise IndexError, InvalidEntryName + dn
+            raise IndexError(InvalidEntryName + dn)
 
         self.tag = matchobj.group(1)
 

@@ -16,6 +16,7 @@ import time
 import numpy
 from regrid2 import RegridError
 import ESMP
+from functools import reduce
 
 # constants
 R8 = ESMP.ESMP_TYPEKIND_R8
@@ -185,7 +186,7 @@ class EsmfStructGrid:
             msg = """
 esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
             """ % periodicity
-            raise RegridError, msg
+            raise RegridError(msg)
 
         # Grid add coordinates call must go here for parallel runs
         # This occur before the fields are created, making the fields
@@ -356,7 +357,7 @@ class EsmfStructField:
             etype = I4
         else:
             msg = 'esmf.EsmfStructField.__init__: ERROR invalid type %s' % datatype
-            raise RegridError, msg
+            raise RegridError(msg)
 
         self.field = ESMP.ESMP_FieldCreateGrid(esmfGrid.grid,
                                                name,

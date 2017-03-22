@@ -31,7 +31,7 @@ def updateProgressGui(blocknum, blocksize, size, prog):
 
     Return: 0 to signal that a cancel has been received, 1 to continue reading.
     """
-    sizekb = size/1024L
+    sizekb = size/1024
     percent = min(100,int(100.0*float(blocknum*blocksize)/float(size)))
     if percent<100:
         noInterrupt = prog.Update(percent,"Read: %3d%% of %dK"%(percent,sizekb))

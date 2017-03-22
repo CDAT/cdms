@@ -2,7 +2,7 @@
 CDMS module-level functions and definitions
 """
 
-import cdmsNode
+from . import cdmsNode
 import cdtime
 import glob
 import os
@@ -180,7 +180,7 @@ def templateToRegex(template):
         elif dimtype in ('level','elevel'):
             dimtypes[dimtype]=spec
 
-        if matchspec.has_key(spec):
+        if spec in matchspec:
             return '(?P='+name+')'
         else:
             matchspec[spec] = 1
@@ -247,7 +247,7 @@ def generateTime(matchobj,timespecs):
 def matchingFiles(direc,template):
 
     if os.path.isabs(template):
-        raise AbsoluteTemplate, template
+        raise AbsoluteTemplate(template)
 
     # Generate a glob pattern
     normTemplate = os.path.normpath(template)
@@ -261,7 +261,7 @@ def matchingFiles(direc,template):
     try:
         os.chdir(direc)
     except os.error:
-        raise IOError,'%s: %s'%(sys.exc_value,direc)
+        raise IOError('%s: %s'%(sys.exc_info()[1],direc))
         
     candlist = glob.glob(globPattern)
 
@@ -376,7 +376,7 @@ def searchPattern(objlist, pattern, attribute=None, tag=None):
     if tag is not None:
         tag = string.lower(tag)
     regexp = re.compile(pattern)
-    if type(objlist) is not types.ListType:
+    if type(objlist) is not list:
         objlist = [objlist]
 
     returnlist = []
@@ -397,7 +397,7 @@ def matchPattern(objlist, pattern, attribute=None, tag=None):
     if tag is not None:
         tag = string.lower(tag)
     regexp = re.compile(pattern)
-    if type(objlist) is not types.ListType:
+    if type(objlist) is not list:
         objlist = [objlist]
 
     returnlist = []
@@ -426,7 +426,7 @@ def matchPattern(objlist, pattern, attribute=None, tag=None):
 def searchPredicate(objlist, predicate, tag=None):
     if tag is not None:
         tag = string.lower(tag)
-    if type(objlist) is not types.ListType:
+    if type(objlist) is not list:
         objlist = [objlist]
 
     returnlist = []
@@ -449,7 +449,7 @@ class CdmsObj (object):
 
     def _listatts(self):
         dic={}
-        for nm,val in self.__dict__.items():
+        for nm,val in list(self.__dict__.items()):
             if (nm[0]!='_' and not nm in self.__cdms_internals__) or nm in ['_FillValue']:
                 dic[nm]=val
             if nm == '_units':
@@ -480,7 +480,7 @@ class CdmsObj (object):
                 parenttype = None
             atts = node.getExternalDict()
             adict = self.__dict__
-            for attname in atts.keys():
+            for attname in list(atts.keys()):
                 (attval,datatype)=atts[attname] # (XML value, datatype)
                 constraint = node.extra.get(attname)
                 if constraint is not None:
@@ -492,12 +492,12 @@ class CdmsObj (object):
                             try:
                                 attval = string.atof(attval)
                             except:
-                                raise RuntimeError,"%s=%s must be a float"%(attname,attval)
+                                raise RuntimeError("%s=%s must be a float"%(attname,attval))
                         elif reqtype in (CdShort,CdInt,CdLong,CdInt64):
                             try:
                                 attval = string.atoi(attval)
                             except:
-                                raise RuntimeError,"%s=%s must be an integer"%(attname,attval)
+                                raise RuntimeError("%s=%s must be an integer"%(attname,attval))
                 adict[attname] = attval
                 self.attributes[attname] = attval
 
@@ -518,13 +518,13 @@ class CdmsObj (object):
         :::
         """
         if attname is None:
-            for attval in self.attributes.values():
-                if type(attval) is types.StringType and pattern.search(attval) is not None:
+            for attval in list(self.attributes.values()):
+                if type(attval) is bytes and pattern.search(attval) is not None:
                     return 1
             return 0
-        elif self.attributes.has_key(attname):
+        elif attname in self.attributes:
             attval = self.attributes[attname]
-            return (type(attval) is types.StringType and pattern.search(attval) is not None)
+            return (type(attval) is bytes and pattern.search(attval) is not None)
         else:
             return 0
 
@@ -548,13 +548,13 @@ class CdmsObj (object):
         :::
         """
         if attname is None:
-            for attval in self.attributes.values():
-                if type(attval) is types.StringType and pattern.match(attval) is not None:
+            for attval in list(self.attributes.values()):
+                if type(attval) is bytes and pattern.match(attval) is not None:
                     return 1
             return 0
-        elif self.attributes.has_key(attname):
+        elif attname in self.attributes:
             attval = self.attributes[attname]
-            return (type(attval) is types.StringType and pattern.match(attval) is not None)
+            return (type(attval) is bytes and pattern.match(attval) is not None)
         else:
             return 0
 
@@ -621,7 +621,7 @@ class CdmsObj (object):
         """
         if tag is None or string.lower(tag)==self._node_.tag:
             try:
-                if apply(predicate,(self,))==1:
+                if predicate(*(self,))==1:
                     result = [self]
             except:
                 result = []
@@ -644,7 +644,7 @@ class CdmsObj (object):
         :::
         """
         if self._node_ is None:
-            raise CDMSError, "No tree node found"
+            raise CDMSError("No tree node found")
         self._node_.dump(path,format)
 
     def _getinternals(self):
@@ -658,9 +658,9 @@ if __name__ == '__main__':
     x = CdmsObj(None)
     x.someatt = 1
     assert x.attributes['someatt'] == x.someatt
-    assert not x.attributes.has_key('_node')
+    assert '_node' not in x.attributes
     # need tests for the search routines...
-    print "Test passed."
+    print("Test passed.")
 
 
 

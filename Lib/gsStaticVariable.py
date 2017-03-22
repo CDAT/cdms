@@ -18,6 +18,7 @@ from cdms2.coord import FileAxis2D
 from cdms2.gengrid import FileGenericGrid
 from cdms2.fvariable import FileVariable
 from cdms2.axis import FileAxis
+from functools import reduce
 
 try:
     from pycf import libCFConfig as libcf
@@ -36,7 +37,7 @@ def createTransientGrid(gFName, coordinates):
 
     fh = cdms2.open(gFName)
     gridid = None
-    if libcf.CF_GRIDNAME in fh.attributes.keys(): 
+    if libcf.CF_GRIDNAME in list(fh.attributes.keys()): 
         gridid = getattr(fh, libcf.CF_GRIDNAME)
     xn, yn = coordinates.split()
 
@@ -48,7 +49,7 @@ def createTransientGrid(gFName, coordinates):
     ydim = y.shape
 
     if xdim != ydim: 
-        raise CDMSError, "Dimension of coordinates grids don't match"
+        raise CDMSError("Dimension of coordinates grids don't match")
 
     ni = xdim[1]
     nj = xdim[0]
@@ -196,7 +197,7 @@ class StaticFileVariable(StaticVariable):
                 f.variables[coord] = FileAxis2D(f, coord, g.variables[coord])
             
             # Build the axes
-            for key in f.axes.keys():
+            for key in list(f.axes.keys()):
                 f.axes[key] = FileAxis(f, key, None)
 
             # Set the boundaries
@@ -205,7 +206,7 @@ class StaticFileVariable(StaticVariable):
                 f.variables[coord].setBounds(bounds)
 
             # Initialize the domain
-            for var in f.variables.values():
+            for var in list(f.variables.values()):
                 var.initDomain(f.axes)
 
             # Add the grid
@@ -255,11 +256,11 @@ class StaticTransientVariable(StaticVariable):
             vr.gridIndex    = gridIndex
 
             grid = None
-            if 'coordinates' in vr.attributes.keys():
+            if 'coordinates' in list(vr.attributes.keys()):
                 grid = createTransientGrid(gFName, vr.attributes['coordinates'])
             atts = dict(vr.attributes)
             atts.update(gh.attributes)
-            if libcf.CF_GRIDNAME in fh.attributes.keys():
+            if libcf.CF_GRIDNAME in list(fh.attributes.keys()):
                 atts[libcf.CF_GRIDNAME] = getattr(fh, libcf.CF_GRIDNAME)
 
             # Create the variable

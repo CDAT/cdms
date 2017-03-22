@@ -95,7 +95,7 @@ def reverseSlice(s,size):
         j = j%size
     
     if i<-size or j<-size-1:
-        raise 'Invalid slice',`s`
+        raise RuntimeError("Invalid slice %s" % repr(s))
 
     k = -k
     pk = ((j-i+k)/k)*k+i
@@ -129,26 +129,26 @@ def splitSliceExt(s,size):
     i,j,k = s.start,s.stop,s.step
 
     # slice of form [i:] sets j to large int
-    if j>2000000000L:
+    if j>2000000000:
         j = size
 
     _debug=0
-    if(_debug): print "SSSS0: ",i,j,k
+    if(_debug): print("SSSS0: ",i,j,k)
 
     wrap=[]
 
     if k>0:
 
         iter=0
-        if(_debug): print "SSSS1: iter ",iter,j,size,k
+        if(_debug): print("SSSS1: iter ",iter,j,size,k)
         while(j>0):
-            if(_debug): print " "
-            if(_debug): print "SSSS2: iter",iter,j,size,k
+            if(_debug): print(" ")
+            if(_debug): print("SSSS2: iter",iter,j,size,k)
             jo=size
             if(iter>0): jo=size+1
-            if(_debug): print "SSSS3: iter",iter,j,jo
+            if(_debug): print("SSSS3: iter",iter,j,jo)
             if(j<size): jo=j
-            if(_debug): print "SSSS4: iter",iter,j,jo
+            if(_debug): print("SSSS4: iter",iter,j,jo)
             wrap.append(slice(i,jo,k))
             j=j-size
             i=0
@@ -158,14 +158,14 @@ def splitSliceExt(s,size):
 
         wraprev=[]
         iter=0
-        if(_debug): print "SSSS1 neg: iter ",iter,i,j,size,k
+        if(_debug): print("SSSS1 neg: iter ",iter,i,j,size,k)
         while(i>=0):
-            if(_debug): print " "
-            if(_debug): print "SSSS2 neg: iter",iter,i,j,size,k
+            if(_debug): print(" ")
+            if(_debug): print("SSSS2 neg: iter",iter,i,j,size,k)
             io=size-1
-            if(_debug): print "SSSS3 neg: iter",iter,i,j,io
+            if(_debug): print("SSSS3 neg: iter",iter,i,j,io)
             if(i<size): io=i
-            if(_debug): print "SSSS4 neg: iter",iter,i,j,io
+            if(_debug): print("SSSS4 neg: iter",iter,i,j,io)
             
             # mf 20010405 python does not return nothing for slice(size-1,size-1,-1); force it
             if( not ( io==size-1 and j==size-1 ) ):
@@ -180,7 +180,7 @@ def splitSliceExt(s,size):
         for k in range(0,len(wraprev)):
             kk=len(wraprev)-k-1
             wrap.append(wraprev[kk])
-            if(_debug): print "SSSS5 neg: ",kk,wraprev[kk]
+            if(_debug): print("SSSS5 neg: ",kk,wraprev[kk])
 
     return (wrap)
 

@@ -8,7 +8,7 @@ No guarantee is provided whatsoever. Use at your own risk.
 """
 
 import numpy
-import mvBaseWriter
+from . import mvBaseWriter
 import re
 
 class VsWriter(mvBaseWriter.BaseWriter):
@@ -21,7 +21,7 @@ class VsWriter(mvBaseWriter.BaseWriter):
         try:
             import tables
         except:
-            raise ImportError, 'You must have pytables installed'
+            raise ImportError('You must have pytables installed')
         
         if filename.find('.vsh5') < 0 and filename.find('.h5') < 0:
             filename += '.vsh5' # VizSchema hdf5 format

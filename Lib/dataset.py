@@ -2,32 +2,32 @@
 # Further modified to be pure new numpy June 24th 2008
 
 """ CDMS dataset and file objects"""
-from error import CDMSError
+from .error import CDMSError
 import Cdunif
 import numpy
-import cdmsNode
+from . import cdmsNode
 import os
 import sys
 import string
-import urllib
-import cdmsURLopener                    # Import after urllib, to handle errors
-import urlparse
-import cdmsobj
+import urllib.request, urllib.parse, urllib.error
+from . import cdmsURLopener                    # Import after urllib, to handle errors
+import urllib.parse
+from . import cdmsobj
 import re
-from CDMLParser import CDMLParser
-from cdmsobj import CdmsObj
-from axis import Axis, FileAxis, FileVirtualAxis, isOverlapVector
-from coord import FileAxis2D, DatasetAxis2D
-from auxcoord import FileAuxAxis1D, DatasetAuxAxis1D
-from grid import RectGrid, FileRectGrid
-from hgrid import FileCurveGrid, DatasetCurveGrid
-from gengrid import FileGenericGrid, DatasetGenericGrid
-from variable import DatasetVariable
-from fvariable import FileVariable
-from tvariable import asVariable
-from cdmsNode import CdDatatypes
-import convention
-import typeconv
+from .CDMLParser import CDMLParser
+from .cdmsobj import CdmsObj
+from .axis import Axis, FileAxis, FileVirtualAxis, isOverlapVector
+from .coord import FileAxis2D, DatasetAxis2D
+from .auxcoord import FileAuxAxis1D, DatasetAuxAxis1D
+from .grid import RectGrid, FileRectGrid
+from .hgrid import FileCurveGrid, DatasetCurveGrid
+from .gengrid import FileGenericGrid, DatasetGenericGrid
+from .variable import DatasetVariable
+from .fvariable import FileVariable
+from .tvariable import asVariable
+from .cdmsNode import CdDatatypes
+from . import convention
+from . import typeconv
 
 # Default is serial mode until setNetcdfUseParallelFlag(1) is called
 rk = 0
@@ -43,13 +43,13 @@ except:
     rk = 0
 
 try:
-    import gsHost
+    from . import gsHost
     from pycf import libCFConfig as libcf
 except:
     libcf = None
 
 try:
-    import cache
+    from . import cache
 except ImportError:
     pass
 
@@ -290,9 +290,9 @@ def load(path):
 
 
 def loadURI(uri):
-    (scheme, netloc, path, parameters, query, fragment) = urlparse.urlparse(uri)
-    uripath = urlparse.urlunparse((scheme, netloc, path, '', '', ''))
-    fd = urllib.urlopen(uripath)
+    (scheme, netloc, path, parameters, query, fragment) = urllib.parse.urlparse(uri)
+    uripath = urllib.parse.urlunparse((scheme, netloc, path, '', '', ''))
+    fd = urllib.request.urlopen(uripath)
     text = fd.read()
     fd.close()
     p = CDMLParser()
@@ -330,7 +330,7 @@ file :: (cdms2.dataset.CdmsFile) (0) file to read from
 :::
     """
     uri = string.strip(uri)
-    (scheme, netloc, path, parameters, query, fragment) = urlparse.urlparse(uri)
+    (scheme, netloc, path, parameters, query, fragment) = urllib.parse.urlparse(uri)
     if scheme in ('', 'file'):
         if netloc:
             # In case of relative path...
@@ -522,7 +522,7 @@ def parseFileMap(text):
     return result
 
 # A CDMS dataset consists of a CDML/XML file and one or more data files
-from cudsinterface import cuDataset
+from .cudsinterface import cuDataset
 
 
 class Dataset(CdmsObj, cuDataset):
@@ -558,7 +558,7 @@ class Dataset(CdmsObj, cuDataset):
         self.xlinks = {}
         self._gridmap_ = {}
         # Gridmap:(latname,lonname,order,maskname,gridclass) => grid
-        (scheme, netloc, xmlpath, parameters, query, fragment) = urlparse.urlparse(uri)
+        (scheme, netloc, xmlpath, parameters, query, fragment) = urllib.parse.urlparse(uri)
         self._xmlpath_ = xmlpath
         # Dictionary of dictionaries, keyed on node tags
         self.dictdict = {'variable': self.variables,
@@ -578,7 +578,7 @@ class Dataset(CdmsObj, cuDataset):
         if datasetNode is not None:
             coordsaux = self._convention_.getDsetnodeAuxAxisIds(datasetNode)
 
-            for node in datasetNode.getIdDict().values():
+            for node in list(datasetNode.getIdDict().values()):
                 if node.tag == 'variable':
                     if node.id in coordsaux:
                         if node.getDomain().getChildCount() == 1:
@@ -605,7 +605,7 @@ class Dataset(CdmsObj, cuDataset):
                         self.dictdict[node.tag] = {node.id: node}
 
             # Initialize grid domains
-            for grid in self.grids.values():
+            for grid in list(self.grids.values()):
                 grid.initDomain(self.axes, self.variables)
                 latname = grid.getLatitude().id
                 lonname = grid.getLongitude().id
@@ -617,10 +617,10 @@ class Dataset(CdmsObj, cuDataset):
                 self._gridmap_[(latname, lonname, grid.getOrder(), maskname)] = grid
 
             # Initialize variable domains.
-            for var in self.variables.values():
+            for var in list(self.variables.values()):
                 var.initDomain(self.axes, self.grids)
 
-            for var in self.variables.values():
+            for var in list(self.variables.values()):
 
                 # Get grid information for the variable. gridkey has the form
                 # (latname,lonname,order,maskname,abstract_class).
@@ -663,7 +663,7 @@ class Dataset(CdmsObj, cuDataset):
                                     break
 
                             if not foundname:
-                                print 'Warning: cannot generate a grid for variable', var.id
+                                print('Warning: cannot generate a grid for variable', var.id)
                                 continue
 
                         # Create the grid
@@ -722,19 +722,19 @@ class Dataset(CdmsObj, cuDataset):
                             levmap[(levstart, levend)] = 1
                         if forecast is not None:
                             fcmap[(forecast, forecast)] = 1
-                    tkeys = timemap.keys()
+                    tkeys = list(timemap.keys())
                     if len(tkeys) > 0:
                         tkeys.sort()
-                        tpart = map(lambda x: list(x), tkeys)
+                        tpart = [list(x) for x in tkeys]
                     else:
                         tpart = None
-                    levkeys = levmap.keys()
+                    levkeys = list(levmap.keys())
                     if len(levkeys) > 0:
                         levkeys.sort()
-                        levpart = map(lambda x: list(x), levkeys)
+                        levpart = [list(x) for x in levkeys]
                     else:
                         levpart = None
-                    fckeys = fcmap.keys()
+                    fckeys = list(fcmap.keys())
                     if len(fckeys) > 0:
                         fckeys.sort()
                     if varname in self.variables:
@@ -754,8 +754,8 @@ class Dataset(CdmsObj, cuDataset):
 
     # Close all files
     def close(self):
-        for dict in self.dictdict.values():
-            for obj in dict.values():
+        for dict in list(self.dictdict.values()):
+            for obj in list(dict.values()):
                 obj.parent = None
                 del obj
         self.dictdict = {}
@@ -810,13 +810,13 @@ class Dataset(CdmsObj, cuDataset):
             else:
                 resultlist = []
         if tag is None:
-            for dict in self.dictdict.values():
-                for obj in dict.values():
+            for dict in list(self.dictdict.values()):
+                for obj in list(dict.values()):
                     if obj.searchone(pattern, attribute):
                         resultlist.append(obj)
         elif tag != 'dataset':
             dict = self.dictdict[tag]
-            for obj in dict.values():
+            for obj in list(dict.values()):
                 if obj.searchone(pattern, attribute):
                     resultlist.append(obj)
         return resultlist
@@ -835,13 +835,13 @@ class Dataset(CdmsObj, cuDataset):
             else:
                 resultlist = []
         if tag is None:
-            for dict in self.dictdict.values():
-                for obj in dict.values():
+            for dict in list(self.dictdict.values()):
+                for obj in list(dict.values()):
                     if obj.matchone(pattern, attribute):
                         resultlist.append(obj)
         elif tag != 'dataset':
             dict = self.dictdict[tag]
-            for obj in dict.values():
+            for obj in list(dict.values()):
                 if obj.matchone(pattern, attribute):
                     resultlist.append(obj)
         return resultlist
@@ -864,8 +864,8 @@ class Dataset(CdmsObj, cuDataset):
             except AttributeError:
                 pass
         if tag is None:
-            for dict in self.dictdict.values():
-                for obj in dict.values():
+            for dict in list(self.dictdict.values()):
+                for obj in list(dict.values()):
                     try:
                         if predicate(*(obj,)) == 1:
                             resultlist.append(obj)
@@ -873,7 +873,7 @@ class Dataset(CdmsObj, cuDataset):
                         pass
         elif tag != "dataset":
             dict = self.dictdict[tag]
-            for obj in dict.values():
+            for obj in list(dict.values()):
                 try:
                     if predicate(*(obj,)) == 1:
                         resultlist.append(obj)
@@ -884,7 +884,7 @@ class Dataset(CdmsObj, cuDataset):
     # Return a sorted list of all data files associated with the dataset
     def getPaths(self):
         pathdict = {}
-        for var in self.variables.values():
+        for var in list(self.variables.values()):
             for path, stuple in var.getPaths():
                 pathdict[path] = 1
         result = sorted(pathdict.keys())
@@ -918,9 +918,9 @@ class Dataset(CdmsObj, cuDataset):
                     try:
                         fileurl = os.path.join(dburl, self.datapath, filename)
                     except:
-                        print 'Error joining', repr(dburl), self.datapath, filename
+                        print('Error joining', repr(dburl), self.datapath, filename)
                         raise
-                (scheme, netloc, path, parameters, query, fragment) = urlparse.urlparse(fileurl)
+                (scheme, netloc, path, parameters, query, fragment) = urllib.parse.urlparse(fileurl)
                 if scheme in ['file', ''] and os.path.isfile(path):
                     if cdmsobj._debug == 1:
                         sys.stdout.write(fileurl + '\n')
@@ -950,7 +950,7 @@ class Dataset(CdmsObj, cuDataset):
 
             for dburl in dburls:
                 fileurl = os.path.join(dburl, self.datapath, filename)
-                (scheme, netloc, path, parameters, query, fragment) = urlparse.urlparse(fileurl)
+                (scheme, netloc, path, parameters, query, fragment) = urllib.parse.urlparse(fileurl)
                 if scheme == 'ftp':
                     cache = self.parent.enableCache()
                     fileDN = (self.uri, filename)  # Global file name
@@ -985,16 +985,14 @@ class Dataset(CdmsObj, cuDataset):
     def getVariables(self, spatial=0):
         """Get a list of variable objects. If spatial=1, only return those
         axes defined on latitude or longitude, excluding weights and bounds."""
-        retval = self.variables.values()
+        retval = list(self.variables.values())
         if spatial:
-            retval = filter(
-                lambda x: x.id[
+            retval = [x for x in retval if x.id[
                     0:7] != "bounds_" and x.id[
                     0:8] != "weights_" and (
                     (x.getLatitude() is not None) or (
                         x.getLongitude() is not None) or (
-                        x.getLevel() is not None)),
-                retval)
+                        x.getLevel() is not None))]
         return retval
 
     def getAxis(self, id):
@@ -1065,7 +1063,7 @@ class CdmsFile(CdmsObj, cuDataset):
 
         # self.attributes returns the Cdunif file dictionary.
 # self.replace_external_attributes(self._file_.__dict__)
-        for att in self._file_.__dict__.keys():
+        for att in list(self._file_.__dict__.keys()):
             self.__dict__.__setitem__(att, self._file_.__dict__[att])
             self.attributes[att] = self._file_.__dict__[att]
         self._boundAxis_ = None         # Boundary axis for cell vertices
@@ -1079,11 +1077,11 @@ class CdmsFile(CdmsObj, cuDataset):
             # A mosaic variable with coordinates attached, but the coordinate variables reside in a
             # different file. Add the coordinate variables to the mosaic variables list.
             if hostObj is not None:
-                for name in self._file_.variables.keys():
+                for name in list(self._file_.variables.keys()):
                     if 'coordinates' in dir(self._file_.variables[name]):
                         coords = self._file_.variables[name].coordinates.split()
                         for coord in coords:
-                            if coord not in self._file_.variables.keys():
+                            if coord not in list(self._file_.variables.keys()):
                                 cdunifvar = Cdunif.CdunifFile(hostObj.gridVars[coord][0], mode)
                                 self._file_.variables[coord] = cdunifvar.variables[coord]
 
@@ -1092,7 +1090,7 @@ class CdmsFile(CdmsObj, cuDataset):
             coordsaux = self._convention_.getAxisAuxIds(self._file_.variables, coords1d)
 
             # Build variable list
-            for name in self._file_.variables.keys():
+            for name in list(self._file_.variables.keys()):
                 if name not in coords1d:
                     cdunifvar = self._file_.variables[name]
                     if name in coordsaux:
@@ -1106,7 +1104,7 @@ class CdmsFile(CdmsObj, cuDataset):
                         self.variables[name] = FileVariable(self, name, cdunifvar)
 
             # Build axis list
-            for name in self._file_.dimensions.keys():
+            for name in list(self._file_.dimensions.keys()):
                 if name in coords1d:
                     cdunifvar = self._file_.variables[name]
                 elif name in coordsaux:
@@ -1129,11 +1127,11 @@ class CdmsFile(CdmsObj, cuDataset):
                 'genericGrid': self.grids}
 
             # Initialize variable domains
-            for var in self.variables.values():
+            for var in list(self.variables.values()):
                 var.initDomain(self.axes)
 
             # Build grids
-            for var in self.variables.values():
+            for var in list(self.variables.values()):
                 # Get grid information for the variable. gridkey has the form
                 # (latname,lonname,order,maskname, abstract_class).
                 gridkey, lat, lon = var.generateGridkey(self._convention_, self.variables)
@@ -1176,7 +1174,7 @@ class CdmsFile(CdmsObj, cuDataset):
                                     break
 
                             if not foundname:
-                                print 'Warning: cannot generate a grid for variable', var.id
+                                print('Warning: cannot generate a grid for variable', var.id)
                                 continue
 
                         # Create the grid
@@ -1187,7 +1185,7 @@ class CdmsFile(CdmsObj, cuDataset):
                                 if gridkey[3] in self.variables:
                                     maskvar = self.variables[gridkey[3]]
                                 else:
-                                    print 'Warning: mask variable %s not found' % gridkey[3]
+                                    print('Warning: mask variable %s not found' % gridkey[3])
                                     maskvar = None
                             else:
                                 maskvar = None
@@ -1234,7 +1232,7 @@ class CdmsFile(CdmsObj, cuDataset):
                                  (self.__class__.__name__, name))
         if name not in self.__cdms_internals__:
             delattr(self._file_, name)
-            if(name in self.attributes.keys()):
+            if(name in list(self.attributes.keys())):
                 del(self.attributes[name])
 
     def sync(self):
@@ -1252,8 +1250,8 @@ class CdmsFile(CdmsObj, cuDataset):
         if self._status_ == "closed":
             return
         if hasattr(self, 'dictdict'):
-            for dict in self.dictdict.values():
-                for obj in dict.values():
+            for dict in list(self.dictdict.values()):
+                for obj in list(dict.values()):
                     obj.parent = None
                     del obj
         self.dictdict = self.variables = self.axes = {}
@@ -1413,7 +1411,7 @@ class CdmsFile(CdmsObj, cuDataset):
                 else:
                     boundsid = None
                 newaxis.setBounds(bounds, persistent=1, boundsid=boundsid)
-            for attname, attval in axis.attributes.items():
+            for attname, attval in list(axis.attributes.items()):
                 if attname not in ["datatype", "id", "length", "isvar", "name_in_file", "partition"]:
                     setattr(newaxis, attname, attval)
         return newaxis
@@ -1492,7 +1490,7 @@ class CdmsFile(CdmsObj, cuDataset):
             newmask = grid.getMask()    # Get the mask array
             newgrid = self.createRectGrid(newname, lat, lon, grid.getOrder(), grid.getType(), None)
             newgrid.setMask(newmask)    # Set the mask array, non-persistently
-            for attname in grid.attributes.keys():
+            for attname in list(grid.attributes.keys()):
                 setattr(newgrid, attname, getattr(grid, attname))
 
         return newgrid
@@ -1546,7 +1544,7 @@ class CdmsFile(CdmsObj, cuDataset):
             numericType = typeconv.oldtypecodes[numericType]
             cuvar = cufile.createVariable(name, numericType, tuple(dimensions))
         except Exception as err:
-            print err
+            print(err)
             raise CDMSError("Creating variable " + name)
         var = FileVariable(self, name, cuvar)
         var.initDomain(self.axes)
@@ -1582,13 +1580,13 @@ class CdmsFile(CdmsObj, cuDataset):
             else:
                 resultlist = []
         if tag is None:
-            for dict in self.dictdict.values():
-                for obj in dict.values():
+            for dict in list(self.dictdict.values()):
+                for obj in list(dict.values()):
                     if obj.searchone(pattern, attribute):
                         resultlist.append(obj)
         elif tag not in ('cdmsFile', 'dataset'):
             dict = self.dictdict[tag]
-            for obj in dict.values():
+            for obj in list(dict.values()):
                 if obj.searchone(pattern, attribute):
                     resultlist.append(obj)
         return resultlist
@@ -1620,13 +1618,13 @@ class CdmsFile(CdmsObj, cuDataset):
             else:
                 resultlist = []
         if tag is None:
-            for dict in self.dictdict.values():
-                for obj in dict.values():
+            for dict in list(self.dictdict.values()):
+                for obj in list(dict.values()):
                     if obj.matchone(pattern, attribute):
                         resultlist.append(obj)
         elif tag not in ('cdmsFile', 'dataset'):
             dict = self.dictdict[tag]
-            for obj in dict.values():
+            for obj in list(dict.values()):
                 if obj.matchone(pattern, attribute):
                     resultlist.append(obj)
         return resultlist
@@ -1662,8 +1660,8 @@ class CdmsFile(CdmsObj, cuDataset):
             except AttributeError:
                 pass
         if tag is None:
-            for dict in self.dictdict.values():
-                for obj in dict.values():
+            for dict in list(self.dictdict.values()):
+                for obj in list(dict.values()):
                     try:
                         if predicate(*(obj,)) == 1:
                             resultlist.append(obj)
@@ -1671,7 +1669,7 @@ class CdmsFile(CdmsObj, cuDataset):
                         pass
         elif tag not in ('dataset', 'cdmsFile'):
             dict = self.dictdict[tag]
-            for obj in dict.values():
+            for obj in list(dict.values()):
                 try:
                     if predicate(*(obj,)) == 1:
                         resultlist.append(obj)
@@ -1774,14 +1772,14 @@ class CdmsFile(CdmsObj, cuDataset):
             try:
                 attributes['missing_value'] = var.missing_value
             except Exception as err:
-                print err
+                print(err)
                 pass
             try:
                 if fill_value is None:
-                    if('_FillValue' in attributes.keys()):
+                    if('_FillValue' in list(attributes.keys())):
                         attributes['_FillValue'] = numpy.array(var._FillValue).astype(var.dtype)
                         attributes['missing_value'] = numpy.array(var._FillValue).astype(var.dtype)
-                    if('missing_value' in attributes.keys()):
+                    if('missing_value' in list(attributes.keys())):
                         attributes['_FillValue'] = numpy.array(var.missing_value).astype(var.dtype)
                         attributes['missing_value'] = numpy.array(var.missing_value).astype(var.dtype)
                 else:
@@ -1808,7 +1806,7 @@ class CdmsFile(CdmsObj, cuDataset):
         # Create the new variable
         datatype = cdmsNode.NumericToCdType.get(var.typecode())
         newvar = self.createVariable(newname, datatype, axislist)
-        for attname, attval in attributes.items():
+        for attname, attval in list(attributes.items()):
             if attname not in ["id", "datatype", "parent"]:
                 setattr(newvar, attname, attval)
                 if (attname == "_FillValue") or (attname == "missing_value"):
@@ -2021,16 +2019,14 @@ class CdmsFile(CdmsObj, cuDataset):
         variables :: ([cdms2.fvariable.FileVariable]) (0) file variables
         :::
 """
-        retval = self.variables.values()
+        retval = list(self.variables.values())
         if spatial:
-            retval = filter(
-                lambda x: x.id[
+            retval = [x for x in retval if x.id[
                     0:7] != "bounds_" and x.id[
                     0:8] != "weights_" and (
                     (x.getLatitude() is not None) or (
                         x.getLongitude() is not None) or (
-                        x.getLevel() is not None)),
-                retval)
+                        x.getLevel() is not None))]
         return retval
 
     def getAxis(self, id):

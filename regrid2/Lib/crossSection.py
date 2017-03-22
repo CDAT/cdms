@@ -2,7 +2,7 @@
 
 import cdms2
 import numpy, copy, string, _regrid
-from error import RegridError
+from .error import RegridError
 
 class CrossSectionRegridder:
     """    #-----------------------------------------------------------------------------------------------
@@ -156,7 +156,7 @@ class CrossSectionRegridder:
         if isinstance(ar, AbstractVariable):
             attrs = copy.copy(ar.attributes)
             varid = ar.id
-            axislist = list(map(lambda x: x[0].clone(), ar.getDomain()))
+            axislist = list([x[0].clone() for x in ar.getDomain()])
             inputIsVariable = 1
             if order is None:
                 order = ar.getOrder()
@@ -177,7 +177,7 @@ class CrossSectionRegridder:
         elif isinstance(ar, numpy.ndarray):
             armask = armiss = None
         else:
-            raise RegridError, "Input array is not a Variable, numpy.ma, or numpy array"
+            raise RegridError("Input array is not a Variable, numpy.ma, or numpy array")
         
         # If neither mask nor missing value is specified, get them from
         # the input array.
@@ -885,14 +885,14 @@ def sendmsg(msg, value1 = None, value2 = None):
     #
     #---------------------------------------------------------------------------------"""
 
-    print '*******************************************************************'
+    print('*******************************************************************')
     if value1 == None:
-        print msg
+        print(msg)
     elif value2 == None:
-        print msg, value1
+        print(msg, value1)
     else:
-        print msg, value1, value2
-    print '*******************************************************************'
+        print(msg, value1, value2)
+    print('*******************************************************************')
 
     return None
 
@@ -937,9 +937,9 @@ def rmserror(data1, data2):
     #---------------------------------------------------------------------------------"""
 
     if data1.shape != data2.shape:
-        print 'Error in shape in rmserror'
-        print 'data1 shape = ', data1.shape
-        print 'data2 shape = ', data2.shape
+        print('Error in shape in rmserror')
+        print('data1 shape = ', data1.shape)
+        print('data2 shape = ', data2.shape)
         raise ValueError
 
     d1 = numpy.ravel(data1)
@@ -971,7 +971,7 @@ if __name__=='__main__':
     dataCheck = section(latOut[:], levOut[:])                                         # make the exact answer
     error = rmserror(dataOut, dataCheck)                                        # find the rms error
 
-    print 'expected cross section test case rms error =  0.18581882'
+    print('expected cross section test case rms error =  0.18581882')
     # print 'expected cross section test case rms error =  0.23062'
-    print 'calculated cross section test case rms error = ', error
+    print('calculated cross section test case rms error = ', error)
 

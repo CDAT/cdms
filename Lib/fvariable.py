@@ -3,15 +3,15 @@
 
 "CDMS File-based variables."
 import numpy
-import typeconv
+from . import typeconv
 import types
 import re
 
-from cdmsobj import Max32int
-from variable import DatasetVariable
-from error import CDMSError
-from sliceut import reverseSlice
-from avariable import AbstractVariable
+from .cdmsobj import Max32int
+from .variable import DatasetVariable
+from .error import CDMSError
+from .sliceut import reverseSlice
+from .avariable import AbstractVariable
 from cdms2 import Cdunif
 from Cdunif import CdunifError
 
@@ -25,7 +25,7 @@ class FileVariable(DatasetVariable):
         DatasetVariable.__init__(self, parent, varname)
         self._obj_ = cdunifobj
         if cdunifobj is not None:
-            for attname, attval in cdunifobj.__dict__.items():
+            for attname, attval in list(cdunifobj.__dict__.items()):
                 self.__dict__[attname] = attval
                 self.attributes[attname]=attval
             if self.__dict__['missing_value'] is None:
@@ -54,7 +54,7 @@ class FileVariable(DatasetVariable):
 
     def assignValue(self,data):
         if self.parent is None:
-            raise CDMSError, FileClosedWrite+self.id
+            raise CDMSError(FileClosedWrite+self.id)
         if numpy.ma.isMaskedArray(data):
           if data.mask is not numpy.ma.nomask and not numpy.ma.allclose(data.mask,0):
             saveFill = data.fill_value
@@ -85,10 +85,10 @@ class FileVariable(DatasetVariable):
             i += 1
 
         if self.parent is None:
-            raise CDMSError, FileClosed+self.id
+            raise CDMSError(FileClosed+self.id)
         if self.rank() == 0:
             return self._obj_.getValue()
-        result = apply(self._obj_.getitem,slist)
+        result = self._obj_.getitem(*slist)
 
         # If slices with negative strides were input, apply the appropriate
         # reversals.
@@ -99,7 +99,7 @@ class FileVariable(DatasetVariable):
 
     def __setitem__(self, index, value):
         if self.parent is None:
-            raise CDMSError, FileClosedWrite+self.id
+            raise CDMSError(FileClosedWrite+self.id)
         if numpy.ma.isMaskedArray(value):
           if value.mask is not numpy.ma.nomask and not numpy.ma.allclose(value.mask,0):
             saveFill = value.fill_value
@@ -107,14 +107,14 @@ class FileVariable(DatasetVariable):
                 self.setMissing(saveFill)
             else:
                 value.set_fill_value(self.getMissing())
-        apply(self._obj_.setitem,(index,numpy.ma.filled(value)))
+        self._obj_.setitem(*(index,numpy.ma.filled(value)))
         if numpy.ma.isMaskedArray(value):
           if value.mask is not numpy.ma.nomask and not numpy.ma.allclose(value.mask,0):
             value.set_fill_value(saveFill)
 
     def __setslice__(self, low, high, value):
         if self.parent is None:
-            raise CDMSError, FileClosedWrite+self.id
+            raise CDMSError(FileClosedWrite+self.id)
 
         # Hack to prevent netCDF overflow error on 64-bit architectures
         high = min(Max32int, high)
@@ -128,14 +128,14 @@ class FileVariable(DatasetVariable):
                 self.setMissing(saveFill)
             else:
                 value.set_fill_value(self.getMissing())
-        apply(self._obj_.setslice,(low,high,numpy.ma.filled(value)))
+        self._obj_.setslice(*(low,high,numpy.ma.filled(value)))
         if numpy.ma.isMaskedArray(value):
           if value.mask is not numpy.ma.nomask and not numpy.ma.allclose(value.mask,0):
             value.set_fill_value(saveFill)
 
     def _getShape (self):
         if self.parent is None:
-            raise CDMSError, FileClosed+self.id
+            raise CDMSError(FileClosed+self.id)
         return self._obj_.shape
 
     # Write external attributes to the file.
@@ -144,12 +144,12 @@ class FileVariable(DatasetVariable):
     # that the value is propagated to the external file.
     def __setattr__(self, name, value):
         if hasattr(self, "parent") and self.parent is None:
-            raise CDMSError, FileClosedWrite+self.id
+            raise CDMSError(FileClosedWrite+self.id)
         if (not name in self.__cdms_internals__) and (value is not None):
             try:
                 setattr(self._obj_, name, value)
             except CdunifError:
-                raise CDMSError, "Setting %s.%s=%s"%(self.id,name,`value`)
+                raise CDMSError("Setting %s.%s=%s"%(self.id,name,repr(value)))
             self.attributes[name]=value
         self.__dict__[name] = value
 
@@ -162,14 +162,14 @@ class FileVariable(DatasetVariable):
             try:
                 delattr(self._obj_, name)
             except CdunifError:
-                raise CDMSError, "Deleting %s.%s"%(self.id,name)
+                raise CDMSError("Deleting %s.%s"%(self.id,name))
             del(self.attributes[name])
         del self.__dict__[name]
 
     def getValue(self, squeeze=1):
         """Return the entire set of values."""
         if self.parent is None:
-            raise CDMSError, FileClosed+self.id
+            raise CDMSError(FileClosed+self.id)
         if self.rank()>0:
             return self.getSlice(Ellipsis, squeeze=squeeze)
         else:
@@ -178,7 +178,7 @@ class FileVariable(DatasetVariable):
     def __len__(self):
         " Length of first dimension. "
         if self.parent is None:
-            raise CDMSError, FileClosed+self.id
+            raise CDMSError(FileClosed+self.id)
         return len(self._obj_)
 
 #    def __repr__(self):

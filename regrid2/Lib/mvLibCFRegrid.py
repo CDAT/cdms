@@ -90,7 +90,7 @@ class LibCFRegrid(GenericRegrid):
         @param rootPe not used
         """
         for entry in 'numDstPoints', 'numValid':
-                if diag.has_key(entry):
+                if entry in diag:
                         meth = 'get' + entry[0].upper() + entry[1:]
                         diag[entry] = eval('self.regridObj.' + meth + '()')
         diag['regridTool'] = 'libcf'

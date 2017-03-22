@@ -70,7 +70,7 @@ class ESMFRegrid(GenericRegrid):
 
         self.regridMethod = BILINEAR
         self.regridMethodStr = 'linear'
-        if type(regridMethod) == types.StringType:
+        if type(regridMethod) == bytes:
             if re.search('conserv', regridMethod.lower()):
                 self.regridMethod = CONSERVE
                 self.regridMethodStr = 'conserve'
@@ -81,7 +81,7 @@ class ESMFRegrid(GenericRegrid):
         # data stagger
         self.staggerloc = CENTER
         self.staggerlocStr = 'center'
-        if type(staggerLoc) == types.StringType:
+        if type(staggerLoc) == bytes:
             if re.search('corner', staggerLoc.lower(), re.I) or \
                     re.search('node', staggerLoc.lower(), re.I):
                 self.staggerloc = CORNER
@@ -129,7 +129,7 @@ class ESMFRegrid(GenericRegrid):
 mvESMFRegrid.ESMFRegrid.__init__: mismatch in the number of topological
 dimensions. len(srcGridshape) = %d != len(dstGridshape) = %d""" % \
                 (self.ndims, len(self.dstGridShape))
-            raise RegridError, msg
+            raise RegridError(msg)
 
         # Initialize the grids without data.
         self.srcGrid = esmf.EsmfStructGrid(self.srcGridShape,
@@ -195,7 +195,7 @@ dimensions. len(srcGridshape) = %d != len(dstGridshape) = %d""" % \
                 msg = """
 mvESMFRegrid.ESMFRegrid.__init__: can't set the src bounds for
 staggerLoc = %s!""" % staggerLoc
-                raise RegridError, msg
+                raise RegridError(msg)
 
         # create destination Grid
         self.dstGrid.setCoords(dstGrid, staggerloc = self.staggerloc,
@@ -216,7 +216,7 @@ staggerLoc = %s!""" % staggerLoc
                 msg = """
 mvESMFRegrid.ESMFRegrid.__init__: can't set the dst bounds for
 staggerLoc = %s!""" % staggerLoc
-                raise RegridError, msg
+                raise RegridError(msg)
 
     def computeWeights(self, **args):
         """
@@ -400,7 +400,7 @@ staggerLoc = %s!""" % staggerLoc
         """
         for entry in  'srcAreaFractions', 'dstAreaFractions',  \
                 'srcAreas', 'dstAreas':
-            if diag.has_key(entry):
+            if entry in diag:
                 meth = 'get' + entry[0].upper() + entry[1:]
                 diag[entry] = eval('self.regridObj.' + meth + '(rootPe = rootPe)')
         diag['regridTool'] = 'esmf'

@@ -9,6 +9,7 @@ No guarantee is provided whatsoever. Use at your own risk.
 
 import numpy
 from types import NoneType
+from functools import reduce
 
 class SphereMesh:
     
@@ -133,7 +134,7 @@ def test2DRect():
     var = cdms2.createVariable(data, id='fake_data_2d_rect', 
                                axes=(lats, lons))
     sphere_mesh = SphereMesh(var, 0.1)
-    print sphere_mesh.getXYZCoords()
+    print(sphere_mesh.getXYZCoords())
 
 def test2D():
     """
@@ -169,7 +170,7 @@ def test2D():
                                attributes = {'coordinates': 'lats lons'},
                                )
     sphere_mesh = SphereMesh(var)
-    print sphere_mesh.getXYZCoords()
+    print(sphere_mesh.getXYZCoords())
 
 def test3DRect():
     """
@@ -199,13 +200,13 @@ def test3DRect():
     var = cdms2.createVariable(data, id='fake_data_3d_rect', 
                                axes=(elvs, lats, lons))
     sphere_mesh = SphereMesh(var)
-    print sphereMesh.getXYZCoords()
+    print(sphereMesh.getXYZCoords())
 
 def test3DposDown():
     """
     Test 3d data with elev positive down. Need to work with 1D axes.
     """
-    print 'test positive down'
+    print('test positive down')
     import cdms2
     import numpy
     nlev, nlat, nlon = 4, 5, 6
@@ -231,7 +232,7 @@ def test3DposDown():
     sphereMesh = SphereMesh(var)
     aa = sphereMesh.getXYZCoords()
     bb = aa.reshape((4, 5, 6, 3))
-    for i in range(nlev): print levs1d[i], bb[i, 0, 0, :]
+    for i in range(nlev): print(levs1d[i], bb[i, 0, 0, :])
 
 if __name__ == '__main__': 
 #    test2DRect()

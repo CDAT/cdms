@@ -13,15 +13,15 @@ def two_times_from_one( t ):
     (component time) object.
     Output is the same time, both as a long _and_ as a comptime."""
     if t==0:
-        t = 0L
+        t = 0
     if isinstance(t,str):
         t = cdtime.s2c(t)
-    if (isinstance(t,long) or isinstance(t,int)) and t>1000000000L :
+    if (isinstance(t,int) or isinstance(t,int)) and t>1000000000 :
         tl = t
-        year = tl / 1000000000L
-        rem =  tl % 1000000000L
-        month = rem / 10000000L
-        rem =   rem % 10000000L
+        year = tl / 1000000000
+        rem =  tl % 1000000000
+        month = rem / 10000000
+        rem =   rem % 10000000
         day =     rem / 100000
         allsecs = rem % 100000
         sec =     allsecs%60
@@ -35,8 +35,8 @@ def two_times_from_one( t ):
         # comptime or anything similar.  Note that cdtime.comptime is a C
         # function available from Python.
         tc = t
-        tl = tc.year * 1000000000L
-        tl += tc.month * 10000000L
+        tl = tc.year * 1000000000
+        tl += tc.month * 10000000
         tl += tc.day   * 100000
         tl += tc.hour * 3600
         tl += tc.minute *60
@@ -71,7 +71,7 @@ class forecast():
         if len(filenames)>0:
             filename = filenames[0]
         else:
-            raise CDMSError, "Cannot find filename for forecast %d"%self.fctl
+            raise CDMSError("Cannot find filename for forecast %d"%self.fctl)
         self.filename = path + '/' + filename
         self.file = cdms2.open( self.filename )
 
@@ -157,7 +157,7 @@ class forecasts():
 
         mytimesl = self.forecast_times_to_list( forecast_times )
         if mytimesl == []:
-            raise CDMSError, "bad forecast_times argument to forecasts.__init__"
+            raise CDMSError("bad forecast_times argument to forecasts.__init__")
         self.fcs = [ forecast( t, dataset_list, path ) for t in mytimesl ]
 
     def forecast_times_to_list( self, forecast_times ):
@@ -180,9 +180,9 @@ class forecasts():
     def time_interval_to_list( self, tlo, thi, openclosed='co' ):
         """For internal use, translates a time interval to a list of times.
         """
-        if type(tlo) is not long:  # make tlo a long integer
+        if type(tlo) is not int:  # make tlo a long integer
             tlo, tdummy = two_times_from_one( tlo )
-        if type(thi) is not long:  # make thi a long integer
+        if type(thi) is not int:  # make thi a long integer
             thi, tdummy = two_times_from_one( thi )
         oclo = openclosed[0]
         ochi = openclosed[1]
@@ -341,7 +341,7 @@ class forecasts():
         is a list of forecasts to be passed on to forecast_axis().
         """
         if type(varname) is not str :
-            raise CDMSError, "bad argument to forecasts[]"
+            raise CDMSError("bad argument to forecasts[]")
 
         var = self.dataset[varname]
         # var is a DatasetVariable and consists of lots of attributes.

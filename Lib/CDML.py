@@ -288,6 +288,6 @@ class CDML:
 
 if __name__=='__main__':
     cdml = CDML()
-    print cdml.extra
+    print(cdml.extra)
     cdml2 = CDML()
-    print cdml2.extra
+    print(cdml2.extra)

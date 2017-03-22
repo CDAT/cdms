@@ -1,9 +1,9 @@
 
 """Classes to support easy selection of climate data"""
 import string, types, cdtime
-from axis import axisMatches
-from error import CDMSError
-from grid import AbstractRectGrid, defaultRegion, setRegionSpecs, LongitudeType, LatitudeType, TimeType, VerticalType
+from .axis import axisMatches
+from .error import CDMSError
+from .grid import AbstractRectGrid, defaultRegion, setRegionSpecs, LongitudeType, LatitudeType, TimeType, VerticalType
 
 _debug = 0
 class SelectorError (CDMSError):
@@ -50,7 +50,7 @@ class Selector:
             else:
                 self.refine(positionalComponent(a))
 
-        for k, v in kwargs.items():
+        for k, v in list(kwargs.items()):
                self.refine(kwselect(k, v))
  
     def __repr__ (self):
@@ -66,7 +66,7 @@ class Selector:
            self.clone() refined by other
         """
         if not isinstance(other, Selector):
-            raise SelectorError, 'Cannot combine Selector with non-selector'
+            raise SelectorError('Cannot combine Selector with non-selector')
         s = self.clone()
         s.refine(other)
         return s
@@ -155,33 +155,32 @@ class Selector:
         # Now select on non-coordinate components.
         while(components):
             axes = result.getAxisList()
-            if _debug: print "Axes:", axes
+            if _debug: print("Axes:", axes)
             specifications = [':']*len(axes)
             confined_by = [None]*len(axes)
             aux = {} # for extra state 
             overflow = []
-            if _debug: print "Component list:", components
+            if _debug: print("Component list:", components)
             for c in components:
                 if c.specify(result, axes, specifications, confined_by, aux):
-                    if _debug: print 'Defer ' + repr(c)
+                    if _debug: print('Defer ' + repr(c))
                     overflow.append(c)
                 elif _debug:
-                    print "After applying", c, ":"
-                    print  "specifications=", specifications
-                    print "Confined_by", confined_by
-                    print "aux", aux
-                    print "-----------------"
+                    print("After applying", c, ":")
+                    print("specifications=", specifications)
+                    print("Confined_by", confined_by)
+                    print("aux", aux)
+                    print("-----------------")
             if _debug: 
-                print 'About to call subRegion:', specifications
+                print('About to call subRegion:', specifications)
             fetched = result.subRegion(*specifications)
-            axismap = range(len(axes))
+            axismap = list(range(len(axes)))
             for c in components:
                 if c in overflow: continue
                 fetched = c.post(fetched, result, axes, specifications, 
                                  confined_by, aux, axismap)
             if not len(overflow) < len(components):
-                raise SelectorError, \
-                  'Internal selector error, infinite loop detected.'
+                raise SelectorError('Internal selector error, infinite loop detected.')
             components = overflow
             result = fetched
 
@@ -298,8 +297,7 @@ class requiredComponent (SelectorComponent):
                 if axisMatches(axes[i], id):
                     break
             else:
-                raise SelectorError, \
-                      'Required axis %s not present in this variable.' % (id,)
+                raise SelectorError('Required axis %s not present in this variable.' % (id,))
         return 0
 
 class indexComponent (axisComponent):
@@ -344,9 +342,8 @@ class positionalComponent (SelectorComponent):
                 aux[id(self)] = i
                 return 0
         else:
-            raise SelectorError, \
-            'positional component cannot be applied, insufficent rank:' +\
-             repr(self)
+            raise SelectorError('positional component cannot be applied, insufficent rank:' +\
+             repr(self))
 
     def __repr__ (self):
         s = repr(self.__class__) + '(' + repr(self.v) + ')'
@@ -393,7 +390,7 @@ def required(values):
     """Creates a selector that requires a certain axis to be present."""
     if values is None:
         return all
-    if isinstance(values, types.StringType):
+    if isinstance(values, bytes):
         values = (values,)
     return Selector(requiredComponent(values))
 

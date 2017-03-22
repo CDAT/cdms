@@ -2,8 +2,9 @@
 
 import cdms2
 import _scrip
-from error import RegridError
+from .error import RegridError
 import numpy
+from functools import reduce
 
 """Regrid support for nonrectangular grids, based on the SCRIP package."""
 
@@ -37,14 +38,14 @@ class ScripRegridder:
             else:
                 ingrid = input.getGrid()
             if ingrid is None:
-                raise RegridError, "Input variable must have an associated grid."
+                raise RegridError("Input variable must have an associated grid.")
             rank = len(ingrid.shape)
             gridsize = ingrid.size()
             outgridshape = self.outputGrid.shape
 
             # Check that the grid matches the last dimension(s) of input
             if input.shape[-rank:] != ingrid.shape:
-                raise RegridError, 'Last dimensions of input array must match grid shape: %s'%`ingrid.shape`
+                raise RegridError('Last dimensions of input array must match grid shape: %s'%repr(ingrid.shape))
             #this expects contiguous arrays
             if input.iscontiguous() is False:
                 input = input.ascontiguous()
@@ -104,7 +105,7 @@ class ConservativeRegridder(ScripRegridder):
 
     def __init__(self, outputGrid, remapMatrix, sourceAddress, destAddress, inputGrid=None, sourceFrac=None, destFrac=None, normalize="fracarea", normal=None, sourceArea=None, destArea=None):
         if normalize not in ["fracarea", "destarea", "none"]:
-            raise RegridError, "Invalid normalization option: %s"%normalize
+            raise RegridError("Invalid normalization option: %s"%normalize)
         ScripRegridder.__init__(self, outputGrid, remapMatrix, sourceAddress, destAddress, inputGrid=inputGrid, sourceFrac=sourceFrac, destFrac=destFrac)
         self.normalize = normalize
         self.normal = None
@@ -161,12 +162,12 @@ class BicubicRegridder(ScripRegridder):
         if (gradLat.shape != input.shape or
             gradLon.shape != input.shape or
             gradLatlon.shape != input.shape):
-            raise RegridError, "All input arrays must have shape %s"%`input.shape`
+            raise RegridError("All input arrays must have shape %s"%repr(input.shape))
 
         if (type(gradLat) is not type(input) or
             type(gradLon) is not type(input) or
             type(gradLatlon) is not type(input)):
-            raise RegridError, "All input arrays must have type %s"%`type(input)`
+            raise RegridError("All input arrays must have type %s"%repr(type(input)))
 
         # If input is a variable, make it a TV
         if isVariable(input) and not isinstance(input, TransientVariable):
@@ -184,14 +185,14 @@ class BicubicRegridder(ScripRegridder):
             else:
                 ingrid = input.getGrid()
             if ingrid is None:
-                raise RegridError, "Input variable must have an associated grid."
+                raise RegridError("Input variable must have an associated grid.")
             rank = len(ingrid.shape)
             gridsize = ingrid.size()
             outgridshape = self.outputGrid.shape
 
             # Check that the grid matches the last dimension(s) of input
             if input.shape[-rank:] != ingrid.shape:
-                raise RegridError, 'Last dimensions of input array must match grid shape: %s'%`ingrid.shape`
+                raise RegridError('Last dimensions of input array must match grid shape: %s'%repr(ingrid.shape))
 
         else:
             rank = 1                    # If not a TV, last dimension is the 'cell' dimension
@@ -253,7 +254,7 @@ def readRegridder(fileobj, mapMethod=None, checkGrid=1):
     if isinstance(fileobj,str):
         fileobj = cdms2.open(fileobj)
     elif not isinstance(fileobj,cdms2.dataset.CdmsFile):
-        raise RegridError,"fileobj arguments must be a cdms2 file or a string pointing to a file"
+        raise RegridError("fileobj arguments must be a cdms2 file or a string pointing to a file")
     
     if mapMethod is None:
         mapString = fileobj.map_method.strip().lower()
@@ -266,10 +267,10 @@ def readRegridder(fileobj, mapMethod=None, checkGrid=1):
         elif mapString[0:8]=="distance" or mapString[0:7]=="distwgt":
             mapMethod = "distwgt"
         else:
-            raise RegridError, "Unrecognized map method: %s"%mapString
+            raise RegridError("Unrecognized map method: %s"%mapString)
 
     convention = 'SCRIP'
-    if fileobj.variables.keys().count('S'):
+    if list(fileobj.variables.keys()).count('S'):
         convention = 'NCAR'
     if convention == 'SCRIP':
         remapMatrix = fileobj('remap_matrix').filled()
@@ -291,7 +292,7 @@ def readRegridder(fileobj, mapMethod=None, checkGrid=1):
             srcarea = fileobj('src_grid_area')
             dstarea = fileobj('dst_grid_area')
         else: #NCAR stuff
-            if "S2" in fileobj.variables.keys():
+            if "S2" in list(fileobj.variables.keys()):
                 remapMatrix=fileobj("S2")
                 sh = list(remapMatrix.shape)
                 if len(sh)==2 and sh[-1]==2:
@@ -309,7 +310,7 @@ def readRegridder(fileobj, mapMethod=None, checkGrid=1):
     elif mapMethod=="distwgt":
         regridder = DistwgtRegridder(outgrid, remapMatrix,srcAddress, dstAddress, inputGrid=ingrid, sourceFrac=srcfrac, destFrac=dstfrac)
     else:
-        raise RegridError, "Unrecognized map method: %s"%mapMethod
+        raise RegridError("Unrecognized map method: %s"%mapMethod)
 
     return regridder
 

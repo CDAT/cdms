@@ -4,8 +4,8 @@
 "Read part of the old cu slab interface implemented over CDMS"
 import numpy
 import string, types, sys
-from error import CDMSError
-from axis import std_axis_attributes
+from .error import CDMSError
+from .axis import std_axis_attributes
 import cdms2 as cdms
 
 class Slab:
@@ -37,7 +37,7 @@ class Slab:
                        'long_name':'',
                        'units':''}
         result = None
-        if name in defaultdict.keys() and not hasattr(self,name):
+        if name in list(defaultdict.keys()) and not hasattr(self,name):
             if name=='filename':
                 if (not hasattr(self,'parent')) or self.parent is None:
                     result = ''
@@ -85,13 +85,13 @@ class Slab:
 
     def listattributes (self):
         "Return a list of attribute names."
-        return self.attributes.keys()
+        return list(self.attributes.keys())
 
     def listdimattributes(self, dim):
         "List the legal axis field names."
         a = self.getAxis(dim)
         result = []
-        for x in std_axis_attributes + a.attributes.keys():
+        for x in std_axis_attributes + list(a.attributes.keys()):
             if not x in result: result.append(x)
         return result
 
@@ -131,10 +131,10 @@ class Slab:
             result[0:-1] = b[:,0]
             result[-1] = b[-1,1]
             return result
-        elif d.attributes.has_key(field):
+        elif field in d.attributes:
             return d.attributes[field]
         else:
-            raise CDMSError, "No %s attribute on given axis." % field
+            raise CDMSError("No %s attribute on given axis." % field)
             
           
     def showdim(self):
@@ -143,7 +143,7 @@ class Slab:
         for nd in range(self.rank()):
             result.append('** Dimension ' + str(nd+1) + ' **')
             result = result + self.getAxis(nd).listall(1)
-        print string.join(result, '\n')
+        print(string.join(result, '\n'))
 
     def listdimnames(self):
         "Return a list of the names of the dimensions."
@@ -161,7 +161,7 @@ class Slab:
         result.append('shape: ' + str(self.shape))
         for x in Slab.std_slab_atts:
             result.append(x + ": " + str(self.getattribute(x)))
-        for x in self.attributes.keys():
+        for x in list(self.attributes.keys()):
             if x in Slab.std_slab_atts: continue
             if x == 'name': continue
             result.append(x + ": " + str(self.attributes[x]))

@@ -5,11 +5,11 @@
 
 import numpy
 ## import PropertiedClasses
-import bindex
-from error import CDMSError
-from grid import LongitudeType, LatitudeType, VerticalType, TimeType, CoordTypeToLoc
-from hgrid import AbstractHorizontalGrid
-from axis import allclose
+from . import bindex
+from .error import CDMSError
+from .grid import LongitudeType, LatitudeType, VerticalType, TimeType, CoordTypeToLoc
+from .hgrid import AbstractHorizontalGrid
+from .axis import allclose
 
 MethodNotImplemented = "Method not yet implemented"
 
@@ -19,7 +19,7 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
         """Create a generic grid.
         """
         if latAxis.shape != lonAxis.shape:
-            raise CDMSError, 'Latitude and longitude axes must have the same shape.'
+            raise CDMSError('Latitude and longitude axes must have the same shape.')
         AbstractHorizontalGrid.__init__(self, latAxis, lonAxis, id, maskvar, tempmask, node)
         self._index_ = None
 
@@ -35,13 +35,13 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
     def getMesh(self, transpose=None):
         """Generate a mesh array for the meshfill graphics method.
         'transpose' is for compatibility with other grid types, is ignored."""
-        import MV2 as MV
+        from . import MV2 as MV
         if self._mesh_ is None:
             LAT=0
             LON=1
             latbounds, lonbounds = self.getBounds()
             if latbounds is None or lonbounds is None:
-                raise CDMSError, 'No boundary data is available for grid %s'%self.id
+                raise CDMSError('No boundary data is available for grid %s'%self.id)
             nvert = latbounds.shape[-1]
             mesh = numpy.zeros((self.size(),2,nvert),latbounds.dtype.char)
             mesh[:,LAT,:] = MV.filled(latbounds)
@@ -163,7 +163,7 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
             k += 1
 
         if i==-1:
-            raise RuntimeError, 'Grid lat/lon domains do not match variable domain'
+            raise RuntimeError('Grid lat/lon domains do not match variable domain')
 
         return ((islice, ), (inewaxis, ))
 
@@ -196,7 +196,7 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
         lonlin = numpy.ma.where(numpy.ma.greater_equal(lonlin,360.0), lonlin-360.0, lonlin)
         points = bindex.intersectHorizontalGrid(latspec, lonspec, latlin, lonlin, index)
         if len(points)==0:
-            raise CDMSError, 'No data in the specified region, longitude=%s, latitude=%s'%(`lonspec`, `latspec`)
+            raise CDMSError('No data in the specified region, longitude=%s, latitude=%s'%(repr(lonspec), repr(latspec)))
 
         fullmask = numpy.ones(ncell)
         numpy.put(fullmask, points, 0)
@@ -268,7 +268,7 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
         having the same length as the number of cells in the grid, similarly
         for flatlon."""
         if self._flataxes_ is None:
-            import MV2 as MV
+            from . import MV2 as MV
             alat = MV.filled(self.getLatitude())
             alon = MV.filled(self.getLongitude())
             self._flataxes_ = (alat, alon)
@@ -295,7 +295,7 @@ class DatasetGenericGrid(AbstractGenericGrid):
         self.parent = parent
 
     def __repr__(self):
-        return "<DatasetGenericGrid, id: %s, shape: %s>"%(self.id, `self.shape`)
+        return "<DatasetGenericGrid, id: %s, shape: %s>"%(self.id, repr(self.shape))
 
 class FileGenericGrid(AbstractGenericGrid):
 
@@ -306,7 +306,7 @@ class FileGenericGrid(AbstractGenericGrid):
         self.parent = parent
 
     def __repr__(self):
-        return "<FileGenericGrid, id: %s, shape: %s>"%(self.id, `self.shape`)
+        return "<FileGenericGrid, id: %s, shape: %s>"%(self.id, repr(self.shape))
 
 class TransientGenericGrid(AbstractGenericGrid):
 
@@ -321,7 +321,7 @@ class TransientGenericGrid(AbstractGenericGrid):
         AbstractGenericGrid.__init__(self, latAxis, lonAxis, id, maskvar, tempmask)
 
     def __repr__(self):
-        return "<TransientGenericGrid, id: %s, shape: %s>"%(self.id, `self.shape`)
+        return "<TransientGenericGrid, id: %s, shape: %s>"%(self.id, repr(self.shape))
 
     def toGenericGrid(self, gridid=None):
         if gridid is None:
@@ -339,11 +339,11 @@ def readScripGenericGrid(fileobj, dims, whichType, whichGrid):
     if whichType is "mapping", whichGrid is the choice of grid, either "source" or "destination"
     """
     import string
-    from auxcoord import TransientAuxAxis1D
-    from coord import TransientVirtualAxis
+    from .auxcoord import TransientAuxAxis1D
+    from .coord import TransientVirtualAxis
 
     convention = 'SCRIP'
-    if 'S' in fileobj.variables.keys():
+    if 'S' in list(fileobj.variables.keys()):
         convention = 'NCAR'
         if whichType=="grid":
             gridCornerLatName = 'grid_corner_lat'
@@ -406,21 +406,21 @@ def readScripGenericGrid(fileobj, dims, whichType, whichGrid):
 
     iaxis = TransientVirtualAxis("i",ni)
 
-    if vardict.has_key(gridMaskName):
+    if gridMaskName in vardict:
         # SCRIP convention: 0 for invalid data
         # numpy.ma convention: 1 for invalid data
         mask = 1 - fileobj(gridMaskName)
     else:
         mask = None
         
-    if vardict.has_key(gridCenterLatName):
+    if gridCenterLatName in vardict:
         centerLat = fileobj(gridCenterLatName)
         if hasattr(centerLat, "units") and string.lower(centerLat.units)=='radians':
             centerLat *= (180.0/numpy.pi)
     else:
         centerLat = cornerLat[:,:,0]
 
-    if vardict.has_key(gridCenterLonName):
+    if gridCenterLonName in vardict:
         centerLon = fileobj(gridCenterLonName)
         if hasattr(centerLon, "units") and string.lower(centerLon.units)=='radians':
             centerLon *= (180.0/numpy.pi)

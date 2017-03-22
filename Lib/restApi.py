@@ -1,5 +1,5 @@
 import cdms2
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import xml.etree.ElementTree
 try:
     import genutil
@@ -32,14 +32,14 @@ class FacetConnection(object):
             if facet_param:
                 rqst=rqst+'&%s'%facet_param        
             #print rqst
-            url = urllib2.urlopen(rqst)
-        except Exception,msg:
+            url = urllib.request.urlopen(rqst)
+        except Exception as msg:
              raise self.EsgfObjectException(msg)
         r = url.read()
         try:
             e = xml.etree.ElementTree.fromstring(r)
             return e
-        except Exception,err:
+        except Exception as err:
             raise self.EsgfObjectException("Could not interpret server's results: %s" % err)
     def make_facet_dict(self,xmlelement):
         facet_dict={}
@@ -60,14 +60,14 @@ class FacetConnection(object):
             if facet_param:
                 rqst=rqst+'&%s'%facet_param        
                 #print rqst
-            url = urllib2.urlopen(rqst)
-        except Exception,msg:
+            url = urllib.request.urlopen(rqst)
+        except Exception as msg:
              raise self.EsgfObjectException(msg)
         r = url.read()
         try:
             e = xml.etree.ElementTree.fromstring(r)
             return e
-        except Exception,err:
+        except Exception as err:
             raise self.EsgfObjectException("Could not interpret server's results: %s" % err)
 
     def make_facet_dict_count(self,xmlelement):
@@ -103,7 +103,7 @@ class esgfConnection(object):
         ## Now figure out the facet fields
         self.serverOrder = []
         for e in all:
-            if e.tag=="lst" and "name" in e.keys() and e.get("name")=="responseHeader":
+            if e.tag=="lst" and "name" in list(e.keys()) and e.get("name")=="responseHeader":
                 ## ok found the Header
                 for s in e:
                     if s.get("name")=="params":
@@ -149,8 +149,8 @@ class esgfConnection(object):
             raise self.EsgfObjectException("Invalid key: %s" % repr(key))
         return val
     def __setitem__(self,key,value):
-        if not key in self.params.keys():
-            raise self.EsgfObjectException("Invalid key: %s, valid keys are: %s" % (repr(key),repr(self.params.keys())))
+        if not key in list(self.params.keys()):
+            raise self.EsgfObjectException("Invalid key: %s, valid keys are: %s" % (repr(key),repr(list(self.params.keys()))))
         self.params[key]=value
         return
 
@@ -175,8 +175,8 @@ class esgfConnection(object):
             tmp=rqst[6:].replace("//","/")
             rqst=rqst[:6]+tmp
             #print "Request:%s"%rqst
-            url = urllib2.urlopen(rqst)
-        except Exception,msg:
+            url = urllib.request.urlopen(rqst)
+        except Exception as msg:
              raise self.EsgfObjectException(msg)
         r = url.read()
         if stringType:
@@ -185,7 +185,7 @@ class esgfConnection(object):
             try:
                 e = xml.etree.ElementTree.fromstring(r)
                 return e
-            except Exception,err:
+            except Exception as err:
                 raise self.EsgfObjectException("Could not interpret server's results: %s" % err)
 
     def generateRequest(self,stringType=False,**keys):
@@ -197,7 +197,7 @@ class esgfConnection(object):
         ##         params[k]=self[k]
 
         
-        for k in keys.keys():
+        for k in list(keys.keys()):
             if k == "stringType":
                 stringType=keys[k]
                 continue
@@ -209,7 +209,7 @@ class esgfConnection(object):
                 params[k]=keys[k]
 
         search = ""
-        for k in params.keys():
+        for k in list(params.keys()):
             if isinstance(params[k],list):
                 for v in params[k]:
                     if isinstance(v,str):
@@ -442,11 +442,11 @@ class esgfDataset(esgfConnection):
         return files
             
     def info(self):
-        print self
+        print(self)
 
     def __str__(self):
         st = "Dataset Information\nid: %s\nKeys:\n" % self.id
-        for k in self.keys():
+        for k in list(self.keys()):
             st+="\t%s : %s\n" % (k,self[k])
         return st
         
@@ -574,7 +574,7 @@ class esgfFiles(object):
             return self.mapping
     def getMappingKeys(self):
         if isinstance(self.mapping,genutil.StringConstructor):
-            return self.mapping.keys()
+            return list(self.mapping.keys())
         else:
             return None
     def setMapping(self,mapping):
@@ -583,7 +583,7 @@ class esgfFiles(object):
             if self.datasetids is not None:
                 self.mapping=self.datasetids
             else:
-                for k in self.parent.keys():
+                for k in list(self.parent.keys()):
                     if not k in ["limit","offset","text"]:
                         self.mapping+="%%(%s)" % k
         else:
@@ -636,44 +636,44 @@ class esgfFiles(object):
             mappoint=self.mapped
             tabs=""
             nok=0
-            nlevels = len(thismapping.keys())
+            nlevels = len(list(thismapping.keys()))
             #print "This mapping",thismapping.template,nlevels
             if nlevels == 0:
                 ## ok no mapping, let's try to figure this one out
-                if 'dataset_id_template_' in f.keys():
+                if 'dataset_id_template_' in list(f.keys()):
                     #print "We are good to go"
                     ds = f['dataset_id_template_'].replace(")s",")")
                     thismapping = genutil.StringConstructor(ds)
-            for k in thismapping.keys():
+            for k in list(thismapping.keys()):
                 ## if verbose: print tabs,"keys:",k,"File keys:",f.keys()
                 ## if k == self.mapping.keys()[0]:
                 ##     f.matched.keys()
                 ## else:
                 ##     ## if verbose: print
-                if k in f.keys():
+                if k in list(f.keys()):
                     ## if verbose: print tabs,k,f[k]
                     nok+=1
                     cont = f[k]
                     if not isinstance(cont,(str,int,float)):
                         break
-                    if not cont in mappoint.keys():
+                    if not cont in list(mappoint.keys()):
                         mappoint[cont]={}
-                elif k in self.parent.keys():
+                elif k in list(self.parent.keys()):
                     ## if verbose: print tabs,k,f[k]
                     nok+=1
                     cont = self[k]
-                    if not cont in mappoint.keys():
+                    if not cont in list(mappoint.keys()):
                         mappoint[cont]={}
                 elif isinstance(self.fileids,genutil.StringConstructor):
                     try:
                         mapid = self.fileids.reverse(self.parent.id)
                         ## if verbose:
                             ## print "MAPID:",k,mapid
-                        if k in mapid.keys():
+                        if k in list(mapid.keys()):
                             ## if verbose: print tabs,k,mapid[k]
                             nok+=1
                             cont = mapid[k]
-                            if not cont in mappoint.keys():
+                            if not cont in list(mappoint.keys()):
                                 mappoint[cont]={}
                     except:
                         break

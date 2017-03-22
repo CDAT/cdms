@@ -2,7 +2,7 @@
 
 import cdms2
 import numpy, copy, string, _regrid
-from error import RegridError
+from .error import RegridError
 
 class PressureRegridder:
     """    #-----------------------------------------------------------------------------------------------
@@ -90,7 +90,7 @@ class PressureRegridder:
         elif isinstance(ar, numpy.ndarray):
             armiss = None
         else:
-            raise RegridError, "Input array is not a Variable, numpy.ma, or numpy array"
+            raise RegridError("Input array is not a Variable, numpy.ma, or numpy array")
         
         # Set missing value
         if missing is None:
@@ -433,14 +433,14 @@ def sendmsg(msg, value1 = None, value2 = None):
     #
     #---------------------------------------------------------------------------------"""
 
-    print '*******************************************************************'
+    print('*******************************************************************')
     if value1 == None:
-        print msg
+        print(msg)
     elif value2 == None:
-        print msg, value1
+        print(msg, value1)
     else:
-        print msg, value1, value2
-    print '*******************************************************************'
+        print(msg, value1, value2)
+    print('*******************************************************************')
 
     return None
 

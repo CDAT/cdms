@@ -9,7 +9,7 @@ No guarantee is provided whatsoever. Use at your own risk.
 Alex Pletzer, Tech-X Corp. (2011)
 """
 
-import mvSphereMesh
+from . import mvSphereMesh
 
 class BaseWriter:
 
@@ -39,5 +39,4 @@ class BaseWriter:
         Write data to file. This method is overloaded.
         @param filename file name
         """
-        raise NotImplementedError, \
-            'write method not implemented in derived class'
+        raise NotImplementedError('write method not implemented in derived class')

@@ -34,7 +34,7 @@ class GS_Regridder:
             self.infile = os.path.basename(infile)
             self.inpath = os.path.dirname(infile)
         if ( not os.path.isfile( self.inpath + "/" + self.infile ) ):
-            raise OSError,"cannot open infile " + self.inpath + "/" + self.infile
+            raise OSError("cannot open infile " + self.inpath + "/" + self.infile)
 
         if ( not hasattr(outgrid,"gsfile") ):
             outgrid.gsfile = None
@@ -46,7 +46,7 @@ class GS_Regridder:
             self.outfile = os.path.basename(outfile)
             self.outpath = os.path.dirname(outfile)
         if ( not os.path.isfile( self.outpath + "/" + self.outfile ) ):
-            raise OSError, "cannot open outfile " + self.outpath + "/" + self.outfile
+            raise OSError("cannot open outfile " + self.outpath + "/" + self.outfile)
 
         if ( remapfile==None ):
             timestr = str(int(time.time()))
@@ -56,7 +56,7 @@ class GS_Regridder:
             self.remapfile = os.path.basename(remapfile)
             self.remappath = os.path.dirname(remapfile)
         if ( not os.path.isdir( self.remappath + "/" ) ):
-            raise OSError, "cannot open remapfile directory " + self.remappath + "/"
+            raise OSError("cannot open remapfile directory " + self.remappath + "/")
 
         ingrid.write_gridspec( self.inpath + "/" + self.infile )
         outgrid.write_gridspec( self.outpath + "/" + self.outfile )
@@ -179,7 +179,7 @@ class GS_Regridder:
         kbegin = 0
         kend = -1
 
-        print "__call__  remapfile=", self.remapfile
+        print("__call__  remapfile=", self.remapfile)
         libcf.gs_fregrid( history, mosaic_in, mosaic_out, dir_in, dir_out,
                           input_file, nfiles, output_file, nfiles_out,
                           self.remapfile,

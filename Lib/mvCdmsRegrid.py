@@ -10,8 +10,9 @@ import operator
 import re
 import numpy
 import cdms2
-from error import CDMSError
+from .error import CDMSError
 import regrid2
+from functools import reduce
 
 def _areCellsOk(cornerCoords, mask=None):
     """
@@ -187,7 +188,7 @@ def getBoundList(coordList, mask=None,
         res = _areCellsOk(cornerCoords, mask=mask)
         if res:
             badCellIndices += res['badCellIndices']
-            print """
+            print("""
 -----------
 WARNING: bad cell were detected
 -----------
@@ -199,7 +200,7 @@ indices of bad cells:
 
 bad cell coordinates:
                       %(badCellCoords)s
-                """ % res
+                """ % res)
 
     return cornerCoords
 
@@ -369,20 +370,20 @@ class CdmsRegrid:
                     
             for c, b in zip(srcBounds, srcCoords):
                 if c.min() == b.min() or c.max() == b.max():
-                    print """   
+                    print("""   
 WARNING: Edge bounds are the same. The results of conservative regridding will not conserve.
 coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
-              """ % (c.min(), b.min(), c.max(), b.max())
+              """ % (c.min(), b.min(), c.max(), b.max()))
             if srcBounds[0].min() < -90 or srcBounds[0].max() > 90 or \
                dstBounds[0].min() < -90 or dstBounds[0].max() > 90:
-                print "WARNING: Bounds exceed +/-90 degree latitude: min/max lats = %g/%g" % \
-                     (srcBounds[0].min(), srcBounds[0].max())
+                print("WARNING: Bounds exceed +/-90 degree latitude: min/max lats = %g/%g" % \
+                     (srcBounds[0].min(), srcBounds[0].max()))
             if not re.search('esmp', regridTool.lower()):
                 regridTool = 'esmf'
 
         # If LibCF handleCut is True, the bounds are needed to extend the grid
         # close the cut at the top
-        if re.search('LibCF', regridTool, re.I) and args.has_key('handleCut'):
+        if re.search('LibCF', regridTool, re.I) and 'handleCut' in args:
             if args['handleCut']: srcBounds = getBoundList(srcCoords)
 
         srcCoordsArrays = [numpy.array(sc) for sc in srcCoords]
@@ -440,7 +441,7 @@ coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
                              **args)
 
         # fill in diagnostic data
-        if args.has_key('diag'):
+        if 'diag' in args:
             self.regridObj.fillInDiagnosticData(diag = args['diag'], rootPe = 0)
 
         # construct the axis list for dstVar
@@ -450,7 +451,7 @@ coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
         attrs = {}
         for a in srcVar.attributes:
             v = srcVar.attributes[a]
-            if type(v) is types.StringType:
+            if type(v) is bytes:
                 attrs[a] = v
 
         # if the missing value is present in the destination data, set

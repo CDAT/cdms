@@ -13,8 +13,6 @@ from scrip import DistwgtRegridder, readRegridder
 from regrid2 import gsRegrid
 from mvGenericRegrid import GenericRegrid
 from mvLibCFRegrid import LibCFRegrid
-import pdb
-pdb.set_trace()
 try:
     import ESMF
     from mvESMFRegrid import ESMFRegrid

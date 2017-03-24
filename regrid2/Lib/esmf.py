@@ -285,6 +285,17 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
         else:
             return None
 
+    def getMask(self, staggerloc=CENTER):
+        """
+        Get mask array. In ESMF, the mask is applied to cells.
+        @return mask numpy array. 1 is invalid by default. This array exists on all procs
+        """
+        try:
+            maskPtr = self.grid.get_item(item=ESMF.GridItem.MASK, staggerloc=staggerloc)
+        except:
+            maskPtr = None
+        return maskPtr
+
     def setMask(self, mask, staggerloc=CENTER):
         """
         Set mask array. In ESMF, the mask is applied to cells.

@@ -993,7 +993,7 @@ class AbstractVariable(CdmsObj, Slab):
         One can use the regrid2.Regridder optional arguments as well.
 
         Example:
-        new_cdmsVar = cdmsVar.regrid(newGrid)  # uses libcf
+        new_cdmsVar = cdmsVar.regrid(newGrid)  # uses esmf
         new_cdmsVar = cdmsVar.regrid(newGrid, regridMethod = 'conserve',
                                      coordSys = 'cart')
 
@@ -1130,8 +1130,8 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
 
             srcGridMask = None
             # set the source mask if a mask is defined with the source data
-            if numpy.any(self.mask == True):
-                srcGridMask = getMinHorizontalMask(self)
+#            if numpy.any(self.mask == True):
+#                srcGridMask = getMinHorizontalMask(self)
 
             # compute the interpolation weights
             ro = CdmsRegrid(fromgrid, togrid, 

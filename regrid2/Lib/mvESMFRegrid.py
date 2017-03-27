@@ -120,8 +120,14 @@ class ESMFRegrid(GenericRegrid):
         # value (1) which means invalid
 #        self.srcMaskValues = numpy.array([1],dtype = numpy.int32)
 #        self.dstMaskValues = numpy.array([1],dtype = numpy.int32)
-        self.srcMaskValues = None
-        self.dstMaskValues = None
+
+        if type(regridMethod) == types.StringType:
+            if re.search('conserv', regridMethod.lower()):
+                self.srcMaskValues = numpy.array([1],dtype = numpy.int32)
+                self.dstMaskValues = numpy.array([1],dtype = numpy.int32)
+            else:
+                self.srcMaskValues = srcGridMask
+                self.dstMaskValues = dstGridMask
 
         # provided by user or None
         self.srcGridAreas = srcGridAreas
@@ -297,8 +303,10 @@ staggerLoc = %s!""" % staggerLoc
         if args.has_key('srcDataMask'):
             srcDataMask=args.get('srcDataMask')
             # Make sure with have a mask intialized for this grid.
+         
             if(self.maskPtr is None):
-                self.srcFld.field.grid.add_item(item=ESMF.GridItem.MASK, staggerloc=self.staggerloc)
+                if(self.srcFld.field.grid.mask[self.staggerloc] is None):
+                    self.srcFld.field.grid.add_item(item=ESMF.GridItem.MASK, staggerloc=self.staggerloc)
                 self.maskPtr = self.srcFld.field.grid.get_item(item=ESMF.GridItem.MASK, 
                                                                staggerloc=self.staggerloc)
             # Recompute weights only if masks are different.

@@ -400,13 +400,8 @@ class Test(unittest.TestCase):
             # checks
             dstDataMask = (dstData == so.missing_value)
             print 'number of masked values = ', dstDataMask.sum()
-            dstDataFltd = dstData * (1 - dstDataMask)
-            if so.missing_value > 0:
-                dstDataMin = dstData[:].min()
-                dstDataMax = dstDataFltd.max()
-            else:
-                dstDataMin = dstDataFltd.min()
-                dstDataMax = dstData[:].max()
+            dstDataMin = dstData[:].min()
+            dstDataMax = dstData[:].max()
             print 'min/max value of dstData: %f %f' % (dstDataMin, dstDataMax)                               
             self.assertLess(dstDataMax, so[0,0,...].max())
 
@@ -446,12 +441,8 @@ class Test(unittest.TestCase):
             dstDataMask = (dstData == so.missing_value)
             print 'number of masked values = ', dstDataMask.sum()
             dstDataFltd = dstData * (1 - dstDataMask)
-            if so.missing_value > 0:
-                dstDataMin = dstData.min()
-                dstDataMax = dstDataFltd.max()
-            else:
-                dstDataMin = dstDataFltd.min()
-                dstDataMax = dstData.max()
+            dstDataMax = dstDataFltd.max()
+            dstDataMin = dstDataFltd.min()
             print 'min/max value of dstData: %f %f' % (dstDataMin, dstDataMax)                               
             self.assertLess(dstDataMax, so.max())
 
@@ -474,10 +465,9 @@ class Test(unittest.TestCase):
 
         # checks
         if self.pe == 0:
-            dstDataMask = (dstData == so.missing_value)
+            dstDataMask = dstData.mask
             print 'number of masked values = ', dstDataMask.sum()
             self.assertTrue(str(type(dstData)), str(type(clt)))
-            dstData.mask = (dstData == so.missing_value)
             dstDataMin = dstData.min()
             dstDataMax = dstData.max()
             zeroValCnt = (dstData == 0).sum()
@@ -499,13 +489,8 @@ class Test(unittest.TestCase):
             dstDataMask = (dstData == so.missing_value)
             dstDataFltd = dstData * (1 - dstDataMask)
             zeroValCnt = (dstData == 0).sum()
-            if so.missing_value > 0:
-                dstDataMin = dstData.min()
-                dstDataMax = dstDataFltd.max()
-            else:
-                dstDataMin = dstDataFltd.min()
-                dstDataMax = dstData.max()
-                zeroValCnt = (dstData == 0).sum()
+            dstDataMin = dstDataFltd.min()
+            dstDataMax = dstDataFltd.max()
             print 'Number of zero valued cells', zeroValCnt
             print 'min/max value of dstData: %f %f' % (dstDataMin, dstDataMax)                   
             self.assertLess(dstDataMax, so.max())

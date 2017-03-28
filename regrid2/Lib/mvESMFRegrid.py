@@ -16,7 +16,7 @@ from regrid2 import RegridError
 from regrid2 import GenericRegrid
 from regrid2 import RegridError
 
-ESMF.Manager(debug=True)
+ESMF.Manager(debug=False)
 HAVE_MPI = False
 try:
     from mpi4py import MPI

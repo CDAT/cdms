@@ -47,7 +47,7 @@ import cdat_info
 import numpy
 macros = []
 try:
-    import mpi4py
+    import dmpi4py
     ## Ok we have mpi4py let's build with support for it
     macros.append(("PARALLEL",None))
     import subprocess
@@ -58,11 +58,12 @@ try:
       mpicc="mpicc"
       subprocess.check_call([mpicc,"--version"])
     os.environ["CC"]=mpicc
-    os.environ["CFLAGS"]="-w -g"
+    os.environ["CFLAGS"]="-w -g -O0"
 except:
-    os.environ["CFLAGS"]="-w -g"
+    os.environ["CFLAGS"]="-w -g -O0"
     pass
 
+libs_pth = os.path.join(sys.prefix,"lib")
 setup (name = "cdms2",
        version=Version,
        description = "Climate Data Management System",
@@ -70,15 +71,19 @@ setup (name = "cdms2",
        packages = ['cdms2'],
        package_dir = {'cdms2': 'Lib'},
        include_dirs = ['Include', numpy.lib.utils.get_include()] + cdat_info.cdunif_include_directories,
-       scripts = ['Script/cdscan', 'Script/convertcdms.py'],
+       scripts = ['Script/cdscan', 'Script/convertcdms.py',"Script/myproxy_logon"],
        ext_modules = [Extension('cdms2.Cdunif',
                                 ['Src/Cdunifmodule.c'],
                                 library_dirs = cdat_info.cdunif_library_directories,
                                 libraries = cdat_info.cdunif_libraries,
                                 define_macros = macros,
+                                runtime_library_dirs = [libs_pth],
+                                extra_compile_args = [ "-L%s"% libs_pth],
                                 ),
                       Extension('cdms2._bindex',
                                 ['Src/_bindexmodule.c', 'Src/bindex.c'],
+                                extra_compile_args = [ "-L%s"% libs_pth],
+                                runtime_library_dirs = [libs_pth],
                                 ) 
                      ]
       )
@@ -97,6 +102,12 @@ setup (name = "regrid2",
        packages = ['regrid2'],
        package_dir = {'regrid2': 'regrid2/Lib'},
        include_dirs = [numpy.lib.utils.get_include()],
-       ext_modules = [Extension('regrid2._regrid', ['regrid2/Src/_regridmodule.c']),
-                      Extension('regrid2._scrip', ['regrid2/Src/scrip.pyf','regrid2/Src/regrid.c'])]
+       ext_modules = [Extension('regrid2._regrid', ['regrid2/Src/_regridmodule.c'],
+                                runtime_library_dirs = [libs_pth],
+                                extra_compile_args = [ "-L%s"% libs_pth],
+                                ),
+                      Extension('regrid2._scrip', ['regrid2/Src/scrip.pyf','regrid2/Src/regrid.c'],
+                                runtime_library_dirs = [libs_pth],
+                                extra_compile_args = [ "-L%s"% libs_pth],
+                          )]
       )

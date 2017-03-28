@@ -460,8 +460,10 @@ def compareVarDictValues(val1, val2):
 def cleanupAttrs(attrs):
     for attname in attrs.keys():
         attval = attrs[attname]
-        if type(attval) is numpy.ndarray:
-            if len(attval)==1:
+        if isinstance(attval, numpy.ndarray):
+            if attval.ndim==0:
+                continue
+            elif len(attval)==1:
                 attrs[attname] = attval[0]
             else:
                 attrs[attname] = str(attval)

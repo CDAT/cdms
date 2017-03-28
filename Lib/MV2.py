@@ -74,9 +74,9 @@ class var_unary_operation:
         self.mafunc = mafunc
         self.__doc__ = mafunc.__doc__
 
-    def __call__ (self, a):
+    def __call__ (self, a, **kwargs):
         axes, attributes, id, grid = _extractMetadata(a)
-        maresult = self.mafunc(_makeMaskedArg(a))
+        maresult = self.mafunc(_makeMaskedArg(a), **kwargs)
         return TransientVariable(maresult, axes=axes, attributes=attributes, id=id, grid=grid)
 
 class var_unary_operation_with_axis:
@@ -86,10 +86,10 @@ class var_unary_operation_with_axis:
         """
         self.mafunc = mafunc
         self.__doc__ = mafunc.__doc__
-    def __call__ (self, a, axis=0):
+    def __call__ (self, a, axis=0, **kwargs):
         axis = _conv_axis_arg(axis)
         ta = _makeMaskedArg(a)
-        maresult = self.mafunc(ta, axis=axis)
+        maresult = self.mafunc(ta, axis=axis, **kwargs)
         axes, attributes, id, grid = _extractMetadata(a, omit=axis, omitall=(axis is None))
         return TransientVariable(maresult, axes=axes, attributes=attributes, id=id, grid=grid)
 
@@ -218,14 +218,14 @@ class var_binary_operation:
         self.mafunc = mafunc
         self.__doc__ = mafunc.__doc__
 
-    def __call__ (self, a, b):
+    def __call__ (self, a, b, **kwargs):
         id = "variable_%i" % TransientVariable.variable_count
         TransientVariable.variable_count+=1
         axes = commonDomain(a,b)
         grid = commonGrid(a,b,axes)
         ta = _makeMaskedArg(a)
         tb = _makeMaskedArg(b)
-        maresult = self.mafunc(ta,tb)
+        maresult = self.mafunc(ta,tb, **kwargs)
         return TransientVariable(maresult, axes=axes, grid=grid,no_update_from=True,id=id)
 
     def reduce (self, target, axis=0):
@@ -343,8 +343,10 @@ nonzero = var_unary_operation(numpy.ma.nonzero)
 around = var_unary_operation(numpy.ma.around)
 floor = var_unary_operation(numpy.ma.floor)
 ceil = var_unary_operation(numpy.ma.ceil)
-sometrue = var_unary_operation_with_axis(numpy.ma.sometrue)
-alltrue = var_unary_operation_with_axis(numpy.ma.alltrue)
+sometrue = var_unary_operation_with_axis(numpy.ma.any)
+any = sometrue
+alltrue = var_unary_operation_with_axis(numpy.ma.all)
+all = alltrue
 logical_not = var_unary_operation(numpy.ma.logical_not)
 divide.reduce = None
 remainder = var_binary_operation(numpy.ma.remainder)

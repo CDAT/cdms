@@ -2056,6 +2056,8 @@ class CdmsFile(CdmsObj, cuDataset):
             var = var.astype(typecode)
         var = asVariable(var, writeable=0)
 
+        if fill_value is None and hasattr(var, "fill_value"):
+            fill_value = var.fill_value
         # Define the variable if necessary.
         if id is None:
             varid = var.id

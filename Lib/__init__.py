@@ -2,9 +2,19 @@
 CDMS module-level API
 """
 
+import warnings
+warnings.filterwarnings("ignore")
+def fxn():
+    warnings.warn("deprecated", DeprecationWarning)
+
+with warnings.catch_warnings():
+    warnings.filterwarnings("ignore")
+    fxn()
+
 import cdat_info
 cdat_info.pingPCMDIdb("cdat", "cdms2")
 from . import git
+from . import myproxy_logon
 
 __all__ = ["cdmsobj", "axis", "coord", "grid", "hgrid", "avariable",
            "sliceut", "error", "variable", "fvariable", "tvariable", "dataset",

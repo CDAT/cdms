@@ -17,7 +17,7 @@ from axis import axisMatchIndex, axisMatchAxis, axisMatches, unspecified, Cdtime
 import selectors
 import copy
 # from regrid2 import Regridder, PressureRegridder, CrossSectionRegridder
-from mvCdmsRegrid import CdmsRegrid
+from mvCdmsRegrid import CdmsRegrid, getBoundList, _getCoordList
 from regrid2.mvGenericRegrid import guessPeriodicity
 #import PropertiedClasses
 from convention import CF1
@@ -143,8 +143,11 @@ class AbstractVariable(CdmsObj, Slab):
         self._grid_ = None      # Variable grid, if any
         if not hasattr(self,'missing_value'):
             self.missing_value = None
-        elif numpy.isnan(self.missing_value):
-          self.missing_value = None
+        else:
+            if isinstance(self.missing_value,basestring):
+                self.missing_value = None
+            elif numpy.isnan(self.missing_value):
+              self.missing_value = None
 
         # Reminder: children to define self.shape and set self.id
 
@@ -205,7 +208,7 @@ class AbstractVariable(CdmsObj, Slab):
                 result = numpy.ma.masked_array(ar)
             elif missing==inf or missing!=missing: # (x!=x) ==> x is NaN
                 result = numpy.ma.masked_object(ar, missing, copy=0)
-            elif ar.dtype.char=='c':
+            elif ar.dtype.char=='c' or ar.dtype.char=='S':
                 # umath.equal is not implemented
                 resultmask = (ar==missing)
                 if not resultmask.any():
@@ -501,7 +504,16 @@ class AbstractVariable(CdmsObj, Slab):
         if asarray==0 and isinstance(mv, numpy.ndarray):
             mv = mv[0]
         if type(mv) is types.StringType and self.dtype.char not in ['?','c','O','S']:
-            mv = float(mv)
+            try:
+                mv = float(mv)
+            except:
+                if hasattr(self,'_FillValue'):
+                    try:
+                        mv = float(self._FillValue)
+                    except:
+                        mv = None
+                else:
+                    mv = None
         return mv
 
     def _setmissing(self, name, value):
@@ -1180,8 +1192,9 @@ class AbstractVariable(CdmsObj, Slab):
 
             if self.getAxis(-1).attributes.has_key('topology'):
                 if self.getAxis(-1).attributes['topology'] == 'circular':
-                    # for the ESMF regridders
-                    keywords['periodicity'] = guessPeriodicity(self.getAxis(-1).getBounds())
+                    # for the ESMF regridders if periodicity is not set.
+                    if 'periodicity' not in keywords.keys():
+                        keywords['periodicity'] = guessPeriodicity(getBoundList(_getCoordList(self.getGrid())))
                     keywords['mkCyclic'] = 1    # for LibCF regridder
 
             # check if there are bounds and we have esmf
@@ -1287,8 +1300,8 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
 
             srcGridMask = None
             # set the source mask if a mask is defined with the source data
-            if numpy.any(self.mask == True):
-                srcGridMask = getMinHorizontalMask(self)
+#            if numpy.any(self.mask == True):
+#                srcGridMask = getMinHorizontalMask(self)
 
             # compute the interpolation weights
             ro = CdmsRegrid(fromgrid, togrid, 

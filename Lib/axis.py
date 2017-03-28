@@ -1460,9 +1460,16 @@ class AbstractAxis(CdmsObj):
             bnds = numpy.array([self[0]-delta,self[0]+delta])
 
         # Transform to (n,2) array
-        retbnds = numpy.zeros((len(ar),2),numpy.float)
+        retbnds = numpy.zeros((len(ar),2),numpy.float64)
         retbnds[:,0] = bnds[:-1]
         retbnds[:,1] = bnds[1:]
+        # To avoid floating point error on bound limits
+        if(self._getdtype(self) == numpy.float32):
+            retbnds[0,0] = round(retbnds[0,0],4)
+            retbnds[-1,1] = round(retbnds[-1,1],4)
+        else:
+            retbnds[0,0] = round(retbnds[0,0],13)
+            retbnds[-1,1] = round(retbnds[-1,1],13)
 
         if self.isLatitude():
             retbnds[0,:] = numpy.maximum(-90.0, numpy.minimum(90.0,retbnds[0,:]))

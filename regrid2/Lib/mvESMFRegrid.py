@@ -16,7 +16,7 @@ from regrid2 import RegridError
 from regrid2 import GenericRegrid
 from regrid2 import RegridError
 
-ESMF.Manager(debug=True)
+ESMF.Manager(debug=False)
 HAVE_MPI = False
 try:
     from mpi4py import MPI
@@ -118,12 +118,21 @@ class ESMFRegrid(GenericRegrid):
 
         # masks can take several values in ESMF, we'll have just one
         # value (1) which means invalid
-        self.srcMaskValues = numpy.array([1],dtype = numpy.int32)
-        self.dstMaskValues = numpy.array([1],dtype = numpy.int32)
+#        self.srcMaskValues = numpy.array([1],dtype = numpy.int32)
+#        self.dstMaskValues = numpy.array([1],dtype = numpy.int32)
+
+        if type(regridMethod) == types.StringType:
+            if re.search('conserv', regridMethod.lower()):
+                self.srcMaskValues = numpy.array([1],dtype = numpy.int32)
+                self.dstMaskValues = numpy.array([1],dtype = numpy.int32)
+            else:
+                self.srcMaskValues = srcGridMask
+                self.dstMaskValues = dstGridMask
 
         # provided by user or None
         self.srcGridAreas = srcGridAreas
         self.dstGridAreas = dstGridAreas
+        self.maskPtr = None
 
         # MPI stuff
         self.pe = 0
@@ -268,6 +277,16 @@ staggerLoc = %s!""" % staggerLoc
         When used in parallel, if the processor is not the root processor,
         the dstData returns None.
 
+        Source data mask:
+
+            . If you provide srcDataMask in args the source grid will 
+              be masked and weights will be recomputed.
+
+            . Subsequently, if you do not provide a srcDataMask the last 
+              weights will be used to regrid the source data array.
+
+            . By default, only the data are masked, but not the grid.
+ 
         @param srcData array source data, shape should
                        cover entire global index space
         @param dstData array destination data, shape should
@@ -280,14 +299,25 @@ staggerLoc = %s!""" % staggerLoc
                               is only relevant if rootPe is None
         @param **args
         """
-#        self.srcFld.setLocalData(srcData, self.staggerloc,
-#                                 globalIndexing = globalIndexing)
-#        self.dstFld.setLocalData(dstData, self.staggerloc,
-#                                 globalIndexing = globalIndexing)
+
+        if args.has_key('srcDataMask'):
+            srcDataMask=args.get('srcDataMask')
+            # Make sure with have a mask intialized for this grid.
+         
+            if(self.maskPtr is None):
+                if(self.srcFld.field.grid.mask[self.staggerloc] is None):
+                    self.srcFld.field.grid.add_item(item=ESMF.GridItem.MASK, staggerloc=self.staggerloc)
+                self.maskPtr = self.srcFld.field.grid.get_item(item=ESMF.GridItem.MASK, 
+                                                               staggerloc=self.staggerloc)
+            # Recompute weights only if masks are different.
+            if(not numpy.array_equal(self.maskPtr, srcDataMask)):
+                self.maskPtr[:] = srcDataMask[:]
+                self.computeWeights(**args)
 
         self.srcFld.field.data[:] = srcData
         self.dstFld.field.data[:] = dstData
         # regrid
+         
         self.regridObj(self.srcFld.field, self.dstFld.field)
 
         # fill in dstData

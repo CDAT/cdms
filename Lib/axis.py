@@ -1467,7 +1467,7 @@ class AbstractAxis(CdmsObj):
         retbnds[:,1] = bnds[1:]
         # To avoid floating point error on bound limits
 
-        if( self.isLongitude() and (self.units.find('degree') != -1)):
+        if( self.isLongitude() and hasattr(self, 'units') and (self.units.find('degree') != -1)):
              # Make sure we have close to 360 degree interval
              if( abs(abs(retbnds[-1,1] - retbnds[0,0]) -360) < (numpy.minimum(0.01, abs(retbnds[0,1] - retbnds[0,0])*0.1))):
                  # Now check wether either bound is near an interger value;
@@ -1488,7 +1488,7 @@ class AbstractAxis(CdmsObj):
                      else:
                          retbnds[0,0] = retbnds[-1,1] + 360.
                   
-        if( self.isLatitude() and (self.units.find('degree') != -1)):
+        if( self.isLatitude() and hasattr(self, 'units') and (self.units.find('degree') != -1)):
             retbnds[0,:] = numpy.maximum(-90.0, numpy.minimum(90.0,retbnds[0,:]))
             retbnds[-1,:] = numpy.maximum(-90.0, numpy.minimum(90.0,retbnds[-1,:]))
 

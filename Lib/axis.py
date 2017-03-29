@@ -6,6 +6,7 @@ CDMS Axis objects
 """
 _debug = 0
 std_axis_attributes = ['name', 'units', 'length', 'values', 'bounds']
+import pdb
 import string, sys, types, copy
 import numpy
 # import regrid2._regrid
@@ -1466,49 +1467,32 @@ class AbstractAxis(CdmsObj):
         retbnds[:,1] = bnds[1:]
         # To avoid floating point error on bound limits
 
-        if self.isLongitude():
+        pdb.set_trace()
+        if( self.isLongitude() and (self.units.find('degree') != -1)):
              # Make sure we have at least 360 degree interval
-             if( abs(retbnds[0,0] - retbnds[-1,1]) >= 360.0):
-                 # Make sure that precision is within 1% of of delta lon
-                 deltaLonEps = (self[1]-self[0])/100.0
-                 # retrieve fraction part  only (get rid of integer)
-                 decimalBfirst = abs(retbnds[0,0]- numpy.trunc(retbnds[0,0]))
-                 decimalBlast  = abs(retbnds[-1,1]- numpy.trunc(retbnds[-1,1]))
-
-                 # make sure we don't have .999 but something between 0-0.5
-                 # we multiply by 10 to round .999 to 1.0
-                 if( round(decimalBfirst) == 1.0) :
-                     decimalBfirst = 1-decimalBfirst
-                 if( round(decimalBlast) == 1.0) :
-                     decimalBlast = 1-decimalBlast
-                 nbDigits = 0
-                 if( decimalBfirst > 0 ):
-                 # Find out how many 0s we have after the decimal point
-                     nbDigits = numpy.trunc(abs(numpy.log10(decimalBfirst)))
-                     nbDigits = nbDigits.astype(numpy.int32)-1
-                 # trunc after the to the nth Digit
-                 roundBfirst = numpy.round(retbnds[0,0],nbDigits)
-                 # Same thing for last bounds
-                 nbDigits = 0
-                 if( decimalBlast > 0 ):
-                     nbDigits = numpy.trunc(abs(numpy.log10(decimalBlast)))
-                     nbDigits = nbDigits.astype(numpy.int32)-1
-                 roundBlast = round(retbnds[-1,1],nbDigits)
-
-                 diffBfirst = abs(roundBfirst - retbnds[0,0])
-                 diffBlast = abs(roundBlast - retbnds[-1,1])
-                 # Cyclical longitude can be shaved to nth decimal since the 
-                 # difference between Bounds and is within 1% of longitude difference
-                 if((retbnds[0,0] != roundBfirst) and (diffBfirst < deltaLonEps)): 
+             domain = retbnds[-1,1] - retbnds[0,0]
+             if( abs(domain - 360.) < (numpy.minimum(0.01, abs(retbnds[0,1] - retbnds[0,0])*0.1))):
+                 setbnd = False
+                 if( (abs(retbnds[0,0] - numpy.floor(retbnds[0,0] + 0.5)) < 
+                      abs(retbnds[0,1] - retbnds[0,0])*0.01)):
                      warnings.warn("Your first bounds[0,0] %lf will be corrected to %lf" %
-                                   (retbnds[0,0], roundBfirst),UserWarning)
-                     retbnds[0,0] = roundBfirst
+                                   (retbnds[0,0], numpy.floor(retbnds[0,0] + 0.5)),UserWarning)
+                     retbnds[0,0] = numpy.floor(retbnds[0,0] + 0.5)
+                     setbnd = True
 
-                 if((retbnds[-1,1] != roundBlast) and (diffBlast < deltaLonEps)): 
+                 if( (abs(retbnds[-1,1] - numpy.floor(retbnds[-1,1] + 0.5)) < 
+                      abs(retbnds[-1,1] - retbnds[-1,0])*0.01)):
                      warnings.warn("Your bounds bounds[-1,1] %lf will be corrected to %lf" %
-                                   (retbnds[-1,1], roundBlast),UserWarning)
-                     retbnds[-1,1] = roundBlast
+                                   (retbnds[-1,1], numpy.floor(retbnds[-1,1] + 0.5)),UserWarning)
+                     retbnds[-1,1] = numpy.floor(retbnds[-1,1] + 0.5)
+                     setbnds = True
 
+                 if(not setbnd):
+                     if ( domain > 0 ):
+                         retbnds[-1,1] = retbnds[0,0] + 360.
+                     else:
+                         retbnds[0,0] = retbnds[-1,1] + 360.
+                  
         if self.isLatitude():
             retbnds[0,:] = numpy.maximum(-90.0, numpy.minimum(90.0,retbnds[0,:]))
             retbnds[-1,:] = numpy.maximum(-90.0, numpy.minimum(90.0,retbnds[-1,:]))

@@ -1469,17 +1469,17 @@ class AbstractAxis(CdmsObj):
 
         if( self.isLongitude() and (self.units.find('degree') != -1)):
              # Make sure we have close to 360 degree interval
-             if( abs(retbnds[-1,1] - retbnds[0,0] -360) < (numpy.minimum(0.01, abs(retbnds[0,1] - retbnds[0,0])*0.1))):
+             if( abs(abs(retbnds[-1,1] - retbnds[0,0]) -360) < (numpy.minimum(0.01, abs(retbnds[0,1] - retbnds[0,0])*0.1))):
                  # Now check wether either bound is near an interger value;
                  # if yes round both integer
                  if( (abs(retbnds[0,0] - numpy.floor(retbnds[0,0] + 0.5)) < 
                       abs(retbnds[0,1] - retbnds[0,0])*0.01) or 
                      (abs(retbnds[-1,1] - numpy.floor(retbnds[-1,1] + 0.5)) < 
                       abs(retbnds[-1,1] - retbnds[-1,0])*0.01) ):
-                     warnings.warn("\nYour first bounds[0,0] %lf will be corrected to %lf"
-                                   "\nYour bounds bounds[-1,1] %lf will be corrected to %lf" %
-                                   (retbnds[0,0], numpy.floor(retbnds[0,0] + 0.5), 
-                                    retbnds[-1,1], numpy.floor(retbnds[-1,1] + 0.5)), Warning)
+                     msg = "\nYour first bounds[0,0] %lf will be corrected to %lf\nYour bounds bounds[-1,1] %lf will be corrected to %lf" \
+                            % (retbnds[0,0], numpy.floor(retbnds[0,0] + 0.5), retbnds[-1,1], numpy.floor(retbnds[-1,1] + 0.5))
+
+                     warnings.warn(msg,UserWarning)
                      retbnds[0,0] = numpy.floor(retbnds[0,0] + 0.5)
                      retbnds[-1,1] = numpy.floor(retbnds[-1,1] + 0.5)
                  else:

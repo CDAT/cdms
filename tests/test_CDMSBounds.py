@@ -5,15 +5,15 @@ import os
 
 class TestCDMSAutobounds(unittest.TestCase):
 
-    def createFile(self, offset):
+    def createFile(self, minLon, maxLon, offset):
         # Create a test netCDF file and load it with one grid of data.
         #
         testFile = cdms2.open('testFile.nc', 'w')
         latitudes = numpy.linspace(-89.975, 89.975,
                                    num=3600, dtype=numpy.float32)
 
-        minVal = float('-180.0')
-        maxVal = float('180.0')
+        minVal = minLon
+        maxVal = maxLon
         halfStep = 0.5 * (maxVal - minVal) / float(7200)
         minVal += halfStep
         maxVal -= halfStep
@@ -50,7 +50,7 @@ class TestCDMSAutobounds(unittest.TestCase):
     def test_Bounds10th(self):
         exponent = -10
         offset = 2.0**exponent
-        self.createFile(offset)
+        self.createFile(-180,180,offset)
         # Open the test file and get the CDMS2 longitude axis.
         #
         testFile = cdms2.open('testFile.nc')
@@ -65,10 +65,27 @@ class TestCDMSAutobounds(unittest.TestCase):
         self.assertEqual(bounds[-1,1], 180.00096893310547)
 #        self.assertAlmostEqual(bounds[-1, 1], 180.000984192, 5)
 
+    def test_BoundsReverse11th(self):
+        exponent = -11
+        offset = 2.0**exponent
+        self.createFile(180,-180,offset)
+        # Open the test file and get the CDMS2 longitude axis.
+        #
+        testFile = cdms2.open('testFile.nc')
+        var = testFile.variables['tos']
+        axes = var.getAxisList()
+        for axis in axes:
+            if 'longitude' == axis.id:
+                break
+        values = axis[:]
+        bounds = axis.getBounds()
+        self.assertEqual(bounds[0, 0],   180.0)
+        self.assertEqual(bounds[-1, 1], -180.0)
+
     def test_Bounds11th(self):
         exponent = -11
         offset = 2.0**exponent
-        self.createFile(offset)
+        self.createFile(-180,180,offset)
         # Open the test file and get the CDMS2 longitude axis.
         #
         testFile = cdms2.open('testFile.nc')

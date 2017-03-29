@@ -1467,33 +1467,28 @@ class AbstractAxis(CdmsObj):
         retbnds[:,1] = bnds[1:]
         # To avoid floating point error on bound limits
 
-        pdb.set_trace()
         if( self.isLongitude() and (self.units.find('degree') != -1)):
-             # Make sure we have at least 360 degree interval
-             domain = retbnds[-1,1] - retbnds[0,0]
-             if( abs(domain - 360.) < (numpy.minimum(0.01, abs(retbnds[0,1] - retbnds[0,0])*0.1))):
-                 setbnd = False
+             # Make sure we have close to 360 degree interval
+             if( abs(retbnds[-1,1] - retbnds[0,0] -360) < (numpy.minimum(0.01, abs(retbnds[0,1] - retbnds[0,0])*0.1))):
+                 # Now check wether either bound is near an interger value;
+                 # if yes round both integer
                  if( (abs(retbnds[0,0] - numpy.floor(retbnds[0,0] + 0.5)) < 
-                      abs(retbnds[0,1] - retbnds[0,0])*0.01)):
-                     warnings.warn("Your first bounds[0,0] %lf will be corrected to %lf" %
-                                   (retbnds[0,0], numpy.floor(retbnds[0,0] + 0.5)),UserWarning)
+                      abs(retbnds[0,1] - retbnds[0,0])*0.01) or 
+                     (abs(retbnds[-1,1] - numpy.floor(retbnds[-1,1] + 0.5)) < 
+                      abs(retbnds[-1,1] - retbnds[-1,0])*0.01) ):
+                     warnings.warn("\nYour first bounds[0,0] %lf will be corrected to %lf"
+                                   "\nYour bounds bounds[-1,1] %lf will be corrected to %lf" %
+                                   (retbnds[0,0], numpy.floor(retbnds[0,0] + 0.5), 
+                                    retbnds[-1,1], numpy.floor(retbnds[-1,1] + 0.5)), Warning)
                      retbnds[0,0] = numpy.floor(retbnds[0,0] + 0.5)
-                     setbnd = True
-
-                 if( (abs(retbnds[-1,1] - numpy.floor(retbnds[-1,1] + 0.5)) < 
-                      abs(retbnds[-1,1] - retbnds[-1,0])*0.01)):
-                     warnings.warn("Your bounds bounds[-1,1] %lf will be corrected to %lf" %
-                                   (retbnds[-1,1], numpy.floor(retbnds[-1,1] + 0.5)),UserWarning)
                      retbnds[-1,1] = numpy.floor(retbnds[-1,1] + 0.5)
-                     setbnds = True
-
-                 if(not setbnd):
-                     if ( domain > 0 ):
+                 else:
+                     if( retbnds[-1,1] > retbnds[0,0] ):
                          retbnds[-1,1] = retbnds[0,0] + 360.
                      else:
                          retbnds[0,0] = retbnds[-1,1] + 360.
                   
-        if self.isLatitude():
+        if( self.isLatitude() and (self.units.find('degree') != -1)):
             retbnds[0,:] = numpy.maximum(-90.0, numpy.minimum(90.0,retbnds[0,:]))
             retbnds[-1,:] = numpy.maximum(-90.0, numpy.minimum(90.0,retbnds[-1,:]))
 

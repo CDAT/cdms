@@ -88,6 +88,7 @@ class TestVariableSubselection(basetest.CDMSBaseTest):
         ps2 = ps[:, :, :37]
         s2 = numpy.ma.concatenate((ps1, ps2), axis=2)
         s2w = fw('ps', longitude=(-180, 180, 'ccn'))
+        print s2, s2w
         self.assertTrue(numpy.ma.allequal(s2, s2w))
 
     def testOrder(self):

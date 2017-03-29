@@ -15,6 +15,7 @@ from mvGenericRegrid import GenericRegrid
 from mvLibCFRegrid import LibCFRegrid
 try:
     import ESMF
+    ESMF.deprecated.func_globals['warnings'].warn_explicit=ESMF.deprecated.func_globals['warnings'].warn
     from mvESMFRegrid import ESMFRegrid
 except:
     pass
@@ -25,6 +26,7 @@ ESMF_HAS_BEEN_INITIALIZED = False
 if not ESMF_HAS_BEEN_INITIALIZED:
     try:
         import ESMF
+        ESMF.deprecated.func_globals['warnings'].warn_explicit=ESMF.deprecated.func_globals['warnings'].warn
         ESMF.Manager(debug=False)
         # this turns off the PET file logs
         ESMF_HAS_BEEN_INITIALIZED = True

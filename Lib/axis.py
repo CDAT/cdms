@@ -6,7 +6,6 @@ CDMS Axis objects
 """
 _debug = 0
 std_axis_attributes = ['name', 'units', 'length', 'values', 'bounds']
-import pdb
 import string, sys, types, copy
 import numpy
 # import regrid2._regrid
@@ -1488,7 +1487,7 @@ class AbstractAxis(CdmsObj):
                      else:
                          retbnds[0,0] = retbnds[-1,1] + 360.
                   
-        if( self.isLatitude() and hasattr(self, 'units') and (self.units.find('degree') != -1)):
+        if( (self.isLatitude() and (getAutoBounds() == 2)) or (hasattr(self, 'units') and (self.units.find('degree') != -1))):
             retbnds[0,:] = numpy.maximum(-90.0, numpy.minimum(90.0,retbnds[0,:]))
             retbnds[-1,:] = numpy.maximum(-90.0, numpy.minimum(90.0,retbnds[-1,:]))
 

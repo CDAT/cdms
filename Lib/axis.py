@@ -687,6 +687,8 @@ class AbstractAxis(CdmsObj):
           p2=p.to(units)
           return True
         except Exception,err:
+          import warnings
+          warnings.warn("genutil module not present, was not able to determine if axis is level based on units")
           pass
         return ((id[0:3] == 'lev') or (id[0:5] == 'depth') or (id in level_aliases))
 

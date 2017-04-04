@@ -300,19 +300,19 @@ staggerLoc = %s!""" % staggerLoc
         @param **args
         """
 
-        if args.has_key('srcDataMask'):
-            srcDataMask=args.get('srcDataMask')
+#        if args.has_key('srcDataMask'):
+#            srcDataMask=args.get('srcDataMask')
             # Make sure with have a mask intialized for this grid.
          
-            if(self.maskPtr is None):
-                if(self.srcFld.field.grid.mask[self.staggerloc] is None):
-                    self.srcFld.field.grid.add_item(item=ESMF.GridItem.MASK, staggerloc=self.staggerloc)
-                self.maskPtr = self.srcFld.field.grid.get_item(item=ESMF.GridItem.MASK, 
-                                                               staggerloc=self.staggerloc)
+#            if(self.maskPtr is None):
+#                if(self.srcFld.field.grid.mask[self.staggerloc] is None):
+#                    self.srcFld.field.grid.add_item(item=ESMF.GridItem.MASK, staggerloc=self.staggerloc)
+#                self.maskPtr = self.srcFld.field.grid.get_item(item=ESMF.GridItem.MASK, 
+#                                                               staggerloc=self.staggerloc)
             # Recompute weights only if masks are different.
-            if(not numpy.array_equal(self.maskPtr, srcDataMask)):
-                self.maskPtr[:] = srcDataMask[:]
-                self.computeWeights(**args)
+#            if(not numpy.array_equal(self.maskPtr, srcDataMask)):
+#                self.maskPtr[:] = srcDataMask[:]
+#                self.computeWeights(**args)
 
         self.srcFld.field.data[:] = srcData
         self.dstFld.field.data[:] = dstData

@@ -3,7 +3,9 @@ import glob
 import importlib
 import sys
 import os
+import cdat_info
 
+cdat_info.download_sample_data_files(os.path.join(sys.prefix,"share","cdms2","test_data_files.txt"),cdat_info.get_sampledata_path())
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "tests"))
 if len(sys.argv)==1:
     names = glob.glob("tests/test_*.py")

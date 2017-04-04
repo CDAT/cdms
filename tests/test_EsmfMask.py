@@ -1,12 +1,13 @@
 import unittest
 import cdms2
 import ESMF
-import vcs
+import cdat_info
+import os
 
 class TestESMFMask(unittest.TestCase):
     def setUp(self):
 
-        self.f=cdms2.open(vcs.sample_data+"/clt.nc")
+        self.f=cdms2.open(os.path.join(cdat_info.get_sampledata_path(),"clt.nc"))
         self.s=self.f('clt',slice(0,12)).astype("float64")
         self.u=self.f('u').astype("float64")
 

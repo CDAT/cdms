@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from numpy.distutils.core import setup, Extension
+from distutils.core import setup, Extension
 import os, sys
 import subprocess,shutil
 target_prefix = sys.prefix
@@ -72,6 +72,7 @@ setup (name = "cdms2",
        package_dir = {'cdms2': 'Lib'},
        include_dirs = ['Include', numpy.lib.utils.get_include()] + cdat_info.cdunif_include_directories,
        scripts = ['Script/cdscan', 'Script/convertcdms.py',"Script/myproxy_logon"],
+       data_files = [("share/cdms2",["share/test_data_files.txt"])],
        ext_modules = [Extension('cdms2.Cdunif',
                                 ['Src/Cdunifmodule.c'],
                                 library_dirs = cdat_info.cdunif_library_directories,
@@ -95,6 +96,7 @@ setup (name = "MV2",
        py_modules=['MV2']
        )
 
+from numpy.distutils.core import setup, Extension
 setup (name = "regrid2",
        version=Version,
        description = "Remap Package",

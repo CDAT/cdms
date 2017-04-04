@@ -9,10 +9,17 @@ fields are decomposed.
 
 import ESMF
 import numpy
-from mpi4py import MPI
+try:
+    from mpi4py import MPI
+    has_mpi = True
+except:
+    has_mpi = False
 
 rootPe = 0
-pe = MPI.COMM_WORLD.Get_rank()
+if has_mpi:
+    pe = MPI.COMM_WORLD.Get_rank()
+else:
+    pe = 0
 
 COORDSYS = ESMF.CoordSys.CART
 CENTER = ESMF.StaggerLoc.CENTER

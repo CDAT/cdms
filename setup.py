@@ -47,7 +47,7 @@ import cdat_info
 import numpy
 macros = []
 try:
-    import dmpi4py
+    import mpi4py
     ## Ok we have mpi4py let's build with support for it
     macros.append(("PARALLEL",None))
     import subprocess

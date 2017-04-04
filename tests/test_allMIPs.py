@@ -1,4 +1,3 @@
-import requests
 import cdms2
 import os
 import sys
@@ -8,13 +7,9 @@ import ssl
 
 class TestMIPS(basetest.CDMSBaseTest):
     def setUp(self):
-        self.filename="161122_RobertPincus_multiple_input4MIPs_radiation_RFMIP_UColorado-RFMIP-20161122_none.nc"
-        myurl = "http://uvcdat.llnl.gov/cdat/sample_data/"+self.filename
         super(TestMIPS, self).setUp()
-        r=requests.get(myurl, stream=True)
-        with open(self.filename, 'wb') as fd:
-            for chunk in r.iter_content(chunk_size=1024):
-                fd.write(chunk)
+        pth = cdat_info.get_sampledata_path()
+        self.filename=os.path.join(pth,"161122_RobertPincus_multiple_input4MIPs_radiation_RFMIP_UColorado-RFMIP-20161122_none.nc")
 
     def tearDown(self):
         super(TestMIPS, self).tearDown()

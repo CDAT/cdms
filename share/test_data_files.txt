@@ -30,3 +30,5 @@ c366a478a1aacc30f4a3aab608c1d6c8  tas_ccsr-95a_1980.01-1980.12.nc
 919efd749b5dfd00d36cb8a77464ba9d  tas_ccsr-95a_1982.01-1982.12.nc
 ee4c335a071bd9ca5f3ed2a94bfe1b17  tas_ccsr-95a_1983.01-1983.12.nc
 3f04f9e3a21226da7dc88f77e6e11ec6  tas_ccsr-95a_1984.01-1984.12.nc
+bae6d4d96aeb7faafee00f2a906392a5  era40_tas_sample.nc
+a58748f192e02ae1ec2cf9375a1141cc  161122_RobertPincus_multiple_input4MIPs_radiation_RFMIP_UColorado-RFMIP-20161122_none.nc

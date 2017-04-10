@@ -15,7 +15,11 @@ import unittest
 import time
 import ESMF
 import copy
-from mpi4py import MPI
+try:
+    from mpi4py import MPI
+    has_mpi = True
+except:
+    has_mpi = False
 import sys
 
 PLOT = False
@@ -28,7 +32,10 @@ class Test(unittest.TestCase):
 
     def test1_2d_esmf_native_tripolar_fraction(self):
 
-        mype = MPI.COMM_WORLD.Get_rank()
+        if has_mpi:
+            mype = MPI.COMM_WORLD.Get_rank()
+        else:
+            mype = 0
 
         f = cdms2.open(cdat_info.get_sampledata_path() + \
                            '/so_Omon_ACCESS1-0_historical_r1i1p1_185001-185412_2timesteps.nc')

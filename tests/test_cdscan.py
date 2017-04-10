@@ -3,7 +3,7 @@ import basetest
 from cdms2.cdscan import main as cdscan
 import os, sys
 import xml.etree.ElementTree as ET
-
+import cdat_info
 
 def diffElements(el1, el2):
     if el1.tag != el2.tag:
@@ -34,7 +34,7 @@ def diffElements(el1, el2):
 class TestCDScan(basetest.CDMSBaseTest):
     def testScan(self):
         argv = 'cdscan -q -d test -x some_junk.xml u_2000.nc u_2001.nc u_2002.nc v_2000.nc v_2001.nc v_2002.nc'.split()
-        pth = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
+        pth = cdat_info.get_sampledata_path()
         os.chdir(pth)
         cdscan(argv)
         baseline = ET.parse("test.xml")

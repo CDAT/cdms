@@ -35,17 +35,7 @@ class TestESMFRegridding(unittest.TestCase):
         self.fGrid2D = [g2D.getLatitude()[:], g2D.getLongitude()[:]]
 
         filename = cdat_info.get_sampledata_path() + "/era40_tas_sample.nc"
-        if os.path.isfile(filename):
-            g=cdms2.open(filename)
-        else:
-            filename="era40_tas_sample.nc"
-            import requests
-            myurl = "http://uvcdat.llnl.gov/cdat/sample_data/"+filename
-            r=requests.get(myurl, stream=True)
-            with open(filename, 'wb') as fd: 
-                for chunk in r.iter_content(chunk_size=1024):
-                    fd.write(chunk)
-            g=cdms2.open(filename)
+        g=cdms2.open(filename)
 
         self.gtas = g('tas')
         self.gGrid = [self.gtas.getLatitude(), self.gtas.getLongitude()]

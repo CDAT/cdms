@@ -1477,7 +1477,7 @@ class AbstractAxis(CdmsObj):
                       abs(retbnds[0,1] - retbnds[0,0])*0.01) or 
                      (abs(retbnds[-1,1] - numpy.floor(retbnds[-1,1] + 0.5)) < 
                       abs(retbnds[-1,1] - retbnds[-1,0])*0.01) ):
-                     msg = "\nYour first bounds[0,0] %lf will be corrected to %lf\nYour bounds bounds[-1,1] %lf will be corrected to %lf" \
+                     msg = "\nYour first bounds[0,0] %3.15lf will be corrected to %3.15lf\nYour bounds bounds[-1,1] %3.15lf will be corrected to %3.15lf" \
                             % (retbnds[0,0], numpy.floor(retbnds[0,0] + 0.5), retbnds[-1,1], numpy.floor(retbnds[-1,1] + 0.5))
 
                      warnings.warn(msg,UserWarning)

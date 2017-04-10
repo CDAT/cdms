@@ -172,12 +172,18 @@ class EsmfStructGrid:
         self.centersSet = False
 
         maxIndex = numpy.array(shape, dtype = numpy.int32)
+
+        # assume last 2 dimensions are Y,X
+        self.centersSet = False
+        periodic_dim = self.ndims-1
+        pole_dim = self.ndims-2
         if periodicity == 0:
             self.grid = ESMF.Grid(max_index=maxIndex, num_peri_dims=0, staggerloc=[staggerloc],
                                   coord_sys=coordSys)
         elif periodicity == 1:
-            self.grid = ESMF.Grid(max_index=maxIndex, num_peri_dims=1, staggerloc=[staggerloc],
-                                  coord_sys=coordSys)
+            self.grid = ESMF.Grid(max_index=maxIndex, num_peri_dims=1, 
+                                  periodic_dim=periodic_dim, pole_dim=pole_dim,
+                                  staggerloc=[staggerloc], coord_sys=coordSys)
         else:
             msg = """
 esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.

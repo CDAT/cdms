@@ -4,7 +4,7 @@
 
 import numpy, cdms2, os, cdtime, sys,shutil
 import basetest
-
+import cdat_info
 
 class TestDatasetFilemap(basetest.CDMSBaseTest):
     def testFilemaps(self):
@@ -47,8 +47,8 @@ class TestDatasetFilemap(basetest.CDMSBaseTest):
             imo += 12
 
         # Test filemap access ...
-        pth = os.path.dirname(os.path.abspath(__file__))
-        shutil.copy2(os.path.join(pth, "data", "cdtest10.xml"), os.path.join(self.tempdir, "cdtest10.xml"))
+        pth = cdat_info.get_sampledata_path()
+        shutil.copy2(os.path.join(pth, "cdtest10.xml"), os.path.join(self.tempdir, "cdtest10.xml"))
         f = self.getTempFile('cdtest10.xml')
 
         # Read u from 2001-7 to 2002-7 and compare

@@ -1,7 +1,9 @@
 ## Automatically adapted for numpy.oldnumeric Aug 01, 2007 by 
 
 import numpy
-import cdms2,os,sys
+import cdms2
+import os
+import sys
 from cdms2.tvariable import TransientVariable as TV
 import MV2
 import basetest

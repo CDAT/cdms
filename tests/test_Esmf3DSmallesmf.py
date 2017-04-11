@@ -75,6 +75,16 @@ class TestESMPRegridderConserve(unittest.TestCase):
         srcDims, srcXYZCenter, srcData, srcBounds = makeGrid(5, 4, 3)
         dstDims, dstXYZCenter, dstData, dstBounds = makeGrid(5, 4, 3)
 
+        srcData=srcData.T
+        dstData=dstData.T
+        srcXYZCenter[0]=srcXYZCenter[0].T
+        dstXYZCenter[0]=dstXYZCenter[0].T
+        srcXYZCenter[1]=srcXYZCenter[1].T
+        dstXYZCenter[1]=dstXYZCenter[1].T
+        srcXYZCenter[2]=srcXYZCenter[2].T
+        dstXYZCenter[2]=dstXYZCenter[2].T
+        srcDims=srcDims[::-1]
+        dstDims=dstDims[::-1]
         # Establish the destination grid
         dstGrid3D = esmf.EsmfStructGrid(dstData.shape, periodicity=1,
                                         coordSys = ESMF.CoordSys.CART, 
@@ -159,7 +169,6 @@ class TestESMPRegridderConserve(unittest.TestCase):
             self.assertEqual(maxlsd, maxlii.round(2))
 
     def dtest2_3D_Native_Conserve(self):
-        print
         srcDims, srcXYZCenter, srcData, srcBounds = makeGrid(5, 4, 3)
         dstDims, dstXYZCenter, dstData, dstBounds = makeGrid(5, 4, 3)
 

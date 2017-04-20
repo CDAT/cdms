@@ -9,6 +9,16 @@ import basetest
 
 
 class TestGenericGrids(basetest.CDMSBaseTest):
+    def testGenGrids2(self):
+        fn = self.getDataFile('sampleCurveGrid4.nc')
+        s=fn("sample")
+        g=s.getGrid()
+        lat=g.getLatitude()
+        lon=g.getLongitude()
+        g2=cdms2.createGenericGrid(lat, lon)
+        print g2.getLatitude()[:]
+        print g2.getLongitude()[:]
+
     def testGenGrids(self):
 
         datb = numpy.array([ 693., 694.,])

@@ -16,8 +16,6 @@ class TestGenericGrids(basetest.CDMSBaseTest):
         lat=g.getLatitude()
         lon=g.getLongitude()
         g2=cdms2.createGenericGrid(lat, lon)
-        print g2.getLatitude()[:]
-        print g2.getLongitude()[:]
 
     def testGenGrids(self):
 

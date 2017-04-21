@@ -9,13 +9,21 @@ import unittest
 import ESMF
 import cdms2
 import numpy
-from mpi4py import MPI
+try:
+    from mpi4py import MPI
+    has_mpi = True
+except:
+    has_mpi = False
 
 class TestESMFEDGE(unittest.TestCase):
     def setUp(self):
 
-        self.pe = MPI.COMM_WORLD.Get_rank()
-        self.nprocs = MPI.COMM_WORLD.Get_size()
+        if has_mpi:
+            self.pe = MPI.COMM_WORLD.Get_rank()
+            self.nprocs = MPI.COMM_WORLD.Get_size()
+        else:
+            self.pe = 0
+            self.nprocs = 1
 
         nxe, nye = 4, 3
         nxs, nys = 1, 1

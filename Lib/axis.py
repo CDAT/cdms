@@ -16,6 +16,7 @@ from cdmsobj import CdmsObj, Max32int
 from sliceut import reverseSlice, splitSlice, splitSliceExt
 from error import CDMSError
 import forecast
+import warnings
 #import internattr
 from UserList import UserList
 class AliasList (UserList):
@@ -737,8 +738,12 @@ class AbstractAxis(CdmsObj):
           units=getattr(self,'units',"").strip()
           p2=p.to(units)
           return True
-        except Exception,err:
+        except ImportError,err:
+          import warnings
+          warnings.warn("genutil module not present, was not able to determine if axis is level based on units")
           pass
+        except Exception:
+            pass
         return ((id[0:3] == 'lev') or (id[0:5] == 'depth') or (id in level_aliases))
 
     # Designate axis as a longitude axis
@@ -1518,14 +1523,30 @@ class AbstractAxis(CdmsObj):
         retbnds[:,0] = bnds[:-1]
         retbnds[:,1] = bnds[1:]
         # To avoid floating point error on bound limits
-        if(self._getdtype(self) == numpy.float32):
-            retbnds[0,0] = round(retbnds[0,0],4)
-            retbnds[-1,1] = round(retbnds[-1,1],4)
-        else:
-            retbnds[0,0] = round(retbnds[0,0],13)
-            retbnds[-1,1] = round(retbnds[-1,1],13)
 
-        if self.isLatitude():
+        if( self.isLongitude() and hasattr(self, 'units') and (self.units.find('degree') != -1)):
+             # Make sure we have close to 360 degree interval
+             if( abs(abs(retbnds[-1,1] - retbnds[0,0]) -360) < (numpy.minimum(0.01, abs(retbnds[0,1] - retbnds[0,0])*0.1))):
+                 # Now check wether either bound is near an interger value;
+                 # if yes round both integer
+                 if( (abs(retbnds[0,0] - numpy.floor(retbnds[0,0] + 0.5)) < 
+                      abs(retbnds[0,1] - retbnds[0,0])*0.01) or 
+                     (abs(retbnds[-1,1] - numpy.floor(retbnds[-1,1] + 0.5)) < 
+                      abs(retbnds[-1,1] - retbnds[-1,0])*0.01) ):
+                     msg = "\nYour first bounds[0,0] %3.15lf will be corrected to %3.15lf\nYour bounds bounds[-1,1] %3.15lf will be corrected to %3.15lf" \
+                            % (retbnds[0,0], numpy.floor(retbnds[0,0] + 0.5), retbnds[-1,1], numpy.floor(retbnds[-1,1] + 0.5))
+
+                     warnings.warn(msg,UserWarning)
+                     retbnds[0,0] = numpy.floor(retbnds[0,0] + 0.5)
+                     retbnds[-1,1] = numpy.floor(retbnds[-1,1] + 0.5)
+                 else:
+                     if( retbnds[-1,1] > retbnds[0,0] ):
+                         retbnds[-1,1] = retbnds[0,0] + 360.
+                     else:
+                         retbnds[0,0] = retbnds[-1,1] + 360.
+                  
+        if( (self.isLatitude() and getAutoBounds()) or 
+            (self.isLatitude() and hasattr(self, 'units') and (self.units.find('degree') != -1))): 
             retbnds[0,:] = numpy.maximum(-90.0, numpy.minimum(90.0,retbnds[0,:]))
             retbnds[-1,:] = numpy.maximum(-90.0, numpy.minimum(90.0,retbnds[-1,:]))
 

@@ -15,9 +15,15 @@ from regrid2 import GenericRegrid
 import numpy
 import time
 import os
-from mpi4py import MPI
+try:
+    from mpi4py import MPI
+    has_mpi = True
+except:
+    has_mpi = False
 
 import re
+import warnings
+
 
 ESMF.Manager(debug=True)
 
@@ -95,12 +101,18 @@ class TestESMPRegridderConserve(unittest.TestCase):
         """
         Unit test set up
         """
-        self.pe = MPI.COMM_WORLD.Get_rank()
-        self.np = MPI.COMM_WORLD.Get_size()
+        if has_mpi:
+            self.pe = MPI.COMM_WORLD.Get_rank()
+            self.np = MPI.COMM_WORLD.Get_size()
+        else:
+            self.pe = 0
+            self.np = 1
         self.rootPe = 0
 
     def test1_3D_Native_Bilinear(self):
-        print 'test1'
+        if not has_mpi:
+            warnings.warn("mpi4py needed for this test, skipping")
+            return
         srcDims, srcXYZCenter, srcData, srcBounds = makeGrid(5, 4, 3)
         dstDims, dstXYZCenter, dstData, dstBounds = makeGrid(5, 4, 3)
 

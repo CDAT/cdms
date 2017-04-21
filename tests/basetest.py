@@ -4,7 +4,7 @@ import numpy
 import tempfile
 import cdms2
 import os
-
+import cdat_info
 
 class CDMSBaseTest(unittest.TestCase):
     def getFile(self, path, mode="r"):
@@ -13,8 +13,8 @@ class CDMSBaseTest(unittest.TestCase):
         return f
 
     def getDataFile(self, name):
-        pth = os.path.dirname(os.path.abspath(__file__))
-        return self.getFile(os.path.join(pth, "data", name))
+        pth = cdat_info.get_sampledata_path()
+        return self.getFile(os.path.join(pth, name))
 
     def getTempFile(self, path, mode="r"):
         return self.getFile(os.path.join(self.tempdir, path), mode)

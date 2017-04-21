@@ -15,8 +15,12 @@ import unittest
 import ESMF
 import time
 import copy
-from mpi4py import MPI
 import sys
+try:
+    from mpi4py import MPI
+    has_mpi = True
+except:
+    has_mpi = False
 
 PLOT = False
 if PLOT:
@@ -40,7 +44,10 @@ class Test(unittest.TestCase):
         toc = time.time()
         #print 'time to interpolate (ESMF linear) forward/backward: ', toc - tic
 
-        mype = MPI.COMM_WORLD.Get_rank()
+        if has_mpi:
+            mype = MPI.COMM_WORLD.Get_rank()
+        else:
+            mype = 0
         if mype == 0:
             ntot = reduce(operator.mul, so.shape)
             avgdiff = numpy.sum(so - soInterpInterp) / float(ntot)

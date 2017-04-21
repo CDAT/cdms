@@ -94,7 +94,7 @@ class TestRegridding(basetest.CDMSBaseTest):
         var = cdms2.createVariable(dat, axes=(lev,g), attributes={'units':'N/A'}, id='test')
         result = var.pressureRegrid(levout)
 
-        #self.assertLess(abs(result[0,0,0]-3.26185), 1.e-4)
+        self.assertLess(abs(result[0,0,0]-3.26185), 1.e-4)
         # Test cross-section regridder --------------------------------
         latin = cdms2.createGaussianAxis(16)
         latout = cdms2.createGaussianAxis(24)
@@ -108,7 +108,7 @@ class TestRegridding(basetest.CDMSBaseTest):
         dat[2] = 6.0
         var = cdms2.createVariable(dat, axes=(lev,latin), attributes={'units':'N/A'}, id='test')
         dat2 = var.crossSectionRegrid(levout, latout)
-        #self.assertLess(abs(dat2[0,0]-3.26185), 1.e-4)
+        self.assertLess(abs(dat2[0,0]-3.26185), 1.e-4)
 
 
 if __name__ == "__main__":

@@ -6,7 +6,6 @@
 
 import cdms2, numpy, os, sys
 import basetest
-import pdb
 
 
 class TestGenericGrids(basetest.CDMSBaseTest):

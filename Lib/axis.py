@@ -16,6 +16,7 @@ from cdmsobj import CdmsObj, Max32int
 from sliceut import reverseSlice, splitSlice, splitSliceExt
 from error import CDMSError
 import forecast
+import warnings
 #import internattr
 from UserList import UserList
 class AliasList (UserList):
@@ -656,10 +657,11 @@ class AbstractAxis(CdmsObj):
     # Return true iff the axis is a latitude axis
     def isLatitude(self):
         id = self.id.strip().lower()
-        if (hasattr(self,'axis') and self.axis=='Y'): return 1
+        if (hasattr(self,'axis') and self.axis=='Y'): return True
         units = getattr(self,"units","").strip().lower()
-        if units in ["degrees_north","degree_north","degree_n","degrees_n","degreen","degreesn"]:
-          return 1
+        if units in ["degrees_north","degree_north","degree_n","degrees_n","degreen","degreesn"] and  \
+           not (self.isLongitude() or self.isLevel() or self.isTime()):
+             return True
         return (id[0:3] == 'lat') or (id in latitude_aliases)
 
     # Designate axis as a vertical level axis
@@ -674,18 +676,22 @@ class AbstractAxis(CdmsObj):
     # Return true iff the axis is a level axis
     def isLevel(self):
         id = self.id.strip().lower()
-        if (hasattr(self,'axis') and self.axis=='Z'): return 1
+        if (hasattr(self,'axis') and self.axis=='Z'): return True
         if getattr(self,"positive","").strip().lower() in ["up","down"]:
-          return 1
+          return True
         try:
           #Ok let's see if this thing as pressure units
           import genutil
           p=genutil.udunits(1,"Pa")
           units=getattr(self,'units',"").strip()
           p2=p.to(units)
-          return 1
-        except Exception,err:
+          return True
+        except ImportError,err:
+          import warnings
+          warnings.warn("genutil module not present, was not able to determine if axis is level based on units")
           pass
+        except Exception:
+            pass
         return ((id[0:3] == 'lev') or (id[0:5] == 'depth') or (id in level_aliases))
 
     # Designate axis as a longitude axis
@@ -714,10 +720,11 @@ class AbstractAxis(CdmsObj):
     # Return true iff the axis is a longitude axis
     def isLongitude(self):
         id = self.id.strip().lower()
-        if (hasattr(self,'axis') and self.axis=='X'): return 1
+        if (hasattr(self,'axis') and self.axis=='X'): return True
         units = getattr(self,"units","").strip().lower()
-        if units in ["degrees_east","degree_east","degree_e","degrees_e","degreee","degreese"]:
-          return 1
+        if units in ["degrees_east","degree_east","degree_e","degrees_e","degreee","degreese"] and \
+           not (self.isLatitude() or self.isLevel() or self.isTime()):
+             return True
         return (id[0:3] == 'lon') or (id in longitude_aliases)
 
     # Designate axis as a time axis, and optionally set the calendar
@@ -743,14 +750,14 @@ class AbstractAxis(CdmsObj):
     def isTime(self):
         id = self.id.strip().lower()
         if hasattr(self,'axis'):
-            if self.axis=='T': return 1
-            elif self.axis is not None: return 0
+            if self.axis=='T': return True
+            elif self.axis is not None: return False
         # Have we saved the id-to-axis type information already?
         if id in self.idtaxis:
             if self.idtaxis[id]=='T':
-                return 1
+                return True
             else:
-                return 0
+                return False
         ## Try to figure it out from units
         try:
           import genutil
@@ -761,26 +768,26 @@ class AbstractAxis(CdmsObj):
             s = sp[0].strip()
             if s in t.available_units() and t.known_units()[s]=="TIME":
               self.idtaxis[id] = 'T'
-              return 1
+              return True
             #try the plural version since udunits only as singular (day noy days)
             s=s+"s"
             if s in t.available_units() and t.known_units()[s]=="TIME":
               self.idtaxis[id] = 'T'
-              return 1
+              return True
         except:
           pass
         #return (id[0:4] == 'time') or (id in time_aliases)
         if (id[0:4] == 'time') or (id in time_aliases):
             self.idtaxis[id]='T'
-            return 1
+            return True
         else:
             self.idtaxis[id] = 'O'
-            return 0
+            return False
 
     # Return true iff the axis is a forecast axis
     def isForecast(self):
         id = self.id.strip().lower()
-        if (hasattr(self,'axis') and self.axis=='F'): return 1
+        if (hasattr(self,'axis') and self.axis=='F'): return True
         return (id[0:6] == 'fctau0') or (id in forecast_aliases)
     def isForecastTime(self):
         return self.isForecast()
@@ -917,10 +924,10 @@ class AbstractAxis(CdmsObj):
     def isCircular(self):
 
         if hasattr(self,'realtopology'):
-            if self.realtopology=='circular': return 1
-            elif self.realtopology=='linear': return 0
+            if self.realtopology=='circular': return True
+            elif self.realtopology=='linear': return False
         if(len(self) < 2):
-            return 0
+            return False
         
         try:  # non float types will fail this
             baxis = self[0]
@@ -1458,11 +1465,34 @@ class AbstractAxis(CdmsObj):
             bnds = numpy.array([self[0]-delta,self[0]+delta])
 
         # Transform to (n,2) array
-        retbnds = numpy.zeros((len(ar),2),numpy.float)
+        retbnds = numpy.zeros((len(ar),2),numpy.float64)
         retbnds[:,0] = bnds[:-1]
         retbnds[:,1] = bnds[1:]
+        # To avoid floating point error on bound limits
 
-        if self.isLatitude():
+        if( self.isLongitude() and hasattr(self, 'units') and (self.units.find('degree') != -1)):
+             # Make sure we have close to 360 degree interval
+             if( abs(abs(retbnds[-1,1] - retbnds[0,0]) -360) < (numpy.minimum(0.01, abs(retbnds[0,1] - retbnds[0,0])*0.1))):
+                 # Now check wether either bound is near an interger value;
+                 # if yes round both integer
+                 if( (abs(retbnds[0,0] - numpy.floor(retbnds[0,0] + 0.5)) < 
+                      abs(retbnds[0,1] - retbnds[0,0])*0.01) or 
+                     (abs(retbnds[-1,1] - numpy.floor(retbnds[-1,1] + 0.5)) < 
+                      abs(retbnds[-1,1] - retbnds[-1,0])*0.01) ):
+                     msg = "\nYour first bounds[0,0] %3.15lf will be corrected to %3.15lf\nYour bounds bounds[-1,1] %3.15lf will be corrected to %3.15lf" \
+                            % (retbnds[0,0], numpy.floor(retbnds[0,0] + 0.5), retbnds[-1,1], numpy.floor(retbnds[-1,1] + 0.5))
+
+                     warnings.warn(msg,UserWarning)
+                     retbnds[0,0] = numpy.floor(retbnds[0,0] + 0.5)
+                     retbnds[-1,1] = numpy.floor(retbnds[-1,1] + 0.5)
+                 else:
+                     if( retbnds[-1,1] > retbnds[0,0] ):
+                         retbnds[-1,1] = retbnds[0,0] + 360.
+                     else:
+                         retbnds[0,0] = retbnds[-1,1] + 360.
+                  
+        if( (self.isLatitude() and getAutoBounds()) or 
+            (self.isLatitude() and hasattr(self, 'units') and (self.units.find('degree') != -1))): 
             retbnds[0,:] = numpy.maximum(-90.0, numpy.minimum(90.0,retbnds[0,:]))
             retbnds[-1,:] = numpy.maximum(-90.0, numpy.minimum(90.0,retbnds[-1,:]))
 
@@ -1530,7 +1560,7 @@ class AbstractAxis(CdmsObj):
 
     def isVirtual(self):
         "Return true iff coordinate values are implicitly defined."
-        return 0
+        return False
 
     shape = property(_getshape,None)
     dtype = _getdtype
@@ -1762,7 +1792,7 @@ class TransientAxis(AbstractAxis):
                 self._bounds_ = None
 
     def isLinear(self):
-        return 0
+        return False
 
     def typecode(self):
         return self._data_.dtype.char
@@ -1794,11 +1824,11 @@ class TransientVirtualAxis(TransientAxis):
         return numpy.arange(float(self._virtualLength))
 
     def isCircular(self):
-        return 0                        # Circularity doesn't apply to index space.
+        return False                        # Circularity doesn't apply to index space.
 
     def isVirtual(self):
         "Return true iff coordinate values are implicitly defined."
-        return 1
+        return True
 
     def setBounds(self, bounds, isGeneric=False):
         "No boundaries on virtual axes"
@@ -2005,7 +2035,7 @@ class FileAxis(AbstractAxis):
         return length
 
     def isLinear(self):
-        return 0                        # All file axes are vector representation
+        return False                        # All file axes are vector representation
 
     # Return the bounds array, or generate a default if autobounds mode is set
     # If isGeneric is a list with one element, we set its element to True if the
@@ -2103,7 +2133,7 @@ class FileAxis(AbstractAxis):
 
         # No virtual axes in GrADS files
         if self.parent is not None and hasattr(self.parent, 'format') and self.parent.format=='GRADS':
-            return 0
+            return False
         return (self._obj_ is None)
 
     def isUnlimited(self):
@@ -2138,7 +2168,7 @@ class FileVirtualAxis(FileAxis):
 
     def isVirtual(self):
         "Return true iff coordinate values are implicitly defined."
-        return 1
+        return True
 
 ## PropertiedClasses.initialize_property_class (FileVirtualAxis)
 
@@ -2320,7 +2350,7 @@ def axisMatches(axis, specification):
                 raise CDMSError, 'Malformed axis spec, ' + specification
             s = s[1:-1].strip()
         if string.lower(axis.id) == s:
-            return 1
+            return True
         elif (s == 'time') or (s in time_aliases):
             return axis.isTime() 
         elif (s == 'fctau0') or (s in forecast_aliases):
@@ -2332,14 +2362,14 @@ def axisMatches(axis, specification):
         elif (s[0:3] == 'lev') or (s in level_aliases):
             return axis.isLevel()
         else:
-            return 0
+            return False
 
     elif isinstance(specification, types.FunctionType):
         r = specification(axis)
         if r: 
-            return 1
+            return True
         else: 
-            return 0
+            return False
 
     elif isinstance(specification, AbstractAxis):
         return (specification is axis)

@@ -1104,9 +1104,6 @@ static void collect_attributes(PyCdunifFileObject *file, int varid,
 				;
 				Py_END_ALLOW_THREADS
 				;
-				if ((py_type == NPY_STRING)) {
-					length = strlen(s) + 1;
-				}
 				s[length] = '\0';
 				string = PyString_FromString(s);
 				free(s);
@@ -2429,7 +2426,13 @@ PyCdunifVariable_ReadAsArray(PyCdunifVariableObject *self,
 			free(indices);
 		return NULL;
 	}
-	array = (PyArrayObject *) PyArray_SimpleNew(d, dims, self->type);
+	//
+	// If we don't have a flexible type define a Simple Array
+	//
+	if( self->type != NPY_STRING) {
+		array = (PyArrayObject *) PyArray_SimpleNew(d, dims, self->type);
+	}
+
 	if (array != NULL && nitems > 0) {
 		if (self->nd == 0) {
 			long zero = 0;
@@ -2452,6 +2455,11 @@ PyCdunifVariable_ReadAsArray(PyCdunifVariableObject *self,
 			long *start;
 			long *count;
 			long *stride;
+			char **value;
+			int err;
+			int i,j;
+			int maxsize;
+
 			start = (long *) malloc(self->nd * sizeof(long));
 			count = (long *) malloc(self->nd * sizeof(long));
 			stride = (long *) malloc(self->nd * sizeof(long));
@@ -2464,13 +2472,53 @@ PyCdunifVariable_ReadAsArray(PyCdunifVariableObject *self,
 							/ indices[i].stride + 1;
 				}
 				Py_BEGIN_ALLOW_THREADS
-				;
+
 				acquire_Cdunif_lock()
-				;
-				ret = cdvargets(self->file, self->id, start, count, stride,
-						array->data);
+
+				if (self->type == NPY_STRING) {
+					if( d > 1) {
+						// *********************
+						// Limit to 1 dimension
+						// **********************
+						PyErr_SetString(PyExc_IOError, "cdunif: More than 1 dimension String variables not allowed");
+						return NULL;
+					}
+					value = (char**) PyMem_Malloc(nitems * sizeof(char*));
+					err = nc_get_vara_string(self->file->id, self->id, start,
+							count, (void *) value);
+					// Look for maximum string size to create object.
+					// -----------------------------------------------
+					maxsize = -1;
+					for( i=0; i<nitems; i++) {
+							int len = strlen(value[i]);
+							if( maxsize < len) {
+								maxsize = len+1;
+							}
+					}
+					array = (PyArrayObject *) PyArray_New(&PyArray_Type, d,
+														 dims,
+							                             NPY_STRING, NULL,
+														 NULL, maxsize, 0, NULL);
+					//
+					// Copy each string into new PyArray.
+					//
+					if (err == NC_NOERR) {
+						// Note limited to 1 dimension...
+						for (j = 0; j < count[0]; j++) {
+							PyObject *obj = PyUnicode_FromString(value[j]);
+							if (obj != NULL) {
+								PyArray_SETITEM((PyArrayObject*)array,
+								PyArray_GETPTR1((PyArrayObject*)array, j), obj);
+							}
+						}
+					}
+					PyMem_Free(value);
+				} else {
+					ret = cdvargets(self->file, self->id, start, count, stride,
+							array->data);
+				}
 				release_Cdunif_lock()
-				;
+
 				Py_END_ALLOW_THREADS
 				;
 				if (ret == -1) {

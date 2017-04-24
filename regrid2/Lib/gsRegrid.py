@@ -20,6 +20,7 @@ import copy
 import numpy
 import cdms2
 from regrid2 import RegridError
+import warnings
 
 C_DOUBLE_P = POINTER(c_double)
 
@@ -603,14 +604,14 @@ class Regrid:
 
         if src_data.dtype != dst_data.dtype:
             try: # try recasting
-              src_data = src_data.astype(dst_data.dtype)
               warnings.warn("mismatch in src and dst data types (%s vs %s) we recasted src to dst" \
-                                      % (__FILE__, src_data.dtype, dst_data.dtype))
+                                      % (src_data.dtype, dst_data.dtype))
+              src_data = src_data.astype(dst_data.dtype)
             except: # ok maybe the over way around will work?
               try:
-                dst_data = dst_data.astype(src_data.dtype)
                 warnings.warn("mismatch in src and dst data types (%s vs %s) we recasted dst to src" \
-                                        % (__FILE__, src_data.dtype, dst_data.dtype))
+                                        % (src_data.dtype, dst_data.dtype))
+                dst_data = dst_data.astype(src_data.dtype)
               except:
                 raise RegridError, "ERROR in %s: mismatch in src and dst data types (%s vs %s)" \
                     % (__FILE__, src_data.dtype, dst_data.dtype)

@@ -17,7 +17,7 @@ from axis import axisMatchIndex, axisMatchAxis, axisMatches, unspecified, Cdtime
 import selectors
 import copy
 # from regrid2 import Regridder, PressureRegridder, CrossSectionRegridder
-from mvCdmsRegrid import CdmsRegrid
+from mvCdmsRegrid import CdmsRegrid, getBoundList, _getCoordList
 from regrid2.mvGenericRegrid import guessPeriodicity
 #import PropertiedClasses
 from convention import CF1
@@ -184,7 +184,7 @@ class AbstractVariable(CdmsObj, Slab):
                 result = numpy.ma.masked_array(ar)
             elif missing==inf or missing!=missing: # (x!=x) ==> x is NaN
                 result = numpy.ma.masked_object(ar, missing, copy=0)
-            elif ar.dtype.char=='c':
+            elif ar.dtype.char=='c' or ar.dtype.char=='S':
                 # umath.equal is not implemented
                 resultmask = (ar==missing)
                 if not resultmask.any():
@@ -410,10 +410,12 @@ class AbstractVariable(CdmsObj, Slab):
     def getMissing(self, asarray=0):
         """Return the missing value as a scalar, or as
         a numpy array if asarray==1"""
-        try:
-            mv = self.missing_value.item()
-        except:
-            mv = self.missing_value
+
+        if hasattr(self,'missing_value'):
+            try:
+                mv = self.missing_value.item()
+            except:
+                mv = self.missing_value
 
         if mv is None and hasattr(self,'_FillValue'):
             mv = self._FillValue
@@ -991,7 +993,7 @@ class AbstractVariable(CdmsObj, Slab):
         One can use the regrid2.Regridder optional arguments as well.
 
         Example:
-        new_cdmsVar = cdmsVar.regrid(newGrid)  # uses libcf
+        new_cdmsVar = cdmsVar.regrid(newGrid)  # uses esmf
         new_cdmsVar = cdmsVar.regrid(newGrid, regridMethod = 'conserve',
                                      coordSys = 'cart')
 
@@ -1020,8 +1022,9 @@ class AbstractVariable(CdmsObj, Slab):
 
             if self.getAxis(-1).attributes.has_key('topology'):
                 if self.getAxis(-1).attributes['topology'] == 'circular':
-                    # for the ESMF regridders
-                    keywords['periodicity'] = guessPeriodicity(self.getAxis(-1).getBounds())
+                    # for the ESMF regridders if periodicity is not set.
+                    if 'periodicity' not in keywords.keys():
+                        keywords['periodicity'] = guessPeriodicity(getBoundList(_getCoordList(self.getGrid())))
                     keywords['mkCyclic'] = 1    # for LibCF regridder
 
             # check if there are bounds and we have esmf
@@ -1127,8 +1130,8 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
 
             srcGridMask = None
             # set the source mask if a mask is defined with the source data
-            if numpy.any(self.mask == True):
-                srcGridMask = getMinHorizontalMask(self)
+#            if numpy.any(self.mask == True):
+#                srcGridMask = getMinHorizontalMask(self)
 
             # compute the interpolation weights
             ro = CdmsRegrid(fromgrid, togrid, 

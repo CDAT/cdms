@@ -1465,12 +1465,12 @@ class AbstractAxis(CdmsObj):
             bnds = numpy.array([self[0]-delta,self[0]+delta])
 
         # Transform to (n,2) array
-        retbnds = numpy.zeros((len(ar),2),numpy.float64)
-        retbnds[:,0] = bnds[:-1]
-        retbnds[:,1] = bnds[1:]
+        retbnds = numpy.zeros((ar.shape+(2,)),numpy.float64)
+        retbnds[...,0] = bnds[:-1]
+        retbnds[...,1] = bnds[1:]
         # To avoid floating point error on bound limits
 
-        if( self.isLongitude() and hasattr(self, 'units') and (self.units.find('degree') != -1)):
+        if(self.isLongitude() and hasattr(self, 'units') and (self.units.find('degree') != -1) and len(retbnds.shape)==2):
              # Make sure we have close to 360 degree interval
              if( abs(abs(retbnds[-1,1] - retbnds[0,0]) -360) < (numpy.minimum(0.01, abs(retbnds[0,1] - retbnds[0,0])*0.1))):
                  # Now check wether either bound is near an interger value;
@@ -1493,8 +1493,8 @@ class AbstractAxis(CdmsObj):
                   
         if( (self.isLatitude() and getAutoBounds()) or 
             (self.isLatitude() and hasattr(self, 'units') and (self.units.find('degree') != -1))): 
-            retbnds[0,:] = numpy.maximum(-90.0, numpy.minimum(90.0,retbnds[0,:]))
-            retbnds[-1,:] = numpy.maximum(-90.0, numpy.minimum(90.0,retbnds[-1,:]))
+            retbnds[0,...] = numpy.maximum(-90.0, numpy.minimum(90.0,retbnds[0,...]))
+            retbnds[-1,...] = numpy.maximum(-90.0, numpy.minimum(90.0,retbnds[-1,...]))
 
         return retbnds
 

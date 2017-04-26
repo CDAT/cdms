@@ -2,7 +2,7 @@
 
 import numpy
 import cdms2
-import  _regrid, string, copy
+from . import  _regrid
 from .error import RegridError
 import warnings
 
@@ -160,7 +160,7 @@ class Horizontal:
         
         assert rank==len(order), 'Order must be same length as array rank: %i'%len(ar.shape)
 
-        order = string.lower(order)
+        order = order.lower()
 
         # Map order to ilon, ilat ...
         itim1 = itim2 = 0

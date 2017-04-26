@@ -1,7 +1,7 @@
 ## Automatically adapted for numpy.oldnumeric Aug 02, 2007 by 
 
 import cdms2
-import _scrip
+from . import _scrip
 from .error import RegridError
 import numpy
 from functools import reduce

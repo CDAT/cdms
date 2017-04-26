@@ -1,7 +1,8 @@
 ## Automatically adapted for numpy.oldnumeric Aug 02, 2007 by 
 
 import cdms2
-import numpy, copy, string, _regrid
+import numpy
+from . import _regrid
 from .error import RegridError
 
 class CrossSectionRegridder:

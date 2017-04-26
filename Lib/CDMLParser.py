@@ -19,7 +19,7 @@ _Integer = re.compile(_opS+'[0-9]+$'+_opS)
 class CDMLParser(XMLParser):
 
     def __init__(self, verbose=0):
-	XMLParser.__init__(self)
+        XMLParser.__init__(self)
         self.root = None
         self.currentPath = []         # Current path, a stack
         self.dtd = CDML.CDML().dtd
@@ -50,25 +50,25 @@ class CDMLParser(XMLParser):
     def handle_data(self, data):
         matchObj = _S.match(data)
         if not matchObj:
-            if self.verbose: print('data:',data)
+            if self.verbose: print(('data:',data))
             if self.root:
                 self.getCurrentNode().setContentFromString(string.strip(data))
 
     def handle_cdata(self, data):
-        if self.verbose: print('cdata:', repr(data))
+        if self.verbose: print(('cdata:', repr(data)))
 
     def handle_proc(self, name, data):
-        if self.verbose: print('processing:',name,repr(data))
+        if self.verbose: print(('processing:',name,repr(data)))
 
     def handle_special(self, data):
-        if self.verbose: print('special:',repr(data))
+        if self.verbose: print(('special:',repr(data)))
 
     def handle_starttag(self, tag, method, attrs):
 
         if tag in self.dtd:
 
             # Check that attributes are valid
-	    validDict = self.dtd[tag]
+            validDict = self.dtd[tag]
             validAttrs = list(validDict.keys())
             attrnames = list(attrs.keys())
             for attrname in attrnames:
@@ -95,14 +95,13 @@ class CDMLParser(XMLParser):
                                       (tag,attrname))
                 if type(attdefault)==type("") and attrname not in attrnames:
                     attrs[attrname]=attdefault
-            
-	method(attrs)
+                    method(attrs)
 
     #------------------------------------------------------------------------
     # CDML tags
 
     def start_attr(self,attrs):
-        if self.verbose: print('attr:',attrs)
+        if self.verbose: print(('attr:',attrs))
         name = attrs['name']
         datatype = attrs['datatype']
         attr = cdmsNode.AttrNode(name,None)
@@ -119,7 +118,7 @@ class CDMLParser(XMLParser):
     #------------------------------------------------------------------------
 
     def start_axis(self,attrs):
-        if self.verbose: print('axis:',attrs)
+        if self.verbose: print(('axis:',attrs))
         id = attrs['id']
         length_s = attrs['length']
         datatype = attrs.get('datatype')
@@ -139,7 +138,7 @@ class CDMLParser(XMLParser):
 
     #------------------------------------------------------------------------
     def start_cdml(self, attrs):
-        if self.verbose: print('cdml:',attrs)
+        if self.verbose: print(('cdml:',attrs))
 
     def end_cdml(self):
         pass
@@ -147,21 +146,21 @@ class CDMLParser(XMLParser):
     #------------------------------------------------------------------------
 
     def start_component(self, attrs):
-        if self.verbose: print('component:',attrs)
+        if self.verbose: print(('component:',attrs))
 
     def end_component(self):
         pass
 
     #------------------------------------------------------------------------
     def start_compoundAxis(self, attrs):
-        if self.verbose: print('compoundAxis:',attrs)
+        if self.verbose: print(('compoundAxis:',attrs))
 
     def end_compoundAxis(self):
         pass
 
     #------------------------------------------------------------------------
     def start_data(self, attrs):
-        if self.verbose: print('data:',attrs)
+        if self.verbose: print(('data:',attrs))
 
     def end_data(self):
         pass
@@ -169,7 +168,7 @@ class CDMLParser(XMLParser):
     #------------------------------------------------------------------------
 
     def start_dataset(self,attrs):
-        if self.verbose: print('dataset:',attrs)
+        if self.verbose: print(('dataset:',attrs))
         id = attrs['id']
         dataset = cdmsNode.DatasetNode(id)
         dataset.setExternalDict(attrs)
@@ -184,7 +183,7 @@ class CDMLParser(XMLParser):
     #------------------------------------------------------------------------
 
     def start_doclink(self, attrs):
-        if self.verbose: print('docLink:',attrs)
+        if self.verbose: print(('docLink:',attrs))
         uri = attrs['href']
         doclink = cdmsNode.DocLinkNode(uri)
         doclink.setExternalDict(attrs)
@@ -197,7 +196,7 @@ class CDMLParser(XMLParser):
     #------------------------------------------------------------------------
 
     def start_domElem(self, attrs):
-        if self.verbose: print('domElem:',attrs)
+        if self.verbose: print(('domElem:',attrs))
         name = attrs['name']
         start_s = attrs.get('start')
         length_s = attrs.get('length')
@@ -218,7 +217,7 @@ class CDMLParser(XMLParser):
 
     #------------------------------------------------------------------------
     def start_domain(self, attrs):
-        if self.verbose: print('domain:',attrs)
+        if self.verbose: print(('domain:',attrs))
         domain = cdmsNode.DomainNode()
         self.getCurrentNode().setDomain(domain)
         self.pushCurrentNode(domain)
@@ -229,7 +228,7 @@ class CDMLParser(XMLParser):
     #------------------------------------------------------------------------
 
     def start_rectGrid(self,attrs):
-        if self.verbose: print('rectGrid:',attrs)
+        if self.verbose: print(('rectGrid:',attrs))
         id = attrs['id']
         gridtype = attrs['type']
         latitude = attrs['latitude']
@@ -245,7 +244,7 @@ class CDMLParser(XMLParser):
     #------------------------------------------------------------------------
 
     def start_linear(self, attrs):
-        if self.verbose: print('linear:',attrs)
+        if self.verbose: print(('linear:',attrs))
         start_s = attrs['start']
         delta_s = attrs['delta']
         length_s = attrs['length']
@@ -270,7 +269,7 @@ class CDMLParser(XMLParser):
     #------------------------------------------------------------------------
 
     def start_variable(self,attrs):
-        if self.verbose: print('variable:',attrs)
+        if self.verbose: print(('variable:',attrs))
         id = attrs['id']
         datatype = attrs['datatype']
         variable = cdmsNode.VariableNode(id,datatype,None)
@@ -284,7 +283,7 @@ class CDMLParser(XMLParser):
     #------------------------------------------------------------------------
 
     def start_xlink(self, attrs):
-        if self.verbose: print('xlink:',attrs)
+        if self.verbose: print(('xlink:',attrs))
         id = attrs['id']
         uri = attrs['href']
         contentRole = attrs['content-role']
@@ -299,24 +298,24 @@ class CDMLParser(XMLParser):
     #------------------------------------------------------------------------
 
     def cdml_syntax_error(self, lineno, message):
-        print('error near line %d:' % lineno, message)
+        print(('error near line %d:' % lineno, message))
 
     def unknown_starttag(self, tag, attrs):
-        if self.verbose: print('**'+tag+'**:',attrs)
+        if self.verbose: print(('**'+tag+'**:',attrs))
 
     def unknown_endtag(self, tag):
         pass
 
     def unknown_entityref(self, ref):
-	self.flush()
-        if self.verbose: print('*** unknown entity ref: &' + ref + ';')
+        self.flush()
+        if self.verbose: print(('*** unknown entity ref: &' + ref + ';'))
 
     def unknown_charref(self, ref):
-	self.flush()
-        if self.verbose: print('*** unknown char ref: &#' + ref + ';')
+        self.flush()
+        if self.verbose: print(('*** unknown char ref: &#' + ref + ';'))
 
     def close(self):
-	XMLParser.close(self)
+        XMLParser.close(self)
 
 if __name__ == '__main__':
     import sys

@@ -3,7 +3,7 @@
 
 """ CDMS dataset and file objects"""
 from .error import CDMSError
-import Cdunif
+from . import Cdunif
 import numpy
 from . import cdmsNode
 import os

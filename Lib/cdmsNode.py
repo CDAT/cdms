@@ -456,7 +456,7 @@ class AxisNode(CdmsNode):
     # If datatype is None, assume values [0,1,..,length-1]
     # data is a numpy array, if specified
     def __init__(self, id, length, datatype=CdLong,data=None):
-        assert isinstance(length, IntType), 'Invalid length: '+repr(length)
+        assert isinstance(length, int), 'Invalid length: '+repr(length)
         assert type(datatype) is StringType, 'Invalid datatype: '+repr(datatype)
         assert datatype in CdDatatypes, 'Invalid datatype: '+repr(datatype)
         if data is not None: assert isinstance(data, numpy.ndarray), 'data must be a 1-D Numeric array'
@@ -722,13 +722,13 @@ class AxisNode(CdmsNode):
 # Linear data element
 class LinearDataNode(CdmsNode):
 
-    validStartTypes = [IntType,FloatType,type(cdtime.comptime(0)),type(cdtime.reltime(0,"hours"))]
-    validDeltaTypes = [IntType,FloatType,ListType]
+    validStartTypes = [int,float,type(cdtime.comptime(0)),type(cdtime.reltime(0,"hours"))]
+    validDeltaTypes = [int,float,list]
 
     def __init__(self, start, delta, length):
         assert isinstance(start, numpy.floating) or isinstance(start, numpy.integer) or (type(start) in self.validStartTypes), 'Invalid start argument: '+repr(start)
         assert isinstance(start, numpy.floating) or isinstance(start, numpy.integer) or (type(delta) in self.validDeltaTypes), 'Invalid delta argument: '+repr(delta)
-        assert isinstance(length, IntType), 'Invalid length argument: '+repr(length)
+        assert isinstance(length, int), 'Invalid length argument: '+repr(length)
         CdmsNode.__init__(self,"linear")
         self.delta = delta
         self.length = length
@@ -932,12 +932,12 @@ class AttrNode(CdmsNode):
 
     def __init__(self, name, value=None):
         CdmsNode.__init__(self,"attr")
-        if not (isinstance(value,IntType)
+        if not (isinstance(value,int)
                 or isinstance(value,numpy.integer)
-                or isinstance(value,FloatType)
+                or isinstance(value,float)
                 or isinstance(value,numpy.floating)
-                or isinstance(value,StringType)
-                or isinstance(value,NoneType)):
+                or isinstance(value,bytes)
+                or isinstance(value, type(None))):
             raise CDMSError('Invalid attribute type: '+repr(value))
         self.name = name
         self.value = value
@@ -956,9 +956,9 @@ class AttrNode(CdmsNode):
             return self.datatype
         elif type(self.value) is StringType:
             return CdString
-        elif isinstance(self.value, FloatType) or isinstance(self.value,numpy.floating):
+        elif isinstance(self.value, float) or isinstance(self.value,numpy.floating):
             return CdDouble
-        elif isinstance(self.value, IntType) or isinstance(self.value,numpy.integer):
+        elif isinstance(self.value, int) or isinstance(self.value,numpy.integer):
             return CdLong
         else:
             raise CDMSError('Invalid attribute type: '+repr(self.value))

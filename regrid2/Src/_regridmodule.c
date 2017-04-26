@@ -2458,6 +2458,16 @@ static struct PyMethodDef rgd_methods[] = {
 };
 
 
+static struct PyModuleDef moduledef = {
+PyModuleDef_HEAD_INIT, "_regrid",
+"",
+-1,
+rgd_methods,
+NULL,
+NULL,
+NULL,
+NULL,
+};
  /*************************************************************************
  *                                                                        *
  * INITIALIZATION FUNCTION        
@@ -2465,12 +2475,12 @@ static struct PyMethodDef rgd_methods[] = {
  *                                                                        *
 \**************************************************************************/
 
-void init_regrid()
+PyMODINIT_FUNC PyInit__regrid()
 {
   PyObject *m, *d;
   
   /* create this module and add the functions */
-  m = Py_InitModule("_regrid", rgd_methods);
+  m = PyModule_Create(&moduledef);
   import_array();
 
   /* add symbolic constants to the module */
@@ -2481,6 +2491,7 @@ void init_regrid()
   /* check for errors */
   if(PyErr_Occurred())
     Py_FatalError("can't initialize module _regrid");
+  return(m);
 }
 
 

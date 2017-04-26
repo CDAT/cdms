@@ -99,7 +99,7 @@ typedef struct {
 /* Return an object referring to an existing variable */
 #define PyCdunifFile_GetVariable_RET PyCdunifVariableObject *
 #define PyCdunifFile_GetVariable_PROTO \
-	  (PyCdunifFileObject *file, char *name)
+	  (PyCdunifFileObject *file, PyObject *name)
 #define PyCdunifFile_GetVariable_NUM 7
 
 /* Get variable rank */
@@ -133,13 +133,13 @@ typedef struct {
 /* Get file attribute */
 #define PyCdunifFile_GetAttribute_RET PyObject *
 #define PyCdunifFile_GetAttribute_PROTO \
-	  (PyCdunifFileObject *var, char *name)
+	  (PyCdunifFileObject *var, PyObject *name)
 #define PyCdunifFile_GetAttribute_NUM 13
 
 /* Set file attribute */
 #define PyCdunifFile_SetAttribute_RET int
 #define PyCdunifFile_SetAttribute_PROTO \
-	  (PyCdunifFileObject *var, char *name, PyObject *value)
+	  (PyCdunifFileObject *var, PyObject *name, PyObject *value)
 #define PyCdunifFile_SetAttribute_NUM 14
 
 /* Set file attribute to string value */
@@ -151,7 +151,7 @@ typedef struct {
 /* Get variable attribute */
 #define PyCdunifVariable_GetAttribute_RET PyObject *
 #define PyCdunifVariable_GetAttribute_PROTO \
-	  (PyCdunifVariableObject *var, char *name)
+	  (PyCdunifVariableObject *var, PyObject *name)
 #define PyCdunifVariable_GetAttribute_NUM 16
 
 /* Set variable attribute */

@@ -1204,6 +1204,10 @@ class CdmsFile(CdmsObj, cuDataset):
             self.close()
             raise
 
+    def __enter__(self):
+        return self;
+    def __exit__(self, type, value, traceback):
+        self.close()
     # setattr writes external global attributes to the file
     def __setattr__(self, name, value):
         self.__dict__[name] = value  # attributes kept in sync w/file

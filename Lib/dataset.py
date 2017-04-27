@@ -27,7 +27,6 @@ from fvariable import FileVariable
 from tvariable import asVariable
 from cdmsNode import CdDatatypes
 import convention
-import typeconv
 
 # Default is serial mode until setNetcdfUseParallelFlag(1) is called
 rk = 0
@@ -1311,7 +1310,7 @@ class CdmsFile(CdmsObj, cuDataset):
             typecode = ar.dtype.char
 
         # Compatibility: revert to old typecode for cdunif
-        typecode = typeconv.oldtypecodes[typecode]
+#        typecode = typeconv.oldtypecodes[typecode]
         cuvar = cufile.createVariable(name, typecode, (name,))
 
         # Cdunif should really create this extra dimension info:
@@ -1547,7 +1546,8 @@ class CdmsFile(CdmsObj, cuDataset):
 
         try:
             # Compatibility: revert to old typecode for cdunif
-            numericType = typeconv.oldtypecodes[numericType]
+#            numericType = typeconv.oldtypecodes[numericType]
+            numericType = numpy.dtype(numericType).char
             cuvar = cufile.createVariable(name, numericType, tuple(dimensions))
         except Exception as err:
             print err
@@ -1789,8 +1789,8 @@ class CdmsFile(CdmsObj, cuDataset):
                         attributes['_FillValue'] = numpy.array(var.missing_value).astype(var.dtype)
                         attributes['missing_value'] = numpy.array(var.missing_value).astype(var.dtype)
                 else:
-                    attributes['_FillValue'] = fill_value
-                    attributes['missing_value'] = fill_value
+                    attributes['_FillValue'] = numpy.array(fill_value).astype(var.dtype)
+                    attributes['missing_value'] = numpy.array(fill_value).astype(var.dtype)
             except:
                 pass
             if "name" in attributes:
@@ -1889,7 +1889,8 @@ class CdmsFile(CdmsObj, cuDataset):
 
         # Make var an AbstractVariable
         if dtype is None and typecode is not None:
-            dtype = typeconv.convtypecode2(typecode)
+#            dtype = typeconv.convtypecode2(typecode)
+            dtype = typecode
         typecode = dtype
         if typecode is not None and var.dtype.char != typecode:
             var = var.astype(typecode)

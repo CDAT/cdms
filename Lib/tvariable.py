@@ -9,7 +9,6 @@ Contains also the write part of the old cu interface.
 import json
 import re
 import types
-import typeconv
 import numpy
 from numpy import sctype2char
 from error import CDMSError
@@ -167,7 +166,8 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
 
         # Compatibility: assuming old typecode, map to new
         if dtype is None and typecode is not None:
-            dtype = typeconv.convtypecode2(typecode)
+#            dtype = typeconv.convtypecode2(typecode)
+            dtype = typecode
         typecode = sctype2char(dtype)
         if isinstance(data, types.TupleType):
             data = list(data)
@@ -252,7 +252,8 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         """
         # Compatibility: assuming old typecode, map to new
         if dtype is None and typecode is not None:
-            dtype = typeconv.convtypecode2(typecode)
+#            dtype = typeconv.convtypecode2(typecode)
+            dtype = typecode
         typecode = sctype2char(dtype)
         if isinstance(data, types.TupleType):
             data = list(data)

@@ -635,18 +635,22 @@ static int cdvarinq(PyCdunifFileObject *file, int varid, char* name,
  * of Python types assumes that 'short' is 16-bit and 'int' is 32-bit.
  */
 
-int data_types[] = { -1, /* not used */
-NPY_BYTE, /* signed 8-bit int */
-NPY_CHAR, /* 8-bit character */
-NPY_SHORT, /* 16-bit signed int */
-NPY_INT, /* 32-bit signed int */
-NPY_FLOAT, /* 32-bit IEEE float */
-NPY_DOUBLE, /* 64-bit IEEE float */
-NPY_UBYTE, /* NC_UBYTE */
-NPY_USHORT, /*NC_USHORT */
-NPY_UINT, /*NC_UINT */
-NPY_INT64, /*int64 */
-NPY_UINT64, NPY_STRING };
+int data_types[] = {-1, /* not used */
+    NPY_BYTE, /* signed 8-bit int */
+    NPY_CHAR, /* 8-bit character */
+    NPY_SHORT, /* 16-bit signed int */
+    NPY_INT, /* 32-bit signed int */
+    NPY_FLOAT, /* 32-bit IEEE float */
+    NPY_DOUBLE, /* 64-bit IEEE float */
+    NPY_UBYTE, /* NC_UBYTE */
+    NPY_USHORT, /*NC_USHORT */
+    NPY_UINT, /*NC_UINT */
+    NPY_LONGLONG, /*int64 */
+    NPY_ULONGLONG, /* uint64 */
+    NPY_ULONG,
+    NPY_LONG,
+    NPY_STRING
+};
 
 static char *dimension_types[] = { "error", "global", "local" };
 
@@ -665,6 +669,7 @@ static int nc_put_att_any(int ncid, int varid, const char *name, nc_type xtype,
 	case NC_SHORT:
 		return nc_put_att_short(ncid, varid, name, xtype, len, (short *) data);
 		break;
+	/* case NC_LONG: same as value as NC_INT */
 	case NC_INT:
 		return nc_put_att_int(ncid, varid, name, xtype, len, (int *) data);
 		break;
@@ -727,6 +732,7 @@ static int nc_put_var1_any(int ncid, int varid, nc_type xtype,
 	case NC_SHORT:
 		return nc_put_var1_short(ncid, varid, indexp, (short *) data);
 		break;
+	    /* case NC_LONG: same as value as NC_INT */
 	case NC_INT:
 		return nc_put_var1_int(ncid, varid, indexp, (int *) data);
 		break;
@@ -788,6 +794,7 @@ static int nc_put_vars_any(int ncid, int varid, nc_type xtype,
 		return nc_put_vars_short(ncid, varid, start, count, stride,
 				(short *) data);
 		break;
+	    /* case NC_LONG: same as value as NC_INT */
 	case NC_INT:
 		return nc_put_vars_int(ncid, varid, start, count, stride, (int *) data);
 		break;
@@ -853,6 +860,7 @@ static int nc_get_att_any(int ncid, int varid, const char *name, nc_type xtype,
 	case NC_SHORT:
 		return nc_get_att_short(ncid, varid, name, (short *) data);
 		break;
+	    /* case NC_LONG: same as value as NC_INT */
 	case NC_INT:
 		return nc_get_att_int(ncid, varid, name, (int *) data);
 		break;
@@ -993,8 +1001,14 @@ static nc_type cdunif_type_from_code(char code) {
 	case 'h':
 		type = NC_SHORT;
 		break;
+    case 'l':
+#ifdef NC_INT64
+        type = NC_INT64;
+#else
+        type = NC_LONG;
+#endif
+        break;
 	case 'i':
-	case 'l':
 		type = NC_INT;
 		break;
 	case 'f':
@@ -1014,10 +1028,17 @@ static nc_type cdunif_type_from_code(char code) {
 		break;
 #endif
 #ifdef NC_UINT
-	case 'L':
-		type = NC_UINT;
-		break;
+    case 'L':
+#ifdef NC_UINT64
+        type = NC_UINT64;
+#else
+        type=NC_UINT;
 #endif
+        break;
+#endif
+    case 'I':
+        type = NC_UINT;
+        break;
 #ifdef NC_INT64
 	case 'q':
 		type = NC_INT64;
@@ -1046,22 +1067,60 @@ static int cdunif_type_from_type(char array_type) {
 		type = NC_CHAR;
 		break;
 	case NPY_UBYTE:
+        type = NC_UBYTE;
+        break;
 	case NPY_BYTE:
+	case NPY_BOOL:
 		type = NC_BYTE;
 		break;
+    case NPY_USHORT:
+        type = NC_USHORT;
+        break;
 	case NPY_SHORT:
 		type = NC_SHORT;
 		break;
 	case NPY_INT:
-	case NPY_LONG:
 		type = NC_INT;
 		break;
+    case NPY_UINT:
+        type = NC_UINT;
+        break;
 	case NPY_FLOAT:
 		type = NC_FLOAT;
 		break;
+    case NPY_LONGDOUBLE:
+        type = NC_DOUBLE;
+        break;
 	case NPY_DOUBLE:
 		type = NC_DOUBLE;
 		break;
+    case NPY_STRING:
+        type = NC_STRING;
+        break;
+    case NPY_ULONG:
+#ifdef NC_UINT64
+        type = NC_UINT64;
+#else
+        type = NC_UINT;
+#endif
+        break;
+    case NPY_LONG:
+#ifdef NC_INT64
+        type = NC_INT64;
+#else
+        type = NC_INT;
+#endif
+        break;
+#ifdef NC_INT64
+    case NPY_LONGLONG:
+        type = NC_INT64;
+        break;
+#endif
+#ifdef NC_UINT64
+    case NPY_ULONGLONG:
+        type = NC_UINT64;
+        break;
+#endif
 	default:
 		type = 0;
 	}
@@ -1220,10 +1279,18 @@ static int set_attribute(int fileid, int varid, PyObject *attributes,
 		if (array != NULL) {
 			int len = (array->nd == 0) ? 1 : array->dimensions[0];
 			int type = cdunif_type_from_code(array->descr->type);
+			// Do not write longlong type attribute not NetCDF 3 format*/
+			if((type == NC_INT64)
+			    && (strcmp(name, "_FillValue") !=0)
+			    && (strcmp(name, "missing_value") !=0)){
+			    type=NC_LONG;
+			}
 			if (type == 0) {
 				/* 0 means probably going to freak out netcdf */
 				fprintf(stderr,
-						"Attribute %s has a bad type for NetCDF. We will not attempt to write it\n");
+						"Attribute %s has a bad type for NetCDF. We will not attempt to write it\n",
+						name);
+				return(-1);
 			}
 			if ((data_types[type] == NPY_STRING) && PyList_Check(value)) {
 				int i;
@@ -1918,14 +1985,18 @@ static char close_doc[] = "";
 /* Method table */
 
 static PyMethodDef PyCdunifFileObject_methods[] = { { "close",
-		(PyCFunction) PyCdunifFileObject_close, 1, close_doc }, {
-		"createDimension", (PyCFunction) PyCdunifFileObject_new_dimension, 1,
-		createDimension_doc }, { "createVariable",
-		(PyCFunction) PyCdunifFileObject_new_variable, 1, createVariable_doc },
+		(PyCFunction) PyCdunifFileObject_close, 1, close_doc },
+        {"createDimension", (PyCFunction) PyCdunifFileObject_new_dimension, 1,
+                            createDimension_doc },
+		{ "createVariable", (PyCFunction) PyCdunifFileObject_new_variable, 1,
+		                    createVariable_doc },
 		{ "readDimension", (PyCFunction) PyCdunifFileObject_read_dimension, 1,
-				read_dimension_doc }, { "sync",
-				(PyCFunction) PyCdunifFileObject_sync, 1, sync_doc }, { "flush",
-				(PyCFunction) PyCdunifFileObject_sync, 1, flush_doc }, { NULL,
+				            read_dimension_doc },
+		{ "sync",
+				(PyCFunction) PyCdunifFileObject_sync, 1, sync_doc },
+		{ "flush",
+				(PyCFunction) PyCdunifFileObject_sync, 1, flush_doc },
+		{ NULL,
 				NULL } /* sentinel */
 };
 
@@ -2032,7 +2103,7 @@ PyCdunifFileObject_repr(PyCdunifFileObject *file) {
 	sprintf(buf, "<%s Cdunif file '%.256s', mode '%.10s' at %lx>",
 			file->open ? "open" : "closed", PyString_AsString(file->name),
 			PyString_AsString(file->mode), (long) file);
-	return PyString_FromString(buf);
+	return Py_BuildValue("s",buf);
 }
 
 /* Type definition */
@@ -2156,11 +2227,11 @@ PyCdunifVariableObject_assign(PyCdunifVariableObject *self, PyObject *args) {
 
 static PyObject *
 PyCdunifVariableObject_typecode(PyCdunifVariableObject *self, PyObject *args) {
-	char t;
+	char t[1];
 	if (!PyArg_ParseTuple(args, ""))
 		return NULL;
-	t = typecode(self->type);
-	return PyString_FromStringAndSize(&t, 1);
+	*t = typecode(self->type);
+	return Py_BuildValue("s#", t, 1);
 }
 
 /* Get an item: wrapper for subscript */

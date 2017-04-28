@@ -1750,6 +1750,9 @@ class CdmsFile(CdmsObj, cuDataset):
         # Create axes if necessary
         axislist = []
         for axis in sourceAxislist:
+            # classic does not handle int64 data
+            if((axis[:].dtype == numpy.int64) and Cdunif.CdunifGetNCFLAGS("classic")):
+                axis._data_=numpy.array(axis[:],dtype=numpy.int32)
             if extendedAxis is None or axis.id != extendedAxis:
                 try:
                     newaxis = self.copyAxis(axis)
@@ -1894,6 +1897,10 @@ class CdmsFile(CdmsObj, cuDataset):
         typecode = dtype
         if typecode is not None and var.dtype.char != typecode:
             var = var.astype(typecode)
+        if var.dtype.char == 'l' and Cdunif.CdunifGetNCFLAGS("classic"):
+            var = var.astype(numpy.int32)
+        if var.dtype.char == 'L' and Cdunif.CdunifGetNCFLAGS("classic"):
+            var = var.astype(numpy.uint32)
         var = asVariable(var, writeable=0)
 
         if fill_value is None and hasattr(var, "fill_value"):

@@ -16,6 +16,8 @@ class TestMIPS(basetest.CDMSBaseTest):
         os.remove(self.filename)
 
     def testinput4MIPs(self):
+        import pdb
+        pdb.set_trace()
         f=cdms2.open(self.filename)
         self.assertEqual(f['water_vapor'].getLatitude()[0:4].tolist(), [-28.5, 28.5, 31.5, 87.])
         self.assertEqual(f['water_vapor'].getLongitude()[0:4].tolist(), [27., 24., 162., 126.])

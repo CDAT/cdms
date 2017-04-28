@@ -79,11 +79,11 @@ setup (name = "cdms2",
                                 libraries = cdat_info.cdunif_libraries,
                                 define_macros = macros,
                                 runtime_library_dirs = [libs_pth],
-                                extra_compile_args = [ "-L%s"% libs_pth],
+                                extra_compile_args = [ "-L%s"% libs_pth, "-g", "-O0"],
                                 ),
                       Extension('cdms2._bindex',
                                 ['Src/_bindexmodule.c', 'Src/bindex.c'],
-                                extra_compile_args = [ "-L%s"% libs_pth],
+                                extra_compile_args = [ "-L%s"% libs_pth, "-g", "-O0"],
                                 runtime_library_dirs = [libs_pth],
                                 ) 
                      ]

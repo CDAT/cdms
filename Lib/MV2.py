@@ -3,7 +3,8 @@
 
 "CDMS Variable objects, MaskedArray interface"
 import numpy
-from numpy import character, float, float32, float64, int, int8, int16, int32, int64, byte, ubyte, uint8, uint16, uint32, uint64, long
+from numpy import character, float, float32, float64, int, int8, int16, int32, int64, byte, ubyte, \
+     uint8, uint16, uint32, uint64, long
 from numpy.ma import allclose, allequal, common_fill_value, compress, make_mask_none, dot, filled, \
      getmask, getmaskarray, identity, indices, innerproduct, masked, put, putmask, rank, ravel, \
      set_fill_value, shape, size, isMA, isMaskedArray, is_mask, isarray, \

@@ -163,8 +163,6 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
 
         # tile index, None means no mosaic
         self.tileIndex = None
-        import pdb
-#        pdb.set_trace()
         # Compatibility: assuming old typecode, map to new
         if dtype is None and typecode is not None:
 #            dtype = typeconv.convtypecode2(typecode)

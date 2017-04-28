@@ -633,36 +633,27 @@ static int cdvarinq(PyCdunifFileObject *file, int varid, char* name,
  * Caution: the following specification may not be fully portable.
  * The comments indicate the correct Cdunif specification. The assignment
  * of Python types assumes that 'short' is 16-bit and 'int' is 32-bit.
+ *
+ * data_types is initialized int initCdunif.
  */
 
-int data_types[] = {-1, /* not used */
-    NPY_BYTE, /* signed 8-bit int NC_BYTE*/
-    NPY_CHAR, /* 8-bit character NC_CHAR*/
-    NPY_SHORT, /* 16-bit signed int NC_SHORT*/
-    NPY_INT, /* 32-bit signed int NC_INT NC_LONG(4 byte)*/
-    NPY_FLOAT, /* 32-bit IEEE float NC_FLOAT*/
-    NPY_DOUBLE, /* 64-bit IEEE float NC_DOUBLE*/
-    NPY_UBYTE, /* NC_UBYTE */
-    NPY_USHORT, /*NC_USHORT */
-    NPY_UINT, /*NC_UINT */
-    NPY_LONGLONG, /*int64 */
-    NPY_ULONGLONG, /* uint64 */
-    NPY_STRING
-};
-#define NC_NAT          0   /**< Not A Type */
-#define NC_BYTE         1   /**< signed 1 byte integer */
-#define NC_CHAR     2   /**< ISO/ASCII character */
-#define NC_SHORT    3   /**< signed 2 byte integer */
-#define NC_INT          4   /**< signed 4 byte integer */
-#define NC_LONG         NC_INT  /**< \deprecated required for backward compatibility. */
-#define NC_FLOAT    5   /**< single precision floating point number */
-#define NC_DOUBLE   6   /**< double precision floating point number */
-#define NC_UBYTE    7   /**< unsigned 1 byte int */
-#define NC_USHORT   8   /**< unsigned 2-byte int */
-#define NC_UINT     9   /**< unsigned 4-byte int */
-#define NC_INT64    10  /**< signed 8-byte int */
-#define NC_UINT64   11  /**< unsigned 8-byte int */
-#define NC_STRING   12  /**< string */
+
+static int data_types[13] = {[ 0 ... 12] = -1};
+
+//#define NC_NAT          0   /**< Not A Type */
+//#define NC_BYTE         1   /**< signed 1 byte integer */
+//#define NC_CHAR     2   /**< ISO/ASCII character */
+//#define NC_SHORT    3   /**< signed 2 byte integer */
+//#define NC_INT          4   /**< signed 4 byte integer */
+//#define NC_LONG         NC_INT  /**< \deprecated required for backward compatibility. */
+//#define NC_FLOAT    5   /**< single precision floating point number */
+//#define NC_DOUBLE   6   /**< double precision floating point number */
+//#define NC_UBYTE    7   /**< unsigned 1 byte int */
+//#define NC_USHORT   8   /**< unsigned 2-byte int */
+//#define NC_UINT     9   /**< unsigned 4-byte int */
+//#define NC_INT64    10  /**< signed 8-byte int */
+//#define NC_UINT64   11  /**< unsigned 8-byte int */
+//#define NC_STRING   12  /**< string */
 
 static char *dimension_types[] = { "error", "global", "local" };
 
@@ -3388,4 +3379,17 @@ DL_EXPORT(void) initCdunif(void) {
 	/* Check for errors */
 	if (PyErr_Occurred())
 		Py_FatalError("can't initialize module Cdunif");
+	data_types[NC_BYTE]=NPY_BYTE; /* signed 8-bit int NC_BYTE*/
+	data_types[NC_CHAR]=NPY_CHAR; /* 8-bit character NC_CHAR*/
+	data_types[NC_SHORT]=NPY_SHORT; /* 16-bit signed int NC_SHORT*/
+	data_types[NC_INT]=NPY_INT; /* 32-bit signed int NC_INT NC_LONG(4 byte)*/
+	data_types[NC_FLOAT]=NPY_FLOAT; /* 32-bit IEEE float NC_FLOAT*/
+	data_types[NC_DOUBLE]=NPY_DOUBLE; /* 64-bit IEEE float NC_DOUBLE*/
+	data_types[NC_UBYTE]=NPY_UBYTE; /* NC_UBYTE */
+	data_types[NC_USHORT]=NPY_USHORT; /*NC_USHORT */
+	data_types[NC_UINT]=NPY_UINT; /*NC_UINT */
+	data_types[NC_INT64]=NPY_LONGLONG; /*int64 */
+	data_types[NC_UINT64]=NPY_ULONGLONG; /* uint64 */
+	data_types[NC_STRING]=NPY_STRING;
+
 }

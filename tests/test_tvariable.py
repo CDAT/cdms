@@ -1,5 +1,9 @@
 import numpy
-import cdms2, cdtime, copy, os, sys
+import cdms2
+import cdtime
+import copy
+import os
+import sys
 import basetest
 
 
@@ -18,7 +22,8 @@ class TestTransientVariables(basetest.CDMSBaseTest):
         xx = tv[1, 7, 15]
         self.assertFalse(isinstance(xx, numpy.ndarray))
 
-        # Variable get: axis, grid, latitude, level, longitude, missing, order, time, len, typecode
+        # Variable get: axis, grid, latitude, level, longitude, missing, order,
+        # time, len, typecode
 
         vaxis0 = v.getAxis(0)
         axis0 = tv.getAxis(0)
@@ -86,7 +91,7 @@ class TestTransientVariables(basetest.CDMSBaseTest):
 
         # Axis set: bounds, calendar
         savebounds = copy.copy(bounds)
-        bounds[0, 0]=-90.0
+        bounds[0, 0] = -90.0
         axis1.setBounds(bounds)
         nbounds = axis1.getBounds()
         self.assertFalse(not numpy.ma.allequal(bounds, nbounds))
@@ -95,14 +100,15 @@ class TestTransientVariables(basetest.CDMSBaseTest):
         gaussaxis = cdms2.createGaussianAxis(32)
         try:
             testaxis = cdms2.createGaussianAxis(31)
-        except:
+        except BaseException:
             markError('Gaussian axis with odd number of latitudes')
 
-        # Grid get: axis, bounds, latitude, longitude, mask, order, type, weights, subgrid, subgridRegion
+        # Grid get: axis, bounds, latitude, longitude, mask, order, type,
+        # weights, subgrid, subgridRegion
         a1 = grid.getAxis(1)
         self.assertFalse(not numpy.ma.allequal(a1[:], axis2[:]))
 
-        bounds[0, 0]=savebounds[0, 0]
+        bounds[0, 0] = savebounds[0, 0]
         axis1.setBounds(bounds)
         latbounds, lonbounds = grid.getBounds()
         self.assertFalse(not numpy.ma.allequal(latbounds, savebounds))
@@ -115,7 +121,10 @@ class TestTransientVariables(basetest.CDMSBaseTest):
         weights = grid.getWeights()
         subg = grid.subGrid((1, 7), (1, 15))
         subg2 = grid.subGridRegion((-30., 30., 'ccn'), (101.25, 247.5, 'ccn'))
-        self.assertFalse(not numpy.ma.allequal(subg.getLongitude()[:], subg2.getLongitude()[:]))
+        self.assertFalse(
+            not numpy.ma.allequal(
+                subg.getLongitude()[:],
+                subg2.getLongitude()[:]))
         self.assertEqual(grid.shape, (8, 17))
 
         # Grid set: bounds, mask, type
@@ -135,7 +144,10 @@ class TestTransientVariables(basetest.CDMSBaseTest):
         # Create a transient variable from scratch
         oldlat = tv.getLatitude()
         oldBounds = oldlat.getBounds()
-        newlat = cdms2.createAxis(numpy.ma.array(oldlat[:]), numpy.ma.array(oldBounds))
+        newlat = cdms2.createAxis(
+            numpy.ma.array(
+                oldlat[:]),
+            numpy.ma.array(oldBounds))
         b = newlat.getBounds()
         b[0, 0] = -48.
         newlat.setBounds(b)
@@ -161,6 +173,7 @@ class TestTransientVariables(basetest.CDMSBaseTest):
         # Test take of axis without bounds
         newlat.setBounds(None)
         samp = cdms2.axis.take(newlat, (2, 4, 6))
+
 
 if __name__ == "__main__":
     basetest.run()

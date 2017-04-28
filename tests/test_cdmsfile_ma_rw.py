@@ -1,4 +1,7 @@
-import cdms2, numpy, os, sys
+import cdms2
+import numpy
+import os
+import sys
 import basetest
 
 
@@ -8,17 +11,19 @@ class TestCDMSFileMaskedArrayReadWrite(basetest.CDMSBaseTest):
         self.file = self.getTempFile("readwrite4.nc", "w")
         self.readonly = self.getDataFile("readonly.nc")
         self.timearr = numpy.ma.array([0.0, 366.0, 731.0])
-        self.latarr = numpy.ma.arange(self.NLAT)*(180./(self.NLAT-1))-90.
-        self.lonarr = numpy.ma.arange(self.NLON)*(360.0/self.NLON)
-        self.timestr = ['2000','2001','2002']
+        self.latarr = numpy.ma.arange(
+            self.NLAT) * (180. / (self.NLAT - 1)) - 90.
+        self.lonarr = numpy.ma.arange(self.NLON) * (360.0 / self.NLON)
+        self.timestr = ['2000', '2001', '2002']
         self.u = self.test_arr[0]
-        tobj = self.file.createAxis('time',numpy.ma.array([self.timearr[1]]))
+        tobj = self.file.createAxis('time', numpy.ma.array([self.timearr[1]]))
         tobj.units = 'days since 2000-1-1'
-        latobj = self.file.createAxis('latitude',self.latarr)
+        latobj = self.file.createAxis('latitude', self.latarr)
         latobj.units = 'degrees_north'
-        lonobj = self.file.createAxis('longitude',self.lonarr)
+        lonobj = self.file.createAxis('longitude', self.lonarr)
         lonobj.units = 'degrees_east'
-        self.var = self.file.createVariable('u',numpy.float,(tobj,latobj,lonobj))
+        self.var = self.file.createVariable(
+            'u', numpy.float, (tobj, latobj, lonobj))
         self.var.units = 'm/s'
 
     def testSetSlice(self):
@@ -30,8 +35,8 @@ class TestCDMSFileMaskedArrayReadWrite(basetest.CDMSBaseTest):
         self.assertTrue(numpy.ma.allequal(self.var, self.u[0]))
 
     def testSetItem(self):
-        self.var[0,4:12] = -self.u[0, 4:12]
-        self.assertTrue(numpy.ma.allequal(self.var[0,4:12], -self.u[0, 4:12]))
+        self.var[0, 4:12] = -self.u[0, 4:12]
+        self.assertTrue(numpy.ma.allequal(self.var[0, 4:12], -self.u[0, 4:12]))
 
     def setVarAttributes(self):
         attrs = var.attributes
@@ -47,16 +52,23 @@ class TestCDMSFileMaskedArrayReadWrite(basetest.CDMSBaseTest):
     def testRewriteAxis(self):
         latAttrs = self.var.getLatitude().attributes
         self.var.getLatitude()[self.NLAT / 2] = 6.5
-        self.assertNotEqual(self.var.getLatitude()[self.NLAT/2], self.latarr[self.NLAT/2])
+        self.assertNotEqual(self.var.getLatitude()[
+                            self.NLAT / 2], self.latarr[self.NLAT / 2])
         self.var.getLatitude().standard_name = "Latitude"
         self.assertEqual(self.var.getLatitude().standard_name, "Latitude")
         self.latarr[self.NLAT / 2] = 6.5
 
     def testMaskedVariable(self):
-        masked = self.file.createVariable("umasked", cdms2.CdDouble, (self.var.getTime(), self.var.getLatitude(), self.var.getLongitude()), fill_value=-99.9)
+        masked = self.file.createVariable(
+            "umasked",
+            cdms2.CdDouble,
+            (self.var.getTime(),
+             self.var.getLatitude(),
+             self.var.getLongitude()),
+            fill_value=-99.9)
         umask = self.test_arr[0, 0]
         umask.set_fill_value(-111.1)
-        umask[4:12,8:24] = numpy.ma.masked
+        umask[4:12, 8:24] = numpy.ma.masked
         fmask = numpy.ma.getmask(umask)
         masked[:] = umask
         masked.units = "m/s"
@@ -88,6 +100,7 @@ class TestCDMSFileMaskedArrayReadWrite(basetest.CDMSBaseTest):
         lon.designateLongitude()
         b = lon.getBounds()
         self.assertTrue(isinstance(b, numpy.ndarray))
+
 
 if __name__ == "__main__":
     basetest.run()

@@ -3,6 +3,7 @@ import unittest
 import numpy
 import os
 
+
 class TestCDMSAutobounds(unittest.TestCase):
 
     def createFile(self, minLon, maxLon, offset):
@@ -23,11 +24,11 @@ class TestCDMSAutobounds(unittest.TestCase):
         times = numpy.array([0.5])
 
         lat = testFile.createAxis('latitude', latitudes)
-        lat.standard_name="latitude"
-        lat.units="degrees_north"
+        lat.standard_name = "latitude"
+        lat.units = "degrees_north"
         lon = testFile.createAxis('longitude', longitudes)
-        lon.standard_name="longitude"
-        lon.units="degrees_east"
+        lon.standard_name = "longitude"
+        lon.units = "degrees_east"
         time = testFile.createAxis('time', times)
         time.units = 'days since 1900-01-01 00:00:00'
 
@@ -50,7 +51,7 @@ class TestCDMSAutobounds(unittest.TestCase):
     def test_Bounds10th(self):
         exponent = -10
         offset = 2.0**exponent
-        self.createFile(-180,180,offset)
+        self.createFile(-180, 180, offset)
         # Open the test file and get the CDMS2 longitude axis.
         #
         testFile = cdms2.open('testFile.nc')
@@ -62,13 +63,13 @@ class TestCDMSAutobounds(unittest.TestCase):
         values = axis[:]
         bounds = axis.getBounds()
         self.assertAlmostEqual(bounds[0, 0], -179.999031067, 5)
-        self.assertEqual(bounds[-1,1], 180.00096893310547)
+        self.assertEqual(bounds[-1, 1], 180.00096893310547)
 #        self.assertAlmostEqual(bounds[-1, 1], 180.000984192, 5)
 
     def test_BoundsReverse11th(self):
         exponent = -11
         offset = 2.0**exponent
-        self.createFile(180,-180,offset)
+        self.createFile(180, -180, offset)
         # Open the test file and get the CDMS2 longitude axis.
         #
         testFile = cdms2.open('testFile.nc')
@@ -79,13 +80,13 @@ class TestCDMSAutobounds(unittest.TestCase):
                 break
         values = axis[:]
         bounds = axis.getBounds()
-        self.assertEqual(bounds[0, 0],   180.0)
+        self.assertEqual(bounds[0, 0], 180.0)
         self.assertEqual(bounds[-1, 1], -180.0)
 
     def test_Bounds11th(self):
         exponent = -11
         offset = 2.0**exponent
-        self.createFile(-180,180,offset)
+        self.createFile(-180, 180, offset)
         # Open the test file and get the CDMS2 longitude axis.
         #
         testFile = cdms2.open('testFile.nc')

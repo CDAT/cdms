@@ -5,11 +5,13 @@ import unittest
 # global, keeps track of the number of times the Ctor was called
 INIT_REF_COUNT = 0
 
+
 class Foo:
     """
     Test class to check that reference counting of ESMP.ESMP_Initialize/
     ESMP.ESMP_Finalize is working
     """
+
     def __init__(self):
         global INIT_REF_COUNT
         if INIT_REF_COUNT == 0:
@@ -30,7 +32,7 @@ class Test(unittest.TestCase):
 
     def test_test1(self):
         f1 = Foo()
-        grid = ESMF.Grid(numpy.array([3,4], dtype=numpy.int32))
+        grid = ESMF.Grid(numpy.array([3, 4], dtype=numpy.int32))
 #        grid = ESMP.ESMP_GridCreateNoPeriDim(numpy.array([3, 4], dtype=numpy.int32))
         f2 = Foo()
         del f1
@@ -38,12 +40,11 @@ class Test(unittest.TestCase):
 
     def test_test2(self):
         ESMF.Manager()
-        g = ESMF.Grid(numpy.array([3,4], dtype=numpy.int32))
+        g = ESMF.Grid(numpy.array([3, 4], dtype=numpy.int32))
 #        g = ESMP.ESMP_GridCreateNoPeriDim(numpy.array([3, 4], dtype=numpy.int32))
 
 
-if __name__ == '__main__': 
-    print "" # Spacer
+if __name__ == '__main__':
+    print ""  # Spacer
     suite = unittest.TestLoader().loadTestsFromTestCase(Test)
-    unittest.TextTestRunner(verbosity = 1).run(suite)
-    
+    unittest.TextTestRunner(verbosity=1).run(suite)

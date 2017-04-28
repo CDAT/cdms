@@ -39,13 +39,13 @@ try:
     from mpi4py import rc
     rc.initialize = False
     from mpi4py import MPI
-except:
+except BaseException:
     rk = 0
 
 try:
     import gsHost
     from pycf import libCFConfig as libcf
-except:
+except BaseException:
     libcf = None
 
 try:
@@ -54,8 +54,12 @@ except ImportError:
     pass
 
 DuplicateAxis = "Axis already defined: "
+
+
 class DuplicateAxisError(CDMSError):
     pass
+
+
 DuplicateGrid = "Grid already defined: "
 DuplicateVariable = "Variable already defined: "
 FileNotFound = "File not found: "
@@ -106,6 +110,7 @@ _IndexList5 = re.compile(
 _NPRINT = 20
 _showCompressWarnings = True
 
+
 def setCompressionWarnings(value=None):
     """Turn on/off the warnings for compression
     Usage:
@@ -120,20 +125,23 @@ def setCompressionWarnings(value=None):
         value = not _showCompressWarnings
     if isinstance(value, str):
         if not value.slower() in ['y', 'n', 'yes', 'no']:
-            raise CDMSError("setCompressionWarnings flags must be yes/no or 1/0, or None to invert it")
+            raise CDMSError(
+                "setCompressionWarnings flags must be yes/no or 1/0, or None to invert it")
         if value.lower()[0] == 'y':
             value = 1
         else:
             value = 0
     if not isinstance(value, (int, bool)):
-        raise CDMSError("setCompressionWarnings flags must be yes/no or 1/0, or None to invert it")
+        raise CDMSError(
+            "setCompressionWarnings flags must be yes/no or 1/0, or None to invert it")
 
     if value in [1, True]:
         _showCompressWarnings = True
     elif value in [0, False]:
         _showCompressWarnings = False
     else:
-        raise CDMSError("setCompressionWarnings flags must be yes\/no or 1\/0, or None to invert it")
+        raise CDMSError(
+            "setCompressionWarnings flags must be yes\/no or 1\/0, or None to invert it")
 
     return _showCompressWarnings
 
@@ -142,7 +150,8 @@ def setNetcdfUseNCSwitchModeFlag(value):
     """ Tells cdms2 to switch constantly between netcdf define/write modes"""
 
     if value not in [True, False, 0, 1]:
-        raise CDMSError("Error UseNCSwitchMode flag must be 1(can use)/0(do not use) or true/False")
+        raise CDMSError(
+            "Error UseNCSwitchMode flag must be 1(can use)/0(do not use) or true/False")
     if value in [0, False]:
         Cdunif.CdunifSetNCFLAGS("use_define_mode", 0)
     else:
@@ -153,7 +162,8 @@ def setNetcdfUseParallelFlag(value):
     """ Sets NetCDF classic flag value"""
     global CdMpi
     if value not in [True, False, 0, 1]:
-        raise CDMSError("Error UseParallel flag must be 1(can use)/0(do not use) or true/False")
+        raise CDMSError(
+            "Error UseParallel flag must be 1(can use)/0(do not use) or true/False")
     if value in [0, False]:
         Cdunif.CdunifSetNCFLAGS("use_parallel", 0)
     else:
@@ -223,7 +233,8 @@ def setNetcdfDeflateFlag(value):
 def setNetcdfDeflateLevelFlag(value):
     """ Sets NetCDF deflate level flag value"""
     if value not in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]:
-        raise CDMSError("Error NetCDF deflate_level flag must be an integer < 10")
+        raise CDMSError(
+            "Error NetCDF deflate_level flag must be an integer < 10")
     Cdunif.CdunifSetNCFLAGS("deflate_level", value)
 
 
@@ -314,7 +325,8 @@ def createDataset(path, template=None):
 # 'mode' is 'r', 'r+', 'a', or 'w'
 
 
-def openDataset(uri, mode='r', template=None, dods=1, dpath=None, hostObj=None):
+def openDataset(uri, mode='r', template=None,
+                dods=1, dpath=None, hostObj=None):
     """
     Options:::
 mode :: (str) ('r') mode to open the file in read/write/append
@@ -345,13 +357,14 @@ file :: (cdms2.dataset.CdmsFile) (0) file to read from
             datanode = load(path)
         else:
             # If the doesn't exist allow it to be created
-            # Ok mpi has issues with bellow we need to test this only with 1 rank
+            # Ok mpi has issues with bellow we need to test this only with 1
+            # rank
             if not os.path.exists(path):
                 return CdmsFile(path, mode, mpiBarrier=CdMpi)
             elif mode == "w":
                 try:
                     os.remove(path)
-                except:
+                except BaseException:
                     pass
                 return CdmsFile(path, mode, mpiBarrier=CdMpi)
 
@@ -359,10 +372,12 @@ file :: (cdms2.dataset.CdmsFile) (0) file to read from
             file1 = CdmsFile(path, "r")
             if libcf is not None:
                 if hasattr(file1, libcf.CF_FILETYPE):
-                    if getattr(file1, libcf.CF_FILETYPE) == libcf.CF_GLATT_FILETYPE_HOST:
+                    if getattr(
+                            file1, libcf.CF_FILETYPE) == libcf.CF_GLATT_FILETYPE_HOST:
                         file = gsHost.open(path, mode)
                     elif mode == 'r' and hostObj is None:
-                        # helps performance on machines where file open (in CdmsFile) is costly
+                        # helps performance on machines where file open (in
+                        # CdmsFile) is costly
                         file = file1
                     else:
                         file = CdmsFile(path, mode, hostObj=hostObj)
@@ -385,14 +400,15 @@ file :: (cdms2.dataset.CdmsFile) (0) file to read from
                 return file
             except Exception:
                 msg = "Error in DODS open of: " + uri
-                if os.path.exists(os.path.join(os.path.expanduser("~"), ".dodsrc")):
+                if os.path.exists(os.path.join(
+                        os.path.expanduser("~"), ".dodsrc")):
                     msg += "\nYou have a .dodsrc in your HOME directory, try to remove it"
                 raise CDMSError(msg)
         else:
             try:
                 datanode = loadURI(uri)
                 return datanode
-            except:
+            except BaseException:
                 datanode = loadURI(uri)
                 raise CDMSError("Error in loadURI of: " + uri)
 
@@ -521,26 +537,28 @@ def parseFileMap(text):
         raise CDMSError("Parsing cdms_filemap near " + text[n:n + _NPRINT])
     return result
 
+
 # A CDMS dataset consists of a CDML/XML file and one or more data files
 from cudsinterface import cuDataset
 
 
 class Dataset(CdmsObj, cuDataset):
 
-    def __init__(self, uri, mode, datasetNode=None, parent=None, datapath=None):
+    def __init__(self, uri, mode, datasetNode=None,
+                 parent=None, datapath=None):
         if datasetNode is not None and datasetNode.tag != 'dataset':
             raise CDMSError('Node is not a dataset node')
         CdmsObj.__init__(self, datasetNode)
         for v in ['datapath',
-                   'variables',
-                   'axes',
-                   'grids',
-                   'xlinks',
-                   'dictdict',
-                   'default_variable_name',
-                   'parent',
-                   'uri',
-                   'mode']:
+                  'variables',
+                  'axes',
+                  'grids',
+                  'xlinks',
+                  'dictdict',
+                  'default_variable_name',
+                  'parent',
+                  'uri',
+                  'mode']:
             if v not in self.__cdms_internals__:
                 val = self.__cdms_internals__ + [v, ]
                 self.___cdms_internals__ = val
@@ -550,7 +568,8 @@ class Dataset(CdmsObj, cuDataset):
         self.uri = uri
         self.mode = mode
         # Path of data files relative to parent db.
-        # Note: .directory is the location of data relative to the location of the XML file
+        # Note: .directory is the location of data relative to the location of
+        # the XML file
         self.datapath = datapath
         self.variables = {}
         self.axes = {}
@@ -558,7 +577,8 @@ class Dataset(CdmsObj, cuDataset):
         self.xlinks = {}
         self._gridmap_ = {}
         # Gridmap:(latname,lonname,order,maskname,gridclass) => grid
-        (scheme, netloc, xmlpath, parameters, query, fragment) = urlparse.urlparse(uri)
+        (scheme, netloc, xmlpath, parameters,
+         query, fragment) = urlparse.urlparse(uri)
         self._xmlpath_ = xmlpath
         # Dictionary of dictionaries, keyed on node tags
         self.dictdict = {'variable': self.variables,
@@ -614,7 +634,8 @@ class Dataset(CdmsObj, cuDataset):
                     maskname = ""
                 else:
                     maskname = mask.id
-                self._gridmap_[(latname, lonname, grid.getOrder(), maskname)] = grid
+                self._gridmap_[
+                    (latname, lonname, grid.getOrder(), maskname)] = grid
 
             # Initialize variable domains.
             for var in self.variables.values():
@@ -624,10 +645,12 @@ class Dataset(CdmsObj, cuDataset):
 
                 # Get grid information for the variable. gridkey has the form
                 # (latname,lonname,order,maskname,abstract_class).
-                gridkey, lat, lon = var.generateGridkey(self._convention_, self.variables)
+                gridkey, lat, lon = var.generateGridkey(
+                    self._convention_, self.variables)
 
                 # If the variable is gridded, lookup the grid. If no such grid exists,
-                # create a unique gridname, create the grid, and add to the gridmap.
+                # create a unique gridname, create the grid, and add to the
+                # gridmap.
                 if gridkey is None:
                     grid = None
                 else:
@@ -656,7 +679,8 @@ class Dataset(CdmsObj, cuDataset):
                         else:
                             foundname = 0
                             for i in range(97, 123):  # Lower-case letters
-                                candidateName = candidateBasename + '_' + chr(i)
+                                candidateName = candidateBasename + \
+                                    '_' + chr(i)
                                 if candidateName not in self.grids:
                                     gridname = candidateName
                                     foundname = 1
@@ -668,7 +692,8 @@ class Dataset(CdmsObj, cuDataset):
 
                         # Create the grid
                         if gridkey[4] == 'rectGrid':
-                            node = cdmsNode.RectGridNode(gridname, lat.id, lon.id, gridtype, gridkey[2])
+                            node = cdmsNode.RectGridNode(
+                                gridname, lat.id, lon.id, gridtype, gridkey[2])
                             grid = RectGrid(self, node)
                             grid.initDomain(self.axes, self.variables)
                         elif gridkey[4] == 'curveGrid':
@@ -715,9 +740,11 @@ class Dataset(CdmsObj, cuDataset):
                         else:
                             forecast = None
                         path = varm1[-1]
-                        self._filemap_[(varname, tstart, levstart, forecast)] = path
+                        self._filemap_[
+                            (varname, tstart, levstart, forecast)] = path
                         if tstart is not None:
-                            timemap[(tstart, tend)] = 1  # Collect unique (tstart, tend) tuples
+                            # Collect unique (tstart, tend) tuples
+                            timemap[(tstart, tend)] = 1
                         if levstart is not None:
                             levmap[(levstart, levend)] = 1
                         if forecast is not None:
@@ -877,7 +904,7 @@ class Dataset(CdmsObj, cuDataset):
                 try:
                     if predicate(*(obj,)) == 1:
                         resultlist.append(obj)
-                except:
+                except BaseException:
                     pass
         return resultlist
 
@@ -917,10 +944,11 @@ class Dataset(CdmsObj, cuDataset):
                 else:
                     try:
                         fileurl = os.path.join(dburl, self.datapath, filename)
-                    except:
+                    except BaseException:
                         print 'Error joining', repr(dburl), self.datapath, filename
                         raise
-                (scheme, netloc, path, parameters, query, fragment) = urlparse.urlparse(fileurl)
+                (scheme, netloc, path, parameters, query,
+                 fragment) = urlparse.urlparse(fileurl)
                 if scheme in ['file', ''] and os.path.isfile(path):
                     if cdmsobj._debug == 1:
                         sys.stdout.write(fileurl + '\n')
@@ -935,13 +963,18 @@ class Dataset(CdmsObj, cuDataset):
                 lcbase = db.lcBaseDN
                 lcpath = self.getLogicalCollectionDN(lcbase)
 
-                # File location is logical collection path combined with relative filename
+                # File location is logical collection path combined with
+                # relative filename
                 fileDN = (self.uri, filename)
-                path = cache.getFile(filename, fileDN, lcpath=lcpath, userid=db.userid, useReplica=db.useReplica)
+                path = cache.getFile(
+                    filename,
+                    fileDN,
+                    lcpath=lcpath,
+                    userid=db.userid,
+                    useReplica=db.useReplica)
                 try:
                     f = Cdunif.CdunifFile(path, mode)
-                except:
-                    # Try again, in case another process clobbered this file
+                except BaseException:                    # Try again, in case another process clobbered this file
                     path = cache.getFile(fileurl, fileDN)
                     f = Cdunif.CdunifFile(path, mode)
                 return f
@@ -950,15 +983,16 @@ class Dataset(CdmsObj, cuDataset):
 
             for dburl in dburls:
                 fileurl = os.path.join(dburl, self.datapath, filename)
-                (scheme, netloc, path, parameters, query, fragment) = urlparse.urlparse(fileurl)
+                (scheme, netloc, path, parameters, query,
+                 fragment) = urlparse.urlparse(fileurl)
                 if scheme == 'ftp':
                     cache = self.parent.enableCache()
                     fileDN = (self.uri, filename)  # Global file name
                     path = cache.getFile(fileurl, fileDN)
                     try:
                         f = Cdunif.CdunifFile(path, mode)
-                    except:
-                        # Try again, in case another process clobbered this file
+                    except BaseException:                        # Try again, in case another process clobbered this
+                        # file
                         path = cache.getFile(fileurl, fileDN)
                         f = Cdunif.CdunifFile(path, mode)
                     return f
@@ -1006,7 +1040,8 @@ class Dataset(CdmsObj, cuDataset):
         return self.grids.get(id)
 
     def __repr__(self):
-        return "<Dataset: '%s', URI: '%s', mode: '%s', status: %s>" % (self.id, self.uri, self.mode, self._status_)
+        return "<Dataset: '%s', URI: '%s', mode: '%s', status: %s>" % (
+            self.id, self.uri, self.mode, self._status_)
 
 # internattr.add_internal_attribute (Dataset, 'datapath',
 # 'variables',
@@ -1051,7 +1086,7 @@ class CdmsFile(CdmsObj, cuDataset):
             if mode[0].lower() == "w":
                 try:
                     os.remove(path)
-                except:
+                except BaseException:
                     pass
             _fileobj_ = Cdunif.CdunifFile(path, mode)
         except Exception as err:
@@ -1077,19 +1112,23 @@ class CdmsFile(CdmsObj, cuDataset):
         try:
 
             # A mosaic variable with coordinates attached, but the coordinate variables reside in a
-            # different file. Add the coordinate variables to the mosaic variables list.
+            # different file. Add the coordinate variables to the mosaic
+            # variables list.
             if hostObj is not None:
                 for name in self._file_.variables.keys():
                     if 'coordinates' in dir(self._file_.variables[name]):
-                        coords = self._file_.variables[name].coordinates.split()
+                        coords = self._file_.variables[name].coordinates.split(
+                        )
                         for coord in coords:
                             if coord not in self._file_.variables.keys():
-                                cdunifvar = Cdunif.CdunifFile(hostObj.gridVars[coord][0], mode)
+                                cdunifvar = Cdunif.CdunifFile(
+                                    hostObj.gridVars[coord][0], mode)
                                 self._file_.variables[coord] = cdunifvar.variables[coord]
 
             # Get lists of 1D and auxiliary coordinate axes
             coords1d = self._convention_.getAxisIds(self._file_.variables)
-            coordsaux = self._convention_.getAxisAuxIds(self._file_.variables, coords1d)
+            coordsaux = self._convention_.getAxisAuxIds(
+                self._file_.variables, coords1d)
 
             # Build variable list
             for name in self._file_.variables.keys():
@@ -1099,11 +1138,14 @@ class CdmsFile(CdmsObj, cuDataset):
                         # Put auxiliary coordinate axes with variables, since there may be
                         # a dimension with the same name.
                         if len(cdunifvar.shape) == 2:
-                            self.variables[name] = FileAxis2D(self, name, cdunifvar)
+                            self.variables[name] = FileAxis2D(
+                                self, name, cdunifvar)
                         else:
-                            self.variables[name] = FileAuxAxis1D(self, name, cdunifvar)
+                            self.variables[name] = FileAuxAxis1D(
+                                self, name, cdunifvar)
                     else:
-                        self.variables[name] = FileVariable(self, name, cdunifvar)
+                        self.variables[name] = FileVariable(
+                            self, name, cdunifvar)
 
             # Build axis list
             for name in self._file_.dimensions.keys():
@@ -1136,10 +1178,12 @@ class CdmsFile(CdmsObj, cuDataset):
             for var in self.variables.values():
                 # Get grid information for the variable. gridkey has the form
                 # (latname,lonname,order,maskname, abstract_class).
-                gridkey, lat, lon = var.generateGridkey(self._convention_, self.variables)
+                gridkey, lat, lon = var.generateGridkey(
+                    self._convention_, self.variables)
 
                 # If the variable is gridded, lookup the grid. If no such grid exists,
-                # create a unique gridname, create the grid, and add to the gridmap.
+                # create a unique gridname, create the grid, and add to the
+                # gridmap.
                 if gridkey is None:
                     grid = None
                 else:
@@ -1169,7 +1213,8 @@ class CdmsFile(CdmsObj, cuDataset):
                         else:
                             foundname = 0
                             for i in range(97, 123):  # Lower-case letters
-                                candidateName = candidateBasename + '_' + chr(i)
+                                candidateName = candidateBasename + \
+                                    '_' + chr(i)
                                 if candidateName not in self.grids:
                                     gridname = candidateName
                                     foundname = 1
@@ -1181,7 +1226,8 @@ class CdmsFile(CdmsObj, cuDataset):
 
                         # Create the grid
                         if gridkey[4] == 'rectGrid':
-                            grid = FileRectGrid(self, gridname, lat, lon, gridkey[2], gridtype)
+                            grid = FileRectGrid(
+                                self, gridname, lat, lon, gridkey[2], gridtype)
                         else:
                             if gridkey[3] != '':
                                 if gridkey[3] in self.variables:
@@ -1192,23 +1238,27 @@ class CdmsFile(CdmsObj, cuDataset):
                             else:
                                 maskvar = None
                             if gridkey[4] == 'curveGrid':
-                                grid = FileCurveGrid(lat, lon, gridname, parent=self, maskvar=maskvar)
+                                grid = FileCurveGrid(
+                                    lat, lon, gridname, parent=self, maskvar=maskvar)
                             else:
-                                grid = FileGenericGrid(lat, lon, gridname, parent=self, maskvar=maskvar)
+                                grid = FileGenericGrid(
+                                    lat, lon, gridname, parent=self, maskvar=maskvar)
                         self.grids[grid.id] = grid
                         self._gridmap_[gridkey] = grid
 
                 # Set the variable grid
                 var.setGrid(grid)
-        except:
+        except BaseException:
             self.close()
             raise
 
     def __enter__(self):
-        return self;
+        return self
+
     def __exit__(self, type, value, traceback):
         self.close()
     # setattr writes external global attributes to the file
+
     def __setattr__(self, name, value):
         self.__dict__[name] = value  # attributes kept in sync w/file
         if name not in self.__cdms_internals__ and name[0] != '_':
@@ -1359,7 +1409,8 @@ class CdmsFile(CdmsObj, cuDataset):
         return axis
 
     # Copy axis description and data from another axis
-    def copyAxis(self, axis, newname=None, unlimited=0, index=None, extbounds=None):
+    def copyAxis(self, axis, newname=None, unlimited=0,
+                 index=None, extbounds=None):
         """
         Copy axis description and data from another axis
         :::
@@ -1386,7 +1437,8 @@ class CdmsFile(CdmsObj, cuDataset):
                 if len(axis) != len(newaxis):
                     raise DuplicateAxisError(DuplicateAxis + newname)
             elif unlimited == 0 or (unlimited == 1 and getNetcdfUseParallelFlag() != 0):
-                if len(axis) != len(newaxis) or numpy.alltrue(numpy.less(numpy.absolute(newaxis[:] - axis[:]), 1.e-5)) == 0:
+                if len(axis) != len(newaxis) or numpy.alltrue(
+                        numpy.less(numpy.absolute(newaxis[:] - axis[:]), 1.e-5)) == 0:
                     raise DuplicateAxisError(DuplicateAxis + newname)
             else:
                 if index is None:
@@ -1418,7 +1470,8 @@ class CdmsFile(CdmsObj, cuDataset):
                     boundsid = None
                 newaxis.setBounds(bounds, persistent=1, boundsid=boundsid)
             for attname, attval in axis.attributes.items():
-                if attname not in ["datatype", "id", "length", "isvar", "name_in_file", "partition"]:
+                if attname not in ["datatype", "id", "length",
+                                   "isvar", "name_in_file", "partition"]:
                     setattr(newaxis, attname, attval)
         return newaxis
 
@@ -1494,7 +1547,8 @@ class CdmsFile(CdmsObj, cuDataset):
         # else create a new grid and copy metadata
         else:
             newmask = grid.getMask()    # Get the mask array
-            newgrid = self.createRectGrid(newname, lat, lon, grid.getOrder(), grid.getType(), None)
+            newgrid = self.createRectGrid(
+                newname, lat, lon, grid.getOrder(), grid.getType(), None)
             newgrid.setMask(newmask)    # Set the mask array, non-persistently
             for attname in grid.attributes.keys():
                 setattr(newgrid, attname, getattr(grid, attname))
@@ -1541,7 +1595,8 @@ class CdmsFile(CdmsObj, cuDataset):
             if isinstance(obj, FileAxis):
                 dimensions.append(obj.id)
             elif isinstance(obj, FileRectGrid):
-                dimensions = dimensions + [obj.getAxis(0).id, obj.getAxis(1).id]
+                dimensions = dimensions + \
+                    [obj.getAxis(0).id, obj.getAxis(1).id]
             else:
                 raise InvalidDomain
 
@@ -1679,12 +1734,12 @@ class CdmsFile(CdmsObj, cuDataset):
                 try:
                     if predicate(*(obj,)) == 1:
                         resultlist.append(obj)
-                except:
+                except BaseException:
                     pass
         return resultlist
 
     def createVariableCopy(self, var, id=None, attributes=None, axes=None, extbounds=None,
-                              extend=0, fill_value=None, index=None, newname=None, grid=None):
+                           extend=0, fill_value=None, index=None, newname=None, grid=None):
         """Define a new variable, with the same axes and attributes as in <var>.
         This does not copy the data itself.
         Keywords:
@@ -1759,7 +1814,8 @@ class CdmsFile(CdmsObj, cuDataset):
                     setit = 0
                     for i in range(97, 123):  # Lower-case letters
                         try:
-                            newaxis = self.copyAxis(axis, axis.id + '_' + chr(i))
+                            newaxis = self.copyAxis(
+                                axis, axis.id + '_' + chr(i))
                             setit = 1
                             break
                         except DuplicateAxisError:
@@ -1768,7 +1824,8 @@ class CdmsFile(CdmsObj, cuDataset):
                     if setit == 0:
                         raise DuplicateAxisError(DuplicateAxis + axis.id)
             else:
-                newaxis = self.copyAxis(axis, unlimited=1, index=index, extbounds=extbounds)
+                newaxis = self.copyAxis(
+                    axis, unlimited=1, index=index, extbounds=extbounds)
 
             axislist.append(newaxis)
 
@@ -1783,15 +1840,19 @@ class CdmsFile(CdmsObj, cuDataset):
             try:
                 if fill_value is None:
                     if('_FillValue' in attributes.keys()):
-                        attributes['_FillValue'] = numpy.array(var._FillValue).astype(var.dtype)
-                        attributes['missing_value'] = numpy.array(var._FillValue).astype(var.dtype)
+                        attributes['_FillValue'] = numpy.array(
+                            var._FillValue).astype(var.dtype)
+                        attributes['missing_value'] = numpy.array(
+                            var._FillValue).astype(var.dtype)
                     if('missing_value' in attributes.keys()):
-                        attributes['_FillValue'] = numpy.array(var.missing_value).astype(var.dtype)
-                        attributes['missing_value'] = numpy.array(var.missing_value).astype(var.dtype)
+                        attributes['_FillValue'] = numpy.array(
+                            var.missing_value).astype(var.dtype)
+                        attributes['missing_value'] = numpy.array(
+                            var.missing_value).astype(var.dtype)
                 else:
                     attributes['_FillValue'] = fill_value
                     attributes['missing_value'] = fill_value
-            except:
+            except BaseException:
                 pass
             if "name" in attributes:
                 if attributes['name'] != var.id:
@@ -1904,7 +1965,9 @@ class CdmsFile(CdmsObj, cuDataset):
             varid = id
         if varid in self.variables:
             if pack:
-                raise CDMSError("You cannot pack an existing variable %s " % varid)
+                raise CDMSError(
+                    "You cannot pack an existing variable %s " %
+                    varid)
             v = self.variables[varid]
         else:
             if pack is not False:
@@ -1942,7 +2005,8 @@ class CdmsFile(CdmsObj, cuDataset):
             else:
                 v.assignValue(var.getValue())
         else:
-            # Determine if the first dimension of var overlaps the first dimension of v
+            # Determine if the first dimension of var overlaps the first
+            # dimension of v
             vec2 = v.getAxis(0)
             if extbounds is None:
                 bounds1 = vec1.getBounds()
@@ -1965,7 +2029,8 @@ class CdmsFile(CdmsObj, cuDataset):
                         vec1[:]), vec2.id, repr(
                         vec2[:])))
 
-        # pack implementation source: https://www.unidata.ucar.edu/software/netcdf/docs/BestPractices.html
+        # pack implementation source:
+        # https://www.unidata.ucar.edu/software/netcdf/docs/BestPractices.html
         if pack:
             M = var.max()
             m = var.min()
@@ -1992,7 +2057,8 @@ class CdmsFile(CdmsObj, cuDataset):
         such method be available, writeToFile will be used.  If that is not
         available, then self.write(obj) will be called to try to write obj as
         a variable."""
-        # This method was formerly called writeg and just wrote an AbstractCurveGrid.
+        # This method was formerly called writeg and just wrote an
+        # AbstractCurveGrid.
         if (hasattr(obj, 'writeg') and callable(getattr(obj, 'writeg'))):
             obj.writeg(self)
         elif (hasattr(obj, 'writeToFile') and callable(getattr(obj, 'writeToFile'))):

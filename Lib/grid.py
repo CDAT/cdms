@@ -356,11 +356,9 @@ class AbstractRectGrid(AbstractGrid):
         maskArray = self.getMask()
         if maskArray is not None:
             if self._order_ == "yx":
-                submask = maskArray[latinterval[0]
-                    :latinterval[1], loninterval[0]:loninterval[1]]
+                submask = maskArray[latinterval[0]:latinterval[1], loninterval[0]:loninterval[1]]
             else:
-                submask = maskArray[loninterval[0]
-                    :loninterval[1], latinterval[0]:latinterval[1]]
+                submask = maskArray[loninterval[0]:loninterval[1], latinterval[0]:latinterval[1]]
         else:
             submask = None
 

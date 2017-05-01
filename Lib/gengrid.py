@@ -275,7 +275,7 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
             for i in missing:
                 for item in axes:
                     if (len(selfaxes[i]) == len(item)
-                        ) and allclose(selfaxes[i], item):
+                            ) and allclose(selfaxes[i], item):
                         result._lataxis_.setAxis(i, item)
                         result._lonaxis_.setAxis(i, item)
                         break

@@ -24,7 +24,7 @@ HAVE_MPI = False
 try:
     from mpi4py import MPI
     HAVE_MPI = True
-except:
+except BaseException:
     pass
 
 
@@ -38,7 +38,11 @@ def fromJSON(jsn):
     # First recreates the axes
     axes = []
     for a in D["_axes"]:
-        ax = createAxis(numpy.array(a["_values"], dtype=a["_dtype"]), id=a["id"])
+        ax = createAxis(
+            numpy.array(
+                a["_values"],
+                dtype=a["_dtype"]),
+            id=a["id"])
         for k, v in a.iteritems():
             if k not in ["_values", "id", "_dtype"]:
                 setattr(ax, k, v)
@@ -47,7 +51,8 @@ def fromJSON(jsn):
     V = createVariable(D["_values"], id=D["id"], typecode=D["_dtype"])
     V.setAxisList(axes)
     for k, v in D.iteritems():
-        if k not in ["id", "_values", "_axes", "_grid", "_fill_value", "_dtype", ]:
+        if k not in ["id", "_values", "_axes",
+                     "_grid", "_fill_value", "_dtype", ]:
             setattr(V, k, v)
     V.set_fill_value(D["_fill_value"])
     return V
@@ -116,30 +121,30 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
     def __copy__(self):
         return numpy.ma.MaskedArray.copy(self)
 
-    __mul__    = AbstractVariable.__mul__
-    __rmul__   = AbstractVariable.__rmul__
-    __imul__   = AbstractVariable.__imul__
-    __abs__    = AbstractVariable.__abs__
-    __neg__    = AbstractVariable.__neg__
-    __add__    = AbstractVariable.__add__
-    __iadd__   = AbstractVariable.__iadd__
-    __radd__   = AbstractVariable.__radd__
+    __mul__ = AbstractVariable.__mul__
+    __rmul__ = AbstractVariable.__rmul__
+    __imul__ = AbstractVariable.__imul__
+    __abs__ = AbstractVariable.__abs__
+    __neg__ = AbstractVariable.__neg__
+    __add__ = AbstractVariable.__add__
+    __iadd__ = AbstractVariable.__iadd__
+    __radd__ = AbstractVariable.__radd__
     __lshift__ = AbstractVariable.__lshift__
     __rshift__ = AbstractVariable.__rshift__
-    __sub__    = AbstractVariable.__sub__
-    __rsub__   = AbstractVariable.__rsub__
-    __isub__   = AbstractVariable.__isub__
-    __div__    = AbstractVariable.__div__
-    __rdiv__   = AbstractVariable.__rdiv__
-    __idiv__   = AbstractVariable.__idiv__
-    __pow__   = AbstractVariable.__pow__
-    __eq__    = AbstractVariable.__eq__
-    __ne__    = AbstractVariable.__ne__
-    __lt__    = AbstractVariable.__lt__
-    __le__    = AbstractVariable.__le__
-    __gt__    = AbstractVariable.__gt__
-    __ge__    = AbstractVariable.__ge__
-    __sqrt__    = AbstractVariable.__sqrt__
+    __sub__ = AbstractVariable.__sub__
+    __rsub__ = AbstractVariable.__rsub__
+    __isub__ = AbstractVariable.__isub__
+    __div__ = AbstractVariable.__div__
+    __rdiv__ = AbstractVariable.__rdiv__
+    __idiv__ = AbstractVariable.__idiv__
+    __pow__ = AbstractVariable.__pow__
+    __eq__ = AbstractVariable.__eq__
+    __ne__ = AbstractVariable.__ne__
+    __lt__ = AbstractVariable.__lt__
+    __le__ = AbstractVariable.__le__
+    __gt__ = AbstractVariable.__gt__
+    __ge__ = AbstractVariable.__ge__
+    __sqrt__ = AbstractVariable.__sqrt__
 
     def __init__(self, data, typecode=None, copy=1, savespace=0,
                  mask=numpy.ma.nomask, fill_value=None, grid=None,
@@ -154,18 +159,18 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             if data.fill_value is not None:
                 self._setmissing(data.fill_value)
                 fill_value = data.fill_value
-        except:
+        except BaseException:
             pass
         if fill_value is not None:
             self._setmissing(fill_value)
-        if attributes is not None  and "_FillValue" in attributes.keys():
+        if attributes is not None and "_FillValue" in attributes.keys():
             self._setmissing(attributes["_FillValue"])
 
         # tile index, None means no mosaic
         self.tileIndex = None
         # Compatibility: assuming old typecode, map to new
         if dtype is None and typecode is not None:
-#            dtype = typeconv.convtypecode2(typecode)
+            #            dtype = typeconv.convtypecode2(typecode)
             dtype = typecode
         typecode = sctype2char(dtype)
         if isinstance(data, types.TupleType):
@@ -182,24 +187,27 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             if grid is None and not no_update_from:
                 grid = data.getGrid()
                 if (grid is not None) and (not isinstance(grid, AbstractRectGrid)) \
-                                      and (not grid.checkAxes(axes)):
-                    grid = grid.reconcile(axes)  # Make sure grid and axes are consistent
+                        and (not grid.checkAxes(axes)):
+                    # Make sure grid and axes are consistent
+                    grid = grid.reconcile(axes)
 
-        ncopy = (copy!=0)
-
+        ncopy = (copy != 0)
 
         # Initialize the geometry
         if grid is not None:
-            copyaxes = 0                  # Otherwise grid axes won't match domain.
+            # Otherwise grid axes won't match domain.
+            copyaxes = 0
         if axes is not None:
-            self.initDomain(axes, copyaxes=copyaxes)           # Note: clobbers the grid, so set the grid after.
+            # Note: clobbers the grid, so set the grid after.
+            self.initDomain(axes, copyaxes=copyaxes)
         if grid is not None:
             self.setGrid(grid)
 
         # Initialize the attributes
         if attributes is not None:
             for key, value in attributes.items():
-                if (key in ['shape', 'flat', 'imaginary', 'real'] or key[0] == '_') and key not in ['_FillValue']:
+                if (key in ['shape', 'flat', 'imaginary', 'real']
+                        or key[0] == '_') and key not in ['_FillValue']:
                     raise CDMSError('Bad key in attributes: ' + key)
                 elif (key == 'missing_value' or key == '_FillValue'):
                     # ignore if fill value given explicitly
@@ -236,14 +244,14 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
     def _setmissing(self, value):
         self._missing = numpy.array(value).astype(self.dtype)
 
-    missing       = property(_getmissing, _setmissing)
-    fill_value    = property(_getmissing, _setmissing)
-    _FillValue    = property(_getmissing, _setmissing)
+    missing = property(_getmissing, _setmissing)
+    fill_value = property(_getmissing, _setmissing)
+    _FillValue = property(_getmissing, _setmissing)
     missing_value = property(_getmissing, _setmissing)
 
     def __new__(cls, data, typecode=None, copy=0, savespace=0,
-                 mask=numpy.ma.nomask, fill_value=None, grid=None,
-                 axes=None, attributes=None, id=None, copyaxes=1, dtype=None, order='C', **kargs):
+                mask=numpy.ma.nomask, fill_value=None, grid=None,
+                axes=None, attributes=None, id=None, copyaxes=1, dtype=None, order='C', **kargs):
         """createVariable (self, data, typecode=None, copy=0, savespace=0,
                  mask=None, fill_value=None, grid=None,
                  axes=None, attributes=None, id=None, dtype=None, order='C')
@@ -251,7 +259,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         """
         # Compatibility: assuming old typecode, map to new
         if dtype is None and typecode is not None:
-#            dtype = typeconv.convtypecode2(typecode)
+            #            dtype = typeconv.convtypecode2(typecode)
             dtype = typecode
         typecode = sctype2char(dtype)
         if isinstance(data, types.TupleType):
@@ -263,7 +271,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             try:
                 if fill_value is None:
                     fill_value = data.fill_value
-            except:
+            except BaseException:
                 pass
 
         ncopy = (copy != 0)
@@ -281,7 +289,8 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         if dtype is None and data is not None:
             dtype = numpy.array(data).dtype
 
-        if fill_value in ["N/A"]:  fill_value = None
+        if fill_value in ["N/A"]:
+            fill_value = None
 
         if fill_value is not None:
             fill_value = numpy.array(fill_value).astype(dtype)
@@ -314,7 +323,8 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         return numpy.ma.MaskedArray.__getitem__(self, slicelist)
 
     def initDomain(self, axes, copyaxes=1):
-        # lazy evaluation via getAxis to avoid creating axes that aren't ever used.
+        # lazy evaluation via getAxis to avoid creating axes that aren't ever
+        # used.
         newgrid = None
         self.__domain = [None] * self.rank()
         if axes is not None:
@@ -336,7 +346,8 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
                     copyaxes = 0
                     newgrid = item
                 else:
-                    raise CDMSError("Invalid item in axis list:\n" + repr(item))
+                    raise CDMSError(
+                        "Invalid item in axis list:\n" + repr(item))
             if len(flataxes) != self.rank():
                 raise CDMSError("Wrong number of axes to initialize domain.")
             for i in range(len(flataxes)):
@@ -344,7 +355,8 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
                     if (not flataxes[i].isVirtual()) and copyaxes == 1:
                         self.copyAxis(i, flataxes[i])
                     else:
-                        self.setAxis(i, flataxes[i])  # No sense copying a virtual axis.
+                        # No sense copying a virtual axis.
+                        self.setAxis(i, flataxes[i])
             if newgrid is not None:     # Do this after setting the axes, so the grid is consistent
                 self.setGrid(newgrid)
 
@@ -360,7 +372,12 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         if self.__domain[n] is None:
             length = numpy.ma.size(self, n)
             # axis = createAxis(numpy.ma.arange(numpy.ma.size(self, n), typecode=numpy.Float))
-            axis = createAxis(numpy.ma.arange(numpy.ma.size(self, n), dtype=numpy.float_))
+            axis = createAxis(
+                numpy.ma.arange(
+                    numpy.ma.size(
+                        self,
+                        n),
+                    dtype=numpy.float_))
             axis.id = "axis_" + str(n)
             self.__domain[n] = (axis, 0, length, length)
         return self.__domain[n][0]
@@ -372,7 +389,9 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             n = n + self.rank()
         axislen = self.shape[n]
         if len(axis) != axislen:
-            raise CDMSError("axis length %d does not match corresponding dimension %d" % (len(axis), axislen))
+            raise CDMSError(
+                "axis length %d does not match corresponding dimension %d" %
+                (len(axis), axislen))
         if not isinstance(axis, AbstractAxis):
             raise CDMSError("copydimension, other not a slab.")
         self.__domain[n] = (axis, 0, len(axis), len(axis))
@@ -521,7 +540,8 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
                     b1[:, 1] = b[1:]
                     d.setBounds(b1)
                 else:
-                    raise CDMSError("setdimattribute, bounds improper shape: " + b.shape)
+                    raise CDMSError(
+                        "setdimattribute, bounds improper shape: " + b.shape)
         else:
             setattr(d, field, value)
 
@@ -617,8 +637,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         try:
             # required by mvVsWriter
             import tables
-        except:
-            # fall back
+        except BaseException:            # fall back
             format = 'VTK'
 
         def generateTimeFileName(filename, tIndex, tIndexMax, suffix):
@@ -656,7 +675,8 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             # time dependent data
             tIndexMax = len(timeAxis)
             for tIndex in range(tIndexMax):
-                sliceOp = 'self[' + (':,' * timeIndex) + ('%d,' % tIndex) + '...]'
+                sliceOp = 'self[' + (':,' * timeIndex) + \
+                    ('%d,' % tIndex) + '...]'
                 var = eval(sliceOp)
                 if format == 'VTK':
                     if filename.find('.vtk') == -1:
@@ -723,7 +743,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
                     # thickness ghostWidth on the high index side,
                     # -1 on the low index side.
                     winId = tuple([0 for i in range(dim)] + [drect] +
-                                   [0 for i in range(dim + 1, ndims)])
+                                  [0 for i in range(dim + 1, ndims)])
 
                     slce = slice(0, ghostWidth)
                     if drect == 1:
@@ -815,7 +835,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         ndims = len(self.shape)
 
         slab = [slice(0, None) for i in range(dim)] + [slce] + \
-                [slice(0, None) for i in range(dim + 1, ndims)]
+            [slice(0, None) for i in range(dim + 1, ndims)]
         return tuple(slab)
 
     def __getMPIType(self):
@@ -885,6 +905,7 @@ def asVariable(s, writeable=1):
         raise CDMSError("asVariable could not make a Variable from the input.")
     return result
 
+
 if __name__ == '__main__':
     for s in [(20,), (4, 5)]:
         x = numpy.arange(20)
@@ -896,7 +917,12 @@ if __name__ == '__main__':
         assert t.dtype.char == numpy.int
         assert numpy.ma.size(t) == numpy.ma.size(x)
         assert numpy.ma.size(t, 0) == len(t)
-        assert numpy.ma.allclose(t.getAxis(0)[:], numpy.ma.arange(numpy.ma.size(t, 0)))
+        assert numpy.ma.allclose(
+            t.getAxis(0)[:],
+            numpy.ma.arange(
+                numpy.ma.size(
+                    t,
+                    0)))
         t.missing_value = -99
         assert t.missing_value == -99
         assert t.fill_value == -99
@@ -908,8 +934,14 @@ if __name__ == '__main__':
     assert t[2] == 2
     t[3] = numpy.ma.masked
     assert t[3] is numpy.ma.masked
-    f = createVariable(numpy.ma.arange(5, typecode=numpy.float32), mask=[0, 0, 0, 1, 0])
-    f2 = createVariable(numpy.ma.arange(5, typecode=numpy.float32), mask=[0, 0, 0, 1, 0])
+    f = createVariable(
+        numpy.ma.arange(
+            5, typecode=numpy.float32), mask=[
+            0, 0, 0, 1, 0])
+    f2 = createVariable(
+        numpy.ma.arange(
+            5, typecode=numpy.float32), mask=[
+            0, 0, 0, 1, 0])
     f[3] = numpy.ma.masked
     assert f[3] is numpy.ma.masked
     assert numpy.ma.allclose(2.0, f[2])
@@ -919,5 +951,8 @@ if __name__ == '__main__':
     assert t.getdimattribute(0, 'name') == 'fudge'
     f2b = f2.getdimattribute(0, 'bounds')
     t.setdimattribute(0, 'bounds', f2b)
-    assert numpy.ma.allclose(f.getdimattribute(0, 'bounds'), f2.getdimattribute(0, 'bounds'))
+    assert numpy.ma.allclose(
+        f.getdimattribute(
+            0, 'bounds'), f2.getdimattribute(
+            0, 'bounds'))
     print "Transient Variable test passed ok."

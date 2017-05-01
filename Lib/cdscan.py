@@ -1697,8 +1697,7 @@ def main(argv):
     validateAttrs(datasetnode)
 
     timeWasOverridden = 0
-    keys = axisdict.keys()
-    keys.sort()
+    keys = sorted(axisdict.keys())
     for key in keys:
         axis = axisdict[key]
         tcode = axis.typecode()

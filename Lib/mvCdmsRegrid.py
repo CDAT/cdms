@@ -12,6 +12,8 @@ import numpy
 import cdms2
 from error import CDMSError
 import regrid2
+from functools import reduce
+
 
 def _areCellsOk(cornerCoords, mask=None):
     """
@@ -21,7 +23,7 @@ def _areCellsOk(cornerCoords, mask=None):
     @return None if OK, otherwise return a dict containing some diagnostics
 
    3         2
-    +-------+ 
+    +-------+
     | \     |
     |  \    |
     |   \   |
@@ -34,28 +36,32 @@ def _areCellsOk(cornerCoords, mask=None):
     """
 
     if len(cornerCoords) != 2:
-        return True # no-op, no check
+        return True  # no-op, no check
 
     def projectToSphere(the, lam):
         """ @return x, y, z coordinates in Cartesian space"""
         ct = numpy.cos(the)
-        return ct*numpy.cos(lam), ct*numpy.sin(lam), numpy.sin(the)
+        return ct * numpy.cos(lam), ct * numpy.sin(lam), numpy.sin(the)
 
     # compute area elements in Cartesian space
-    lat0 = numpy.array(cornerCoords[0][ :-1,  :-1], numpy.float64)
-    lat1 = numpy.array(cornerCoords[0][ :-1, 1:  ], numpy.float64)
-    lat2 = numpy.array(cornerCoords[0][1:  , 1:  ], numpy.float64)
-    lat3 = numpy.array(cornerCoords[0][1:  ,  :-1], numpy.float64)
+    lat0 = numpy.array(cornerCoords[0][:-1, :-1], numpy.float64)
+    lat1 = numpy.array(cornerCoords[0][:-1, 1:], numpy.float64)
+    lat2 = numpy.array(cornerCoords[0][1:, 1:], numpy.float64)
+    lat3 = numpy.array(cornerCoords[0][1:, :-1], numpy.float64)
 
-    the0 = lat0*numpy.pi/180.
-    the1 = lat1*numpy.pi/180.
-    the2 = lat2*numpy.pi/180.
-    the3 = lat3*numpy.pi/180.
-    lam0 = numpy.array(cornerCoords[1][ :-1,  :-1], numpy.float64)*numpy.pi/180.
-    lam1 = numpy.array(cornerCoords[1][ :-1, 1:  ], numpy.float64)*numpy.pi/180.
-    lam2 = numpy.array(cornerCoords[1][1:  , 1:  ], numpy.float64)*numpy.pi/180.
-    lam3 = numpy.array(cornerCoords[1][1:  ,  :-1], numpy.float64)*numpy.pi/180.
-    
+    the0 = lat0 * numpy.pi / 180.
+    the1 = lat1 * numpy.pi / 180.
+    the2 = lat2 * numpy.pi / 180.
+    the3 = lat3 * numpy.pi / 180.
+    lam0 = numpy.array(cornerCoords[1][:-1, :-1],
+                       numpy.float64) * numpy.pi / 180.
+    lam1 = numpy.array(cornerCoords[1][:-1, 1:],
+                       numpy.float64) * numpy.pi / 180.
+    lam2 = numpy.array(cornerCoords[1][1:, 1:],
+                       numpy.float64) * numpy.pi / 180.
+    lam3 = numpy.array(cornerCoords[1][1:, :-1],
+                       numpy.float64) * numpy.pi / 180.
+
     x0, y0, z0 = projectToSphere(the0, lam0)
     x1, y1, z1 = projectToSphere(the1, lam1)
     x2, y2, z2 = projectToSphere(the2, lam2)
@@ -77,40 +83,40 @@ def _areCellsOk(cornerCoords, mask=None):
     dy20 = y2 - y0
     dz20 = z2 - z0
 
-    areas013 = [ (dy10*dz30 - dy30*dz10),
-                 (dz10*dx30 - dz30*dx10),
-                 (dx10*dy30 - dx30*dy10), ]
-    areas231 = [ (dy32*dz12 - dy12*dz32),
-                 (dz32*dx12 - dz12*dx32),
-                 (dx32*dy12 - dx12*dy32), ]
-    areas012 = [ (dy10*dz20 - dy20*dz10),
-                 (dz10*dx20 - dz20*dx10),
-                 (dx10*dy20 - dx20*dy10), ] 
-    areas230 = [ (-dy32*dz20 + dy20*dz32),
-                 (-dz32*dx20 + dz20*dx32),
-                 (-dx32*dy20 + dx20*dy32), ]
+    areas013 = [(dy10 * dz30 - dy30 * dz10),
+                (dz10 * dx30 - dz30 * dx10),
+                (dx10 * dy30 - dx30 * dy10), ]
+    areas231 = [(dy32 * dz12 - dy12 * dz32),
+                (dz32 * dx12 - dz12 * dx32),
+                (dx32 * dy12 - dx12 * dy32), ]
+    areas012 = [(dy10 * dz20 - dy20 * dz10),
+                (dz10 * dx20 - dz20 * dx10),
+                (dx10 * dy20 - dx20 * dy10), ]
+    areas230 = [(-dy32 * dz20 + dy20 * dz32),
+                (-dz32 * dx20 + dz20 * dx32),
+                (-dx32 * dy20 + dx20 * dy32), ]
 
-    areas013Abs = numpy.sqrt( reduce(operator.add, 
-                                     [areas013[i]**2 for i in range(3)]) )
-    areas231Abs = numpy.sqrt( reduce(operator.add, 
-                                     [areas231[i]**2 for i in range(3)]) )
-    areas012Abs = numpy.sqrt( reduce(operator.add, 
-                                     [areas012[i]**2 for i in range(3)]) )
-    areas230Abs = numpy.sqrt( reduce(operator.add, 
-                                     [areas230[i]**2 for i in range(3)]) )
+    areas013Abs = numpy.sqrt(reduce(operator.add,
+                                    [areas013[i]**2 for i in range(3)]))
+    areas231Abs = numpy.sqrt(reduce(operator.add,
+                                    [areas231[i]**2 for i in range(3)]))
+    areas012Abs = numpy.sqrt(reduce(operator.add,
+                                    [areas012[i]**2 for i in range(3)]))
+    areas230Abs = numpy.sqrt(reduce(operator.add,
+                                    [areas230[i]**2 for i in range(3)]))
 
-    areas013DotAreas231 = reduce(operator.add, 
-                                 [areas013[i]*areas231[i] for i in range(3)])
-    areas012DotAreas230 = reduce(operator.add, 
-                                 [areas012[i]*areas230[i] for i in range(3)])
-    
+    areas013DotAreas231 = reduce(operator.add,
+                                 [areas013[i] * areas231[i] for i in range(3)])
+    areas012DotAreas230 = reduce(operator.add,
+                                 [areas012[i] * areas230[i] for i in range(3)])
+
     areasCriss = areas013Abs + areas231Abs
     areasCross = areas012Abs + areas230Abs
 
-    minArea = 1.e-6 * numpy.pi * 2*numpy.pi / \
-        float(areasCross.shape[0]*areasCross.shape[1])
+    minArea = 1.e-6 * numpy.pi * 2 * numpy.pi / \
+        float(areasCross.shape[0] * areasCross.shape[1])
 
-    # Check that the cell has some area and check the 
+    # Check that the cell has some area and check the
     # topology
 
     bad = (areasCriss < minArea) | \
@@ -125,27 +131,31 @@ def _areCellsOk(cornerCoords, mask=None):
 
     # inds contains list of bad cell indices
     inds = numpy.where(bad)
-    
+
     if len(inds[0]) > 0:
         # package the result
-        badCellIndices = [(inds[0][i], inds[1][i]) for i in range(len(inds[0]))]
-        bcis1 = [(inds[0][i]  , inds[1][i]+1) for i in range(len(inds[0]))]
-        bcis2 = [(inds[0][i]+1, inds[1][i]+1) for i in range(len(inds[0]))]
-        bcis3 = [(inds[0][i]+1, inds[1][i]  ) for i in range(len(inds[0]))]
+        badCellIndices = [(inds[0][i], inds[1][i])
+                          for i in range(len(inds[0]))]
+        bcis1 = [(inds[0][i], inds[1][i] + 1) for i in range(len(inds[0]))]
+        bcis2 = [(inds[0][i] + 1, inds[1][i] + 1) for i in range(len(inds[0]))]
+        bcis3 = [(inds[0][i] + 1, inds[1][i]) for i in range(len(inds[0]))]
         badCellCoords = [[(cornerCoords[0][badCellIndices[i]], cornerCoords[1][badCellIndices[i]]),
-                          (cornerCoords[0][bcis1[i]], cornerCoords[1][bcis1[i]]),
-                          (cornerCoords[0][bcis2[i]], cornerCoords[1][bcis2[i]]),
-                          (cornerCoords[0][bcis3[i]], cornerCoords[1][bcis3[i]])] \
-                             for i in range(len(badCellIndices))]
+                          (cornerCoords[0][bcis1[i]],
+                           cornerCoords[1][bcis1[i]]),
+                          (cornerCoords[0][bcis2[i]],
+                           cornerCoords[1][bcis2[i]]),
+                          (cornerCoords[0][bcis3[i]], cornerCoords[1][bcis3[i]])]
+                         for i in range(len(badCellIndices))]
         # problems...
         return {'numCells': len(areasCross.flat),
                 'numBadCells': len(inds[0]),
                 'badCellIndices': badCellIndices,
                 'badCellCoords': badCellCoords,
-                 }
+                }
     else:
         # everything is fine
         return None
+
 
 def _buildBounds(bounds):
     """
@@ -154,26 +164,27 @@ def _buildBounds(bounds):
     @return ndarrray of corners
     """
 
-    bndShape = [s+1 for s in bounds.shape[:-1]]
-    bnd = numpy.ones(bndShape, dtype = bounds.dtype)
+    bndShape = [s + 1 for s in bounds.shape[:-1]]
+    bnd = numpy.ones(bndShape, dtype=bounds.dtype)
     if len(bndShape) == 1:
         bnd[:-1] = bounds[..., 0]
-        bnd[ -1] = bounds[ -1, 1]
+        bnd[-1] = bounds[-1, 1]
     elif len(bndShape) > 1:
-        bnd[:-1, :-1] = bounds[  :,  :, 0]
-        bnd[:-1,  -1] = bounds[  :, -1, 1]
-        bnd[ -1,  -1] = bounds[ -1, -1, 2]
-        bnd[ -1, :-1] = bounds[ -1,  :, 3]
+        bnd[:-1, :-1] = bounds[:, :, 0]
+        bnd[:-1, -1] = bounds[:, -1, 1]
+        bnd[-1, -1] = bounds[-1, -1, 2]
+        bnd[-1, :-1] = bounds[-1, :, 3]
 
     return bnd
 
-def getBoundList(coordList, mask=None, 
+
+def getBoundList(coordList, mask=None,
                  removeBadCells=False, badCellIndices=[]):
     """
     Return a list of bounds built from a list of coordinates
     @param coordList coordinate list, should have getBounds()
     @param mask avoid checking areas where mask is one
-    @param removeBadCells set to True if you want to the code to remove  
+    @param removeBadCells set to True if you want to the code to remove
                 bad cells, ie zero cells, butterfly cells, ...
     @param maskCellIndices list of bad cell indices to mask out (output)
     @return [latBounds, lonBounds]
@@ -182,7 +193,7 @@ def getBoundList(coordList, mask=None,
     for c in coordList:
         cornerC = _buildBounds(c.getBounds()[:])
         cornerCoords.append(cornerC)
-        
+
     if removeBadCells:
         res = _areCellsOk(cornerCoords, mask=mask)
         if res:
@@ -194,7 +205,7 @@ WARNING: bad cell were detected
 total number of cells: %(numCells)d
 number of bad cells:   %(numBadCells)d
 
-indices of bad cells:  
+indices of bad cells:
                       %(badCellIndices)s
 
 bad cell coordinates:
@@ -202,6 +213,7 @@ bad cell coordinates:
                 """ % res
 
     return cornerCoords
+
 
 def _getCoordList(grid):
     """
@@ -224,6 +236,7 @@ def _getCoordList(grid):
     # be cdms2 coordinates so we can inquire about bounds
     return lats, lons
 
+
 def _getDstDataShape(srcVar, dstGrid):
     """
     Get the shape of the dst data
@@ -245,19 +258,20 @@ def _getDstDataShape(srcVar, dstGrid):
     dstDataShape = []
     found = False
     j = 2
-    for i in range(ndims-1, -1, -1):
+    for i in range(ndims - 1, -1, -1):
         o = order[i]
         if not found and (o in 'xy') or (not hasXY and o == '-'):
             # add size from dst grid
             j -= 1
-            dstDataShape = [dstGrid.shape[j],] + dstDataShape
+            dstDataShape = [dstGrid.shape[j], ] + dstDataShape
             if j == 0:
                 found = True
         else:
             # add size from src variable
-            dstDataShape = [srcVar.shape[i],] + dstDataShape
+            dstDataShape = [srcVar.shape[i], ] + dstDataShape
 
     return dstDataShape
+
 
 def _getAxisList(srcVar, dstGrid):
     """
@@ -281,19 +295,20 @@ def _getAxisList(srcVar, dstGrid):
     axisList = []
     found = False
     j = 2
-    for i in range(ndims-1, -1, -1):
+    for i in range(ndims - 1, -1, -1):
         o = order[i]
         if not found and (o in 'xy') or (not hasXY and o == '-'):
             # add axis from dst grid
             j -= 1
-            axisList = [dstGrid.getAxis(j),] + axisList
+            axisList = [dstGrid.getAxis(j), ] + axisList
             if j == 0:
                 found = True
         else:
             # add axis from src variable
-            axisList = [srcVar.getAxis(i),] + axisList
+            axisList = [srcVar.getAxis(i), ] + axisList
 
     return axisList
+
 
 class CdmsRegrid:
     """
@@ -301,10 +316,11 @@ class CdmsRegrid:
     regridder. If a multidimensional variable is passed in, the apply step
     loops over the axes above the Lat (Y) -- Lon (X) coordinates
     """
+
     def __init__(self, srcGrid, dstGrid, dtype,
-                 regridMethod = 'linear', regridTool = 'esmf',
-                 srcGridMask = None, srcGridAreas = None,
-                 dstGridMask = None, dstGridAreas = None,
+                 regridMethod='linear', regridTool='esmf',
+                 srcGridMask=None, srcGridAreas=None,
+                 dstGridMask=None, dstGridAreas=None,
                  **args):
         """
         Establish which regridding method to use, handle CDMS variables before
@@ -345,21 +361,21 @@ class CdmsRegrid:
         # Set the tool to esmf if conservative selected. This overrides the
         # regridTool selection
         self.regridMethod = regridMethod
-        if re.search( 'conserv', regridMethod.lower()):
+        if re.search('conserv', regridMethod.lower()):
             srcBadCellIndices = []
             srcBounds = getBoundList(srcCoords, srcGridMask,
                                      args.get('fixSrcBounds', False),
-                                     badCellIndices = srcBadCellIndices)
+                                     badCellIndices=srcBadCellIndices)
             # mask out the bad src cells
             if len(srcBadCellIndices) > 0:
                 if srcGridMask is None:
                     srcGridMask = numpy.zeros(srcCoords[0].shape, numpy.bool)
                 for inds in srcBadCellIndices:
-                    srcGridMask[inds] = 1 # True mean invalid      
+                    srcGridMask[inds] = 1  # True mean invalid
             dstBadCellIndices = []
             dstBounds = getBoundList(dstCoords, dstGridMask,
                                      args.get('fixDstBounds', False),
-                                     badCellIndices = dstBadCellIndices)
+                                     badCellIndices=dstBadCellIndices)
             # mask out the bad dst cells
             if len(dstBadCellIndices) > 0:
 
@@ -367,11 +383,11 @@ class CdmsRegrid:
                     dstGridMask = numpy.zeros(dstCoords[0].shape, numpy.bool)
 
                 for inds in dstBadCellIndices:
-                    dstGridMask[inds] = 1 # True means invalid 
-                    
+                    dstGridMask[inds] = 1  # True means invalid
+
             for c, b in zip(srcBounds, srcCoords):
                 if c.min() == b.min() or c.max() == b.max():
-                    print """   
+                    print """
 WARNING: Edge bounds are the same. The results of conservative regridding will not conserve.
 coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
               """ % (c.min(), b.min(), c.max(), b.max())
@@ -379,7 +395,7 @@ coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
             if srcBounds[0].min() < -90 or srcBounds[0].max() > 90 or \
                dstBounds[0].min() < -90 or dstBounds[0].max() > 90:
                 print "WARNING: Bounds exceed +/-90 degree latitude: min/max lats = %g/%g" % \
-                     (srcBounds[0].min(), srcBounds[0].max())
+                    (srcBounds[0].min(), srcBounds[0].max())
 
             if not re.search('esmp', regridTool.lower()):
                 regridTool = 'esmf'
@@ -389,23 +405,24 @@ coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
 
         # If LibCF handleCut is True, the bounds are needed to extend the grid
         # close the cut at the top
-        if re.search('LibCF', regridTool, re.I) and args.has_key('handleCut'):
-            if args['handleCut']: srcBounds = getBoundList(srcCoords)
+        if re.search('LibCF', regridTool, re.I) and 'handleCut' in args:
+            if args['handleCut']:
+                srcBounds = getBoundList(srcCoords)
 
         srcCoordsArrays = [numpy.array(sc) for sc in srcCoords]
         dstCoordsArrays = [numpy.array(dc) for dc in dstCoords]
 
         self.regridObj = regrid2.GenericRegrid(srcCoordsArrays, dstCoordsArrays,
-                                               regridMethod = regridMethod,
-                                               regridTool = regridTool,
-                                               dtype = dtype,
-                                               srcGridMask = srcGridMask,
-                                               srcBounds = srcBounds,
-                                               srcGridAreas = srcGridAreas,
-                                               dstGridMask = dstGridMask,
-                                               dstBounds = dstBounds,
-                                               dstGridAreas = dstGridAreas,
-                                               **args )
+                                               regridMethod=regridMethod,
+                                               regridTool=regridTool,
+                                               dtype=dtype,
+                                               srcGridMask=srcGridMask,
+                                               srcBounds=srcBounds,
+                                               srcGridAreas=srcGridAreas,
+                                               dstGridMask=dstGridMask,
+                                               dstBounds=dstBounds,
+                                               dstGridAreas=dstGridAreas,
+                                               **args)
         self.regridObj.computeWeights(**args)
 
     def __call__(self, srcVar, **args):
@@ -428,7 +445,7 @@ coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
         dstShape = _getDstDataShape(srcVar, self.dstGrid)
 
         # establish the destination data. Initialize to missing values or 0.
-        dstData = numpy.ones(dstShape, dtype = srcVar.dtype)
+        dstData = numpy.ones(dstShape, dtype=srcVar.dtype)
         if missingValue is not None and \
                 re.search('conserv', self.regridMethod) is None:
             dstData *= missingValue
@@ -437,18 +454,18 @@ coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
 
         # sometimes the masked values are not set to missing_values,
         # sorry for the extra copy
-        srcData = srcVar.data*(1 - srcVar.mask)
+        srcData = srcVar.data * (1 - srcVar.mask)
         srcData += srcVar.mask * missingValue
 
         # interpolate the data, MPI gather on processor 0
         self.regridObj.apply(srcData, dstData,
-                             rootPe = 0,
-                             missingValue = missingValue,
+                             rootPe=0,
+                             missingValue=missingValue,
                              **args)
 
         # fill in diagnostic data
-        if args.has_key('diag'):
-            self.regridObj.fillInDiagnosticData(diag = args['diag'], rootPe = 0)
+        if 'diag' in args:
+            self.regridObj.fillInDiagnosticData(diag=args['diag'], rootPe=0)
 
         # construct the axis list for dstVar
         dstAxisList = _getAxisList(srcVar, self.dstGrid)
@@ -457,7 +474,7 @@ coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
         attrs = {}
         for a in srcVar.attributes:
             v = srcVar.attributes[a]
-            if type(v) is types.StringType:
+            if isinstance(v, types.StringType):
                 attrs[a] = v
 
         # if the missing value is present in the destination data, set
@@ -469,12 +486,11 @@ coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
         # we should create the variable on the supplied dstGrid or
         # the local grid.
         dstVar = cdms2.createVariable(dstData,
-                                      mask = dstMask,
-                                      fill_value = missingValue,
-                                      axes = dstAxisList,
-                                      grid = self.dstGrid,
-                                      attributes = attrs,
-                                      id = srcVar.id + '_CdmsRegrid')
+                                      mask=dstMask,
+                                      fill_value=missingValue,
+                                      axes=dstAxisList,
+                                      grid=self.dstGrid,
+                                      attributes=attrs,
+                                      id=srcVar.id + '_CdmsRegrid')
 
         return dstVar
-

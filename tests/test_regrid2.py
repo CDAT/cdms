@@ -1,6 +1,6 @@
 
 import cdms2, numpy.ma, regrid2 as regrid, os, sys
-from regrid2 import Regridder
+from regrid2 import Horizontal
 import numpy
 import basetest
 
@@ -17,7 +17,7 @@ class TestRegridding(basetest.CDMSBaseTest):
 
         sh = ingrid.shape
 
-        regridf = Regridder(ingrid, outgrid)
+        regridf = Horizontal(ingrid, outgrid)
         newu = regridf(u)
 
         self.assertLess(abs(newu[0,0,-1]-488.4763488), 1.e-3)
@@ -59,7 +59,7 @@ class TestRegridding(basetest.CDMSBaseTest):
 
         # Set the input grid mask
         ingrid.setMask(mask)
-        regridf2 = Regridder(ingrid, outgrid)
+        regridf2 = Horizontal(ingrid, outgrid)
         newar = regridf2(numar)
         self.assertLess(abs(newar[0][-1]-488.4763488), 1.e-3)
 
@@ -67,7 +67,7 @@ class TestRegridding(basetest.CDMSBaseTest):
         g = self.getDataFile('test.xml')
         u = g.variables['u']
         outgrid = cdms2.createGaussianGrid(24)
-        regridf3 = Regridder(u.getGrid(), outgrid)
+        regridf3 = Horizontal(u.getGrid(), outgrid)
         try:
             unew = regridf3(u)
         except:
@@ -94,7 +94,7 @@ class TestRegridding(basetest.CDMSBaseTest):
         var = cdms2.createVariable(dat, axes=(lev,g), attributes={'units':'N/A'}, id='test')
         result = var.pressureRegrid(levout)
 
-        #self.assertLess(abs(result[0,0,0]-3.26185), 1.e-4)
+        self.assertLess(abs(result[0,0,0]-3.26185), 1.e-4)
         # Test cross-section regridder --------------------------------
         latin = cdms2.createGaussianAxis(16)
         latout = cdms2.createGaussianAxis(24)
@@ -108,7 +108,7 @@ class TestRegridding(basetest.CDMSBaseTest):
         dat[2] = 6.0
         var = cdms2.createVariable(dat, axes=(lev,latin), attributes={'units':'N/A'}, id='test')
         dat2 = var.crossSectionRegrid(levout, latout)
-        #self.assertLess(abs(dat2[0,0]-3.26185), 1.e-4)
+        self.assertLess(abs(dat2[0,0]-3.26185), 1.e-4)
 
 
 if __name__ == "__main__":

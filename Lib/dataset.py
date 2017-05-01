@@ -27,7 +27,6 @@ from fvariable import FileVariable
 from tvariable import asVariable
 from cdmsNode import CdDatatypes
 import convention
-import typeconv
 
 # Default is serial mode until setNetcdfUseParallelFlag(1) is called
 rk = 0
@@ -1311,7 +1310,7 @@ class CdmsFile(CdmsObj, cuDataset):
             typecode = ar.dtype.char
 
         # Compatibility: revert to old typecode for cdunif
-        typecode = typeconv.oldtypecodes[typecode]
+#        typecode = typeconv.oldtypecodes[typecode]
         cuvar = cufile.createVariable(name, typecode, (name,))
 
         # Cdunif should really create this extra dimension info:
@@ -1547,7 +1546,8 @@ class CdmsFile(CdmsObj, cuDataset):
 
         try:
             # Compatibility: revert to old typecode for cdunif
-            numericType = typeconv.oldtypecodes[numericType]
+#            numericType = typeconv.oldtypecodes[numericType]
+            numericType = numpy.dtype(numericType).char
             cuvar = cufile.createVariable(name, numericType, tuple(dimensions))
         except Exception as err:
             print err
@@ -1750,6 +1750,9 @@ class CdmsFile(CdmsObj, cuDataset):
         # Create axes if necessary
         axislist = []
         for axis in sourceAxislist:
+            # classic does not handle int64 data
+            if((axis[:].dtype == numpy.int64) and Cdunif.CdunifGetNCFLAGS("classic")):
+                axis._data_=numpy.array(axis[:],dtype=numpy.int32)
             if extendedAxis is None or axis.id != extendedAxis:
                 try:
                     newaxis = self.copyAxis(axis)
@@ -1789,8 +1792,8 @@ class CdmsFile(CdmsObj, cuDataset):
                         attributes['_FillValue'] = numpy.array(var.missing_value).astype(var.dtype)
                         attributes['missing_value'] = numpy.array(var.missing_value).astype(var.dtype)
                 else:
-                    attributes['_FillValue'] = fill_value
-                    attributes['missing_value'] = fill_value
+                    attributes['_FillValue'] = numpy.array(fill_value).astype(var.dtype)
+                    attributes['missing_value'] = numpy.array(fill_value).astype(var.dtype)
             except:
                 pass
             if "name" in attributes:
@@ -1889,10 +1892,15 @@ class CdmsFile(CdmsObj, cuDataset):
 
         # Make var an AbstractVariable
         if dtype is None and typecode is not None:
-            dtype = typeconv.convtypecode2(typecode)
+#            dtype = typeconv.convtypecode2(typecode)
+            dtype = typecode
         typecode = dtype
         if typecode is not None and var.dtype.char != typecode:
             var = var.astype(typecode)
+        if var.dtype.char == 'l' and Cdunif.CdunifGetNCFLAGS("classic"):
+            var = var.astype(numpy.int32)
+        if var.dtype.char == 'L' and Cdunif.CdunifGetNCFLAGS("classic"):
+            var = var.astype(numpy.uint32)
         var = asVariable(var, writeable=0)
 
         if fill_value is None and hasattr(var, "fill_value"):

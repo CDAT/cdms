@@ -1591,7 +1591,6 @@ class AbstractAxis(CdmsObj):
                                             numpy.minimum(90.0, retbnds[0, ...]))
             retbnds[-1, ...] = numpy.maximum(-90.0,
                                              numpy.minimum(90.0, retbnds[-1, ...]))
-
         return retbnds
 
     def clone(self, copyData=1):

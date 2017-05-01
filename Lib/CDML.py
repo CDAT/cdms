@@ -19,12 +19,22 @@ Fixed = 3
 
 # Data types
 
-CdChar = "Char"
+CdUByte = "UByte"
+CdUShort = "UShort"
+CdUInt = "UInt"
+CdULong = "ULong"
+CdUInt64 = "UInt64"
+CdULongLong = "ULongLong"
+
 CdByte = "Byte"
 CdShort = "Short"
 CdInt = "Int"
 CdLong = "Long"
 CdInt64 = "Int64"
+CdLongLong = "LongLong"
+
+
+CdChar = "Char"
 CdFloat = "Float"
 CdDouble = "Double"
 CdString = "String"

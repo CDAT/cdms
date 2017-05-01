@@ -4,7 +4,7 @@ import numpy.ma
 import regrid2 as regrid
 import os
 import sys
-from regrid2 import Regridder
+from regrid2 import Horizontal
 import numpy
 import basetest
 
@@ -101,7 +101,7 @@ class TestRegridding(basetest.CDMSBaseTest):
                 'units': 'N/A'}, id='test')
         result = var.pressureRegrid(levout)
 
-        self.assertLess(abs(result[0,0,0]-3.26185), 1.e-4)
+        self.assertLess(abs(result[0, 0, 0] - 3.26185), 1.e-4)
         # Test cross-section regridder --------------------------------
         latin = cdms2.createGaussianAxis(16)
         latout = cdms2.createGaussianAxis(24)
@@ -118,7 +118,7 @@ class TestRegridding(basetest.CDMSBaseTest):
                 lev, latin), attributes={
                 'units': 'N/A'}, id='test')
         dat2 = var.crossSectionRegrid(levout, latout)
-        self.assertLess(abs(dat2[0,0]-3.26185), 1.e-4)
+        self.assertLess(abs(dat2[0, 0] - 3.26185), 1.e-4)
 
 
 if __name__ == "__main__":

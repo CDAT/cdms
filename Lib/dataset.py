@@ -1601,7 +1601,7 @@ class CdmsFile(CdmsObj, cuDataset):
 
         try:
             # Compatibility: revert to old typecode for cdunif
-#            numericType = typeconv.oldtypecodes[numericType]
+            #            numericType = typeconv.oldtypecodes[numericType]
             numericType = numpy.dtype(numericType).char
             cuvar = cufile.createVariable(name, numericType, tuple(dimensions))
         except Exception as err:
@@ -1807,7 +1807,7 @@ class CdmsFile(CdmsObj, cuDataset):
         for axis in sourceAxislist:
             # classic does not handle int64 data
             if((axis[:].dtype == numpy.int64) and Cdunif.CdunifGetNCFLAGS("classic")):
-                axis._data_=numpy.array(axis[:],dtype=numpy.int32)
+                axis._data_ = numpy.array(axis[:], dtype=numpy.int32)
             if extendedAxis is None or axis.id != extendedAxis:
                 try:
                     newaxis = self.copyAxis(axis)
@@ -1852,9 +1852,12 @@ class CdmsFile(CdmsObj, cuDataset):
                             var.missing_value).astype(var.dtype)
                         attributes['missing_value'] = numpy.array(
                             var.missing_value).astype(var.dtype)
-                    attributes['_FillValue'] = numpy.array(fill_value).astype(var.dtype)
-                    attributes['missing_value'] = numpy.array(fill_value).astype(var.dtype)
-            except:
+                else:
+                    attributes['_FillValue'] = numpy.array(
+                        fill_value).astype(var.dtype)
+                    attributes['missing_value'] = numpy.array(
+                        fill_value).astype(var.dtype)
+            except BaseException:
                 pass
             if "name" in attributes:
                 if attributes['name'] != var.id:
@@ -1952,7 +1955,7 @@ class CdmsFile(CdmsObj, cuDataset):
 
         # Make var an AbstractVariable
         if dtype is None and typecode is not None:
-#            dtype = typeconv.convtypecode2(typecode)
+            #            dtype = typeconv.convtypecode2(typecode)
             dtype = typecode
         typecode = dtype
         if typecode is not None and var.dtype.char != typecode:

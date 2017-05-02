@@ -203,7 +203,13 @@ class CFConvention(COARDSConvention):
     def axisIsLatitude(self, axis):
         if (hasattr(axis, 'axis') and axis.axis == 'Y'):
             return True
-        elif (hasattr(axis, 'units') and string.lower(axis.units) in ['degrees_north', 'degree_north', 'degree_n', 'degrees_n', 'degreen', 'degreesn'] and not (axis.isLongitude() or axis.isLevel() or axis.isTime())):
+        elif (hasattr(axis, 'units') and string.lower(axis.units) in ['degrees_north',
+                                                                      'degree_north',
+                                                                      'degree_n',
+                                                                      'degrees_n'
+                                                                      'degreen',
+                                                                      'degreesn'] and
+              not (axis.isLongitude() or axis.isLevel() or axis.isTime())):
             return True
         elif (hasattr(axis, 'standard_name') and string.lower(axis.standard_name) == 'latitude'):
             return True
@@ -213,7 +219,10 @@ class CFConvention(COARDSConvention):
     def axisIsLongitude(self, axis):
         if (hasattr(axis, 'axis') and axis.axis == 'X'):
             return True
-        elif (hasattr(axis, 'units') and string.lower(axis.units) in ['degrees_east', 'degree_east', 'degree_e', 'degrees_e', 'degreee', 'degreese'] and not (axis.isLatitude() or axis.isLevel() or axis.isTime())):
+        elif (hasattr(axis, 'units') and string.lower(axis.units) in
+                ['degrees_east', 'degree_east', 'degree_e',
+                 'degrees_e', 'degreee', 'degreese'] and
+                not (axis.isLatitude() or axis.isLevel() or axis.isTime())):
             return True
         elif (hasattr(axis, 'standard_name') and string.lower(axis.standard_name) == 'longitude'):
             return True

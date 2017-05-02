@@ -5,7 +5,7 @@ Resource Locators", by R. Fielding, UC Irvine, June 1995.
 
 # Standard/builtin Python modules
 import string
-from string import joinfields, splitfields, find, rfind
+from string import joinfields, splitfields, rfind
 
 # A classification of schemes ('' means apply by default)
 uses_relative = ['ftp', 'http', 'ldap', 'gopher', 'nntp', 'wais', 'file',
@@ -55,7 +55,7 @@ def urlparse(url, scheme='', allow_fragments=1):
     if len(_parse_cache) >= MAX_CACHE_SIZE:  # avoid runaway growth
         clear_cache()
     find = string.find
-    netloc = path = params = query = fragment = ''
+    netloc = params = query = fragment = ''
     i = find(url, ':')
     if i > 0:
         if url[:i] in ['http', 'ldap']:  # optimize the common case

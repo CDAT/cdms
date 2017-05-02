@@ -10,7 +10,6 @@ import os
 import sys
 import string
 import urllib
-import cdmsURLopener                    # Import after urllib, to handle errors
 import urlparse
 import cdmsobj
 import re
@@ -47,10 +46,6 @@ try:
 except BaseException:
     libcf = None
 
-try:
-    import cache
-except ImportError:
-    pass
 
 DuplicateAxis = "Axis already defined: "
 
@@ -538,7 +533,10 @@ def parseFileMap(text):
 
 
 # A CDMS dataset consists of a CDML/XML file and one or more data files
-from cudsinterface import cuDataset
+try:
+    from cudsinterface import cuDataset
+except BaseException:
+    pass
 
 
 class Dataset(CdmsObj, cuDataset):
@@ -613,9 +611,9 @@ class Dataset(CdmsObj, cuDataset):
                 elif node.tag == 'rectGrid':
                     obj = RectGrid(self, node)
                     self.grids[node.id] = obj
-                elif node.tag == 'xlink':
-                    obj = Xlink(node)
-                    self.xlinks[node.id] = obj
+#                elif node.tag == 'xlink':
+#                    obj = Xlink(node)
+#                    self.xlinks[node.id] = obj
                 else:
                     dict = self.dictdict.get(node.tag)
                     if dict is not None:
@@ -1565,7 +1563,8 @@ class CdmsFile(CdmsObj, cuDataset):
         Create a variable
         'name' is the string name of the Variable
         'datatype' is a CDMS datatype or numpy typecode
-        'axesOrGrids' is a list of axes, grids. (Note: this should be generalized to allow subintervals of axes and/or grids)
+        'axesOrGrids' is a list of axes, grids. (Note: this should be generalized to allow
+        subintervals of axes and/or grids)
         Return a variable object.
         :::
         Options:::
@@ -1763,7 +1762,9 @@ class CdmsFile(CdmsObj, cuDataset):
         attributes :: (None/dict) (None) use these attributes instead of the original var ones
         axes :: (None/[cdms2.axis.AbstractAxis]) (None) list of axes to use for the copied variable
         extbounds :: (None/numpy.ndarray) (None) Bounds of the (portion of) the extended dimension being written
-        extend :: (int) (0) If 1, define the first dimension as the unlimited dimension. If 0, do not define an unlimited dimension. The default is the define the first dimension as unlimited only if it is a time dimension.
+        extend :: (int) (0) If 1, define the first dimension as the unlimited dimension.
+                            If 0, do not define an unlimited dimension.
+                        The default is the define the first dimension as unlimited only if it is a time dimension.
         extend :: (int) (0) If 1, define the first dimension as the unlimited dimension.
                    If 0, do not define an unlimited dimension. The default is the define the
                    first dimension as unlimited only if it is a time dimension.

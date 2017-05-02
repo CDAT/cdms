@@ -758,6 +758,10 @@ class AbstractAxis(CdmsObj):
             return True
         try:
             # Ok let's see if this thing as pressure units
+            import genutil
+            p = genutil.udunits(1, "Pa")
+            units = getattr(self, 'units', "").strip()
+            p.to(units)
             return True
         except ImportError:
             import warnings

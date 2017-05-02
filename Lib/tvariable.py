@@ -191,8 +191,6 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
                     # Make sure grid and axes are consistent
                     grid = grid.reconcile(axes)
 
-        ncopy = (copy != 0)
-
         # Initialize the geometry
         if grid is not None:
             # Otherwise grid axes won't match domain.
@@ -206,8 +204,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         # Initialize the attributes
         if attributes is not None:
             for key, value in attributes.items():
-                if (key in ['shape', 'flat', 'imaginary', 'real']
-                        or key[0] == '_') and key not in ['_FillValue']:
+                if (key in ['shape', 'flat', 'imaginary', 'real'] or key[0] == '_') and key not in ['_FillValue']:
                     raise CDMSError('Bad key in attributes: ' + key)
                 elif (key == 'missing_value' or key == '_FillValue'):
                     # ignore if fill value given explicitly
@@ -363,7 +360,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
     def getDomain(self):
         for i in range(self.rank()):
             if self.__domain[i] is None:
-                junk = self.getAxis(i)  # will force a fill in
+                self.getAxis(i)  # will force a fill in
         return self.__domain
 
     def getAxis(self, n):
@@ -631,12 +628,11 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         sphereRadius: radius of the earth
         maxElev: maximum elevation for representation on the sphere
         """
-        import mvSphereMesh
         import mvVTKSGWriter
         import mvVsWriter
         try:
             # required by mvVsWriter
-            import tables
+            import tables                # noqa
         except BaseException:            # fall back
             format = 'VTK'
 

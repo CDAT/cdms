@@ -4,8 +4,6 @@
 """
 CDMS Axis objects
 """
-_debug = 0
-std_axis_attributes = ['name', 'units', 'length', 'values', 'bounds']
 import string
 import sys
 import types
@@ -20,8 +18,12 @@ from sliceut import reverseSlice, splitSlice, splitSliceExt
 from error import CDMSError
 import forecast
 import warnings
-#import internattr
 from UserList import UserList
+# import internattr
+
+
+_debug = 0
+std_axis_attributes = ['name', 'units', 'length', 'values', 'bounds']
 
 
 class AliasList (UserList):
@@ -407,9 +409,17 @@ def mapLinearExt(axis, bounds, interval, indicator='ccn',
             boundLeft = bd[i][0]
             boundRight = bd[i][1]
 
-            test = mapLinearIntersection(xind, yind, iind,
-                                         aMinusEps, aPlusEps, bPlusEps, bMinusEps,
-                                         boundLeft, nodeSubI, boundRight)
+            test = mapLinearIntersection(
+                xind,
+                yind,
+                iind,
+                aMinusEps,
+                aPlusEps,
+                bPlusEps,
+                bMinusEps,
+                boundLeft,
+                nodeSubI,
+                boundRight)
 
             if(iInterval == -1 and test):
                 iInterval = i
@@ -423,9 +433,17 @@ def mapLinearExt(axis, bounds, interval, indicator='ccn',
             boundLeft = bd[i][0]
             boundRight = bd[i][1]
 
-            testB = mapLinearIntersection(xind, yind, 'b',
-                                          aMinusEps, aPlusEps, bPlusEps, bMinusEps,
-                                          boundLeft, nodeSubI, boundRight)
+            testB = mapLinearIntersection(
+                xind,
+                yind,
+                'b',
+                aMinusEps,
+                aPlusEps,
+                bPlusEps,
+                bMinusEps,
+                boundLeft,
+                nodeSubI,
+                boundRight)
 
             if(iIntervalB == -1 and testB):
                 iIntervalB = i
@@ -447,9 +465,17 @@ def mapLinearExt(axis, bounds, interval, indicator='ccn',
             #  user test
             #
 
-            test = mapLinearIntersection(xind, yind, iind,
-                                         aMinusEps, aPlusEps, bPlusEps, bMinusEps,
-                                         boundLeft, nodeSubI, boundRight)
+            test = mapLinearIntersection(
+                xind,
+                yind,
+                iind,
+                aMinusEps,
+                aPlusEps,
+                bPlusEps,
+                bMinusEps,
+                boundLeft,
+                nodeSubI,
+                boundRight)
 
             if((jInterval == -1 and iInterval != -1 and test == 0 and j <= jEnd)):
                 jInterval = j - 1
@@ -469,9 +495,17 @@ def mapLinearExt(axis, bounds, interval, indicator='ccn',
             boundLeft = bd[j][0]
             boundRight = bd[j][1]
 
-            testB = mapLinearIntersection(xind, yind, 'b',
-                                          aMinusEps, aPlusEps, bPlusEps, bMinusEps,
-                                          boundLeft, nodeSubI, boundRight)
+            testB = mapLinearIntersection(
+                xind,
+                yind,
+                'b',
+                aMinusEps,
+                aPlusEps,
+                bPlusEps,
+                bMinusEps,
+                boundLeft,
+                nodeSubI,
+                boundRight)
 
             if((jIntervalB == -1 and iIntervalB != -1 and testB == 0 and j <= jEnd)):
                 jIntervalB = j - 1
@@ -584,14 +618,14 @@ def lookupArray(ar, value):
 # Lookup a value in a monotonic 1-D array. value is a scalar
 # Always returns a valid index for ar
 # def lookupArray(ar,value):
-##     ascending = (ar[0]<ar[-1])
+#     ascending = (ar[0]<ar[-1])
 # if ascending:
-##         index = numpy.searchsorted(ar,value)
+#         index = numpy.searchsorted(ar,value)
 # else:
-##         index = numpy.searchsorted(ar[::-1],value)
-##         index = len(ar)-index-1
-##     index = max(index,0)
-##     index = min(index,len(ar))
+#         index = numpy.searchsorted(ar[::-1],value)
+#         index = len(ar)-index-1
+#     index = max(index,0)
+#     index = min(index,len(ar))
 # return index
 
 # Return true if vector vec1 is a subset of vec2, within tolerance tol.
@@ -699,8 +733,10 @@ class AbstractAxis(CdmsObj):
         if (hasattr(self, 'axis') and self.axis == 'Y'):
             return True
         units = getattr(self, "units", "").strip().lower()
-        if units in ["degrees_north", "degree_north", "degree_n", "degrees_n", "degreen", "degreesn"] and  \
-           not (self.isLongitude() or self.isLevel() or self.isTime()):
+        if units in [
+            "degrees_north", "degree_north", "degree_n", "degrees_n",
+            "degreen", "degreesn"] and not(
+                self.isLongitude() or self.isLevel() or self.isTime()):
             return True
         return (id[0:3] == 'lat') or (id in latitude_aliases)
 
@@ -734,8 +770,7 @@ class AbstractAxis(CdmsObj):
             pass
         except Exception:
             pass
-        return ((id[0:3] == 'lev') or (id[0:5] == 'depth')
-                or (id in level_aliases))
+        return ((id[0:3] == 'lev') or (id[0:5] == 'depth') or (id in level_aliases))
 
     # Designate axis as a longitude axis
     # If persistent is true, write metadata to the container.
@@ -766,8 +801,10 @@ class AbstractAxis(CdmsObj):
         if (hasattr(self, 'axis') and self.axis == 'X'):
             return True
         units = getattr(self, "units", "").strip().lower()
-        if units in ["degrees_east", "degree_east", "degree_e", "degrees_e", "degreee", "degreese"] and \
-           not (self.isLatitude() or self.isLevel() or self.isTime()):
+        if units in [
+                "degrees_east", "degree_east", "degree_e", "degrees_e", "degreee",
+                "degreese"] and not(
+                self.isLatitude() or self.isLevel() or self.isTime()):
             return True
         return (id[0:3] == 'lon') or (id in longitude_aliases)
 
@@ -893,8 +930,9 @@ class AbstractAxis(CdmsObj):
             calendar = self.getCalendar()
         for val in self[:]:
             c = cdtime.reltime(val, self.units).tocomp(calendar)
-            dtg = datetime.datetime(c.year, c.month, c.day, c.hour, c.minute, int(
-                c.second), int((c.second - int(c.second)) * 1000))
+            dtg = datetime.datetime(
+                c.year, c.month, c.day, c.hour, c.minute, int(c.second),
+                int((c.second - int(c.second)) * 1000))
             result.append(dtg)
         return result
 
@@ -1221,8 +1259,9 @@ class AbstractAxis(CdmsObj):
              indicator[2] != 'e')
             )
            ):
-            raise CDMSError("EEE: 3-character interval/intersection indicator incomplete or incorrect = "
-                            + indicator)
+            raise CDMSError(
+                "EEE: 3-character interval/intersection indicator incomplete or incorrect = " +
+                indicator)
 
         if self._data_ is None:
             self._data_ = self.getData()
@@ -1400,9 +1439,9 @@ class AbstractAxis(CdmsObj):
         modulo = None
         size = len(self)
 
-        #----------------------------------------------------------------------
+        # ----------------------------------------------------------------------
         # mf 20010328 negative stride i >= vice i >
-        #----------------------------------------------------------------------
+        # ----------------------------------------------------------------------
 
         if wrap and ((k > 0 and j > size) or (
                 k < 0 and i >= size)) and self.isCircular():
@@ -1415,11 +1454,11 @@ class AbstractAxis(CdmsObj):
             if (self[0] > self[-1]) == (k > 0):
                 modulo = -modulo
 
-            #------------------------------------------------------------------
+            # ------------------------------------------------------------------
             #
             #  mf 20010329 -- N vice two slice scheme (more general)
             #
-            #------------------------------------------------------------------
+            # ------------------------------------------------------------------
 
             donew = 1
 
@@ -1504,9 +1543,9 @@ class AbstractAxis(CdmsObj):
 
         return newaxis
 
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------
 # mf 2001 set calls to subAxis as subaxis
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------
 
     subAxis = subaxis
 
@@ -1519,8 +1558,13 @@ class AbstractAxis(CdmsObj):
         requiredShape = (len(self), 2)
         requiredShape2 = (len(self) + 1,)
         if bounds.shape != requiredShape and bounds.shape != requiredShape2:
-            raise CDMSError(InvalidBoundsArray +
-                            'shape is %s, should be %s or %s' % (repr(bounds.shape), repr(requiredShape), repr(requiredShape2)))
+            raise CDMSError(
+                InvalidBoundsArray +
+                'shape is %s, should be %s or %s' %
+                (repr(
+                    bounds.shape),
+                    repr(requiredShape),
+                    repr(requiredShape2)))
         if bounds.shape == requiredShape2:  # case of "n+1" bounds
             bounds2 = numpy.zeros(requiredShape)
             bounds2[:, 0] = bounds[:-1]
@@ -1531,12 +1575,14 @@ class AbstractAxis(CdmsObj):
             for i in range(bounds.shape[0]):
                 if not bounds[i, 0] <= self[i] <= bounds[i, 1]:
                     raise CDMSError(InvalidBoundsArray +
-                                    'bounds[%i]=%f is not in the range [%f,%f]' % (i, self[i], bounds[i, 0], bounds[i, 1]))
+                                    'bounds[%i]=%f is not in the range [%f,%f]' %
+                                    (i, self[i], bounds[i, 0], bounds[i, 1]))
         else:
             for i in range(bounds.shape[0]):
                 if not bounds[i, 0] >= self[i] >= bounds[i, 1]:
                     raise CDMSError(InvalidBoundsArray +
-                                    'bounds[%i]=%f is not in the range [%f,%f]' % (i, self[i], bounds[i, 1], bounds[i, 0]))
+                                    'bounds[%i]=%f is not in the range [%f,%f]' %
+                                    (i, self[i], bounds[i, 1], bounds[i, 0]))
         return bounds
 
     # Generate bounds from midpoints. width is the width of the zone if the
@@ -1560,9 +1606,11 @@ class AbstractAxis(CdmsObj):
         retbnds[..., 1] = bnds[1:]
         # To avoid floating point error on bound limits
 
-        if(self.isLongitude() and hasattr(self, 'units') and (self.units.find('degree') != -1) and len(retbnds.shape) == 2):
+        if(self.isLongitude() and hasattr(self, 'units') and
+                (self.units.find('degree') != -1) and len(retbnds.shape) == 2):
             # Make sure we have close to 360 degree interval
-            if(abs(abs(retbnds[-1, 1] - retbnds[0, 0]) - 360) < (numpy.minimum(0.01, abs(retbnds[0, 1] - retbnds[0, 0]) * 0.1))):
+            if(abs(abs(retbnds[-1, 1] - retbnds[0, 0]) - 360) <
+                    (numpy.minimum(0.01, abs(retbnds[0, 1] - retbnds[0, 0]) * 0.1))):
                 # Now check wether either bound is near an interger value;
                 # if yes round both integer
                 if((abs(retbnds[0, 0] - numpy.floor(retbnds[0, 0] + 0.5)) <
@@ -1574,7 +1622,8 @@ class AbstractAxis(CdmsObj):
                     if((retbnds[0, 0] * retbnds[-1, 1]) < 0):
                         msg = "\nYour first bounds[0,0] %3.15lf will be corrected to %3.15lf\n"\
                               "Your bounds bounds[-1,1] %3.15lf will be corrected to %3.15lf" \
-                            % (retbnds[0, 0], numpy.floor(retbnds[0, 0] + 0.5), retbnds[-1, 1], numpy.floor(retbnds[-1, 1] + 0.5))
+                            % (retbnds[0, 0], numpy.floor(retbnds[0, 0] + 0.5), retbnds[-1, 1],
+                               numpy.floor(retbnds[-1, 1] + 0.5))
 
                         warnings.warn(msg, UserWarning)
                         retbnds[0, 0] = numpy.floor(retbnds[0, 0] + 0.5)
@@ -1670,7 +1719,7 @@ class AbstractAxis(CdmsObj):
 # AbstractAxis._getshape, nowrite=1, nodelete=1)
 # PropertiedClasses.set_property(AbstractAxis, 'dtype',
 # AbstractAxis._getdtype, nowrite=1, nodelete=1)
-## internattr.add_internal_attribute (AbstractAxis, 'id', 'parent')
+# internattr.add_internal_attribute (AbstractAxis, 'id', 'parent')
 
 # One-dimensional coordinate axis in a dataset
 
@@ -1888,8 +1937,13 @@ class TransientAxis(AbstractAxis):
                 requiredShape = (len(self), 2)
                 requiredShape2 = (len(self) + 1,)
                 if bounds.shape != requiredShape and bounds.shape != requiredShape2:
-                    raise CDMSError(InvalidBoundsArray +
-                                    'shape is %s, should be %s or %s' % (repr(bounds.shape), repr(requiredShape), repr(requiredShape2)))
+                    raise CDMSError(
+                        InvalidBoundsArray +
+                        'shape is %s, should be %s or %s' %
+                        (repr(
+                            bounds.shape),
+                            repr(requiredShape),
+                            repr(requiredShape2)))
                 if bounds.shape == requiredShape2:  # case of "n+1" bounds
                     bounds2 = numpy.zeros(requiredShape)
                     bounds2[:, 0] = bounds[:-1]
@@ -1956,7 +2010,7 @@ class TransientVirtualAxis(TransientAxis):
     def __getslice__(self, low, high):
         return self.getData()[low:high]
 
-## PropertiedClasses.initialize_property_class (TransientVirtualAxis)
+# PropertiedClasses.initialize_property_class (TransientVirtualAxis)
 
 # One-dimensional coordinate axis in a CdmsFile.
 
@@ -2047,20 +2101,20 @@ class FileAxis(AbstractAxis):
             return
         if hasattr(self, 'parent') and self.parent is None:
             raise CDMSError(FileWasClosed + self.id)
-##         s = self.get_property_s (name)
+#         s = self.get_property_s (name)
 # if s is not None:
-##             s(self, name, value)
+#             s(self, name, value)
 # return
-        if not name in self.__cdms_internals__ and name[0] != '_':
+        if name not in self.__cdms_internals__ and name[0] != '_':
             setattr(self._obj_, name, value)
             self.attributes[name] = value
         self.__dict__[name] = value
 
     # delattr deletes external global attributes in the file
     def __delattr__(self, name):
-        ##         d = self.get_property_d(name)
+        #         d = self.get_property_d(name)
         # if d is not None:
-        ##             d(self, name)
+        #             d(self, name)
         # return
         if name == "units":
             self._delunits()
@@ -2070,7 +2124,7 @@ class FileAxis(AbstractAxis):
         except KeyError:
             raise AttributeError("%s instance has no attribute %s." %
                                  (self.__class__.__name__, name))
-        if not name in self.__cdms_internals__(name):
+        if name not in self.__cdms_internals__(name):
             delattr(self._obj_, name)
             del(self.attributes[name])
 
@@ -2278,7 +2332,7 @@ class FileAxis(AbstractAxis):
 # acts=FileAxis._setunits,
 # nodelete=1
 # )
-## internattr.add_internal_attribute(FileAxis, 'name_in_file')
+# internattr.add_internal_attribute(FileAxis, 'name_in_file')
 
 
 class FileVirtualAxis(FileAxis):
@@ -2303,7 +2357,7 @@ class FileVirtualAxis(FileAxis):
         "Return true iff coordinate values are implicitly defined."
         return True
 
-## PropertiedClasses.initialize_property_class (FileVirtualAxis)
+# PropertiedClasses.initialize_property_class (FileVirtualAxis)
 
 # Functions for selecting axes
 
@@ -2510,8 +2564,8 @@ def axisMatches(axis, specification):
     elif isinstance(specification, AbstractAxis):
         return (specification is axis)
 
-    raise CDMSError("Specification not acceptable: "
-                    + str(type(specification)) + ', ' + str(specification))
+    raise CDMSError("Specification not acceptable: " +
+                    str(type(specification)) + ', ' + str(specification))
 
 
 def concatenate(axes, id=None, attributes=None):

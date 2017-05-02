@@ -145,7 +145,7 @@ def usePythonTransfer():
 
 def useRequestManagerTransfer():
     try:
-        import reqm
+        import reqm   # noqa
     except ImportError:
         raise CDMSError(RequestManagerNotSupported)
     global _transferMethod
@@ -224,12 +224,10 @@ def copyFile(fromURL, toURL, callback=None,
             signal.alarm(3)             # Number of seconds between polls
             signal.pause()
 
-        #!!!! Remove this when gsincftp uses the right target name !!!
-
-##         oldpath = os.path.join(os.path.dirname(toURL),path)
-# os.rename(oldpath,toURL)
-
-        #!!!!
+        # !!!! Remove this when gsincftp uses the right target name !!!
+        #         oldpath = os.path.join(os.path.dirname(toURL),path)
+        # os.rename(oldpath,toURL)
+        # !!!!
 
         return
     else:

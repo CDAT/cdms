@@ -11,7 +11,7 @@ import cdtime
 import re
 import string
 import sys
-from types import *
+from types import StringType, TupleType, IntType, FloatType, ListType, NoneType
 from error import CDMSError
 
 # Regular expressions
@@ -1068,12 +1068,12 @@ class AttrNode(CdmsNode):
 
     def __init__(self, name, value=None):
         CdmsNode.__init__(self, "attr")
-        if not (isinstance(value, IntType)
-                or isinstance(value, numpy.integer)
-                or isinstance(value, FloatType)
-                or isinstance(value, numpy.floating)
-                or isinstance(value, StringType)
-                or isinstance(value, NoneType)):
+        if not (isinstance(value, IntType) or
+                isinstance(value, numpy.integer) or
+                isinstance(value, FloatType) or
+                isinstance(value, numpy.floating) or
+                isinstance(value, StringType) or
+                isinstance(value, NoneType)):
             raise CDMSError('Invalid attribute type: ' + repr(value))
         self.name = name
         self.value = value

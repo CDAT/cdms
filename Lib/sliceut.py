@@ -105,9 +105,6 @@ def reverseSlice(s, size):
     j = i + 1
     i = pk % size
 
-# if j==size:
-##         j = None
-
     return slice(i, j, k)
 
 

@@ -1,4 +1,4 @@
-#/usr/bin/env python
+#!/usr/bin/env python
 
 """
 A variable-like object extending over multiple tiles and time slices
@@ -7,18 +7,12 @@ This code is provided with the hope that it will be useful.
 No guarantee is provided whatsoever. Use at your own risk.
 """
 
-import operator
-import cdtime
 import cdms2
 from cdms2.MV2 import concatenate as MV2concatenate
-from cdms2.gsStaticVariable import StaticVariable
-from cdms2.tvariable import TransientVariable
 from cdms2.error import CDMSError
-from cdms2.hgrid import AbstractCurveGrid, TransientCurveGrid, FileCurveGrid
-from cdms2.coord import TransientAxis2D, TransientVirtualAxis
+from cdms2.hgrid import FileCurveGrid
 from cdms2.Cdunif import CdunifFile
 from cdms2.coord import FileAxis2D
-from cdms2.gengrid import FileGenericGrid
 from cdms2.fvariable import FileVariable
 from cdms2.axis import FileAxis, TransientAxis
 from cdms2.axis import concatenate as axisConcatenate
@@ -322,10 +316,6 @@ class TimeFileVariable:
                 if hasattr(u.variables[varName], "coordinates"):
                     coords = u.variables[varName].coordinates.split()
 
-                # Get lists of 1D and auxiliary coordinate axes
-                coords1d = f._convention_.getAxisIds(u.variables)
-                coordsaux = f._convention_.getAxisAuxIds(u.variables, coords1d)
-
                 # Convert the variable into a FileVariable
                 f.variables[varName] = FileVariable(
                     f, varName, u.variables[varName])
@@ -355,8 +345,7 @@ class TimeFileVariable:
                     f._convention_, f.variables)
                 gridname = ("grid%d_" % gridIndex) + "%dx%d" % lat.shape
 #                grid = FileGenericGrid(lat, lon, gridname, parent = f, maskvar = None)
-                grid = FileCurveGrid(
-                    lat, lon, gridname, parent=f, maskvar=None)
+                grid = FileCurveGrid(lat, lon, gridname, parent=f, maskvar=None)
                 f.variables[varName]._grid_ = grid
                 vars.append(f.variables[varName])
 
@@ -389,9 +378,9 @@ class TimeFileVariable:
         """
         return self.vars[gridIndex]
 
-###############################################################################
-############## DEPRECIATED - Testing required to fully remove #################
-###############################################################################
+# ############################################################################# #
+# ############# DEPRECIATED - Testing required to fully remove ################ #
+# ############################################################################# #
 
 
 class TimeTransientVariable:

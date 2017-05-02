@@ -1,4 +1,4 @@
-#/usr/bin/env python
+#!/usr/bin/env python
 
 """
 A file-like object to access a host file, the single entry point
@@ -142,7 +142,7 @@ class Host:
                     # Add coordinate names a local list of coordinates
                     if 'coordinates' in dir(f[vn]):
                         for coord in f[vn].coordinates.split():
-                            if not coord in coordinates:
+                            if coord not in coordinates:
                                 coordinates.append(coord)
                     if vn not in self.statVars:
                         # allocate
@@ -170,7 +170,7 @@ class Host:
                         # Add coordinate names a local list of coordinates
                         if 'coordinates' in dir(f[vn]):
                             for coord in f[vn].coordinates.split():
-                                if not coord in coordinates:
+                                if coord not in coordinates:
                                     coordinates.append(coord)
                         if vn not in self.timeVars:
                             # allocate

@@ -3,19 +3,14 @@
 """
 DatasetVariable: Dataset-based variables
 """
-from cdms2 import Cdunif
 import numpy
 import cdmsNode
 import cdtime
 import copy
-import os
 import string
-import sys
-import types
-import cdmsobj
-from cdmsobj import CdmsObj, getPathFromTemplate, Max32int
+from cdmsobj import getPathFromTemplate, Max32int
 from avariable import AbstractVariable
-from sliceut import *
+from sliceut import slicePartition, sliceIntersect, reverseSlice, lenSlice
 from error import CDMSError
 
 InvalidGridElement = "Grid domain elements are not yet implemented: "
@@ -138,10 +133,6 @@ class DatasetVariable(AbstractVariable):
             domelem = axisdict.get(dename)
             if domelem is None:
                 domelem = griddict.get(dename)
-                if grid is None:
-                    raise CDMSError(NoSuchAxisOrGrid + dename)
-                else:
-                    raise CDMSError(InvalidGridElement + dename)
             partlenstr = denode.getExternalAttr('partition_length')
             if partlenstr is not None:
                 truelen = string.atoi(partlenstr)
@@ -337,13 +328,11 @@ class DatasetVariable(AbstractVariable):
             if hasattr(axis, 'partition'):
                 npart = npart + 1
                 if npart == 1:
-                    part1 = axis
                     npart1 = ndim
                 elif npart == 2:
-                    part2 = axis
                     npart2 = ndim
                 else:
-                    raise CDMSError(TooManyPartitions + variable.id)
+                    raise CDMSError(TooManyPartitions + axis.id)
             ndim = ndim + 1
 
         # If no partitioned axes, just read the data
@@ -501,7 +490,6 @@ class DatasetVariable(AbstractVariable):
         for i in range(len(self.domain)):
             if self.domain[i][0].isForecast():
                 fci = i
-                fcv = initslist[i].start
                 break
 
         # If no intersection, return an 'empty' array.
@@ -655,14 +643,4 @@ class DatasetVariable(AbstractVariable):
         return result
 
     shape = property(_getShape, None)
-##     shape = _getShape
     dtype = property(_getdtype, None)
-
-# PropertiedClasses.set_property (DatasetVariable, 'shape',
-##                                   DatasetVariable._getShape, nowrite=1,
-# nodelete=1)
-# PropertiedClasses.set_property (DatasetVariable, 'dtype',
-##                                   DatasetVariable._getdtype, nowrite=1,
-# nodelete=1)
-
-## internattr.add_internal_attribute(DatasetVariable, 'domain')

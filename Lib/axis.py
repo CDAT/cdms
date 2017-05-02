@@ -758,12 +758,8 @@ class AbstractAxis(CdmsObj):
             return True
         try:
             # Ok let's see if this thing as pressure units
-            import genutil
-            p = genutil.udunits(1, "Pa")
-            units = getattr(self, 'units', "").strip()
-            p2 = p.to(units)
             return True
-        except ImportError as err:
+        except ImportError:
             import warnings
             warnings.warn(
                 "genutil module not present, was not able to determine if axis is level based on units")
@@ -1288,10 +1284,6 @@ class AbstractAxis(CdmsObj):
         #
         # ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 
-        xind = indicator[0]
-        yind = indicator[1]
-        iind = indicator[2]
-
         xi, yi = interval
 
         length = len(self)
@@ -1433,7 +1425,6 @@ class AbstractAxis(CdmsObj):
         isGeneric = [False]
         fullBounds = self.getBounds(isGeneric)
         _debug = 0
-        _debugprefix = "SS__XX subaxis "
 
         # Handle wraparound
         modulo = None
@@ -2227,7 +2218,7 @@ class FileAxis(AbstractAxis):
         boundsArray = self.getExplicitBounds()
         try:
             boundsArray = self.validateBounds(boundsArray)
-        except Exception as err:
+        except Exception:
             boundsArray = None
         if boundsArray is None and (getAutoBounds() == 1 or (
                 getAutoBounds() == 2 and (self.isLatitude() or self.isLongitude()))):

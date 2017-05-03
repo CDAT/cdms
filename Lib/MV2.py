@@ -3,25 +3,28 @@
 
 "CDMS Variable objects, MaskedArray interface"
 import numpy
-from numpy import character, float, float32, float64, int, int8, int16, int32, int64, byte, ubyte, \
-    uint8, uint16, uint32, uint64, long
-from numpy.ma import allclose, allequal, common_fill_value, compress, make_mask_none, dot, filled, \
-    getmask, getmaskarray, identity, indices, innerproduct, masked, put, putmask, rank, ravel, \
-    set_fill_value, shape, size, isMA, isMaskedArray, is_mask, isarray, \
-    make_mask, make_mask_none, mask_or, nomask
+from numpy import character, float, float32, float64  # noqa
+from numpy import int, int8, int16, int32, int64, byte  # noqa
+from numpy import  ubyte, uint8, uint16, uint32, uint64, long   # noqa
+from numpy.ma import allclose, allequal, common_fill_value  # noqa
+from numpy.ma import make_mask_none, dot, filled  # noqa
+from numpy.ma import getmask, getmaskarray, identity  # noqa
+from numpy.ma import indices, innerproduct, masked, put, putmask, rank, ravel  # noqa
+from numpy.ma import set_fill_value, shape, size, isMA, isMaskedArray, is_mask, isarray  # noqa
+from numpy.ma import make_mask, mask_or, nomask   # noqa
 from numpy import sctype2char, get_printoptions, set_printoptions
 from avariable import AbstractVariable, getNumericCompatibility
 from tvariable import TransientVariable, asVariable
 from grid import AbstractRectGrid
 from error import CDMSError
-#from numpy.ma import *
+# from numpy.ma import *
 from axis import allclose as axisAllclose, TransientAxis, concatenate as axisConcatenate, take as axisTake
 
 
 create_mask = make_mask_none
 e = numpy.e
 pi = numpy.pi
-#NewAxis = numpy.oldnumeric.NewAxis
+# NewAxis = numpy.oldnumeric.NewAxis
 newaxis = numpy.newaxis
 counter = 0
 
@@ -267,10 +270,12 @@ class var_binary_operation:
 
 
 def compress(a, b):
-    __doc__ = numpy.ma.__doc__
+    __doc__ = numpy.ma.__doc__  # noqa
     import warnings
     warnings.warn(
-        "arguments order for compress function has changed\nit is now: MV2.copmress(array,condition), if your code seems to not react or act wrong to a call to compress, please check this",
+        "arguments order for compress function has changed\nit is now: " +
+        "MV2.copmress(array,condition), if your code seems to not react " +
+        "or act wrong to a call to compress, please check this",
         Warning)
     return TransientVariable(numpy.ma.compress(a, b), copy=1)
 
@@ -523,7 +528,6 @@ min.__doc__ = numpy.ma.min.__doc__
 
 
 def sort(a, axis=-1):
-    ta = _makeMaskedArg(a)
     maresult = numpy.ma.sort(a.asma(), axis)
     axes, attributes, id, grid = _extractMetadata(a)
     sortaxis = axes[axis]
@@ -539,7 +543,7 @@ sort.__doc__ = numpy.ma.sort.__doc__ + \
     "The sort axis is replaced with a dummy axis."
 
 
-def choose(indices, t):
+def choose(myindices, t):
     """Returns an array shaped like indices containing elements chosen
       from t.
       If an element of t is the special element masked, any element
@@ -547,15 +551,15 @@ def choose(indices, t):
 
       The result has only the default axes.
     """
-    maresult = numpy.ma.choose(indices, map(_makeMaskedArg, t))
+    maresult = numpy.ma.choose(myindices, map(_makeMaskedArg, t))
     F = getattr(t, "fill_value", 1.e20)
     return TransientVariable(maresult, fill_value=F)
 
 
 def where(condition, x, y):
     "where(condition, x, y) is x where condition is true, y otherwise"
-##    axes = commonDomain(x,y)
-##    grid = commonGrid(x,y,axes)
+#    axes = commonDomain(x,y)
+#    grid = commonGrid(x,y,axes)
     maresult = numpy.ma.where(condition, _makeMaskedArg(x), _makeMaskedArg(y))
     axes, attributes, id, grid = _extractMetadata(condition)
     F = getattr(x, "fill_value", 1.e20)
@@ -714,20 +718,20 @@ def concatenate(arrays, axis=0, axisid=None, axisattributes=None):
         maresult, axes=axes, attributes=varattributes, id=varid, grid=grid, fill_value=F)
 
 
-def take(a, indices, axis=None):
+def take(a, myindices, axis=None):
     "take(a, indices, axis=None) returns selection of items from a."
     axis = _conv_axis_arg(axis)
     ta = _makeMaskedArg(a)
 
     # ma compatibility interface has a bug
-    maresult = numpy.ma.take(ta, indices, axis=axis)
+    maresult = numpy.ma.take(ta, myindices, axis=axis)
     axes, attributes, id, grid = _extractMetadata(a, omitall=(axis is None))
 
     # If the take is on a grid axis, omit the grid.
     if (grid is not None) and (axes[axis] in grid.getAxisList()):
         grid = None
     if axes is not None:
-        axes[axis] = axisTake(axes[axis], indices)
+        axes[axis] = axisTake(axes[axis], myindices)
     F = getattr(a, "fill_value", 1.e20)
     return TransientVariable(
         maresult, axes=axes, attributes=attributes, id=id, grid=grid, fill_value=F)
@@ -766,7 +770,7 @@ class _minimum_operation:
             if m is nomask:
                 d = numpy.min(filled(a).ravel())
                 return d
-##             ac = a.compressed()
+#             ac = a.compressed()
 # if len(ac) == 0:
 # return masked
             else:
@@ -826,7 +830,7 @@ class _maximum_operation:
             if m is nomask:
                 d = numpy.max(filled(a).ravel())
                 return d
-##             ac = a.compressed()
+#             ac = a.compressed()
 # if len(ac) == 0:
 # return masked
             else:
@@ -899,22 +903,22 @@ def arrayrange(start, stop=None, step=1, typecode=None,
 arange = arrayrange
 
 
-def zeros(shape, typecode=float, savespace=0, axes=None,
+def zeros(myshape, typecode=float, savespace=0, axes=None,
           attributes=None, id=None, grid=None, dtype=None):
     """zeros(n, typecode=float, savespace=0, axes=None, attributes=None, id=None) =
      an array of all zeros of the given length or shape."""
     dtype = _convdtype(dtype, typecode)
-    maresult = numpy.ma.zeros(shape, dtype=dtype)
+    maresult = numpy.ma.zeros(myshape, dtype=dtype)
     return TransientVariable(
         maresult, axes=axes, attributes=attributes, id=id, grid=grid)
 
 
-def ones(shape, typecode=float, savespace=0, axes=None,
+def ones(myshape, typecode=float, savespace=0, axes=None,
          attributes=None, id=None, grid=None, dtype=None):
     """ones(n, typecode=float, savespace=0, axes=None, attributes=None, id=None) =
      an array of all ones of the given length or shape."""
     dtype = _convdtype(dtype, typecode)
-    maresult = numpy.ma.ones(shape, dtype=dtype)
+    maresult = numpy.ma.ones(myshape, dtype=dtype)
     return TransientVariable(
         maresult, axes=axes, attributes=attributes, id=id, grid=grid)
 
@@ -989,7 +993,7 @@ def resize(a, new_shape, axes=None, attributes=None, id=None, grid=None):
     if axes is not None:
         axesshape = [len(item) for item in axes]
         if axesshape != list(new_shape):
-            raise CDMSError('axes must be shaped %s' % repr(newshape))
+            raise CDMSError('axes must be shaped %s' % repr(new_shape))
     ta = _makeMaskedArg(a)
     maresult = numpy.ma.resize(ta, new_shape)
     F = getattr(a, "fill_value", 1.e20)
@@ -1075,8 +1079,8 @@ def diagonal(a, offset=0, axis1=0, axis2=1):
                                                offset, axis1, axis2), fill_value=F)
 
 
-def fromstring(s, t):
-    """Construct a masked array from a string. Result will have no mask.
-       t is a typecode.
-    """
-    return TransientArray(numpy.ma.fromstring(s, t))
+# def fromstring(s, t):
+#     """Construct a masked array from a string. Result will have no mask.
+#        t is a typecode.
+#     """
+#     return TransientArray(numpy.ma.fromstring(s, t))

@@ -193,7 +193,7 @@ class StaticFileVariable(StaticVariable):
                 coords = u.variables[varName].coordinates.split()
 
             # Get lists of 1D and auxiliary coordinate axes
-            coords1d = f._convention_.getAxisIds(u.variables)
+            # coords1d = f._convention_.getAxisIds(u.variables)
 
             # Convert the variable into a FileVariable
             f.variables[varName] = FileVariable(

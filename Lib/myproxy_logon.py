@@ -6,7 +6,6 @@
 #
 
 
-import os
 import socket
 from OpenSSL import crypto, SSL
 
@@ -80,7 +79,6 @@ def deserialize_certs(inp_dat):
 
     dat = inp_dat
 
-    import base64
     while dat:
 
         # find start of cert, get length

@@ -204,7 +204,7 @@ def test3DRect():
     var = cdms2.createVariable(data, id='fake_data_3d_rect',
                                axes=(elvs, lats, lons))
     sphere_mesh = SphereMesh(var)
-    print sphereMesh.getXYZCoords()
+    print sphere_mesh.getXYZCoords()
 
 
 def test3DposDown():

@@ -10,7 +10,6 @@ import operator
 import re
 import numpy
 import cdms2
-from error import CDMSError
 import regrid2
 from functools import reduce
 
@@ -437,9 +436,6 @@ coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
         # initialize
         dstMask = None
         missingValue = getattr(srcVar, 'missing_value', None)
-
-        timeAxis = srcVar.getTime()
-        levelAxis = srcVar.getLevel()
 
         # shape of dst var
         dstShape = _getDstDataShape(srcVar, self.dstGrid)

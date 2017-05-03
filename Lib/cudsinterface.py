@@ -6,8 +6,8 @@ import string
 import types
 import sys
 from error import CDMSError
-from dataset import openDataset, createDataset
-from tvariable import createVariable
+# from dataset import openDataset, createDataset
+# from tvariable import createVariable
 import numpy
 
 
@@ -28,8 +28,7 @@ class cuDataset():
             try:
                 if (self.is_gridspec_grid_file() and
                         (id == '' or id == 'grid' or id == 'gridspec') and
-                        len(args) == 0 and len(kwargs) == 0
-                    ):
+                        len(args) == 0 and len(kwargs) == 0):
                     return self.readg()
                 else:
                     raise CDMSError("No such variable or grid, " + id)
@@ -334,7 +333,8 @@ class cuDataset():
               (4) a cdms-style tuple of world coordinates e.g. (start, stop, 'cc')
         :::
         Options:::
-        args :: (*tuple/*cdms2.selectors.Selector) () tuple of type (val1,val2,'cob') for any given dimension or cdms selector
+        args :: (*tuple/*cdms2.selectors.Selector) () tuple of type (val1,val2,'cob')
+        for any given dimension or cdms selector
         :::
         Keys:::
         squeeze :: (int/True/False) (0) squeezes (removes) dimensions of length 1

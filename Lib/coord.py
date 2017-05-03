@@ -9,14 +9,15 @@ import cdmsNode
 import cdtime
 import copy
 import numpy
-#import internattr
-import types
+#
+#
 import string
+from axis import TransientAxis
 from cdmsobj import CdmsObj
-from axis import createAxis, TransientVirtualAxis
+# from axis import createAxis, TransientVirtualAxis
+from axis import TransientVirtualAxis   # noqa
 from error import CDMSError
-from convention import AliasList, level_aliases, longitude_aliases, latitude_aliases, time_aliases,\
-    forecast_aliases
+from convention import level_aliases, time_aliases, forecast_aliases
 from fvariable import FileVariable
 from variable import DatasetVariable
 from tvariable import TransientVariable
@@ -156,8 +157,8 @@ class AbstractCoordinateAxis(CdmsObj):
         id = string.lower(self.id)
         if (hasattr(self, 'axis') and self.axis == 'Z'):
             return 1
-        return ((id[0:3] == 'lev') or (id[0:5] == 'depth')
-                or (id in level_aliases))
+        return ((id[0:3] == 'lev') or (id[0:5] == 'depth') or
+                (id in level_aliases))
 
     # Return true iff the axis is a longitude axis
     def isLongitude(self):
@@ -230,11 +231,11 @@ class AbstractCoordinateAxis(CdmsObj):
         if persistent:
             self.calendar = calendarToTag.get(calendar, None)
             if self.calendar is None:
-                raise CDMSError(InvalidCalendar + calendar)
+                raise CDMSError("InvalidCalendar" + calendar)
         else:
             self.__dict__['calendar'] = calendarToTag.get(calendar, None)
             if self.__dict__['calendar'] is None:
-                raise CDMSError(InvalidCalendar + calendar)
+                raise CDMSError("InvalidCalendar" + calendar)
 
     def size(self, axis=None):
         "Number of elements in array, or in a particular axis."

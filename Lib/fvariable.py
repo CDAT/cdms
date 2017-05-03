@@ -3,15 +3,11 @@
 
 "CDMS File-based variables."
 import numpy
-import types
-import re
 
 from cdmsobj import Max32int
 from variable import DatasetVariable
 from error import CDMSError
 from sliceut import reverseSlice
-from avariable import AbstractVariable
-from cdms2 import Cdunif
 from Cdunif import CdunifError
 
 FileClosed = "Cannot read from closed file, variable: "
@@ -156,7 +152,7 @@ class FileVariable(DatasetVariable):
     def __setattr__(self, name, value):
         if hasattr(self, "parent") and self.parent is None:
             raise CDMSError(FileClosedWrite + self.id)
-        if (not name in self.__cdms_internals__) and (value is not None):
+        if (name not in self.__cdms_internals__) and (value is not None):
             try:
                 setattr(self._obj_, name, value)
             except CdunifError:
@@ -171,7 +167,7 @@ class FileVariable(DatasetVariable):
     # This function intercepts the basic del operation, and ensures
     # that the delete is propagated to the external file.
     def __delattr__(self, name):
-        if (not name in self.__cdms_internals__):
+        if (name not in self.__cdms_internals__):
             try:
                 delattr(self._obj_, name)
             except CdunifError:

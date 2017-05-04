@@ -102,7 +102,7 @@ class TestCDMSAutobounds(unittest.TestCase):
         self.assertEqual(bounds[-1, 1], 180.0)
 
     def test_BoundsPolar(self):
-        f=cdms2.open(cdat_info.get_sampledata_path() + "/sample_polar.nc")
+        f=cdms2.open(cdat_info.get_sampledata_path() + "/stereographic.nc")
         s=f('seaice_conc_cdr')
         firstBounds = s.getAxis(1).getBounds()[0]
         lastBounds = s.getAxis(1).getBounds()[-1]

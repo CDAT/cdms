@@ -11,9 +11,12 @@ import datetime
 
 class TestRegressions(basetest.CDMSBaseTest):
     def testCreateCopyLoseDType(self):
-        incat = self.getFile(os.path.join(cdat_info.get_sampledata_path(), "tas_ccsr-95a.xml"))
+        incat = self.getFile(
+            os.path.join(
+                cdat_info.get_sampledata_path(),
+                "tas_ccsr-95a.xml"))
         invar = incat['tas']
-        intype = invar.dtype 
+        intype = invar.dtype
 
         outfile = self.getTempFile('newfile.nc', 'w')
         outfile.createVariableCopy(invar)
@@ -51,17 +54,19 @@ class TestRegressions(basetest.CDMSBaseTest):
             t.setCalendar(3421)
 
     def testAxisDatetime(self):
-        ax = cdms2.createAxis([10.813224335543,],id="time")
-        ax.units="seconds since 2014-10-06 10:12:13"
+        ax = cdms2.createAxis([10.813224335543, ], id="time")
+        ax.units = "seconds since 2014-10-06 10:12:13"
         ax.designateTime()
 
         dt = ax.asdatetime()
 
-        self.assertEqual(dt[0], datetime.datetime(2014, 10, 6, 10, 12, 23, 813))
+        self.assertEqual(
+            dt[0], datetime.datetime(
+                2014, 10, 6, 10, 12, 23, 813))
 
     def testFileURI(self):
-        pth = os.path.join(cdat_info.get_sampledata_path(),"clt.nc")
-        f = cdms2.open("file://"+pth)
+        pth = os.path.join(cdat_info.get_sampledata_path(), "clt.nc")
+        f = cdms2.open("file://" + pth)
         self.assertEqual("file://" + pth, f.uri)
 
     def testDefaultFillValueNotNAN(self):
@@ -74,76 +79,79 @@ class TestRegressions(basetest.CDMSBaseTest):
         self.assertTrue(t.isUnlimited())
 
     def testJSON(self):
-        f = self.getFile(cdat_info.get_sampledata_path()+"/clt.nc")
+        f = self.getFile(cdat_info.get_sampledata_path() + "/clt.nc")
         s = f("clt")
         jsn = s.dumps()
         s2 = cdms2.createVariable(jsn, fromJSON=True)
         assert(numpy.allclose(s2, s))
 
     def testAxisDetection(self):
-        val = [1,2,3]
+        val = [1, 2, 3]
         a = cdms2.createAxis(val)
 
-        #First let's make sure it does not detect anything
+        # First let's make sure it does not detect anything
         self.assertFalse(a.isLatitude())
         self.assertFalse(a.isLongitude())
         self.assertFalse(a.isLevel())
         self.assertFalse(a.isTime())
 
-        #Now quick tests for making it latitude
-        for u in ["DEGREESN","  deGREEn  ","degrees_north","degree_north","degree_n","degrees_n","degreen","degreesn"]:
+        # Now quick tests for making it latitude
+        for u in ["DEGREESN", "  deGREEn  ", "degrees_north",
+                  "degree_north", "degree_n", "degrees_n", "degreen", "degreesn"]:
             a.units = u
             self.assertTrue(a.isLatitude())
-            a.units=""
+            a.units = ""
             self.assertFalse(a.isLatitude())
-        for i in ["lat","LAT","latitude","latituDE"]:
+        for i in ["lat", "LAT", "latitude", "latituDE"]:
             a.id = i
             self.assertTrue(a.isLatitude())
-            a.id="axis"
+            a.id = "axis"
             self.assertFalse(a.isLatitude())
-        a.axis="Y"
+        a.axis = "Y"
         self.assertTrue(a.isLatitude())
         del(a.axis)
         self.assertFalse(a.isLatitude())
-        #Now quick tests for making it longitude
-        for u in ["DEGREESe","  deGREEe  ","degrees_east","degree_east","degree_e","degrees_e","degreee","degreese"]:
+        # Now quick tests for making it longitude
+        for u in ["DEGREESe", "  deGREEe  ", "degrees_east",
+                  "degree_east", "degree_e", "degrees_e", "degreee", "degreese"]:
             a.units = u
             self.assertTrue(a.isLongitude())
-            a.units=""
+            a.units = ""
             self.assertFalse(a.isLongitude())
-        for i in ["lon","LON","longitude","lOngituDE"]:
+        for i in ["lon", "LON", "longitude", "lOngituDE"]:
             a.id = i
             self.assertTrue(a.isLongitude())
-            a.id="axis"
+            a.id = "axis"
             self.assertFalse(a.isLongitude())
-        a.axis="X"
+        a.axis = "X"
         self.assertTrue(a.isLongitude())
         del(a.axis)
         self.assertFalse(a.isLongitude())
-        #Now quick tests for making it level
+        # Now quick tests for making it level
         try:
             import genutil
             has_genutil = True
-        except:
+        except BaseException:
             has_genutil = False
         if has_genutil:
-            for u in ["Pa","hPa","psi","N/m2","N*m-2","kg*m-1*s-2","atm","bar","torr"]:
+            for u in ["Pa", "hPa", "psi", "N/m2", "N*m-2",
+                      "kg*m-1*s-2", "atm", "bar", "torr"]:
                 a.units = u
                 self.assertTrue(a.isLevel())
-                a.units=""
+                a.units = ""
                 self.assertFalse(a.isLevel())
-        for i in ["lev","LEV","level","lEvEL","depth","  depth"]:
+        for i in ["lev", "LEV", "level", "lEvEL", "depth", "  depth"]:
             a.id = i
             self.assertTrue(a.isLevel())
-            a.id="axis"
+            a.id = "axis"
             self.assertFalse(a.isLevel())
-        a.axis="Z"
+        a.axis = "Z"
         self.assertTrue(a.isLevel())
         del(a.axis)
         self.assertFalse(a.isLevel())
-        a.positive="up"
+        a.positive = "up"
         self.assertTrue(a.isLevel())
-        a.positive="positive"
+        a.positive = "positive"
         self.assertFalse(a.isLevel())
 
     def testSimpleWrite(self):
@@ -154,7 +162,10 @@ class TestRegressions(basetest.CDMSBaseTest):
         f.write(data, dtype=numpy.float32, id="test_simple")
 
     def testRegridZonal(self):
-        f = self.getFile(os.path.join(cdat_info.get_sampledata_path(), "clt.nc"))
+        f = self.getFile(
+            os.path.join(
+                cdat_info.get_sampledata_path(),
+                "clt.nc"))
         s = f("clt", slice(0, 1))
         g = cdms2.createGaussianGrid(64)
         gl = cdms2.createZonalGrid(g)
@@ -176,15 +187,20 @@ class TestRegressions(basetest.CDMSBaseTest):
             lon_units = 'degrees_east'
             iaxis = TransientVirtualAxis(idi, ni)
             jaxis = TransientVirtualAxis(idj, nj)
-            lataxis = TransientAxis2D(lat, axes=(iaxis, jaxis), attributes={'units': lat_units}, id="latitude")
-            lonaxis = TransientAxis2D(lon, axes=(iaxis, jaxis), attributes={'units': lon_units}, id="longitude")
+            lataxis = TransientAxis2D(lat, axes=(iaxis, jaxis), attributes={
+                                      'units': lat_units}, id="latitude")
+            lonaxis = TransientAxis2D(lon, axes=(iaxis, jaxis), attributes={
+                                      'units': lon_units}, id="longitude")
             curvegrid = TransientGenericGrid(lataxis, lonaxis, tempmask=None)
             attributs = None
             vid = None
-            if hasattr(v, 'attributes'): attributs = v.attributes
-            if hasattr(v, 'id'): vid = v.id
+            if hasattr(v, 'attributes'):
+                attributs = v.attributes
+            if hasattr(v, 'id'):
+                vid = v.id
             axis0 = v.getAxis(0)
-            return cdms2.createVariable(v, axes=[axis0,iaxis,jaxis], grid=curvegrid, attributes=attributs, id=v.id)
+            return cdms2.createVariable(
+                v, axes=[axis0, iaxis, jaxis], grid=curvegrid, attributes=attributs, id=v.id)
 
         lat = MV2.array([[-20, -10, 0, -15, -5]], 'f')
         lon = MV2.array([[0, 10, 20, 50, 60]], 'f')
@@ -212,6 +228,7 @@ class TestRegressions(basetest.CDMSBaseTest):
         a = MV2.masked_greater(a, 23)
         b = MV2.average(a, axis=0)
         c = a - b
+
 
 if __name__ == "__main__":
     basetest.run()

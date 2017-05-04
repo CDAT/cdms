@@ -7,8 +7,9 @@ HAS_MPI = False
 try:
     from mpi4py import MPI
     HAS_MPI = True
-except:
+except BaseException:
     pass
+
 
 class TestEsmpSmall(unittest.TestCase):
 
@@ -17,12 +18,12 @@ class TestEsmpSmall(unittest.TestCase):
     """
 
     def xFunct(self, j, i):
-        dx = 1.0/float(self.dims[0])
-        return 0.0 + i*dx
-    
+        dx = 1.0 / float(self.dims[0])
+        return 0.0 + i * dx
+
     def yFunct(self, j, i):
-        dy = 1.0/float(self.dims[1])
-        return 0.0 + j*dy
+        dy = 1.0 / float(self.dims[1])
+        return 0.0 + j * dy
 
     def func(self, x, y):
         if x == 0 and y == 0:
@@ -35,7 +36,7 @@ class TestEsmpSmall(unittest.TestCase):
             return 1
         else:
             return 0
-        #return x * y
+        # return x * y
 
     def setUp(self):
         pass
@@ -45,21 +46,21 @@ class TestEsmpSmall(unittest.TestCase):
         rk = 0
         if HAS_MPI:
             rk = MPI.COMM_WORLD.Get_rank()
-        
-        coordSys = ESMF.CoordSys.CART
-        
-        nres = 4
-        self.srcDims = (4*nres, 3*nres)
-        self.dstDims = (4*nres, 3*nres)
 
-        srcMaxIndex = numpy.array(self.srcDims, numpy.int32) # number of cells
-        dstMaxIndex = numpy.array(self.dstDims, numpy.int32) # number of cells
+        coordSys = ESMF.CoordSys.CART
+
+        nres = 4
+        self.srcDims = (4 * nres, 3 * nres)
+        self.dstDims = (4 * nres, 3 * nres)
+
+        srcMaxIndex = numpy.array(self.srcDims, numpy.int32)  # number of cells
+        dstMaxIndex = numpy.array(self.dstDims, numpy.int32)  # number of cells
 
         # grids
-        srcGrid = ESMF.Grid(srcMaxIndex, num_peri_dims = 0,
-                                        coord_sys = coordSys, staggerloc=[ESMF.StaggerLoc.CENTER])
-        dstGrid = ESMF.Grid(dstMaxIndex, num_peri_dims = 0,
-                                        coord_sys = coordSys, staggerloc=[ESMF.StaggerLoc.CENTER])
+        srcGrid = ESMF.Grid(srcMaxIndex, num_peri_dims=0,
+                            coord_sys=coordSys, staggerloc=[ESMF.StaggerLoc.CENTER])
+        dstGrid = ESMF.Grid(dstMaxIndex, num_peri_dims=0,
+                            coord_sys=coordSys, staggerloc=[ESMF.StaggerLoc.CENTER])
 
         srcGrid.add_coords(staggerloc=ESMF.StaggerLoc.CORNER)
         dstGrid.add_coords(staggerloc=ESMF.StaggerLoc.CORNER)
@@ -70,7 +71,6 @@ class TestEsmpSmall(unittest.TestCase):
 
         dstGrid.add_item(item=ESMF.GridItem.MASK)
         dstGridMaskPtr = dstGrid.get_item(ESMF.GridItem.MASK)
-
 
         # coordinates
         srcXCorner = srcGrid.get_coords(0, staggerloc=ESMF.StaggerLoc.CORNER)
@@ -94,12 +94,12 @@ class TestEsmpSmall(unittest.TestCase):
         dstHiCenter = dstGrid.upper_bounds[ESMF.StaggerLoc.CENTER]
 
         # fields
-        srcFld = ESMF.Field(srcGrid, name='srcFld', 
-                            typekind = ESMF.TypeKind.R8,
-                            staggerloc = ESMF.StaggerLoc.CENTER)
-        dstFld = ESMF.Field(dstGrid, name='dstFld', 
-                            typekind = ESMF.TypeKind.R8,
-                            staggerloc = ESMF.StaggerLoc.CENTER)
+        srcFld = ESMF.Field(srcGrid, name='srcFld',
+                            typekind=ESMF.TypeKind.R8,
+                            staggerloc=ESMF.StaggerLoc.CENTER)
+        dstFld = ESMF.Field(dstGrid, name='dstFld',
+                            typekind=ESMF.TypeKind.R8,
+                            staggerloc=ESMF.StaggerLoc.CENTER)
 
         srcFieldPtr = srcFld.data
         dstFieldPtr = dstFld.data
@@ -108,7 +108,7 @@ class TestEsmpSmall(unittest.TestCase):
 
         # src-corners
         srcNx1 = srcHiCorner[0] - srcLoCorner[0]
-        srcNy1 = self.srcDims[1]+1
+        srcNy1 = self.srcDims[1] + 1
         self.dims = self.srcDims
         for iy in range(srcNy1):
             iyp = iy + srcLoCorner[0]
@@ -117,7 +117,7 @@ class TestEsmpSmall(unittest.TestCase):
                 srcXCorner[ix, iy] = self.xFunct(iyp, ixp)
                 srcYCorner[ix, iy] = self.yFunct(iyp, ixp)
 
-        # src-centers and mask 
+        # src-centers and mask
         srcNx = srcHiCenter[0] - srcLoCenter[0]
         srcNy = srcHiCenter[1] - srcLoCenter[1]
         self.dims = self.srcDims
@@ -130,11 +130,11 @@ class TestEsmpSmall(unittest.TestCase):
                 srcXCenter[ix, iy] = x
                 srcYCenter[ix, iy] = y
                 mask = 0
-                if ((iyp*ixp) % 3) == 1: 
+                if ((iyp * ixp) % 3) == 1:
                     mask = 1
-                srcGridMaskPtr[ix, iy] = mask # valid
+                srcGridMaskPtr[ix, iy] = mask  # valid
                 srcFieldPtr[ix, iy] = self.func(ixp, iyp)
-        
+
         # dst-corners
         dstNx1 = dstHiCorner[0] - dstLoCorner[0]
         dstNy1 = dstHiCorner[1] - dstLoCorner[1]
@@ -146,7 +146,7 @@ class TestEsmpSmall(unittest.TestCase):
                 dstXCorner[ix, iy] = self.xFunct(iyp, ixp)
                 dstYCorner[ix, iy] = self.yFunct(iyp, ixp)
 
-        # dst-centers and mask 
+        # dst-centers and mask
         dstNx = dstHiCenter[0] - dstLoCenter[0]
         dstNy = dstHiCenter[1] - dstLoCenter[1]
         self.dims = self.dstDims
@@ -158,24 +158,23 @@ class TestEsmpSmall(unittest.TestCase):
                 y = self.yFunct(iyp + 0.5, ixp + 0.5)
                 dstXCenter[ix, iy] = x
                 dstYCenter[ix, iy] = y
-                dstGridMaskPtr[ix, iy] = 0 # valid
-                dstFieldPtr[ix, iy] = -20 # fill value
+                dstGridMaskPtr[ix, iy] = 0  # valid
+                dstFieldPtr[ix, iy] = -20  # fill value
 
         srcAreaField = ESMF.Field(srcGrid, name='srcAreas',
-                                                typekind = ESMF.TypeKind.R8,
-                                                staggerloc = ESMF.StaggerLoc.CENTER)
+                                                typekind=ESMF.TypeKind.R8,
+                                                staggerloc=ESMF.StaggerLoc.CENTER)
         dstAreaField = ESMF.Field(dstGrid, name='dstAreas',
-                                                typekind = ESMF.TypeKind.R8,
-                                                staggerloc = ESMF.StaggerLoc.CENTER)
+                                                typekind=ESMF.TypeKind.R8,
+                                                staggerloc=ESMF.StaggerLoc.CENTER)
         srcFracField = ESMF.Field(srcGrid, name='srcFracAreas',
-                                                typekind = ESMF.TypeKind.R8,
-                                                staggerloc = ESMF.StaggerLoc.CENTER)
+                                                typekind=ESMF.TypeKind.R8,
+                                                staggerloc=ESMF.StaggerLoc.CENTER)
         dstFracField = ESMF.Field(dstGrid, name='dstFracAreas',
-                                                typekind = ESMF.TypeKind.R8,
-                                                staggerloc = ESMF.StaggerLoc.CENTER)
+                                                typekind=ESMF.TypeKind.R8,
+                                                staggerloc=ESMF.StaggerLoc.CENTER)
 
-
-        # IF you want to set your own area. These lines are required. 
+        # IF you want to set your own area. These lines are required.
         # Otherwise, let ESMF do it.
 #        ESMF.ESMF_GridAddItem(srcGrid, item = ESMF.ESMP_GRIDITEM_AREA)
 #        srcAreas = ESMF.ESMP_GridGetItem(srcGrid, item = ESMP.ESMP_GRIDITEM_AREA)
@@ -183,16 +182,16 @@ class TestEsmpSmall(unittest.TestCase):
 #        dstAreas = ESMF.ESMP_GridGetItem(dstGrid, item = ESMP.ESMP_GRIDITEM_AREA)
 #        srcAreas[:] = 0.02080333333
 #        dstAreas[:] = 0.08333333333
-        
+
         # interpolation
-        maskVals = numpy.array([1], numpy.int32) # values defining mask
-        regrid = ESMF.Regrid(srcFld, dstFld, 
-                            src_mask_values=maskVals, 
-                            dst_mask_values=None, 
-                            regrid_method=ESMF.RegridMethod.CONSERVE, 
-                            unmapped_action=ESMF.UnmappedAction.IGNORE, 
-                            src_frac_field=srcFracField, 
-                            dst_frac_field=None)
+        maskVals = numpy.array([1], numpy.int32)  # values defining mask
+        regrid = ESMF.Regrid(srcFld, dstFld,
+                             src_mask_values=maskVals,
+                             dst_mask_values=None,
+                             regrid_method=ESMF.RegridMethod.CONSERVE,
+                             unmapped_action=ESMF.UnmappedAction.IGNORE,
+                             src_frac_field=srcFracField,
+                             dst_frac_field=None)
 
         regrid(srcFld, dstFld)
 
@@ -201,10 +200,10 @@ class TestEsmpSmall(unittest.TestCase):
         dstAreaField.get_area()
 
         srcFieldPtr = srcFld.data
-        srcFracPtr  = srcFracField.data
+        srcFracPtr = srcFracField.data
 
         dstFieldPtr = dstFld.data
-        dstFracPtr  = dstFracField.data
+        dstFracPtr = dstFracField.data
 
         srcarea = srcAreaField.data
         dstarea = dstAreaField.data
@@ -212,33 +211,34 @@ class TestEsmpSmall(unittest.TestCase):
         srcFracPtr = srcFracField.data
 
         # check conservation
-        marr = numpy.array(mask == 0, dtype = numpy.int32)
+        marr = numpy.array(mask == 0, dtype=numpy.int32)
         srcFldSum, dstFldSum = srcFieldPtr.sum(), dstFieldPtr.sum()
         srcFldIntegral = (srcFieldPtr * srcarea * srcFracPtr).sum()
-        dstFldIntegral = (dstFieldPtr*dstarea).sum()
+        dstFldIntegral = (dstFieldPtr * dstarea).sum()
 
         lackConservLocal = srcFldIntegral - dstFldIntegral
 
-        print '[%d] src corner lo = %s hi = %s dst corner lo = %s hi = %s' % (rk, 
-                                                                              str(srcLoCorner), 
-                                                                              str(srcHiCorner), 
-                                                                              str(dstLoCorner), 
-                                                                              str(dstHiCorner)) 
-        print '[%d] src center lo = %s hi = %s dst center lo = %s hi = %s' % (rk, 
-                                                                              str(srcLoCenter), 
-                                                                              str(srcHiCenter), 
-                                                                              str(dstLoCenter), 
-                                                                              str(dstHiCenter)) 
-                                                                              
+        print '[%d] src corner lo = %s hi = %s dst corner lo = %s hi = %s' % (rk,
+                                                                              str(srcLoCorner),
+                                                                              str(srcHiCorner),
+                                                                              str(dstLoCorner),
+                                                                              str(dstHiCorner))
+        print '[%d] src center lo = %s hi = %s dst center lo = %s hi = %s' % (rk,
+                                                                              str(srcLoCenter),
+                                                                              str(srcHiCenter),
+                                                                              str(dstLoCenter),
+                                                                              str(dstHiCenter))
+
         print '[%d] checksum of src: %f checksum of dst: %f' % (rk, srcFldSum, dstFldSum)
         print '[%d] src total area integral: %g dst total area integral: %g diff: %g\n' % \
             (rk, srcFldIntegral, dstFldIntegral, lackConservLocal)
 
         if HAS_MPI:
-            lackConserv = MPI.COMM_WORLD.reduce(lackConservLocal, op=MPI.SUM, root=0)
+            lackConserv = MPI.COMM_WORLD.reduce(
+                lackConservLocal, op=MPI.SUM, root=0)
         else:
             lackConserv = lackConservLocal
-        
+
         if rk == 0:
             print '[0] total lack of conservation (should be small): %f' % lackConserv
             assert(abs(lackConserv) < 1.e-6)
@@ -250,10 +250,9 @@ class TestEsmpSmall(unittest.TestCase):
         srcGrid.destroy()
         dstGrid.destroy()
 
+
 if __name__ == '__main__':
 
-    print "" # Spacer
+    print ""  # Spacer
     suite = unittest.TestLoader().loadTestsFromTestCase(TestEsmpSmall)
-    unittest.TextTestRunner(verbosity = 1).run(suite)
-
-        
+    unittest.TextTestRunner(verbosity=1).run(suite)

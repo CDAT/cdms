@@ -14,7 +14,7 @@ __all__ = ["cdmsobj", "axis", "coord", "grid", "hgrid", "avariable",
            "mvBaseWriter", "mvSphereMesh", "mvVsWriter", "mvCdmsRegrid"]
 
 # Errors
-from error import CDMSError
+from error import CDMSError  # noqa 
 
 # CDMS datatypes
 from cdmsobj import CdArray, CdChar, CdByte, CdDouble, CdFloat, CdFromObject, CdInt, CdLong, CdScalar, CdShort, CdString
@@ -64,10 +64,9 @@ from mvCdmsRegrid import CdmsRegrid
 try:
     from gsStaticVariable import StaticFileVariable
     from gsTimeVariable import TimeFileVariable
-except:
+except BaseException:
     pass
 
 from restApi import esgfConnection, esgfDataset, FacetConnection
 
 MV = MV2
-

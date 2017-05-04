@@ -2,27 +2,40 @@
 
 # Can't write a _FillValue attribute to a Variable
 # J-Y Peterschmitt - LSCE - 07/2015
-import cdms2,numpy,cdtime,os,sys
+import cdms2
+import numpy
+import cdtime
+import os
+import sys
 import numpy as np
 import basetest
+
 
 class TestFillValueWrite(basetest.CDMSBaseTest):
     def testWriteFillValue(self):
 
         data = np.random.random((10, 10))
-        data = np.ma.array(data,fill_value=1234.0)
+        data = np.ma.array(data, fill_value=1234.0)
         data = np.ma.masked_less(data, 0.5)
         dummy_grid = cdms2.createUniformGrid(10, 10, 1, 0, 10, 1)
-        dummy_var = cdms2.createVariable(data, axes=[dummy_grid.getLatitude(), dummy_grid.getLongitude()], id='my_var')
+        dummy_var = cdms2.createVariable(
+            data,
+            axes=[
+                dummy_grid.getLatitude(),
+                dummy_grid.getLongitude()],
+            id='my_var')
 
-        if dummy_var.fill_value != 1234.0:   markError("createVariable fill_value failed")
+        if dummy_var.fill_value != 1234.0:
+            markError("createVariable fill_value failed")
 
         # Test if all fillvalue related attributes are changed
-        dummy_var.fill_value= 2.e+20
-        self.assertTrue(all([v == 2.e20 for v in (dummy_var.fill_value, dummy_var._FillValue, dummy_var.missing_value)]))
+        dummy_var.fill_value = 2.e+20
+        self.assertTrue(all([v == 2.e20 for v in (
+            dummy_var.fill_value, dummy_var._FillValue, dummy_var.missing_value)]))
 
         dummy_var._FillValue = 1.33
-        self.assertTrue(all([v == 1.33 for v in (dummy_var.fill_value, dummy_var._FillValue, dummy_var.missing_value)]))
+        self.assertTrue(all([v == 1.33 for v in (
+            dummy_var.fill_value, dummy_var._FillValue, dummy_var.missing_value)]))
 
         dummy_var.dummy_att = 'Dummy att'
         dummy_var._dummy_att = 'Dummy att starting with _'
@@ -40,7 +53,8 @@ class TestFillValueWrite(basetest.CDMSBaseTest):
 
         f = self.getTempFile('dummy1.nc')
         m = f("my_var")
-        self.assertTrue(all([v == 999.999 for v in (m.fill_value, m._FillValue, m.missing_value)]))
+        self.assertTrue(
+            all([v == 999.999 for v in (m.fill_value, m._FillValue, m.missing_value)]))
 
         # Test 2 Copy dummy_var attributes
         var_att = dummy_var.attributes
@@ -53,10 +67,16 @@ class TestFillValueWrite(basetest.CDMSBaseTest):
 
         f = self.getTempFile('dummy2.nc')
         m = f("my_var")
-        self.assertTrue(all([v == 1.33 for v in (m.fill_value, m._FillValue, m.missing_value)]))
+        self.assertTrue(
+            all([v == 1.33 for v in (m.fill_value, m._FillValue, m.missing_value)]))
 
         # Test 3 pass variable as is
-        dummy_var = cdms2.createVariable(data, axes=[dummy_grid.getLatitude(), dummy_grid.getLongitude()], id='dummy3_var')
+        dummy_var = cdms2.createVariable(
+            data,
+            axes=[
+                dummy_grid.getLatitude(),
+                dummy_grid.getLongitude()],
+            id='dummy3_var')
 
         f = self.getTempFile('dummy3.nc', 'w')
         f.write(dummy_var)
@@ -64,7 +84,9 @@ class TestFillValueWrite(basetest.CDMSBaseTest):
 
         f = self.getTempFile('dummy3.nc')
         m = f("dummy3_var")
-        self.assertTrue(all([v == 1234.0 for v in (m.fill_value, m._FillValue, m.missing_value)]))
+        self.assertTrue(
+            all([v == 1234.0 for v in (m.fill_value, m._FillValue, m.missing_value)]))
+
 
 if __name__ == "__main__":
     basetest.run()

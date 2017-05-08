@@ -770,7 +770,8 @@ class AbstractAxis(CdmsObj):
             pass
         except Exception:
             pass
-        return ((id[0:3] == 'lev') or (id[0:5] == 'depth') or (id in level_aliases))
+        return ((id[0:3] == 'lev') or (id[0:5] == 'depth')
+                or (id in level_aliases))
 
     # Designate axis as a longitude axis
     # If persistent is true, write metadata to the container.
@@ -1601,11 +1602,9 @@ class AbstractAxis(CdmsObj):
         retbnds[..., 1] = bnds[1:]
         # To avoid floating point error on bound limits
 
-        if(self.isLongitude() and hasattr(self, 'units') and
-                (self.units.find('degree') != -1) and len(retbnds.shape) == 2):
+        if(self.isLongitude() and hasattr(self, 'units') and (self.units.find('degree') != -1) and len(retbnds.shape) == 2):
             # Make sure we have close to 360 degree interval
-            if(abs(abs(retbnds[-1, 1] - retbnds[0, 0]) - 360) <
-                    (numpy.minimum(0.01, abs(retbnds[0, 1] - retbnds[0, 0]) * 0.1))):
+            if(abs(abs(retbnds[-1, 1] - retbnds[0, 0]) - 360) < (numpy.minimum(0.01, abs(retbnds[0, 1] - retbnds[0, 0]) * 0.1))):
                 # Now check wether either bound is near an interger value;
                 # if yes round both integer
                 if((abs(retbnds[0, 0] - numpy.floor(retbnds[0, 0] + 0.5)) <
@@ -1617,8 +1616,7 @@ class AbstractAxis(CdmsObj):
                     if((retbnds[0, 0] * retbnds[-1, 1]) < 0):
                         msg = "\nYour first bounds[0,0] %3.15lf will be corrected to %3.15lf\n"\
                               "Your bounds bounds[-1,1] %3.15lf will be corrected to %3.15lf" \
-                            % (retbnds[0, 0], numpy.floor(retbnds[0, 0] + 0.5), retbnds[-1, 1],
-                               numpy.floor(retbnds[-1, 1] + 0.5))
+                            % (retbnds[0, 0], numpy.floor(retbnds[0, 0] + 0.5), retbnds[-1, 1], numpy.floor(retbnds[-1, 1] + 0.5))
 
                         warnings.warn(msg, UserWarning)
                         retbnds[0, 0] = numpy.floor(retbnds[0, 0] + 0.5)
@@ -1629,12 +1627,12 @@ class AbstractAxis(CdmsObj):
                     else:
                         retbnds[0, 0] = retbnds[-1, 1] + 360.
 
-        if((self.isLatitude() and getAutoBounds()) or
-                (self.isLatitude() and hasattr(self, 'units') and (self.units.find('degree') != -1))):
+        if((self.isLatitude() and getAutoBounds()) and hasattr(self, 'units') and (self.units.find('degree') != -1)):
             retbnds[0, ...] = numpy.maximum(-90.0,
                                             numpy.minimum(90.0, retbnds[0, ...]))
             retbnds[-1, ...] = numpy.maximum(-90.0,
                                              numpy.minimum(90.0, retbnds[-1, ...]))
+
         return retbnds
 
     def clone(self, copyData=1):

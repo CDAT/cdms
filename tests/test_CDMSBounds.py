@@ -1,3 +1,4 @@
+import cdat_info
 import cdms2
 import unittest
 import numpy
@@ -99,6 +100,16 @@ class TestCDMSAutobounds(unittest.TestCase):
         bounds = axis.getBounds()
         self.assertEqual(bounds[0, 0], -180.0)
         self.assertEqual(bounds[-1, 1], 180.0)
+
+    def test_BoundsPolar(self):
+        f=cdms2.open(cdat_info.get_sampledata_path() + "/stereographic.nc")
+        s=f('seaice_conc_cdr')
+        firstBounds = s.getAxis(1).getBounds()[0]
+        lastBounds = s.getAxis(1).getBounds()[-1]
+        self.assertEqual(firstBounds[0], 5850000.)
+        self.assertEqual(firstBounds[1], 5825000.)
+        self.assertEqual(lastBounds[0], -5325000.)
+        self.assertEqual(lastBounds[1], -5350000.)
 
 
 if __name__ == '__main__':

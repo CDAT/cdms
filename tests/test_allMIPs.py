@@ -16,7 +16,6 @@ class TestMIPS(basetest.CDMSBaseTest):
 
     def tearDown(self):
         super(TestMIPS, self).tearDown()
-        os.remove(self.filename)
 
     def testinput4MIPs(self):
         f = cdms2.open(self.filename)

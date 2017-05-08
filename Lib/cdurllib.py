@@ -5,6 +5,7 @@ import getpass
 import socket
 import string
 import sys
+import os
 
 MAXFTPCACHE = 10        # Trim the ftp cache beyond this size
 
@@ -23,7 +24,7 @@ class CDURLopener(urllib.URLopener):
     def open_ftp(self, url):
         host, path = urllib.splithost(url)
         if not host:
-            raise IOError, ('ftp error', 'no host given')
+            raise IOError(('ftp error', 'no host given'))
         host, port = urllib.splitport(host)
         user, host = urllib.splituser(host)
         # if user: user, passwd = splitpasswd(user)
@@ -75,25 +76,25 @@ class CDURLopener(urllib.URLopener):
                 import StringIO
                 headers = mimetools.Message(StringIO.StringIO(
                     'Content-Length: %d\n' % retrlen))
-            else:
-                headers = noheaders()
+#            else:
+#                headers = noheaders()
             return urllib.addinfourl(fp, headers, "ftp:" + url)
         except urllib.ftperrors() as msg:
-            raise IOError, ('ftp error', msg), sys.exc_info()[2]
+            raise IOError(('ftp error', msg), sys.exc_info()[2])
 
     def retrieve(self, url, filename=None, reporthook=None, blocksize=262144):
         url = urllib.unwrap(url)
         if self.tempcache and url in self.tempcache:
             return self.tempcache[url]
         type, url1 = urllib.splittype(url)
-        if not filename and (not type or type == 'file'):
-            try:
-                fp = self.open_local_file(url1)
-                hdrs = fp.info()
-                del fp
-                return url2pathname(urllib.splithost(url1)[1]), hdrs
-            except IOError as msg:
-                pass
+#        if not filename and (not type or type == 'file'):
+#            try:
+#                fp = self.open_local_file(url1)
+#                hdrs = fp.info()
+#                del fp
+#                return url2pathname(urllib.splithost(url1)[1]), hdrs
+#            except IOError:
+#                pass
         fp = self.open(url)
         headers = fp.info()
         if not filename:
@@ -154,7 +155,6 @@ def sampleReportHook(blocknum, blocksize, size, userObj):
 
 if __name__ == '__main__':
 
-    import sys
     if len(sys.argv) != 4:
         print 'Usage: cdurllib.py URL filename blocksize'
         sys.exit(1)

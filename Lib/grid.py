@@ -13,7 +13,7 @@ import sys
 from cdmsobj import CdmsObj
 from axis import TransientAxis, createAxis, createUniformLatitudeAxis
 from axis import createUniformLongitudeAxis, getAutoBounds, createGaussianAxis
-from axis import isSubsetVector, lookupArray
+from axis import isSubsetVector
 
 MethodNotImplemented = "Method not yet implemented"
 

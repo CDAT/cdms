@@ -125,7 +125,7 @@ def add_internal_attribute(C, *aname):
     """
     initialize_internal_attributes(C)
     for name in aname:
-        if not name in C._internal:
+        if name not in C._internal:
             C._internal.append(name)
 
 

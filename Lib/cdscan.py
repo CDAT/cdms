@@ -15,6 +15,7 @@ import types
 from cdms2 import cdmsNode
 import re
 from functools import reduce
+from error import CDMSError
 
 usage = """Usage:
     cdscan [options] <files>
@@ -43,18 +44,18 @@ Options:
 
     -d dataset_id: dataset identifier. Default: "none"
 
-    -e newattr:	   Add or modify attributes of a file, variable, or
-		   axis. The form of 'newattr' is either:
+    -e newattr:    Add or modify attributes of a file, variable, or
+           axis. The form of 'newattr' is either:
 
-		   'var.attr = value' to modify a variable or attribute, or
-		   '.attr = value' to modify a global (file) attribute.
+           'var.attr = value' to modify a variable or attribute, or
+           '.attr = value' to modify a global (file) attribute.
 
-		   In either case, 'value' may be quoted to preserve spaces
-		   or force the attribute to be treated as a string. If
-		   'value' is not quoted and the first character is a
-		   digit, it is converted to integer or
-		   floating-point. This option does not modify the input
-		   datafiles. See notes and examples below.
+           In either case, 'value' may be quoted to preserve spaces
+           or force the attribute to be treated as a string. If
+           'value' is not quoted and the first character is a
+           digit, it is converted to integer or
+           floating-point. This option does not modify the input
+           datafiles. See notes and examples below.
 
     --exclude var,var,...
                    Exclude specified variables. The argument
@@ -107,8 +108,8 @@ Options:
                    that the match is to the initial part of the basename. For example, the
                    pattern 'st' matches any basename starting with 'st'.
 
-    -j:		   scan time as a vector dimension. Time values are listed
-		   individually. Turns off the -i option.
+    -j:        scan time as a vector dimension. Time values are listed
+           individually. Turns off the -i option.
 
     -l levels:     list of levels, comma-separated. Only specify if files are partitioned by
                    levels.
@@ -117,7 +118,7 @@ Options:
                    vertical level dimension
 
     --notrim-lat:  Don't trim latitude values (in degrees) to the range [-90..90]. By default
-		   latitude values are trimmed.
+           latitude values are trimmed.
 
     -p template:   Compatibility with pre-V3.0 datasets. 'cdimport -h' describes template strings.
 
@@ -371,8 +372,9 @@ def combineKeys(dict, typedict, timeIsLinear=0,
                     len(values)))
             badvalues = numpy.take(values, badindices)
             if verbose:
-                print >> sys.stderr, "Error: Missing values in %s after times: %s. Set delta with the -i option or turn off linear mode with the -j option." % (
-                    path, str(badvalues))
+                print >> sys.stderr, "Error: Missing values in %s after times: %s." + \
+                    " Set delta with the -i option or turn off linear mode with the -j option." % \
+                    (path, str(badvalues))
             errorOccurred = 1
 
         prevvals = values
@@ -457,8 +459,8 @@ def disambig(name, dict, num, comparator, value):
 
 def compareaxes(axis1, axis2):
     """Return 0 if equal, 1 if not"""
-    return ((len(axis1) != len(axis2))
-            or not numpy.ma.allclose(axis1[:], axis2[:]))
+    return ((len(axis1) != len(axis2)) or
+            not numpy.ma.allclose(axis1[:], axis2[:]))
 
 
 def comparedomains(domain1, domain2):
@@ -599,8 +601,8 @@ def addAttrs(fobj, eattrs):
 def setNodeDict(node, dict):
     for key in dict.keys():
         value = dict[key]
-        if (isinstance(value, numpy.integer)
-                or isinstance(value, types.IntType)):
+        if (isinstance(value, numpy.integer) or
+                isinstance(value, types.IntType)):
             datatype = CdLong
         elif (isinstance(value, numpy.floating) or isinstance(value, types.FloatType)):
             datatype = CdDouble
@@ -695,7 +697,7 @@ def initialize_filemap(filemap, timedict, levdict, timeid, extendDset, splitOnTi
             else:
                 filemap[name] = varmaplist
 
-#-------------------------------------------------------------------------
+# ------------------------------------------------------------------------
 
 
 verbose = 1
@@ -956,7 +958,7 @@ def main(argv):
         else:
             extraDict[evar] = [(eattr, evalue)]
 
-    #-------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
     # Initialize dictionaries if adding to an existing dataset
     if verbose and len(dsetargs) > 0:
         print 'Scanning datasets ...'
@@ -1034,7 +1036,7 @@ def main(argv):
 
         # end of loop "for extendPath in dsetargs"
 
-    #-------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
     if verbose:
         print 'Scanning files ...'
 
@@ -1358,7 +1360,7 @@ def main(argv):
         f.close()
         # End of loop "for path in fileargs"
 
-    #-------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
 
     # Generate varindex, by combining variable names with
     # identical varentry values.
@@ -1430,8 +1432,8 @@ def main(argv):
         # >>> that all variables can have the same time axis..  For now, just raise an error
         # >>> if there are time axis differences at this point.
         values0, units0, calendar0 = timedict[timedict.keys()[0]]
-        timedict_same = all([((values0 == values).all() and units0 == units and calendar0 == calendar)
-                             for (values, units, calendar) in timedict.values()])
+        timedict_same = all([((values0 == values1).all() and units0 == units1 and calendar0 == calendar1)
+                             for (values1, units1, calendar1) in timedict.values()])
         if not timedict_same:
             raise CDMSError(
                 'cdscan is confused about times for a forecast set')
@@ -1452,7 +1454,7 @@ def main(argv):
         # Finally, add the appropriate standard_name to it, if we haven't already gotten one from
         # the data file.  If the file has anything other than 'forecast_period', it's wrong, but
         # we'll stick with it anyway.
-        if not 'standard_name' in fc_time_attr.keys():
+        if 'standard_name' not in fc_time_attr.keys():
             fc_time_attr['standard_name'] = 'forecast_period'
 
     # Create partitioned axes
@@ -1815,7 +1817,7 @@ def main(argv):
             print xmlpath, 'written'
 
 
-#-------------------------------------------------------------------------
+# ------------------------------------------------------------------------
 if __name__ == '__main__':
     main(sys.argv)
     try:

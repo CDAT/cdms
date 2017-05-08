@@ -4,8 +4,8 @@ CDMS module-level API
 
 import cdat_info
 cdat_info.pingPCMDIdb("cdat", "cdms2")  # noqa
-from . import git
-from . import myproxy_logon
+from . import git  # noqa
+from . import myproxy_logon  # noqa
 
 __all__ = ["cdmsobj", "axis", "coord", "grid", "hgrid", "avariable",
            "sliceut", "error", "variable", "fvariable", "tvariable", "dataset",
@@ -30,14 +30,14 @@ from axis import createAxis, createEqualAreaAxis, createGaussianAxis, createUnif
 from grid import createGenericGrid, createGlobalMeanGrid, createRectGrid, createUniformGrid, createZonalGrid, setClassifyGrids, createGaussianGrid, writeScripGrid, isGrid  # noqa
 
 # Dataset functions
-from dataset import createDataset, openDataset, useNetcdf3, \  # noqa
-    getNetcdfClassicFlag, getNetcdfShuffleFlag, getNetcdfDeflateFlag, getNetcdfDeflateLevelFlag,\  # noqa
-    setNetcdfClassicFlag, setNetcdfShuffleFlag, setNetcdfDeflateFlag, setNetcdfDeflateLevelFlag,\  # noqa
-    setNetcdfUseNCSwitchModeFlag, getNetcdfUseNCSwitchModeFlag,\  # noqa
-    setCompressionWarnings,\  # noqa
-    setNetcdf4Flag, getNetcdf4Flag,\  # noqa
-    setNetcdfUseParallelFlag, getNetcdfUseParallelFlag, \  # noqa
-    getMpiRank, getMpiSize  # noqa
+from dataset import createDataset, openDataset, useNetcdf3  # noqa
+from dataset import getNetcdfClassicFlag, getNetcdfShuffleFlag, getNetcdfDeflateFlag, getNetcdfDeflateLevelFlag  # noqa
+from dataset import setNetcdfClassicFlag, setNetcdfShuffleFlag, setNetcdfDeflateFlag, setNetcdfDeflateLevelFlag  # noqa
+from dataset import setNetcdfUseNCSwitchModeFlag, getNetcdfUseNCSwitchModeFlag  # noqa
+from dataset import setCompressionWarnings  # noqa
+from dataset import setNetcdf4Flag, getNetcdf4Flag  # noqa
+from dataset import setNetcdfUseParallelFlag, getNetcdfUseParallelFlag  # noqa
+from dataset import getMpiRank, getMpiSize  # noqa
 
 open = openDataset
 
@@ -46,8 +46,8 @@ from database import connect, Base, Onelevel, Subtree  # noqa
 
 # Selectors
 import selectors  # noqa
-from selectors import longitude, latitude, time, level, required, \  # noqa
-    longitudeslice, latitudeslice, levelslice, timeslice  # noqa
+from selectors import longitude, latitude, time, level, required  # noqa
+from selectors import longitudeslice, latitudeslice, levelslice, timeslice  # noqa
 
 from avariable import order2index, orderparse, setNumericCompatibility, getNumericCompatibility  # noqa
 # TV
@@ -69,4 +69,4 @@ except BaseException:
 
 from restApi import esgfConnection, esgfDataset, FacetConnection  # noqa
 
-MV = MV2
+MV = MV2  # noqa

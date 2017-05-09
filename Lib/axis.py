@@ -1519,12 +1519,12 @@ class AbstractAxis(CdmsObj):
             bnds = numpy.array([self[0]-delta,self[0]+delta])
 
         # Transform to (n,2) array
-        retbnds = numpy.zeros((len(ar),2),numpy.float64)
-        retbnds[:,0] = bnds[:-1]
-        retbnds[:,1] = bnds[1:]
+        retbnds = numpy.zeros((ar.shape+(2,)),numpy.float64)
+        retbnds[...,0] = bnds[:-1]
+        retbnds[...,1] = bnds[1:]
         # To avoid floating point error on bound limits
 
-        if( self.isLongitude() and hasattr(self, 'units') and (self.units.find('degree') != -1)):
+        if(self.isLongitude() and hasattr(self, 'units') and (self.units.find('degree') != -1) and len(retbnds.shape)==2):
              # Make sure we have close to 360 degree interval
              if( abs(abs(retbnds[-1,1] - retbnds[0,0]) -360) < (numpy.minimum(0.01, abs(retbnds[0,1] - retbnds[0,0])*0.1))):
                  # Now check wether either bound is near an interger value;
@@ -1533,22 +1533,24 @@ class AbstractAxis(CdmsObj):
                       abs(retbnds[0,1] - retbnds[0,0])*0.01) or 
                      (abs(retbnds[-1,1] - numpy.floor(retbnds[-1,1] + 0.5)) < 
                       abs(retbnds[-1,1] - retbnds[-1,0])*0.01) ):
-                     msg = "\nYour first bounds[0,0] %3.15lf will be corrected to %3.15lf\nYour bounds bounds[-1,1] %3.15lf will be corrected to %3.15lf" \
-                            % (retbnds[0,0], numpy.floor(retbnds[0,0] + 0.5), retbnds[-1,1], numpy.floor(retbnds[-1,1] + 0.5))
+                     ## only for -180, 180 not needed if values are all positive (0-360)
+                     if( (retbnds[0,0] * retbnds[-1,1]) < 0 ):
+                         msg = "\nYour first bounds[0,0] %3.15lf will be corrected to %3.15lf\n"\
+                               "Your bounds bounds[-1,1] %3.15lf will be corrected to %3.15lf" \
+                                % (retbnds[0,0], numpy.floor(retbnds[0,0] + 0.5), retbnds[-1,1], numpy.floor(retbnds[-1,1] + 0.5))
 
-                     warnings.warn(msg,UserWarning)
-                     retbnds[0,0] = numpy.floor(retbnds[0,0] + 0.5)
-                     retbnds[-1,1] = numpy.floor(retbnds[-1,1] + 0.5)
+                         warnings.warn(msg,UserWarning)
+                         retbnds[0,0] = numpy.floor(retbnds[0,0] + 0.5)
+                         retbnds[-1,1] = numpy.floor(retbnds[-1,1] + 0.5)
                  else:
                      if( retbnds[-1,1] > retbnds[0,0] ):
                          retbnds[-1,1] = retbnds[0,0] + 360.
                      else:
                          retbnds[0,0] = retbnds[-1,1] + 360.
                   
-        if( (self.isLatitude() and getAutoBounds()) or 
-            (self.isLatitude() and hasattr(self, 'units') and (self.units.find('degree') != -1))): 
-            retbnds[0,:] = numpy.maximum(-90.0, numpy.minimum(90.0,retbnds[0,:]))
-            retbnds[-1,:] = numpy.maximum(-90.0, numpy.minimum(90.0,retbnds[-1,:]))
+        if( (self.isLatitude() and getAutoBounds()) and hasattr(self, 'units') and (self.units.find('degree') != -1)): 
+            retbnds[0,...] = numpy.maximum(-90.0, numpy.minimum(90.0,retbnds[0,...]))
+            retbnds[-1,...] = numpy.maximum(-90.0, numpy.minimum(90.0,retbnds[-1,...]))
 
         return retbnds
 

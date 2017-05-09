@@ -9,7 +9,6 @@ Contains also the write part of the old cu interface.
 import json
 import re
 import types
-import typeconv
 import numpy
 from numpy import sctype2char
 from error import CDMSError
@@ -164,10 +163,10 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
 
         # tile index, None means no mosaic
         self.tileIndex = None
-
         # Compatibility: assuming old typecode, map to new
         if dtype is None and typecode is not None:
-            dtype = typeconv.convtypecode2(typecode)
+#            dtype = typeconv.convtypecode2(typecode)
+            dtype = typecode
         typecode = sctype2char(dtype)
         if isinstance(data, types.TupleType):
             data = list(data)
@@ -252,7 +251,8 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         """
         # Compatibility: assuming old typecode, map to new
         if dtype is None and typecode is not None:
-            dtype = typeconv.convtypecode2(typecode)
+#            dtype = typeconv.convtypecode2(typecode)
+            dtype = typecode
         typecode = sctype2char(dtype)
         if isinstance(data, types.TupleType):
             data = list(data)
@@ -278,12 +278,16 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             data = numpy.ma.masked.data
             mask = numpy.ma.masked.mask
 
+        if dtype is None and data is not None:
+            dtype = numpy.array(data).dtype
+
         if fill_value in ["N/A"]:  fill_value = None
 
         if fill_value is not None:
             fill_value = numpy.array(fill_value).astype(dtype)
         else:
             fill_value = numpy.ma.MaskedArray(1).astype(dtype).item()
+            fill_value = numpy.ma.default_fill_value(fill_value)
 
         self = numpy.ma.MaskedArray.__new__(cls, data, dtype=dtype,
                                             copy=ncopy,

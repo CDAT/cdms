@@ -31,7 +31,10 @@ the eastward and northward components of wind speed, respectively, and
 both variables are functions of time, latitude, and longitude, then the
 velocity for time 0 (first index) can be calculated as
 
->>>  from cdms import MV vel = MV.sqrt(u[0]**2 + v[0]2) 
+.. doctest::
+
+   >>> from cdms2 import MV
+   >>> vel = MV.sqrt(u[0]**2 + v[0]**2)
 
 This illustrates several points:
 
@@ -60,26 +63,43 @@ control file), or PCMDI DRS. (HDF and DRS support is optional, and is
 configured at the time UV-CDAT is installed.) For instance, to read data
 from file sample.nc into variable u:
 
- >>> import cdms 
- >>> f = cdms.open('sample.nc') 
- >>> u = f('u') 
+.. testsetup:: *
+
+   import MV2
+   import cdms2
+   f = cdms2.open('clt.nc')
+   u = f('u')
+   v = f('v')
+   smallvar=MV2.reshape(MV2.arange(20),(4,5),id='small variable').astype(MV2.float32) 
+   largevar=MV2.reshape(MV2.arange(400),(20,20),id="large variable").astype(MV2.float32)
+.. doctest::
+
+    >>> f = cdms2.open('clt.nc')
+    >>> u = f('u')
 
 Data can be read by index or by world coordinate values. The following
 reads the n-th timepoint of u (the syntax slice(i,j) refers to indices k
 such that i <= k < j):
 
- >>> u0 = f('u',time=slice(n,n+1)) 
+.. doctest:: 
 
-To read ``u`` at time 366.0:
+   >>> n = 0
+   >>> u0 = f('u',time=slice(n,n+1))
 
- >>> u1 = f('u',time=366.) 
+To read ``u`` at time 1.:
+
+.. doctest::
+
+    >>> u1 = f('u',time=1.)
 
 A variable can be written to a file with the write function:
 
- >>> g = cdms.open('sample2.nc','w') 
- >>> g.write(u)
- <Variable: u, file: sample2.nc, shape: (1, 16, 32)> 
- >>> g.close() 
+.. doctest::
+
+   >>> g = cdms2.open('sample2.nc','w')
+   >>> g.write(u) # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
+   <cdms2.fvariable.FileVariable object at ...
+   >>> g.close()
 
 1.4 Coordinate Axes
 ^^^^^^^^^^^^^^^^^^^
@@ -102,27 +122,53 @@ latitude, longitude). This indicates the order of the dimensions, with
 the slowest- varying dimension listed first (time). The domain may be
 accessed with the ``getAxisList()`` method:
 
- >>> s.getAxisList()
- [ id: lat Designated a latitude axis. 
-   units: degrees_north 
-   Length: 64
-   First: -87.8637970305 
-   Last: 87.8637970305 
+.. doctest::
+
+   >>> u.getAxisList() # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
+   [   id: time1
+   Designated a time axis.
+   units:  months since 1978-12
+   Length: 1
+   First:  1.0
+   Last:   1.0
    Other axis attributes:
-        long_name: latitude
-        axis: Y
-        Python id: 833efa4, 
-   id: lon Designated a longitude axis. 
-   units: degrees_east Length: 128
-   First: 0.0 
-   Last: 357.1875 
+      calendar: gregorian
+      axis: T
+   Python id:  ...
+   ,    id: plev
+   Designated a level axis.
+   units:  hPa
+   Length: 2
+   First:  200.0
+   Last:   850.0
    Other axis attributes:
-        modulo: 360.0
-        topology: circular
-        long_name: longitude
-        axis: X
-        Python id: 833f174
- ] 
+      axis: Z
+      realtopology: linear
+   Python id:  ...
+   ,    id: latitude1
+   Designated a latitude axis.
+   units:  degrees_north
+   Length: 80
+   First:  -88.2884
+   Last:   88.2884
+   Other axis attributes:
+      axis: Y
+      realtopology: linear
+   Python id:  ...
+   ,    id: longitude1
+   Designated a longitude axis.
+   units:  degrees_east
+   Length: 97
+   First:  -180.0
+   Last:   180.0
+   Other axis attributes:
+      axis: X
+      topology: circular
+      modulo: 360.0
+      realtopology: linear
+   Python id:  ...
+   ]
+
 
 In the above example, the domain elements are axes that are also
 spatiotemporal. In general it is not always the case that an element of
@@ -140,8 +186,13 @@ associated with a variable. The methods getLatitude, getLongitude,
 getLevel, and getTime return the associated coordinate axes. For
 example:
 
- >>> t = u.getTime() >>> print t[:][ 0., 366., 731.,] 
- >>> print t.units 'days since 2000-1-1' 
+.. doctest::
+
+   >>> t = u.getTime()
+   >>> print t[:]
+   [ 1.]
+   >>> print t.units
+   months since 1978-12
 
 1.5 Attributes
 ^^^^^^^^^^^^^^
@@ -150,7 +201,11 @@ As mentioned above, variables can have associated attributes ,
 name-value pairs. In fact, nearly all CDMS objects can have associated
 attributes, which are accessed using the Python dot notation:
 
- >>> u.units='m/s' >>> print u.units m/s 
+.. doctest::
+
+   >>> u.units='m/s'
+   >>> print u.units 
+   m/s
 
 Attribute values can be strings, scalars, or 1-D Numeric arrays.
 
@@ -162,11 +217,17 @@ written to an output file along with the variable. By default, when an
 attribute is set, it is treated as external. Every variable has a field
 attributes, a Python dictionary that defines the external attributes:
 
- >>> print u.attributes.keys() ['datatype', 'name', 'missing_value', 'units'] 
+.. doctest::
+
+   >>> print u.attributes.keys()
+   ['name', 'title', 'tileIndex', 'date', 'source', 'time', 'units', 'type']
 
 The Python dir command lists the internal attribute names:
 
- >>> dir(u) ['_MaskedArray__data', '_MaskedArray__fill_value,' ..., 'id', 'parent'] 
+.. doctest::
+
+   >>> dir(u)
+   ['T', '_FillValue', '_TransientVariable__domain', ..., 'view']
 
 In general internal attributes should not be modified directly. One
 exception is the id attribute, the name of the variable. It is used in
@@ -183,14 +244,28 @@ corresponding data array element is missing or invalid.
 Arithmetic operations in CDMS take missing data into account. The same
 is true of the functions defined in the cdms.MV module. For example:
 
- >>> a = MV.array([1,2,3]) # Create array a, with no mask 
- >>> b = MV.array([4,5,6]) # Same for b 
- >>> a+b variable_13 array([5,7,9,])
+.. doctest::
 
-            a[1]=MV.masked # Mask the second value of a a.mask() # View the mask [0,1,0,]
-
-            a+b # The sum is masked also variable_14 array( data = [5,0,9,], mask = [0,1,0,], fill_value=[0,] ) 
-
+   >>> a = MV2.array([1,2,3]) # Create array a, with no mask
+   >>> b = MV2.array([4,5,6]) # Same for b  
+   >>> a+b # variable_... array([5,7,9,]) # doctest: +ELLIPSIS
+   variable_...
+   masked_array(data = [5 7 9],
+             mask = False,
+       fill_value = 999999)
+       
+       
+   >>> a[1]=MV2.masked # Mask the second value of a a.mask()
+   >>> a.mask
+   array([False,  True, False], dtype=bool)
+   >>> a+b # The sum is masked also 
+   variable_...
+   masked_array(data = [5 -- 9],
+             mask = [False  True False],
+       fill_value = 999999)
+       
+       
+   
 When data is read from a file, the result variable is masked if the file
 variable has a missing_value attribute. The mask is set to one for
 those elements equal to the missing value, zero elsewhere. If no such
@@ -205,7 +280,7 @@ Masking is covered in `Section 2.9 <cdms_2.html#2.9>`__. See also the
 documentation of the Python Numeric and MA modules, on which ``cdms.MV``
 is based, at
 
-[http://numpy.sourceforge.net](http://numpy.sourceforge.net/).
+`http://www.numpy.org/ <http://www.numpy.org/>`__.
 
 1.7 File Variables
 ^^^^^^^^^^^^^^^^^^
@@ -230,9 +305,10 @@ passing the name of the variable, or by calling the getVariable
 function. Note that obtaining a file variable does not actually read the
 data array:
 
- >>> f = cdms.open('sample.nc','r+') 
- >>> u = f.getVariable('u') # or u=f['u'] 
- >>> u.shape (3, 16, 32) 
+.. doctest:: 
+   >>> f = cdms.open('sample.nc','r+')
+   >>> u = f.getVariable('u') # or u=f['u']
+   >>> u.shape (3, 16, 32)
 
 File variables are also useful for fine-grained I/O. They behave like
 transient variables, but operations on them also affect the associated
@@ -245,43 +321,69 @@ file. Specifically:
 -  and calling a file variable like a function reads data associated
    with the variable:
 
- >>> f = cdms.open('sample.nc','r+') # Open read/write 
- >>> uvar = f['u'] # Note square brackets 
- >>> uvar.shape (3, 16, 32)
-
-            u0 = uvar[0] # Reads data from sample.nc u0.shape (16, 32)
-
-            uvar[1]=u0 # Writes data to sample.nc uvar.units # Reads the
-            attribute 'm/s'
-
-            uvar.units='meters/second' # Writes the attribute # Calling
-            a variable like a function reads data u24 = uvar(time=24.0)
-            f.close() # Save changes to sample.nc (I/O may be buffered)
-            
+.. doctest::
+   >>> f = cdms.open('sample.nc','r+') # Open read/write
+   >>> uvar = f['u'] # Note square brackets
+   >>> uvar.shape (3, 16, 32)
+   >>> u0 = uvar[0] # Reads data from sample.nc u0.shape (16, 32)
+   >>> uvar[1]=u0 # Writes data to sample.nc uvar.units
+   # Reads the attribute 'm/s'
+   >>> uvar.units='meters/second' # Writes the attribute
+   # Calling  a variable like a function reads data
+   >>> u24 = uvar(time=24.0)
+   >>> .close() # Save changes to clt.nc (I/O may be buffered)
 
 In an interactive application, the type of variable can be determined
 simply by printing the variable:
 
- >>> rlsf # Transient variable rls array( array (4,48,96) , type = f, has 18432 elements) 
- >>> rlsg # Dataset variable <Variable: rls, dataset: mri_perturb, shape: (4, 46, 72)> 
- >>> prc # File variable <Variable: prc, file: testnc.nc, shape: (16, 32, 64)> 
+- rlsf # Transient variable
+  - rlsf array( array (4,48,96) , type = f, has 18432 elements)
+- rlsg # Dataset variable
+  - <Variable: rlsq, dataset: mri_perturb, shape: (4, 46, 72)>
+- prc # File variable
+  - <Variable: prc, file: testnc.nc, shape: (16, 32, 64)>
 
 Note that the data values themselves are not printed. For transient
 variables, the data is printed only if the size of the array is less
 than the print limit . This value can be set with the function
 MV.set_print_limit to force the data to be printed:
 
- >>> smallvar.size() # Number of elements 20 
- >>> MV.get_print_limit() # Current limit 300 
- >>> smallvar small variable array( [[ 0., 1., 2., 3.,][ 4., 5., 6., 7.,] [ 8., 9., 10., 11.,][ 12., 13., 14., 15.,] [ 16., 17., 18., 19.,] ]) 
- >>> largevar.size() 400 
- >>> largevar large variable array( array (20,20) , type = d, has 400 elements) 
- >>> MV.set_print_limit(500) # Reset the print limit 
- >>> largevar large variable array( [[ 0., 1., 2., 3., 4., 5., 6., 7., 8., 9., 10., 11., 12., 13., 14., 15., 16., 17., 18., 19.,] ... ]) 
+.. doctest::
+   >>> smallvar.size() # Number of elements 20
+   >>> MV2.get_print_limit() # Current limit 1000
+   1000
+   >>> smallvar 
+   small variable 
+   maksed_array( 
+      [[ 0., 1., 2., 3.,]
+      [ 4., 5., 6., 7.,] 
+      [ 8., 9., 10., 11.,]
+      [ 12., 13., 14., 15.,] 
+      [ 16., 17., 18., 19.,]],
+       mask = False,
+       fill_value = 1e+20)
+      )
+   >>> largevar.size()
+   400
+   >>> MV2.set_print_limit(100) 
+   >>> largevar 
+   large variable
+   masked_array(data =
+   [[   0.    1.    2. ...,   17.   18.   19.]
+   [  20.   21.   22. ...,   37.   38.   39.]
+   [  40.   41.   42. ...,   57.   58.   59.]
+   ...,
+   [ 340.  341.  342. ...,  357.  358.  359.]
+   [ 360.  361.  362. ...,  377.  378.  379.]
+   [ 380.  381.  382. ...,  397.  398.  399.]],
+   mask = False,
+   fill_value = 999999.0)
 
 The datatype of the variable is determined with the typecode function:
 
- >>> x.typecode() 'd' 
+.. doctest::
+   >>> u.typecode() 
+   'f'
 
 1.8 Dataset Variables
 ^^^^^^^^^^^^^^^^^^^^^
@@ -295,17 +397,30 @@ dataset typically represents the data generated by one run of a general
 circulation or coupled ocean-atmosphere model.
 
 For example, suppose data for variables u and v are stored in six files:
-u_2000.nc, u_2001.nc, u_2002.nc, v_2000.nc, v_2001.nc , and
-v_2002.nc. A metafile can be generated with the command:
+
+1. u_2000.nc,
+2. u_2001.nc,
+3. u_2002.nc,
+4. v_2000.nc,
+5. v_2001.nc,
+6. v_2002.nc.
+
+A metafile can be generated with the command:
 
 {% highlight text %} $ cdscan -x cdsample.xml [uv]\*.nc {% endhighlight
 %}
 
 The metafile **cdsample.xml** is then used like an ordinary data file:
 
- >>> f = cdms.open('cdsample.xml') 
- >>> u = f('u')
- >>> u.shape (3, 16, 32) 
+.. doctest::
+
+   >>> import os
+   >>> os.system("cdscan -x cdsample.xml [uv]*.nc")
+   0
+   >>> f = cdms2.open('cdsample.xml')
+   >>> u = f('u')
+   >>> u.shape
+   (3, 16, 32)
 
 1.9 Grids
 ^^^^^^^^^
@@ -332,7 +447,7 @@ CDMS supports two types of nonrectangular grid:
    which is a two-dimensional coordinate axis. Curvilinear grids are
    often used in ocean model applications.
 -  A generic grid consists of a latitude and longitude axis, each of
-   which is an auxiliary one-dimensional coordinate axis. An auxiliary
+   which is an auxiliary one-dimensional coordinate axis. An auxiliarycdscan -x cdsample.xml [uv]\*.nc
    axis has values that are not necessarily monotonic. As the name
    suggests, generic grids can represent virtually any type of grid.
    However, it is more difficult to determine adjacency relationships
@@ -352,11 +467,8 @@ grid. Note that:
 
  >>> f = cdms.open('sampleCurveGrid.nc')
 
-lat and lon are coordinate axes, but are grouped
-================================================
-
-with data variables
-===================
+lat and lon are coordinate axes, but are grouped with data variables
+====================================================================
 
             f.variables.keys() ['lat', 'sample', 'bounds_lon', 'lon',
             'bounds_lat']
@@ -394,9 +506,9 @@ the domain of 'sample'
 lat and lon are variables ...
 =============================
 
-            lat.shape (128, 192) lat lat array( array (128,192) , type = d, has 24576 elements) # ... so can be used in computation 
+            lat.shape (128, 192) lat lat array( array (128,192) , type = d, has 24576 elements) # ... so can be used in computation
 
- >>> lat_in_radians = lat\*Numeric.pi/180.0 
+ >>> lat_in_radians = lat\*Numeric.pi/180.0
 
 .. figure:: /images/curvilinear_grid.jpg
    :alt: curvilinear grid
@@ -409,14 +521,14 @@ lat and lon are variables ...
 In this example variable zs is defined on a generic grid. Figure 2
 illustrates the grid, in this case a geodesic grid.
 
- >>> f.variables.keys() ['lat', 'bounds_lon', 'lon', 'zs', 'bounds_lat'] 
- >>> f.axes.keys() ['cell', 'nvert'] 
- >>> zs = f('zs') 
- >>> g = zs.getGrid() 
- >>> g 
- >>> lat = g.getLatitude() 
- >>> lon = g.getLongitude() 
- >>> lat.shape (2562,) 
+ >>> f.variables.keys() ['lat', 'bounds_lon', 'lon', 'zs', 'bounds_lat']
+ >>> f.axes.keys() ['cell', 'nvert']
+ >>> zs = f('zs')
+ >>> g = zs.getGrid()
+ >>> g
+ >>> lat = g.getLatitude()
+ >>> lon = g.getLongitude()
+ >>> lat.shape (2562,)
  >>> lon.shape (2562,) # variable zs is defined in terms of a single index coordinate
 
 axis, 'cell'
@@ -435,7 +547,7 @@ lat and lon are one-dimensional, 'auxiliary' coordinate
 axes: values are not monotonic
 ==============================
 
-            lat.  **class** 
+            lat.  **class**
 
 .. figure:: /images/generic_grid.jpg
    :alt: generic grid
@@ -450,16 +562,16 @@ representation. Similarly, a rectangular grid can be represented as
 curvilinear. The method toCurveGrid is used to convert a non-generic
 grid to curvilinear representation:
 
- >>> import cdms 
- >>> f = cdms.open('clt.nc') 
- >>> clt = f('clt') 
- >>> rectgrid = clt.getGrid() 
- >>> rectgrid.shape (46, 72) 
- >>> curvegrid = rectgrid.toCurveGrid() 
- >>> curvegrid 
- >>> genericgrid = curvegrid.toGenericGrid() 
- >>> genericgrid 
- >>> 
+ >>> import cdms
+ >>> f = cdms.open('clt.nc')
+ >>> clt = f('clt')
+ >>> rectgrid = clt.getGrid()
+ >>> rectgrid.shape (46, 72)
+ >>> curvegrid = rectgrid.toCurveGrid()
+ >>> curvegrid
+ >>> genericgrid = curvegrid.toGenericGrid()
+ >>> genericgrid
+ >>>
 
 1.10 Regridding
 ^^^^^^^^^^^^^^^
@@ -482,19 +594,19 @@ The built-in CDMS regridder is used to transform data from one
 rectangular grid to another. For example, to regrid variable ``u`` (from
 a rectangular grid) to a 96x192 rectangular Gaussian grid:
 
- >>> u = f('u') 
- >>> u.shape (3, 16, 32) 
- >>> t63_grid = cdms.createGaussianGrid(96) 
- >>> u63 = u.regrid(t63_grid) 
- >>> u63.shape (3, 96, 192) 
+ >>> u = f('u')
+ >>> u.shape (3, 16, 32)
+ >>> t63_grid = cdms.createGaussianGrid(96)
+ >>> u63 = u.regrid(t63_grid)
+ >>> u63.shape (3, 96, 192)
 
 To regrid a variable ``uold`` to the same grid as variable ``vnew``:
 
- >>> uold.shape (3, 16, 32) 
- >>> vnew.shape (3, 96, 192) 
- >>> t63_grid = vnew.getGrid() # Obtain the grid for vnew 
- >>> u63 = u.regrid(t63_grid) 
- >>> u63.shape (3, 96, 192) 
+ >>> uold.shape (3, 16, 32)
+ >>> vnew.shape (3, 96, 192)
+ >>> t63_grid = vnew.getGrid() # Obtain the grid for vnew
+ >>> u63 = u.regrid(t63_grid)
+ >>> u63.shape (3, 96, 192)
 
 1.10.2 SCRIP Regridder
 ''''''''''''''''''''''
@@ -543,7 +655,7 @@ regrid.readRegridder(remapf) remapf.close()
 Regrid the source variable
 ==========================
 
-popdat = regridf(dat) 
+popdat = regridf(dat)
 
 Regridding is discussed in `Chapter 4 <cdms_4.md>`__.
 
@@ -563,11 +675,11 @@ Relative time is time relative to a fixed base time. It consists of:
 For example, the time "28.0 days since 1996-1-1" has value= 28.0 , and
 units=" days since 1996-1-1". To create a relative time type:
 
- >>> import cdtime 
- >>> rt = cdtime.reltime(28.0, "days since 1996-1-1") 
- >>> rt 28.00 days since 1996-1-1 
- >>> rt.value 28.0 
- >>> rt.units 'days since 1996-1-1' 
+ >>> import cdtime
+ >>> rt = cdtime.reltime(28.0, "days since 1996-1-1")
+ >>> rt 28.00 days since 1996-1-1
+ >>> rt.value 28.0
+ >>> rt.units 'days since 1996-1-1'
 
 A component time consists of the integer fields year, month, day, hour,
 minute , and the floating-point field second . For example:
@@ -632,13 +744,13 @@ To generate a plot:
 
 For example:
 
- >>> import cdms, vcs 
- >>> f = cdms.open('sample.nc') 
- >>> f['time'][:] # Print the time coordinates [ 0., 6., 12., 18., 24., 30., 36., 42., 48., 54., 60., 66., 72., 78., 84., 90.,] 
- >>> precip = f('prc', time=24.0) # Read precip data 
- >>> precip.shape (1, 32, 64) 
- >>> w = vcs.init() # Initialize a canvas 'Template' is currently set to P_default. Graphics method 'Boxfill' is currently set to Gfb_default. 
- >>> w.plot(precip) # Generate a plot (generates a boxfill plot) 
+ >>> import cdms, vcs
+ >>> f = cdms.open('sample.nc')
+ >>> f['time'][:] # Print the time coordinates [ 0., 6., 12., 18., 24., 30., 36., 42., 48., 54., 60., 66., 72., 78., 84., 90.,]
+ >>> precip = f('prc', time=24.0) # Read precip data
+ >>> precip.shape (1, 32, 64)
+ >>> w = vcs.init() # Initialize a canvas 'Template' is currently set to P_default. Graphics method 'Boxfill' is currently set to Gfb_default.
+ >>> w.plot(precip) # Generate a plot (generates a boxfill plot)
 
 By default for rectangular grids, a boxfill plot of the lat-lon slice is
 produced. Since variable precip includes information on time, latitude,
@@ -667,9 +779,9 @@ Protocol (LDAP).
 
 Here is an example of accessing data via a database:
 
- >>> db = cdms.connect() # Connect to the default database. 
- >>> f = db.open('ncep_reanalysis_mo') # Open a dataset. 
- >>> f.variables.keys() # List the variables in the dataset. 
+ >>> db = cdms.connect() # Connect to the default database.
+ >>> f = db.open('ncep_reanalysis_mo') # Open a dataset.
+ >>> f.variables.keys() # List the variables in the dataset.
 ['ua', 'evs', 'cvvta', 'tauv', 'wap', 'cvwhusa', 'rss', 'rls', ... 'prc', 'ts', 'va']
 
 

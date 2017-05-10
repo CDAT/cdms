@@ -1,4 +1,4 @@
-## Automatically adapted for numpy.oldnumeric Aug 01, 2007 by 
+# Automatically adapted for numpy.oldnumeric Aug 01, 2007 by
 
 import numpy
 import cdms2
@@ -20,10 +20,16 @@ class TestMV2(basetest.CDMSBaseTest):
         self.u_lat = self.u_file.getLatitude()
         f = self.getDataFile("u_2000.nc")
         self.other_u_file = f["u"]
-        self.ones = MV2.ones(self.other_u_file.shape, numpy.float32, axes=self.other_u_file.getAxisList(), attributes=self.other_u_file.attributes, id=self.other_u_file.id)
+        self.ones = MV2.ones(
+            self.other_u_file.shape,
+            numpy.float32,
+            axes=self.other_u_file.getAxisList(),
+            attributes=self.other_u_file.attributes,
+            id=self.other_u_file.id)
 
     def testKwargs(self):
-        # This test makes sure that kwargs are passed through in each of the types of operation
+        # This test makes sure that kwargs are passed through in each of the
+        # types of operation
         arr = numpy.full((3, 3), .65) * [range(i, i + 3) for i in range(3)]
         # Test var_unary_operation
         v = MV2.around(arr, decimals=1)
@@ -35,7 +41,8 @@ class TestMV2(basetest.CDMSBaseTest):
         self.assertTrue(MV2.allequal(v, valid))
         xs = [1, -1, -1, 1]
         ys = [1, 1, -1, -1]
-        angles = [numpy.pi / 4, 3 * numpy.pi / 4, -3 * numpy.pi / 4, -numpy.pi / 4]
+        angles = [numpy.pi / 4, 3 * numpy.pi /
+                  4, -3 * numpy.pi / 4, -numpy.pi / 4]
         test_arr = numpy.zeros(4)
         # Test var_binary_operation
         MV2.arctan2(ys, xs, out=test_arr)
@@ -43,7 +50,8 @@ class TestMV2(basetest.CDMSBaseTest):
         self.assertTrue(MV2.allequal(test_arr, angles))
         # Test var_unary_operation_with_axis
         values = numpy.tile(numpy.arange(2), 3)
-        self.assertEqual(len(MV2.sometrue(values, axis=0, keepdims=True).shape), len(values.shape))
+        self.assertEqual(
+            len(MV2.sometrue(values, axis=0, keepdims=True).shape), len(values.shape))
 
     def testPowAndSqrt(self):
         vel = MV2.sqrt(self.u_file ** 2 + self.v_file ** 2)
@@ -66,14 +74,19 @@ class TestMV2(basetest.CDMSBaseTest):
     def testMulDiv(self):
         scalar_mul = self.u_file * 2
         broadcast_mul = scalar_mul * self.other_u_file
-        self.assertTrue(MV2.allequal(broadcast_mul[0] / self.u_file[0] / self.other_u_file, 2))
+        self.assertTrue(
+            MV2.allequal(
+                broadcast_mul[0] /
+                self.u_file[0] /
+                self.other_u_file,
+                2))
         scalar_right = 1 / self.u_file
         self.assertTrue(MV2.allclose(scalar_mul * scalar_right, 2))
 
     def testTypeCoercion(self):
-        x9 = 3*self.u_file
+        x9 = 3 * self.u_file
         x15 = x9.astype(numpy.float32)
-        self.assertTrue(x15.dtype.char==numpy.sctype2char(numpy.float32))
+        self.assertTrue(x15.dtype.char == numpy.sctype2char(numpy.float32))
 
     def testArange(self):
         test_range = MV2.arange(16, axis=self.u_lat)
@@ -82,7 +95,8 @@ class TestMV2(basetest.CDMSBaseTest):
 
     def testMaskedArray(self):
         xmarray = MV2.masked_array(self.u_file, mask=self.u_file > .01)
-        self.assertEqual(len(xmarray.getAxisList()), len(self.u_file.getAxisList()))
+        self.assertEqual(len(xmarray.getAxisList()),
+                         len(self.u_file.getAxisList()))
         self.assertTrue(MV2.allequal(xmarray.mask, self.u_file > .01))
 
     def testAverage(self):
@@ -90,7 +104,9 @@ class TestMV2(basetest.CDMSBaseTest):
         self.assertTrue(MV2.allequal(xav, 1))
         xav2 = MV2.average(self.u_file)
         xav3 = MV2.average(self.u_transient)
-        xav4, wav4 = MV2.average(self.u_transient, weights=MV2.ones(self.u_transient.shape, numpy.float), returned=1)
+        xav4, wav4 = MV2.average(
+            self.u_transient, weights=MV2.ones(
+                self.u_transient.shape, numpy.float), returned=1)
         a = MV2.arange(5)
         b = 2 ** a
         av, wav = MV2.average(b, weights=a, returned=1)
@@ -98,27 +114,42 @@ class TestMV2(basetest.CDMSBaseTest):
         self.assertEqual(wav, 10)
 
     def testArrayGeneration(self):
-        xones = MV2.ones(self.other_u_file.shape, numpy.float32, axes=self.other_u_file.getAxisList(), attributes=self.other_u_file.attributes, id=self.other_u_file.id)
+        xones = MV2.ones(
+            self.other_u_file.shape,
+            numpy.float32,
+            axes=self.other_u_file.getAxisList(),
+            attributes=self.other_u_file.attributes,
+            id=self.other_u_file.id)
         self.assertTrue(MV2.allequal(xones, 1))
         self.assertEqual(xones.shape, self.other_u_file.shape)
-        xzeros = MV2.zeros(self.u_file.shape, dtype=numpy.float, axes=self.u_file.getAxisList(), attributes=self.u_file.attributes, id=self.u_file.id)
+        xzeros = MV2.zeros(
+            self.u_file.shape,
+            dtype=numpy.float,
+            axes=self.u_file.getAxisList(),
+            attributes=self.u_file.attributes,
+            id=self.u_file.id)
         self.assertTrue(MV2.allequal(xzeros, 0))
         self.assertEqual(xzeros.shape, self.u_file.shape)
 
     def testChoose(self):
-        ct1 = MV2.TransientVariable([1,1,2,0,1])
-        ctr = MV2.choose(ct1, [numpy.ma.masked, 10,20,30,40])
+        ct1 = MV2.TransientVariable([1, 1, 2, 0, 1])
+        ctr = MV2.choose(ct1, [numpy.ma.masked, 10, 20, 30, 40])
         self.assertTrue(MV2.allclose(ctr, [10, 10, 20, 100, 10]))
-        ctx = MV2.TransientVariable([1,2,3,150,4])
-        cty = -MV2.TransientVariable([1,2,3,150,4])
-        ctr = MV2.choose(MV2.greater(ctx,100), (ctx, 100))
-        self.assertTrue(MV2.allclose(ctr, [1,2,3,100,4]))
-        ctr = MV2.choose(MV2.greater(ctx,100), (ctx, cty))
-        self.assertTrue(MV2.allclose(ctr, [1,2,3,-150,4]))
+        ctx = MV2.TransientVariable([1, 2, 3, 150, 4])
+        cty = -MV2.TransientVariable([1, 2, 3, 150, 4])
+        ctr = MV2.choose(MV2.greater(ctx, 100), (ctx, 100))
+        self.assertTrue(MV2.allclose(ctr, [1, 2, 3, 100, 4]))
+        ctr = MV2.choose(MV2.greater(ctx, 100), (ctx, cty))
+        self.assertTrue(MV2.allclose(ctr, [1, 2, 3, -150, 4]))
 
     def testConcatenate(self):
         xcon = MV2.concatenate((self.u_file, self.v_file))
-        self.assertEqual(xcon.shape, (self.u_file.shape[0] + self.v_file.shape[0], self.u_file.shape[1], self.u_file.shape[2]))
+        self.assertEqual(
+            xcon.shape,
+            (self.u_file.shape[0] +
+             self.v_file.shape[0],
+             self.u_file.shape[1],
+             self.u_file.shape[2]))
 
     def testIsMasked(self):
         self.assertFalse(MV2.isMaskedVariable(numpy.ones(self.ones.shape)))
@@ -156,7 +187,11 @@ class TestMV2(basetest.CDMSBaseTest):
         self.assertTrue(MV2.allequal(masked.mask[0:1], True))
         self.assertTrue(MV2.allequal(masked.mask[1:4], False))
         self.assertTrue(MV2.allequal(masked.mask[4:], True))
-        masked = MV2.masked_where(MV2.logical_or(MV2.greater(xouter, 3), MV2.less(xouter, 2)), xouter)
+        masked = MV2.masked_where(
+            MV2.logical_or(
+                MV2.greater(
+                    xouter, 3), MV2.less(
+                    xouter, 2)), xouter)
         self.assertTrue(MV2.allequal(masked.mask[0:2], True))
         self.assertTrue(MV2.allequal(masked.mask[2:4], False))
         self.assertTrue(MV2.allequal(masked.mask[4:], True))
@@ -197,8 +232,8 @@ class TestMV2(basetest.CDMSBaseTest):
                 self.assertTrue(((ind_slice - amax) <= 0).all())
                 self.assertTrue(((ind_slice - amin) >= 0).all())
 
-        t1 = MV2.TransientVariable([1.,2.])
-        t2 = MV2.TransientVariable([1.,10.])
+        t1 = MV2.TransientVariable([1., 2.])
+        t2 = MV2.TransientVariable([1., 10.])
         t3 = MV2.minimum.outer(t1, t2)
         self.assertTrue(MV2.allequal(t3, [[1, 1], [1, 2]]))
         t3 = MV2.maximum.outer(t1, t2)
@@ -243,14 +278,14 @@ class TestMV2(basetest.CDMSBaseTest):
         self.assertTrue(MV2.allequal(t[:, :, 2], self.u_file[:, :, 6]))
 
     def testTranspose(self):
-        ## transpose(a, axes=None) 
-        ##   transpose(a, axes=None) reorder dimensions per tuple axes
+        ## transpose(a, axes=None)
+        # transpose(a, axes=None) reorder dimensions per tuple axes
         xtr = MV2.transpose(self.u_file)
         xtr = numpy.arange(24)
-        xtr.shape = (4,6)
+        xtr.shape = (4, 6)
         xtr1 = MV2.transpose(xtr)
         xtr2 = MV2.transpose(MV2.TransientVariable(xtr))
-        self.assertTrue(xtr2.shape == (6,4))
+        self.assertTrue(xtr2.shape == (6, 4))
         xtr3 = numpy.transpose(xtr)
         self.assertTrue(MV2.allclose(xtr1, xtr3))
         self.assertTrue(MV2.allclose(xtr2, xtr3))
@@ -258,27 +293,31 @@ class TestMV2(basetest.CDMSBaseTest):
     def testWhere(self):
         xouter = MV2.outerproduct(MV2.arange(3), MV2.arange(3))
         xwhere = MV2.where(MV2.greater(xouter, 3), xouter, -123)
-        self.assertEqual(xwhere[-1,-1], 4)
+        self.assertEqual(xwhere[-1, -1], 4)
         xwhere.mask = xwhere == 4
         self.assertTrue(MV2.allequal(xwhere, -123))
 
     def testDiagnoal(self):
-        xdiag = MV2.TransientVariable([[1,2,3],[4,5,6]])
-        self.assertTrue(MV2.allclose(MV2.diagonal(xdiag, 1), [2,6]))
+        xdiag = MV2.TransientVariable([[1, 2, 3], [4, 5, 6]])
+        self.assertTrue(MV2.allclose(MV2.diagonal(xdiag, 1), [2, 6]))
 
     def testBroadcasting(self):
         # Broadcast
         v_transient2 = self.v_transient[0]
         broadcasted = self.u_transient - v_transient2
-        self.assertTrue(MV2.allequal(self.u_transient[2], broadcasted[2] + v_transient2))
+        self.assertTrue(
+            MV2.allequal(
+                self.u_transient[2],
+                broadcasted[2] +
+                v_transient2))
 
     def testMean(self):
-        a=MV2.ones((13,14))
-        b=a.mean()
+        a = MV2.ones((13, 14))
+        b = a.mean()
         self.assertEqual(b, 1.0)
 
-if __name__ == "__main__":
-    basetest.run()
-if __name__ == "__main__":
-    basetest.run()
 
+if __name__ == "__main__":
+    basetest.run()
+if __name__ == "__main__":
+    basetest.run()

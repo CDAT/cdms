@@ -6,6 +6,7 @@ import cdms2
 import os
 import cdat_info
 
+
 class CDMSBaseTest(unittest.TestCase):
     def getFile(self, path, mode="r"):
         f = cdms2.open(path, mode)
@@ -27,7 +28,8 @@ class CDMSBaseTest(unittest.TestCase):
         self.NTIME = 3
         self.NLAT = 16
         self.NLON = 32
-        self.test_arr = numpy.ma.arange(float(2 * self.NTIME * self.NLAT * self.NLON))
+        self.test_arr = numpy.ma.arange(
+            float(2 * self.NTIME * self.NLAT * self.NLON))
         self.test_arr.shape = (2, self.NTIME, self.NLAT, self.NLON)
         self.tempdir = tempfile.mkdtemp()
 
@@ -36,6 +38,7 @@ class CDMSBaseTest(unittest.TestCase):
             f.close()
         os.chdir(self.orig_cwd)
         shutil.rmtree(self.tempdir)
+
 
 def run():
     unittest.main()

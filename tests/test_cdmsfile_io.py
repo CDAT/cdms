@@ -63,7 +63,7 @@ class TestCDMSFileIO(basetest.CDMSBaseTest):
         transient_u = self.u[:]
         self.readOnly.close()
         with self.assertRaises(cdms2.CDMSError):
-            badslice = u[:,4:12,8:24]
+            badslice = u[:, 4:12, 8:24]
             badu = u.getValue()
 
         with self.assertRaises(cdms2.CDMSError):
@@ -73,10 +73,11 @@ class TestCDMSFileIO(basetest.CDMSBaseTest):
             badslice = u[0:1]
 
         with self.assertRaises(cdms2.CDMSError):
-            u[0,0,0]=-99.9
+            u[0, 0, 0] = -99.9
 
         with self.assertRaises(cdms2.CDMSError):
-            u[0:1]=-99.9
+            u[0:1] = -99.9
+
 
 if __name__ == '__main__':
     basetest.run()

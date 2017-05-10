@@ -52,6 +52,7 @@ extensions = [
     'easydev.copybutton',
     'sphinx.ext.todo',
     'sphinx.ext.autodoc',
+    'sphinx.ext.graphviz',
     'sphinx.ext.doctest',
     'sphinx.ext.napoleon'
 ]

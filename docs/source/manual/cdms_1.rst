@@ -248,7 +248,7 @@ is true of the functions defined in the cdms.MV module. For example:
 
    >>> a = MV2.array([1,2,3]) # Create array a, with no mask
    >>> b = MV2.array([4,5,6]) # Same for b  
-   >>> a+b # variable_... array([5,7,9,]) # doctest: +ELLIPSIS
+   >>> a+b # variable_... array([5,7,9,]) # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
    variable_...
    masked_array(data = [5 7 9],
              mask = False,
@@ -258,7 +258,7 @@ is true of the functions defined in the cdms.MV module. For example:
    >>> a[1]=MV2.masked # Mask the second value of a a.mask()
    >>> a.mask
    array([False,  True, False], dtype=bool)
-   >>> a+b # The sum is masked also 
+   >>> a+b # The sum is masked also # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
    variable_...
    masked_array(data = [5 -- 9],
              mask = [False  True False],
@@ -306,9 +306,10 @@ function. Note that obtaining a file variable does not actually read the
 data array:
 
 .. doctest:: 
-   >>> f = cdms.open('sample.nc','r+')
+
    >>> u = f.getVariable('u') # or u=f['u']
-   >>> u.shape (3, 16, 32)
+   >>> u.shape 
+   (1, 2, 80, 97)
 
 File variables are also useful for fine-grained I/O. They behave like
 transient variables, but operations on them also affect the associated
@@ -322,52 +323,45 @@ file. Specifically:
    with the variable:
 
 .. doctest::
-   >>> f = cdms.open('sample.nc','r+') # Open read/write
+
+   >>> import os
+   >>> os.system("cp clt.nc /tmp")
+   0
+   >>> f = cdms2.open('/tmp/clt.nc','a') # Open read/write
    >>> uvar = f['u'] # Note square brackets
-   >>> uvar.shape (3, 16, 32)
-   >>> u0 = uvar[0] # Reads data from sample.nc u0.shape (16, 32)
-   >>> uvar[1]=u0 # Writes data to sample.nc uvar.units
-   # Reads the attribute 'm/s'
-   >>> uvar.units='meters/second' # Writes the attribute
-   # Calling  a variable like a function reads data
-   >>> u24 = uvar(time=24.0)
-   >>> .close() # Save changes to clt.nc (I/O may be buffered)
+   >>> uvar.shape
+   (1, 2, 80, 97)
+   >>> u0 = uvar[0] # Reads data from sample.nc 
+   >>> u0.shape
+   (2, 80, 97)
+   >>> uvar[1]=u0 # Writes data to sample.nc
+   >>> uvar.units # Reads the attribute 'm/s'
+   'm/s'
+   >>> u24 = uvar(time=1.0) # Calling  a variable like a function reads data
+   >>> f.close() # Save changes to clt.nc (I/O may be buffered)
 
-In an interactive application, the type of variable can be determined
-simply by printing the variable:
 
-- rlsf # Transient variable
-  - rlsf array( array (4,48,96) , type = f, has 18432 elements)
-- rlsg # Dataset variable
-  - <Variable: rlsq, dataset: mri_perturb, shape: (4, 46, 72)>
-- prc # File variable
-  - <Variable: prc, file: testnc.nc, shape: (16, 32, 64)>
-
-Note that the data values themselves are not printed. For transient
-variables, the data is printed only if the size of the array is less
+For transient variables, the data is printed only if the size of the array is less
 than the print limit . This value can be set with the function
 MV.set_print_limit to force the data to be printed:
 
 .. doctest::
-   >>> smallvar.size() # Number of elements 20
+
    >>> MV2.get_print_limit() # Current limit 1000
    1000
-   >>> smallvar 
-   small variable 
-   maksed_array( 
-      [[ 0., 1., 2., 3.,]
-      [ 4., 5., 6., 7.,] 
-      [ 8., 9., 10., 11.,]
-      [ 12., 13., 14., 15.,] 
-      [ 16., 17., 18., 19.,]],
-       mask = False,
-       fill_value = 1e+20)
-      )
-   >>> largevar.size()
-   400
+   >>> smallvar  # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
+    small variable
+    masked_array(data =
+     [[  0.   1.   2.   3.   4.]
+     [  5.   6.   7.   8.   9.]
+     [ 10.  11.  12.  13.  14.]
+     [ 15.  16.  17.  18.  19.]],
+                 mask =
+     False,
+           fill_value = 999999.0)
    >>> MV2.set_print_limit(100) 
-   >>> largevar 
-   large variable
+   >>> largevar   # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
+   large variable  
    masked_array(data =
    [[   0.    1.    2. ...,   17.   18.   19.]
    [  20.   21.   22. ...,   37.   38.   39.]
@@ -382,6 +376,7 @@ MV.set_print_limit to force the data to be printed:
 The datatype of the variable is determined with the typecode function:
 
 .. doctest::
+
    >>> u.typecode() 
    'f'
 
@@ -447,7 +442,7 @@ CDMS supports two types of nonrectangular grid:
    which is a two-dimensional coordinate axis. Curvilinear grids are
    often used in ocean model applications.
 -  A generic grid consists of a latitude and longitude axis, each of
-   which is an auxiliary one-dimensional coordinate axis. An auxiliarycdscan -x cdsample.xml [uv]\*.nc
+   which is an auxiliary one-dimensional coordinate axis. An auxiliary
    axis has values that are not necessarily monotonic. As the name
    suggests, generic grids can represent virtually any type of grid.
    However, it is more difficult to determine adjacency relationships
@@ -465,55 +460,67 @@ grid. Note that:
    lon ), each a two-dimensional coordinate axis.
 -  lat and lon each have domain ( y , x )
 
- >>> f = cdms.open('sampleCurveGrid.nc')
+.. doctest::
 
-lat and lon are coordinate axes, but are grouped with data variables
-====================================================================
+   >>> f = cdms2.open('sampleCurveGrid4.nc')
 
-            f.variables.keys() ['lat', 'sample', 'bounds_lon', 'lon',
-            'bounds_lat']
 
-y and x are index coordinate axes
-=================================
+   >>> # lat and lon are coordinate axes, but are grouped with data variables
+   >>> f.variables.keys() 
+   ['lat', 'sample', 'bounds_lon', 'lon', 'bounds_lat']
 
-            f.axes.keys() ['y', 'x', 'nvert'] # Read data for variable
-            sample sample = f('sample')
+   >>> # y and x are index coordinate axes
+   >>> f.axes.keys() 
+   ['y', 'x', 'nvert'] 
+   
+   >>> # Read data for variable sample
+   >>> sample = f('sample')
+   
+   >>> # The associated grid g is curvilinear
+   >>> g = sample.getGrid()
+   
+   >>> # The domain of the variable consfigists of index axes
+   >>> sample.getAxisIds() 
+   ['y', 'x']
+   
+   >>> # Get the coordinate axes associated with the grid
+   >>> lat = g.getLatitude() # or sample.getLatitude()
+   >>> lon = g.getLongitude() # or sample.getLongitude()
+   
+   >>> # lat and lon have the same domain, a subset of the domain of 'sample'
+   >>> lat.getAxisIds() 
+   ['y', 'x']
+   
+   >>> # lat and lon are variables ...
+   >>> lat.shape 
+   (32, 48) 
+   
+   >>> lat  # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
+       lat
+    masked_array(data =
+     [[-76.08465554 -76.08465554 -76.08465554 ..., -76.08465554 -76.08465554
+      -76.08465554]
+     [-73.92641847 -73.92641847 -73.92641847 ..., -73.92641847 -73.92641847
+      -73.92641847]
+     [-71.44420823 -71.44420823 -71.44420823 ..., -71.44420823 -71.44420823
+      -71.44420823]
+     ..., 
+     [ 42.32854943  42.6582209   43.31990211 ...,  43.3199019   42.65822088
+       42.32854943]
+     [ 42.70106429  43.05731498  43.76927818 ...,  43.76927796  43.05731495
+       42.70106429]
+     [ 43.0307341   43.41264383  44.17234165 ...,  44.17234141  43.41264379
+       43.0307341 ]],
+                 mask =
+     False,
+           fill_value = 1e+20)
 
-The associated grid g is curvilinear
-====================================
+   >>> lat_in_radians = lat*MV2.pi/180.0
 
-            g = sample.getGrid() g
-
-The domain of the variable consists of index axes
-=================================================
-
-            sample.getAxisIds() ['y', 'x']
-
-Get the coordinate axes associated with the grid
-================================================
-
-            lat = g.getLatitude() # or sample.getLatitude() lon =
-            g.getLongitude() # or sample.getLongitude()
-
-lat and lon have the same domain, a subset of
-=============================================
-
-the domain of 'sample'
-======================
-
-            lat.getAxisIds() ['y', 'x']
-
-lat and lon are variables ...
-=============================
-
-            lat.shape (128, 192) lat lat array( array (128,192) , type = d, has 24576 elements) # ... so can be used in computation
-
- >>> lat_in_radians = lat\*Numeric.pi/180.0
-
-.. figure:: /images/curvilinear_grid.jpg
+.. figure:: images/curvilinear_grid.jpg
    :alt: curvilinear grid
 
-   curvilinear grid
+   Figure1: Curvilinear Grid
 
 1.9.2 Example: a generic grid
 '''''''''''''''''''''''''''''
@@ -521,40 +528,42 @@ lat and lon are variables ...
 In this example variable zs is defined on a generic grid. Figure 2
 illustrates the grid, in this case a geodesic grid.
 
- >>> f.variables.keys() ['lat', 'bounds_lon', 'lon', 'zs', 'bounds_lat']
- >>> f.axes.keys() ['cell', 'nvert']
- >>> zs = f('zs')
- >>> g = zs.getGrid()
- >>> g
- >>> lat = g.getLatitude()
- >>> lon = g.getLongitude()
- >>> lat.shape (2562,)
- >>> lon.shape (2562,) # variable zs is defined in terms of a single index coordinate
+.. doctest::
 
-axis, 'cell'
-============
-
-            zs.shape (2562,) zs.getAxisIds() ['cell']
-
-lat and lon are also defined in terms of the cell axis
-======================================================
-
-            lat.getAxisIds() ['cell']
-
-lat and lon are one-dimensional, 'auxiliary' coordinate
-=======================================================
-
-axes: values are not monotonic
-==============================
-
-            lat.  **class**
-
-.. figure:: /images/generic_grid.jpg
+   >>> f.variables.keys()
+   ['lat', 'sample', 'bounds_lon', 'lon', 'bounds_lat']
+   >>> f.axes.keys() 
+   ['y', 'x', 'nvert']
+   >>> zs = f('sample')
+   >>> g = zs.getGrid()
+   >>> g
+   <TransientCurveGrid, id: grid_2, shape: (32, 48)>
+   >>> lat = g.getLatitude()
+   >>> lon = g.getLongitude()
+   >>> lat.shape 
+   (32, 48)
+   >>> lon.shape # variable zs is defined in terms of a single index coordinate
+   (32, 48) 
+   >>> # axis, 'cell'
+   >>> zs.shape 
+   (32, 48) 
+   >>> zs.getAxisIds() 
+   ['y', 'x']
+   
+   >>> # lat and lon are also defined in terms of the cell axis
+   >>> lat.getAxisIds() 
+   ['y', 'x']
+   
+   >>> # lat and lon are one-dimensional, 'auxiliary' coordinate 
+   >>> # axes: values are not monotonic
+   >>> lat.__class__
+   <class 'cdms2.coord.TransientAxis2D'>
+   
+   
+.. figure:: images/generic_grid.jpg
    :alt: generic grid
 
-   generic grid
-
-FIGURE 2. Generic grid
+   Figure 2: Generic Grid
 
 Generic grids can be used to represent any of the grid types. The method
 toGenericGrid can be applied to any grid to convert it to a generic
@@ -562,16 +571,21 @@ representation. Similarly, a rectangular grid can be represented as
 curvilinear. The method toCurveGrid is used to convert a non-generic
 grid to curvilinear representation:
 
- >>> import cdms
- >>> f = cdms.open('clt.nc')
- >>> clt = f('clt')
- >>> rectgrid = clt.getGrid()
- >>> rectgrid.shape (46, 72)
- >>> curvegrid = rectgrid.toCurveGrid()
- >>> curvegrid
- >>> genericgrid = curvegrid.toGenericGrid()
- >>> genericgrid
- >>>
+.. testcode:: *
+
+   >>> f = cdms2.open('clt.nc')
+   >>> clt = f('clt')
+   >>> rectgrid = clt.getGrid()
+   >>> rectgrid.shape
+   >>> curvegrid = rectgrid.toCurveGrid()
+   >>> curvegrid
+   >>> genericgrid = curvegrid.toGenericGrid()
+   >>> genericgrid
+   
+.. testoutput::
+
+   (46, 72)
+
 
 1.10 Regridding
 ^^^^^^^^^^^^^^^

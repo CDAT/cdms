@@ -383,7 +383,7 @@ file :: (cdms2.dataset.CdmsFile) (0) file to read from
             else:
                 file1.close()
                 return CdmsFile(path, mode)
-    elif scheme in ['http', 'gridftp']:
+    elif scheme in ['http', 'gridftp', 'https']:
 
         if (dods):
             if mode != 'r':

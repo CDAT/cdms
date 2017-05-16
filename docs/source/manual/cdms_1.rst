@@ -402,8 +402,7 @@ For example, suppose data for variables u and v are stored in six files:
 
 A metafile can be generated with the command:
 
-{% highlight text %} $ cdscan -x cdsample.xml [uv]\*.nc {% endhighlight
-%}
+**$ cdscan -x cdsample.xml [uv]*.nc**
 
 The metafile **cdsample.xml** is then used like an ordinary data file:
 
@@ -608,19 +607,26 @@ The built-in CDMS regridder is used to transform data from one
 rectangular grid to another. For example, to regrid variable ``u`` (from
 a rectangular grid) to a 96x192 rectangular Gaussian grid:
 
- >>> u = f('u')
- >>> u.shape (3, 16, 32)
- >>> t63_grid = cdms.createGaussianGrid(96)
- >>> u63 = u.regrid(t63_grid)
- >>> u63.shape (3, 96, 192)
+.. doctest::
+
+   >>> f = cdms2.open('clt.nc')
+   >>> u = f('u')
+   >>> u.shape
+   ((1, 2, 80, 97)
+   >>> t63_grid = cdms2.createGaussianGrid(96)
+   >>> u63 = u.regrid(t63_grid)
+   >>> u63.shape
+   (3, 96, 192)
 
 To regrid a variable ``uold`` to the same grid as variable ``vnew``:
 
- >>> uold.shape (3, 16, 32)
- >>> vnew.shape (3, 96, 192)
- >>> t63_grid = vnew.getGrid() # Obtain the grid for vnew
- >>> u63 = u.regrid(t63_grid)
- >>> u63.shape (3, 96, 192)
+.. doctest::
+
+   >>> uold.shape(3, 16, 32)
+   >>> vnew.shape(3, 96, 192)
+   >>> t63_grid = vnew.getGrid() # Obtain the grid for vnew
+   >>> u63 = u.regrid(t63_grid)
+   >>> u63.shape(3, 96, 192)
 
 1.10.2 SCRIP Regridder
 ''''''''''''''''''''''
@@ -651,27 +657,25 @@ For example, suppose the source data on a T42 grid is to be mapped to a
 POP curvilinear grid. Assume that SCRIP generated a remapping file named
 rmp_T42_to_POP43_conserv.nc:
 
- >>>  # Import regrid package for regridder functions
+.. doctest::
 
-import regrid, cdms
+   >>> # Import regrid package for regridder functions
+   >>> import regrid, cdms
+   
+   >>> # Get the source variable
+   >>> f = cdms.open('sampleT42Grid.nc') 
+   >>> dat = f('src_array') 
+   >>> f.close()
+   
+   >>> # Read the regridder from the remapper file
+   >>> remapf = cdms.open('rmp_T42_to_POP43_conserv.nc') 
+   >>> regridf = regrid.readRegridder(remapf) 
+   >>> remapf.close()
+   
+   >>> # Regrid the source variable
+   >>> popdat = regridf(dat)
 
-Get the source variable
-=======================
-
-f = cdms.open('sampleT42Grid.nc') dat = f('src_array') f.close()
-
-Read the regridder from the remapper file
-=========================================
-
-remapf = cdms.open('rmp_T42_to_POP43_conserv.nc') regridf =
-regrid.readRegridder(remapf) remapf.close()
-
-Regrid the source variable
-==========================
-
-popdat = regridf(dat)
-
-Regridding is discussed in `Chapter 4 <cdms_4.md>`__.
+Regridding is discussed in `Chapter 4 <cdms_4.html>`__.
 
 1.11 Time types
 ^^^^^^^^^^^^^^^
@@ -689,22 +693,28 @@ Relative time is time relative to a fixed base time. It consists of:
 For example, the time "28.0 days since 1996-1-1" has value= 28.0 , and
 units=" days since 1996-1-1". To create a relative time type:
 
- >>> import cdtime
- >>> rt = cdtime.reltime(28.0, "days since 1996-1-1")
- >>> rt 28.00 days since 1996-1-1
- >>> rt.value 28.0
- >>> rt.units 'days since 1996-1-1'
+.. doctest::
+
+   >>> import cdtime
+   >>> rt = cdtime.reltime(28.0, "days since 1996-1-1")
+   >>> rt
+   28.00 days since 1996-1-1
+   >>> rt.value
+   28.0
+   >>> rt.units
+   'days since 1996-1-1'
 
 A component time consists of the integer fields year, month, day, hour,
 minute , and the floating-point field second . For example:
 
-::
+
+.. doctest::
 
     >>> ct = cdtime.comptime(1996,2,28,12,10,30)
     >>> ct
-     -2-28 12:10:30.0
-      ct.year
-      ct.month
+    -2-28 12:10:30.0
+    ct.year
+    ct.month
        
 
 The conversion functions tocomp and torel convert between the two
@@ -712,31 +722,32 @@ representations. For instance, suppose that the time axis of a variable
 is represented in units " days since 1979" . To find the coordinate
 value corresponding to January 1, 1990:
 
-::
+.. doctest::
 
     >>> ct = cdtime.comptime(1990,1)
     >>> rt = ct.torel("days since 1979")
     >>> rt.value
-     .0
+    .0
 
 Time values can be used to specify intervals of time to read. The syntax
 time=(c1,c2) specifies that data should be read for times t such that
 c1<=t<=c2:
 
-::
+.. doctest::
 
     >>> c1 = cdtime.comptime(1990,1)
     >>> c2 = cdtime.comptime(1991,1)
     >>> ua = f[' ua']
     >>> ua.shape
-     480, 17, 73, 144)
+    480, 17, 73, 144)
     >>> x = ua.subRegion(time=(c1,c2))
     >>> x.shape
-     12, 17, 73, 144)
+    12, 17, 73, 144)
 
 or string representations can be used:
 
-::
+
+.. doctest::
 
     >>> x = ua.subRegion(time=('1990-1','1991-1'))
 
@@ -758,13 +769,20 @@ To generate a plot:
 
 For example:
 
- >>> import cdms, vcs
- >>> f = cdms.open('sample.nc')
- >>> f['time'][:] # Print the time coordinates [ 0., 6., 12., 18., 24., 30., 36., 42., 48., 54., 60., 66., 72., 78., 84., 90.,]
- >>> precip = f('prc', time=24.0) # Read precip data
- >>> precip.shape (1, 32, 64)
- >>> w = vcs.init() # Initialize a canvas 'Template' is currently set to P_default. Graphics method 'Boxfill' is currently set to Gfb_default.
- >>> w.plot(precip) # Generate a plot (generates a boxfill plot)
+.. doctest::
+
+   >>> import cdms, vcs
+   >>> f = cdms.open('sample.nc')
+   >>> f['time'][:] # Print the time coordinates
+   [ 0., 6., 12., 18., 24., 30., 36., 42., 48., 54., 60., 66., 72., 78., 84., 90.,]
+   >>> precip = f('prc', time=24.0) # Read precip data
+   >>> precip.shape
+   (1, 32, 64)
+   >>> w = vcs.init() # Initialize a canvas
+   'Template' is currently set to P_default.
+   Graphics method 'Boxfill' is currently set to Gfb_default.
+   >>> w.plot(precip) # Generate a plot
+   (generates a boxfill plot)
 
 By default for rectangular grids, a boxfill plot of the lat-lon slice is
 produced. Since variable precip includes information on time, latitude,
@@ -793,10 +811,13 @@ Protocol (LDAP).
 
 Here is an example of accessing data via a database:
 
- >>> db = cdms.connect() # Connect to the default database.
- >>> f = db.open('ncep_reanalysis_mo') # Open a dataset.
- >>> f.variables.keys() # List the variables in the dataset.
-['ua', 'evs', 'cvvta', 'tauv', 'wap', 'cvwhusa', 'rss', 'rls', ... 'prc', 'ts', 'va']
+.. doctest::
+
+   >>> db = cdms.connect() # Connect to the default database.
+   >>> f = db.open('ncep_reanalysis_mo') # Open a dataset.
+   >>> f.variables.keys() # List the variables in the dataset.
+   ['ua', 'evs', 'cvvta', 'tauv', 'wap', 'cvwhusa', 'rss', 'rls', ... 'prc', 'ts', 'va']
+
 
 
 Databases are discussed further in `Section 2.7 <cdms_2.html#2.7>`__.

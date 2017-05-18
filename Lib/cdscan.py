@@ -15,7 +15,7 @@ import types
 from cdms2 import cdmsNode
 import re
 from functools import reduce
-from error import CDMSError
+from cdms2.error import CDMSError
 
 usage = """Usage:
     cdscan [options] <files>

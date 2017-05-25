@@ -257,9 +257,9 @@ class AbstractVariable(CdmsObj, Slab):
             return self.generateRectGridkey(lat, lon), lat, lon
 
         # Check for a rectilinear grid
-        if isinstance(lat, cdms2.auxcoord.AbstractAuxAxis1D) and isinstance(
-                lon, cdms2.auxcoord.AbstractAuxAxis1D) and (lat.rank() == lon.rank() == 1):
-            return self.generateRectGridkey(lat, lon), lat, lon
+#        if isinstance(lat, cdms2.auxcoord.AbstractAuxAxis1D) and isinstance(
+#                lon, cdms2.auxcoord.AbstractAuxAxis1D) and (lat.rank() == lon.rank() == 1):
+#            return self.generateRectGridkey(lat, lon), lat, lon
 
         # Check for a curvilinear grid:
         if lat.rank() == lon.rank() == 2:

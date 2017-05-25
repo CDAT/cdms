@@ -1147,6 +1147,8 @@ class CdmsFile(CdmsObj, cuDataset):
 
             # Build axis list
             newcoordsaux = []
+            dimlat = "--lat--"
+            dimlon = "--lon--"
             for name in self._file_.dimensions.keys():
                 if name in coords1d:
                     cdunifvar = self._file_.variables[name]
@@ -1155,17 +1157,27 @@ class CdmsFile(CdmsObj, cuDataset):
                 else:
                     cdunifvar = None
                 for i in range(len(coordsaux)):
-                    if(name in self._file_.variables[coordsaux[i]].dimensions) and len(self._file_.variables[coordsaux[i]].shape) == 1:
-                        msg = "\n** Variable \"" + coordsaux[i] + "\" found in the \"coordinates\" " + \
-                              "attribute will be used as coordinate variable\n" +\
-                              "** CDMS could not find the coordinate variable \"" + name + "(" + name + ")\"\n" + \
-                              "** Verify that your file is CF-1 compliant!"
-                        warnings.warn(msg)
-                        cdunifvar = self._file_.variables[coordsaux[i]]
-                        self.variables[name] = FileVariable(self, name, cdunifvar)
-                        self.variables[coordsaux[i]] = FileVariable(self, coordsaux[i], cdunifvar)
-                        newcoordsaux=coordsaux[:i] + coordsaux[i+1:]
-                coordsaux= newcoordsaux
+                    if(coordsaux[i][0:3] == 'lat'):
+                        dimlat = self._file_.variables[coordsaux[i]].dimensions
+                    if(coordsaux[i][0:3] == 'lon'):
+                        dimlon = self._file_.variables[coordsaux[i]].dimensions
+
+                if(dimlat != dimlon):
+                    for i in range(len(coordsaux)):
+                        if(name in self._file_.variables[coordsaux[i]].dimensions) and  \
+                                len(self._file_.variables[coordsaux[i]].shape) == 1:
+                            msg = "\n** Variable \"" + coordsaux[i] + "\" found in the \"coordinates\" " + \
+                                  "attribute will be used as coordinate variable\n" +\
+                                  "** CDMS could not find the coordinate variable \"" + name + "(" + name + ")\"\n" + \
+                                  "** Verify that your file is CF-1 compliant!"
+                            warnings.warn(msg)
+                            cdunifvar = self._file_.variables[coordsaux[i]]
+                            self.variables[name] = FileVariable(
+                                self, name, cdunifvar)
+                            self.variables[coordsaux[i]] = FileVariable(
+                                self, coordsaux[i], cdunifvar)
+                            newcoordsaux = coordsaux[:i] + coordsaux[i + 1:]
+                    coordsaux = newcoordsaux
                 self.axes[name] = FileAxis(self, name, cdunifvar)
 
             # Attach boundary variables

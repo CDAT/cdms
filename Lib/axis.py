@@ -2019,21 +2019,10 @@ class FileAxis(AbstractAxis):
         self.___cdms_internals__ = val
         self.id = axisname
         self._obj_ = obj
-        axis=None
         # Overshadows file boundary data, if not None
         self._boundsArray_ = None
-        try:
-            (units, typecode, name_in_file, parent_varname, dimtype, ncid) = \
-                parent._file_.dimensioninfo[axisname]
-        except:
-            axis = parent._file_.variables[axisname].dimensions
-
-        if(axis is not None and len(axis) == 1):
-            (units, typecode, name_in_file, parent_varname, dimtype, ncid) = \
-                parent._file_.dimensioninfo[axis[0]]
-            units = parent._file_.variables[axisname].units
-            self._obj_=parent._file_.variables[axisname]
-
+        (units, typecode, name_in_file, parent_varname, dimtype, ncid) = \
+            parent._file_.dimensioninfo[axisname]
         self.__dict__['_units'] = units
         att = self.attributes
         att['units'] = units

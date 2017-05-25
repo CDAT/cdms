@@ -40,37 +40,12 @@ class FileVariable(DatasetVariable):
     def initDomain(self, axisdict):
         "Called by whoever made me."
         self.domain = []
-        if(hasattr(self._obj_, 'coordinates')):
-            listcoords = self._obj_.coordinates.split(' ')
-            dimensions = self._obj_.dimensions
-            self.domain = numpy.zeros(len(listcoords)).tolist()
-            i = 0
-            for coord in listcoords:
-                axis = axisdict.get(coord)
-                try:
-                    pos = list(self._obj_.dimensions).index(axis._obj_.dimensions[0])
-                except:
-                    continue
-                start = 0
-                length = len(axis)
-                truelen = length
-                i = i + 1
-                self.domain[pos]=(axis, start, length, truelen)
-            for i in range(len(self.domain)):
-                try: 
-                    index = self.domain.index(0.0)
-                    if( index != -1 ):
-                        self.domain = self.domain[:index] + self.domain[index+1:]
-                except:
-                    pass
-                
-        else:
-            for dimname in self._obj_.dimensions:
-                axis = axisdict.get(dimname)
-                start = 0
-                length = len(axis)
-                truelen = length
-                self.domain.append((axis, start, length, truelen))
+        for dimname in self._obj_.dimensions:
+            axis = axisdict.get(dimname)
+            start = 0
+            length = len(axis)
+            truelen = length
+            self.domain.append((axis, start, length, truelen))
 
     def typecode(self):
         # Compatibility: convert to new typecode

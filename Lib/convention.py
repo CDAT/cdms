@@ -84,10 +84,6 @@ class NUGConvention(AbstractConvention):
             dimensions = vardict[name].dimensions
             if len(dimensions) == 1 and (name in dimensions):
                 result.append(name)
-            varattrs=vardict[name].__dict__
-            if(len(dimensions) == 1 and hasattr(varattrs, 'standard_name')):
-               if((varattrs['standard_name'] in ['latitude', 'longitude', 'time']) and name not in result):
-                    result.append(name)
         return result
 
     def getAxisAuxIds(self, vardict, axiskeys):

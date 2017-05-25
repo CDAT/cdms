@@ -26,6 +26,7 @@ from fvariable import FileVariable
 from tvariable import asVariable
 from cdmsNode import CdDatatypes
 import convention
+import warnings
 
 # Default is serial mode until setNetcdfUseParallelFlag(1) is called
 rk = 0
@@ -1127,14 +1128,6 @@ class CdmsFile(CdmsObj, cuDataset):
             coordsaux = self._convention_.getAxisAuxIds(
                 self._file_.variables, coords1d)
 
-            for name in self._file_.variables.keys():
-                if 'coordinates' in dir(self._file_.variables[name]):
-                    coords = self._file_.variables[name].coordinates.split()
-                    for coord in coords:
-                        if((coord not in coords1d) and (coord not in coordsaux)):
-                            coordsaux.append(coord)
-      
-
             # Build variable list
             for name in self._file_.variables.keys():
                 if name not in coords1d:
@@ -1153,19 +1146,7 @@ class CdmsFile(CdmsObj, cuDataset):
                             self, name, cdunifvar)
 
             # Build axis list
-            for name in coords1d:
-                try:
-                    cdunifvar = self._file_.variables[name]
-                    self.axes[name] = FileAxis(self, name, cdunifvar)
-                except:
-                    pass
-            for name in coordsaux:
-                try:
-                    cdunifvar = self._file_.variables[name]
-                    self.axes[name] = FileAxis(self, name, cdunifvar)
-                except:
-                    pass
-
+            newcoordsaux = []
             for name in self._file_.dimensions.keys():
                 if name in coords1d:
                     cdunifvar = self._file_.variables[name]
@@ -1173,8 +1154,19 @@ class CdmsFile(CdmsObj, cuDataset):
                     cdunifvar = self._file_.variables[name]
                 else:
                     cdunifvar = None
-                if name not in self.axes.keys():
-                    self.axes[name] = FileAxis(self, name, cdunifvar)
+                for i in range(len(coordsaux)):
+                    if(name in self._file_.variables[coordsaux[i]].dimensions) and len(self._file_.variables[coordsaux[i]].shape) == 1:
+                        msg = "\n** Variable \"" + coordsaux[i] + "\" found in the \"coordinates\" " + \
+                              "attribute will be used as coordinate variable\n" +\
+                              "** CDMS could not find the coordinate variable \"" + name + "(" + name + ")\"\n" + \
+                              "** Verify that your file is CF-1 compliant!"
+                        warnings.warn(msg)
+                        cdunifvar = self._file_.variables[coordsaux[i]]
+                        self.variables[name] = FileVariable(self, name, cdunifvar)
+                        self.variables[coordsaux[i]] = FileVariable(self, coordsaux[i], cdunifvar)
+                        newcoordsaux=coordsaux[:i] + coordsaux[i+1:]
+                coordsaux= newcoordsaux
+                self.axes[name] = FileAxis(self, name, cdunifvar)
 
             # Attach boundary variables
             for name in coordsaux:

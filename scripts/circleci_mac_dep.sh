@@ -11,7 +11,7 @@ cmd="export PATH=${HOME}/miniconda/bin:${PATH}"
 echo $cmd
 $cmd
 
-cmd="conda install -c uvcdat/label/nightly -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8"
+cmd="conda install -c uvcdat/label/nightly -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 cdutil"
 echo $cmd
 $cmd
 

@@ -198,8 +198,6 @@ class TestMV2(basetest.CDMSBaseTest):
         self.assertTrue(MV2.allequal(masked.mask[4:], True))
 
     def testCount(self):
-        import pdb
-        pdb.set_trace()
         xouter = MV2.outerproduct(MV2.arange(5.), [1] * 10)
         masked = MV2.masked_outside(xouter, 1, 3)
         self.assertEqual(MV2.count(masked), 30)

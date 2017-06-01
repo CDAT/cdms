@@ -6,6 +6,7 @@ import os
 import sys
 from cdms2.tvariable import TransientVariable as TV
 import MV2
+import cdutil
 import basetest
 
 
@@ -197,6 +198,8 @@ class TestMV2(basetest.CDMSBaseTest):
         self.assertTrue(MV2.allequal(masked.mask[4:], True))
 
     def testCount(self):
+        import pdb
+        pdb.set_trace()
         xouter = MV2.outerproduct(MV2.arange(5.), [1] * 10)
         masked = MV2.masked_outside(xouter, 1, 3)
         self.assertEqual(MV2.count(masked), 30)
@@ -316,8 +319,19 @@ class TestMV2(basetest.CDMSBaseTest):
         b = a.mean()
         self.assertEqual(b, 1.0)
 
+    def testCrosSectionRegrid(self):
+        fmod = self.getDataFile("20160520.A_WCYCL1850.ne30_oEC.edison.alpha6_01_ANN_climo_Q.nc")
+        fobs = self.getDataFile("MERRA_ANN_climo_SHUM.nc")
+        var1=fmod('Q')
+        var2=fobs('SHUM')
 
-if __name__ == "__main__":
-    basetest.run()
+        mv1 = cdutil.averager(var1,axis='x')
+        mv2 = cdutil.averager(var2,axis='x')
+        mv1_reg = mv1 
+        lev_out = mv1.getLevel()
+        lat_out = mv1.getLatitude()
+        mv2_reg = mv2.crossSectionRegrid(lev_out, lat_out)
+        self.assertTrue(numpy.ma.is_masked(mv2_reg[:,:,-1].all()))
+
 if __name__ == "__main__":
     basetest.run()

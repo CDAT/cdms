@@ -231,11 +231,14 @@ class CrossSectionRegridder:
         outar = self.rgrd(ar, missing, 'greater', logYes, positionIn)
 
         # Reconstruct the same class as on input
+        # Mask fill_value and return results
         if inputIsVariable == 1:
             result = cdms2.createVariable(outar, fill_value=missing,
                                           axes=axislist, attributes=attrs, id=varid)
+            result = numpy.ma.masked_values(result, missing)
         else:
             result = numpy.ma.masked_array(outar, fill_value=missing)
+            result = numpy.ma.masked_values(result, missing)
 
         return result
 

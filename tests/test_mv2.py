@@ -316,8 +316,19 @@ class TestMV2(basetest.CDMSBaseTest):
         b = a.mean()
         self.assertEqual(b, 1.0)
 
+    def testCrosSectionRegrid(self):
+        fmod = self.getDataFile("20160520.A_WCYCL1850.ne30_oEC.edison.alpha6_01_ANN_climo_Q.nc")
+        fobs = self.getDataFile("MERRA_ANN_climo_SHUM.nc")
+        var1=fmod('Q')
+        var2=fobs('SHUM')
 
-if __name__ == "__main__":
-    basetest.run()
+        mv1 = MV2.average(var1,axis=-1)
+        mv2 = MV2.average(var2,axis=-1)
+        mv1_reg = mv1 
+        lev_out = mv1.getLevel()
+        lat_out = mv1.getLatitude()
+        mv2_reg = mv2.crossSectionRegrid(lev_out, lat_out)
+        self.assertTrue(numpy.ma.is_masked(mv2_reg[:,:,-1].all()))
+
 if __name__ == "__main__":
     basetest.run()

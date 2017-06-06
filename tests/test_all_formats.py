@@ -5,6 +5,13 @@ import basetest
 
 
 class TestFormats(basetest.CDMSBaseTest):
+    def testPack(self):
+        f = self.getDataFile('netcdf4_compressed_example.nc')
+        data = f['wnd']
+        self.assertEqual(data.missing_value, -32768.0)
+        self.assertAlmostEqual(data[3, 13, 3], 2.3299999237060547, 5)
+        self.assertAlmostEqual(data[4, 13, 4], 2.22000, 5)
+
     def testPP(self):
         f = self.getDataFile('testpp.pp')
         data = f['ps']

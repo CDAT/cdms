@@ -6,7 +6,6 @@ import os
 import sys
 from cdms2.tvariable import TransientVariable as TV
 import MV2
-import cdutil
 import basetest
 
 
@@ -323,8 +322,8 @@ class TestMV2(basetest.CDMSBaseTest):
         var1=fmod('Q')
         var2=fobs('SHUM')
 
-        mv1 = cdutil.averager(var1,axis='x')
-        mv2 = cdutil.averager(var2,axis='x')
+        mv1 = MV2.average(var1,axis=-1)
+        mv2 = MV2.average(var2,axis=-1)
         mv1_reg = mv1 
         lev_out = mv1.getLevel()
         lat_out = mv1.getLatitude()

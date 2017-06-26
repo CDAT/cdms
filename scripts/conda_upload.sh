@@ -16,7 +16,7 @@ mkdir ~/conda-bld
 conda install -q anaconda-client conda-build
 conda config --set anaconda_upload no
 export CONDA_BLD_PATH=${HOME}/conda-bld
-export VERSION=`date +%Y.%m.%d`
+export VERSION="2.10"
 echo "Cloning recipes"
 git clone git://github.com/UV-CDAT/conda-recipes
 cd conda-recipes
@@ -25,12 +25,12 @@ rm -rf uvcdat
 python ./prep_for_build.py
 echo "Building now"
 conda build $PKG_NAME -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.12
-anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-`date +%Y*`-np112py27_0.tar.bz2 --force
+anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-$VERSION.`date +%Y*`-np112py27_0.tar.bz2 --force
 conda build $PKG_NAME -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.11
-anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-`date +%Y*`-np111py27_0.tar.bz2 --force
+anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-$VERSION.`date +%Y*`-np111py27_0.tar.bz2 --force
 conda build $PKG_NAME -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.10
-anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-`date +%Y*`-np110py27_0.tar.bz2 --force
+anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-$VERSION.`date +%Y*`-np110py27_0.tar.bz2 --force
 conda build $PKG_NAME -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.9
-anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-`date +%Y*`-np19py27_0.tar.bz2 --force
-echo "anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-`date +%Y*`-np19py27_0.tar.bz2 --force"
+anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-$VERSION.`date +%Y*`-np19py27_0.tar.bz2 --force
+echo "anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-$VERSION.`date +%Y*`-np19py27_0.tar.bz2 --force"
 

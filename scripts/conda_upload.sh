@@ -32,4 +32,5 @@ conda build $PKG_NAME -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1
 anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-`date +%Y*`-np110py27_0.tar.bz2 --force
 conda build $PKG_NAME -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.9
 anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-`date +%Y*`-np19py27_0.tar.bz2 --force
+echo "anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-`date +%Y*`-np19py27_0.tar.bz2 --force"
 

@@ -2192,7 +2192,7 @@ class FileAxis(AbstractAxis):
 
     def __setslice__(self, low, high, value):
         # Hack to prevent netCDF overflow error on 64-bit architectures
-        if(self.isUnlimited() and self.isTime() and (high >= Max32int)):
+        if(self.isUnlimited() and (high >= Max32int)):
             high = self.__len__()
         high = min(Max32int, high)
         if self._obj_ is None:

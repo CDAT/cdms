@@ -7,6 +7,7 @@ This code is provided with the hope that it will be useful.
 No guarantee is provided whatsoever. Use at your own risk.
 """
 
+from __future__ import print_function
 import numpy
 import time
 from . import mvBaseWriter

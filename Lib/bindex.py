@@ -3,7 +3,8 @@
 
 """Bin index for non-rectilinear grids"""
 
-import _bindex, numpy 
+from . import _bindex
+import numpy 
 
 def bindexHorizontalGrid(latlin, lonlin):
     """Create a bin index for a horizontal grid.

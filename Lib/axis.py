@@ -4,6 +4,9 @@
 """
 CDMS Axis objects
 """
+
+from future import standard_library
+standard_library.install_aliases()
 _debug = 0
 std_axis_attributes = ['name', 'units', 'length', 'values', 'bounds']
 import string, sys, types, copy

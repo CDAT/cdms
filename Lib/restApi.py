@@ -460,12 +460,12 @@ class esgfDataset(esgfConnection):
             target = os.path.join(target,"esgfDatasetsCache.pckl")
         if os.path.exists(target):
             f=open(source)
-            #dict=eval(bz2.decompress(f.read()))
-	    dict=eval(f.read())
+            # dict=eval(bz2.decompress(f.read()))
+            dico=eval(f.read())
             f.close()
         else:
-            dict={}
-        dict[self.id]=[self["timestamp"],xml.etree.ElementTree.tostring(self.resp),self.originalKeys]
+            dico={}
+        dico[self.id]=[self["timestamp"],xml.etree.ElementTree.tostring(self.resp),self.originalKeys]
         f=open(target,"w")
         #f.write(bz2.compress(repr(self.cache)))
         f.write(repr(self.cache))
@@ -473,18 +473,18 @@ class esgfDataset(esgfConnection):
         
     def loadCache(self,source):
         if isinstance(source,dict):
-            dict=source
+            dico=source
         else:
             if os.path.isdir(source):
                 source = os.path.join(source,"esgfDatasetsCache.pckl")
             if os.path.exists(source):
                 f=open(source)
                 #dict=eval(bz2.decompress(f.read()))
-                dict=eval(f.read())
+                dico=eval(f.read())
                 f.close()
             else:
-                dict={}
-        vals = dict.get(self.id,["",None,{}])
+                dico={}
+        vals = dico.get(self.id,["",None,{}])
         if vals[1] is not None:
             self.cacheTime=vals[0]
             self.resp=xml.etree.ElementTree.fromstring(vals[0])

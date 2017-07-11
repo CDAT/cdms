@@ -17,8 +17,8 @@ from .axis import axisMatchIndex, axisMatchAxis, axisMatches, unspecified, Cdtim
 from . import selectors
 import copy
 # from regrid2 import Regridder, PressureRegridder, CrossSectionRegridder
-from .mvCdmsRegrid import CdmsRegrid
-from regrid2.mvGenericRegrid import guessPeriodicity
+#from .mvCdmsRegrid import CdmsRegrid
+#from regrid2.mvGenericRegrid import guessPeriodicity
 #import PropertiedClasses
 from .convention import CF1
 from .grid import AbstractRectGrid

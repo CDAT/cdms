@@ -11,7 +11,7 @@ import re
 import numpy
 import cdms2
 from .error import CDMSError
-import regrid2
+#import regrid2
 from functools import reduce
 
 def _areCellsOk(cornerCoords, mask=None):

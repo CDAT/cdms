@@ -20,6 +20,7 @@
 
 #define _CDUNIF_MODULE
 #include "Cdunifmodule.h"
+#include "py3c.h"
 
 /* This is a workaround, always something elsewhere should have set NC_NETCDF4. */
 #ifndef NC_NETCDF4
@@ -1108,7 +1109,7 @@ static void collect_attributes(PyCdunifFileObject *file, int varid,
 					length = strlen(s) + 1;
 				}
 				s[length] = '\0';
-				string = PyUnicode_FromString(s);
+				string = PyStr_FromString(s);
 				free(s);
 				if (string != NULL) {
 					PyDict_SetItemString(attributes, name, string);
@@ -1132,10 +1133,10 @@ static void collect_attributes(PyCdunifFileObject *file, int varid,
 			Py_END_ALLOW_THREADS
 			;
 			for (i = 0; i < t_len; i++) {
-				PyObject *szObj = PyUnicode_FromString(st[i]);
+				PyObject *szObj = PyStr_FromString(st[i]);
 				PyList_Append(listObj, szObj);
 			}
-			string = PyUnicode_FromString(st[0]);
+			string = PyStr_FromString(st[0]);
 			if (string != NULL) {
 				PyDict_SetItemString(attributes, name, listObj);
 				Py_DECREF(string);
@@ -1454,8 +1455,8 @@ PyCdunifFile_Open(char *filename, char *mode) {
 		PyCdunifFileObject_dealloc(self);
 		return NULL;
 	}
-	self->name = PyUnicode_FromString(filename);
-	self->mode = PyUnicode_FromString(mode);
+	self->name = PyStr_FromString(filename);
+	self->mode = PyStr_FromString(mode);
 	return self;
 }
 
@@ -1938,20 +1939,21 @@ static PyObject *
 PyCdunifFile_GetAttribute(PyCdunifFileObject *self, PyObject *nameobj) {
 	PyObject *value;
 	char *name = PyBytes_AsString(nameobj);
+    printf ("%s\n", name);
 	if (check_if_open(self, -1)) {
-		if (PyUnicode_CompareWithASCIIString(nameobj, "dimensions") == 0) {
+		if (strcmp(name, "dimensions") == 0) {
 			Py_INCREF(self->dimensions);
 			return self->dimensions;
 		}
-		if (PyUnicode_CompareWithASCIIString(nameobj, "variables") == 0) {
+		if (strcmp(name, "variables") == 0) {
 			Py_INCREF(self->variables);
 			return self->variables;
 		}
-		if (PyUnicode_CompareWithASCIIString(nameobj, "__dict__") == 0) {
+		if (strcmp(name, "__dict__") == 0) {
 			Py_INCREF(self->attributes);
 			return self->attributes;
 		}
-		if (PyUnicode_CompareWithASCIIString(nameobj, "dimensioninfo") == 0) {
+		if (strcmp(name, "dimensioninfo") == 0) {
 			Py_INCREF(self->diminfo);
 			return self->diminfo;
 		}
@@ -1967,13 +1969,15 @@ PyCdunifFile_GetAttribute(PyCdunifFileObject *self, PyObject *nameobj) {
 		return NULL;
 }
 
-static int PyCdunifFile_SetAttribute(PyCdunifFileObject *self, PyObject *name,
+static int PyCdunifFile_SetAttribute(PyCdunifFileObject *self, PyObject *nameobj,
 		PyObject *value) {
+	char *name = PyBytes_AsString(nameobj);
+    printf ("%s\n", name);
 	if (check_if_open(self, 1)) {
-		if (PyUnicode_CompareWithASCIIString(name, "dimensions") == 0
-		        || PyUnicode_CompareWithASCIIString(name, "variables") == 0
-				|| PyUnicode_CompareWithASCIIString(name, "dimensioninfo") == 0
-				|| PyUnicode_CompareWithASCIIString(name, "__dict__") == 0) {
+		if (strcmp(name, "dimensions") == 0
+		        || strcmp(name, "variables") == 0
+				|| strcmp(name, "dimensioninfo") == 0
+				|| strcmp(name, "__dict__") == 0) {
 			PyErr_SetString(PyExc_TypeError, "object has read-only attributes");
 			return -1;
 		}
@@ -1986,7 +1990,7 @@ static int PyCdunifFile_SetAttribute(PyCdunifFileObject *self, PyObject *name,
 
 static int PyCdunifFile_SetAttributeUnicode(PyCdunifFileObject *self, char *name,
 		char *value) {
-	PyObject *string = PyUnicode_FromString(value);
+	PyObject *string = PyStr_FromString(value);
 	if (string != NULL)
 		return PyCdunifFile_SetAttribute(self, name, string);
 	else
@@ -1999,9 +2003,9 @@ static int PyCdunifFile_AddHistoryLine(PyCdunifFileObject *self, char *text) {
     int ret;
 	PyUnicodeObject *new_string;
 	PyObject *h = PyCdunifFile_GetAttribute(self, history);
-	new_string = PyUnicode_FromString(text);
+	new_string = PyStr_FromString(text);
 	if (new_string) {
-        PyUnicode_Concat(h, PyUnicode_FromString("\n"));
+        PyUnicode_Concat(h, PyStr_FromString("\n"));
         PyUnicode_Concat(h, text);
 		ret = PyCdunifFile_SetAttribute(self, history, (PyObject *) new_string);
 		Py_XDECREF(h);
@@ -2018,7 +2022,7 @@ PyCdunifFileObject_repr(PyCdunifFileObject *file) {
 	sprintf(buf, "<%s Cdunif file '%.256s', mode '%.10s' at %lx>",
 			file->open ? "open" : "closed", PyBytes_AsString(file->name),
 			PyBytes_AsString(file->mode), (long) file);
-	return PyUnicode_FromString(buf);
+	return PyStr_FromString(buf);
 }
 
 /* Type definition */
@@ -2256,7 +2260,7 @@ static PyObject *
 PyCdunifVariable_GetAttribute(PyCdunifVariableObject *self, PyObject *nameobj) {
 	PyObject *value;
 	char *name = PyBytes_AsString(nameobj);
-	if (PyUnicode_CompareWithASCIIString(name, "shape") == 0) {
+	if (strcmp(name, "shape") == 0) {
 		PyObject *tuple;
 		int i;
 		if (check_if_open(self->file, -1)) {
@@ -2271,7 +2275,7 @@ PyCdunifVariable_GetAttribute(PyCdunifVariableObject *self, PyObject *nameobj) {
 		} else
 			return NULL;
 	}
-	if (PyUnicode_CompareWithASCIIString(name, "dimensions") == 0) {
+	if (strcmp(name, "dimensions") == 0) {
 		PyObject *tuple;
 		char name[MAX_NC_NAME];
 		int i;
@@ -2294,12 +2298,12 @@ PyCdunifVariable_GetAttribute(PyCdunifVariableObject *self, PyObject *nameobj) {
 				;
 
 				if (dimtype == CuGlobalDim) {
-					PyObject *tmpx = PyUnicode_FromString(name);
+					PyObject *tmpx = PyStr_FromString(name);
 					PyTuple_SetItem(tuple, i, tmpx);
 					//Py_DECREF(tmpx);
 				} else {
 					sprintf(pseudoname, "%s_%s", name, vname);
-					PyObject *tmpx = PyUnicode_FromString(pseudoname);
+					PyObject *tmpx = PyStr_FromString(pseudoname);
 					PyTuple_SetItem(tuple, i, tmpx);
 					//Py_DECREF(tmpx);
 				}
@@ -2308,7 +2312,7 @@ PyCdunifVariable_GetAttribute(PyCdunifVariableObject *self, PyObject *nameobj) {
 		} else
 			return NULL;
 	}
-	if (PyUnicode_CompareWithASCIIString(name, "__dict__") == 0) {
+	if (strcmp(name, "__dict__") == 0) {
 		Py_INCREF(self->attributes);
 		return self->attributes;
 	}
@@ -2324,6 +2328,7 @@ PyCdunifVariable_GetAttribute(PyCdunifVariableObject *self, PyObject *nameobj) {
 
 static int PyCdunifVariable_SetAttribute(PyCdunifVariableObject *self,
 		char *name, PyObject *value) {
+    printf ("%s\n", name);
 	if (check_if_open(self->file, 1)) {
 		if (strcmp(name, "shape") == 0 || strcmp(name, "dimensions") == 0
 				|| strcmp(name, "__dict__") == 0) {
@@ -2339,7 +2344,7 @@ static int PyCdunifVariable_SetAttribute(PyCdunifVariableObject *self,
 
 static int PyCdunifVariable_SetAttributeUnicode(PyCdunifVariableObject *self,
 		char *name, char *value) {
-	PyObject *string = PyUnicode_FromString(value);
+	PyObject *string = PyStr_FromString(value);
 	if (string != NULL)
 		return PyCdunifVariable_SetAttribute(self, name, string);
 	else
@@ -2526,7 +2531,7 @@ PyCdunifVariable_ReadAsString(PyCdunifVariableObject *self) {
 			string = NULL;
 		} else {
 			temp[self->dimensions[0]] = '\0';
-			string = PyUnicode_FromString(temp);
+			string = PyStr_FromString(temp);
 		}
 		free(temp);
 		return (PyUnicodeObject *) string;
@@ -3081,6 +3086,7 @@ PyCdunif_setncflags(PyObject *self, PyObject *args) {
 	char msg[1024];
 	char *flagname = NULL;
 	int flagval;
+	char *name;
 	if (!PyArg_ParseTuple(args, "si", &flagname, &flagval))
 		return NULL;
 	if (strcmp(flagname, "classic") == 0) {
@@ -3200,17 +3206,14 @@ static PyMethodDef cdunif_methods[] = {
 
 /* Module initialization */
 static struct PyModuleDef moduledef = {
-PyModuleDef_HEAD_INIT, "Cdunif", /* m_name */
-"", /* m_doc */
+PyModuleDef_HEAD_INIT,  /* m_base */
+"Cdunif", /* m_name */
+NULL, /* m_doc */
 -1, /* m_size */
-cdunif_methods, /* m_methods */
-NULL, /* m_reload */
-NULL, /* m_traverse */
-NULL, /* m_clear */
-NULL, /* m_free */
+cdunif_methods /* m_methods */
 };
 
-PyMODINIT_FUNC PyInit_Cdunif(void) {
+MODULE_INIT_FUNC (Cdunif) {
 	PyObject *m, *d;
 	static void *PyCdunif_API[PyCdunif_API_pointers];
 
@@ -3283,7 +3286,7 @@ PyMODINIT_FUNC PyInit_Cdunif(void) {
        PyCapsule_New((void *) PyCdunif_API, "_C_API", NULL));
 
 
-    CdunifError = PyUnicode_FromString("CdunifError");
+    CdunifError = PyStr_FromString("CdunifError");
 
 	PyDict_SetItemString(d, "CdunifError", CdunifError);
 

@@ -12,7 +12,8 @@ from .error import CDMSError
 from .grid import AbstractGrid, LongitudeType, LatitudeType, VerticalType, TimeType, CoordTypeToLoc
 from .coord import TransientVirtualAxis
 from .axis import getAutoBounds, allclose
-import bindex,_bindex
+from . import bindex
+from . import _bindex
 from functools import reduce
 
 MethodNotImplemented = "Method not yet implemented"

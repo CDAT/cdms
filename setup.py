@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 from numpy.distutils.core import setup, Extension
 import os, sys
 import subprocess,shutil
@@ -60,7 +61,7 @@ try:
     os.environ["CC"]=mpicc
     os.environ["CFLAGS"]="-w -g"
 except:
-    os.environ["CFLAGS"]="-w -g"
+    os.environ["CFLAGS"]="-w -g -O0"
     pass
 
 libs_pth = os.path.join(sys.prefix,"lib")
@@ -70,7 +71,7 @@ setup (name = "cdms2",
        url = "http://github.com/UV-CDAT/cdms",
        packages = ['cdms2'],
        package_dir = {'cdms2': 'Lib'},
-       include_dirs = ['Include', numpy.lib.utils.get_include()] + cdat_info.cdunif_include_directories,
+       include_dirs = ['Include', 'Include/py3c', numpy.lib.utils.get_include()] + cdat_info.cdunif_include_directories,
        scripts = ['Script/cdscan', 'Script/convertcdms.py',"Script/myproxy_logon"],
        ext_modules = [Extension('cdms2.Cdunif',
                                 ['Src/Cdunifmodule.c'],
@@ -101,7 +102,7 @@ setup (name = "regrid2",
        url = "http://github.com/UV-CDAT/cdms",
        packages = ['regrid2'],
        package_dir = {'regrid2': 'regrid2/Lib'},
-       include_dirs = [numpy.lib.utils.get_include()],
+       include_dirs = ['Include', numpy.lib.utils.get_include()],
        ext_modules = [Extension('regrid2._regrid', ['regrid2/Src/_regridmodule.c'],
                                 runtime_library_dirs = [libs_pth],
                                 extra_compile_args = [ "-L%s"% libs_pth],

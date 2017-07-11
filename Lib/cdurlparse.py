@@ -5,7 +5,6 @@ Resource Locators", by R. Fielding, UC Irvine, June 1995.
 
 # Standard/builtin Python modules
 import string
-from string import joinfields, splitfields, find, rfind
 
 # A classification of schemes ('' means apply by default)
 uses_relative = ['ftp', 'http', 'ldap', 'gopher', 'nntp', 'wais', 'file',
@@ -30,7 +29,7 @@ uses_fragment = ['ftp', 'hdl', 'http', 'ldap', 'gopher', 'news', 'nntp', 'wais',
 		 'file', 'prospero', '']
 
 # Characters valid in scheme names
-scheme_chars = string.letters + string.digits + '+-.'
+scheme_chars = string.ascii_letters + string.digits + '+-.'
 
 MAX_CACHE_SIZE = 20
 _parse_cache = {}
@@ -53,29 +52,28 @@ def urlparse(url, scheme = '', allow_fragments = 1):
 		return cached
 	if len(_parse_cache) >= MAX_CACHE_SIZE:	# avoid runaway growth
 	    clear_cache()
-	find = string.find
 	netloc = path = params = query = fragment = ''
-	i = find(url, ':')
+	i = url.find(':')
 	if i > 0:
 		if url[:i] in ['http','ldap']: # optimize the common case
 			scheme = string.lower(url[:i])
 			url = url[i+1:]
 			if url[:2] == '//':
-				i = find(url, '/', 2)
+				i = url.find('/', 2)
 				if i < 0:
 					i = len(url)
 				netloc = url[2:i]
 				url = url[i:]
 			if allow_fragments:
-				i = string.rfind(url, '#')
+				i = url.rfind('#')
 				if i >= 0:
 					fragment = url[i+1:]
 					url = url[:i]
-			i = find(url, '?')
+			i = url.find('?')
 			if i >= 0:
 				query = url[i+1:]
 				url = url[:i]
-			i = find(url, ';')
+			i = url.find(';')
 			if i >= 0:
 				params = url[i+1:]
 				url = url[:i]
@@ -89,20 +87,20 @@ def urlparse(url, scheme = '', allow_fragments = 1):
 			scheme, url = string.lower(url[:i]), url[i+1:]
 	if scheme in uses_netloc:
 		if url[:2] == '//':
-			i = find(url, '/', 2)
+			i = url.find('/', 2)
 			if i < 0:
 				i = len(url)
 			netloc, url = url[2:i], url[i:]
 	if allow_fragments and scheme in uses_fragment:
-		i = string.rfind(url, '#')
+		i = url.rfind('#')
 		if i >= 0:
 			url, fragment = url[:i], url[i+1:]
 	if scheme in uses_query:
-		i = find(url, '?')
+		i = url.find('?')
 		if i >= 0:
 			url, query = url[:i], url[i+1:]
 	if scheme in uses_params:
-		i = find(url, ';')
+		i = url.find(';')
 		if i >= 0:
 			url, params = url[:i], url[i+1:]
 	tuple = scheme, netloc, url, params, query, fragment
@@ -151,10 +149,10 @@ def urljoin(base, url, allow_fragments = 1):
 	if not path:
 		return urlunparse((scheme, netloc, bpath,
 				   params, query or bquery, fragment))
-	i = rfind(bpath, '/')
+	i = bpath.rfind('/')
 	if i >= 0:
 		path = bpath[:i] + '/' + path
-	segments = splitfields(path, '/')
+	segments = path.split('/')
 	if segments[-1] == '.':
 		segments[-1] = ''
 	while '.' in segments:
@@ -173,7 +171,7 @@ def urljoin(base, url, allow_fragments = 1):
 		segments[-1] = ''
 	elif len(segments) >= 2 and segments[-1] == '..':
 		segments[-2:] = ['']
-	return urlunparse((scheme, netloc, joinfields(segments, '/'),
+	return urlunparse((scheme, netloc, "/".join(segments), 
 			   params, query, fragment))
 
 def urldefrag(url):

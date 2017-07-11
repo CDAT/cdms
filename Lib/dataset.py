@@ -329,7 +329,7 @@ Output:::
 file :: (cdms2.dataset.CdmsFile) (0) file to read from
 :::
     """
-    uri = string.strip(uri)
+    uri = uri.strip()
     (scheme, netloc, path, parameters, query, fragment) = urllib.parse.urlparse(uri)
     if scheme in ('', 'file'):
         if netloc:

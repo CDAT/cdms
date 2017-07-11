@@ -19,6 +19,7 @@
 #include <math.h>
 
 #include <string.h>
+#include "py3c.h"
 
 static PyObject *ErrorObject;            /* locally raised exception */
 
@@ -2459,14 +2460,11 @@ static struct PyMethodDef rgd_methods[] = {
 
 
 static struct PyModuleDef moduledef = {
-PyModuleDef_HEAD_INIT, "_regrid",
-"",
+PyModuleDef_HEAD_INIT, 
+"_regrid",
+NULL,
 -1,
-rgd_methods,
-NULL,
-NULL,
-NULL,
-NULL,
+rgd_methods
 };
  /*************************************************************************
  *                                                                        *

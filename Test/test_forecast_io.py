@@ -33,7 +33,7 @@ class TestForecastIO(basetest.CDMSBaseTest):
         f1 = self.getTempFile('test_fc1','w')
         f2 = self.getTempFile('test_fc2','w')
         f3 = self.getTempFile('test_fc3','w')
-        print "TEMP:",self.tempdir
+        print("TEMP:",self.tempdir)
         f1.write(v1)
         f1.write(date1)
         f1.write(sec1)
@@ -74,7 +74,7 @@ class TestForecastIO(basetest.CDMSBaseTest):
         #...Note that fcaxis is an Axis so its shape comes from len(fcaxis.node) which is the
         # number of forecasts described in test_fc.xml; in contrast for TransientAxis the shape
         # would be len(fcaxis._data_) which is the number of forecasts that have been read.
-        self.assertEqual(fcaxis._data_, [2010082500000L, 2010082600000L])
+        self.assertEqual(fcaxis._data_, [2010082500000, 2010082600000])
         self.assertEqual(fcaxis.id, 'fctau0')
 
 if __name__ == "__main__":

@@ -1197,7 +1197,7 @@ static int set_attribute(int fileid, int varid, PyObject *attributes,
 		PyDict_DelItemString(attributes, name);
 		return 0;
 	}
-	if (PyUnicode_Check(value)) {
+	if (PyStr_Check(value)) {
 		int len = PyBytes_Size(value);
 		char *string = PyBytes_AsString(value);
 		int ret;
@@ -1755,7 +1755,7 @@ PyCdunifFileObject_new_variable(PyCdunifFileObject *self, PyObject *args) {
 	}
 	for (i = 0; i < ndim; i++) {
 		item = PyTuple_GetItem(dim, i);
-		if (PyUnicode_Check(item))
+		if (PyStr_Check(item))
 			dimension_names[i] = PyBytes_AsString(item);
 		else {
 			PyErr_SetString(PyExc_TypeError, "dimension name must be a string");
@@ -1939,7 +1939,6 @@ static PyObject *
 PyCdunifFile_GetAttribute(PyCdunifFileObject *self, PyObject *nameobj) {
 	PyObject *value;
 	char *name = PyBytes_AsString(nameobj);
-    printf ("%s\n", name);
 	if (check_if_open(self, -1)) {
 		if (strcmp(name, "dimensions") == 0) {
 			Py_INCREF(self->dimensions);
@@ -1972,7 +1971,6 @@ PyCdunifFile_GetAttribute(PyCdunifFileObject *self, PyObject *nameobj) {
 static int PyCdunifFile_SetAttribute(PyCdunifFileObject *self, PyObject *nameobj,
 		PyObject *value) {
 	char *name = PyBytes_AsString(nameobj);
-    printf ("%s\n", name);
 	if (check_if_open(self, 1)) {
 		if (strcmp(name, "dimensions") == 0
 		        || strcmp(name, "variables") == 0
@@ -1983,7 +1981,7 @@ static int PyCdunifFile_SetAttribute(PyCdunifFileObject *self, PyObject *nameobj
 		}
 		define_mode(self, 1);
 		return set_attribute(self->id, NC_GLOBAL, self->attributes,
-		        PyBytes_AsString(name), value);
+		        name, value);
 	} else
 		return -1;
 }
@@ -2041,7 +2039,6 @@ sizeof(PyCdunifFileObject), /*tp_basicsize*/
 0, /*tp_as_number*/
 0, /*tp_as_sequence*/
 0, /*tp_as_mapping*/
-0, /*tp_hash*/
 /* more methods */
 0, /* tp_hash    "dict[x]" */
 0, /* tp_call    "x()"     */
@@ -2167,7 +2164,7 @@ PyCdunifVariableObject_typecode(PyCdunifVariableObject *self, PyObject *args) {
 	if (!PyArg_ParseTuple(args, ""))
 		return NULL;
 	t = typecode(self->type);
-	return PyUnicode_FromUnicode(&t, 1);
+	return PyStr_FromStringAndSize(&t, (Py_ssize_t) 1);
 }
 
 /* Get an item: wrapper for subscript */
@@ -2260,6 +2257,7 @@ static PyObject *
 PyCdunifVariable_GetAttribute(PyCdunifVariableObject *self, PyObject *nameobj) {
 	PyObject *value;
 	char *name = PyBytes_AsString(nameobj);
+	printf("%s\n", name);
 	if (strcmp(name, "shape") == 0) {
 		PyObject *tuple;
 		int i;
@@ -2316,19 +2314,19 @@ PyCdunifVariable_GetAttribute(PyCdunifVariableObject *self, PyObject *nameobj) {
 		Py_INCREF(self->attributes);
 		return self->attributes;
 	}
-	value = PyDict_GetItemString(self->attributes, PyBytes_AsString(name));
+	value = PyDict_GetItemString(self->attributes, name);
 	if (value != NULL) {
 		Py_INCREF(value);
 		return value;
 	} else {
 		PyErr_Clear();
-        return PyObject_GenericGetAttr((PyObject *) self, name);
+        return PyObject_GenericGetAttr((PyObject *) self, PyStr_FromString(name));
 	}
 }
 
 static int PyCdunifVariable_SetAttribute(PyCdunifVariableObject *self,
-		char *name, PyObject *value) {
-    printf ("%s\n", name);
+		PyObject *nameobj, PyObject *value) {
+    char *name = PyStr_AsString(nameobj);
 	if (check_if_open(self->file, 1)) {
 		if (strcmp(name, "shape") == 0 || strcmp(name, "dimensions") == 0
 				|| strcmp(name, "__dict__") == 0) {
@@ -3037,7 +3035,6 @@ sizeof(PyCdunifVariableObject), /*tp_basicsize*/
 0, /*tp_as_number*/
 &PyCdunifVariableObject_as_sequence, /*tp_as_sequence*/
 &PyCdunifVariableObject_as_mapping, /*tp_as_mapping*/
-0, /*tp_hash*/
 
 /* more methods */
 0, /* tp_hash    "dict[x]" */

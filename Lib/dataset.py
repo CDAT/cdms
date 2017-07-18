@@ -1301,7 +1301,7 @@ class CdmsFile(CdmsObj, cuDataset):
             else:
                 typecode = ar.dtype.char
         else:
-            cufile.createDimension(name, len(ar))
+            cufile.createDimension(name, long(len(ar)))
             typecode = ar.dtype.char
 
         # Compatibility: revert to old typecode for cdunif

@@ -157,7 +157,7 @@ typedef struct {
 /* Set variable attribute */
 #define PyCdunifVariable_SetAttribute_RET int
 #define PyCdunifVariable_SetAttribute_PROTO \
-	  (PyCdunifVariableObject *var, char *name, PyObject *value)
+	  (PyCdunifVariableObject *var, PyObject *nameobj, PyObject *value)
 #define PyCdunifVariable_SetAttribute_NUM 17
 
 /* Set variable attribute to string value */

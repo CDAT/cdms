@@ -2466,20 +2466,26 @@ NULL,
 -1,
 rgd_methods
 };
- /*************************************************************************
+
+/*************************************************************************
  *                                                                        *
  * INITIALIZATION FUNCTION        
  * 
  *                                                                        *
 \**************************************************************************/
 
-PyMODINIT_FUNC PyInit__regrid()
-{
+MODULE_INIT_FUNC (_regrid) {
   PyObject *m, *d;
   
   /* create this module and add the functions */
   m = PyModule_Create(&moduledef);
+  if(m == NULL) {
+      return(NULL);
+  }
+
+#ifdef import_array
   import_array();
+#endif
 
   /* add symbolic constants to the module */
   d = PyModule_GetDict(m);
@@ -2491,7 +2497,6 @@ PyMODINIT_FUNC PyInit__regrid()
     Py_FatalError("can't initialize module _regrid");
   return(m);
 }
-
 
 
  /*************************************************************************

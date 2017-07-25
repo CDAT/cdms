@@ -4,7 +4,7 @@ import numpy
 import copy
 import string
 import _regrid
-from error import RegridError
+from .error import RegridError
 
 
 class PressureRegridder:
@@ -476,13 +476,13 @@ def sendmsg(msg, value1=None, value2=None):
     #
     #---------------------------------------------------------------------------------"""
 
-    print '*******************************************************************'
+    print('*******************************************************************')
     if value1 is None:
-        print msg
+        print(msg)
     elif value2 is None:
-        print msg, value1
+        print(msg, value1)
     else:
-        print msg, value1, value2
-    print '*******************************************************************'
+        print(msg, value1, value2)
+    print('*******************************************************************')
 
     return None

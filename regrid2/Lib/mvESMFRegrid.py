@@ -77,7 +77,7 @@ class ESMFRegrid(GenericRegrid):
 
         self.regridMethod = BILINEAR
         self.regridMethodStr = 'linear'
-        if isinstance(regridMethod, types.StringType):
+        if isinstance(regridMethod, bytes):
             if re.search('conserv', regridMethod.lower()):
                 self.regridMethod = CONSERVE
                 self.regridMethodStr = 'conserve'
@@ -88,7 +88,7 @@ class ESMFRegrid(GenericRegrid):
         # data stagger
         self.staggerloc = CENTER
         self.staggerlocStr = 'center'
-        if isinstance(staggerLoc, types.StringType):
+        if isinstance(staggerLoc, bytes):
             if re.search('vface', staggerLoc.lower(), re.I):
                 self.staggerloc = VFACE
                 self.staggerlocStr = 'vcorner'
@@ -121,7 +121,7 @@ class ESMFRegrid(GenericRegrid):
 #        self.srcMaskValues = numpy.array([1],dtype = numpy.int32)
 #        self.dstMaskValues = numpy.array([1],dtype = numpy.int32)
 
-        if isinstance(regridMethod, types.StringType):
+        if isinstance(regridMethod, bytes):
             if re.search('conserv', regridMethod.lower()):
                 self.srcMaskValues = numpy.array([1], dtype=numpy.int32)
                 self.dstMaskValues = numpy.array([1], dtype=numpy.int32)

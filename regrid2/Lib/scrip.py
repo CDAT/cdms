@@ -2,7 +2,7 @@
 
 import cdms2
 import _scrip
-from error import RegridError
+from .error import RegridError
 import numpy
 from functools import reduce
 
@@ -369,7 +369,7 @@ def readRegridder(fileobj, mapMethod=None, checkGrid=1):
             raise RegridError("Unrecognized map method: %s" % mapString)
 
     convention = 'SCRIP'
-    if fileobj.variables.keys().count('S'):
+    if list(fileobj.variables.keys()).count('S'):
         convention = 'NCAR'
     if convention == 'SCRIP':
         remapMatrix = fileobj('remap_matrix').filled()
@@ -393,7 +393,7 @@ def readRegridder(fileobj, mapMethod=None, checkGrid=1):
             srcarea = fileobj('src_grid_area')
             dstarea = fileobj('dst_grid_area')
         else:  # NCAR stuff
-            if "S2" in fileobj.variables.keys():
+            if "S2" in list(fileobj.variables.keys()):
                 remapMatrix = fileobj("S2")
                 sh = list(remapMatrix.shape)
                 if len(sh) == 2 and sh[-1] == 2:

@@ -23,9 +23,9 @@ PATCH = 0
 Version = "%s.%s.%s" % (MAJOR,MINOR,PATCH)
 
 f=open("git.py","w")
-git_branch=subprocess.Popen(["git","rev-parse","--abbrev-ref","HEAD"],stdout=subprocess.PIPE).stdout.read().strip()
+git_branch=subprocess.Popen(["git","rev-parse","--abbrev-ref","HEAD"],stdout=subprocess.PIPE).stdout.read().strip().decode("utf-8")
 print("branch = '%s'" % git_branch, file=f)
-git_tag = subprocess.Popen(["git","describe","--tags"],stdout=subprocess.PIPE).stdout.read().strip()
+git_tag = subprocess.Popen(["git","describe","--tags"],stdout=subprocess.PIPE).stdout.read().strip().decode("utf-8")
 sp=git_tag.split("-")
 if len(sp)>2:
     commit = sp[-1]

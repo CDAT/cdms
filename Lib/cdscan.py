@@ -450,7 +450,7 @@ def disambig(name, dict, num, comparator, value):
                         value, dict[uniqname]):
                     break
             else:
-                raise 'Cannot make axis name unique: ', name
+                raise BaseException('Cannot make axis name unique: ' + str(name))
 
     return uniqname
 

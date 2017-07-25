@@ -11,7 +11,6 @@ import cdtime
 import re
 import string
 import sys
-from types import StringType, TupleType, IntType, FloatType, ListType, NoneType
 from .error import CDMSError
 
 # Regular expressions
@@ -369,7 +368,7 @@ class CdmsNode:
                 (attval, datatype) = self.attribute[attname]
                 # attvalstr = _Illegal.sub(mapIllegalToEntity,str(attval))  #
                 # Map illegal chars to entities
-                if not isinstance(attval, StringType):
+                if not isinstance(attval, basestring):
                     attval = repr(attval)
                 attvalstr = string.strip(attval)
                 # Make sure continuation lines are preceded with a space
@@ -382,7 +381,7 @@ class CdmsNode:
         for attname in list(self.attribute.keys()):
             if validAttrs and (attname not in validAttrs):
                 (attval, datatype) = self.attribute[attname]
-                if not isinstance(attval, StringType):
+                if not isinstance(attval, basestring):
                     attval = repr(attval)
                 # Make sure continuation lines are preceded with a space
                 attval = re.sub('\n', '\n ', attval)
@@ -395,7 +394,7 @@ class CdmsNode:
         #     fd.write("value: %s"%(content,))
 
         # Write user attributes
-        if isinstance(userAttrs, StringType):
+        if isinstance(userAttrs, basestring):
             newAttrs = [userAttrs]
         else:
             newAttrs = userAttrs
@@ -419,7 +418,7 @@ class CdmsNode:
         for attname in list(self.attribute.keys()):
             if attname in validKeys:
                 (atttype, default) = self.dtd[attname]
-                if isinstance(atttype, TupleType):
+                if isinstance(atttype, tuple):
                     attval = self.getExternalAttr(attname)
                     assert attval in atttype, 'Invalid attribute %s=%s must be in %s' % (
                         attname, attval, repr(atttype))
@@ -499,7 +498,7 @@ class VariableNode(CdmsNode):
     # If validate is true, validate immediately
     def __init__(self, id, datatype, domain):
         assert isinstance(
-            datatype, StringType), 'Invalid datatype: ' + repr(datatype)
+            datatype, basestring), 'Invalid datatype: ' + repr(datatype)
         assert datatype in CdDatatypes, 'Invalid datatype: ' + repr(datatype)
         CdmsNode.__init__(self, "variable", id)
         self.datatype = datatype
@@ -531,9 +530,9 @@ class AxisNode(CdmsNode):
     # If datatype is None, assume values [0,1,..,length-1]
     # data is a numpy array, if specified
     def __init__(self, id, length, datatype=CdLong, data=None):
-        assert isinstance(length, IntType), 'Invalid length: ' + repr(length)
+        assert isinstance(length, int), 'Invalid length: ' + repr(length)
         assert isinstance(
-            datatype, StringType), 'Invalid datatype: ' + repr(datatype)
+            datatype, basestring), 'Invalid datatype: ' + repr(datatype)
         assert datatype in CdDatatypes, 'Invalid datatype: ' + repr(datatype)
         if data is not None:
             assert isinstance(
@@ -813,11 +812,11 @@ class AxisNode(CdmsNode):
 class LinearDataNode(CdmsNode):
 
     validStartTypes = [
-        IntType, FloatType, type(
+        int, float, type(
             cdtime.comptime(0)), type(
             cdtime.reltime(
                 0, "hours"))]
-    validDeltaTypes = [IntType, FloatType, ListType]
+    validDeltaTypes = [int, float, list]
 
     def __init__(self, start, delta, length):
         assert isinstance(start, numpy.floating) or isinstance(start, numpy.integer) or (
@@ -825,7 +824,7 @@ class LinearDataNode(CdmsNode):
         assert isinstance(start, numpy.floating) or isinstance(start, numpy.integer) or (
             type(delta) in self.validDeltaTypes), 'Invalid delta argument: ' + repr(delta)
         assert isinstance(
-            length, IntType), 'Invalid length argument: ' + repr(length)
+            length, int), 'Invalid length argument: ' + repr(length)
         CdmsNode.__init__(self, "linear")
         self.delta = delta
         self.length = length
@@ -1068,12 +1067,12 @@ class AttrNode(CdmsNode):
 
     def __init__(self, name, value=None):
         CdmsNode.__init__(self, "attr")
-        if not (isinstance(value, IntType) or
+        if not (isinstance(value, int) or
                 isinstance(value, numpy.integer) or
-                isinstance(value, FloatType) or
+                isinstance(value, float) or
                 isinstance(value, numpy.floating) or
-                isinstance(value, StringType) or
-                isinstance(value, NoneType)):
+                isinstance(value, basestring) or
+                value is None):
             raise CDMSError('Invalid attribute type: ' + repr(value))
         self.name = name
         self.value = value
@@ -1090,11 +1089,11 @@ class AttrNode(CdmsNode):
     def getDatatype(self):
         if self.datatype:
             return self.datatype
-        elif isinstance(self.value, StringType):
+        elif isinstance(self.value, basestring):
             return CdString
-        elif isinstance(self.value, FloatType) or isinstance(self.value, numpy.floating):
+        elif isinstance(self.value, float) or isinstance(self.value, numpy.floating):
             return CdDouble
-        elif isinstance(self.value, IntType) or isinstance(self.value, numpy.integer):
+        elif isinstance(self.value, int) or isinstance(self.value, numpy.integer):
             return CdLong
         else:
             raise CDMSError('Invalid attribute type: ' + repr(self.value))
@@ -1106,7 +1105,7 @@ class AttrNode(CdmsNode):
     #   Returns ValueError if the conversion fails
     def setValueFromString(self, valString, datatype):
         val = None
-        if not isinstance(valString, StringType):
+        if not isinstance(valString, basestring):
             raise CDMSError('input value is not a string')
         if datatype == CdString:
             val = valString

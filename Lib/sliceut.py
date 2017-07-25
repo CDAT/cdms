@@ -98,7 +98,7 @@ def reverseSlice(s, size):
         j = j % size
 
     if i < -size or j < -size - 1:
-        raise 'Invalid slice', repr(s)
+        raise BaseException('Invalid slice'+ repr(s))
 
     k = -k
     pk = ((j - i + k) / k) * k + i

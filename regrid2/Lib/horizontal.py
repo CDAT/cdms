@@ -5,7 +5,7 @@ import cdms2
 import _regrid
 import string
 import copy
-from error import RegridError
+from .error import RegridError
 import warnings
 
 _debug = 0                              # Set to 1 for debug
@@ -69,14 +69,14 @@ class Horizontal:
         if _debug == 1:
             import sys
             sys.stdout = open('debug_regrid.txt', 'w')
-            print "bsin = ", numpy.array2string(bsin, precision=3)
-            print "bnin = ", numpy.array2string(bnin, precision=3)
-            print "bwin = ", numpy.array2string(bwin, precision=3)
-            print "bein = ", numpy.array2string(bein, precision=3)
-            print "bsout = ", numpy.array2string(bsout, precision=3)
-            print "bnout = ", numpy.array2string(bnout, precision=3)
-            print "bwout = ", numpy.array2string(bwout, precision=3)
-            print "beout = ", numpy.array2string(beout, precision=3)
+            print("bsin = ", numpy.array2string(bsin, precision=3))
+            print("bnin = ", numpy.array2string(bnin, precision=3))
+            print("bwin = ", numpy.array2string(bwin, precision=3))
+            print("bein = ", numpy.array2string(bein, precision=3))
+            print("bsout = ", numpy.array2string(bsout, precision=3))
+            print("bnout = ", numpy.array2string(bnout, precision=3))
+            print("bwout = ", numpy.array2string(bwout, precision=3))
+            print("beout = ", numpy.array2string(beout, precision=3))
 
         self.londx, self.lonpt, self.wtlon, self.latdx, self.latpt, self.wtlat = _regrid.maparea(
             self.nloni, self.nlono, self.nlati, self.nlato, bnin, bnout, bsin, bsout, bein, beout, bwin, bwout)
@@ -114,7 +114,7 @@ class Horizontal:
         if isinstance(ar, AbstractVariable):
             attrs = copy.copy(ar.attributes)
             varid = ar.id
-            axislist = list(map(lambda x: x[0].clone(), ar.getDomain()))
+            axislist = list([x[0].clone() for x in ar.getDomain()])
             inputIsVariable = 1
             if order is None:
                 order = ar.getOrder()
@@ -204,9 +204,7 @@ class Horizontal:
         nlati = shape[rank - ilat - 1]
         nloni = shape[rank - ilon - 1]
         if nlati != self.nlati or nloni != self.nloni:
-            raise (
-                'array lat,lon (%i,%i) does not match grid lat,lon (%i,%i)' %
-                (nlati, nloni, self.nlati, self.nloni))
+            raise 'array lat,lon (%i,%i) does not match grid lat,lon (%i,%i)'
 
         if itim1 != 0:
             ntim1 = shape[rank - itim1 - 1]

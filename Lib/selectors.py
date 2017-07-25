@@ -1,10 +1,8 @@
 
 """Classes to support easy selection of climate data"""
-import types
-# import cdtime
-from axis import axisMatches
-from error import CDMSError
-from grid import AbstractRectGrid, defaultRegion, setRegionSpecs, LongitudeType, LatitudeType, TimeType, VerticalType
+from .axis import axisMatches
+from .error import CDMSError
+from .grid import AbstractRectGrid, defaultRegion, setRegionSpecs, LongitudeType, LatitudeType, TimeType, VerticalType
 
 _debug = 0
 
@@ -55,7 +53,7 @@ class Selector:
             else:
                 self.refine(positionalComponent(a))
 
-        for k, v in kwargs.items():
+        for k, v in list(kwargs.items()):
             self.refine(kwselect(k, v))
 
     def __repr__(self):
@@ -165,28 +163,28 @@ class Selector:
         while(components):
             axes = result.getAxisList()
             if _debug:
-                print "Axes:", axes
+                print("Axes:", axes)
             specifications = [':'] * len(axes)
             confined_by = [None] * len(axes)
             aux = {}  # for extra state
             overflow = []
             if _debug:
-                print "Component list:", components
+                print("Component list:", components)
             for c in components:
                 if c.specify(result, axes, specifications, confined_by, aux):
                     if _debug:
-                        print 'Defer ' + repr(c)
+                        print('Defer ' + repr(c))
                     overflow.append(c)
                 elif _debug:
-                    print "After applying", c, ":"
-                    print "specifications=", specifications
-                    print "Confined_by", confined_by
-                    print "aux", aux
-                    print "-----------------"
+                    print("After applying", c, ":")
+                    print("specifications=", specifications)
+                    print("Confined_by", confined_by)
+                    print("aux", aux)
+                    print("-----------------")
             if _debug:
-                print 'About to call subRegion:', specifications
+                print('About to call subRegion:', specifications)
             fetched = result.subRegion(*specifications)
-            axismap = range(len(axes))
+            axismap = list(range(len(axes)))
             for c in components:
                 if c in overflow:
                     continue
@@ -428,7 +426,7 @@ def required(values):
     """Creates a selector that requires a certain axis to be present."""
     if values is None:
         return all
-    if isinstance(values, types.StringType):
+    if isinstance(values, bytes):
         values = (values,)
     return Selector(requiredComponent(values))
 

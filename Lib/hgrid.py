@@ -7,11 +7,11 @@ import numpy
 import cdms2
 import os
 import os.path
-from error import CDMSError
-from grid import AbstractGrid, LongitudeType, LatitudeType, CoordTypeToLoc
-from coord import TransientVirtualAxis
-from axis import getAutoBounds, allclose
-import bindex
+from .error import CDMSError
+from .grid import AbstractGrid, LongitudeType, LatitudeType, CoordTypeToLoc
+from .coord import TransientVirtualAxis
+from .axis import getAutoBounds, allclose
+from . import bindex
 import _bindex
 from functools import reduce
 
@@ -131,7 +131,7 @@ class AbstractHorizontalGrid(AbstractGrid):
             mask = where(less(cross, 0.0), 1, 0)
             badmask = logical_or(mask, badmask)
 
-        badcells = compress(badmask, range(len(badmask)))
+        badcells = compress(badmask, list(range(len(badmask))))
 
         lonb.shape = saveshape
         latb.shape = saveshape
@@ -343,9 +343,9 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
     def toGenericGrid(self, gridid=None):
 
         import copy
-        from auxcoord import TransientAuxAxis1D
-        from coord import TransientVirtualAxis
-        from gengrid import TransientGenericGrid
+        from .auxcoord import TransientAuxAxis1D
+        from .coord import TransientVirtualAxis
+        from .gengrid import TransientGenericGrid
 
         lat = numpy.ma.filled(self._lataxis_)
         latunits = self._lataxis_.units
@@ -456,10 +456,10 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
 
         x = self._lonaxis_
         if (not hasattr(x, 'units')):
-            print "Warning, no units found for longitude"
+            print("Warning, no units found for longitude")
             x.units = 'degree_east'
         if (not hasattr(x, 'standard_name')):
-            print "Warning, no standard_name found for longitude axis"
+            print("Warning, no standard_name found for longitude axis")
             x.standard_name = 'longitude'
         if (x.standard_name == 'geographic_longitude'):
             # temporary for updating test files
@@ -471,10 +471,10 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
 
         y = self._lataxis_
         if (not hasattr(y, 'units')):
-            print "Warning, no units found for latitude"
+            print("Warning, no units found for latitude")
             y.units = 'degree_north'
         if (not hasattr(y, 'standard_name')):
-            print "Warning, no standard_name found for latitude axis"
+            print("Warning, no standard_name found for latitude axis")
             y.standard_name = 'latitude'
         if (y.standard_name == 'geographic_latitude'):
             # temporary for updating test files
@@ -548,7 +548,7 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         try:
             f = cdms2.open(filename)
         except IOError:
-            print "Cannot open grid file for reading: ", filename
+            print("Cannot open grid file for reading: ", filename)
             return
         self.init_from_gridspec_file(self, f)
         f.close()
@@ -721,7 +721,7 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         having the same length as the number of cells in the grid, similarly
         for flatlon."""
         if self._flataxes_ is None:
-            import MV2 as MV
+            from . import MV2 as MV
             alat = MV.filled(self.getLatitude())
             alon = MV.filled(self.getLongitude())
             alatflat = numpy.ravel(alat)
@@ -799,9 +799,9 @@ def readScripCurveGrid(fileobj, dims, whichType, whichGrid):
     if whichType is "mapping", whichGrid is the choice of grid, either "source" or "destination"
     """
     import string
-    from coord import TransientAxis2D
+    from .coord import TransientAxis2D
 
-    if 'S' in fileobj.variables.keys():
+    if 'S' in list(fileobj.variables.keys()):
         if whichType == "grid":
             gridCornerLatName = 'grid_corner_lat'
             gridCornerLonName = 'grid_corner_lon'

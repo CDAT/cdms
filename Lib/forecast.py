@@ -17,7 +17,7 @@ def two_times_from_one(t):
         t = 0
     if isinstance(t, str):
         t = cdtime.s2c(t)
-    if (isinstance(t, long) or isinstance(t, int)) and t > 1000000000:
+    if (isinstance(t, int) or isinstance(t, int)) and t > 1000000000:
         tl = t
         year = tl / 1000000000
         rem = tl % 1000000000
@@ -186,9 +186,9 @@ class forecasts():
     def time_interval_to_list(self, tlo, thi, openclosed='co'):
         """For internal use, translates a time interval to a list of times.
         """
-        if not isinstance(tlo, long):  # make tlo a long integer
+        if not isinstance(tlo, int):  # make tlo a long integer
             tlo, tdummy = two_times_from_one(tlo)
-        if not isinstance(thi, long):  # make thi a long integer
+        if not isinstance(thi, int):  # make thi a long integer
             thi, tdummy = two_times_from_one(thi)
         oclo = openclosed[0]
         ochi = openclosed[1]

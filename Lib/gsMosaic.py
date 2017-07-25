@@ -203,16 +203,16 @@ class Mosaic:
         @return transient variable grid
         """
         result = []
-        for tn1 in self.tile_contacts.keys():
-            for tn2 in self.tile_contacts[tn1].keys():
+        for tn1 in list(self.tile_contacts.keys()):
+            for tn2 in list(self.tile_contacts[tn1].keys()):
                 # Get the seam data
                 result.append(self.getSeamData(tn1, tn2, coordData))
 
                 # Get the triangle data. Need to find the three cells
                 # comprising a corner.
-                if tn2 in self.tile_contacts.keys():
-                    t1n = self.tile_contacts[tn1].keys()
-                    t2n = self.tile_contacts[tn2].keys()
+                if tn2 in list(self.tile_contacts.keys()):
+                    t1n = list(self.tile_contacts[tn1].keys())
+                    t2n = list(self.tile_contacts[tn2].keys())
 
                     # Look for a tile in the main list. Now compare the adjacent
                     # tiles to 1 and 2 until there is match. Now we have tile 3
@@ -481,26 +481,26 @@ def test():
 
     options, args = parser.parse_args()
     if not options.mfile:
-        print usage
+        print(usage)
         exit(1)
     # Use the libcf examples directory.
     if not os.path.exists(options.mfile):
-        print "File '%s' does not exist. Check path" % options.mfile
+        print("File '%s' does not exist. Check path" % options.mfile)
         exit(2)
 
     m = open(options.mfile)
 
-    print "\nCoordinate Names"
+    print("\nCoordinate Names")
     for c in m.coordinate_names:
-        print c
+        print(c)
 
-    print "\nTile Contacts"
+    print("\nTile Contacts")
     for t in m.tile_contacts:
-        print "%s -> %s" % (t, m.tile_contacts[t])
-    print "\nTile Contacts Complement"
+        print("%s -> %s" % (t, m.tile_contacts[t]))
+    print("\nTile Contacts Complement")
     for t in m.tile_contacts_compl:
-        print "%s -> %s" % (t, m.tile_contacts_compl[t])
-    print
+        print("%s -> %s" % (t, m.tile_contacts_compl[t]))
+    print()
 
 
 if __name__ == "__main__":

@@ -9,7 +9,7 @@ No guarantee is provided whatsoever. Use at your own risk.
 Alex Pletzer, Tech-X Corp. (2011)
 """
 
-import mvSphereMesh
+from . import mvSphereMesh
 
 
 class BaseWriter:

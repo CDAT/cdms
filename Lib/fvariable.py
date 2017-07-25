@@ -4,10 +4,10 @@
 "CDMS File-based variables."
 import numpy
 
-from cdmsobj import Max32int
-from variable import DatasetVariable
-from error import CDMSError
-from sliceut import reverseSlice
+from .cdmsobj import Max32int
+from .variable import DatasetVariable
+from .error import CDMSError
+from .sliceut import reverseSlice
 from Cdunif import CdunifError
 
 FileClosed = "Cannot read from closed file, variable: "
@@ -21,10 +21,10 @@ class FileVariable(DatasetVariable):
         DatasetVariable.__init__(self, parent, varname)
         self._obj_ = cdunifobj
         if cdunifobj is not None:
-            for attname, attval in cdunifobj.__dict__.items():
+            for attname, attval in list(cdunifobj.__dict__.items()):
                 self.__dict__[attname] = attval
                 self.attributes[attname] = attval
-            if '_FillValue' in self.__dict__.keys():
+            if '_FillValue' in list(self.__dict__.keys()):
                 self.__dict__['missing_value'] = self.__dict__['_FillValue']
                 self.attributes['missing_value'] = self.__dict__['_FillValue']
             if self.__dict__['missing_value'] is None:

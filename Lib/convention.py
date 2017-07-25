@@ -1,8 +1,8 @@
 """ metadata conventions """
 
 import string
-from error import CDMSError
-from UserList import UserList
+from .error import CDMSError
+from collections import UserList
 
 # On in order to turn off some warnings
 WITH_GRIDSPEC_SUPPORT = True
@@ -18,7 +18,7 @@ class AliasList (UserList):
         self.data[i] = string.lower(value)
 
     def __setslice(self, i, j, values):
-        self.data[i:j] = map(lambda x: string.lower(x), values)
+        self.data[i:j] = [string.lower(x) for x in values]
 
     def append(self, value):
         self.data.append(string.lower(value))
@@ -80,7 +80,7 @@ class NUGConvention(AbstractConvention):
     def getAxisIds(self, vardict):
         "Get 1-D coordinate axis IDs."
         result = []
-        for name in vardict.keys():
+        for name in list(vardict.keys()):
             dimensions = vardict[name].dimensions
             if len(dimensions) == 1 and (name in dimensions):
                 result.append(name)
@@ -106,7 +106,7 @@ class CFConvention(COARDSConvention):
     def getAxisAuxIds(self, vardict, axiskeys):
         "Get Axis2D and AuxAxis1D IDs"
         coorddict = {}
-        for var in vardict.values():
+        for var in list(vardict.values()):
             if hasattr(var, 'coordinates'):
                 coordnames = string.split(var.coordinates)
                 for item in coordnames:
@@ -114,26 +114,26 @@ class CFConvention(COARDSConvention):
                     if item in axiskeys:
                         continue
                     coorddict[item] = 1
-        for key in coorddict.keys():
+        for key in list(coorddict.keys()):
             try:
                 coord = vardict[key]
             except KeyError:
                 # Note: not everything referenced by .coordinates attribute is
                 # in fact a coordinate axis, e.g., scalar coordinates
                 if not WITH_GRIDSPEC_SUPPORT:
-                    print 'Warning: coordinate attribute points to non-existent variable: %s' % key
+                    print('Warning: coordinate attribute points to non-existent variable: %s' % key)
                 del coorddict[key]
                 continue
             # Omit scalar dimensions, and dimensions greater than 2-D
             if len(coord.shape) not in [1, 2]:
                 del coorddict[key]
-        return coorddict.keys()
+        return list(coorddict.keys())
 
     def getDsetnodeAuxAxisIds(self, dsetnode):
         "Get auxiliary axis IDs from a dataset node"
         coorddict = {}
         dsetdict = dsetnode.getIdDict()
-        for node in dsetdict.values():
+        for node in list(dsetdict.values()):
             coordnames = node.getExternalAttr('coordinates')
             if coordnames is not None:
                 coordnames = string.split(coordnames)
@@ -148,7 +148,7 @@ class CFConvention(COARDSConvention):
                     if domnode.getChildCount() not in [1, 2]:
                         continue
                     coorddict[item] = 1
-        return coorddict.keys()
+        return list(coorddict.keys())
 
     def getVarLatId(self, var, vardict):
         lat = None
@@ -236,7 +236,7 @@ class CFConvention(COARDSConvention):
             if boundsid in dset.variables:
                 result = dset[boundsid]
             else:
-                print 'Warning: bounds variable not found in %s: %s' % (dset.id, boundsid)
+                print('Warning: bounds variable not found in %s: %s' % (dset.id, boundsid))
                 result = None
         else:
             result = None

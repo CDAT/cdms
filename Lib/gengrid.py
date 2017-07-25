@@ -4,11 +4,11 @@
 """CDMS Generic Grids"""
 
 import numpy
-import bindex
-from error import CDMSError
-from grid import LongitudeType, LatitudeType, CoordTypeToLoc
-from hgrid import AbstractHorizontalGrid
-from axis import allclose
+from . import bindex
+from .error import CDMSError
+from .grid import LongitudeType, LatitudeType, CoordTypeToLoc
+from .hgrid import AbstractHorizontalGrid
+from .axis import allclose
 
 MethodNotImplemented = "Method not yet implemented"
 
@@ -38,7 +38,7 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
     def getMesh(self, transpose=None):
         """Generate a mesh array for the meshfill graphics method.
         'transpose' is for compatibility with other grid types, is ignored."""
-        import MV2 as MV
+        from . import MV2 as MV
         if self._mesh_ is None:
             LAT = 0
             LON = 1
@@ -288,7 +288,7 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
         having the same length as the number of cells in the grid, similarly
         for flatlon."""
         if self._flataxes_ is None:
-            import MV2 as MV
+            from . import MV2 as MV
             alat = MV.filled(self.getLatitude())
             alon = MV.filled(self.getLongitude())
             self._flataxes_ = (alat, alon)
@@ -371,11 +371,11 @@ def readScripGenericGrid(fileobj, dims, whichType, whichGrid):
     if whichType is "mapping", whichGrid is the choice of grid, either "source" or "destination"
     """
     import string
-    from auxcoord import TransientAuxAxis1D
-    from coord import TransientVirtualAxis
+    from .auxcoord import TransientAuxAxis1D
+    from .coord import TransientVirtualAxis
 
     convention = 'SCRIP'
-    if 'S' in fileobj.variables.keys():
+    if 'S' in list(fileobj.variables.keys()):
         convention = 'NCAR'
         if whichType == "grid":
             gridCornerLatName = 'grid_corner_lat'

@@ -21,7 +21,7 @@ try:
     LIBCF = __path__[0] + '/pylibcf'
 
 except BaseException:    # raise ImportError, 'Error: could not import pycf'
-    print 'Error: could not import pycf'
+    print('Error: could not import pycf')
 
 
 def open(hostfile, mode='r'):
@@ -194,7 +194,7 @@ class Host:
             varNames = cdms2.open(fName_ct.value, 'r').listvariable()
             for vn in varNames:
                 if vn in coordinates:
-                    if vn not in self.gridVars.keys():
+                    if vn not in list(self.gridVars.keys()):
                         self.gridVars[vn] = []
                         self.gridName[vn] = []
 
@@ -203,9 +203,9 @@ class Host:
 
         # Populate the variables dictionary, avoid the grids
         self.variables = {}
-        for item in self.statVars.keys():
+        for item in list(self.statVars.keys()):
             self.variables[item] = StaticFileVariable(self, item)
-        for item in self.timeVars.keys():
+        for item in list(self.timeVars.keys()):
             self.variables[item] = TimeFileVariable(self, item)
 
     def __initialize(self):
@@ -257,7 +257,7 @@ class Host:
         Get the mosaic filename
         @return mfn Mosaic filename
         """
-        from gsMosaic import Mosaic
+        from .gsMosaic import Mosaic
         mfn = Mosaic(self.mosaicFilename, "r")
 
         return mfn
@@ -272,14 +272,14 @@ class Host:
         """
         Return a list of time filenames. Assumes each coordinate is in each file.
         """
-        c = self.gridVars.keys()
+        c = list(self.gridVars.keys())
         return self.gridVars[c[0]]
 
     def getGridNames(self):
         """
         Return a list of grid names
         """
-        return self.gridName.values()
+        return list(self.gridName.values())
 
     def getStatFilenames(self, varName=None):
         """
@@ -291,7 +291,7 @@ class Host:
         if varName is not None:
             return self.statVars[varName]
         # return all the static var filenames
-        return self.statVars.values()
+        return list(self.statVars.values())
 
     def getTimeFilenames(self, varName=None):
         """
@@ -302,22 +302,22 @@ class Host:
         if varName is not None:
             return self.timeVars[varName]
         # return all the time var filenames
-        return self.timeVars.values()
+        return list(self.timeVars.values())
 
     def getCoordinates(self):
         """
         Coordinates variables contained within the host object
         @return list of coordinate names
         """
-        return self.gridVars.keys()
+        return list(self.gridVars.keys())
 
     def getNumGrids(self):
         """
         Get number of grids (tiles)
         @return number of grids
         """
-        c = self.gridVars.keys()
-        return len(self.gridVars[c[0]].values())
+        c = list(self.gridVars.keys())
+        return len(list(self.gridVars[c[0]].values()))
 
     def getNumStatDataFiles(self):
         """
@@ -342,14 +342,14 @@ class Host:
         isStr = isinstance(gstype, str)
 
         if isNone:
-            variables = self.statVars.keys() + self.timeVars.keys()
+            variables = list(self.statVars.keys()) + list(self.timeVars.keys())
             return variables
 
         elif isStr:
             if gstype.upper() == "STATIC":
-                return self.statVars.keys()
+                return list(self.statVars.keys())
             if gstype[0:4].upper() == "TIME":
-                return self.timeVars.keys()
+                return list(self.timeVars.keys())
             return None
 
         # Raise error
@@ -395,14 +395,14 @@ class Host:
         List a variable's dimensions
         @return [nGrids, (n0, n1, ...)]
         """
-        return self.dimensions.keys()
+        return list(self.dimensions.keys())
 
     def listglobal(self):
         """
         List global attributes of host file
         @return a list of the global attributes in the file
         """
-        return self.attributes.keys()
+        return list(self.attributes.keys())
 
     def getglobal(self, attName):
         """
@@ -528,41 +528,41 @@ def test():
 
     options, args = parser.parse_args()
     if not options.hostFilename:
-        print """need to provide a host file, use -h
-to get a full list of options"""
+        print("""need to provide a host file, use -h
+to get a full list of options""")
         sys.exit(1)
 
-    print 'open file..., create grdspec file object...'
+    print('open file..., create grdspec file object...')
     gf = cdms2.open(options.hostFilename)
     if gf._status_ == 'closed':
-        print "File not opened"
+        print("File not opened")
         sys.exit(1)
-    print
-    print "type=", type(gf)
-    print 'listvariable...'
-    print gf.listvariable()
-    print 'listattributes...'
-    print gf.listattribute('distance')
-    print gf.listattribute('v')
-    print 'listglobals...'
-    print gf.listglobal()
-    print 'print...'
-    print gf
-    print 'access static data...', 'distance' in gf.listvariable()
-    print type(gf['distance'])
+    print()
+    print("type=", type(gf))
+    print('listvariable...')
+    print(gf.listvariable())
+    print('listattributes...')
+    print(gf.listattribute('distance'))
+    print(gf.listattribute('v'))
+    print('listglobals...')
+    print(gf.listglobal())
+    print('print...')
+    print(gf)
+    print('access static data...', 'distance' in gf.listvariable())
+    print(type(gf['distance']))
     di = gf['distance']
-    print di[0].size
-    print gf['distance'][0].shape
-    print 'acess time dependent data...', "V" in gf.listvariables()
-    print gf['V'][0].size
+    print(di[0].size)
+    print(gf['distance'][0].shape)
+    print('acess time dependent data...', "V" in gf.listvariables())
+    print(gf['V'][0].size)
 
     # Test the mosaic
-    print 'getMosaic...', 'getMosaic' in dir(gf)
+    print('getMosaic...', 'getMosaic' in dir(gf))
     mosaic = gf.getMosaic()
     for c in mosaic.coordinate_names:
-        print c
+        print(c)
     for t in mosaic.tile_contacts:
-        print "%s -> %s" % (t, mosaic.tile_contacts[t])
+        print("%s -> %s" % (t, mosaic.tile_contacts[t]))
 
 ##############################################################################
 

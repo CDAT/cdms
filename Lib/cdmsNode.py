@@ -6,13 +6,13 @@ CDMS node classes
 """
 import numpy
 from numpy import get_printoptions, set_printoptions, inf
-import CDML
+from . import CDML
 import cdtime
 import re
 import string
 import sys
 from types import StringType, TupleType, IntType, FloatType, ListType, NoneType
-from error import CDMSError
+from .error import CDMSError
 
 # Regular expressions
 # Note: allows digit as first character
@@ -264,7 +264,7 @@ class CdmsNode:
     # Set the external attribute dictionary. The input dictionary
     # is of the form {name:value,...} where value is a string.
     def setExternalDict(self, dict):
-        for key in dict.keys():
+        for key in list(dict.keys()):
             self.attribute[key] = (dict[key], CdString)
 
     # Write to a file, with formatting.
@@ -276,7 +276,7 @@ class CdmsNode:
         # Ensure that all Numeric array values will be printed
         set_printoptions(threshold=inf)
         if self.dtd:
-            validAttrs = self.dtd.keys()
+            validAttrs = list(self.dtd.keys())
         else:
             validAttrs = None
 
@@ -287,7 +287,7 @@ class CdmsNode:
             fd.write('\n')
 
         # Write valid attributes
-        for attname in self.attribute.keys():
+        for attname in list(self.attribute.keys()):
             if (validAttrs and (attname in validAttrs)) or (not validAttrs):
                 if format:
                     fd.write((tablevel + 1) * '\t')
@@ -309,7 +309,7 @@ class CdmsNode:
             fd.write('\n')
 
         # Write extra attributes
-        for attname in self.attribute.keys():
+        for attname in list(self.attribute.keys()):
             if validAttrs and (attname not in validAttrs):
                 (attval, datatype) = self.attribute[attname]
                 attr = AttrNode(attname, attval)
@@ -355,7 +355,7 @@ class CdmsNode:
         if fd is None:
             fd = sys.stdout
         if self.dtd:
-            validAttrs = self.dtd.keys()
+            validAttrs = list(self.dtd.keys())
         else:
             validAttrs = None
 
@@ -364,7 +364,7 @@ class CdmsNode:
         fd.write("dn: %s\n" % newdn)
 
         # Write valid attributes
-        for attname in self.attribute.keys():
+        for attname in list(self.attribute.keys()):
             if (validAttrs and (attname in validAttrs)) or (not validAttrs):
                 (attval, datatype) = self.attribute[attname]
                 # attvalstr = _Illegal.sub(mapIllegalToEntity,str(attval))  #
@@ -379,7 +379,7 @@ class CdmsNode:
                 fd.write("%s: %s\n" % (attname, attvalstr))
 
         # Write extra attributes
-        for attname in self.attribute.keys():
+        for attname in list(self.attribute.keys()):
             if validAttrs and (attname not in validAttrs):
                 (attval, datatype) = self.attribute[attname]
                 if not isinstance(attval, StringType):
@@ -415,8 +415,8 @@ class CdmsNode:
     def validate(self, idtable=None):
 
         # Check validity of enumerated values and references
-        validKeys = self.dtd.keys()
-        for attname in self.attribute.keys():
+        validKeys = list(self.dtd.keys())
+        for attname in list(self.attribute.keys()):
             if attname in validKeys:
                 (atttype, default) = self.dtd[attname]
                 if isinstance(atttype, TupleType):
@@ -427,7 +427,7 @@ class CdmsNode:
                     attval = self.getExternalAttr(attname)
                     if idtable:
                         if attval not in idtable:
-                            print 'Warning: ID reference not found: %s=%s' % (attname, attval)
+                            print('Warning: ID reference not found: %s=%s' % (attname, attval))
 
         # Validate children
         for node in self.children():
@@ -1043,7 +1043,7 @@ class DomElemNode(CdmsNode):
         if format:
             fd.write(tablevel * '\t')
         fd.write('<' + self.tag)
-        for attname in self.attribute.keys():
+        for attname in list(self.attribute.keys()):
             (attval, datatype) = self.attribute[attname]
             # attvalstr = string.replace(str(attval),'"',"'") # Map " to '
             attvalstr = _Illegal.sub(
@@ -1138,7 +1138,7 @@ class AttrNode(CdmsNode):
         if fd is None:
             fd = sys.stdout
         if self.dtd:
-            validAttrs = self.dtd.keys()
+            validAttrs = list(self.dtd.keys())
         else:
             validAttrs = None
 
@@ -1147,7 +1147,7 @@ class AttrNode(CdmsNode):
         fd.write('<' + self.tag)
 
         # Write valid attributes
-        for attname in self.attribute.keys():
+        for attname in list(self.attribute.keys()):
             if (validAttrs and (attname in validAttrs)) or (not validAttrs):
                 (attval, datatype) = self.attribute[attname]
                 # attvalstr = string.replace(str(attval),'"',"'") # Map " to '
@@ -1230,14 +1230,14 @@ if __name__ == '__main__':
 
     def printType(axis):
         if axis.dataRepresent == CdLinear:
-            print 'linear'
+            print('linear')
         else:
-            print 'vector'
+            print('vector')
 
     def testit(a, b):
         import copy
         x = copy.copy(a)
-        print x.extend(b).getData()
+        print(x.extend(b).getData())
         printType(x)
 
     # testit(mAxis,nAxis)

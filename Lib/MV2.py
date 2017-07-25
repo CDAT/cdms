@@ -5,7 +5,7 @@
 import numpy
 from numpy import character, float, float32, float64  # noqa
 from numpy import int, int8, int16, int32, int64, byte  # noqa
-from numpy import  ubyte, uint8, uint16, uint32, uint64, long   # noqa
+from numpy import  ubyte, uint8, uint16, uint32, uint64, int   # noqa
 from numpy.ma import allclose, allequal, common_fill_value  # noqa
 from numpy.ma import make_mask_none, dot, filled  # noqa
 from numpy.ma import getmask, getmaskarray, identity  # noqa
@@ -13,12 +13,12 @@ from numpy.ma import indices, innerproduct, masked, put, putmask, rank, ravel  #
 from numpy.ma import set_fill_value, shape, size, isMA, isMaskedArray, is_mask, isarray  # noqa
 from numpy.ma import make_mask, mask_or, nomask   # noqa
 from numpy import sctype2char, get_printoptions, set_printoptions
-from avariable import AbstractVariable, getNumericCompatibility
-from tvariable import TransientVariable, asVariable
-from grid import AbstractRectGrid
-from error import CDMSError
+from .avariable import AbstractVariable, getNumericCompatibility
+from .tvariable import TransientVariable, asVariable
+from .grid import AbstractRectGrid
+from .error import CDMSError
 # from numpy.ma import *
-from axis import allclose as axisAllclose, TransientAxis, concatenate as axisConcatenate, take as axisTake
+from .axis import allclose as axisAllclose, TransientAxis, concatenate as axisConcatenate, take as axisTake
 
 
 create_mask = make_mask_none
@@ -354,7 +354,7 @@ def is_floating(x):
 def is_integer(x):
     "Is x a scalar integer, either python or numpy?"
     return (isinstance(x, numpy.integer) or isinstance(
-        x, int) or isinstance(x, long))
+        x, int) or isinstance(x, int))
 
 
 def get_print_limit():
@@ -551,7 +551,7 @@ def choose(myindices, t):
 
       The result has only the default axes.
     """
-    maresult = numpy.ma.choose(myindices, map(_makeMaskedArg, t))
+    maresult = numpy.ma.choose(myindices, list(map(_makeMaskedArg, t)))
     F = getattr(t, "fill_value", 1.e20)
     return TransientVariable(maresult, fill_value=F)
 

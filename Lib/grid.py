@@ -2,19 +2,18 @@
 # Further modified to be pure new numpy June 24th 2008
 
 """CDMS Grid objects"""
-import types
 import re
-from error import CDMSError
-import numpy  # , PropertiedClasses, internattr
+from .error import CDMSError
+import numpy
 # import regrid2._regrid
 import copy
 import string
 import sys
-from cdmsobj import CdmsObj
-from axis import TransientAxis, createAxis, createUniformLatitudeAxis
-from axis import createUniformLongitudeAxis, getAutoBounds, createGaussianAxis
-from axis import isSubsetVector
-from axis import lookupArray  # noqa
+from .cdmsobj import CdmsObj
+from .axis import TransientAxis, createAxis, createUniformLatitudeAxis
+from .axis import createUniformLongitudeAxis, getAutoBounds, createGaussianAxis
+from .axis import isSubsetVector
+from .axis import lookupArray  # noqa
 
 MethodNotImplemented = "Method not yet implemented"
 
@@ -152,7 +151,7 @@ def setRegionSpecs(grid, coordSpec, coordType, resultSpec):
 
     if (coordSpec is None) or (coordSpec == ':'):
         canonSpec = None
-    elif isinstance(coordSpec, types.TupleType):
+    elif isinstance(coordSpec, tuple):
         if len(coordSpec) == 2:
             canonSpec = (coordSpec[0], coordSpec[1], 'cc', None)
         elif len(coordSpec) == 3:
@@ -161,7 +160,7 @@ def setRegionSpecs(grid, coordSpec, coordType, resultSpec):
             raise CDMSError(
                 'Invalid coordinate specification: %s' %
                 repr(coordSpec))
-    elif type(coordSpec) in [types.IntType, types.FloatType]:
+    elif type(coordSpec) in [int, float]:
         canonSpec = (coordSpec, coordSpec, 'cc', None)
     else:
         raise CDMSError(
@@ -515,7 +514,7 @@ class AbstractRectGrid(AbstractGrid):
         import regrid2._regrid
 
         if hasattr(self, "parent") and self.parent is not None:
-            gridfamily = self.parent.grids.values()
+            gridfamily = list(self.parent.grids.values())
         else:
             gridfamily = []
 
@@ -626,8 +625,8 @@ class AbstractRectGrid(AbstractGrid):
         'gridid' is the string identifier of the resulting curvilinear grid object.
         """
 
-        from coord import TransientVirtualAxis, TransientAxis2D
-        from hgrid import TransientCurveGrid
+        from .coord import TransientVirtualAxis, TransientAxis2D
+        from .hgrid import TransientCurveGrid
 
         lat = self._lataxis_[:]
         lon = self._lonaxis_[:]
@@ -718,13 +717,6 @@ class AbstractRectGrid(AbstractGrid):
 
     shape = property(_getshape, None)
 
-# PropertiedClasses.set_property (AbstractRectGrid, 'shape',
-# AbstractRectGrid._getshape,
-# nowrite=1,
-# nodelete=1)
-
-# internattr.add_internal_attribute (AbstractRectGrid, 'id', 'parent')
-
 
 class RectGrid(AbstractRectGrid):
 
@@ -760,8 +752,6 @@ class RectGrid(AbstractRectGrid):
 
     def getMaskVar(self):
         return self._maskVar_
-
-# internattr.add_internal_attribute(RectGrid)
 
 
 class FileRectGrid(AbstractRectGrid):
@@ -814,8 +804,6 @@ class FileRectGrid(AbstractRectGrid):
     def getMaskVar(self):
         return self._maskVar_
 
-# internattr.add_internal_attribute(FileRectGrid)
-
 # In-memory rectilinear grid
 
 
@@ -858,8 +846,6 @@ class TransientRectGrid(AbstractRectGrid):
     def setBounds(self, latBounds, lonBounds):
         self._lataxis_.setBounds(latBounds)
         self._lonaxis_.setBounds(lonBounds)
-
-# internattr.add_internal_attribute(TransientRectGrid)
 
 
 def isGrid(grid):

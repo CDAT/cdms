@@ -5,7 +5,6 @@ David Kindig and Alex Pletzer, Tech-X Corp. (2012)
 This code is provided with the hope that it will be useful.
 No guarantee is provided whatsoever. Use at your own risk.
 """
-import types
 import operator
 import re
 import numpy
@@ -197,7 +196,7 @@ def getBoundList(coordList, mask=None,
         res = _areCellsOk(cornerCoords, mask=mask)
         if res:
             badCellIndices += res['badCellIndices']
-            print """
+            print("""
 -----------
 WARNING: bad cell were detected
 -----------
@@ -209,7 +208,7 @@ indices of bad cells:
 
 bad cell coordinates:
                       %(badCellCoords)s
-                """ % res
+                """ % res)
 
     return cornerCoords
 
@@ -386,15 +385,15 @@ class CdmsRegrid:
 
             for c, b in zip(srcBounds, srcCoords):
                 if c.min() == b.min() or c.max() == b.max():
-                    print """
+                    print("""
 WARNING: Edge bounds are the same. The results of conservative regridding will not conserve.
 coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
-              """ % (c.min(), b.min(), c.max(), b.max())
+              """ % (c.min(), b.min(), c.max(), b.max()))
 
             if srcBounds[0].min() < -90 or srcBounds[0].max() > 90 or \
                dstBounds[0].min() < -90 or dstBounds[0].max() > 90:
-                print "WARNING: Bounds exceed +/-90 degree latitude: min/max lats = %g/%g" % \
-                    (srcBounds[0].min(), srcBounds[0].max())
+                print("WARNING: Bounds exceed +/-90 degree latitude: min/max lats = %g/%g" %
+                      (srcBounds[0].min(), srcBounds[0].max()))
 
             if not re.search('esmp', regridTool.lower()):
                 regridTool = 'esmf'
@@ -470,7 +469,7 @@ coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
         attrs = {}
         for a in srcVar.attributes:
             v = srcVar.attributes[a]
-            if isinstance(v, types.StringType):
+            if isinstance(v, bytes):
                 attrs[a] = v
 
         # if the missing value is present in the destination data, set

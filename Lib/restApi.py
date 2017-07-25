@@ -1,5 +1,7 @@
 # import cdms2
-import urllib2
+import urllib.request
+import urllib.error
+import urllib.parse
 import xml.etree.ElementTree
 try:
     import genutil
@@ -39,7 +41,7 @@ class FacetConnection(object):
             if facet_param:
                 rqst = rqst + '&%s' % facet_param
             # print rqst
-            url = urllib2.urlopen(rqst)
+            url = urllib.request.urlopen(rqst)
         except Exception as msg:
             raise self.EsgfObjectException(msg)
         r = url.read()
@@ -74,7 +76,7 @@ class FacetConnection(object):
             if facet_param:
                 rqst = rqst + '&%s' % facet_param
                 # print rqst
-            url = urllib2.urlopen(rqst)
+            url = urllib.request.urlopen(rqst)
         except Exception as msg:
             raise self.EsgfObjectException(msg)
         r = url.read()
@@ -122,7 +124,7 @@ class esgfConnection(object):
         # Now figure out the facet fields
         self.serverOrder = []
         for e in all:
-            if e.tag == "lst" and "name" in e.keys() and e.get("name") == "responseHeader":
+            if e.tag == "lst" and "name" in list(e.keys()) and e.get("name") == "responseHeader":
                 # ok found the Header
                 for s in e:
                     if s.get("name") == "params":
@@ -171,11 +173,11 @@ class esgfConnection(object):
         return val
 
     def __setitem__(self, key, value):
-        if key not in self.params.keys():
+        if key not in list(self.params.keys()):
             raise self.EsgfObjectException(
                 "Invalid key: %s, valid keys are: %s" %
                 (repr(key), repr(
-                    self.params.keys())))
+                    list(self.params.keys()))))
         self.params[key] = value
         return
 
@@ -202,7 +204,7 @@ class esgfConnection(object):
             tmp = rqst[6:].replace("//", "/")
             rqst = rqst[:6] + tmp
             # print "Request:%s"%rqst
-            url = urllib2.urlopen(rqst)
+            url = urllib.request.urlopen(rqst)
         except Exception as msg:
             raise self.EsgfObjectException(msg)
         r = url.read()
@@ -224,7 +226,7 @@ class esgfConnection(object):
         # if self[k] is not None and k in self.searchableKeys and k!="type":
         # params[k]=self[k]
 
-        for k in keys.keys():
+        for k in list(keys.keys()):
             if k == "stringType":
                 # stringType = keys[k]
                 continue
@@ -237,7 +239,7 @@ class esgfConnection(object):
                 params[k] = keys[k]
 
         search = ""
-        for k in params.keys():
+        for k in list(params.keys()):
             if isinstance(params[k], list):
                 for v in params[k]:
                     if isinstance(v, str):
@@ -495,11 +497,11 @@ class esgfDataset(esgfConnection):
         return files
 
     def info(self):
-        print self
+        print(self)
 
     def __str__(self):
         st = "Dataset Information\nid: %s\nKeys:\n" % self.id
-        for k in self.keys():
+        for k in list(self.keys()):
             st += "\t%s : %s\n" % (k, self[k])
         return st
 
@@ -638,7 +640,7 @@ class esgfFiles(object):
 
     def getMappingKeys(self):
         if isinstance(self.mapping, genutil.StringConstructor):
-            return self.mapping.keys()
+            return list(self.mapping.keys())
         else:
             return None
 
@@ -648,7 +650,7 @@ class esgfFiles(object):
             if self.datasetids is not None:
                 self.mapping = self.datasetids
             else:
-                for k in self.parent.keys():
+                for k in list(self.parent.keys()):
                     if k not in ["limit", "offset", "text"]:
                         self.mapping += "%%(%s)" % k
         else:
@@ -704,44 +706,44 @@ class esgfFiles(object):
             mappoint = self.mapped
             tabs = ""
             nok = 0
-            nlevels = len(thismapping.keys())
+            nlevels = len(list(thismapping.keys()))
             # print "This mapping",thismapping.template,nlevels
             if nlevels == 0:
                 # ok no mapping, let's try to figure this one out
-                if 'dataset_id_template_' in f.keys():
+                if 'dataset_id_template_' in list(f.keys()):
                     # print "We are good to go"
                     ds = f['dataset_id_template_'].replace(")s", ")")
                     thismapping = genutil.StringConstructor(ds)
-            for k in thismapping.keys():
+            for k in list(thismapping.keys()):
                 # if verbose: print tabs,"keys:",k,"File keys:",f.keys()
                 # if k == self.mapping.keys()[0]:
                 # f.matched.keys()
                 # else:
                 # if verbose: print
-                if k in f.keys():
+                if k in list(f.keys()):
                     # if verbose: print tabs,k,f[k]
                     nok += 1
                     cont = f[k]
                     if not isinstance(cont, (str, int, float)):
                         break
-                    if cont not in mappoint.keys():
+                    if cont not in list(mappoint.keys()):
                         mappoint[cont] = {}
-                elif k in self.parent.keys():
+                elif k in list(self.parent.keys()):
                     # if verbose: print tabs,k,f[k]
                     nok += 1
                     cont = self[k]
-                    if cont not in mappoint.keys():
+                    if cont not in list(mappoint.keys()):
                         mappoint[cont] = {}
                 elif isinstance(self.fileids, genutil.StringConstructor):
                     try:
                         mapid = self.fileids.reverse(self.parent.id)
                         # if verbose:
                         # print "MAPID:",k,mapid
-                        if k in mapid.keys():
+                        if k in list(mapid.keys()):
                             # if verbose: print tabs,k,mapid[k]
                             nok += 1
                             cont = mapid[k]
-                            if cont not in mappoint.keys():
+                            if cont not in list(mappoint.keys()):
                                 mappoint[cont] = {}
                     except BaseException:
                         break

@@ -241,8 +241,8 @@ def test():
         else:
             fp = open(fn)
     else:
-        import StringIO
-        fp = StringIO.StringIO(test_input)
+        import io
+        fp = io.StringIO(test_input)
     while True:
         line = fp.readline()
         if not line:
@@ -252,15 +252,15 @@ def test():
             continue
         url = words[0]
         parts = urlparse(url)
-        print '%-10s : %s' % (url, parts)
+        print('%-10s : %s' % (url, parts))
         abs = urljoin(base, url)
         if not base:
             base = abs
         wrapped = '<URL:%s>' % abs
-        print '%-10s = %s' % (url, wrapped)
+        print('%-10s = %s' % (url, wrapped))
         if len(words) == 3 and words[1] == '=':
             if wrapped != words[2]:
-                print 'EXPECTED', words[2], '!!!!!!!!!!'
+                print('EXPECTED', words[2], '!!!!!!!!!!')
 
 
 if __name__ == '__main__':

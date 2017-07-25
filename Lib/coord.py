@@ -5,23 +5,23 @@
 CDMS CoordinateAxis objects
 """
 import sys
-import cdmsNode
+from . import cdmsNode
 import cdtime
 import copy
 import numpy
 #
 #
 import string
-from axis import TransientAxis
-from cdmsobj import CdmsObj
+from .axis import TransientAxis
+from .cdmsobj import CdmsObj
 # from axis import createAxis, TransientVirtualAxis
-from axis import TransientVirtualAxis   # noqa
-from error import CDMSError
-from convention import level_aliases, time_aliases, forecast_aliases
-from fvariable import FileVariable
-from variable import DatasetVariable
-from tvariable import TransientVariable
-from avariable import AbstractVariable
+from .axis import TransientVirtualAxis   # noqa
+from .error import CDMSError
+from .convention import level_aliases, time_aliases, forecast_aliases
+from .fvariable import FileVariable
+from .variable import DatasetVariable
+from .tvariable import TransientVariable
+from .avariable import AbstractVariable
 from functools import reduce
 
 MethodNotImplemented = "Method not yet implemented"
@@ -200,7 +200,7 @@ class AbstractCoordinateAxis(CdmsObj):
         d = self.getValue()
         result.append('   Shape: ' + str(d.shape))
         flag = 1
-        for k in self.attributes.keys():
+        for k in list(self.attributes.keys()):
             if k in std_axis_attributes:
                 continue
             if flag:
@@ -340,9 +340,6 @@ class DatasetAxis2D(AbstractAxis2D, DatasetVariable):
         else:
             return "<DatasetAxis2D: %s, file: **CLOSED**>" % self.id
 
-# internattr.initialize_internal_attributes(DatasetAxis2D) Copy internal
-# attrs from parents
-
 # Two-dimensional coordinate axis in a file.
 
 
@@ -360,9 +357,6 @@ class FileAxis2D(AbstractAxis2D, FileVariable):
         else:
             return "<FileAxis2D: %s, file: **CLOSED**>" % self.id
 
-# internattr.initialize_internal_attributes(FileAxis2D) # Copy internal
-# attrs from parents
-
 
 class TransientAxis2D(AbstractAxis2D, TransientVariable):
 
@@ -379,6 +373,3 @@ class TransientAxis2D(AbstractAxis2D, TransientVariable):
                                    id=id, copyaxes=copyaxes)
         if axes is not None:
             self.setBounds(bounds)
-
-# internattr.initialize_internal_attributes(TransientAxis2D) # Copy
-# internal attrs from parents

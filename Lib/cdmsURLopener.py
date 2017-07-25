@@ -1,10 +1,12 @@
 """Overrides urllib error handling"""
 # Import this AFTER urllib
 
-import urllib
+import urllib.request
+import urllib.parse
+import urllib.error
 
 
-class CDMSURLopener(urllib.FancyURLopener):
+class CDMSURLopener(urllib.request.FancyURLopener):
 
     # Override FancyURLopener error handling - raise an exception
     # Can also define function http_error_DDD where DDD is the 3-digit error code,
@@ -15,4 +17,4 @@ class CDMSURLopener(urllib.FancyURLopener):
         raise IOError('http error', errcode, errmsg, headers)
 
 
-urllib._urlopener = CDMSURLopener()
+urllib.request._urlopener = CDMSURLopener()

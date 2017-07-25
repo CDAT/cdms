@@ -8,7 +8,7 @@ No guarantee is provided whatsoever. Use at your own risk.
 """
 
 import numpy
-import mvBaseWriter
+from . import mvBaseWriter
 import re
 
 

@@ -18,7 +18,10 @@ from .sliceut import reverseSlice, splitSlice, splitSliceExt
 from .error import CDMSError
 from . import forecast
 import warnings
-from collections import UserList
+try:  # Python 3
+    from collections import UserList
+except BaseException:  # Python 2
+    from UserList import UserList
 
 
 _debug = 0

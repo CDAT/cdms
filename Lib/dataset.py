@@ -9,9 +9,14 @@ from . import cdmsNode
 import os
 import sys
 import string
-import urllib.request
-import urllib.error
-import urllib.parse
+try:  # Python3
+    import urllib.request
+    import urllib.parse
+except:  # Python 2
+    import urllib
+    urllib.request = urllib
+    import urlparse
+    urllib.parse = urlparse
 from . import cdmsobj
 import re
 from .CDMLParser import CDMLParser

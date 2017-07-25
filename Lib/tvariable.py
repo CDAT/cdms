@@ -216,7 +216,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         self.missing_value = self._getmissing()
         self._FillValue = self._getmissing()
         if id is not None:
-            if not isinstance(id, str):
+            if not isinstance(id, basestring):
                 raise CDMSError('id must be a string')
             self.id = id
         elif hasattr(data, 'id'):
@@ -502,7 +502,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             raise CDMSError("setdimattribute, dim out of bounds.")
         d = self.getAxis(dim)
         if field == "name":
-            if not isinstance(value, bytes):
+            if not isinstance(value, basestring):
                 raise CDMSError("setdimattribute: name not a string")
             d.id = value
 
@@ -515,7 +515,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             self.setAxis(dim, a)
 
         elif field == "units":
-            if not isinstance(value, bytes):
+            if not isinstance(value, basestring):
                 raise CDMSError("setdimattribute: units not a string")
             d.units = value
 

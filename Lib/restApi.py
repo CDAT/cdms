@@ -1,7 +1,12 @@
 # import cdms2
-import urllib.request
-import urllib.error
-import urllib.parse
+try:
+    import urllib.request
+    import urllib.parse
+except:
+    import urllib
+    urllib.request = urllib
+    import urlparse
+    urllib.parse = urlparse
 import xml.etree.ElementTree
 try:
     import genutil

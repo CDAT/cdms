@@ -2,7 +2,10 @@
 
 import string
 from .error import CDMSError
-from collections import UserList
+try:  # Python 3
+    from collections import UserList
+except BaseException:  # Python 2
+    from UserList import UserList
 
 # On in order to turn off some warnings
 WITH_GRIDSPEC_SUPPORT = True

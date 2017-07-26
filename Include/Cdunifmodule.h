@@ -69,119 +69,119 @@ typedef struct {
 
 /* Open a Cdunif file (i.e. create a new file object) */
 #define PyCdunifFile_Open_RET PyCdunifFileObject *
-#define PyCdunifFile_Open_PROTO (char *filename, char *mode)
+#define PyCdunifFile_Open_PROTO Py_PROTO((char *filename, char *mode))
 #define PyCdunifFile_Open_NUM 2
 
 /* Close a Cdunif file. Returns -1 if there was an error. */
 #define PyCdunifFile_Close_RET int
-#define PyCdunifFile_Close_PROTO (PyCdunifFileObject *file)
+#define PyCdunifFile_Close_PROTO Py_PROTO((PyCdunifFileObject *file))
 #define PyCdunifFile_Close_NUM 3
 
 /* Ensure that all data is written to the disk file.
    Returns 0 if there was an error. */
 #define PyCdunifFile_Sync_RET int
-#define PyCdunifFile_Sync_PROTO (PyCdunifFileObject *file)
+#define PyCdunifFile_Sync_PROTO Py_PROTO((PyCdunifFileObject *file))
 #define PyCdunifFile_Sync_NUM 4
 
 /* Create a new dimension. Returns -1 if there was an error. */
 #define PyCdunifFile_CreateDimension_RET int
 #define PyCdunifFile_CreateDimension_PROTO \
-        (PyCdunifFileObject *file, char *name, long size)
+        Py_PROTO((PyCdunifFileObject *file, char *name, long size))
 #define PyCdunifFile_CreateDimension_NUM 5
 
 /* Create a Cdunif variable and return the variable object */
 #define PyCdunifFile_CreateVariable_RET PyCdunifVariableObject *
 #define PyCdunifFile_CreateVariable_PROTO \
-      (PyCdunifFileObject *file, char *name, int typecode, \
-                char **dimension_names, int ndim)
+      Py_PROTO((PyCdunifFileObject *file, char *name, int typecode, \
+                char **dimension_names, int ndim))
 #define PyCdunifFile_CreateVariable_NUM 6
 
 /* Return an object referring to an existing variable */
 #define PyCdunifFile_GetVariable_RET PyCdunifVariableObject *
 #define PyCdunifFile_GetVariable_PROTO \
-	  (PyCdunifFileObject *file, char *name)
+	  Py_PROTO((PyCdunifFileObject *file, char *name))
 #define PyCdunifFile_GetVariable_NUM 7
 
 /* Get variable rank */
 #define PyCdunifVariable_GetRank_RET int
-#define PyCdunifVariable_GetRank_PROTO (PyCdunifVariableObject *var)
+#define PyCdunifVariable_GetRank_PROTO Py_PROTO((PyCdunifVariableObject *var))
 #define PyCdunifVariable_GetRank_NUM 8
 
 /* Get variable shape */
 #define PyCdunifVariable_GetShape_RET size_t *
-#define PyCdunifVariable_GetShape_PROTO (PyCdunifVariableObject *var)
+#define PyCdunifVariable_GetShape_PROTO Py_PROTO((PyCdunifVariableObject *var))
 #define PyCdunifVariable_GetShape_NUM 9
 
 /* Allocate and initialize index structures for reading/writing data */
 #define PyCdunifVariable_Indices_RET PyCdunifIndex *
-#define PyCdunifVariable_Indices_PROTO (PyCdunifVariableObject *var)
+#define PyCdunifVariable_Indices_PROTO Py_PROTO((PyCdunifVariableObject *var))
 #define PyCdunifVariable_Indices_NUM 10
 
 /* Read data and return an array object */
 #define PyCdunifVariable_ReadAsArray_RET PyArrayObject *
 #define PyCdunifVariable_ReadAsArray_PROTO \
-	  (PyCdunifVariableObject *var, PyCdunifIndex *indices)
+	  Py_PROTO((PyCdunifVariableObject *var, PyCdunifIndex *indices))
 #define PyCdunifVariable_ReadAsArray_NUM 11
 
 /* Write array. Returns -1 if there was an error.  */
 #define PyCdunifVariable_WriteArray_RET int
 #define PyCdunifVariable_WriteArray_PROTO \
-	  (PyCdunifVariableObject *var, PyCdunifIndex *indices, \
-		    PyObject *array)
+	  Py_PROTO((PyCdunifVariableObject *var, PyCdunifIndex *indices, \
+		    PyObject *array))
 #define PyCdunifVariable_WriteArray_NUM 12
 
 /* Get file attribute */
 #define PyCdunifFile_GetAttribute_RET PyObject *
 #define PyCdunifFile_GetAttribute_PROTO \
-	  (PyCdunifFileObject *var, char *name)
+	  Py_PROTO((PyCdunifFileObject *var, char *name))
 #define PyCdunifFile_GetAttribute_NUM 13
 
 /* Set file attribute */
 #define PyCdunifFile_SetAttribute_RET int
 #define PyCdunifFile_SetAttribute_PROTO \
-	  (PyCdunifFileObject *var, char *name, PyObject *value)
+	  Py_PROTO((PyCdunifFileObject *var, char *name, PyObject *value))
 #define PyCdunifFile_SetAttribute_NUM 14
 
 /* Set file attribute to string value */
 #define PyCdunifFile_SetAttributeString_RET int
 #define PyCdunifFile_SetAttributeString_PROTO \
-	  (PyCdunifFileObject *var, char *name, char *value)
+	  Py_PROTO((PyCdunifFileObject *var, char *name, char *value))
 #define PyCdunifFile_SetAttributeString_NUM 15
 
 /* Get variable attribute */
 #define PyCdunifVariable_GetAttribute_RET PyObject *
 #define PyCdunifVariable_GetAttribute_PROTO \
-	  (PyCdunifVariableObject *var, char *name)
+	  Py_PROTO((PyCdunifVariableObject *var, char *name))
 #define PyCdunifVariable_GetAttribute_NUM 16
 
 /* Set variable attribute */
 #define PyCdunifVariable_SetAttribute_RET int
 #define PyCdunifVariable_SetAttribute_PROTO \
-	  (PyCdunifVariableObject *var, char *name, PyObject *value)
+	  Py_PROTO((PyCdunifVariableObject *var, char *name, PyObject *value))
 #define PyCdunifVariable_SetAttribute_NUM 17
 
 /* Set variable attribute to string value */
 #define PyCdunifVariable_SetAttributeString_RET int
 #define PyCdunifVariable_SetAttributeString_PROTO \
-	  (PyCdunifVariableObject *var, char *name, char *value)
+	  Py_PROTO((PyCdunifVariableObject *var, char *name, char *value))
 #define PyCdunifVariable_SetAttributeString_NUM 18
 
 /* Add entry to the history */
 #define PyCdunifFile_AddHistoryLine_RET int
 #define PyCdunifFile_AddHistoryLine_PROTO \
-	  (PyCdunifFileObject *self, char *text)
+	  Py_PROTO((PyCdunifFileObject *self, char *text))
 #define PyCdunifFile_AddHistoryLine_NUM 19
 
 /* Write string. Returns -1 if there was an error.  */
 #define PyCdunifVariable_WriteString_RET int
 #define PyCdunifVariable_WriteString_PROTO \
-	  (PyCdunifVariableObject *var, PyBytesObject *value)
+	  Py_PROTO((PyCdunifVariableObject *var, PyStringObject *value))
 #define PyCdunifVariable_WriteString_NUM 20
 
 /* Read string  */
-#define PyCdunifVariable_ReadAsString_RET PyBytesObject *
+#define PyCdunifVariable_ReadAsString_RET PyStringObject *
 #define PyCdunifVariable_ReadAsString_PROTO \
-	  (PyCdunifVariableObject *var)
+	  Py_PROTO((PyCdunifVariableObject *var))
 #define PyCdunifVariable_ReadAsString_NUM 21
 
 /* Total number of C API pointers */
@@ -196,8 +196,8 @@ typedef struct {
 extern PyTypeObject PyCdunifFile_Type;
 extern PyTypeObject PyCdunifVariable_Type;
 #else
-static PyTypeObject PyCdunifFile_Type;
-static PyTypeObject PyCdunifVariable_Type;
+staticforward PyTypeObject PyCdunifFile_Type;
+staticforward PyTypeObject PyCdunifVariable_Type;
 #endif
 
 /* Type check macros */

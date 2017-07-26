@@ -3362,7 +3362,9 @@ moduleinit(void)
 #else
         m = Py_InitModule("Cdunif", cdunif_methods);
 #endif
-    if (m == NULL) return m;
+    if (m == NULL) {
+        return m;
+    }
 	/* Import the array module */
 #ifdef import_array
 	import_array();
@@ -3435,6 +3437,8 @@ moduleinit(void)
 	data_types[NC_INT64]=NPY_LONGLONG; /*int64 */
 	data_types[NC_UINT64]=NPY_ULONGLONG; /* uint64 */
 	data_types[NC_STRING]=NPY_STRING;
+        fprintf(stderr,"CRAPr \n");
+    return m;
 
 }
 #if PY_MAJOR_VERSION >=3

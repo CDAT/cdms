@@ -5,7 +5,7 @@ Resource Locators", by R. Fielding, UC Irvine, June 1995.
 
 # Standard/builtin Python modules
 import string
-from string import joinfields, splitfields, rfind
+#from str import joinfields, splitfields, rfind
 
 # A classification of schemes ('' means apply by default)
 uses_relative = ['ftp', 'http', 'ldap', 'gopher', 'nntp', 'wais', 'file',
@@ -30,7 +30,7 @@ uses_fragment = ['ftp', 'hdl', 'http', 'ldap', 'gopher', 'news', 'nntp', 'wais',
                  'file', 'prospero', '']
 
 # Characters valid in scheme names
-scheme_chars = string.letters + string.digits + '+-.'
+scheme_chars = string.ascii_letters + string.digits + '+-.'
 
 MAX_CACHE_SIZE = 20
 _parse_cache = {}
@@ -157,10 +157,10 @@ def urljoin(base, url, allow_fragments=1):
     if not path:
         return urlunparse((scheme, netloc, bpath,
                            params, query or bquery, fragment))
-    i = rfind(bpath, '/')
+    i = str.rfind(bpath, '/')
     if i >= 0:
         path = bpath[:i] + '/' + path
-    segments = splitfields(path, '/')
+    segments = str.splitfields(path, '/')
     if segments[-1] == '.':
         segments[-1] = ''
     while '.' in segments:
@@ -179,7 +179,7 @@ def urljoin(base, url, allow_fragments=1):
         segments[-1] = ''
     elif len(segments) >= 2 and segments[-1] == '..':
         segments[-2:] = ['']
-    return urlunparse((scheme, netloc, joinfields(segments, '/'),
+    return urlunparse((scheme, netloc, str.joinfields(segments, '/'),
                        params, query, fragment))
 
 

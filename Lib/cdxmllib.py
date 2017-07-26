@@ -4,7 +4,6 @@ from __future__ import print_function
 # Author: Sjoerd Mullender.
 
 import re
-import string
 
 # import warnings
 # warnings.warn("The xmllib module is obsolete.  Use xml.sax instead.",
@@ -73,7 +72,7 @@ procclose = re.compile(_opS + r'\?>')
 commentopen = re.compile('<!--')
 commentclose = re.compile('-->')
 doubledash = re.compile('--')
-attrtrans = string.maketrans(' \r\n\t', '    ')
+attrtrans = str.maketrans(' \r\n\t', '    ')
 
 # definitions for XML namespaces
 _NCName = '[a-zA-Z_][-a-zA-Z0-9._]*'    # XML Name, minus the ":"

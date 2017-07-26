@@ -12,7 +12,7 @@ from .grid import AbstractGrid, LongitudeType, LatitudeType, CoordTypeToLoc
 from .coord import TransientVirtualAxis
 from .axis import getAutoBounds, allclose
 from . import bindex
-import _bindex
+from . import _bindex
 from functools import reduce
 
 MethodNotImplemented = "Method not yet implemented"

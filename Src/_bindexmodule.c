@@ -2,6 +2,11 @@
 extern "C" {
 #endif
 #include "Python.h"
+#if PY_MAJOR_VERSION >= 3
+    #define PyInt_FromLong PyLong_FromLong
+    #define PyStringObject PyUnicodeObject
+    #define PyString_FromString PyUnicode_FromString
+#endif
 #include "numpy/arrayobject.h"
  
 static PyObject *ErrorObject;
@@ -504,14 +509,33 @@ static struct PyMethodDef _bindex_methods[] = {
 static char _bindex_module_documentation[] =
 "Fortran interface module _bindex";
 
-void init_bindex(void)
+#if PY_MAJOR_VERSION >= 3
+  static struct PyModuleDef moduledef = {
+      PyModuleDef_HEAD_INIT,
+      "_bindex", /* m_name */
+      "_bindex module",    /* m_doc */
+      -1,                  /* m_size */
+      _bindex_methods,     /* m_methods */
+      NULL,                /* m_reload */
+      NULL,                /* m_traverse */
+      NULL,                /* m_clear */
+      NULL,                /* m_free */
+  };
+#endif
+static PyObject *
+moduleinit(void)
 {
         PyObject *m, *d, *j;
  
         import_array ();
+#if PY_MAJOR_VERSION >= 3
+            m = PyModule_Create(&moduledef);
+#else
         m = Py_InitModule4("_bindex", _bindex_methods,
                 _bindex_module_documentation,
                 (PyObject*)NULL,PYTHON_API_VERSION);
+#endif
+        if (m == NULL) return m;
  
         d = PyModule_GetDict(m);
         ErrorObject = PyString_FromString("_bindex.error");
@@ -529,8 +553,21 @@ void init_bindex(void)
         if (PyErr_Occurred()) {
             Py_FatalError("can't initialize module _bindex");
         }
+        return m;
 }
-
+#if PY_MAJOR_VERSION < 3
+    PyMODINIT_FUNC
+        init_bindex(void)
+        {
+            moduleinit();
+        }
+#else
+    PyMODINIT_FUNC
+        PyInit__bindex(void)
+        {
+            return moduleinit();
+        }
+#endif
 /* C++ trailer */
 #ifdef __CPLUSCPLUS__
 }

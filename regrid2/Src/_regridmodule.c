@@ -2464,13 +2464,34 @@ static struct PyMethodDef rgd_methods[] = {
  * 
  *                                                                        *
 \**************************************************************************/
+#if PY_MAJOR_VERSION >= 3
+static struct PyModuleDef moduledef = {
+    PyModuleDef_HEAD_INIT,
+    "_regrid", /* m_name */
+    "_regrid module",      /* m_doc */
+    -1,                  /* m_size */
+    rgd_methods,    /* m_methods */
+    NULL,                /* m_reload */
+    NULL,                /* m_traverse */
+    NULL,                /* m_clear */
+    NULL,                /* m_free */
+};
+#endif
 
-void init_regrid()
+static PyObject *
+moduleinit(void)
 {
   PyObject *m, *d;
   
   /* create this module and add the functions */
-  m = Py_InitModule("_regrid", rgd_methods);
+#if PY_MAJOR_VERSION >= 3
+      m = PyModule_Create(&moduledef);
+#else
+      m = Py_InitModule("_regrid", rgd_methods);
+#endif
+      if (m == NULL)
+          return NULL;
+
   import_array();
 
   /* add symbolic constants to the module */
@@ -2481,7 +2502,21 @@ void init_regrid()
   /* check for errors */
   if(PyErr_Occurred())
     Py_FatalError("can't initialize module _regrid");
+  return m;
 }
+#if PY_MAJOR_VERSION < 3
+    PyMODINIT_FUNC
+init_regrid(void)
+{
+    moduleinit();
+}
+#else
+    PyMODINIT_FUNC
+PyInit__regrid(void)
+{
+    return moduleinit();
+}
+#endif
 
 
 

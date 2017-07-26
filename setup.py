@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from __future__ import print_function
-from distutils.core import setup, Extension
+from numpy.distutils.core import setup, Extension
 import os, sys
 import subprocess,shutil
 target_prefix = sys.prefix

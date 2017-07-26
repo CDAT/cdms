@@ -22,7 +22,11 @@ class CDMSBaseTest(unittest.TestCase):
 
     def setUp(self):
         global cdms2
-        cdms2 = reload(cdms2)
+        try:
+            cdms2 = reload(cdms2)
+        except:
+            import imp
+            imp.reload(cdms2)
         self.orig_cwd = os.getcwd()
         self.files = []
         self.NTIME = 3

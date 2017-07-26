@@ -42,6 +42,7 @@ class FileVariable(DatasetVariable):
         self.domain = []
         for dimname in self._obj_.dimensions:
             axis = axisdict.get(dimname)
+            print("OK OUR AXIS IS:",dimname,axisdict)
             start = 0
             length = len(axis)
             truelen = length
@@ -186,6 +187,7 @@ class FileVariable(DatasetVariable):
 
     def __len__(self):
         " Length of first dimension. "
+        print("THIS LENGTH FOR AXIS?")
         if self.parent is None:
             raise CDMSError(FileClosed + self.id)
         return len(self._obj_)

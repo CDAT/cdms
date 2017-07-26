@@ -3,12 +3,11 @@
 
 """ CDMS dataset and file objects"""
 from .error import CDMSError
-import Cdunif
+from . import Cdunif
 import numpy
 from . import cdmsNode
 import os
 import sys
-import string
 try:  # Python3
     import urllib.request
     import urllib.parse
@@ -341,7 +340,7 @@ Output:::
 file :: (cdms2.dataset.CdmsFile) (0) file to read from
 :::
     """
-    uri = string.strip(uri)
+    uri = uri.strip()
     (scheme, netloc, path, parameters, query, fragment) = urllib.parse.urlparse(uri)
     if scheme in ('', 'file'):
         if netloc:
@@ -487,7 +486,7 @@ def parseIndexList(text):
     for i in range(nindices):
         s = m.group(i + 1)
         if s != '-':
-            result[i] = string.atoi(s)
+            result[i] = int(s)
     result[nindices] = m.group(nindices + 1)
     return result, m.end()
 
@@ -833,7 +832,7 @@ class Dataset(CdmsObj, cuDataset):
     def searchPattern(self, pattern, attribute, tag):
         resultlist = []
         if tag is not None:
-            tag = string.lower(tag)
+            tag = tag.lower()
         if tag in ('dataset', None):
             if self.searchone(pattern, attribute) == 1:
                 resultlist = [self]
@@ -858,7 +857,7 @@ class Dataset(CdmsObj, cuDataset):
     def matchPattern(self, pattern, attribute, tag):
         resultlist = []
         if tag is not None:
-            tag = string.lower(tag)
+            tag = tag.lower()
         if tag in ('dataset', None):
             if self.matchone(pattern, attribute) == 1:
                 resultlist = [self]
@@ -886,7 +885,7 @@ class Dataset(CdmsObj, cuDataset):
     def searchPredicate(self, predicate, tag):
         resultlist = []
         if tag is not None:
-            tag = string.lower(tag)
+            tag = tag.lower()
         if tag in ('dataset', None):
             try:
                 if predicate(*(self,)) == 1:
@@ -1117,6 +1116,7 @@ class CdmsFile(CdmsObj, cuDataset):
 
             # Get lists of 1D and auxiliary coordinate axes
             coords1d = self._convention_.getAxisIds(self._file_.variables)
+            print("c1d",coords1d)
             coordsaux = self._convention_.getAxisAuxIds(
                 self._file_.variables, coords1d)
 
@@ -1626,7 +1626,7 @@ class CdmsFile(CdmsObj, cuDataset):
         """
         resultlist = []
         if tag is not None:
-            tag = string.lower(tag)
+            tag = tag.lower()
         if tag in ('cdmsFile', None, 'dataset'):
             if self.searchone(pattern, attribute) == 1:
                 resultlist = [self]
@@ -1664,7 +1664,7 @@ class CdmsFile(CdmsObj, cuDataset):
         """
         resultlist = []
         if tag is not None:
-            tag = string.lower(tag)
+            tag = tag.lower()
         if tag in ('cdmsFile', None, 'dataset'):
             if self.matchone(pattern, attribute) == 1:
                 resultlist = [self]
@@ -1705,7 +1705,7 @@ class CdmsFile(CdmsObj, cuDataset):
         """
         resultlist = []
         if tag is not None:
-            tag = string.lower(tag)
+            tag = tag.lower()
         if tag in ('cdmsFile', None, 'dataset'):
             try:
                 if predicate(*(self,)) == 1:
@@ -2154,7 +2154,7 @@ class CdmsFile(CdmsObj, cuDataset):
 
     def __repr__(self):
         filerep = repr(self._file_)
-        loc = string.find(filerep, "file")
+        loc = filerep.find("file")
         if loc == -1:
             loc = 0
         return "<CDMS " + filerep[loc:-1] + ", status: %s>" % self._status_

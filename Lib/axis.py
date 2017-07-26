@@ -4,7 +4,6 @@
 """
 CDMS Axis objects
 """
-import string
 import sys
 import types
 import copy
@@ -33,16 +32,16 @@ class AliasList (UserList):
         UserList.__init__(self, alist)
 
     def __setitem__(self, i, value):
-        self.data[i] = string.lower(value)
+        self.data[i] = value.lower()
 
     def __setslice(self, i, j, values):
-        self.data[i:j] = [string.lower(x) for x in values]
+        self.data[i:j] = [x.lower() for x in values]
 
     def append(self, value):
-        self.data.append(string.lower(value))
+        self.data.append(value.lower())
 
     def extend(self, values):
-        self.data.extend(list(map(string.lower, values)))
+        self.data.extend(list(map(str.lower, values)))
 
 
 level_aliases = AliasList(['plev'])
@@ -141,7 +140,7 @@ def createGaussianAxis(nlat):
     # For odd number of latitudes, gridattr returns 0 in the second half of
     # lats
     if nlat % 2:
-        mid = nlat / 2
+        mid = nlat // 2
         lats[mid + 1:] = -lats[:mid][::-1]
 
     latBounds = numpy.zeros((nlat, 2), numpy.float)
@@ -261,7 +260,7 @@ def mapLinearExt(axis, bounds, interval, indicator='ccn',
     intersection is empty.
     """
 
-    indicator = string.lower(indicator)
+    indicator = indicator.lower()
     length = len(axis)
 
     # Make the interval and search array non-decreasing
@@ -691,7 +690,7 @@ class AbstractAxis(CdmsObj):
         self._doubledata_ = None
 
     def __str__(self):
-        return string.join(self.listall(), "\n") + "\n"
+        return "\n".join(self.listall()) + "\n"
 
     __repr__ = __str__
 
@@ -909,14 +908,14 @@ class AbstractAxis(CdmsObj):
         for val in self[:]:
             comptime = cdtime.reltime(val, self.units).tocomp(calendar)
             s = repr(comptime)
-            tt = string.split(s, ' ')
+            tt = s.split(' ')
 
-            ttt = string.split(tt[0], '-')
+            ttt = tt[0].split('-')
             yr = int(ttt[0])
             mo = int(ttt[1])
             da = int(ttt[2])
 
-            ttt = string.split(tt[1], ':')
+            ttt = tt[1].split(':')
             hr = int(ttt[0])
             dtg = "%04d%02d%02d%02d" % (yr, mo, da, hr)
             result.append(dtg)
@@ -1120,7 +1119,7 @@ class AbstractAxis(CdmsObj):
     # calendar.
     def getCalendar(self):
         if hasattr(self, 'calendar'):
-            calendar = string.lower(self.calendar)
+            calendar = self.calendar.lower()
         else:
             calendar = None
 
@@ -1251,7 +1250,7 @@ class AbstractAxis(CdmsObj):
         # check length of indicator if overridden by user
         #
 
-        indicator = string.lower(indicator)
+        indicator = indicator.lower()
         if len(indicator) == 2:
             indicator += 'n'
 
@@ -1725,7 +1724,7 @@ class Axis(AbstractAxis):
             if axisNode.partition is not None:
                 flatpart = axisNode.partition
                 self.__dict__['partition'] = numpy.reshape(
-                    flatpart, (len(flatpart) / 2, 2))
+                    flatpart, (len(flatpart) // 2, 2))
                 self.attributes['partition'] = self.partition
         self.id = axisNode.id
 
@@ -1772,6 +1771,7 @@ class Axis(AbstractAxis):
         return self._data_[low:high]
 
     def __len__(self):
+        print("IN THIS LEN:",self._node_)
         return len(self._node_)
 
     # Return true iff the axis representation is linear
@@ -1815,9 +1815,9 @@ class Axis(AbstractAxis):
 
     def getCalendar(self):
         if hasattr(self, 'calendar'):
-            calendar = string.lower(self.calendar)
+            calendar = self.calendar.lower()
         elif self.parent is not None and hasattr(self.parent, 'calendar'):
-            calendar = string.lower(self.parent.calendar)
+            calendar = self.parent.calendar.lower()
         else:
             calendar = None
 
@@ -1888,6 +1888,7 @@ class TransientAxis(AbstractAxis):
         self._data_[low:high] = numpy.ma.filled(value)
 
     def __len__(self):
+        print("or in this one",len(self._data_))
         return len(self._data_)
 
     def getBounds(self, isGeneric=None):
@@ -1968,6 +1969,7 @@ class TransientVirtualAxis(TransientAxis):
         self._virtualLength = axislen  # length of the axis
 
     def __len__(self):
+        print("or is it this one?",self._virtualLength)
         return self._virtualLength
 
     def __str__(self):
@@ -2196,6 +2198,7 @@ class FileAxis(AbstractAxis):
         return self._obj_.setslice(*(low, high, numpy.ma.filled(value)))
 
     def __len__(self):
+        print("AH this one!")
         if self.parent is None:
             raise CDMSError(FileWasClosed + self.id)
         if self._obj_ is not None:
@@ -2296,9 +2299,9 @@ class FileAxis(AbstractAxis):
 
     def getCalendar(self):
         if hasattr(self, 'calendar'):
-            calendar = string.lower(self.calendar)
+            calendar = self.calendar.lower()
         elif self.parent is not None and hasattr(self.parent, 'calendar'):
-            calendar = string.lower(self.parent.calendar)
+            calendar = self.parent.calendar.lower()
         else:
             calendar = None
 
@@ -2518,13 +2521,13 @@ def axisMatches(axis, specification):
        3. an axis object; will match if it is the same object as axis.
     """
     if isinstance(specification, str):
-        s = string.lower(specification)
+        s = specification.lower()
         s = s.strip()
         while s[0] == '(':
             if s[-1] != ')':
                 raise CDMSError('Malformed axis spec, ' + specification)
             s = s[1:-1].strip()
-        if string.lower(axis.id) == s:
+        if axis.id.lower() == s:
             return True
         elif (s == 'time') or (s in time_aliases):
             return axis.isTime()

@@ -72,7 +72,11 @@ procclose = re.compile(_opS + r'\?>')
 commentopen = re.compile('<!--')
 commentclose = re.compile('-->')
 doubledash = re.compile('--')
-attrtrans = str.maketrans(' \r\n\t', '    ')
+try:
+    attrtrans = str.maketrans(' \r\n\t', '    ')
+except:
+    import string
+    attrtrans = string.maketrans(' \r\n\t', '    ')
 
 # definitions for XML namespaces
 _NCName = '[a-zA-Z_][-a-zA-Z0-9._]*'    # XML Name, minus the ":"

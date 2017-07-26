@@ -1445,9 +1445,11 @@ PyCdunifFile_Open(char *filename, char *mode) {
 	int rw, ncmode;
 	CuFileType filetype;
 
-	self = PyObject_NEW(PyCdunifFileObject, &PyCdunifFile_Type);
+    fprintf(stderr,"file '%s'\n",filename);
+	self = PyObject_New(PyCdunifFileObject, &PyCdunifFile_Type);
 	if (self == NULL)
 		return NULL;
+    fprintf(stderr,"Ok we do come here\n");
 	self->dimensions = NULL;
 	self->variables = NULL;
 	self->attributes = NULL;
@@ -2127,7 +2129,7 @@ PyCdunifFileObject_repr(PyCdunifFileObject *file) {
 
 /* Type definition */
 
-static PyTypeObject PyCdunifFile_Type = { PyVarObject_HEAD_INIT(NULL, 0) 0, /*ob_size*/
+static PyTypeObject PyCdunifFile_Type = { PyVarObject_HEAD_INIT(NULL, 0) /*ob_size*/
 "CdunifFile", /*tp_name*/
 sizeof(PyCdunifFileObject), /*tp_basicsize*/
 0, /*tp_itemsize*/
@@ -3161,7 +3163,7 @@ static PyMappingMethods PyCdunifVariableObject_as_mapping = {
 		(objobjargproc) PyCdunifVariableObject_ass_subscript, /*mp_ass_subscript*/
 };
 
-static PyTypeObject PyCdunifVariable_Type = { PyVarObject_HEAD_INIT(NULL, 0) 0, /*ob_size*/
+static PyTypeObject PyCdunifVariable_Type = { PyVarObject_HEAD_INIT(NULL, 0) /*ob_size*/
 "CdunifVariable", /*tp_name*/
 sizeof(PyCdunifVariableObject), /*tp_basicsize*/
 0, /*tp_itemsize*/

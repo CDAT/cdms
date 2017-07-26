@@ -344,6 +344,8 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
                 else:
                     raise CDMSError(
                         "Invalid item in axis list:\n" + repr(item))
+            print(flataxes, self.rank())
+            input("PRESS ENER")
             if len(flataxes) != self.rank():
                 raise CDMSError("Wrong number of axes to initialize domain.")
             for i in range(len(flataxes)):

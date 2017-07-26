@@ -1198,8 +1198,10 @@ static int set_attribute(int fileid, int varid, PyObject *attributes,
 		return 0;
 	}
 	if (PyStr_Check(value)) {
-		int len = PyBytes_Size(value);
-		char *string = PyBytes_AsString(value);
+	    int len;
+	    char * string = PyStr_AsUTF8AndSize(value, (Py_ssize_t *) &len);
+//		int len = PyStr_Size(value);
+//		char *string = PyStr_AsUTF8(value);
 		int ret;
 		Py_BEGIN_ALLOW_THREADS
 		;
@@ -1240,7 +1242,7 @@ static int set_attribute(int fileid, int varid, PyObject *attributes,
 					if (PyUnicode_Check(oUnicode)) {
 						int lenVal;
 						char *attValue;
-						aszUnicodes[i] = PyBytes_AsString(oUnicode);
+						aszUnicodes[i] = PyStr_AsString(oUnicode);
 					}
 				}
 				array->data = (void *) aszUnicodes;
@@ -1623,8 +1625,8 @@ PyCdunifFileObject_new_dimension(PyCdunifFileObject *self, PyObject *args) {
 		return NULL;
 	if (size_ob == Py_None)
 		size = 0;
-	else if (PyLong_Check(size_ob))
-		size = PyLong_AsLong(size_ob);
+	else if (PyInt_Check(size_ob))
+		size = PyInt_AsLong(size_ob);
 	else {
 		PyErr_SetString(PyExc_TypeError, "size must be None or integer");
 		return NULL;
@@ -1739,9 +1741,9 @@ PyCdunifFileObject_new_variable(PyCdunifFileObject *self, PyObject *args) {
 	PyObject *item, *dim;
 	char *name;
 	int ndim;
-	char type;
+	char *type;
 	int i;
-	if (!PyArg_ParseTuple(args, "scO!", &name, &type, &PyTuple_Type, &dim))
+	if (!PyArg_ParseTuple(args, "ssO!", &name, &type, &PyTuple_Type, &dim))
 		return NULL;
 	ndim = PyTuple_Size(dim);
 	if (ndim == 0)
@@ -1756,14 +1758,14 @@ PyCdunifFileObject_new_variable(PyCdunifFileObject *self, PyObject *args) {
 	for (i = 0; i < ndim; i++) {
 		item = PyTuple_GetItem(dim, i);
 		if (PyStr_Check(item))
-			dimension_names[i] = PyBytes_AsString(item);
+			dimension_names[i] = PyStr_AsString(item);
 		else {
 			PyErr_SetString(PyExc_TypeError, "dimension name must be a string");
 			free(dimension_names);
 			return NULL;
 		}
 	}
-	var = PyCdunifFile_CreateVariable(self, name, type, dimension_names, ndim);
+	var = PyCdunifFile_CreateVariable(self, name, *type, dimension_names, ndim);
 	free(dimension_names);
 	return (PyObject *) var;
 }
@@ -1938,7 +1940,8 @@ static PyMethodDef PyCdunifFileObject_methods[] = { { "close",
 static PyObject *
 PyCdunifFile_GetAttribute(PyCdunifFileObject *self, PyObject *nameobj) {
 	PyObject *value;
-	char *name = PyBytes_AsString(nameobj);
+	char *name = PyStr_AsString(nameobj);
+	printf("%s\n",name);
 	if (check_if_open(self, -1)) {
 		if (strcmp(name, "dimensions") == 0) {
 			Py_INCREF(self->dimensions);
@@ -1970,7 +1973,7 @@ PyCdunifFile_GetAttribute(PyCdunifFileObject *self, PyObject *nameobj) {
 
 static int PyCdunifFile_SetAttribute(PyCdunifFileObject *self, PyObject *nameobj,
 		PyObject *value) {
-	char *name = PyBytes_AsString(nameobj);
+	char *name = PyStr_AsString(nameobj);
 	if (check_if_open(self, 1)) {
 		if (strcmp(name, "dimensions") == 0
 		        || strcmp(name, "variables") == 0
@@ -2018,8 +2021,8 @@ static PyObject *
 PyCdunifFileObject_repr(PyCdunifFileObject *file) {
 	char buf[300];
 	sprintf(buf, "<%s Cdunif file '%.256s', mode '%.10s' at %lx>",
-			file->open ? "open" : "closed", PyBytes_AsString(file->name),
-			PyBytes_AsString(file->mode), (long) file);
+			file->open ? "open" : "closed", PyStr_AsString(file->name),
+			PyStr_AsString(file->mode), (long) file);
 	return PyStr_FromString(buf);
 }
 
@@ -2256,7 +2259,7 @@ PyCdunifVariable_GetShape(PyCdunifVariableObject *var) {
 static PyObject *
 PyCdunifVariable_GetAttribute(PyCdunifVariableObject *self, PyObject *nameobj) {
 	PyObject *value;
-	char *name = PyBytes_AsString(nameobj);
+	char *name = PyStr_AsString(nameobj);
 	printf("%s\n", name);
 	if (strcmp(name, "shape") == 0) {
 		PyObject *tuple;
@@ -2753,7 +2756,7 @@ static int PyCdunifVariable_WriteUnicode(PyCdunifVariableObject *self,
 		acquire_Cdunif_lock()
 		;
 		ret = cdms2_nc_put_var_text(self->file->id, self->id,
-				PyBytes_AsString((PyObject *) value));
+				PyStr_AsString((PyObject *) value));
 		release_Cdunif_lock()
 		;
 		Py_END_ALLOW_THREADS

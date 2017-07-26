@@ -1,13 +1,11 @@
 import basetest
 import cdms2
 import numpy
-import pdb
 
 
 class TestCDMSFileReadWrite(basetest.CDMSBaseTest):
     def setUp(self):
         super(TestCDMSFileReadWrite, self).setUp()
-        pdb.set_trace()
         self.timearr = numpy.array([0.0,366.0,731.0])
         self.latarr = numpy.arange(self.NLAT)*(180./(self.NLAT-1))-90.
         self.lonarr = numpy.arange(self.NLON)*(360.0/self.NLON)
@@ -24,7 +22,6 @@ class TestCDMSFileReadWrite(basetest.CDMSBaseTest):
         self.var.units = 'm/s'
 
     def testSetSlice(self):
-        pdb.set_trace()
         self.var[:] = self.u[0]
         self.assertTrue(numpy.ma.allequal(self.var, self.u[0]))
 
@@ -42,22 +39,22 @@ class TestCDMSFileReadWrite(basetest.CDMSBaseTest):
         self.assertEqual(self.var.long_name, "Test variable")
         self.assertEqual(self.var.param, -99)
 
-    def dtestSetFileAttrs(self):
+    def testSetFileAttrs(self):
         self.file.Conventions = "CF1.0"
         self.assertEqual(self.file.Conventions, "CF1.0")
 
-    def dtestRewriteAxis(self):
+    def testRewriteAxis(self):
         self.var.getLatitude()[self.NLAT / 2] = 6.5
         self.assertNotEqual(self.var.getLatitude()[self.NLAT/2], self.latarr[self.NLAT/2])
         self.var.getLatitude().standard_name = "Latitude"
         self.assertEqual(self.var.getLatitude().standard_name, "Latitude")
         self.latarr[self.NLAT / 2] = 6.5
 
-    def dtestWriteVariable(self):
+    def testWriteVariable(self):
         p = self.file.createVariable("p0", cdms2.CdDouble, ())
         p.assignValue(-99.9)
 
-    def dtestReread(self):
+    def testReread(self):
         self.testSetFileAttrs()
         self.testWriteVariable()
         self.testReadWriteAttrs()

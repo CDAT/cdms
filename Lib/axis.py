@@ -25,13 +25,13 @@ class AliasList (UserList):
     def __init__(self, alist):
         UserList.__init__(self,alist)
     def __setitem__ (self, i, value):
-        self.data[i] = string.lower(value)
+        self.data[i] = value.lower()
     def __setslice(self, i, j, values):
-        self.data[i:j] = [string.lower(x) for x in values]
+        self.data[i:j] = [x.lower() for x in values]
     def append(self, value):
-        self.data.append(string.lower(value))
+        self.data.append(value.lower())
     def extend(self, values):
-        self.data.extend(list(map(string.lower, values)))
+        self.data.extend(list(map(str.lower, values)))
 
 level_aliases = AliasList(['plev'])
 longitude_aliases = AliasList([])
@@ -231,7 +231,7 @@ def mapLinearExt(axis, bounds, interval, indicator ='ccn', epsilon=None, stride=
     intersection is empty.
     """
     
-    indicator = string.lower(indicator)
+    indicator = indicator.lower()
     length = len(axis)
 
     # Make the interval and search array non-decreasing
@@ -1010,7 +1010,7 @@ class AbstractAxis(CdmsObj):
     # calendar.
     def getCalendar(self):
         if hasattr(self,'calendar'):
-            calendar = string.lower(self.calendar)
+            calendar = self.calendar.lower()
         else:
             calendar = None
 
@@ -1142,7 +1142,7 @@ class AbstractAxis(CdmsObj):
         # check length of indicator if overridden by user
         #
 
-        indicator = string.lower(indicator)
+        indicator = indicator.lower()
         if len(indicator)==2: indicator += 'n'
 
         if( ( len(indicator) != 3 ) or
@@ -1643,9 +1643,9 @@ class Axis(AbstractAxis):
 
     def getCalendar(self):
         if hasattr(self,'calendar'):
-            calendar = string.lower(self.calendar)
+            calendar = self.calendar.lower()
         elif self.parent is not None and hasattr(self.parent, 'calendar'):
-            calendar = string.lower(self.parent.calendar)
+            calendar = self.parent.calendar.lower()
         else:
             calendar = None
 
@@ -2093,9 +2093,9 @@ class FileAxis(AbstractAxis):
 
     def getCalendar(self):
         if hasattr(self,'calendar'):
-            calendar = string.lower(self.calendar)
+            calendar = self.calendar.lower()
         elif self.parent is not None and hasattr(self.parent, 'calendar'):
-            calendar = string.lower(self.parent.calendar)
+            calendar = self.parent.calendar.lower()
         else:
             calendar = None
 
@@ -2317,13 +2317,13 @@ def axisMatches(axis, specification):
        3. an axis object; will match if it is the same object as axis.
     """   
     if isinstance(specification, str):
-        s = string.lower(specification)
+        s = specification.lower()
         s = s.strip()
         while s[0] == '(':
             if s[-1] != ')':
                 raise CDMSError('Malformed axis spec, ' + specification)
             s = s[1:-1].strip()
-        if string.lower(axis.id) == s:
+        if axis.id.lower() == s:
             return True
         elif (s == 'time') or (s in time_aliases):
             return axis.isTime() 

@@ -1,5 +1,5 @@
 os:
-    - osx
+#    - osx
     - linux
 
 sudo: required
@@ -15,19 +15,16 @@ before_install:
 - conda update -y -q conda
 - conda install gcc future
 script:
-- if [ "$TRAVIS_OS_NAME" = "linux" ]; then conda install -c conda-forge -c uvcdat uvcdat-nox pyopenssl; fi
-- if [ "$TRAVIS_OS_NAME" = "osx" ]; then conda install -c conda-forge -c uvcdat uvcdat pyopenssl; fi
+- conda install -c uvcdat/label/nightly -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8
 - export UVCDAT_ANONYMOUS_LOG=False
-- travis_retry vcs_download_sample_data
 - echo $TRAVIS_BRANCH
 - export TRAVIS_PR_BRANCH=$TRAVIS_BRANCH
 - echo $TRAVIS_EVENT_TYPE
 - echo $TRAVIS_PULL_REQUEST
 - python setup.py install
-- python run_tests.py
+- python run_tests.py -v2 -s
 env:
   global:
     secure: Z06idl4BP01QMhrocmfuYV4CcbLmb5ZJZoXXymDr5sLIIfqdMiSL/CfDCRkIwl44vKpTN5R9AAhQV6iNMdU0NOQQrftHJyT5YV4y966FuAA1v9ev7y/cgExJFv7M/4E37WAN6YIcO7E42KZReeNKOAodorpqoT87MW6FAImZbrM=
 after_success:
-    - if [ $TRAVIS_BRANCH == "master" -a $TRAVIS_PULL_REQUEST == "false" -a "$TRAVIS_OS_NAME" = "osx" ]; then conda install conda-build && conda install anaconda-client && bash scripts/conda_upload.sh ; fi
     - if [ $TRAVIS_BRANCH == "master" -a $TRAVIS_PULL_REQUEST == "false" -a "$TRAVIS_OS_NAME" = "linux" ]; then docker run -v `pwd`:/travis_home -e CONDA_UPLOAD_TOKEN=${CONDA_UPLOAD_TOKEN} -a STDOUT cdat/conda:conda-forge-cdms2 /travis_home/scripts/conda_upload.sh ; fi

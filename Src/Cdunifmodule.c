@@ -1247,8 +1247,10 @@ static int set_attribute(int fileid, int varid, PyObject *attributes,
 	if (value == Py_None) {
 		return 0;
 	}
+    fprintf(stderr,"WE ARE SEETTING: %s\n",name);
 	/* Delete attribute */
 	if (value == NULL) {
+        fprintf(stderr,"HEREEEEEEEEEE\n");
 		int ret;
 		Py_BEGIN_ALLOW_THREADS
 		;
@@ -1266,14 +1268,18 @@ static int set_attribute(int fileid, int varid, PyObject *attributes,
 		PyDict_DelItemString(attributes, name);
 		return 0;
 	}
-	if (PyBytes_Check(value)) {
-		int len = PyBytes_Size(value);
-		char *string = PyBytes_AsString(value);
+    fprintf(stderr,"HEREEEEEEEEEE\n");
+	if (PyUnicode_Check(value)) {
+        fprintf(stderr,"THEREEEEEEEEEE\n");
+		int len = PyUnicode_GET_LENGTH(value);
+		char *string = PyUnicode_AsUTF8(value);
+        fprintf(stderr,"we are dumping: %s\n",string);
 		int ret;
 		Py_BEGIN_ALLOW_THREADS
 		;
 		acquire_Cdunif_lock()
 		;
+        fprintf(stderr,"ok calling cdms2 wrpa stuff %i\n",len);
 		ret = cdms2_nc_put_att_text(fileid, varid, name, len, string);
 		release_Cdunif_lock()
 		;
@@ -1286,6 +1292,7 @@ static int set_attribute(int fileid, int varid, PyObject *attributes,
 		PyDict_SetItemString(attributes, name, value);
 		return 0;
 	} else {
+        printf(stderr,"THEREEEEEE555555555EEEE\n");
 		char **aszStrings=NULL;
 		int ret;
 		PyArrayObject *array = (PyArrayObject *) PyArray_ContiguousFromObject(
@@ -2057,6 +2064,7 @@ PyCdunifFile_GetAttribute(PyCdunifFileObject *self, PyObject *nameobj) {
 static int PyCdunifFile_SetAttribute(PyCdunifFileObject *self, PyObject *nameobj,
 		PyObject *value) {
     char *name = PyUnicode_AsUTF8(nameobj);
+    fprintf(stderr,"setting attr: %s\n",name);
 	if (check_if_open(self, 1)) {
 		if (strcmp(name, "dimensions") == 0 || strcmp(name, "variables") == 0
 				|| strcmp(name, "dimensioninfo") == 0

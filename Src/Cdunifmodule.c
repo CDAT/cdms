@@ -1178,7 +1178,7 @@ static void collect_attributes(PyCdunifFileObject *file, int varid,
 				Py_END_ALLOW_THREADS
 				;
 				s[length] = '\0';
-				string = PyBytes_FromString(s);
+				string = PyUnicode_FromString(s);
 				free(s);
 				if (string != NULL) {
 					PyDict_SetItemString(attributes, name, string);
@@ -1202,10 +1202,10 @@ static void collect_attributes(PyCdunifFileObject *file, int varid,
 			Py_END_ALLOW_THREADS
 			;
 			for (i = 0; i < t_len; i++) {
-				PyObject *szObj = PyBytes_FromString(st[i]);
+				PyObject *szObj = PyUnicode_FromString(st[i]);
 				PyList_Append(listObj, szObj);
 			}
-			string = PyBytes_FromString(st[0]);
+			string = PyUnicode_FromString(st[0]);
 			if (string != NULL) {
 				PyDict_SetItemString(attributes, name, listObj);
 				Py_DECREF(string);
@@ -1534,8 +1534,8 @@ PyCdunifFile_Open(char *filename, char *mode) {
 		PyCdunifFileObject_dealloc(self);
 		return NULL;
 	}
-	self->name = PyBytes_FromString(filename);
-	self->mode = PyBytes_FromString(mode);
+	self->name = PyUnicode_FromString(filename);
+	self->mode = PyUnicode_FromString(mode);
 	return self;
 }
 
@@ -2019,8 +2019,9 @@ static PyMethodDef PyCdunifFileObject_methods[] = { { "close",
 /* Attribute access */
 
 static PyObject *
-PyCdunifFile_GetAttribute(PyCdunifFileObject *self, char *name) {
+PyCdunifFile_GetAttribute(PyCdunifFileObject *self, PyObject *nameobj) {
 	PyObject *value;
+    char *name = PyUnicode_AsUTF8(nameobj);
 	if (check_if_open(self, -1)) {
 		if (strcmp(name, "dimensions") == 0) {
 			Py_INCREF(self->dimensions);
@@ -2044,8 +2045,8 @@ PyCdunifFile_GetAttribute(PyCdunifFileObject *self, char *name) {
 			return value;
 		} else {
 			PyErr_Clear();
+            fprintf(stderr,"getting file att: %s\n",name);
 #if PY_MAJOR_VERSION >= 3
-                PyObject *nameobj = PyUnicode_FromString(name);
                 return PyObject_GenericGetAttr((PyObject*) self, nameobj);
 #else
 			return Py_FindMethod(PyCdunifFileObject_methods, (PyObject *) self,
@@ -2056,8 +2057,9 @@ PyCdunifFile_GetAttribute(PyCdunifFileObject *self, char *name) {
 		return NULL;
 }
 
-static int PyCdunifFile_SetAttribute(PyCdunifFileObject *self, char *name,
+static int PyCdunifFile_SetAttribute(PyCdunifFileObject *self, PyObject *nameobj,
 		PyObject *value) {
+    char *name = PyUnicode_AsUTF8(nameobj);
 	if (check_if_open(self, 1)) {
 		if (strcmp(name, "dimensions") == 0 || strcmp(name, "variables") == 0
 				|| strcmp(name, "dimensioninfo") == 0
@@ -2073,7 +2075,7 @@ static int PyCdunifFile_SetAttribute(PyCdunifFileObject *self, char *name,
 
 static int PyCdunifFile_SetAttributeString(PyCdunifFileObject *self, char *name,
 		char *value) {
-	PyObject *string = PyBytes_FromString(value);
+	PyObject *string = PyUnicode_FromString(value);
 	if (string != NULL)
 		return PyCdunifFile_SetAttribute(self, name, string);
 	else
@@ -2136,14 +2138,28 @@ sizeof(PyCdunifFileObject), /*tp_basicsize*/
 /* methods */
 (destructor) PyCdunifFileObject_dealloc, /*tp_dealloc*/
 0, /*tp_print*/
-(getattrfunc) PyCdunifFile_GetAttribute, /*tp_getattr*/
-(setattrfunc) PyCdunifFile_SetAttribute, /*tp_setattr*/
+0, /*tp_getattr*/
+0, /*tp_setattr*/
 0, /*tp_compare*/
 (reprfunc) PyCdunifFileObject_repr, /*tp_repr*/
 0, /*tp_as_number*/
 0, /*tp_as_sequence*/
 0, /*tp_as_mapping*/
 0, /*tp_hash*/
+0, /* tp_call    "x()"     */
+0, /* tp_str     "str(x)"  */
+(getattrofunc) PyCdunifFile_GetAttribute, /* tp_getattro */
+(setattrofunc) PyCdunifFile_SetAttribute, /* tp_setattro */
+0, /* tp_as_buffer */
+0, /* tp_flags */
+0, /* tp_doc */
+0, /* tp_traverse */
+0, /* tp_clear */
+0, /* tp_richcompare */
+0, /* tp_weaklistoffset */
+0, /* tp_iter */
+0, /* tp_iternext */
+(PyMethodDef*) PyCdunifFileObject_methods /* tp_methods */
 };
 
 /*
@@ -2342,8 +2358,10 @@ PyCdunifVariable_GetShape(PyCdunifVariableObject *var) {
 }
 
 static PyObject *
-PyCdunifVariable_GetAttribute(PyCdunifVariableObject *self, char *name) {
+PyCdunifVariable_GetAttribute(PyCdunifVariableObject *self, PyObject *nameobj) {
 	PyObject *value;
+    char *name = PyUnicode_AsUTF8(nameobj);
+    fprintf(stderr, "OK WE RECEIVED %s\n",name);
 	if (strcmp(name, "shape") == 0) {
 		PyObject *tuple;
 		int i;
@@ -2382,12 +2400,12 @@ PyCdunifVariable_GetAttribute(PyCdunifVariableObject *self, char *name) {
 				;
 
 				if (dimtype == CuGlobalDim) {
-					PyObject *tmpx = PyBytes_FromString(name);
+					PyObject *tmpx = PyUnicode_FromString(name);
 					PyTuple_SetItem(tuple, i, tmpx);
 					//Py_DECREF(tmpx);
 				} else {
 					sprintf(pseudoname, "%s_%s", name, vname);
-					PyObject *tmpx = PyBytes_FromString(pseudoname);
+					PyObject *tmpx = PyUnicode_FromString(pseudoname);
 					PyTuple_SetItem(tuple, i, tmpx);
 					//Py_DECREF(tmpx);
 				}
@@ -2406,8 +2424,9 @@ PyCdunifVariable_GetAttribute(PyCdunifVariableObject *self, char *name) {
 		return value;
 	} else {
 		PyErr_Clear();
+        fprintf(stderr,"trying to accesss: %s\n",name);
 #if PY_MAJOR_VERSION >= 3
-        PyObject *nameobj = PyUnicode_FromString(name);
+        //PyObject *nameobj = PyUnicode_FromString(name);
         return PyObject_GenericGetAttr((PyObject*) self, nameobj);
 #else
 		return Py_FindMethod(PyCdunifVariableObject_methods, (PyObject *) self,
@@ -2417,7 +2436,8 @@ PyCdunifVariable_GetAttribute(PyCdunifVariableObject *self, char *name) {
 }
 
 static int PyCdunifVariable_SetAttribute(PyCdunifVariableObject *self,
-		char *name, PyObject *value) {
+		PyObject *nameobj, PyObject *value) {
+    char *name = PyUnicode_AsUTF8(nameobj);
 	if (check_if_open(self->file, 1)) {
 		if (strcmp(name, "shape") == 0 || strcmp(name, "dimensions") == 0
 				|| strcmp(name, "__dict__") == 0) {
@@ -2433,7 +2453,7 @@ static int PyCdunifVariable_SetAttribute(PyCdunifVariableObject *self,
 
 static int PyCdunifVariable_SetAttributeString(PyCdunifVariableObject *self,
 		char *name, char *value) {
-	PyObject *string = PyBytes_FromString(value);
+	PyObject *string = PyUnicode_FromString(value);
 	if (string != NULL)
 		return PyCdunifVariable_SetAttribute(self, name, string);
 	else
@@ -2671,7 +2691,7 @@ PyCdunifVariable_ReadAsString(PyCdunifVariableObject *self) {
 			string = NULL;
 		} else {
 			temp[self->dimensions[0]] = '\0';
-			string = PyBytes_FromString(temp);
+			string = PyUnicode_FromString(temp);
 		}
 		free(temp);
 		return (PyStringObject *) string;
@@ -3170,15 +3190,29 @@ sizeof(PyCdunifVariableObject), /*tp_basicsize*/
 /* methods */
 (destructor) PyCdunifVariableObject_dealloc, /*tp_dealloc*/
 0, /*tp_print*/
-(getattrfunc) PyCdunifVariable_GetAttribute, /*tp_getattr*/
-(setattrfunc) PyCdunifVariable_SetAttribute, /*tp_setattr*/
+0, /*tp_getattr*/
+0, /*tp_setattr*/
 0, /*tp_compare*/
 0, /*tp_repr*/
 0, /*tp_as_number*/
 &PyCdunifVariableObject_as_sequence, /*tp_as_sequence*/
 &PyCdunifVariableObject_as_mapping, /*tp_as_mapping*/
 0, /*tp_hash*/
-};
+0, /* tp_call    "x()"     */
+0, /* tp_str     "str(x)"  */
+(getattrofunc) PyCdunifVariable_GetAttribute, /* tp_getattro */
+(setattrofunc) PyCdunifVariable_SetAttribute, /* tp_setattro */
+0, /* tp_as_buffer */
+0, /* tp_flags */
+0, /* tp_doc */
+0, /* tp_traverse */
+0, /* tp_clear */
+0, /* tp_richcompare */
+0, /* tp_weaklistoffset */
+0, /* tp_iter */
+0, /* tp_iternext */
+(PyMethodDef*) PyCdunifVariableObject_methods /* tp_methods */
+}; /* plus others: see Include/object.h */
 
 /* Creator for CdunifFile objects */
 

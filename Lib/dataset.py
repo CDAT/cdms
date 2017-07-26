@@ -1116,12 +1116,12 @@ class CdmsFile(CdmsObj, cuDataset):
 
             # Get lists of 1D and auxiliary coordinate axes
             coords1d = self._convention_.getAxisIds(self._file_.variables)
-            print("c1d",coords1d)
             coordsaux = self._convention_.getAxisAuxIds(
                 self._file_.variables, coords1d)
 
             # Build variable list
             for name in list(self._file_.variables.keys()):
+                print(name,coords1d)
                 if name not in coords1d:
                     cdunifvar = self._file_.variables[name]
                     if name in coordsaux:

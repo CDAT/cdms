@@ -1445,11 +1445,9 @@ PyCdunifFile_Open(char *filename, char *mode) {
 	int rw, ncmode;
 	CuFileType filetype;
 
-    fprintf(stderr,"file '%s'\n",filename);
 	self = PyObject_New(PyCdunifFileObject, &PyCdunifFile_Type);
 	if (self == NULL)
 		return NULL;
-    fprintf(stderr,"Ok we do come here\n");
 	self->dimensions = NULL;
 	self->variables = NULL;
 	self->attributes = NULL;
@@ -2045,7 +2043,6 @@ PyCdunifFile_GetAttribute(PyCdunifFileObject *self, PyObject *nameobj) {
 			return value;
 		} else {
 			PyErr_Clear();
-            fprintf(stderr,"getting file att: %s\n",name);
 #if PY_MAJOR_VERSION >= 3
                 return PyObject_GenericGetAttr((PyObject*) self, nameobj);
 #else
@@ -2361,7 +2358,6 @@ static PyObject *
 PyCdunifVariable_GetAttribute(PyCdunifVariableObject *self, PyObject *nameobj) {
 	PyObject *value;
     char *name = PyUnicode_AsUTF8(nameobj);
-    fprintf(stderr, "OK WE RECEIVED %s\n",name);
 	if (strcmp(name, "shape") == 0) {
 		PyObject *tuple;
 		int i;
@@ -2424,7 +2420,6 @@ PyCdunifVariable_GetAttribute(PyCdunifVariableObject *self, PyObject *nameobj) {
 		return value;
 	} else {
 		PyErr_Clear();
-        fprintf(stderr,"trying to accesss: %s\n",name);
 #if PY_MAJOR_VERSION >= 3
         //PyObject *nameobj = PyUnicode_FromString(name);
         return PyObject_GenericGetAttr((PyObject*) self, nameobj);
@@ -3473,7 +3468,6 @@ moduleinit(void)
 	data_types[NC_INT64]=NPY_LONGLONG; /*int64 */
 	data_types[NC_UINT64]=NPY_ULONGLONG; /* uint64 */
 	data_types[NC_STRING]=NPY_STRING;
-        fprintf(stderr,"CRAPr \n");
     return m;
 
 }

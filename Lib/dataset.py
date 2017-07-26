@@ -1121,7 +1121,6 @@ class CdmsFile(CdmsObj, cuDataset):
 
             # Build variable list
             for name in list(self._file_.variables.keys()):
-                print(name,coords1d)
                 if name not in coords1d:
                     cdunifvar = self._file_.variables[name]
                     if name in coordsaux:
@@ -1597,7 +1596,6 @@ class CdmsFile(CdmsObj, cuDataset):
             numericType = numpy.dtype(numericType).char
             cuvar = cufile.createVariable(name, numericType, tuple(dimensions))
         except Exception as err:
-            print(err)
             raise CDMSError("Creating variable " + name)
         var = FileVariable(self, name, cuvar)
         var.initDomain(self.axes)

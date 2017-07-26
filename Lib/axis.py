@@ -1771,7 +1771,6 @@ class Axis(AbstractAxis):
         return self._data_[low:high]
 
     def __len__(self):
-        print("IN THIS LEN:",self._node_)
         return len(self._node_)
 
     # Return true iff the axis representation is linear
@@ -1888,7 +1887,6 @@ class TransientAxis(AbstractAxis):
         self._data_[low:high] = numpy.ma.filled(value)
 
     def __len__(self):
-        print("or in this one",len(self._data_))
         return len(self._data_)
 
     def getBounds(self, isGeneric=None):
@@ -1969,7 +1967,6 @@ class TransientVirtualAxis(TransientAxis):
         self._virtualLength = axislen  # length of the axis
 
     def __len__(self):
-        print("or is it this one?",self._virtualLength)
         return self._virtualLength
 
     def __str__(self):
@@ -2198,7 +2195,6 @@ class FileAxis(AbstractAxis):
         return self._obj_.setslice(*(low, high, numpy.ma.filled(value)))
 
     def __len__(self):
-        print("AH this one!")
         if self.parent is None:
             raise CDMSError(FileWasClosed + self.id)
         if self._obj_ is not None:

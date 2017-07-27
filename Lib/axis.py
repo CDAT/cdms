@@ -1555,7 +1555,7 @@ class Axis(AbstractAxis):
         if axisNode is not None:
             if axisNode.partition is not None:
                 flatpart = axisNode.partition
-                self.__dict__['partition']=numpy.reshape(flatpart,(len(flatpart)/2,2))
+                self.__dict__['partition']=numpy.reshape(flatpart,(len(flatpart)//2,2))
                 self.attributes['partition']=self.partition
         self.id = axisNode.id
     

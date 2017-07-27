@@ -204,7 +204,7 @@ def generateTime(matchobj,timespecs):
     if yrspec:
         pat,name,dimtype,pos = _specifierMap[yrspec]
         yrstr = matchobj.group(name)
-        iyr = string.atoi(yrstr)
+        iyr = int(yrstr)
 
         # Map 2-digit year to [1950,2049)
         if yrspec in ('%y','%ey'):
@@ -220,23 +220,23 @@ def generateTime(matchobj,timespecs):
         elif mospec in ('%g','%eg'):
             imo = _monthMapLower[mostr]
         elif mospec in ('%m','%em','%n','%en'):
-            imo = string.atoi(mostr)
+            imo = int(mostr)
     if dyspec:
         pat,name,dimtype,pos = _specifierMap[dyspec]
         dystr = matchobj.group(name)
-        idy = string.atoi(dystr)
+        idy = int(dystr)
     if hrspec:
         pat,name,dimtype,pos = _specifierMap[hrspec]
         hrstr = matchobj.group(name)
-        ihr = string.atoi(hrstr)
+        ihr = int(hrstr)
     if mispec:
         pat,name,dimtype,pos = _specifierMap[mispec]
         mistr = matchobj.group(name)
-        imi = string.atoi(mistr)
+        imi = int(mistr)
     if sespec:
         pat,name,dimtype,pos = _specifierMap[sespec]
         sestr = matchobj.group(name)
-        ise = string.atoi(sestr)
+        ise = int(sestr)
     return cdtime.comptime(iyr,imo,idy,ihr,imi,ise)   
 
 # Find all files in 'direc' which match 'template'.
@@ -280,9 +280,9 @@ def matchingFiles(direc,template):
         if dimtypes['etime'] != [None,None,None,None,None,None]:
             matchnames[_etime] = generateTime(matchobj,dimtypes['etime'])
         if dimtypes['level'] is not None:
-            matchnames[_level] = string.atoi(matchobj.group('level'))
+            matchnames[_level] = int(matchobj.group('level'))
         if dimtypes['elevel'] is not None:
-            matchnames[_elevel] = string.atoi(matchobj.group('elevel'))
+            matchnames[_elevel] = int(matchobj.group('elevel'))
         matchfiles.append((candfile,matchnames))
 
     return matchfiles
@@ -490,12 +490,12 @@ class CdmsObj (object):
                     if reqtype!=datatype and datatype==CdString and scaletype==CdScalar:
                         if reqtype in (CdFloat,CdDouble):
                             try:
-                                attval = string.atof(attval)
+                                attval = float(attval)
                             except:
                                 raise RuntimeError("%s=%s must be a float"%(attname,attval))
                         elif reqtype in (CdShort,CdInt,CdLong,CdInt64):
                             try:
-                                attval = string.atoi(attval)
+                                attval = int(attval)
                             except:
                                 raise RuntimeError("%s=%s must be an integer"%(attname,attval))
                 adict[attname] = attval

@@ -7,6 +7,7 @@ from . import CDML
 import re
 from . import cdmsNode
 import string
+import pdb
 
 # Error constants
 InvalidAttribute = "Invalid attribute"
@@ -52,7 +53,7 @@ class CDMLParser(XMLParser):
         if not matchObj:
             if self.verbose: print(('data:',data))
             if self.root:
-                self.getCurrentNode().setContentFromString(string.strip(data))
+                self.getCurrentNode().setContentFromString(data.strip())
 
     def handle_cdata(self, data):
         if self.verbose: print(('cdata:', repr(data)))
@@ -95,7 +96,7 @@ class CDMLParser(XMLParser):
                                       (tag,attrname))
                 if type(attdefault)==type("") and attrname not in attrnames:
                     attrs[attrname]=attdefault
-                    method(attrs)
+        method(attrs)
 
     #------------------------------------------------------------------------
     # CDML tags
@@ -124,7 +125,7 @@ class CDMLParser(XMLParser):
         datatype = attrs.get('datatype')
         if _Integer.match(length_s) is None:
             raise InvalidAttribute('length='+length_s)
-        length = string.atoi(length_s)
+        length = int(length_s)
         axis = cdmsNode.AxisNode(id,length,datatype)
         partstring = attrs.get('partition')
         if partstring is not None:
@@ -201,11 +202,11 @@ class CDMLParser(XMLParser):
         start_s = attrs.get('start')
         length_s = attrs.get('length')
         if start_s is not None:
-            start = string.atoi(start_s)
+            start = int(start_s)
         else:
             start = None
         if length_s is not None:
-            length = string.atoi(length_s)
+            length = int(length_s)
         else:
             length = None
         domElem = cdmsNode.DomElemNode(name,start,length)
@@ -249,15 +250,15 @@ class CDMLParser(XMLParser):
         delta_s = attrs['delta']
         length_s = attrs['length']
         try:
-            start=string.atof(start_s)
+            start=float(start_s)
         except ValueError:
             raise InvalidAttribute('start='+start_s)
         try:
-            delta=string.atof(delta_s)
+            delta=float(delta_s)
         except ValueError:
             raise InvalidAttribute('delta='+delta_s)
         try:
-            length=string.atoi(length_s)
+            length=int(length_s)
         except ValueError:
             raise InvalidAttribute('length='+length_s)
         linear = cdmsNode.LinearDataNode(start,delta,length)

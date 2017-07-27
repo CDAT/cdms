@@ -1,7 +1,6 @@
 import basetest
 import cdms2
 import numpy
-import string
 import os
 import sys
 from numpy.ma import masked

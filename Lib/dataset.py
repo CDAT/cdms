@@ -471,7 +471,7 @@ def parseIndexList(text):
     for i in range(nindices):
         s = m.group(i + 1)
         if s != '-':
-            result[i] = string.atoi(s)
+            result[i] = int(s)
     result[nindices] = m.group(nindices + 1)
     return result, m.end()
 

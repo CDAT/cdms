@@ -65,7 +65,7 @@ class TestMV2(basetest.CDMSBaseTest):
         scalar_mul = self.u_file * 2
         broadcast_mul = scalar_mul * self.other_u_file
         self.assertTrue(MV2.allequal(broadcast_mul[0] / self.u_file[0] / self.other_u_file, 2))
-        scalar_right = 1 / self.u_file
+        scalar_right = 1 / self.u_file[:]
         self.assertTrue(MV2.allclose(scalar_mul * scalar_right, 2))
 
     def testTypeCoercion(self):
@@ -275,8 +275,6 @@ class TestMV2(basetest.CDMSBaseTest):
         b=a.mean()
         self.assertEqual(b, 1.0)
 
-if __name__ == "__main__":
-    basetest.run()
 if __name__ == "__main__":
     basetest.run()
 

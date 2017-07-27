@@ -140,7 +140,7 @@ class DatasetVariable(AbstractVariable):
                     raise CDMSError(InvalidGridElement + dename)
             partlenstr = denode.getExternalAttr('partition_length')
             if partlenstr is not None:
-                truelen = string.atoi(partlenstr)
+                truelen = int(partlenstr)
             else:
                 truelen = denode.length
             self.domain.append((domelem, denode.start, denode.length, truelen))
@@ -185,6 +185,7 @@ class DatasetVariable(AbstractVariable):
         speclist = self._process_specs (specs, keys)
         slicelist = self.specs2slices(speclist)
 
+        print(slicelist)
         # Generate the filelist
         npart, idims, partitionSlices = self.expertPaths(slicelist)
 

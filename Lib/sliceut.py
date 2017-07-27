@@ -19,13 +19,13 @@ def sliceIntersect(aSlice,interval):
     irev=0
     if k<0:
         k = -k
-        pk = ((j-i+k)/k)*k+i
-        j = i+1
-        i = pk
+        pk = int(((j-i+k)/k)*k+i)
+        j = int(i+1)
+        i = int(pk)
         irev = 1
 
     # Calculate the intersection for an increasing slice
-    px = ((p0-i+k-1)/k)*k+i
+    px = int(((p0-i+k-1)/k)*k+i)
     a = max(px,i)
     b = min(j,p1)
     if a<b:
@@ -38,7 +38,7 @@ def sliceIntersect(aSlice,interval):
 
     # Reverse the slice if necessary
     if irev==1 and newSlice is not None:
-        px = -((-b+a+k)/k*k-a)
+        px = int(-((-b+a+k)/k*k-a))
         newSlice = slice(px,a-1,-k)
     
     return newSlice

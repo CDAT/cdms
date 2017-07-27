@@ -492,12 +492,12 @@ def validateAttrs(node):
             if reqtype!=datatype and datatype==CdString and scaletype==CdScalar:
                 if reqtype in (CdFloat,CdDouble) and type(attval)!=float:
                     try:
-                        attval = string.atof(attval)
+                        attval = float(attval)
                     except:
                         if verbose:
                             print("Warning: %s=%s should be a float, id=%s"%(attname,attval,node.id), end=' ', file=sys.stderr)
                         try:
-                            attval = string.atoi(attval)
+                            attval = int(attval)
                             attval = float(attval)
                             if verbose:
                                 print("(Recasting)")
@@ -513,12 +513,12 @@ def validateAttrs(node):
                                     print("")
                 elif reqtype in (CdShort,CdInt,CdLong) and type(attval)!=int:
                     try:
-                        attval = string.atoi(attval)
+                        attval = int(attval)
                     except:
                         if verbose:
                             print("Warning: %s=%s should be an integer, id=%s"%(attname,attval,node.id), end=' ', file=sys.stderr)
                         try:
-                            attval = string.atof(attval)
+                            attval = float(attval)
                             attval = int(attval)
                             if verbose:
                                 print("(Recasting)")
@@ -534,7 +534,7 @@ def cloneWithLatCheck(axis):
     global notrimlat
 
     axisvals = origvals = axis[:]
-    if axis.isLatitude() and hasattr(axis,"units") and string.lower(axis.units[0:6])=="degree":
+    if axis.isLatitude() and hasattr(axis,"units") and axis.units[0:6].lower()=="degree":
         if notrimlat==0:
             axisvals = numpy.maximum(-90.0, numpy.minimum(90.0,axisvals))
         if not numpy.ma.allclose(axisvals, origvals) and verbose:
@@ -700,7 +700,7 @@ def main(argv):
         if flag=='-a':
             aliasMapFile = arg
         elif flag=='-c':
-            calenkey = string.lower(arg)
+            calenkey = arg.lower()
             calendar = calendarMap[calenkey]
             overrideCalendar = 1
         elif flag=='-d':
@@ -721,7 +721,7 @@ def main(argv):
         elif flag=='--exclude':
             if arg[0]=='-':
                 raise RuntimeError("--exclude option requires an argument")
-            excludeList = string.split(arg,',')
+            excludeList = arg.split(',')
         elif flag=='--exclude-file':
             excludePattern = arg
         elif flag=='-f':
@@ -736,7 +736,7 @@ def main(argv):
             sys.exit(0)
         elif flag=='-i':
             splitOnTime = 1
-            referenceDelta = string.atof(arg)
+            referenceDelta = float(arg)
             timeIsLinear = 1
             timeIsVector = None
         elif flag=='--ignore-open-error':
@@ -744,7 +744,7 @@ def main(argv):
         elif flag=='--include':
             if arg[0]=='-':
                 raise RuntimeError("--include option requires an argument")
-            includeList = string.split(arg,',')
+            includeList = arg.split(',')
         elif flag=='--include-file':
             includePattern = arg
         elif flag=='-j':
@@ -752,8 +752,8 @@ def main(argv):
             timeIsLinear = None
         elif flag=='-l':
             splitOnLevel = 1
-            levelstr = string.split(arg,',')
-            levellist = list(map(string.atof, levelstr))
+            levelstr = arg.split(',')
+            levellist = list(map(float, levelstr))
             levels = numpy.array(levellist)
             levels = numpy.sort(levels)
         elif flag=='-m':
@@ -775,19 +775,19 @@ def main(argv):
             timeid = arg
             args.append(('-e','%s.axis=T'%timeid)) # Add axis=T attribute
         elif flag=='--time-linear':
-            targlist = string.split(arg,',')
-            ttzero = string.atof(targlist[0])
-            tdelta = string.atof(targlist[1])
-            tunits = string.strip(targlist[2])
+            targlist = arg.split(',')
+            ttzero = float(targlist[0])
+            tdelta = float(targlist[1])
+            tunits = targlist[2].strip()
             if len(targlist)==4:
-                tcalendar = string.strip(targlist[3])
+                tcalendar = targlist[3].strip()
             else:
                 tcalendar = None
             overrideTimeLinear = [ttzero,tdelta,tunits,tcalendar]
         elif flag=='--var-locate':
             if varLocate is None:
                 varLocate = {}
-            vname, pattern = string.split(arg,',')
+            vname, pattern = arg.split(',')
             varLocate[vname]=pattern
         elif flag=='-x':
             writeToStdout = 0
@@ -810,7 +810,7 @@ def main(argv):
     # Ignore blank paths
     realargs = []
     for arg in lastargs:
-        sarg = string.strip(arg)
+        sarg = arg.strip()
         if len(sarg)>0:
             realargs.append(sarg)
     lastargs = realargs
@@ -820,7 +820,7 @@ def main(argv):
     dsetargs = []
     for arg in lastargs:
         base, suffix = os.path.splitext(arg)
-        if string.lower(suffix) in ['.xml','.cdml']:
+        if suffix.lower() in ['.xml','.cdml']:
             dsetargs.append(arg)
         else:
             fileargs.append(arg)
@@ -876,7 +876,7 @@ def main(argv):
         modelMap = {}
         modelDirs = []
         for line in mfile.readlines():
-            mdirec, model = string.split(line)
+            mdirec, model = line.split()
             modelMap[mdirec] = model
             modelDirs.append(mdirec)
         mfile.close()
@@ -886,10 +886,10 @@ def main(argv):
         aliasMap = {}
         for line in afile.readlines():
             if line[0] not in ["'",'"']: #"
-                varid, alias = string.split(line)
+                varid, alias = line.split()
             else:
-                dummy, varid, alias = string.split(line,line[0])
-                alias = string.strip(alias)
+                dummy, varid, alias = line,line[0].split()
+                alias = alias.strip()
             aliasMap[varid] = alias
         afile.close()
 
@@ -987,7 +987,7 @@ def main(argv):
     boundsmap = {}                      # boundsmap : varid => timebounds_id
     boundsdict = {}                     # Same as vardict for time bounds
     for path in fileargs:
-        path = string.strip(path)
+        path = path.strip()
 
         # Check if the path is included
         if includePattern is not None:
@@ -1025,7 +1025,7 @@ def main(argv):
                 if mo is not None:
                     suffixPattern = modelMap[direc]
                     def gensuffix(m, mo=mo):
-                        i = string.atoi(m.group(1))
+                        i = int(m.group(1))
                         return mo.group(i)
                     varsuffix = re.sub(r'\\g<(\d)>', gensuffix, suffixPattern)
                     break
@@ -1195,7 +1195,7 @@ def main(argv):
                     if verbose and not forecast:
                         print('Setting reference time units to', referenceTime)
                     if timeIsLinear is None and timeIsVector is None:
-                        timeIsLinear = (string.lower(string.split(referenceTime)[0]) in ['hour','hours','minute','minutes','second','seconds'])
+                        timeIsLinear = (referenceTime.split()[0].lower() in ['hour','hours','minute','minutes','second','seconds'])
                         if timeIsLinear and verbose:
                             print('Setting time representation to "linear"') #'
                     if timeIsLinear and referenceDelta is None:

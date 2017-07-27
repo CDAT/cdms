@@ -1985,6 +1985,8 @@ class FileAxis(AbstractAxis):
             raise CDMSError(ReadOnlyAxis + self.id)
         if self.parent is None:
             raise CDMSError(FileWasClosed+self.id)
+        import pdb
+        pdb.set_trace()
         return self._obj_.setitem(*(index,numpy.ma.filled(value)))
 
     def __setslice__(self, low, high, value):

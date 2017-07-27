@@ -13,6 +13,7 @@ else:
 for i,nm in enumerate(names):
     nm = nm.split("/")[-1].split(".py")[0]
     names[i]=nm
+    print(nm)
 
 if "test_cdscan" in names:
     names.remove("test_cdscan")

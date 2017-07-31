@@ -1229,7 +1229,9 @@ static int set_attribute(int fileid, int varid, PyObject *attributes,
 			if (type == 0) {
 				/* 0 means probably going to freak out netcdf */
 				fprintf(stderr,
-						"Attribute %s has a bad type for NetCDF. We will not attempt to write it\n");
+						"Attribute %s has a bad type for NetCDF. We will not attempt to write it\n",
+						name);
+				return(-1);
 			}
 			if ((data_types[type] == NPY_STRING) && PyList_Check(value)) {
 				int i;
@@ -1510,7 +1512,7 @@ static int Cdunif_file_init(PyCdunifFileObject *self) {
 			if (i == recdim) {
 				PyDict_SetItemString(self->dimensions, name, Py_None);
 			} else {
-				size_ob = PyLong_FromLong(size);
+				size_ob = PyInt_FromLong(size);
 				PyDict_SetItemString(self->dimensions, name, size_ob);
 				Py_DECREF(size_ob);
 			}
@@ -1520,7 +1522,7 @@ static int Cdunif_file_init(PyCdunifFileObject *self) {
 			if (i == recdim) {
 				PyDict_SetItemString(self->dimensions, pseudoname, Py_None);
 			} else {
-				size_ob = PyLong_FromLong(size);
+				size_ob = PyInt_FromLong(size);
 				PyDict_SetItemString(self->dimensions, pseudoname, size_ob);
 				Py_DECREF(size_ob);
 			}
@@ -1606,7 +1608,7 @@ static int PyCdunifFile_CreateDimension(PyCdunifFileObject *file, char *name,
 				PyDict_SetItemString(file->dimensions, name, Py_None);
 				file->recdim = id;
 			} else {
-				size_ob = PyLong_FromLong(size);
+				size_ob = PyInt_FromLong(size);
 				PyDict_SetItemString(file->dimensions, name, size_ob);
 				Py_DECREF(size_ob);
 			}
@@ -1765,7 +1767,7 @@ PyCdunifFileObject_new_variable(PyCdunifFileObject *self, PyObject *args) {
 			return NULL;
 		}
 	}
-	var = PyCdunifFile_CreateVariable(self, name, *type, dimension_names, ndim);
+	var = PyCdunifFile_CreateVariable(self, name, type[0], dimension_names, ndim);
 	free(dimension_names);
 	return (PyObject *) var;
 }
@@ -1840,11 +1842,11 @@ PyCdunifFileObject_read_dimension(PyCdunifFileObject *self, PyObject *args) {
 		return NULL;
 	}
 	dimidObj = PyTuple_GetItem(tuple, 5);
-	if (!PyLong_Check(dimidObj)) {
+	if (!PyInt_Check(dimidObj)) {
 		PyErr_SetString(PyExc_TypeError, "Bad dimension ID");
 		return NULL;
 	}
-	dimid = (int) PyLong_AsLong(dimidObj);
+	dimid = (int) PyInt_AsLong(dimidObj);
 
 	/* Get the dimension length and type*/
 	if (cddiminq(self, dimid, NULL, NULL, &nctype, NULL, NULL, &length) == -1) {
@@ -2001,7 +2003,8 @@ static int PyCdunifFile_SetAttributeUnicode(PyCdunifFileObject *self, char *name
 static int PyCdunifFile_AddHistoryLine(PyCdunifFileObject *self, char *text) {
 	static char *history = "history";
 	int alloc, old, new, new_alloc;
-    int ret;
+	int ret;
+
 	PyUnicodeObject *new_string;
 	PyObject *h = PyCdunifFile_GetAttribute(self, history);
 	new_string = PyStr_FromString(text);
@@ -2268,7 +2271,7 @@ PyCdunifVariable_GetAttribute(PyCdunifVariableObject *self, PyObject *nameobj) {
 			PyCdunifVariable_GetShape(self);
 			tuple = PyTuple_New(self->nd);
 			for (i = 0; i < self->nd; i++) {
-				PyObject *tmpx = PyLong_FromLong(self->dimensions[i]);
+				PyObject *tmpx = PyInt_FromLong(self->dimensions[i]);
 				PyTuple_SetItem(tuple, i, tmpx);
 				//Py_DECREF(tmpx);
 			}
@@ -2435,7 +2438,12 @@ PyCdunifVariable_ReadAsArray(PyCdunifVariableObject *self,
 			free(indices);
 		return NULL;
 	}
-	array = (PyArrayObject *) PyArray_SimpleNew(d, dims, self->type);
+	//
+	// If we don't have a flexible type define a Simple Array
+	//
+	if( self->type != NPY_STRING) {
+		array = (PyArrayObject *) PyArray_SimpleNew(d, dims, self->type);
+    }
 	if (array != NULL && nitems > 0) {
 		if (self->nd == 0) {
 			long zero = 0;
@@ -2812,8 +2820,8 @@ PyCdunifVariableObject_slice(PyCdunifVariableObject *self, Py_ssize_t low,
 static PyObject *
 PyCdunifVariableObject_subscript(PyCdunifVariableObject *self, PyObject *index) {
 	PyCdunifIndex *indices;
-	if (PyLong_Check(index)) {
-		long i = PyLong_AsLong(index);
+	if (PyInt_Check(index)) {
+		long i = PyInt_AsLong(index);
 		return PyCdunifVariableObject_item(self, i);
 	}
 	if (self->nd == 0) {
@@ -2836,8 +2844,8 @@ PyCdunifVariableObject_subscript(PyCdunifVariableObject *self, PyObject *index) 
 				d = 0;
 				for (i = 0; i < ni; i++) {
 					PyObject *subscript = PyTuple_GetItem(index, i);
-					if (PyLong_Check(subscript)) {
-						long n = PyLong_AsLong(subscript);
+					if (PyInt_Check(subscript)) {
+						long n = PyInt_AsLong(subscript);
 						indices[d].start = n;
 						indices[d].stop = n + 1;
 						indices[d].item = 1;
@@ -2930,8 +2938,8 @@ static int PyCdunifVariableObject_ass_slice(PyCdunifVariableObject *self,
 static int PyCdunifVariableObject_ass_subscript(PyCdunifVariableObject *self,
 		PyObject *index, PyObject *value) {
 	PyCdunifIndex *indices;
-	if (PyLong_Check(index)) {
-		long i = PyLong_AsLong(index);
+	if (PyInt_Check(index)) {
+		long i = PyInt_AsLong(index);
 		return PyCdunifVariableObject_ass_item(self, i, value);
 	}
 	if (value == NULL) {
@@ -2946,7 +2954,13 @@ static int PyCdunifVariableObject_ass_subscript(PyCdunifVariableObject *self,
 	if (indices != NULL) {
 		if (PySlice_Check(index)) {
 			Py_ssize_t slicelen;
-			PySlice_GetIndicesEx((PySliceObject *) index, self->dimensions[0],
+			int length;
+			if( self->dimensions[0] == self->file->recdim ){
+			    length = INT_MAX;
+			} else {
+			    length = self->dimensions[0];
+			}
+			PySlice_GetIndicesEx((PySliceObject *) index, length,
 					&indices->start, &indices->stop, &indices->stride,
 					&slicelen);
 			return PyCdunifVariable_WriteArray(self, indices, value);
@@ -2958,8 +2972,8 @@ static int PyCdunifVariableObject_ass_subscript(PyCdunifVariableObject *self,
 				d = 0;
 				for (i = 0; i < ni; i++) {
 					PyObject *subscript = PyTuple_GetItem(index, i);
-					if (PyLong_Check(subscript)) {
-						int n = PyLong_AsLong(subscript);
+					if (PyInt_Check(subscript)) {
+						int n = PyInt_AsLong(subscript);
 						indices[d].start = n;
 						indices[d].stop = n + 1;
 						indices[d].item = 1;

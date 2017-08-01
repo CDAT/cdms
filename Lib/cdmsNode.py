@@ -974,7 +974,7 @@ class AttrNode(CdmsNode):
     #   Returns ValueError if the conversion fails
     def setValueFromString(self,valString,datatype):
         val = None
-        if isinstance(valString, str):
+        if not isinstance(valString, str):
             raise CDMSError('input value is not a string')
         if datatype == CdString:
             val=valString

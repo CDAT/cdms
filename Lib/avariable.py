@@ -18,7 +18,9 @@ from . import selectors
 import copy
 # from regrid2 import Regridder, PressureRegridder, CrossSectionRegridder
 #from .mvCdmsRegrid import CdmsRegrid
-#from regrid2.mvGenericRegrid import guessPeriodicity
+from .mvCdmsRegrid import CdmsRegrid, getBoundList, _getCoordList
+
+from regrid2.mvGenericRegrid import guessPeriodicity
 #import PropertiedClasses
 from .convention import CF1
 from .grid import AbstractRectGrid
@@ -1020,8 +1022,10 @@ class AbstractVariable(CdmsObj, Slab):
 
             if 'topology' in self.getAxis(-1).attributes:
                 if self.getAxis(-1).attributes['topology'] == 'circular':
-                    # for the ESMF regridders
-                    keywords['periodicity'] = guessPeriodicity(self.getAxis(-1).getBounds())
+                    # for the ESMF regridders if periodicity is not set.
+                    if 'periodicity' not in keywords.keys():
+                        keywords['periodicity'] = guessPeriodicity(
+                            getBoundList(_getCoordList(self.getGrid())))
                     keywords['mkCyclic'] = 1    # for LibCF regridder
 
             # check if there are bounds and we have esmf

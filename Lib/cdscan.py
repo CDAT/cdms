@@ -1,21 +1,21 @@
 #!/usr/bin/env python
-
 from __future__ import print_function
+
 import sys
 import getopt
 import cdms2
 from cdms2.grid import lookupArray
 from cdms2.axis import calendarToTag, tagToCalendar
-from cdms2.cdmsobj import CdFromObject,CdString,CdScalar,CdFloat,CdDouble,CdShort,CdInt,CdLong
+from cdms2.cdmsobj import CdFromObject, CdString, CdScalar, CdFloat, CdDouble, CdShort, CdInt, CdLong
 import numpy
 import string
 import cdtime
 import os.path
 import copy
-import types
 from cdms2 import cdmsNode
 import re
 from functools import reduce
+from cdms2.error import CDMSError
 
 usage = """Usage:
     cdscan [options] <files>
@@ -44,18 +44,18 @@ Options:
 
     -d dataset_id: dataset identifier. Default: "none"
 
-    -e newattr:	   Add or modify attributes of a file, variable, or
-		   axis. The form of 'newattr' is either:
+    -e newattr:    Add or modify attributes of a file, variable, or
+           axis. The form of 'newattr' is either:
 
-		   'var.attr = value' to modify a variable or attribute, or
-		   '.attr = value' to modify a global (file) attribute.
+           'var.attr = value' to modify a variable or attribute, or
+           '.attr = value' to modify a global (file) attribute.
 
-		   In either case, 'value' may be quoted to preserve spaces
-		   or force the attribute to be treated as a string. If
-		   'value' is not quoted and the first character is a
-		   digit, it is converted to integer or
-		   floating-point. This option does not modify the input
-		   datafiles. See notes and examples below.
+           In either case, 'value' may be quoted to preserve spaces
+           or force the attribute to be treated as a string. If
+           'value' is not quoted and the first character is a
+           digit, it is converted to integer or
+           floating-point. This option does not modify the input
+           datafiles. See notes and examples below.
 
     --exclude var,var,...
                    Exclude specified variables. The argument
@@ -108,8 +108,8 @@ Options:
                    that the match is to the initial part of the basename. For example, the
                    pattern 'st' matches any basename starting with 'st'.
 
-    -j:		   scan time as a vector dimension. Time values are listed
-		   individually. Turns off the -i option.
+    -j:        scan time as a vector dimension. Time values are listed
+           individually. Turns off the -i option.
 
     -l levels:     list of levels, comma-separated. Only specify if files are partitioned by
                    levels.
@@ -118,7 +118,7 @@ Options:
                    vertical level dimension
 
     --notrim-lat:  Don't trim latitude values (in degrees) to the range [-90..90]. By default
-		   latitude values are trimmed.
+           latitude values are trimmed.
 
     -p template:   Compatibility with pre-V3.0 datasets. 'cdimport -h' describes template strings.
 
@@ -148,7 +148,7 @@ Options:
     --time-linear tzero,delta,units[,calendar]
                    Override the time dimensions(s) with a linear time dimension. The arguments are
                    a comma-separated list:
-                   
+
                    tzero is the initial time point, a floating-point value.
                    delta is the time delta, floating-point.
                    units are time units as specified in the [-r] option.
@@ -163,7 +163,7 @@ Options:
                    Only scan a variable if the basename of the file matches the pattern. This
                    may be used to resolve duplicate variable errors. var and file_pattern are
                    separated by a comma, with no blanks.
-                   
+
                    var is the name of the variable
                    file_pattern is a regular expression following the Python re module syntax.e
 
@@ -249,18 +249,21 @@ reverseCalendarMap = calendarToTag
 
 attrPattern = re.compile(r'\s*(\w*)\.(\w+)\s*=\s*(.*)$')
 cdms2.setNetcdfUseParallelFlag(0)
+
+
 def timestamp():
     "Generate a timestamp."
     import time
-    y,m,d,h,mi,s,w,dy,ds = time.gmtime(time.time())
-    return "%d-%d-%d %d:%d:%d"%(y,m,d,h,mi,s)
+    y, m, d, h, mi, s, w, dy, ds = time.gmtime(time.time())
+    return "%d-%d-%d %d:%d:%d" % (y, m, d, h, mi, s)
+
 
 def timeindex(value, units, basetime, delta, calendar):
     """ Calculate (t - basetime)/delu
     where t = reltime(value, units)
     and delu is the time interval (delta, delunits) (e.g., 1 month).
     """
-    if string.find(units," as ")==-1:
+    if units.find(" as ") == -1:
         tval = cdtime.reltime(value, units)
     else:
         tval = cdtime.abstime(value, units)
@@ -268,9 +271,11 @@ def timeindex(value, units, basetime, delta, calendar):
     if delta is None:
         return newval.value
     else:
-        return newval.value/delta
+        return newval.value / delta
 
-def combineKeys(dict, typedict, timeIsLinear=0, referenceDelta = None, forecast=None):
+
+def combineKeys(dict, typedict, timeIsLinear=0,
+                referenceDelta=None, forecast=None):
     """ Combine dictionary keys into an axis.
     dict: (i,j) => (path, axisname)
     typedict is either timedict or levdict or fcdict.
@@ -281,8 +286,7 @@ def combineKeys(dict, typedict, timeIsLinear=0, referenceDelta = None, forecast=
     global verbose
 
     # Sort the projected time, level indices
-    keys = list(dict.keys())
-    keys.sort()
+    keys = sorted(dict.keys())
 
     axislist = []
     prevend = None
@@ -293,33 +297,37 @@ def combineKeys(dict, typedict, timeIsLinear=0, referenceDelta = None, forecast=
     previ = 0
     firstunits = None
     prevvals = None
-    coordToInd = {(None,None):(None,None)}
-    linCoordToInd = {(None,None):(None,None)}
+    coordToInd = {(None, None): (None, None)}
+    linCoordToInd = {(None, None): (None, None)}
     iadj = None
     errorOccurred = 0
     for i0, i1 in keys:
         path, name = dict[(i0, i1)]
         if name0 is None:
             name0 = name
-        values, units, dummy = typedict[(path,name)]
+        values, units, dummy = typedict[(path, name)]
         if firstunits is None:
             firstunits = units
-        if prevend is not None and prevend>=i0:
-            if prevend>=i1:
+        if prevend is not None and prevend >= i0:
+            if prevend >= i1:
                 if verbose:
-                    print('Warning, file %s, dimension %s contains values in file %s'%(prevpath,name,path), file=sys.stderr)
+                    print('Warning, file %s, dimension %s contains values in file %s' % (
+                        prevpath, name, path), file=sys.stderr)
                 if timeIsLinear:
                     iind = lookupArray(prevvals, values[0])
                     jind = lookupArray(prevvals, values[-1])
                 else:
                     iind = lookupArray(prevvals, i0)
                     jind = lookupArray(prevvals, i1)
-                if len(values)!=(jind-iind+1):
-                    raise RuntimeError('Dimension %s in files %s [len(%s)=%d], %s [len(%s)=%d], is inconsistent'%(name, prevpath, name, (jind-iind+1), path, name, len(values)))
-                coordToInd[(i0,i1)] = (iind, jind)
-                
+                if len(values) != (jind - iind + 1):
+                    raise RuntimeError(
+                        'Dimension %s in files %s [len(%s)=%d], %s [len(%s)=%d], is inconsistent' %
+                        (name, prevpath, name, (jind - iind + 1), path, name, len(values)))
+                coordToInd[(i0, i1)] = (iind, jind)
+
                 prevspart, prevepart = partition[-1]
-                linCoordToInd[(i0,i1)] = (prevspart+iind, prevspart+jind+1)
+                linCoordToInd[(i0, i1)] = (
+                    prevspart + iind, prevspart + jind + 1)
                 continue
             else:                       # Fix partial overlap
                 if timeIsLinear:
@@ -327,7 +335,8 @@ def combineKeys(dict, typedict, timeIsLinear=0, referenceDelta = None, forecast=
                 else:
                     jind = lookupArray(prevvals, i0)
                 if verbose:
-                    print('Warning, file %s, dimension %s overlaps file %s, value=%f'%(prevpath,name,path,prevvals[jind]), file=sys.stderr)
+                    print('Warning, file %s, dimension %s overlaps file %s, value=%f' % (
+                        prevpath, name, path, prevvals[jind]), file=sys.stderr)
                 previ, prevj = compressPart[-1]
                 prevj = previ + jind
                 axislist[-1] = prevvals[0:jind]
@@ -338,37 +347,43 @@ def combineKeys(dict, typedict, timeIsLinear=0, referenceDelta = None, forecast=
                 prevspart, prevepart = partition[-1]
                 prevepart = prevspart + jind
                 partition[-1] = (prevspart, prevepart)
-                linCoordToInd[(prevvals[0], prevvals[-1])] = (prevspart, prevepart)
+                linCoordToInd[(prevvals[0], prevvals[-1])
+                              ] = (prevspart, prevepart)
 
         axislist.append(values)
         prevend = i1
         prevpath = path
-        prevj = previ+len(values)
+        prevj = previ + len(values)
         compressPart.append((previ, prevj))
-        coordToInd[(i0,i1)] = (previ, prevj)
+        coordToInd[(i0, i1)] = (previ, prevj)
 
         if iadj is None:                # partition has to start with 0
             iadj = int(i0)
         spart = int(i0) - iadj
         epart = int(i1) + 1 - iadj
         partition.append((spart, epart))
-        linCoordToInd[(i0,i1)] = (spart, epart)
-        if timeIsLinear and len(values)!=(epart-spart):
+        linCoordToInd[(i0, i1)] = (spart, epart)
+        if timeIsLinear and len(values) != (epart - spart):
             # Find the bad values
-            diffs = values[1:]-values[:-1]
-            badindices = numpy.compress(numpy.not_equal(diffs,referenceDelta),list(range(len(values))))
+            diffs = values[1:] - values[:-1]
+            badindices = numpy.compress(
+                numpy.not_equal(diffs, referenceDelta), list(range(len(values))))
             badvalues = numpy.take(values, badindices)
             if verbose:
-                print("Error: Missing values in %s after times: %s. Set delta with the -i option or turn off linear mode with the -j option."%(path,str(badvalues)), file=sys.stderr)
+                print("Error: Missing values in %s after times: %s." % (path, str(badvalues)) +
+                      " Set delta with the -i option or turn off linear mode with the -j option.",
+                      file=sys.stderr)
             errorOccurred = 1
 
         prevvals = values
         previ = prevj
-        
+
     fullaxis = numpy.ma.concatenate(axislist)
     return fullaxis, name0, compressPart, coordToInd, firstunits, partition, linCoordToInd, errorOccurred
 
-def useKeys(dict, typedict, timeIsLinear=0, referenceDelta = None, forecast=None):
+
+def useKeys(dict, typedict, timeIsLinear=0,
+            referenceDelta=None, forecast=None):
     """ Use dictionary keys for an axis.  This is like combineKeys (same arguments, same return values,
     was written by simplifying combineKeys), but this doesn't do nearly so much because this is
     for an axis where there is no splitting across files, hence partitions are not needed.
@@ -380,8 +395,7 @@ def useKeys(dict, typedict, timeIsLinear=0, referenceDelta = None, forecast=None
     global verbose
 
     # Sort the projected time, level indices
-    keys = list(dict.keys())
-    keys.sort()
+    keys = sorted(dict.keys())
 
     axislist = []
     name0 = None
@@ -400,7 +414,7 @@ def useKeys(dict, typedict, timeIsLinear=0, referenceDelta = None, forecast=None
         path, name = dict[(i0, i1)]
         if name0 is None:
             name0 = name
-        values, units, dummy = typedict[(path,name)]
+        values, units, dummy = typedict[(path, name)]
         if firstunits is None:
             firstunits = units
         axislist.append(values)
@@ -410,6 +424,7 @@ def useKeys(dict, typedict, timeIsLinear=0, referenceDelta = None, forecast=None
     fullaxis = numpy.ma.concatenate(axislist)
     return fullaxis, name0, compressPart, coordToInd, firstunits, partition, linCoordToInd, errorOccurred
 
+
 def copyDict(dict):
     """Copy a dictionary-like object dict to a true dictionary"""
     result = {}
@@ -418,6 +433,7 @@ def copyDict(dict):
 
     return result
 
+
 def disambig(name, dict, num, comparator, value):
     """ Make an unique name from name, wrt to the keys in dictionary dict.
     Try using num first. comparator(value,dict[name]) returns 0 if equal, 1 if not.
@@ -425,85 +441,97 @@ def disambig(name, dict, num, comparator, value):
     if name not in dict or not comparator(value, dict[name]):
         uniqname = name
     else:
-        uniqname = '%s_%d'%(name,num)
+        uniqname = '%s_%d' % (name, num)
         if uniqname in dict and comparator(value, dict[uniqname]):
             trial_name = uniqname
             for letter in string.lowercase:
-                uniqname = '%s_%s'%(trial_name,letter)
-                if uniqname not in dict or not comparator(value, dict[uniqname]):
+                uniqname = '%s_%s' % (trial_name, letter)
+                if uniqname not in dict or not comparator(
+                        value, dict[uniqname]):
                     break
             else:
-                raise RuntimeError("Cannot make axis name unique: %s" % name)
+                raise BaseException(
+                    'Cannot make axis name unique: ' + str(name))
 
     return uniqname
 
+
 def compareaxes(axis1, axis2):
     """Return 0 if equal, 1 if not"""
-    return ((len(axis1)!=len(axis2)) or not numpy.ma.allclose(axis1[:],axis2[:]))
+    return ((len(axis1) != len(axis2)) or
+            not numpy.ma.allclose(axis1[:], axis2[:]))
+
 
 def comparedomains(domain1, domain2):
     """Return 0 if equal, 1 if not"""
-    if len(domain1)!=len(domain2):
+    if len(domain1) != len(domain2):
         return 1
     for i in range(len(domain1)):
         item1 = domain1[i]
         item2 = domain2[i]
-        if type(item1)!=type(item2):
+        if not isinstance(item1, type(item2)):
             return 1
-        if type(item1)==bytes:
-            return item1!=item2
+        if isinstance(item1, str):
+            return item1 != item2
         elif compareaxes(item1, item2):
             return 1
     return 0
 
+
 def compareVarDictValues(val1, val2):
     return comparedomains(val1[0], val2[0])
+
 
 def cleanupAttrs(attrs):
     for attname in list(attrs.keys()):
         attval = attrs[attname]
         if isinstance(attval, numpy.ndarray):
-            if attval.ndim==0:
+            if attval.ndim == 0:
                 continue
-            elif len(attval)==1:
+            elif len(attval) == 1:
                 attrs[attname] = attval[0]
             else:
                 attrs[attname] = str(attval)
     if 'missing_value' in attrs and attrs['missing_value'] is None:
         del attrs['missing_value']
 
+
 def validateAttrs(node):
     """Compare attributes against DTD."""
 
     global verbose
 
-    if hasattr(node,'datatype'):
+    if hasattr(node, 'datatype'):
         parenttype = node.datatype
     else:
         parenttype = None
     atts = node.getExternalDict()
     for attname in list(atts.keys()):
-        (attval,datatype)=atts[attname] # (XML value, datatype)
+        (attval, datatype) = atts[attname]  # (XML value, datatype)
         constraint = node.extra.get(attname)
         if constraint is not None:
-            (scaletype,reqtype)=constraint # (CdScalar|CdArray, required type)
-            if reqtype==CdFromObject:
+            # (CdScalar|CdArray, required type)
+            (scaletype, reqtype) = constraint
+            if reqtype == CdFromObject:
                 reqtype = parenttype
-            if reqtype!=datatype and datatype==CdString and scaletype==CdScalar:
-                if reqtype in (CdFloat,CdDouble) and type(attval)!=float:
+            if reqtype != datatype and datatype == CdString and scaletype == CdScalar:
+                if reqtype in (CdFloat, CdDouble) and not isinstance(
+                        attval, float):
                     try:
                         attval = float(attval)
-                    except:
+                    except BaseException:
                         if verbose:
-                            print("Warning: %s=%s should be a float, id=%s"%(attname,attval,node.id), end=' ', file=sys.stderr)
+                            print("Warning: %s=%s should be a float, id=%s" % (
+                                attname, attval, node.id), end=' ', file=sys.stderr)
                         try:
                             attval = int(attval)
                             attval = float(attval)
                             if verbose:
                                 print("(Recasting)")
-                            node.setExternalAttr(attname,attval)
-                        except:
-                            if attname in ['modulo', 'add_offset', 'scale_factor']:
+                            node.setExternalAttr(attname, attval)
+                        except BaseException:
+                            if attname in [
+                                    'modulo', 'add_offset', 'scale_factor']:
                                 if verbose:
                                     print("(Removing)")
                                 attdict = node.getExternalDict()
@@ -511,21 +539,23 @@ def validateAttrs(node):
                             else:
                                 if verbose:
                                     print("")
-                elif reqtype in (CdShort,CdInt,CdLong) and type(attval)!=int:
+                elif reqtype in (CdShort, CdInt, CdLong) and not isinstance(attval, int):
                     try:
                         attval = int(attval)
-                    except:
+                    except BaseException:
                         if verbose:
-                            print("Warning: %s=%s should be an integer, id=%s"%(attname,attval,node.id), end=' ', file=sys.stderr)
+                            print("Warning: %s=%s should be an integer, id=%s" % (
+                                attname, attval, node.id), end=' ', file=sys.stderr)
                         try:
                             attval = float(attval)
                             attval = int(attval)
                             if verbose:
                                 print("(Recasting)")
-                            node.setExternalAttr(attname,attval)
-                        except:
+                            node.setExternalAttr(attname, attval)
+                        except BaseException:
                             if verbose:
                                 print("")
+
 
 def cloneWithLatCheck(axis):
     """Clone an axis, ensuring that latitudes (in degrees) are in the range [-90:90]"""
@@ -534,11 +564,17 @@ def cloneWithLatCheck(axis):
     global notrimlat
 
     axisvals = origvals = axis[:]
-    if axis.isLatitude() and hasattr(axis,"units") and axis.units[0:6].lower()=="degree":
-        if notrimlat==0:
-            axisvals = numpy.maximum(-90.0, numpy.minimum(90.0,axisvals))
+    if axis.isLatitude() and hasattr(
+            axis, "units") and axis.units[0:6].lower() == "degree":
+        if notrimlat == 0:
+            axisvals = numpy.maximum(-90.0, numpy.minimum(90.0, axisvals))
         if not numpy.ma.allclose(axisvals, origvals) and verbose:
-            print("Warning: resetting latitude values: ",origvals," to: ",axisvals, file=sys.stderr)
+            print(
+                "Warning: resetting latitude values: ",
+                origvals,
+                " to: ",
+                axisvals,
+                file=sys.stderr)
 
     b = axis.getBounds()
     mycopy = cdms2.createAxis(copy.copy(axisvals))
@@ -549,41 +585,45 @@ def cloneWithLatCheck(axis):
         b = mycopy.genGenericBounds()
         mycopy.setBounds(b)
     for k, v in list(axis.attributes.items()):
-       setattr(mycopy, k, v)
+        setattr(mycopy, k, v)
     return mycopy
+
 
 def addAttrs(fobj, eattrs):
     """Add extra attributes to file/dataset fobj.
     eattrs has the form [(varid,attr,value), (varid,attr,value), ...]
     where if varid is '', set the global attribute."""
-    for evar,eattr,evalue in eattrs:
-        if evar=='':
+    for evar, eattr, evalue in eattrs:
+        if evar == '':
             fobj.__dict__[eattr] = evalue
         else:
             varobj = fobj[evar]
             if varobj is not None:
                 varobj.__dict__[eattr] = evalue
 
+
 def setNodeDict(node, dict):
     for key in list(dict.keys()):
         value = dict[key]
-        if (isinstance(value, numpy.integer) or isinstance(value, int)):
+        if (isinstance(value, numpy.integer) or
+                isinstance(value, int)):
             datatype = CdLong
         elif (isinstance(value, numpy.floating) or isinstance(value, float)):
             datatype = CdDouble
         else:
             datatype = CdString
-        node.attribute[key]=(value,datatype)
+        node.attribute[key] = (value, datatype)
 
-def initialize_filemap( filemap, timedict, levdict, timeid, extendDset, splitOnTime, \
-                        referenceTime, timeIsLinear, referenceDelta, splitOnLevel, \
-                        dirlen, overrideCalendar ):
+
+def initialize_filemap(filemap, timedict, levdict, timeid, extendDset, splitOnTime,
+                       referenceTime, timeIsLinear, referenceDelta, splitOnLevel,
+                       dirlen, overrideCalendar):
     # This function was formerly part of the body of "main".
         # Initialize filemap : varid => (tc0, tc1, lc0, lc1, path, timeid, levid)
         # where tc0 is the first time index relative to the reference time, tc1 the last,
         # lc0 is the first level, lc1 the last, path is the filename, timeid is the id
         # of the time dimension of the variable, levid is the id of the level dimension
-        # 
+        #
         # timedict : (path, timeid) => (timearray, timeunits, calendar)
         #
         # levdict : (path, levelid) => (levelarray, levelunits, None)
@@ -592,7 +632,7 @@ def initialize_filemap( filemap, timedict, levdict, timeid, extendDset, splitOnT
     dsetdirec = extendDset.directory
     for namelist, slicelist in initfilemap:
         for name in namelist:
-            var  = extendDset[name]
+            var = extendDset[name]
             timeaxis = var.getTime()
             if timeaxis is not None and not overrideCalendar:
                 calendar = timeaxis.getCalendar()
@@ -603,11 +643,11 @@ def initialize_filemap( filemap, timedict, levdict, timeid, extendDset, splitOnT
                     timeid = timeaxis.id
                 if referenceTime is None:
                     referenceTime = timeaxis.units
-                if timeIsLinear in [None,1]:
+                if timeIsLinear in [None, 1]:
                     timeIsLinear = timeaxis.isLinear()
                     if timeIsLinear:
-                        if len(timeaxis)>1:
-                            referenceDelta = timeaxis[1]-timeaxis[0]
+                        if len(timeaxis) > 1:
+                            referenceDelta = timeaxis[1] - timeaxis[0]
                         else:
                             referenceDelta = 1.0
                     else:
@@ -625,33 +665,47 @@ def initialize_filemap( filemap, timedict, levdict, timeid, extendDset, splitOnT
 
             varmaplist = []
             for t0, t1, lev0, lev1, path in slicelist:
-                fullpath = os.path.join(dsetdirec,path)
+                fullpath = os.path.join(dsetdirec, path)
                 basepath = fullpath[dirlen:]
                 if t0 is not None:
-                    tc0 = timeindex(timeaxis[t0], timeaxis.units, referenceTime, referenceDelta, calendar)
-                    tc1 = timeindex(timeaxis[t1-1], timeaxis.units, referenceTime, referenceDelta, calendar)
+                    tc0 = timeindex(
+                        timeaxis[t0],
+                        timeaxis.units,
+                        referenceTime,
+                        referenceDelta,
+                        calendar)
+                    tc1 = timeindex(timeaxis[t1 - 1],
+                                    timeaxis.units,
+                                    referenceTime,
+                                    referenceDelta,
+                                    calendar)
                     if (basepath, timeid, calendar) not in timedict:
                         values = timeaxis[t0:t1]
-                        timedict[(basepath, timeid)] = (values, timeaxis.units, calendar)
+                        timedict[(basepath, timeid)] = (
+                            values, timeaxis.units, calendar)
                 else:
                     tc0 = tc1 = None
                 if lev0 is not None:
                     lc0 = levelaxis[lev0]
-                    lc1 = levelaxis[lev1-1]
+                    lc1 = levelaxis[lev1 - 1]
                     if (basepath, levid, None) not in levdict:
                         values = levelaxis[lev0:lev1]
-                        levdict[(basepath, levid)] = (values, levelaxis.units, None)
+                        levdict[(basepath, levid)] = (
+                            values, levelaxis.units, None)
                 else:
                     lc0 = lc1 = None
-                varmaplist.append((tc0, tc1, lc0, lc1, basepath, timeid, levid, calendar))
+                varmaplist.append(
+                    (tc0, tc1, lc0, lc1, basepath, timeid, levid, calendar))
             if name in filemap:
                 filemap[name].extend(varmaplist)
             else:
                 filemap[name] = varmaplist
 
-#---------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------
+
 
 verbose = 1
+
 
 def main(argv):
 
@@ -659,10 +713,10 @@ def main(argv):
     global notrimlat
 
     try:
-        args, lastargs = getopt.getopt( \
-            argv[1:], "a:c:d:e:f:hi:jl:m:p:qr:s:t:x:", \
-            ["include=","include-file=","exclude=","exclude-file=","forecast","time-linear=", \
-             "notrim-lat","var-locate=","ignore-open-error" ] )
+        args, lastargs = getopt.getopt(
+            argv[1:], "a:c:d:e:f:hi:jl:m:p:qr:s:t:x:",
+            ["include=", "include-file=", "exclude=", "exclude-file=", "forecast", "time-linear=",
+             "notrim-lat", "var-locate=", "ignore-open-error"])
     except getopt.error:
         print(sys.exc_info()[1], file=sys.stderr)
         print(usage, file=sys.stderr)
@@ -697,99 +751,103 @@ def main(argv):
     includePattern = None
     forecast = False
     for flag, arg in args:
-        if flag=='-a':
+        if flag == '-a':
             aliasMapFile = arg
-        elif flag=='-c':
+        elif flag == '-c':
             calenkey = arg.lower()
             calendar = calendarMap[calenkey]
             overrideCalendar = 1
-        elif flag=='-d':
+        elif flag == '-d':
             datasetid = arg
-        elif flag=='-e':
+        elif flag == '-e':
             matchObj = attrPattern.match(arg)
             if matchObj is None:
-                raise RuntimeError("Expression must have form '[var].attr=value': %s"%arg)
+                raise RuntimeError(
+                    "Expression must have form '[var].attr=value': %s" % arg)
             matchGroups = matchObj.groups()
-            if len(matchGroups)!=3:
-                raise RuntimeError("Expression must have form '[var].attr=value': %s"%arg)
+            if len(matchGroups) != 3:
+                raise RuntimeError(
+                    "Expression must have form '[var].attr=value': %s" % arg)
             matchValue = matchGroups[2]
-            if len(matchValue)>0 and (matchValue[0].isdigit() or matchValue[0] in ['"',"'","-","+"]): #"
+            if len(matchValue) > 0 and (matchValue[0].isdigit(
+            ) or matchValue[0] in ['"', "'", "-", "+"]):  # "
                 matcheval = eval(matchValue)
             else:
                 matcheval = str(matchValue)
             extraAttrs.append((matchGroups[0], matchGroups[1], matcheval))
-        elif flag=='--exclude':
-            if arg[0]=='-':
+        elif flag == '--exclude':
+            if arg[0] == '-':
                 raise RuntimeError("--exclude option requires an argument")
             excludeList = arg.split(',')
-        elif flag=='--exclude-file':
+        elif flag == '--exclude-file':
             excludePattern = arg
-        elif flag=='-f':
+        elif flag == '-f':
             readFromFile = 1
             filelistpath = arg
-        elif flag=='--forecast':  # experimental forecast mode
+        elif flag == '--forecast':  # experimental forecast mode
             forecast = True
             splitOnTime = 0
             splitOnLevel = 0
-        elif flag=='-h':
+        elif flag == '-h':
             print(usage)
             sys.exit(0)
-        elif flag=='-i':
+        elif flag == '-i':
             splitOnTime = 1
             referenceDelta = float(arg)
             timeIsLinear = 1
             timeIsVector = None
-        elif flag=='--ignore-open-error':
+        elif flag == '--ignore-open-error':
             ignoreOpenError = True
-        elif flag=='--include':
-            if arg[0]=='-':
+        elif flag == '--include':
+            if arg[0] == '-':
                 raise RuntimeError("--include option requires an argument")
             includeList = arg.split(',')
-        elif flag=='--include-file':
+        elif flag == '--include-file':
             includePattern = arg
-        elif flag=='-j':
+        elif flag == '-j':
             timeIsVector = 1
             timeIsLinear = None
-        elif flag=='-l':
+        elif flag == '-l':
             splitOnLevel = 1
             levelstr = arg.split(',')
             levellist = list(map(float, levelstr))
             levels = numpy.array(levellist)
             levels = numpy.sort(levels)
-        elif flag=='-m':
+        elif flag == '-m':
             levelid = arg
-            args.append(('-e','%s.axis=Z'%levelid)) # Add axis=Z attribute
-        elif flag=='--notrim-lat':
+            args.append(('-e', '%s.axis=Z' % levelid))  # Add axis=Z attribute
+        elif flag == '--notrim-lat':
             notrimlat = 1
-        elif flag=='-p':
+        elif flag == '-p':
             templatestr = arg
-        elif flag=='-q':
+        elif flag == '-q':
             verbose = 0
-        elif flag=='-r':
+        elif flag == '-r':
             splitOnTime = 1
             referenceTime = arg
-        elif flag=='-s':
+        elif flag == '-s':
             modelMapFile = arg
-        elif flag=='-t':
+        elif flag == '-t':
             splitOnTime = 1
             timeid = arg
-            args.append(('-e','%s.axis=T'%timeid)) # Add axis=T attribute
-        elif flag=='--time-linear':
+            args.append(('-e', '%s.axis=T' % timeid))  # Add axis=T attribute
+        elif flag == '--time-linear':
             targlist = arg.split(',')
             ttzero = float(targlist[0])
             tdelta = float(targlist[1])
             tunits = targlist[2].strip()
-            if len(targlist)==4:
+            if len(targlist) == 4:
                 tcalendar = targlist[3].strip()
+
             else:
                 tcalendar = None
-            overrideTimeLinear = [ttzero,tdelta,tunits,tcalendar]
-        elif flag=='--var-locate':
+            overrideTimeLinear = [ttzero, tdelta, tunits, tcalendar]
+        elif flag == '--var-locate':
             if varLocate is None:
                 varLocate = {}
             vname, pattern = arg.split(',')
-            varLocate[vname]=pattern
-        elif flag=='-x':
+            varLocate[vname] = pattern
+        elif flag == '-x':
             writeToStdout = 0
             xmlpath = arg
 
@@ -797,8 +855,8 @@ def main(argv):
     if overrideTimeLinear is not None:
         timeIsVector = 1
         timeIsLinear = None
-        if overrideCalendar==1:
-            overrideTimeLinear[3]=calenkey
+        if overrideCalendar == 1:
+            overrideTimeLinear[3] = calenkey
 
     if verbose:
         print('Finding common directory ...')
@@ -811,7 +869,7 @@ def main(argv):
     realargs = []
     for arg in lastargs:
         sarg = arg.strip()
-        if len(sarg)>0:
+        if len(sarg) > 0:
             realargs.append(sarg)
     lastargs = realargs
 
@@ -820,7 +878,7 @@ def main(argv):
     dsetargs = []
     for arg in lastargs:
         base, suffix = os.path.splitext(arg)
-        if suffix.lower() in ['.xml','.cdml']:
+        if suffix.lower() in ['.xml', '.cdml']:
             dsetargs.append(arg)
         else:
             fileargs.append(arg)
@@ -830,9 +888,11 @@ def main(argv):
     for path in dsetargs:
         dset = cdms2.open(path)
         if not hasattr(dset, 'cdms_filemap'):
-            raise RuntimeError('Dataset must have a cdms_filemap attribute: '+path)
+            raise RuntimeError(
+                'Dataset must have a cdms_filemap attribute: ' + path)
         if not hasattr(dset, 'directory'):
-            raise RuntimeError('Dataset must have a directory attribute: '+path)
+            raise RuntimeError(
+                'Dataset must have a directory attribute: ' + path)
         dsetdirec = dset.directory
         initfilemap = cdms2.dataset.parseFileMap(dset.cdms_filemap)
         for namelist, slicelist in initfilemap:
@@ -843,14 +903,14 @@ def main(argv):
     # Find the common directory
     directory = os.path.commonprefix(augmentedArgs)
     firstpath = augmentedArgs[0][len(directory):]
-    if not os.path.isfile(os.path.join(directory,firstpath)):
+    if not os.path.isfile(os.path.join(directory, firstpath)):
         dnew = os.path.dirname(directory)
-        if len(dnew)>0 and directory[len(dnew)]=='/':
-            directory = dnew+'/'
+        if len(dnew) > 0 and directory[len(dnew)] == '/':
+            directory = dnew + '/'
         else:
             directory = dnew
     if verbose:
-        print('Common directory:',directory)
+        print('Common directory:', directory)
 
     dirlen = len(directory)
 
@@ -858,7 +918,7 @@ def main(argv):
         if os.path.isabs(templatestr):
             templatestr = templatestr[dirlen:]
         templatere, ignore = cdms2.cdmsobj.templateToRegex(templatestr)
-        template = re.compile(templatere+'$')
+        template = re.compile(templatere + '$')
     else:
         template = None
 
@@ -885,27 +945,27 @@ def main(argv):
         afile = open(aliasMapFile)
         aliasMap = {}
         for line in afile.readlines():
-            if line[0] not in ["'",'"']: #"
+            if line[0] not in ["'", '"']:  # "
                 varid, alias = line.split()
             else:
-                dummy, varid, alias = line,line[0].split()
+                dummy, varid, alias = line.split(line[0])
                 alias = alias.strip()
             aliasMap[varid] = alias
         afile.close()
 
     # Save extra attribute information for new axes
     for evar, eattr, evalue in extraAttrs:
-        if evar=='':
+        if evar == '':
             continue
         if evar in extraDict:
             curval = extraDict[evar]
-            curval.append((eattr,evalue))
+            curval.append((eattr, evalue))
         else:
-            extraDict[evar] = [(eattr,evalue)]
+            extraDict[evar] = [(eattr, evalue)]
 
-    #---------------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
     # Initialize dictionaries if adding to an existing dataset
-    if verbose and len(dsetargs)>0:
+    if verbose and len(dsetargs) > 0:
         print('Scanning datasets ...')
     for extendPath in dsetargs:
         if verbose:
@@ -924,22 +984,22 @@ def main(argv):
         # where tc0 is the first time index relative to the reference time, tc1 the last,
         # lc0 is the first level, lc1 the last, path is the filename, timeid is the id
         # of the time dimension of the variable, levid is the id of the level dimension
-        # 
+        #
         # timedict : (path, timeid) => (timearray, timeunits, calendar)
         #
         # levdict : (path, levelid) => (levelarray, levelunits, None)
         #
-        initialize_filemap( filemap, timedict, levdict, timeid, extendDset, splitOnTime, \
-                            referenceTime, timeIsLinear, referenceDelta, splitOnLevel, \
-                            dirlen, overrideCalendar )
+        initialize_filemap(filemap, timedict, levdict, timeid, extendDset, splitOnTime,
+                           referenceTime, timeIsLinear, referenceDelta, splitOnLevel,
+                           dirlen, overrideCalendar)
 
         # axisdict : id => transient_axis
         #   for non-partitioned axes only
         #
         tempmap = {}
         for axis in list(extendDset.axes.values()):
-            if not ( (splitOnTime and (axis.isTime() or axis.id==timeid)) or \
-                     (splitOnLevel and (axis.isLevel() or axis.id==levelid)) ):
+            if not ((splitOnTime and (axis.isTime() or axis.id == timeid)) or
+                    (splitOnLevel and (axis.isLevel() or axis.id == levelid))):
                 axis = cloneWithLatCheck(axis)
                 if axis.id in axisdict:
                     currentaxis = axisdict[axis.id]
@@ -947,7 +1007,8 @@ def main(argv):
                     # Check that the axis has the same length and values as the saved value. If not,
                     # create an unambiguous name in the axis dictionary.
                     if compareaxes(axis, currentaxis):
-                        sepname = disambig(axis.id, axisdict, len(axis), compareaxes, axis)
+                        sepname = disambig(
+                            axis.id, axisdict, len(axis), compareaxes, axis)
                         axis.name_in_file = axis.id
                         oldid = axis.id
                         axis.id = sepname
@@ -970,7 +1031,7 @@ def main(argv):
                     tempdomain.append(axisdict[id])
                 else:
                     axis = extendDset[id]
-                    if hasattr(axis,'name_in_file'):
+                    if hasattr(axis, 'name_in_file'):
                         id = axis.name_in_file
                     tempdomain.append(id)
             varattrs = copyDict(var.attributes)
@@ -980,7 +1041,7 @@ def main(argv):
 
         # end of loop "for extendPath in dsetargs"
 
-    #---------------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
     if verbose:
         print('Scanning files ...')
 
@@ -1007,11 +1068,13 @@ def main(argv):
             print(path)
         try:
             f = cdms2.open(path)
-        except:
+        except BaseException:
             if not ignoreOpenError:
-                raise RuntimeError('Error opening file '+path)
+                raise RuntimeError('Error opening file ' + path)
             else:
-                print('Warning: cannot open file, skipping: %s'%path, file=sys.stderr)
+                print(
+                    'Warning: cannot open file, skipping: %s' %
+                    path, file=sys.stderr)
                 continue
 
         # Add/modify attributes
@@ -1024,6 +1087,7 @@ def main(argv):
                 mo = re.match(direc, path)
                 if mo is not None:
                     suffixPattern = modelMap[direc]
+
                     def gensuffix(m, mo=mo):
                         i = int(m.group(1))
                         return mo.group(i)
@@ -1038,7 +1102,8 @@ def main(argv):
         basepath = path[dirlen:]
         if template is not None and template.match(basepath) is None:
             if verbose:
-                print('Warning: path %s does not match template %s'%(basepath, templatestr), file=sys.stderr)
+                print('Warning: path %s does not match template %s' % (
+                    basepath, templatestr), file=sys.stderr)
 
         # Find time boundary variables
         boundsids = []
@@ -1046,7 +1111,7 @@ def main(argv):
             tmpdict = {}
             for axisname in list(f.axes.keys()):
                 axis = f[axisname]
-                #was if axis.isTime() and hasattr(axis, 'bounds'):
+                # was if axis.isTime() and hasattr(axis, 'bounds'):
                 if axis.isTime() and (axis.getBounds() is not None):
                     tmpdict[axis.bounds] = 1
             boundsids = list(tmpdict.keys())
@@ -1054,35 +1119,43 @@ def main(argv):
         # For forecasts, get the time at which the forecast begins (tau=0) which
         # is nbdate,nbsec
         if forecast:
-            nbdate = numpy.int( f('nbdate') )  # f('nbdate') is numpy.int32 which gets truncated
+            # f('nbdate') is numpy.int32 which gets truncated
+            nbdate = numpy.int(f('nbdate'))
             nbsec = f('nbsec')
-            fctau0 = nbdate*100000 + nbsec  # hopefully nbsec<(seconds per day)=86400<100000
-            fctau0time = cdtime.abstime( nbdate,"day as %Y%m%d" )
-            fctau0time = fctau0time.add( nbsec, cdtime.Seconds )  # fctau0 as type comptime
+            # hopefully nbsec<(seconds per day)=86400<100000
+            fctau0 = nbdate * 100000 + nbsec
+            fctau0time = cdtime.abstime(nbdate, "day as %Y%m%d")
+            fctau0time = fctau0time.add(
+                nbsec, cdtime.Seconds)  # fctau0 as type comptime
             fc_time_attrs = []
 
         varnames = list(f.variables.keys())
 
         # Try to force all axes to be included, but only small ones, length<100.
         # This section was motivated by a need to preserve the cloud axes isccp_prs,isccp_tau.
-        # If we ever need to preserve longer axes as well, we could create one variable per axis...
-        crude_var_axes = [ [ ax[0] for ax in var.getDomain() ] for var in list(f.variables.values()) ]
-        var_axes = set().union( *crude_var_axes )
-        other_axes = list( set(f.axes.values()) - var_axes )
-        if len(other_axes)>0:
-            other_axes = [ax for ax in other_axes if len(ax)<100]
-            other_axes.sort( key=(lambda ax:ax.id) )
-            axisvar = cdms2.createVariable( numpy.ones([len(ax) for ax in other_axes]),
-                                            axes=other_axes, id='allaxesdummy')
-            axisvar.autoApiInfo = None    # all CdmsObj objects have this attribute, but for unknown
-            # reasons datasetnode.dump() fails trying to dump this attribute's default value (jfp)
-            varnames.append( axisvar.id )
+        # If we ever need to preserve longer axes as well, we could create one
+        # variable per axis...
+        crude_var_axes = [[ax[0] for ax in var.getDomain()]
+                          for var in list(f.variables.values())]
+        var_axes = set().union(*crude_var_axes)
+        other_axes = list(set(f.axes.values()) - var_axes)
+        if len(other_axes) > 0:
+            other_axes = [ax for ax in other_axes if len(ax) < 100]
+            other_axes.sort(key=(lambda ax: ax.id))
+            axisvar = cdms2.createVariable(numpy.ones([len(ax) for ax in other_axes]),
+                                           axes=other_axes, id='allaxesdummy')
+            # all CdmsObj objects have this attribute, but for unknown
+            axisvar.autoApiInfo = None
+            # reasons datasetnode.dump() fails trying to dump this attribute's
+            # default value (jfp)
+            varnames.append(axisvar.id)
         # ...try to force all axes to be considered
 
         varnames.sort()
         for varname in varnames:
 
-            # If --var-locate is specified for the variable, match the basename before processing
+            # If --var-locate is specified for the variable, match the basename
+            # before processing
             if varLocate is not None and varname in varLocate:
                 varpattern = varLocate[varname]
                 base = os.path.basename(path)
@@ -1091,7 +1164,7 @@ def main(argv):
                     continue
 
             # was var = f.variables[varname]
-            if varname=='allaxesdummy':
+            if varname == 'allaxesdummy':
                 var = axisvar
             else:
                 var = f.variables[varname]
@@ -1111,7 +1184,8 @@ def main(argv):
                 var.id += varsuffix
                 varname += varsuffix
 
-            varentry = [None]*9         # [timestart, timeend, levstart, levend, path, timeid, levid, calendar, fctau0]
+            # [timestart, timeend, levstart, levend, path, timeid, levid, calendar, fctau0]
+            varentry = [None] * 9
             varentry[4] = basepath
             varentry[8] = fctau0
 
@@ -1121,29 +1195,33 @@ def main(argv):
             if forecast:
                 tempdomain = ['fctau0']
             else:
-                tempdomain = []         # List of axis names and/or objects (if not partitioned)
+                # List of axis names and/or objects (if not partitioned)
+                tempdomain = []
             for axis, start, length, truelen in domain:
-                if (splitOnTime and (axis.isTime() or axis.id==timeid)) or \
-                   (splitOnLevel and (axis.isLevel() or axis.id==levelid)):
+                if (splitOnTime and (axis.isTime() or axis.id == timeid)) or \
+                   (splitOnLevel and (axis.isLevel() or axis.id == levelid)):
                     tempdomain.append(axis.id)
-                elif forecast and  (axis.isTime() or axis.id==timeid):
-                    # time axis isn't split but needs special treatment for forecasts
+                elif forecast and (axis.isTime() or axis.id == timeid):
+                    # time axis isn't split but needs special treatment for
+                    # forecasts
                     tempdomain.append(axis.id)
                     fc_time_attrs.append(axis.attributes)
                 else:
-                    axis = cloneWithLatCheck(axis) # Transient copy
+                    axis = cloneWithLatCheck(axis)  # Transient copy
                     if axis.id in axisdict:
                         currentaxis = axisdict[axis.id]
 
                         # Check that the axis has the same length and values as the saved value. If not,
                         # create an unambiguous name in the axis dictionary.
                         if compareaxes(axis, currentaxis):
-                            sepname = disambig(axis.id, axisdict, len(axis), compareaxes, axis)
+                            sepname = disambig(
+                                axis.id, axisdict, len(axis), compareaxes, axis)
                             axis.name_in_file = axis.id
                             axis.id = sepname
 
                             # Fix boundary variable names if using suffixes.
-                            if varsuffix is not None and hasattr(axis, 'bounds'):
+                            if varsuffix is not None and hasattr(
+                                    axis, 'bounds'):
                                 axis.bounds += varsuffix
                             axisdict[sepname] = axis
                         else:
@@ -1168,14 +1246,16 @@ def main(argv):
             else:
                 currentdomain, attrs, tcode = vardict[var.id]
                 if comparedomains(currentdomain, tempdomain):
-                    sepname = disambig(var.id, vardict, var.size(), compareVarDictValues, (tempdomain, None))
+                    sepname = disambig(
+                        var.id, vardict, var.size(), compareVarDictValues, (tempdomain, None))
                     saveid = var.id
-                    varname  = var.id = sepname
+                    varname = var.id = sepname
                     varattrs = copyDict(var.attributes)
-                    var.name_in_file = varattrs['name_in_file']  = saveid
+                    var.name_in_file = varattrs['name_in_file'] = saveid
                     vardict[sepname] = [tempdomain, varattrs, var.typecode()]
 
-            # Create a filemap entry for this variable/file, if split on time or forecast
+            # Create a filemap entry for this variable/file, if split on time
+            # or forecast
             axisids = [x[0].id for x in var.getDomain()]
             if splitOnTime or forecast:
                 vartime = None
@@ -1184,7 +1264,9 @@ def main(argv):
                         vartime = f.axes.get(timeid)
                     else:
                         if verbose:
-                            print('Warning, time axis %s not found, -t option ignored'%timeid, file=sys.stderr)
+                            print(
+                                'Warning, time axis %s not found, -t option ignored' %
+                                timeid, file=sys.stderr)
                 if vartime is None:
                     vartime = var.getTime()
                 if vartime is not None:
@@ -1195,13 +1277,21 @@ def main(argv):
                     if verbose and not forecast:
                         print('Setting reference time units to', referenceTime)
                     if timeIsLinear is None and timeIsVector is None:
-                        timeIsLinear = (referenceTime.split()[0].lower() in ['hour','hours','minute','minutes','second','seconds'])
+                        timeIsLinear = (referenceTime[0].lower().split() in
+                                        ['hour',
+                                         'hours',
+                                         'minute',
+                                         'minutes',
+                                         'second',
+                                         'seconds'])
                         if timeIsLinear and verbose:
-                            print('Setting time representation to "linear"') #'
+                            print('Setting time representation to "linear"')  # '
                     if timeIsLinear and referenceDelta is None:
-                        if len(vartime)>1:
-                            time1 = timeindex(vartime[1], vartime.units, referenceTime, None, calendar)
-                            time0 = timeindex(vartime[0], vartime.units, referenceTime, None, calendar)
+                        if len(vartime) > 1:
+                            time1 = timeindex(
+                                vartime[1], vartime.units, referenceTime, None, calendar)
+                            time0 = timeindex(
+                                vartime[0], vartime.units, referenceTime, None, calendar)
                             referenceDelta = time1 - time0
                         else:
                             referenceDelta = 1
@@ -1210,10 +1300,16 @@ def main(argv):
 
 #                    starttime = vartime[0]
 #                    endtime = vartime[-1]
-                    startindex = timeindex(vartime[0], vartime.units, referenceTime, referenceDelta, calendar)
-                    endindex = timeindex(vartime[-1], vartime.units, referenceTime, referenceDelta, calendar)
+                    startindex = timeindex(
+                        vartime[0],
+                        vartime.units,
+                        referenceTime,
+                        referenceDelta,
+                        calendar)
+                    endindex = timeindex(
+                        vartime[-1], vartime.units, referenceTime, referenceDelta, calendar)
                     if forecast:
-                        # split on forecast, hence no split on time 
+                        # split on forecast, hence no split on time
                         varentry[0] = None
                         varentry[1] = None
                         referenceTime = None
@@ -1223,9 +1319,10 @@ def main(argv):
                     varentry[5] = vartime.id
                     varentry[7] = calendar
 
-                    if (basepath,vartime.id) not in timedict:
+                    if (basepath, vartime.id) not in timedict:
                         values = vartime[:]
-                        timedict[(basepath,vartime.id)] = (values, vartime.units, calendar)
+                        timedict[(basepath, vartime.id)] = (
+                            values, vartime.units, calendar)
 
             if splitOnLevel:
                 varlev = None
@@ -1235,10 +1332,10 @@ def main(argv):
                     varlev = var.getLevel()
                 if varlev is not None:
                     startlev = varlev[0]
-                    if type(startlev) is numpy.ndarray:
+                    if isinstance(startlev, numpy.ndarray):
                         startlev = startlev[0]
                     endlev = varlev[-1]
-                    if type(endlev) is numpy.ndarray:
+                    if isinstance(endlev, numpy.ndarray):
                         endlev = endlev[0]
                     varentry[2] = startlev
                     varentry[3] = endlev
@@ -1246,11 +1343,12 @@ def main(argv):
 
                     if (basepath, varlev.id, None) not in levdict:
                         values = varlev[:]
-                        levdict[(basepath,varlev.id)] = (values, varlev.units, None)
+                        levdict[(basepath, varlev.id)] = (
+                            values, varlev.units, None)
 
             if forecast:
                 if (basepath, 'fctau0') not in fcdict:
-                    fcdict[(basepath, 'fctau0')] = ( [fctau0], None, None )
+                    fcdict[(basepath, 'fctau0')] = ([fctau0], None, None)
 
             if varname in filemap:
                 filemap[varname].append(tuple(varentry))
@@ -1258,7 +1356,8 @@ def main(argv):
                 filemap[varname] = [tuple(varentry)]
 
             # Set boundsmap : varid => timebounds_id
-            #was if splitOnTime and vartime is not None and hasattr(vartime, "bounds") and not boundsmap.has_key(varname):
+            # was if splitOnTime and vartime is not None and hasattr(vartime,
+            # "bounds") and not boundsmap.has_key(varname):
             if splitOnTime and vartime is not None and (vartime.getBounds() is not None) and\
                     varname not in boundsmap:
                 boundsmap[varname] = vartime.bounds
@@ -1268,30 +1367,28 @@ def main(argv):
         f.close()
         # End of loop "for path in fileargs"
 
-    #---------------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
 
     # Generate varindex, by combining variable names with
     # identical varentry values.
     varindex = []
-    varnames = list(filemap.keys())
-    varnames.sort()
+    varnames = sorted(filemap.keys())
     for varname in varnames:
-        varentry = filemap[varname]
-        varentry.sort()
+        varentry = sorted(filemap[varname])
 
         for varindexname, varindexvalue in varindex:
             if varentry == varindexvalue:
                 varindexname.append(varname)
                 break
         else:
-            varindex.append(([varname],varentry))
+            varindex.append(([varname], varentry))
 
     # If a variable is not a function of one of the partitioned dimensions,
     # no indexing is necessary: just read from the first file containing it.
     for varlist, slicelist in varindex:
         slice0 = slicelist[0]
-        a,b,c,d,path0,timename,levname,calen,fctau0 = slice0
-        if (a,b,c,d,fctau0)==(None,None,None,None,None):
+        a, b, c, d, path0, timename, levname, calen, fctau0 = slice0
+        if (a, b, c, d, fctau0) == (None, None, None, None, None):
             del slicelist[1:]
 
     # Change times to constant units
@@ -1305,14 +1402,15 @@ def main(argv):
             if prevcal is not None and calendar != prevcal:
                 sameCalendars = 0
             prevcal = calendar
-            if string.find(units," as ")==-1:
-                time0 = cdtime.reltime(values[0],units)
+            if units.find(" as ") == -1:
+                time0 = cdtime.reltime(values[0], units)
             else:
-                time0 = cdtime.abstime(values[0],units)
-            offset = time0.torel( units, calendar ).value  # normally will be 0
-            values = values+offset-values[0]
+                time0 = cdtime.abstime(values[0], units)
+            offset = time0.torel(units, calendar).value  # normally will be 0
+            values = values + offset - values[0]
             # Switch units from "normal" time such as "days since 2001-06-01"
-            # to "basic" time such as "days", which makes sense for a forecast_period.
+            # to "basic" time such as "days", which makes sense for a
+            # forecast_period.
             baslen = time0.units.find(' since ')
             basic_units = time0.units[0:baslen]  # e.g. 'days'
             fc_units = basic_units
@@ -1323,47 +1421,53 @@ def main(argv):
             if prevcal is not None and calendar != prevcal:
                 sameCalendars = 0
             prevcal = calendar
-            if string.find(units," as ")==-1:
-                time0 = cdtime.reltime(values[0],units)
+            if units.find(" as ") == -1:
+                time0 = cdtime.reltime(values[0], units)
             else:
-                time0 = cdtime.abstime(values[0],units)
+                time0 = cdtime.abstime(values[0], units)
             offset = time0.torel(referenceTime, calendar).value
-            values = values+offset-values[0]
+            values = values + offset - values[0]
             timedict[key] = (values, referenceTime, calendar)
 
     if sameCalendars and prevcal is not None:
         calenkey = reverseCalendarMap[calendar]
-        
+
     if forecast:
         # For forecasts, make sure that the above has made all timedict values the same.
         # >>> It's conceivable that different forecasts will have different time (really, tau)
         # >>> axes.  If so, at this point we'll want to merge and mask all the time values, so
         # >>> that all variables can have the same time axis..  For now, just raise an error
         # >>> if there are time axis differences at this point.
-        values0,units0,calendar0 = timedict[ list(timedict.keys())[0] ]
-        timedict_same = all( [ ((values0==values).all() and units0==units and calendar0==calendar) \
-                               for (values,units,calendar) in list(timedict.values()) ] )
+        values0, units0, calendar0 = timedict[list(timedict.keys())[0]]
+        timedict_same = all([((values0 == values1).all() and units0 == units1 and calendar0 == calendar1)
+                             for (values1, units1, calendar1) in list(timedict.values())])
         if not timedict_same:
-            raise CDMSError('cdscan is confused about times for a forecast set')
-        # Earlier we had saved all the time axis attributes.  Keep whatever they have in common.
+            raise CDMSError(
+                'cdscan is confused about times for a forecast set')
+        # Earlier we had saved all the time axis attributes.  Keep whatever
+        # they have in common.
         fc_time_attr = fc_time_attrs[0]
-        for fcta in fc_time_attrs:             # go through all time attributes (each a dictionary)
+        # go through all time attributes (each a dictionary)
+        for fcta in fc_time_attrs:
             for attrn in list(fc_time_attr.keys()):
                 if attrn not in fcta:
-                    del fc_time_attr[attrn]    # key attrn isn't in all time attributes
-                elif fcta[attrn]!=fc_time_attr[attrn]:
-                    del fc_time_attr[attrn]    # not all time attributes have the same value for attrn
+                    # key attrn isn't in all time attributes
+                    del fc_time_attr[attrn]
+                elif fcta[attrn] != fc_time_attr[attrn]:
+                    # not all time attributes have the same value for attrn
+                    del fc_time_attr[attrn]
         # At this point fc_time_attr is the dictionary of those time attributes which are common to
         # all time axes encountered (in the context of a forecast dataset).
         # Finally, add the appropriate standard_name to it, if we haven't already gotten one from
         # the data file.  If the file has anything other than 'forecast_period', it's wrong, but
         # we'll stick with it anyway.
-        if not 'standard_name' in list(fc_time_attr.keys()):
+        if 'standard_name' not in list(fc_time_attr.keys()):
             fc_time_attr['standard_name'] = 'forecast_period'
-        
+
     # Create partitioned axes
     axes = []
-    masterCoordToInd = {}               # varkey => (timeCoordToInd, levCoordToInd)
+    # varkey => (timeCoordToInd, levCoordToInd)
+    masterCoordToInd = {}
     errorOccurred = 0
     for varlist, varentry in varindex:
 
@@ -1377,63 +1481,90 @@ def main(argv):
             if levname is not None:
                 try:
                     levproj[(lev0, lev1)] = (path, levname)
-                except:
-                    print('Cannot hash level %s range (%f,%f)'%(levname,lev0,lev1), file=sys.stderr)
+                except BaseException:
+                    print('Cannot hash level %s range (%f,%f)' % (
+                        levname, lev0, lev1), file=sys.stderr)
                     print(type(lev0), file=sys.stderr)
                     raise
             if fctau0 is not None:
-                fctproj[(fctau0,fctau0)] = (path, 'fctau0')
+                fctproj[(fctau0, fctau0)] = (path, 'fctau0')
 
         # and combine the projected indices into axes
         timeCoordToInd = None
         timelinCoordToInd = None
         if splitOnTime and timename is not None:
             fullaxis, name, partition, timeCoordToInd, units, opartition, timelinCoordToInd, errflag = \
-                      combineKeys(timeproj, timedict, timeIsLinear, referenceDelta)
-            axes.append( ( varlist,fullaxis,name,partition,timeCoordToInd,units,opartition, \
-                           timelinCoordToInd, calendar ) )
-            if errflag: errorOccurred = 1
+                combineKeys(timeproj, timedict, timeIsLinear, referenceDelta)
+            axes.append((varlist, fullaxis, name, partition, timeCoordToInd, units, opartition,
+                         timelinCoordToInd, calendar))
+            if errflag:
+                errorOccurred = 1
         levCoordToInd = None
         if splitOnLevel and levname is not None:
             fullaxis, name, partition, levCoordToInd, units, opartition, levlinCoordToInd, errflag = \
-                      combineKeys(levproj, levdict)
-            axes.append((varlist,fullaxis,name,partition,levCoordToInd,units,opartition,levlinCoordToInd, None))
-            if errflag: errorOccurred = 1
+                combineKeys(levproj, levdict)
+            axes.append(
+                (varlist,
+                 fullaxis,
+                 name,
+                 partition,
+                 levCoordToInd,
+                 units,
+                 opartition,
+                 levlinCoordToInd,
+                 None))
+            if errflag:
+                errorOccurred = 1
         fcCoordToInd = None
         if forecast:
             fullaxis, name, partition, fcCoordToInd, units, opartition, fclinCoordToInd, errflag = \
-                      combineKeys(fctproj, fcdict, forecast=forecast)
-            axes.append((varlist,fullaxis,name,partition,fcCoordToInd,units,opartition,fclinCoordToInd, None))
-            if errflag: errorOccurred = 1
-            if len(timeproj)>0:     # i.e., if time is in this variable's domain.
+                combineKeys(fctproj, fcdict, forecast=forecast)
+            axes.append(
+                (varlist,
+                 fullaxis,
+                 name,
+                 partition,
+                 fcCoordToInd,
+                 units,
+                 opartition,
+                 fclinCoordToInd,
+                 None))
+            if errflag:
+                errorOccurred = 1
+            # i.e., if time is in this variable's domain.
+            if len(timeproj) > 0:
                 # The useKeys call is like combineKeys, except that it's for a variable not partitioned
                 # among files.  It just sets up axis data and (in the context of this variable loop)
-                # propagates what's in timedict to every variable with time in its domain.
+                # propagates what's in timedict to every variable with time in
+                # its domain.
                 fullaxis, name, partition, timeCoordToInd, units, opartition, timelinCoordToInd, errflag = \
-                          useKeys(timeproj, timedict, timeIsLinear, referenceDelta)
-                axes.append( (varlist,fullaxis,name,partition,timeCoordToInd,units,opartition, \
-                              timelinCoordToInd, calendar) )
-                if errflag: errorOccurred = 1
-            
+                    useKeys(timeproj, timedict, timeIsLinear, referenceDelta)
+                axes.append((varlist, fullaxis, name, partition, timeCoordToInd, units, opartition,
+                             timelinCoordToInd, calendar))
+                if errflag:
+                    errorOccurred = 1
 
-        masterCoordToInd[varlist[0]] = (timeCoordToInd, levCoordToInd, timelinCoordToInd, fcCoordToInd)
+        masterCoordToInd[varlist[0]] = (
+            timeCoordToInd, levCoordToInd, timelinCoordToInd, fcCoordToInd)
 
     if errorOccurred:
-        raise RuntimeError('Error(s) determining axis values - see previous message(s)')
-    
+        raise RuntimeError(
+            'Error(s) determining axis values - see previous message(s)')
+
     # Eliminate duplicate axes
     axes2 = []
     for vlist1, axis1, name1, partition1, coordToInd1, units1, opartition1, linCoordToInd1, calen1 in axes:
         for vlist2, axis2, name2, partition2, coordToInd2, units2, opartition2, linCoordToInd2, calen2 in axes2:
-            if len(axis1)==len(axis2) and name1==name2 and partition1==partition2 and units1==units2 and \
-                   numpy.ma.allclose(axis1,axis2)==1 and calen1==calen2:
+            if len(axis1) == len(axis2) and name1 == name2 and partition1 == partition2 and units1 == units2 and \
+                    numpy.ma.allclose(axis1, axis2) == 1 and calen1 == calen2:
                 vlist2.extend(vlist1)
                 break
         else:
-            axes2.append((copy.copy(vlist1),axis1, name1, partition1, coordToInd1, units1, opartition1, \
+            axes2.append((copy.copy(vlist1), axis1, name1, partition1, coordToInd1, units1, opartition1,
                           linCoordToInd1, calen1))
 
-    # For each axis described by axis2, disambiguate its name, create the axis object, etc.
+    # For each axis described by axis2, disambiguate its name, create the axis
+    # object, etc.
     assignedBounds = {}
     for vlist, axis, name, partition, coordToInd, units, opartition, linCoordToInd, calendar in axes2:
         # print vlist, coordToInd
@@ -1442,16 +1573,17 @@ def main(argv):
         axisobj.name_in_file = name
         axisobj.id = uniqname
         axisobj.units = units
-        if forecast and axisobj.isTime():   # For forecasts, give the time axis some saved attributes.
+        # For forecasts, give the time axis some saved attributes.
+        if forecast and axisobj.isTime():
             for attr in list(fc_time_attr.keys()):
-                if not hasattr(axisobj,attr):
-                    setattr(axisobj,attr,fc_time_attr[attr])
+                if not hasattr(axisobj, attr):
+                    setattr(axisobj, attr, fc_time_attr[attr])
         if timeIsLinear and axisobj.isTime():
             axisobj.partition = numpy.ma.ravel(numpy.ma.array(opartition))
-            axisobj.length = axisobj.partition[-1]-axisobj.partition[0]
+            axisobj.length = axisobj.partition[-1] - axisobj.partition[0]
             mopartition = numpy.array(opartition)
-            partition_length = numpy.sum(mopartition[:,1]-mopartition[:,0])
-            if partition_length<axisobj.length:
+            partition_length = numpy.sum(mopartition[:, 1] - mopartition[:, 0])
+            if partition_length < axisobj.length:
                 axisobj.partition_length = partition_length
         elif partition is not None:
             axisobj.partition = numpy.ma.ravel(numpy.ma.array(partition))
@@ -1464,32 +1596,34 @@ def main(argv):
             domain, attributes, tcode = vardict[varname]
             for i in range(len(domain)):
                 item = domain[i]
-                if type(item)==bytes and item==name:
+                if isinstance(item, bytes) and item == name:
                     domain[i] = axisobj
 
         # Add bounds variables to vardict, varindex
         if axisobj.isTime():
-            reprVar = vlist[0]              # 'Representative' variable having this time axis
+            # 'Representative' variable having this time axis
+            reprVar = vlist[0]
             if reprVar in boundsmap:
                 boundsname = boundsmap[reprVar]
                 boundsinfo = boundsdict[boundsname]
                 boundsattrs = boundsinfo[1]
-                if uniqname!=name:
+                if uniqname != name:
                     boundsattrs['name_in_file'] = boundsname
-                    boundsname = uniqname+'_bnds'
+                    boundsname = uniqname + '_bnds'
                 if boundsname not in assignedBounds:
                     axisobj.bounds = boundsname
                     for varids, ranges in varindex:
                         if reprVar in varids:
                             varids.append(boundsname)
                     tmpdom = boundsinfo[0]
-                    if type(tmpdom[1])==bytes:
+                    if isinstance(tmpdom[1], bytes):
                         bndsobj = tmpdom[0]
                         boundsdomain = (bndsobj, axisobj)
                     else:
                         bndsobj = tmpdom[1]
                         boundsdomain = (axisobj, bndsobj)
-                    vardict[boundsname] = (boundsdomain, boundsinfo[1], boundsinfo[2])
+                    vardict[boundsname] = (
+                        boundsdomain, boundsinfo[1], boundsinfo[2])
                     assignedBounds[boundsname] = 1
 
     # Collapse like indices in filemap. For example, transform
@@ -1500,7 +1634,8 @@ def main(argv):
     cdms_filemap_list = []
     duplicatevars = {}
     for varindexname, varindexvalue in varindex:
-        timeCoordToInd, levCoordToInd, linCoordToInd, fcCoordToInd = masterCoordToInd[varindexname[0]]
+        timeCoordToInd, levCoordToInd, linCoordToInd, fcCoordToInd = masterCoordToInd[
+            varindexname[0]]
         newslicedict = {}
         for time0, time1, lev0, lev1, path, timename, levname, calendar, fctau0 in varindexvalue:
             if timeCoordToInd is not None:
@@ -1514,17 +1649,16 @@ def main(argv):
                 j0, j1 = levCoordToInd[(lev0, lev1)]
             else:
                 j0 = j1 = None
-            if (i0,i1,j0,j1,fctau0) in newslicedict:
-                currentpath = newslicedict[(i0,i1,j0,j1,fctau0)]
+            if (i0, i1, j0, j1, fctau0) in newslicedict:
+                currentpath = newslicedict[(i0, i1, j0, j1, fctau0)]
                 if tuple(varindexname) not in duplicatevars:
                     duplicatevars[tuple(varindexname)] = (currentpath, path)
             else:
-                newslicedict[(i0,i1,j0,j1,fctau0)] = path
-        keys = list(newslicedict.keys())
-        keys.sort()
+                newslicedict[(i0, i1, j0, j1, fctau0)] = path
+        keys = sorted(newslicedict.keys())
         newslicelist = []
-        for i0,i1,j0,j1,fctau0 in keys:
-            path = newslicedict[(i0,i1,j0,j1,fctau0)]
+        for i0, i1, j0, j1, fctau0 in keys:
+            path = newslicedict[(i0, i1, j0, j1, fctau0)]
             newslicelist.append([i0, i1, j0, j1, fctau0, path])
         cdms_filemap_list.append([varindexname, newslicelist])
 
@@ -1540,21 +1674,23 @@ def main(argv):
                 if axisobj.isLatitude() or axisobj.isLongitude():
                     path1, path2 = duplicatevars[varlist]
                     illegalvars.append((varname, path1, path2))
-    if len(illegalvars)>0:
-        raise RuntimeError("Variable '%s' is duplicated, and is a function of lat or lon: files %s, %s"%illegalvars[0])
-        
-    if verbose and len(list(duplicatevars.values()))>0:
+    if len(illegalvars) > 0:
+        raise RuntimeError(
+            "Variable '%s' is duplicated, and is a function of lat or lon: files %s, %s" %
+            illegalvars[0])
+
+    if verbose and len(list(duplicatevars.values())) > 0:
         print('Duplicate variables:', file=sys.stderr)
         for varlist in list(duplicatevars.keys()):
             path1, path2 = duplicatevars[varlist]
-            print('\t',varlist,'\t',path1,'\t',path2, file=sys.stderr)
+            print('\t', varlist, '\t', path1, '\t', path2, file=sys.stderr)
 
     # Generate the cdms_filemap attribute
     cdms_filemap = str(cdms_filemap_list)
-    cdms_filemap = string.replace(cdms_filemap, ' ', '')
-    cdms_filemap = string.replace(cdms_filemap, 'None', '-')
-    cdms_filemap = string.replace(cdms_filemap, '"', '') #"
-    cdms_filemap = string.replace(cdms_filemap, "'", '')
+    cdms_filemap = cdms_filemap.replace(' ', '')
+    cdms_filemap = cdms_filemap.replace('None', '-')
+    cdms_filemap = cdms_filemap.replace('"', '')  # "
+    cdms_filemap = cdms_filemap.replace("'", '')
 
     # Dump to XML
     datasetnode = cdmsNode.DatasetNode(datasetid)
@@ -1570,12 +1706,12 @@ def main(argv):
     validateAttrs(datasetnode)
 
     timeWasOverridden = 0
-    keys = list(axisdict.keys())
-    keys.sort()
+    keys = sorted(axisdict.keys())
     for key in keys:
         axis = axisdict[key]
         tcode = axis.typecode()
-        if tcode in [numpy.float32, numpy.float, numpy.int16, numpy.int32, numpy.int, numpy.intc, numpy.int8]:
+        if tcode in [numpy.float32, numpy.float, numpy.int16,
+                     numpy.int32, numpy.int, numpy.intc, numpy.int8]:
             tcode = numpy.sctype2char(tcode)
         cdtype = cdmsNode.NumericToCdType[tcode]
         node = cdmsNode.AxisNode(axis.id, len(axis), cdtype)
@@ -1592,24 +1728,29 @@ def main(argv):
             linearnode = cdmsNode.LinearDataNode(ttzero, ttdelta, len(axis))
             node.setLinearData(linearnode)
             if verbose:
-                if timeWasOverridden==0:
-                    print("Overriding values for axis '%s'"%axis.id)
+                if timeWasOverridden == 0:
+                    print("Overriding values for axis '%s'" % axis.id)
                 else:
-                    print('Warning, overriding more than one time axis (%s)'%axis.id, file=sys.stderr)
+                    print(
+                        'Warning, overriding more than one time axis (%s)' %
+                        axis.id, file=sys.stderr)
             timeWasOverridden = 1
 
         # Represent time as linear axis using time values in the file
         elif axis.isTime() and timeIsLinear:
-            reference_length = axis.partition[-1]-axis.partition[0]
-            linearnode = cdmsNode.LinearDataNode(axis[0], referenceDelta, reference_length)
+            reference_length = axis.partition[-1] - axis.partition[0]
+            linearnode = cdmsNode.LinearDataNode(
+                axis[0], referenceDelta, reference_length)
             node.setLinearData(linearnode)
         else:
             try:
                 node.setData(axis[:])
             except cdms2.cdmsNode.NotMonotonicError:
                 if verbose:
-                    print('Warning: Axis values for axis %s are not monotonic:'%axis.id,axis[:], file=sys.stderr)
-                    print('Warning: Resetting axis %s values to:'%axis.id, numpy.arange(len(axis)), file=sys.stderr)
+                    print('Warning: Axis values for axis %s are not monotonic:' % axis.id, axis[
+                        :], file=sys.stderr)
+                    print('Warning: Resetting axis %s values to:' % axis.id, numpy.arange(
+                        len(axis)), file=sys.stderr)
                 node.setData(numpy.arange(len(axis)))
         axisattrs = copyDict(axis.attributes)
 
@@ -1623,15 +1764,17 @@ def main(argv):
         validateAttrs(node)
         datasetnode.addId(axis.id, node)
 
-    keys = list(vardict.keys())
-    keys.sort()
+    keys = sorted(vardict.keys())
+    keys = vardict.keys()
+    keys = list(keys).sort()
     for key in keys:
         if (includeList is not None) and (key not in includeList):
             continue
         if (excludeList is not None) and (key in excludeList):
             continue
         domain, attrs, tcode = vardict[key]
-        if tcode in [numpy.float32, numpy.float, numpy.int16, numpy.int32, numpy.int, numpy.intc, numpy.int8]:
+        if tcode in [numpy.float32, numpy.float, numpy.int16,
+                     numpy.int32, numpy.int, numpy.intc, numpy.int8]:
             tcode = numpy.sctype2char(tcode)
         domainNode = cdmsNode.DomainNode()
         cdtype = cdmsNode.NumericToCdType[tcode]
@@ -1641,52 +1784,55 @@ def main(argv):
         setNodeDict(node, attrs)
         validateAttrs(node)
         for axis in domain:
-            if hasattr(axis,'length'):
+            if hasattr(axis, 'length'):
                 length = axis.length
             else:
                 length = len(axis)
             try:
                 elemnode = cdmsNode.DomElemNode(axis.id, 0, length)
             except AttributeError:
-                print('Axis %s for variable %s does not have attribute "id"'%(repr(axis), key), file=sys.stderr)
+                print('Axis %s for variable %s does not have attribute "id"' % (
+                    repr(axis), key), file=sys.stderr)
             if hasattr(axis, 'partition_length'):
-                elemnode.setExternalAttr('partition_length',axis.partition_length)
+                elemnode.setExternalAttr(
+                    'partition_length', axis.partition_length)
             domainNode.add(elemnode)
         datasetnode.addId(key, node)
 
     # Add the Conventions attribute if not present
     conventions = datasetnode.getExternalAttr('Conventions')
-    if conventions is None: datasetnode.setExternalAttr('Conventions','')
+    if conventions is None:
+        datasetnode.setExternalAttr('Conventions', '')
     if templatestr is not None:
-        datasetnode.setExternalAttr('template',templatestr)
+        datasetnode.setExternalAttr('template', templatestr)
 
     # Add/modify history
     history = datasetnode.getExternalAttr('history')
     if history is None:
         history = ""
-    stringargv = reduce(lambda x,y: x+' '+y, argv)
-    stringtime = "\n[%s] "%timestamp()
-    if len(stringargv)<=256:
-        history += stringtime+stringargv
+    stringargv = reduce(lambda x, y: x + ' ' + y, argv)
+    stringtime = "\n[%s] " % timestamp()
+    if len(stringargv) <= 256:
+        history += stringtime + stringargv
     else:
-        history += stringtime+stringargv[:256]+" ..."
-    datasetnode.setExternalAttr('history',history)
+        history += stringtime + stringargv[:256] + " ..."
+    datasetnode.setExternalAttr('history', history)
 
-    ## datasetnode.validate()
+    # datasetnode.validate()
     if writeToStdout:
         datasetnode.dump()
     else:
         datasetnode.dump(xmlpath)
         if verbose:
-            print(xmlpath,'written')
+            print(xmlpath, 'written')
 
-#--------------------------------------------------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------
 if __name__ == '__main__':
     main(sys.argv)
     try:
         from mpi4py import MPI
         comm = MPI.Comm.Get_parent()
         comm.send('done', dest=0)
-    except:
+    except BaseException:
         pass
-        

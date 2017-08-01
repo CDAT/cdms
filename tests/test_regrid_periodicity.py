@@ -1,4 +1,4 @@
-import urllib
+import requests
 import cdms2
 import os
 import sys
@@ -17,9 +17,17 @@ class TestRegrid(basetest.CDMSBaseTest):
         super(TestRegrid, self).setUp()
         context = ssl._create_unverified_context()
         myurl = "http://uvcdat.llnl.gov/cdat/sample_data/" + obsFile
-        urllib.urlretrieve(myurl, obsFile, context=context)
+        r = requests.get(myurl, stream=True)
+        if r.status_code == 200:
+            with open(obsFile, 'wb') as f:
+                for chunk in r:
+                    f.write(chunk)
         myurl = "http://uvcdat.llnl.gov/cdat/sample_data/" + modFile
-        urllib.urlretrieve(myurl, modFile, context=context)
+        r = requests.get(myurl, stream=True)
+        if r.status_code == 200:
+            with open(modFile, 'wb') as f:
+                for chunk in r:
+                    f.write(chunk)
 
     def tearDown(self):
         super(TestRegrid, self).tearDown()

@@ -1118,7 +1118,7 @@ class AbstractAxis(CdmsObj):
     # calendar.
     def getCalendar(self):
         if hasattr(self, 'calendar'):
-            calendar = string.lower(self.calendar)
+            calendar = self.calendar.lower()
         else:
             calendar = None
 
@@ -1153,7 +1153,7 @@ class AbstractAxis(CdmsObj):
         if self.isTime():
             if type(value) in CdtimeTypes:
                 value = value.torel(self.units, self.getCalendar()).value
-            elif isinstance(value, types.StringType) and value not in [':', unspecified]:
+            elif isinstance(value, str) and value not in [':', unspecified]:
                 cal = self.getCalendar()
                 value = cdtime.s2c(value, cal).torel(self.units, cal).value
         return value
@@ -1165,7 +1165,7 @@ class AbstractAxis(CdmsObj):
             #
             # mf 20010419 test if attribute is a string (non CF), set to 360.0
             #
-            if(isinstance(cycle, types.StringType)):
+            if(isinstance(cycle, str)):
                 cycle = 360.0
         else:
             cycle = 360.0
@@ -1743,7 +1743,7 @@ class Axis(AbstractAxis):
         length = len(node)
 
         # Allow key of form (slice(i,j),) etc.
-        if isinstance(key, types.TupleType) and len(key) == 1:
+        if isinstance(key, tuple) and len(key) == 1:
             key = key[0]
 
         if isinstance(key, (int, numpy.int, numpy.int32)):  # x[i]
@@ -2043,7 +2043,7 @@ class FileAxis(AbstractAxis):
 
     def getData(self):
         if cdmsobj._debug == 1:
-            print 'Getting array for axis', self.id
+            print('Getting array for axis', self.id)
         if self.parent is None:
             raise CDMSError(FileWasClosed + self.id)
         try:
@@ -2302,9 +2302,9 @@ class FileAxis(AbstractAxis):
 
     def getCalendar(self):
         if hasattr(self, 'calendar'):
-            calendar = string.lower(self.calendar)
+            calendar = self.calendar.lower()
         elif self.parent is not None and hasattr(self.parent, 'calendar'):
-            calendar = string.lower(self.parent.calendar)
+            calendar = self.parent.calendar.lower()
         else:
             calendar = None
 
@@ -2435,7 +2435,7 @@ def axisMatchIndex(axes, specifications=None, omit=None, order=None):
 
     if omit is None:
         omitlist = []
-    elif isinstance(omit, types.StringType):
+    elif isinstance(omit, str):
         omitlist = [omit]
     elif isinstance(omit, list):
         omitlist = omit

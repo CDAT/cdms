@@ -16,6 +16,8 @@ class TestForecastIO(basetest.CDMSBaseTest):
 
         # Generate some test data, then write it out.  This section doesn't
         # test anything.
+        import pdb
+        pdb.set_trace()
         xaxis = cdms2.createAxis([0.1, 0.2], id='x')
         taxis = cdms2.createAxis([10.0, 20.0], id='t')
         taxis.units = 'seconds'    # required!
@@ -39,7 +41,7 @@ class TestForecastIO(basetest.CDMSBaseTest):
         f1 = self.getTempFile('test_fc1', 'w')
         f2 = self.getTempFile('test_fc2', 'w')
         f3 = self.getTempFile('test_fc3', 'w')
-        print "TEMP:", self.tempdir
+        print(("TEMP:", self.tempdir))
         f1.write(v1)
         f1.write(date1)
         f1.write(sec1)

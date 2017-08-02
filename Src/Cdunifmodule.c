@@ -1195,10 +1195,14 @@ static void collect_attributes(PyCdunifFileObject *file, int varid,
 				PyList_Append(listObj, szObj);
 			}
 			string = PyString_FromString(st[0]);
-			if (string != NULL) {
-				PyDict_SetItemString(attributes, name, listObj);
-				Py_DECREF(string);
-			}
+            if (string != NULL) {
+                if (t_len > 1) {
+                    PyDict_SetItemString(attributes, name, listObj);
+                } else {
+                    PyDict_SetItemString(attributes, name, string);
+                }
+                Py_DECREF(string);
+            }
 			nc_free_string(t_len, st);
 			free(st);
 		} else {

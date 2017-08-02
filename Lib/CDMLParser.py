@@ -7,7 +7,6 @@ from . import CDML
 import re
 from . import cdmsNode
 import string
-import pdb
 
 # Error constants
 InvalidAttribute = "Invalid attribute"

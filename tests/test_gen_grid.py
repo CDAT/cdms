@@ -8,7 +8,6 @@ import numpy
 import os
 import sys
 import basetest
-import pdb
 
 
 class TestGenericGrids(basetest.CDMSBaseTest):

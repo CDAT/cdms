@@ -1943,7 +1943,7 @@ static PyObject *
 PyCdunifFile_GetAttribute(PyCdunifFileObject *self, PyObject *nameobj) {
 	PyObject *value;
 	char *name = PyStr_AsString(nameobj);
-	printf("%s\n",name);
+	//printf("%s\n",name);
 	if (check_if_open(self, -1)) {
 		if (strcmp(name, "dimensions") == 0) {
 			Py_INCREF(self->dimensions);
@@ -2263,7 +2263,7 @@ static PyObject *
 PyCdunifVariable_GetAttribute(PyCdunifVariableObject *self, PyObject *nameobj) {
 	PyObject *value;
 	char *name = PyStr_AsString(nameobj);
-	printf("%s\n", name);
+	//printf("%s\n", name);
 	if (strcmp(name, "shape") == 0) {
 		PyObject *tuple;
 		int i;

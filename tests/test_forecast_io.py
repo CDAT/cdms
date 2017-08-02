@@ -16,8 +16,6 @@ class TestForecastIO(basetest.CDMSBaseTest):
 
         # Generate some test data, then write it out.  This section doesn't
         # test anything.
-        import pdb
-        pdb.set_trace()
         xaxis = cdms2.createAxis([0.1, 0.2], id='x')
         taxis = cdms2.createAxis([10.0, 20.0], id='t')
         taxis.units = 'seconds'    # required!

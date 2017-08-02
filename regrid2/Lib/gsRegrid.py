@@ -379,11 +379,11 @@ class Regrid:
             src_gridNew, src_dimsNew = makeCoordsCyclic(src_grid, src_dims)
             if self.verbose:
                 aa, bb = str(src_dims), str(src_dimsNew)
-                print('...  src_dims = %s, after making cyclic src_dimsNew = %s' \
-                    % (aa, bb))
+                print(('...  src_dims = %s, after making cyclic src_dimsNew = %s' \
+                    % (aa, bb)))
                 for i in range(self.rank):
-                    print('...... src_gridNew[%d].shape = %s' \
-                        % (i, str(src_gridNew[i].shape)))
+                    print(('...... src_gridNew[%d].shape = %s' \
+                        % (i, str(src_gridNew[i].shape))))
             # flag indicating that the grid was extended
             if reduce(lambda x, y:x+y, \
                           [src_dimsNew[i] - src_dims[i] \
@@ -410,8 +410,8 @@ class Regrid:
                     self.extendedGrid = self.extendedGrid
                 if self.verbose:
                     aa, bb = str(src_dims), str(src_dimsNew)
-                    print('...  src_dims = %s, after making cyclic src_dimsNew = %s' \
-                        % (aa, bb))
+                    print(('...  src_dims = %s, after making cyclic src_dimsNew = %s' \
+                        % (aa, bb)))
                 src_grid = src_gridNew
                 src_dims = src_dimsNew
                 self.dst_Index = dst_Index
@@ -925,12 +925,12 @@ def test():
 
     # number of destination points
     ndstpts = rg.getNumDstPoints()
-    print('nvalid = ', nvalid, ' ndstpts = ', ndstpts)
+    print(('nvalid = ', nvalid, ' ndstpts = ', ndstpts))
 
     # get the indices and weights for a single target location
     dst_indices = [4, 2, 1]
     inds, weights = rg.getIndicesAndWeights(dst_indices)
-    print('indices and weights are: ', inds, weights)
+    print(('indices and weights are: ', inds, weights))
 
     # data
     src_coords = rg.getSrcGrid()
@@ -942,13 +942,13 @@ def test():
 
     # regrid
     rg(src_data, dst_data)
-    print('after interp: dst_data = ', dst_data)
+    print(('after interp: dst_data = ', dst_data))
 
     # check
     error = numpy.sum(abs(dst_data - func1(dst_coords)))
     #print dst_data
     #print func(dst_coords)
-    print('error = ', error)
+    print(('error = ', error))
 
 def testMasking():
     import numpy.ma as ma
@@ -989,12 +989,12 @@ def testMasking():
 
     # number of destination points
     ndstpts = rg.getNumDstPoints()
-    print('nvalid = ', nvalid, ' ndstpts = ', ndstpts)
+    print(('nvalid = ', nvalid, ' ndstpts = ', ndstpts))
 
     # get the indices and weights for a single target location
     dst_indices = [4, 2, 1]
     inds, weights = rg.getIndicesAndWeights(dst_indices)
-    print('indices and weights are: ', inds, weights)
+    print(('indices and weights are: ', inds, weights))
 
     # data
     src_coords = rg.getSrcGrid()
@@ -1006,13 +1006,13 @@ def testMasking():
 
     # regrid
     rg(src_data, dst_data)
-    print('after interp: dst_data =\n', dst_data)
+    print(('after interp: dst_data =\n', dst_data))
 
     # check
     error = numpy.sum(abs(dst_data - func1(dst_coords)))
     #print dst_data
     #print func(dst_coords)
-    print('error = ', error)
+    print(('error = ', error))
 
 if __name__ == '__main__':
     #testOuterProduct()

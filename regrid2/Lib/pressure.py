@@ -438,9 +438,9 @@ def sendmsg(msg, value1 = None, value2 = None):
     if value1 == None:
         print(msg)
     elif value2 == None:
-        print(msg, value1)
+        print((msg, value1))
     else:
-        print(msg, value1, value2)
+        print((msg, value1, value2))
     print('*******************************************************************')
 
     return None

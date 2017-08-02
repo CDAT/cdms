@@ -61,14 +61,14 @@ class Horizontal:
         if _debug==1:
             import sys
             sys.stdout = open('debug_regrid.txt','w')
-            print("bsin = ", numpy.array2string(bsin,precision=3))
-            print("bnin = ", numpy.array2string(bnin,precision=3))
-            print("bwin = ", numpy.array2string(bwin,precision=3))
-            print("bein = ", numpy.array2string(bein,precision=3))
-            print("bsout = ", numpy.array2string(bsout,precision=3))
-            print("bnout = ", numpy.array2string(bnout,precision=3))
-            print("bwout = ", numpy.array2string(bwout,precision=3))
-            print("beout = ", numpy.array2string(beout,precision=3))
+            print(("bsin = ", numpy.array2string(bsin,precision=3)))
+            print(("bnin = ", numpy.array2string(bnin,precision=3)))
+            print(("bwin = ", numpy.array2string(bwin,precision=3)))
+            print(("bein = ", numpy.array2string(bein,precision=3)))
+            print(("bsout = ", numpy.array2string(bsout,precision=3)))
+            print(("bnout = ", numpy.array2string(bnout,precision=3)))
+            print(("bwout = ", numpy.array2string(bwout,precision=3)))
+            print(("beout = ", numpy.array2string(beout,precision=3)))
 
         self.londx, self.lonpt, self.wtlon, self.latdx, self.latpt, self.wtlat = _regrid.maparea( self.nloni, self.nlono, self.nlati, self.nlato, bnin, bnout, bsin, bsout, bein, beout, bwin, bwout )
 

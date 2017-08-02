@@ -890,9 +890,9 @@ def sendmsg(msg, value1 = None, value2 = None):
     if value1 == None:
         print(msg)
     elif value2 == None:
-        print(msg, value1)
+        print((msg, value1))
     else:
-        print(msg, value1, value2)
+        print((msg, value1, value2))
     print('*******************************************************************')
 
     return None
@@ -939,8 +939,8 @@ def rmserror(data1, data2):
 
     if data1.shape != data2.shape:
         print('Error in shape in rmserror')
-        print('data1 shape = ', data1.shape)
-        print('data2 shape = ', data2.shape)
+        print(('data1 shape = ', data1.shape))
+        print(('data2 shape = ', data2.shape))
         raise ValueError
 
     d1 = numpy.ravel(data1)
@@ -974,5 +974,5 @@ if __name__=='__main__':
 
     print('expected cross section test case rms error =  0.18581882')
     # print 'expected cross section test case rms error =  0.23062'
-    print('calculated cross section test case rms error = ', error)
+    print(('calculated cross section test case rms error = ', error))
 

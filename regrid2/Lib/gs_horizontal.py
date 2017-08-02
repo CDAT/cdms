@@ -179,7 +179,7 @@ class GS_Regridder:
         kbegin = 0
         kend = -1
 
-        print("__call__  remapfile=", self.remapfile)
+        print(("__call__  remapfile=", self.remapfile))
         libcf.gs_fregrid( history, mosaic_in, mosaic_out, dir_in, dir_out,
                           input_file, nfiles, output_file, nfiles_out,
                           self.remapfile,

@@ -5,28 +5,28 @@ import basetest
 
 
 class TestFormats(basetest.CDMSBaseTest):
-    def testPP(self):
+    def dtestPP(self):
         f = self.getDataFile('testpp.pp')
         data = f['ps']
         self.assertEqual(data.missing_value, -1.07374182e+09)
 
-    def testHDF(self):
+    def dtestHDF(self):
         if cdat_info.CDMS_INCLUDE_HDF == "yes":
             f = self.getDataFile("tdata.hdf")  # noqa
 
-    def testDRS(self):
+    def dtestDRS(self):
         f = self.getDataFile("dvtest1.dic")
         data = f['a']
         self.assertEqual(data.time, '15:17:00')
 
-    def testDAP(self):
+    def dtestDAP(self):
         f = cdms2.open(
             'http://test.opendap.org/opendap/hyrax/data/nc/coads_climatology.nc')
         data = f['SST']
         self.assertEqual(data.missing_value, -1e34)
         f.close()
 
-    def testESGF(self):
+    def dtestESGF(self):
         f = cdms2.open(
             "https://esgf.nccs.nasa.gov/thredds/dodsC/CREATE-IP/" +
             "reanalysis/NASA-GMAO/GEOS-5/MERRA/mon/atmos/tas/tas_Amon_reanalysis_MERRA_197901-201312.nc")
@@ -43,12 +43,12 @@ class TestFormats(basetest.CDMSBaseTest):
                 dtype=numpy.float32))
         f.close()
 
-    def testGRIB2(self):
+    def dtestGRIB2(self):
         f = self.getDataFile("testgrib2.ctl")
         data = f['wvhgtsfc']
         self.assertEqual(data.missing_value, 9.999e20)
 
-    def testnetCDF(self):
+    def dtestnetCDF(self):
         f = self.getDataFile("stereographic.nc")
         data = f('seaice_conc_cdr')
         self.assertAlmostEqual(data.mean(), 0.143803220111, 10)

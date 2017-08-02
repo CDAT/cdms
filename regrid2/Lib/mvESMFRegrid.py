@@ -121,7 +121,7 @@ class ESMFRegrid(GenericRegrid):
 #        self.srcMaskValues = numpy.array([1],dtype = numpy.int32)
 #        self.dstMaskValues = numpy.array([1],dtype = numpy.int32)
 
-        if isinstance(regridMethod, bytes):
+        if isinstance(regridMethod, str):
             if re.search('conserv', regridMethod.lower()):
                 self.srcMaskValues = numpy.array([1], dtype=numpy.int32)
                 self.dstMaskValues = numpy.array([1], dtype=numpy.int32)

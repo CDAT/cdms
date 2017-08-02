@@ -78,10 +78,10 @@ class dataNoPeri:
                                                  id='fromData')
 
         if yy.shape != xx.shape:
-            print 'yy.shape', yy.shape, '!= xx.shape', xx.shape
+            print('yy.shape', yy.shape, '!= xx.shape', xx.shape)
             raise 'Coordinate shape mismatch'
         if yyb.shape != xxb.shape:
-            print 'yyb.shape', yyb.shape, '!= xxb.shape', xxb.shape
+            print('yyb.shape', yyb.shape, '!= xxb.shape', xxb.shape)
             raise 'Bounds shape mismatch'
         self.coords = [xx, yy]
         self.bounds = [xxb, yyb]
@@ -151,10 +151,10 @@ class dataMaskedNoPeri:
                                                  id='fromData')
 
         if yy.shape != xx.shape:
-            print 'yy.shape', yy.shape, '!= xx.shape', xx.shape
+            print('yy.shape', yy.shape, '!= xx.shape', xx.shape)
             raise 'Coordinate shape mismatch'
         if yyb.shape != xxb.shape:
-            print 'yyb.shape', yyb.shape, '!= xxb.shape', xxb.shape
+            print('yyb.shape', yyb.shape, '!= xxb.shape', xxb.shape)
             raise 'Bounds shape mismatch'
         self.coords = [yy, xx]
         self.bounds = [yyb, xxb]

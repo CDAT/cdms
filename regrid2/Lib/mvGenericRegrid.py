@@ -8,7 +8,6 @@ David Kindig and Alex Pletzer, Tech-X Corp. (2012)
 """
 import operator
 import numpy
-import string
 
 import regrid2
 import re

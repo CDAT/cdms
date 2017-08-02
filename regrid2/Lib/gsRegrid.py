@@ -11,7 +11,7 @@ No guarantee is provided whatsoever. Use at your own risk.
 # standard python includes
 from re import search, sub
 from ctypes import c_double, c_float, c_int, \
-    c_char_p, CDLL, byref, POINTER
+    c_wchar_p, CDLL, byref, POINTER
 import ctypes
 import operator
 import sys
@@ -21,6 +21,7 @@ import numpy
 import cdms2
 from regrid2 import RegridError
 from functools import reduce
+import fnmatch
 
 C_DOUBLE_P = POINTER(c_double)
 
@@ -336,14 +337,20 @@ class Regrid:
 
         # Open the shaped library
         dynLibFound = False
-        for sosuffix in '.dylib', '.dll', '.DLL', '.so', '.a':
-            if os.path.exists(LIBCFDIR + sosuffix):
-                dynLibFound = True
-                try:
-                    self.lib = CDLL(LIBCFDIR + sosuffix)
-                    break
-                except:
-                    pass
+        CFfile = self.find('pylibcf.*', __path__[0])
+        if os.path.exists(CFfile):
+            try:
+                self.lib = CDLL(CFfile)
+            except:
+                pass
+#        for sosuffix in '.dylib', '.dll', '.DLL', '.so', '.a':
+#            if os.path.exists(LIBCFDIR + sosuffix):
+#                dynLibFound = True
+#                try:
+#                    self.lib = CDLL(LIBCFDIR + sosuffix)
+#                    break
+#                except:
+#                    pass
         if self.lib == None:
             if not dynLibFound:
                 raise RegridError("ERROR in %s: could not find shared library %s.{so,dylib,dll,DLL}" \
@@ -413,8 +420,8 @@ class Regrid:
         self.dst_dims = (c_int * self.rank)()
 
         # Build coordinate objects
-        src_dimnames = (c_char_p * self.rank)()
-        dst_dimnames = (c_char_p * self.rank)()
+        src_dimnames = (c_wchar_p * self.rank)()
+        dst_dimnames = (c_wchar_p * self.rank)()
         for i in range(self.rank):
             src_dimnames[i] = 'src_n%d' % i
             dst_dimnames[i] = 'dst_n%d' % i
@@ -503,6 +510,14 @@ class Regrid:
 
             status = self.lib.nccf_free_coord(self.dst_coordids[i])
             catchError(status, sys._getframe().f_lineno)
+
+    def find(self, pattern, path):
+        result=""
+        for root, dirs, files in os.walk(path):
+            for name in files:
+                if fnmatch.fnmatch(name, pattern):
+                    result=os.path.join(root, name)
+        return result
 
     def setValidMask(self, inMask):
         """

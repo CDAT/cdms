@@ -17,6 +17,7 @@ class TestFormats(basetest.CDMSBaseTest):
     def testDRS(self):
         f = self.getDataFile("dvtest1.dic")
         data = f['a']
+#        self.assertEqual(data.missing_value, 1e20)
         self.assertEqual(data.time, '15:17:00')
 
     def testDAP(self):

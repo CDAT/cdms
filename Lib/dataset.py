@@ -26,7 +26,6 @@ from fvariable import FileVariable
 from tvariable import asVariable
 from cdmsNode import CdDatatypes
 import convention
-import warnings
 
 # Default is serial mode until setNetcdfUseParallelFlag(1) is called
 rk = 0
@@ -1146,9 +1145,6 @@ class CdmsFile(CdmsObj, cuDataset):
                             self, name, cdunifvar)
 
             # Build axis list
-            newcoordsaux = []
-            dimlat = "--lat--"
-            dimlon = "--lon--"
             for name in self._file_.dimensions.keys():
                 if name in coords1d:
                     cdunifvar = self._file_.variables[name]
@@ -1156,28 +1152,6 @@ class CdmsFile(CdmsObj, cuDataset):
                     cdunifvar = self._file_.variables[name]
                 else:
                     cdunifvar = None
-                for i in range(len(coordsaux)):
-                    if(coordsaux[i][0:3] == 'lat'):
-                        dimlat = self._file_.variables[coordsaux[i]].dimensions
-                    if(coordsaux[i][0:3] == 'lon'):
-                        dimlon = self._file_.variables[coordsaux[i]].dimensions
-
-                if(dimlat != dimlon):
-                    for i in range(len(coordsaux)):
-                        if(name in self._file_.variables[coordsaux[i]].dimensions) and  \
-                                len(self._file_.variables[coordsaux[i]].shape) == 1:
-                            msg = "\n** Variable \"" + coordsaux[i] + "\" found in the \"coordinates\" " + \
-                                  "attribute will be used as coordinate variable\n" +\
-                                  "** CDMS could not find the coordinate variable \"" + name + "(" + name + ")\"\n" + \
-                                  "** Verify that your file is CF-1 compliant!"
-                            warnings.warn(msg)
-                            cdunifvar = self._file_.variables[coordsaux[i]]
-                            self.variables[name] = FileVariable(
-                                self, name, cdunifvar)
-                            self.variables[coordsaux[i]] = FileVariable(
-                                self, coordsaux[i], cdunifvar)
-                            newcoordsaux = coordsaux[:i] + coordsaux[i + 1:]
-                    coordsaux = newcoordsaux
                 self.axes[name] = FileAxis(self, name, cdunifvar)
 
             # Attach boundary variables
@@ -1264,8 +1238,11 @@ class CdmsFile(CdmsObj, cuDataset):
                                 grid = FileCurveGrid(
                                     lat, lon, gridname, parent=self, maskvar=maskvar)
                             else:
-                                grid = FileGenericGrid(
-                                    lat, lon, gridname, parent=self, maskvar=maskvar)
+                                if(lat.rank() == 1 and lon.rank() == 1):
+                                    grid = FileRectGrid(self, gridname, lat, lon, gridkey[2], gridtype)
+                                else:
+                                    grid = FileGenericGrid(
+                                        lat, lon, gridname, parent=self, maskvar=maskvar)
                         self.grids[grid.id] = grid
                         self._gridmap_[gridkey] = grid
 

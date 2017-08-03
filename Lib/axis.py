@@ -2571,7 +2571,7 @@ def concatenate(axes, id=None, attributes=None):
 
     data = numpy.ma.concatenate([ax[:] for ax in axes])
     boundsArray = [ax.getBounds() for ax in axes]
-    if None in boundsArray:
+    if any(c is None for c in boundsArray):
         bounds = None
     else:
         bounds = numpy.ma.concatenate(boundsArray)

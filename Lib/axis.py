@@ -194,7 +194,6 @@ def mapLinearIntersection(xind, yind, iind,
                           aMinusEps, aPlusEps, bPlusEps, bMinusEps,
                           boundLeft, nodeSubI, boundRight):
     """
-
     Return true iff the coordinate interval (a,b) intersects the node
     nodeSubI or cell bounds [boundLeft,boundRight], where the interval
     (a,b) is defined by:

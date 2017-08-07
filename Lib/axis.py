@@ -194,6 +194,7 @@ def mapLinearIntersection(xind, yind, iind,
                           aMinusEps, aPlusEps, bPlusEps, bMinusEps,
                           boundLeft, nodeSubI, boundRight):
     """
+
     Return true iff the coordinate interval (a,b) intersects the node
     nodeSubI or cell bounds [boundLeft,boundRight], where the interval
     (a,b) is defined by:
@@ -2570,7 +2571,7 @@ def concatenate(axes, id=None, attributes=None):
 
     data = numpy.ma.concatenate([ax[:] for ax in axes])
     boundsArray = [ax.getBounds() for ax in axes]
-    if any(c is None for c in boundsArray):
+    if None in boundsArray:
         bounds = None
     else:
         bounds = numpy.ma.concatenate(boundsArray)

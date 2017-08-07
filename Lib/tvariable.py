@@ -286,7 +286,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         if dtype is None and data is not None:
             dtype = numpy.array(data).dtype
 
-        if str(fill_value) == 'N/A':
+        if fill_value in ["N/A"]:
             fill_value = None
 
         if fill_value is not None:

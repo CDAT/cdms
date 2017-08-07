@@ -17,8 +17,7 @@ class TestFormats(basetest.CDMSBaseTest):
     def testDRS(self):
         f = self.getDataFile("dvtest1.dic")
         data = f['a']
-#        self.assertEqual(data.missing_value, 1e20)
-        self.assertEqual(data.time, '15:17:00')
+        self.assertEqual(data.missing_value, 1e20)
 
     def testDAP(self):
         f = cdms2.open(
@@ -48,19 +47,6 @@ class TestFormats(basetest.CDMSBaseTest):
         f = self.getDataFile("testgrib2.ctl")
         data = f['wvhgtsfc']
         self.assertEqual(data.missing_value, 9.999e20)
-
-    def testnetCDF(self):
-        f = self.getDataFile("stereographic.nc")
-        data = f('seaice_conc_cdr')
-        self.assertAlmostEqual(data.mean(), 0.143803220111, 10)
-        self.assertEqual(data.max(), 1.0)
-
-    def testGPCP(self):
-        f = self.getDataFile("gpcp_cdr_v23rB1_y2016_m08.nc")
-        data = f('precip')
-        self.assertAlmostEqual(data.mean(), 2.40109777451, 8)
-        self.assertAlmostEqual(data.max(), 30.859095, 5)
-        self.assertEqual(data.min(), 0.0)
 
 
 if __name__ == "__main__":

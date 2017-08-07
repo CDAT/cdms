@@ -204,7 +204,8 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         # Initialize the attributes
         if attributes is not None:
             for key, value in attributes.items():
-                if (key in ['shape', 'flat', 'imaginary', 'real'] or key[0] == '_') and key not in ['_FillValue']:
+                if (key in ['shape', 'flat', 'imaginary', 'real'] or
+                        key[0] == '_') and key not in ['_FillValue']:
                     raise CDMSError('Bad key in attributes: ' + key)
                 elif (key == 'missing_value' or key == '_FillValue'):
                     # ignore if fill value given explicitly
@@ -286,7 +287,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         if dtype is None and data is not None:
             dtype = numpy.array(data).dtype
 
-        if str(fill_value) == 'N/A':
+        if any(x is 'N/A' for x in str(fill_value)):
             fill_value = None
 
         if fill_value is not None:

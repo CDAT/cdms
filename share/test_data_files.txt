@@ -37,3 +37,4 @@ fe00a043c990b2cfd8ff1e2f9e9c4cc0  tas_GFDL-ESM2G_Amon_historical_r1i1p1_198501-2
 6c5bcd38ce3f77954e4353d2b9cba2f4  gpcp_cdr_v23rB1_y2016_m08.nc
 f515f21f4a62d182617f0ae24f60e495  20160520.A_WCYCL1850.ne30_oEC.edison.alpha6_01_ANN_climo_Q.nc
 c85f1abcd5769f4056209413e64d894a  MERRA_ANN_climo_SHUM.nc
+43d54b60e1b7b46b9dd0720c85e4a3a3  vmro3_input4MIPs_ozone_DAMIP_CCMI-hist-stratO3-1-0_gr_185001_nco.nc

@@ -42,10 +42,10 @@ class cdmsCrossSection(unittest.TestCase):
         self.assertAllClose(out,good)
 
     def testGaussian(self):
-        #lat = cdms2.createGaussianAxis(4)
-        #out = self.toCross(lat)
-        #good = [[3.2598915100097656, 2.0, 0.7401084899902344], [8.259891510009766, 7.0, 5.740108489990234], [13.259891510009766, 12.0, 10.740108489990234], [18.259891510009766, 17.0, 15.740108489990234], [23.259891510009766, 22.0, 20.740108489990234]]
-        #self.assertAllClose(out,good)
+        lat = cdms2.createGaussianAxis(3)
+        out = self.toCross(lat)
+        good = [[3.2598915100097656, 2.0, 0.7401084899902344], [8.259891510009766, 7.0, 5.740108489990234], [13.259891510009766, 12.0, 10.740108489990234], [18.259891510009766, 17.0, 15.740108489990234], [23.259891510009766, 22.0, 20.740108489990234]]
+        self.assertAllClose(out,good)
         lat = cdms2.createGaussianAxis(7)
         out = self.toCross(lat)
 

@@ -9,12 +9,10 @@ class cdmsCrossSection(unittest.TestCase):
 
         lat = cdms2.createAxis(numpy.arange(-5,5,2))
         lat.designateLatitude()
-        print lat[:]
 
         lev = cdms2.createAxis(numpy.arange(1000,500,-100))
         lev.designateLevel()
         lev.units='hPa'
-        print lev[:]
 
         self.data.setAxis(0,lev)
         self.data.setAxis(1,lat)
@@ -23,13 +21,10 @@ class cdmsCrossSection(unittest.TestCase):
         self.assertTrue(numpy.allclose(test,good))
 
     def toCross(self,targetLat):
-        print targetLat
-        print targetLat[:]
         out = self.data.crossSectionRegrid(self.data.getLevel(),targetLat)
-        print out.tolist()
         return out
 
-    def restUniform(self):
+    def testUniform(self):
         # Target has less lat
         lat = cdms2.createAxis(numpy.arange(-5,6,2.5))
         good = [[0.0, 1.0, 2.0, 3.0, 4.0], [5.0, 6.0, 7.0, 8.0, 9.0], [10.0, 11.0, 11.999999046325684, 13.0, 14.0], [14.999999046325684, 16.0, 17.0, 18.0, 19.0], [20.0, 21.0, 22.0, 23.0, 24.0]]
@@ -46,10 +41,21 @@ class cdmsCrossSection(unittest.TestCase):
         out = self.toCross(lat)
         good = [[3.2598915100097656, 2.0, 0.7401084899902344], [8.259891510009766, 7.0, 5.740108489990234], [13.259891510009766, 12.0, 10.740108489990234], [18.259891510009766, 17.0, 15.740108489990234], [23.259891510009766, 22.0, 20.740108489990234]]
         self.assertAllClose(out,good)
+        lat = cdms2.createGaussianAxis(4)
+        out = self.toCross(lat)
+        good = [[3.2188282012939453, 2.4131927490234375, 1.586807131767273, 0.7811717987060547], [8.218828201293945, 7.4131927490234375, 6.586806774139404, 5.781171798706055], [13.218828201293945, 12.413192749023438, 11.586806297302246, 10.781171798706055], [18.218828201293945, 17.413192749023438, 16.586807250976562, 15.781171798706055], [23.218828201293945, 22.413192749023438, 21.586807250976562, 20.781171798706055]]
+        self.assertAllClose(out,good)
         lat = cdms2.createGaussianAxis(7)
         out = self.toCross(lat)
+        good = [[3.5878708362579346, 3.0, 2.5450754165649414, 2.0, 1.454924464225769, 1.0, 0.4121290147304535], [8.587870597839355, 8.0, 7.545075416564941, 7.0, 6.4549241065979, 6.0, 5.412128925323486], [13.587870597839355, 13.0, 12.545075416564941, 12.0, 11.454924583435059, 11.0, 10.412129402160645], [18.587871551513672, 18.0, 17.545076370239258, 17.0, 16.454925537109375, 16.0, 15.412128448486328], [23.587871551513672, 23.0, 22.545074462890625, 22.0, 21.454923629760742, 21.0, 20.412128448486328]]
+        self.assertAllClose(out,good)
+        
+        # now test a bunch
+        for i in range(2,205):
+            lat = cdms2.createGaussianAxis(i)
+            out = self.toCross(lat)
 
-    def restEqualArea(self):
+    def testEqualArea(self):
         lat = cdms2.createEqualAreaAxis(3)
         out = self.toCross(lat)
         good = [[3.2598915100097656, 2.0, 0.7401084899902344], [8.259891510009766, 7.0, 5.740108489990234], [13.259891510009766, 12.0, 10.740108489990234], [18.259891510009766, 17.0, 15.740108489990234], [23.259891510009766, 22.0, 20.740108489990234]]
@@ -59,7 +65,12 @@ class cdmsCrossSection(unittest.TestCase):
         good = [[3.2664215564727783, 3.0, 2.1606080532073975, 2.0, 1.8393919467926025, 1.0, 0.7335784435272217], [8.2664213180542, 8.0, 7.160607814788818, 6.999999523162842, 6.839391708374023, 6.0, 5.733578681945801], [13.2664213180542, 13.0, 12.16060733795166, 12.0, 11.839391708374023, 11.0, 10.733577728271484], [18.266422271728516, 18.0, 17.160608291625977, 17.0, 16.839391708374023, 16.0, 15.7335786819458], [23.266422271728516, 23.0, 22.160608291625977, 22.0, 21.839391708374023, 21.0, 20.733577728271484]]
         self.assertAllClose(out,good)
 
-    def restGeneric(self):
+        # now test a bunch
+        for i in range(2,205):
+            lat = cdms2.createEqualAreaAxis(i)
+            out = self.toCross(lat)
+
+    def testGeneric(self):
         # Less latitudes
         lat = cdms2.createAxis([-5,0,1])
         lat.designateLatitude()

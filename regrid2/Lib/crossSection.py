@@ -693,8 +693,7 @@ def get_latitude_wts_bnds(checklatpass):
         return (wts, bnds)
 
     # ------ must be generic latitude -------
-
-    wts, bnds = generic_wts_bnds(checklatpass)
+    #wts, bnds = generic_wts_bnds(checklatpass)
     return (wts, bnds)
 
 

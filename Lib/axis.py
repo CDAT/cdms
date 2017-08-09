@@ -135,6 +135,8 @@ def createGaussianAxis(nlat):
     import regrid2._regrid
 
     lats, wts, bnds = regrid2._regrid.gridattr(nlat, 'gaussian')
+    print "LATS:",lats
+    print "WEIFGHTS:",wts
 
     # For odd number of latitudes, gridattr returns 0 in the second half of
     # lats

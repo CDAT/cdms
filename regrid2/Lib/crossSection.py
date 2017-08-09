@@ -90,8 +90,8 @@ class CrossSectionRegridder:
         self.nlevi = len(levIn)
         self.nlevo = len(levOut)
 
-        latIn, self.nlati = checkdimension(latIn[:], 'input latitude')
-        latOut, self.nlato = checkdimension(latOut[:], 'output latitude')
+        latIn, self.nlati = checkdimension(latIn, 'input latitude')
+        latOut, self.nlato = checkdimension(latOut, 'output latitude')
 
         # --- check for a single grid point in the latitude-level plane
 
@@ -558,14 +558,15 @@ def checkdimension(x, name):
     #
     #---------------------------------------------------------------------------------"""
 
+    data = x[:]
     try:
         xsize = len(x)
     except TypeError:
         sendmsg('Hgrid instance error -- instance requires a ' + name)
         raise TypeError
 
-    if x.dtype.char != 'f':
-        x = x.astype(numpy.float32)
+    if data.dtype.char != 'f':
+        x[:] = x[:].astype(numpy.float32)
 
     # -----  check for consistency  -----
 
@@ -585,6 +586,25 @@ def checkdimension(x, name):
     return x, xsize
 
 
+def generic_wts_bnds(lat):
+    try:
+        bnds = lat.getBounds()
+        if bnds is None:  # No bounds defined
+            newLat = lat.clone()
+            newLat.setBounds(None)
+        bnds = lat.getBounds()
+    except: # just an array....
+        newLat = cdms2.createAxis(lat)
+        newLat.setBounds(None)
+        bnds = newLat.getBounds()
+    outBnds = bnds[:,0].tolist()
+    outBnds.append(bnds[-1][-1])
+    outBnds = numpy.array(outBnds)
+    wts = [ outBnds[i+1] - outBnds[i] for i in range(len(lat))]
+    wts = numpy.array(wts) / numpy.sum(wts)
+    return wts, outBnds
+
+    
 def get_latitude_wts_bnds(checklatpass):
     """        #-------------------------------------------------------------------
     #
@@ -674,10 +694,7 @@ def get_latitude_wts_bnds(checklatpass):
 
     # ------ must be generic latitude -------
 
-#    wts, bnds = generic_wts_bnds(checklat)
-#    if reverse_latitude == 'yes':
-#        wts = wts[::-1]
-#        bnds = bnds[::-1]
+    wts, bnds = generic_wts_bnds(checklatpass)
     return (wts, bnds)
 
 

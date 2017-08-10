@@ -136,12 +136,6 @@ def createGaussianAxis(nlat):
 
     lats, wts, bnds = regrid2._regrid.gridattr(nlat, 'gaussian')
 
-    # For odd number of latitudes, gridattr returns 0 in the second half of
-    # lats
-    if nlat % 2:
-        mid = nlat / 2
-        lats[mid + 1:] = -lats[:mid][::-1]
-
     latBounds = numpy.zeros((nlat, 2), numpy.float)
     latBounds[:, 0] = bnds[:-1]
     latBounds[:, 1] = bnds[1:]

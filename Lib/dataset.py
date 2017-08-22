@@ -1244,7 +1244,8 @@ class CdmsFile(CdmsObj, cuDataset):
                                         lat, lon, gridname, parent=self, maskvar=maskvar)
                                 except BaseException:
                                     if(lat.rank() == 1 and lon.rank() == 1):
-                                        grid = FileRectGrid(self, gridname, lat, lon, gridkey[2], gridtype)
+                                        grid = FileRectGrid(
+                                            self, gridname, lat, lon, gridkey[2], gridtype)
 
                         self.grids[grid.id] = grid
                         self._gridmap_[gridkey] = grid
@@ -1434,9 +1435,9 @@ class CdmsFile(CdmsObj, cuDataset):
             newname = axis.id
 
         if len(newname) > 127:
-           msg = "axis name has more than 127 characters, name will be truncate"
-           warnings.warn(msg, UserWarning)
-           newname= newname[:127] if len(newname) > 127 else newname
+            msg = "axis name has more than 127 characters, name will be truncate"
+            warnings.warn(msg, UserWarning)
+            newname = newname[:127] if len(newname) > 127 else newname
 
         # If the axis already exists and has the same values, return existing
         if newname in self.axes:
@@ -1987,9 +1988,9 @@ class CdmsFile(CdmsObj, cuDataset):
             varid = id
 
         if len(varid) > 127:
-           msg = "varid name has more than 127 characters, name will be truncate"
-           warnings.warn(msg, UserWarning)
-           varid = varid[:127] if len(varid) > 127 else varid
+            msg = "varid name has more than 127 characters, name will be truncate"
+            warnings.warn(msg, UserWarning)
+            varid = varid[:127] if len(varid) > 127 else varid
 
         if varid in self.variables:
             if pack:

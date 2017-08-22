@@ -26,6 +26,7 @@ from fvariable import FileVariable
 from tvariable import asVariable
 from cdmsNode import CdDatatypes
 import convention
+import warnings
 
 # Default is serial mode until setNetcdfUseParallelFlag(1) is called
 rk = 0
@@ -1432,6 +1433,11 @@ class CdmsFile(CdmsObj, cuDataset):
         if newname is None:
             newname = axis.id
 
+        if len(newname) > 127:
+           msg = "axis name has more than 127 characters, name will be truncate"
+           warnings.warn(msg, UserWarning)
+           newname= newname[:127] if len(newname) > 127 else newname
+
         # If the axis already exists and has the same values, return existing
         if newname in self.axes:
             newaxis = self.axes[newname]
@@ -1883,6 +1889,8 @@ class CdmsFile(CdmsObj, cuDataset):
 
         # Create the new variable
         datatype = cdmsNode.NumericToCdType.get(var.typecode())
+        import pdb 
+        pdb.set_trace()
         newvar = self.createVariable(newname, datatype, axislist)
         for attname, attval in attributes.items():
             if attname not in ["id", "datatype", "parent"]:
@@ -1979,6 +1987,12 @@ class CdmsFile(CdmsObj, cuDataset):
             varid = var.id
         else:
             varid = id
+
+        if len(varid) > 127:
+           msg = "varid name has more than 127 characters, name will be truncate"
+           warnings.warn(msg, UserWarning)
+           varid = varid[:127] if len(varid) > 127 else varid
+
         if varid in self.variables:
             if pack:
                 raise CDMSError(

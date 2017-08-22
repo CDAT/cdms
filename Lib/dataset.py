@@ -1238,8 +1238,13 @@ class CdmsFile(CdmsObj, cuDataset):
                                 grid = FileCurveGrid(
                                     lat, lon, gridname, parent=self, maskvar=maskvar)
                             else:
-                                grid = FileGenericGrid(
-                                    lat, lon, gridname, parent=self, maskvar=maskvar)
+                                try:
+                                    grid = FileGenericGrid(
+                                        lat, lon, gridname, parent=self, maskvar=maskvar)
+                                except BaseException:
+                                    if(lat.rank() == 1 and lon.rank() == 1):
+                                        grid = FileRectGrid(self, gridname, lat, lon, gridkey[2], gridtype)
+
                         self.grids[grid.id] = grid
                         self._gridmap_[gridkey] = grid
 

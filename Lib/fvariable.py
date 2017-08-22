@@ -27,11 +27,11 @@ class FileVariable(DatasetVariable):
             if '_FillValue' in self.__dict__.keys():
                 self.__dict__['missing_value'] = self.__dict__['_FillValue']
                 self.attributes['missing_value'] = self.__dict__['_FillValue']
-#            if self.__dict__['missing_value'] is None:
-#                self.__dict__[
-#                    'missing_value'] = numpy.ma.default_fill_value(self)
-#                self.attributes['missing_value'] = numpy.ma.default_fill_value(
-#                    self)
+            if self.__dict__['missing_value'] is None:
+                self.__dict__[
+                    'missing_value'] = numpy.ma.default_fill_value(self)
+                self.attributes['missing_value'] = numpy.ma.default_fill_value(
+                    self)
 
         val = self.__cdms_internals__ + ['name_in_file', ]
         self.___cdms_internals__ = val

@@ -1241,7 +1241,7 @@ class CdmsFile(CdmsObj, cuDataset):
                                 try:
                                     grid = FileGenericGrid(
                                         lat, lon, gridname, parent=self, maskvar=maskvar)
-                                except:
+                                except BaseException:
                                     if(lat.rank() == 1 and lon.rank() == 1):
                                         grid = FileRectGrid(self, gridname, lat, lon, gridkey[2], gridtype)
 

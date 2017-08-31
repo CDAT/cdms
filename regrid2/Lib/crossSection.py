@@ -232,7 +232,7 @@ class CrossSectionRegridder:
 
         # Reconstruct the same class as on input
         # Mask fill_value and return results
-        print "INPUT IS VAR:",inputIsVariable
+        print "INPUT IS VAR:", inputIsVariable
         if inputIsVariable == 1:
             result = numpy.ma.masked_values(outar, missing)
             result = cdms2.createVariable(result, fill_value=missing,
@@ -594,18 +594,18 @@ def generic_wts_bnds(lat):
             newLat = lat.clone()
             newLat.setBounds(None)
         bnds = lat.getBounds()
-    except: # just an array....
+    except BaseException:
         newLat = cdms2.createAxis(lat)
         newLat.setBounds(None)
         bnds = newLat.getBounds()
-    outBnds = bnds[:,0].tolist()
+    outBnds = bnds[:, 0].tolist()
     outBnds.append(bnds[-1][-1])
     outBnds = numpy.array(outBnds)
-    wts = [ outBnds[i+1] - outBnds[i] for i in range(len(lat))]
+    wts = [outBnds[i + 1] - outBnds[i] for i in range(len(lat))]
     wts = numpy.array(wts) / numpy.sum(wts)
     return wts, outBnds
 
-    
+
 def get_latitude_wts_bnds(checklatpass):
     """        #-------------------------------------------------------------------
     #

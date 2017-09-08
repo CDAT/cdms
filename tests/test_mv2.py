@@ -27,7 +27,7 @@ class TestMV2(basetest.CDMSBaseTest):
             attributes=self.other_u_file.attributes,
             id=self.other_u_file.id)
 
-    def dtestKwargs(self):
+    def testKwargs(self):
         # This test makes sure that kwargs are passed through in each of the
         # types of operation
         arr = numpy.full((3, 3), .65) * [range(i, i + 3) for i in range(3)]
@@ -53,7 +53,7 @@ class TestMV2(basetest.CDMSBaseTest):
         self.assertEqual(
             len(MV2.sometrue(values, axis=0, keepdims=True).shape), len(values.shape))
 
-    def dtestPowAndSqrt(self):
+    def testPowAndSqrt(self):
         vel = MV2.sqrt(self.u_file ** 2 + self.v_file ** 2)
         vel.id = 'velocity'
         vel2 = MV2.sqrt(self.u_transient ** 2 + self.v_transient ** 2)
@@ -61,17 +61,17 @@ class TestMV2(basetest.CDMSBaseTest):
         vel2.units = self.u_file.units
         self.assertTrue(MV2.allequal(vel, vel2))
 
-    def dntestAdditionSubtraction(self):
+    def testAdditionSubtraction(self):
         x1 = self.other_u_file + 1.0
         x2 = 1.0 - self.u_file
         self.assertTrue(MV2.allequal(x1 + x2[0], 2.0))
 
-    def dtestNegAbs(self):
+    def testNegAbs(self):
         x11 = -self.other_u_file
         x12 = MV2.absolute(self.u_file)
         self.assertTrue(MV2.allequal(x11 + x12[0], 0))
 
-    def dtestMulDiv(self):
+    def testMulDiv(self):
         scalar_mul = self.u_file * 2
         broadcast_mul = scalar_mul * self.other_u_file
         self.assertTrue(
@@ -83,23 +83,23 @@ class TestMV2(basetest.CDMSBaseTest):
         scalar_right = 1 / self.u_file[:]
         self.assertTrue(MV2.allclose(scalar_mul * scalar_right, 2))
 
-    def dtestTypeCoercion(self):
+    def testTypeCoercion(self):
         x9 = 3 * self.u_file[:]
         x15 = x9.astype(numpy.float32)
         self.assertTrue(x15.dtype.char == numpy.sctype2char(numpy.float32))
 
-    def dtestArange(self):
+    def testArange(self):
         test_range = MV2.arange(16, axis=self.u_lat)
         self.assertEqual(len(test_range), 16)
         self.assertIsNotNone(test_range.getLatitude())
 
-    def dtestMaskedArray(self):
+    def testMaskedArray(self):
         xmarray = MV2.masked_array(self.u_file, mask=self.u_file > .01)
         self.assertEqual(len(xmarray.getAxisList()),
                          len(self.u_file.getAxisList()))
         self.assertTrue(MV2.allequal(xmarray.mask, self.u_file > .01))
 
-    def dtestAverage(self):
+    def testAverage(self):
         xav = MV2.average(self.ones, axis=1)
         self.assertTrue(MV2.allequal(xav, 1))
         xav2 = MV2.average(self.u_file)
@@ -113,7 +113,7 @@ class TestMV2(basetest.CDMSBaseTest):
         self.assertEqual(av, 9.8)
         self.assertEqual(wav, 10)
 
-    def dtestArrayGeneration(self):
+    def testArrayGeneration(self):
         xones = MV2.ones(
             self.other_u_file.shape,
             numpy.float32,
@@ -131,7 +131,7 @@ class TestMV2(basetest.CDMSBaseTest):
         self.assertTrue(MV2.allequal(xzeros, 0))
         self.assertEqual(xzeros.shape, self.u_file.shape)
 
-    def dtestChoose(self):
+    def testChoose(self):
         ct1 = MV2.TransientVariable([1, 1, 2, 0, 1])
         ctr = MV2.choose(ct1, [numpy.ma.masked, 10, 20, 30, 40])
         self.assertTrue(MV2.allclose(ctr, [10, 10, 20, 100, 10]))
@@ -142,7 +142,7 @@ class TestMV2(basetest.CDMSBaseTest):
         ctr = MV2.choose(MV2.greater(ctx, 100), (ctx, cty))
         self.assertTrue(MV2.allclose(ctr, [1, 2, 3, -150, 4]))
 
-    def dtestConcatenate(self):
+    def testConcatenate(self):
         xcon = MV2.concatenate((self.u_file, self.v_file))
         self.assertEqual(
             xcon.shape,
@@ -151,17 +151,17 @@ class TestMV2(basetest.CDMSBaseTest):
              self.u_file.shape[1],
              self.u_file.shape[2]))
 
-    def dtestIsMasked(self):
+    def testIsMasked(self):
         self.assertFalse(MV2.isMaskedVariable(numpy.ones(self.ones.shape)))
         self.assertTrue(MV2.isMaskedVariable(self.ones))
 
-    def dtestOuterproduct(self):
+    def testOuterproduct(self):
         xouter = MV2.outerproduct(MV2.arange(3.), MV2.arange(5.))
         self.assertEqual(xouter.shape, (3, 5))
         for i in range(3):
             self.assertTrue(MV2.allequal(xouter[i], i * xouter[1]))
 
-    def dtestMaskingFunctions(self):
+    def testMaskingFunctions(self):
         xouter = MV2.outerproduct(MV2.arange(5.), [1] * 10)
         masked = MV2.masked_greater(xouter, 1)
         self.assertTrue(MV2.allequal(masked.mask[2:], True))
@@ -196,14 +196,14 @@ class TestMV2(basetest.CDMSBaseTest):
         self.assertTrue(MV2.allequal(masked.mask[2:4], False))
         self.assertTrue(MV2.allequal(masked.mask[4:], True))
 
-    def dtestCount(self):
+    def testCount(self):
         xouter = MV2.outerproduct(MV2.arange(5.), [1] * 10)
         masked = MV2.masked_outside(xouter, 1, 3)
         self.assertEqual(MV2.count(masked), 30)
         self.assertTrue(MV2.allequal(MV2.count(masked, 0), 3))
         self.assertTrue((MV2.count(masked, 1) == [0, 10, 10, 10, 0]).all())
 
-    def dtestMinMax(self):
+    def testMinMax(self):
 
         # Scalar
         xouter = MV2.outerproduct(MV2.arange(10), MV2.arange(10))
@@ -239,12 +239,12 @@ class TestMV2(basetest.CDMSBaseTest):
         t3 = MV2.maximum.outer(t1, t2)
         self.assertTrue(MV2.allequal(t3, [[1, 10], [2, 10]]))
 
-    def dtestProduct(self):
+    def testProduct(self):
         xprod = MV2.product(self.u_file)
         partial_prod = MV2.product(self.u_file[1:])
         self.assertTrue(MV2.allequal(xprod / partial_prod, self.u_file[0]))
 
-    def dtestArrayManipulation(self):
+    def testArrayManipulation(self):
         # Concat
         arr1 = MV2.ones((1, 2, 3))
         arr2 = MV2.ones((1, 2, 3))
@@ -260,24 +260,24 @@ class TestMV2(basetest.CDMSBaseTest):
         arr6 = MV2.resize(arr5, (4, 4))
         self.assertEqual(arr6.shape, (4, 4))
 
-    def dtestSomeTrue(self):
+    def testSomeTrue(self):
         xsome = MV2.zeros((3, 4))
         xsome[1, 2] = 1
         self.assertFalse(MV2.sometrue(xsome[0]))
         self.assertTrue(MV2.sometrue(xsome[1]))
 
-    def dtestSum(self):
+    def testSum(self):
         ones = MV2.ones((1, 2, 3))
         self.assertEqual(MV2.sum(ones), 6)
         self.assertTrue(MV2.allequal(MV2.sum(ones, axis=2), 3))
 
-    def dtestTake(self):
+    def testTake(self):
         t = MV2.take(self.u_file, [2, 4, 6], axis=2)
         self.assertTrue(MV2.allequal(t[:, :, 0], self.u_file[:, :, 2]))
         self.assertTrue(MV2.allequal(t[:, :, 1], self.u_file[:, :, 4]))
         self.assertTrue(MV2.allequal(t[:, :, 2], self.u_file[:, :, 6]))
 
-    def dtestTranspose(self):
+    def testTranspose(self):
         ## transpose(a, axes=None)
         # transpose(a, axes=None) reorder dimensions per tuple axes
         xtr = MV2.transpose(self.u_file)
@@ -290,18 +290,18 @@ class TestMV2(basetest.CDMSBaseTest):
         self.assertTrue(MV2.allclose(xtr1, xtr3))
         self.assertTrue(MV2.allclose(xtr2, xtr3))
 
-    def dntestWhere(self):
+    def testWhere(self):
         xouter = MV2.outerproduct(MV2.arange(3), MV2.arange(3))
         xwhere = MV2.where(MV2.greater(xouter, 3), xouter, -123)
         self.assertEqual(xwhere[-1, -1], 4)
         xwhere.mask = xwhere == 4
         self.assertTrue(MV2.allequal(xwhere, -123))
 
-    def dtestDiagnoal(self):
+    def testDiagnoal(self):
         xdiag = MV2.TransientVariable([[1, 2, 3], [4, 5, 6]])
         self.assertTrue(MV2.allclose(MV2.diagonal(xdiag, 1), [2, 6]))
 
-    def dtestBroadcasting(self):
+    def testBroadcasting(self):
         # Broadcast
         v_transient2 = self.v_transient[0]
         broadcasted = self.u_transient - v_transient2
@@ -311,14 +311,12 @@ class TestMV2(basetest.CDMSBaseTest):
                 broadcasted[2] +
                 v_transient2))
 
-    def dtestMean(self):
+    def testMean(self):
         a = MV2.ones((13, 14))
         b = a.mean()
         self.assertEqual(b, 1.0)
 
     def testCrosSectionRegrid(self):
-        import pdb
-        pdb.set_trace()
         fmod = self.getDataFile("20160520.A_WCYCL1850.ne30_oEC.edison.alpha6_01_ANN_climo_Q.nc")
         fobs = self.getDataFile("MERRA_ANN_climo_SHUM.nc")
         var1=fmod('Q')

@@ -634,20 +634,27 @@ static int cdvarinq(PyCdunifFileObject *file, int varid, char* name,
  * Caution: the following specification may not be fully portable.
  * The comments indicate the correct Cdunif specification. The assignment
  * of Python types assumes that 'short' is 16-bit and 'int' is 32-bit.
+ *
+ * data_types is initialized int initCdunif.
  */
 
-int data_types[] = { -1, /* not used */
-NPY_BYTE, /* signed 8-bit int */
-NPY_CHAR, /* 8-bit character */
-NPY_SHORT, /* 16-bit signed int */
-NPY_INT, /* 32-bit signed int */
-NPY_FLOAT, /* 32-bit IEEE float */
-NPY_DOUBLE, /* 64-bit IEEE float */
-NPY_UBYTE, /* NC_UBYTE */
-NPY_USHORT, /*NC_USHORT */
-NPY_UINT, /*NC_UINT */
-NPY_INT64, /*int64 */
-NPY_UINT64, NPY_STRING };
+
+static int data_types[13] = {[ 0 ... 12] = -1};
+
+//#define NC_NAT          0   /**< Not A Type */
+//#define NC_BYTE         1   /**< signed 1 byte integer */
+//#define NC_CHAR     2   /**< ISO/ASCII character */
+//#define NC_SHORT    3   /**< signed 2 byte integer */
+//#define NC_INT          4   /**< signed 4 byte integer */
+//#define NC_LONG         NC_INT  /**< \deprecated required for backward compatibility. */
+//#define NC_FLOAT    5   /**< single precision floating point number */
+//#define NC_DOUBLE   6   /**< double precision floating point number */
+//#define NC_UBYTE    7   /**< unsigned 1 byte int */
+//#define NC_USHORT   8   /**< unsigned 2-byte int */
+//#define NC_UINT     9   /**< unsigned 4-byte int */
+//#define NC_INT64    10  /**< signed 8-byte int */
+//#define NC_UINT64   11  /**< unsigned 8-byte int */
+//#define NC_STRING   12  /**< string */
 
 static char *dimension_types[] = { "error", "global", "local" };
 
@@ -666,6 +673,7 @@ static int nc_put_att_any(int ncid, int varid, const char *name, nc_type xtype,
 	case NC_SHORT:
 		return nc_put_att_short(ncid, varid, name, xtype, len, (short *) data);
 		break;
+	/* case NC_LONG: same as value as NC_INT */
 	case NC_INT:
 		return nc_put_att_int(ncid, varid, name, xtype, len, (int *) data);
 		break;
@@ -728,6 +736,7 @@ static int nc_put_var1_any(int ncid, int varid, nc_type xtype,
 	case NC_SHORT:
 		return nc_put_var1_short(ncid, varid, indexp, (short *) data);
 		break;
+	    /* case NC_LONG: same as value as NC_INT */
 	case NC_INT:
 		return nc_put_var1_int(ncid, varid, indexp, (int *) data);
 		break;
@@ -789,6 +798,7 @@ static int nc_put_vars_any(int ncid, int varid, nc_type xtype,
 		return nc_put_vars_short(ncid, varid, start, count, stride,
 				(short *) data);
 		break;
+	    /* case NC_LONG: same as value as NC_INT */
 	case NC_INT:
 		return nc_put_vars_int(ncid, varid, start, count, stride, (int *) data);
 		break;
@@ -854,6 +864,7 @@ static int nc_get_att_any(int ncid, int varid, const char *name, nc_type xtype,
 	case NC_SHORT:
 		return nc_get_att_short(ncid, varid, name, (short *) data);
 		break;
+	    /* case NC_LONG: same as value as NC_INT */
 	case NC_INT:
 		return nc_get_att_int(ncid, varid, name, (int *) data);
 		break;
@@ -994,8 +1005,14 @@ static nc_type cdunif_type_from_code(char code) {
 	case 'h':
 		type = NC_SHORT;
 		break;
+    case 'l':
+#ifdef NC_INT64
+        type = NC_INT64;
+#else
+        type = NC_LONG;
+#endif
+        break;
 	case 'i':
-	case 'l':
 		type = NC_INT;
 		break;
 	case 'f':
@@ -1015,10 +1032,17 @@ static nc_type cdunif_type_from_code(char code) {
 		break;
 #endif
 #ifdef NC_UINT
-	case 'L':
-		type = NC_UINT;
-		break;
+    case 'L':
+#ifdef NC_UINT64
+        type = NC_UINT64;
+#else
+        type=NC_UINT;
 #endif
+        break;
+#endif
+    case 'I':
+        type = NC_UINT;
+        break;
 #ifdef NC_INT64
 	case 'q':
 		type = NC_INT64;
@@ -1047,22 +1071,60 @@ static int cdunif_type_from_type(char array_type) {
 		type = NC_CHAR;
 		break;
 	case NPY_UBYTE:
+        type = NC_UBYTE;
+        break;
 	case NPY_BYTE:
+	case NPY_BOOL:
 		type = NC_BYTE;
 		break;
+    case NPY_USHORT:
+        type = NC_USHORT;
+        break;
 	case NPY_SHORT:
 		type = NC_SHORT;
 		break;
 	case NPY_INT:
-	case NPY_LONG:
 		type = NC_INT;
 		break;
+    case NPY_UINT:
+        type = NC_UINT;
+        break;
 	case NPY_FLOAT:
 		type = NC_FLOAT;
 		break;
+    case NPY_LONGDOUBLE:
+        type = NC_DOUBLE;
+        break;
 	case NPY_DOUBLE:
 		type = NC_DOUBLE;
 		break;
+    case NPY_STRING:
+        type = NC_STRING;
+        break;
+    case NPY_ULONG:
+#ifdef NC_UINT64
+        type = NC_UINT64;
+#else
+        type = NC_UINT;
+#endif
+        break;
+    case NPY_LONG:
+#ifdef NC_INT64
+        type = NC_INT64;
+#else
+        type = NC_INT;
+#endif
+        break;
+#ifdef NC_INT64
+    case NPY_LONGLONG:
+        type = NC_INT64;
+        break;
+#endif
+#ifdef NC_UINT64
+    case NPY_ULONGLONG:
+        type = NC_UINT64;
+        break;
+#endif
 	default:
 		type = 0;
 	}
@@ -1137,10 +1199,14 @@ static void collect_attributes(PyCdunifFileObject *file, int varid,
 				PyList_Append(listObj, szObj);
 			}
 			string = PyStr_FromString(st[0]);
-			if (string != NULL) {
-				PyDict_SetItemString(attributes, name, listObj);
-				Py_DECREF(string);
-			}
+            if (string != NULL) {
+                if (t_len > 1) {
+                    PyDict_SetItemString(attributes, name, listObj);
+                } else {
+                    PyDict_SetItemString(attributes, name, string);
+                }
+                Py_DECREF(string);
+            }
 			nc_free_string(t_len, st);
 			free(st);
 		} else {
@@ -1226,6 +1292,14 @@ static int set_attribute(int fileid, int varid, PyObject *attributes,
 		if (array != NULL) {
 			int len = (array->nd == 0) ? 1 : array->dimensions[0];
 			int type = cdunif_type_from_code(array->descr->type);
+			// Do not write longlong type attribute not NetCDF 3 format*/
+
+			if((type == NC_INT64)
+			    && (strcmp(name, "_FillValue") !=0)
+			    && (strcmp(name, "missing_value") !=0)){
+			    type=NC_LONG;
+			}
+
 			if (type == 0) {
 				/* 0 means probably going to freak out netcdf */
 				fprintf(stderr,
@@ -1248,7 +1322,7 @@ static int set_attribute(int fileid, int varid, PyObject *attributes,
 					}
 				}
 				array->data = (void *) aszUnicodes;
-			} else if (data_types[type] != array->descr->type_num) {
+			} else if (data_types[type] != array->descr->type_num){
 				PyArrayObject *array2 = (PyArrayObject *) PyArray_Cast(array,
 						data_types[type]);
 				Py_DECREF(array);
@@ -3360,5 +3434,18 @@ MODULE_INIT_FUNC (Cdunif) {
 	/* Check for errors */
 	if (PyErr_Occurred())
 		Py_FatalError("can't initialize module Cdunif");
-	return(m);
+    data_types[NC_BYTE]=NPY_BYTE; /* signed 8-bit int NC_BYTE*/
+    data_types[NC_CHAR]=NPY_CHAR; /* 8-bit character NC_CHAR*/
+    data_types[NC_SHORT]=NPY_SHORT; /* 16-bit signed int NC_SHORT*/
+    data_types[NC_INT]=NPY_INT; /* 32-bit signed int NC_INT NC_LONG(4 byte)*/
+    data_types[NC_FLOAT]=NPY_FLOAT; /* 32-bit IEEE float NC_FLOAT*/
+    data_types[NC_DOUBLE]=NPY_DOUBLE; /* 64-bit IEEE float NC_DOUBLE*/
+    data_types[NC_UBYTE]=NPY_UBYTE; /* NC_UBYTE */
+    data_types[NC_USHORT]=NPY_USHORT; /*NC_USHORT */
+    data_types[NC_UINT]=NPY_UINT; /*NC_UINT */
+    data_types[NC_INT64]=NPY_LONGLONG; /*int64 */
+    data_types[NC_UINT64]=NPY_ULONGLONG; /* uint64 */
+    data_types[NC_STRING]=NPY_STRING;
+    return(m);
 }
+

@@ -151,7 +151,7 @@ class FileVariable(DatasetVariable):
         if (not name in self.__cdms_internals__) and (value is not None):
             try:
                 setattr(self._obj_, name, value)
-            except CdunifError:
+            except Exception :
                 raise CDMSError("Setting %s.%s=%s"%(self.id,name,repr(value)))
             self.attributes[name]=value
         self.__dict__[name] = value

@@ -27,7 +27,6 @@ from .fvariable import FileVariable
 from .tvariable import asVariable
 from .cdmsNode import CdDatatypes
 from . import convention
-from . import typeconv
 
 # Default is serial mode until setNetcdfUseParallelFlag(1) is called
 rk = 0
@@ -1297,7 +1296,7 @@ class CdmsFile(CdmsObj, cuDataset):
         if ar is None or (unlimited == 1 and getNetcdfUseParallelFlag() == 0):
             cufile.createDimension(name, None)
             if ar is None:
-                typecode = numpy.float
+                typecode = nupy.dtype(numpy.float).char
             else:
                 typecode = ar.dtype.char
         else:
@@ -1305,7 +1304,7 @@ class CdmsFile(CdmsObj, cuDataset):
             typecode = ar.dtype.char
 
         # Compatibility: revert to old typecode for cdunif
-        typecode = typeconv.oldtypecodes[typecode]
+        # typecode = typeconv.oldtypecodes[typecode]
         cuvar = cufile.createVariable(name, typecode, (name,))
 
         # Cdunif should really create this extra dimension info:
@@ -1541,7 +1540,8 @@ class CdmsFile(CdmsObj, cuDataset):
 
         try:
             # Compatibility: revert to old typecode for cdunif
-            numericType = typeconv.oldtypecodes[numericType]
+            # numericType = typeconv.oldtypecodes[numericType]
+            numericType = numpy.dtype(numericType).char
             cuvar = cufile.createVariable(name, numericType, tuple(dimensions))
         except Exception as err:
             print(err)
@@ -1883,7 +1883,8 @@ class CdmsFile(CdmsObj, cuDataset):
 
         # Make var an AbstractVariable
         if dtype is None and typecode is not None:
-            dtype = typeconv.convtypecode2(typecode)
+            # dtype = typeconv.convtypecode2(typecode)
+            dtype = typecode
         typecode = dtype
         if typecode is not None and var.dtype.char != typecode:
             var = var.astype(typecode)
@@ -1912,7 +1913,7 @@ class CdmsFile(CdmsObj, cuDataset):
         # If var has typecode numpy.int, and v is created from var, then v will have
         # typecode numpy.int32. (This is a Cdunif 'feature'). This causes a downcast error
         # for numpy versions 23+, so make the downcast explicit.
-        if var.typecode() == numpy.int and v.typecode() == numpy.int32 and pack is False:
+        if var.typecode() == numpy.dtype(numpy.int).char and v.typecode() == numpy.dtype(numpy.int32).char and pack is False:
             var = var.astype(numpy.int32)
 
         # Write

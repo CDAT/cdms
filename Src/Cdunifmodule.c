@@ -1493,6 +1493,8 @@ static int Cdunif_file_init(PyCdunifFileObject *self) {
 		char pseudoname[2 * CU_MAX_NAME + 1];
 		char dimunits[CU_MAX_NAME + 1];
 		char vname[CU_MAX_NAME + 1];
+		char charset[] =
+		        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_";
 		long size;
 		PyObject *size_ob;
 		Py_BEGIN_ALLOW_THREADS
@@ -1501,6 +1503,11 @@ static int Cdunif_file_init(PyCdunifFileObject *self) {
 		;
 		cddiminq(self, i, name, dimunits, &nctype, &dimtype, vname, &size);
 		release_Cdunif_lock()
+		// Verify for special characters in dimunits
+		// python3 does not allow to convert them to string
+            if (dimunits[strspn(dimunits, charset)] != 0) {
+                strcpy(dimunits, "");
+            }
 		;
 		Py_END_ALLOW_THREADS
 		;

@@ -2,6 +2,7 @@
 
 import numpy
 import cdms2
+import copy
 from . import  _regrid
 from .error import RegridError
 import warnings

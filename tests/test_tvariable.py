@@ -152,6 +152,8 @@ class TestTransientVariables(basetest.CDMSBaseTest):
         b[0, 0] = -48.
         newlat.setBounds(b)
 
+        import pdb
+        pdb.set_trace()
         tv4 = cdms2.createVariable(tv[:], copy=1, fill_value=255.)
         tv4[0, 1:4] = 20.0
 

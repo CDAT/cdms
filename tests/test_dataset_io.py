@@ -65,6 +65,7 @@ class TestDatasetIO(basetest.CDMSBaseTest):
         v2 = self.v.subSlice(2)
         uout = out.write(u0)
         vout = out.write(v2, attributes=self.v.attributes, id='v', extend=1, index=2)
+        uout.getTime()
         out.write(u1, index=1)
         out.write(v0)
         out.write(u2)

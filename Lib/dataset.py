@@ -1947,6 +1947,9 @@ class CdmsFile(CdmsObj, cuDataset):
             else:
                 isoverlap = 1
             if isoverlap == 1:
+                # Make sure file is up to date before copying.
+                # user could have extended the file previously.
+                self.sync()
                 v[index:index + len(vec1)] = var.astype(v.dtype)
                 vec2[index:index + len(vec1)] = vec1[:].astype(vec2[:].dtype)
                 if bounds1 is not None:

@@ -225,8 +225,8 @@ class var_binary_operation:
         grid = commonGrid(a,b,axes)
         ta = _makeMaskedArg(a)
         tb = _makeMaskedArg(b)
-        import pdb
-        pdb.set_trace()
+#        import pdb
+#        pdb.set_trace()
         maresult = self.mafunc(ta,tb, **kwargs)
         return TransientVariable(maresult, axes=axes, grid=grid,no_update_from=True,id=id)
 

@@ -422,7 +422,7 @@ class AbstractVariable(CdmsObj, Slab):
             
         if asarray==0 and isinstance(mv, numpy.ndarray):
             mv = mv[0]
-        if type(mv) is bytes and self.dtype.char not in ['?','c','O','S']:
+        if type(mv) is str and self.dtype.char not in ['?','c','O','S']:
             try:
                 mv = float(mv)
             except:
@@ -1228,6 +1228,10 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
                 if speclist[i] is not unspecified:
                     raise CDMSError('Conflict between specifier %s and %s'%(repr(speclist[i]),repr(keys)))
                 speclist[i] = v
+        # Replace remaining unspecified for slice(None, ...)
+        for i in range(myrank):
+            if speclist[i] is unspecified:
+                speclist[i] = slice(None, None, None)
 
         return speclist
 
@@ -1308,9 +1312,9 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
                     if stop is None:
                         # stop=-1
                         adjustit = 0
-                if start<0: 
+                if (start is None or start<0): 
                     start=start%length
-                if stop<0 and adjustit: 
+                if (stop is None or stop<0) and adjustit: 
                     stop=stop%length
             if altered: 
                 slicelist[i] = slice(start, stop, step)
@@ -1355,7 +1359,7 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
                  isinstance(item, numpy.integer) or \
                  isinstance(item, int) or \
                  isinstance(item, int) or \
-                 isinstance(item, bytes) or \
+                 isinstance(item, str) or \
                  type(item) in CdtimeTypes:
                 axis = self.getAxis(i)
                 #
@@ -1545,7 +1549,7 @@ def orderparse (order):
             remaining axes.
           (name) meaning an axis whose id is name
     """
-    if not isinstance(order, bytes):
+    if not isinstance(order, str):
         raise CDMSError('order arguments must be strings.')
     pos = 0
     result=[]
@@ -1560,7 +1564,7 @@ def orderparse (order):
             r = Ellipsis
         elif len(r) == 1:
             if r in string.digits:
-                r = string.atoi(r)
+                r = int(r)
         result.append(r)
         pos = m.end(0)
 
@@ -1580,7 +1584,7 @@ def order2index (axes, order):
             remaining axes.
           (name) meaning an axis whose id is name
     """
-    if isinstance(order, bytes):
+    if isinstance(order, str):
         result = orderparse(order)
     elif isinstance(order, list):
         result = order
@@ -1593,7 +1597,7 @@ def order2index (axes, order):
     pos = 0
     while j < len(result):
         item = result[j]
-        if isinstance(item, bytes):
+        if isinstance(item, str):
             if item == 't': 
                 spec = 'time'
             elif item == 'x': 

@@ -202,7 +202,8 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             for key, value in list(attributes.items()):
                 if (key in ['shape', 'flat', 'imaginary', 'real'] or key[0] == '_') and key not in ['_FillValue']:
                     raise CDMSError('Bad key in attributes: ' + key)
-                elif key == 'missing_value':
+                elif (key == 'missing_value' or key == '_FillValue'):
+#                elif key == 'missing_value':
                     # ignore if fill value given explicitly
                     if fill_value is None:
                         self._setmissing(value)
@@ -211,7 +212,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
 
         # Sync up missing_value attribute and the fill value.
         self.missing_value = self._getmissing()
-        self._FillValue = self._getmissing()
+#        self._FillValue = self._getmissing()
         if id is not None:
             if not isinstance(id, str):
                 raise CDMSError('id must be a string')
@@ -282,6 +283,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             fill_value = numpy.array(fill_value).astype(dtype)
         else:
             fill_value = numpy.ma.MaskedArray(1).astype(dtype).item()
+#            fill_value = numpy.ma.default_fill_value(fill_value)
 
         self = numpy.ma.MaskedArray.__new__(cls, data, dtype=dtype,
                                             copy=ncopy,
@@ -303,6 +305,8 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         return self.filled()
 
     def expertSlice(self, slicelist):
+        if slicelist == []:
+            slicelist = ()
         return numpy.ma.MaskedArray.__getitem__(self, slicelist)
 
     def initDomain(self, axes, copyaxes=1):

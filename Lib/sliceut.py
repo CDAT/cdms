@@ -25,7 +25,7 @@ def sliceIntersect(aSlice,interval):
         irev = 1
 
     # Calculate the intersection for an increasing slice
-    px = int(((p0-i+k-1)/k)*k+i)
+    px = int((int((p0-i+k-1)/k))*k+i)
     a = max(px,i)
     b = min(j,p1)
     if a<b:
@@ -38,7 +38,7 @@ def sliceIntersect(aSlice,interval):
 
     # Reverse the slice if necessary
     if irev==1 and newSlice is not None:
-        px = int(-((-b+a+k)/k*k-a))
+        px = int(-(int((-b+a+k)/k)*k-a))
         newSlice = slice(px,a-1,-k)
     
     return newSlice
@@ -72,7 +72,7 @@ def lenSlice(aSlice):
         stop = aSlice.start
         step = -step
 
-    return ((stop-start-1)/step + 1)
+    return (int((stop-start-1)/step) + 1)
 
 def reverseSlice(s,size):
     """For 'reversed' slices (slices with negative stride),
@@ -98,7 +98,7 @@ def reverseSlice(s,size):
         raise RuntimeError("Invalid slice %s" % repr(s))
 
     k = -k
-    pk = ((j-i+k)/k)*k+i
+    pk = (int((j-i+k)/k))*k+i
     j = i+1
     i = pk%size
 

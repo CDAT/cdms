@@ -9,7 +9,6 @@ from future import standard_library
 standard_library.install_aliases()
 _debug = 0
 std_axis_attributes = ['name', 'units', 'length', 'values', 'bounds']
-import string
 import sys
 import types
 import copy
@@ -141,7 +140,7 @@ def createGaussianAxis(nlat):
     # For odd number of latitudes, gridattr returns 0 in the second half of
     # lats
     if nlat % 2:
-        mid = nlat / 2
+        mid = int(nlat / 2)
         lats[mid + 1:] = -lats[:mid][::-1]
 
     latBounds = numpy.zeros((nlat, 2), numpy.float)
@@ -689,7 +688,7 @@ class AbstractAxis(CdmsObj):
         self._doubledata_ = None
 
     def __str__(self):
-        return string.join(self.listall(), "\n") + "\n"
+        return "\n".join(self.listall()) + "\n"
 
     __repr__ = __str__
 
@@ -907,14 +906,14 @@ class AbstractAxis(CdmsObj):
         for val in self[:]:
             comptime = cdtime.reltime(val, self.units).tocomp(calendar)
             s = repr(comptime)
-            tt = string.split(s, ' ')
+            tt = str.split(s, ' ')
 
-            ttt = string.split(tt[0], '-')
+            ttt = str.split(tt[0], '-')
             yr = int(ttt[0])
             mo = int(ttt[1])
             da = int(ttt[2])
 
-            ttt = string.split(tt[1], ':')
+            ttt = str.split(tt[1], ':')
             hr = int(ttt[0])
             dtg = "%04d%02d%02d%02d" % (yr, mo, da, hr)
             result.append(dtg)
@@ -2188,6 +2187,13 @@ class FileAxis(AbstractAxis):
             raise CDMSError(ReadOnlyAxis + self.id)
         if self.parent is None:
             raise CDMSError(FileWasClosed + self.id)
+        if isinstance(index, slice):
+            low = index.start
+            high = index.stop
+            if(self.isUnlimited() and (high >= Max32int)):
+                high = self.__len__()
+            high = min(Max32int, high)
+            return self._obj_.setslice(*(low, high, numpy.ma.filled(value)))
         return self._obj_.setitem(*(index, numpy.ma.filled(value)))
 
     def __setslice__(self, low, high, value):
@@ -2571,7 +2577,7 @@ def concatenate(axes, id=None, attributes=None):
 
     data = numpy.ma.concatenate([ax[:] for ax in axes])
     boundsArray = [ax.getBounds() for ax in axes]
-    if None in boundsArray:
+    if any(elem is None for elem in boundsArray):
         bounds = None
     else:
         bounds = numpy.ma.concatenate(boundsArray)

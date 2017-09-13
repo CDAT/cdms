@@ -1,4 +1,4 @@
-## Automatically adapted for numpy.oldnumeric Aug 02, 2007 by 
+# Automatically adapted for numpy.oldnumeric Aug 02, 2007 by
 
 import cdms2
 from . import _scrip
@@ -8,9 +8,11 @@ from functools import reduce
 
 """Regrid support for nonrectangular grids, based on the SCRIP package."""
 
+
 class ScripRegridder:
 
-    def __init__(self, outputGrid, remapMatrix, sourceAddress, destAddress, inputGrid=None, sourceFrac=None, destFrac=None):
+    def __init__(self, outputGrid, remapMatrix, sourceAddress,
+                 destAddress, inputGrid=None, sourceFrac=None, destFrac=None):
         self.outputGrid = outputGrid
         self.remapMatrix = remapMatrix
         self.sourceAddress = sourceAddress
@@ -38,29 +40,39 @@ class ScripRegridder:
             else:
                 ingrid = input.getGrid()
             if ingrid is None:
-                raise RegridError("Input variable must have an associated grid.")
+                raise RegridError(
+                    "Input variable must have an associated grid.")
             rank = len(ingrid.shape)
             gridsize = ingrid.size()
             outgridshape = self.outputGrid.shape
 
             # Check that the grid matches the last dimension(s) of input
             if input.shape[-rank:] != ingrid.shape:
-                raise RegridError('Last dimensions of input array must match grid shape: %s'%repr(ingrid.shape))
-            #this expects contiguous arrays
+                raise RegridError(
+                    'Last dimensions of input array must match grid shape: %s' %
+                    repr(
+                        ingrid.shape))
+            # this expects contiguous arrays
             if input.iscontiguous() is False:
                 input = input.ascontiguous()
 
         else:
             rank = 1                    # If not a TV, last dimension is the 'cell' dimension
             gridsize = input.shape[-1]
-            outgridshape = (reduce(lambda x,y: x*y, self.outputGrid.shape, 1),)
-            
+            outgridshape = (
+                reduce(
+                    lambda x,
+                    y: x * y,
+                    self.outputGrid.shape,
+                    1),
+            )
+
         # If input is an numpy.ma, make it Numeric
         if numpy.ma.isMaskedArray(input):
             input = input.filled()
 
         restoreShape = input.shape[:-rank]
-        restoreLen = reduce(lambda x,y: x*y, restoreShape, 1)
+        restoreLen = reduce(lambda x, y: x * y, restoreShape, 1)
         oldshape = input.shape
         newshape = (restoreLen, gridsize)
         input.shape = newshape
@@ -75,7 +87,7 @@ class ScripRegridder:
 
         # If the input was a variable, so is the output
         if isvar:
-            outdomain = domain[:-rank]+(self.outputGrid,)
+            outdomain = domain[:-rank] + (self.outputGrid,)
             output = TransientVariable(output, axes=outdomain)
 
         return output
@@ -92,6 +104,7 @@ class ScripRegridder:
     def getDestinationFraction(self):
         return self.destFrac
 
+
 class ConservativeRegridder(ScripRegridder):
     """First-order conservative regrid. By default, the normalize option ="fracarea", and array 'normal'
     is not specified. If 'normal' is specified, it should be a one-dimensional array of the same length
@@ -103,10 +116,19 @@ class ConservativeRegridder(ScripRegridder):
     destArea is the area of the destination grid cells
     """
 
-    def __init__(self, outputGrid, remapMatrix, sourceAddress, destAddress, inputGrid=None, sourceFrac=None, destFrac=None, normalize="fracarea", normal=None, sourceArea=None, destArea=None):
+    def __init__(self, outputGrid, remapMatrix, sourceAddress, destAddress, inputGrid=None,
+                 sourceFrac=None, destFrac=None, normalize="fracarea", normal=None, sourceArea=None, destArea=None):
         if normalize not in ["fracarea", "destarea", "none"]:
-            raise RegridError("Invalid normalization option: %s"%normalize)
-        ScripRegridder.__init__(self, outputGrid, remapMatrix, sourceAddress, destAddress, inputGrid=inputGrid, sourceFrac=sourceFrac, destFrac=destFrac)
+            raise RegridError("Invalid normalization option: %s" % normalize)
+        ScripRegridder.__init__(
+            self,
+            outputGrid,
+            remapMatrix,
+            sourceAddress,
+            destAddress,
+            inputGrid=inputGrid,
+            sourceFrac=sourceFrac,
+            destFrac=destFrac)
         self.normalize = normalize
         self.normal = None
         self.sourceArea = sourceArea
@@ -120,34 +142,71 @@ class ConservativeRegridder(ScripRegridder):
 
     def regrid(self, input):
         if self.normal is None:
-##             print "On input, num_links = %d"%(len(self.sourceAddress))
-##             print "On input, nextra = %d"%(input.shape[0])
-##             print "On input, ninput = %d"%(input.shape[1])
-##             print "On input, noutput = %d"%(self.outputGrid.size())
-##             print "On input, shape(input) = %s"%`input.shape`
-##             print "On input, shape(output) = %s"%`self.outputGrid.shape`
-##             print "On input, shape(remap_matrix) = %s"%`self.remapMatrix.shape`
-##             print "On input, shape(src_address) = %s"%`self.sourceAddress.shape`
-##             print "On input, shape(dst_address) = %s"%`self.destAddress.shape`
-            result = _scrip.conserv_regrid(self.outputGrid.size(), input, self.remapMatrix, self.sourceAddress, self.destAddress)
+            # print "On input, num_links = %d"%(len(self.sourceAddress))
+            # print "On input, nextra = %d"%(input.shape[0])
+            # print "On input, ninput = %d"%(input.shape[1])
+            # print "On input, noutput = %d"%(self.outputGrid.size())
+            # print "On input, shape(input) = %s"%`input.shape`
+            # print "On input, shape(output) = %s"%`self.outputGrid.shape`
+            # print "On input, shape(remap_matrix) = %s"%`self.remapMatrix.shape`
+            # print "On input, shape(src_address) = %s"%`self.sourceAddress.shape`
+            # print "On input, shape(dst_address) =
+            # %s"%`self.destAddress.shape`
+            result = _scrip.conserv_regrid(
+                self.outputGrid.size(),
+                input,
+                self.remapMatrix,
+                self.sourceAddress,
+                self.destAddress)
         else:
-            result = _scrip.conserv_regrid_normal(self.outputGrid.size(), input, self.remapMatrix, self.sourceAddress, self.destAddress, self.normal)
+            result = _scrip.conserv_regrid_normal(
+                self.outputGrid.size(),
+                input,
+                self.remapMatrix,
+                self.sourceAddress,
+                self.destAddress,
+                self.normal)
         return result
+
 
 class BilinearRegridder(ScripRegridder):
 
-    def __init__(self, outputGrid, remapMatrix, sourceAddress, destAddress, inputGrid=None, sourceFrac=None, destFrac=None):
-        ScripRegridder.__init__(self, outputGrid, remapMatrix, sourceAddress, destAddress, inputGrid=inputGrid, sourceFrac=sourceFrac, destFrac=destFrac)
+    def __init__(self, outputGrid, remapMatrix, sourceAddress,
+                 destAddress, inputGrid=None, sourceFrac=None, destFrac=None):
+        ScripRegridder.__init__(
+            self,
+            outputGrid,
+            remapMatrix,
+            sourceAddress,
+            destAddress,
+            inputGrid=inputGrid,
+            sourceFrac=sourceFrac,
+            destFrac=destFrac)
 
     def regrid(self, input):
-        result = _scrip.bilinear_regrid(self.outputGrid.size(), input, self.remapMatrix, self.sourceAddress, self.destAddress)
+        result = _scrip.bilinear_regrid(
+            self.outputGrid.size(),
+            input,
+            self.remapMatrix,
+            self.sourceAddress,
+            self.destAddress)
         return result
+
 
 class BicubicRegridder(ScripRegridder):
     """Bicubic regrid."""
 
-    def __init__(self, outputGrid, remapMatrix, sourceAddress, destAddress, inputGrid=None, sourceFrac=None, destFrac=None):
-        ScripRegridder.__init__(self, outputGrid, remapMatrix, sourceAddress, destAddress, inputGrid=inputGrid, sourceFrac=sourceFrac, destFrac=destFrac)
+    def __init__(self, outputGrid, remapMatrix, sourceAddress,
+                 destAddress, inputGrid=None, sourceFrac=None, destFrac=None):
+        ScripRegridder.__init__(
+            self,
+            outputGrid,
+            remapMatrix,
+            sourceAddress,
+            destAddress,
+            inputGrid=inputGrid,
+            sourceFrac=sourceFrac,
+            destFrac=destFrac)
 
     def __call__(self, input, gradLat, gradLon, gradLatlon):
         """gradLat = df/di
@@ -161,13 +220,19 @@ class BicubicRegridder(ScripRegridder):
 
         if (gradLat.shape != input.shape or
             gradLon.shape != input.shape or
-            gradLatlon.shape != input.shape):
-            raise RegridError("All input arrays must have shape %s"%repr(input.shape))
+                gradLatlon.shape != input.shape):
+            raise RegridError(
+                "All input arrays must have shape %s" %
+                repr(
+                    input.shape))
 
-        if (type(gradLat) is not type(input) or
-            type(gradLon) is not type(input) or
-            type(gradLatlon) is not type(input)):
-            raise RegridError("All input arrays must have type %s"%repr(type(input)))
+        if (not isinstance(gradLat, type(input)) or
+            not isinstance(gradLon, type(input)) or
+                not isinstance(gradLatlon, type(input))):
+            raise RegridError(
+                "All input arrays must have type %s" %
+                repr(
+                    type(input)))
 
         # If input is a variable, make it a TV
         if isVariable(input) and not isinstance(input, TransientVariable):
@@ -185,20 +250,30 @@ class BicubicRegridder(ScripRegridder):
             else:
                 ingrid = input.getGrid()
             if ingrid is None:
-                raise RegridError("Input variable must have an associated grid.")
+                raise RegridError(
+                    "Input variable must have an associated grid.")
             rank = len(ingrid.shape)
             gridsize = ingrid.size()
             outgridshape = self.outputGrid.shape
 
             # Check that the grid matches the last dimension(s) of input
             if input.shape[-rank:] != ingrid.shape:
-                raise RegridError('Last dimensions of input array must match grid shape: %s'%repr(ingrid.shape))
+                raise RegridError(
+                    'Last dimensions of input array must match grid shape: %s' %
+                    repr(
+                        ingrid.shape))
 
         else:
             rank = 1                    # If not a TV, last dimension is the 'cell' dimension
             gridsize = input.shape[-1]
-            outgridshape = (reduce(lambda x,y: x*y, self.outputGrid.shape, 1),)
-            
+            outgridshape = (
+                reduce(
+                    lambda x,
+                    y: x * y,
+                    self.outputGrid.shape,
+                    1),
+            )
+
         # If input is an numpy.ma, make it Numeric
         if numpy.ma.isMaskedArray(input):
             input = input.filled()
@@ -207,7 +282,7 @@ class BicubicRegridder(ScripRegridder):
             gradLatlon = gradLatlon.filled()
 
         restoreShape = input.shape[:-rank]
-        restoreLen = reduce(lambda x,y: x*y, restoreShape, 1)
+        restoreLen = reduce(lambda x, y: x * y, restoreShape, 1)
         oldshape = input.shape
         newshape = (restoreLen, gridsize)
         input.shape = newshape
@@ -216,8 +291,15 @@ class BicubicRegridder(ScripRegridder):
         gradLatlon.shape = newshape
 
         # Regrid
-        output = _scrip.bicubic_regrid(self.outputGrid.size(), input, self.remapMatrix, self.sourceAddress, self.destAddress, gradLat, gradLon, gradLatlon)
-
+        output = _scrip.bicubic_regrid(
+            self.outputGrid.size(),
+            input,
+            self.remapMatrix,
+            self.sourceAddress,
+            self.destAddress,
+            gradLat,
+            gradLon,
+            gradLatlon)
 
         # Reshape output and restore input shape
         input.shape = oldshape
@@ -229,18 +311,33 @@ class BicubicRegridder(ScripRegridder):
 
         # If the input was a variable, so is the output
         if isvar:
-            outdomain = domain[:-rank]+(self.outputGrid,)
+            outdomain = domain[:-rank] + (self.outputGrid,)
             output = TransientVariable(output, axes=outdomain)
 
         return output
 
+
 class DistwgtRegridder(ScripRegridder):
 
-    def __init__(self, outputGrid, remapMatrix, sourceAddress, destAddress, inputGrid=None, sourceFrac=None, destFrac=None):
-        ScripRegridder.__init__(self, outputGrid, remapMatrix, sourceAddress, destAddress, inputGrid=inputGrid, sourceFrac=sourceFrac, destFrac=destFrac)
+    def __init__(self, outputGrid, remapMatrix, sourceAddress,
+                 destAddress, inputGrid=None, sourceFrac=None, destFrac=None):
+        ScripRegridder.__init__(
+            self,
+            outputGrid,
+            remapMatrix,
+            sourceAddress,
+            destAddress,
+            inputGrid=inputGrid,
+            sourceFrac=sourceFrac,
+            destFrac=destFrac)
 
     def regrid(self, input):
-        result = _scrip.distwgt_regrid(self.outputGrid.size(), input, self.remapMatrix, self.sourceAddress, self.destAddress)
+        result = _scrip.distwgt_regrid(
+            self.outputGrid.size(),
+            input,
+            self.remapMatrix,
+            self.sourceAddress,
+            self.destAddress)
         return result
 
 
@@ -251,23 +348,24 @@ def readRegridder(fileobj, mapMethod=None, checkGrid=1):
     and 'repaired' if necessary.
     """
 
-    if isinstance(fileobj,str):
+    if isinstance(fileobj, str):
         fileobj = cdms2.open(fileobj)
-    elif not isinstance(fileobj,cdms2.dataset.CdmsFile):
-        raise RegridError("fileobj arguments must be a cdms2 file or a string pointing to a file")
-    
+    elif not isinstance(fileobj, cdms2.dataset.CdmsFile):
+        raise RegridError(
+            "fileobj arguments must be a cdms2 file or a string pointing to a file")
+
     if mapMethod is None:
         mapString = fileobj.map_method.strip().lower()
-        if mapString[0:12]=="conservative":
+        if mapString[0:12] == "conservative":
             mapMethod = "conservative"
-        elif mapString[0:8]=="bilinear":
+        elif mapString[0:8] == "bilinear":
             mapMethod = "bilinear"
-        elif mapString[0:7]=="bicubic":
+        elif mapString[0:7] == "bicubic":
             mapMethod = "bicubic"
-        elif mapString[0:8]=="distance" or mapString[0:7]=="distwgt":
+        elif mapString[0:8] == "distance" or mapString[0:7] == "distwgt":
             mapMethod = "distwgt"
         else:
-            raise RegridError("Unrecognized map method: %s"%mapString)
+            raise RegridError("Unrecognized map method: %s" % mapString)
 
     convention = 'SCRIP'
     if list(fileobj.variables.keys()).count('S'):
@@ -285,32 +383,63 @@ def readRegridder(fileobj, mapMethod=None, checkGrid=1):
         srcfrac = fileobj('frac_a')
         dstfrac = fileobj('frac_b')
     ingrid = fileobj.readScripGrid(whichGrid="source", checkGrid=checkGrid)
-    outgrid = fileobj.readScripGrid(whichGrid="destination", checkGrid=checkGrid)
+    outgrid = fileobj.readScripGrid(
+        whichGrid="destination",
+        checkGrid=checkGrid)
 
-    if mapMethod=="conservative":
+    if mapMethod == "conservative":
         if convention == 'SCRIP':
             srcarea = fileobj('src_grid_area')
             dstarea = fileobj('dst_grid_area')
-        else: #NCAR stuff
+        else:  # NCAR stuff
             if "S2" in list(fileobj.variables.keys()):
-                remapMatrix=fileobj("S2")
+                remapMatrix = fileobj("S2")
                 sh = list(remapMatrix.shape)
-                if len(sh)==2 and sh[-1]==2:
-                    sh[-1]=1
-                    S=fileobj("S").filled()
-                    S.shape=sh
-                    remapMatrix = numpy.concatenate((S,remapMatrix),axis=1)
+                if len(sh) == 2 and sh[-1] == 2:
+                    sh[-1] = 1
+                    S = fileobj("S").filled()
+                    S.shape = sh
+                    remapMatrix = numpy.concatenate((S, remapMatrix), axis=1)
             srcarea = fileobj('area_a')
             dstarea = fileobj('area_b')
-        regridder = ConservativeRegridder(outgrid, remapMatrix,srcAddress, dstAddress, inputGrid=ingrid, sourceFrac=srcfrac, destFrac=dstfrac, sourceArea=srcarea, destArea=dstarea)
-    elif mapMethod=="bilinear":
-        regridder = BilinearRegridder(outgrid, remapMatrix,srcAddress, dstAddress, inputGrid=ingrid, sourceFrac=srcfrac, destFrac=dstfrac)
-    elif mapMethod=="bicubic":
-        regridder = BicubicRegridder(outgrid, remapMatrix,srcAddress, dstAddress, inputGrid=ingrid, sourceFrac=srcfrac, destFrac=dstfrac)
-    elif mapMethod=="distwgt":
-        regridder = DistwgtRegridder(outgrid, remapMatrix,srcAddress, dstAddress, inputGrid=ingrid, sourceFrac=srcfrac, destFrac=dstfrac)
+        regridder = ConservativeRegridder(
+            outgrid,
+            remapMatrix,
+            srcAddress,
+            dstAddress,
+            inputGrid=ingrid,
+            sourceFrac=srcfrac,
+            destFrac=dstfrac,
+            sourceArea=srcarea,
+            destArea=dstarea)
+    elif mapMethod == "bilinear":
+        regridder = BilinearRegridder(
+            outgrid,
+            remapMatrix,
+            srcAddress,
+            dstAddress,
+            inputGrid=ingrid,
+            sourceFrac=srcfrac,
+            destFrac=dstfrac)
+    elif mapMethod == "bicubic":
+        regridder = BicubicRegridder(
+            outgrid,
+            remapMatrix,
+            srcAddress,
+            dstAddress,
+            inputGrid=ingrid,
+            sourceFrac=srcfrac,
+            destFrac=dstfrac)
+    elif mapMethod == "distwgt":
+        regridder = DistwgtRegridder(
+            outgrid,
+            remapMatrix,
+            srcAddress,
+            dstAddress,
+            inputGrid=ingrid,
+            sourceFrac=srcfrac,
+            destFrac=dstfrac)
     else:
-        raise RegridError("Unrecognized map method: %s"%mapMethod)
+        raise RegridError("Unrecognized map method: %s" % mapMethod)
 
     return regridder
-

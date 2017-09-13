@@ -16,6 +16,7 @@ from cdms2 import cdmsNode
 import re
 from functools import reduce
 from cdms2.error import CDMSError
+from collections import OrderedDict
 
 usage = """Usage:
     cdscan [options] <files>
@@ -274,7 +275,7 @@ def timeindex(value, units, basetime, delta, calendar):
         return newval.value / delta
 
 
-def combineKeys(dict, typedict, timeIsLinear=0,
+def combineKeys(mydict, typedict, timeIsLinear=0,
                 referenceDelta=None, forecast=None):
     """ Combine dictionary keys into an axis.
     dict: (i,j) => (path, axisname)
@@ -286,7 +287,8 @@ def combineKeys(dict, typedict, timeIsLinear=0,
     global verbose
 
     # Sort the projected time, level indices
-    keys = sorted(dict.keys())
+    keys = OrderedDict(sorted(mydict.items())).keys()
+
 
     axislist = []
     prevend = None
@@ -302,7 +304,7 @@ def combineKeys(dict, typedict, timeIsLinear=0,
     iadj = None
     errorOccurred = 0
     for i0, i1 in keys:
-        path, name = dict[(i0, i1)]
+        path, name = mydict[(i0, i1)]
         if name0 is None:
             name0 = name
         values, units, dummy = typedict[(path, name)]
@@ -382,7 +384,7 @@ def combineKeys(dict, typedict, timeIsLinear=0,
     return fullaxis, name0, compressPart, coordToInd, firstunits, partition, linCoordToInd, errorOccurred
 
 
-def useKeys(dict, typedict, timeIsLinear=0,
+def useKeys(mydict, typedict, timeIsLinear=0,
             referenceDelta=None, forecast=None):
     """ Use dictionary keys for an axis.  This is like combineKeys (same arguments, same return values,
     was written by simplifying combineKeys), but this doesn't do nearly so much because this is
@@ -395,7 +397,7 @@ def useKeys(dict, typedict, timeIsLinear=0,
     global verbose
 
     # Sort the projected time, level indices
-    keys = sorted(dict.keys())
+    keys = OrderedDict(sorted(mydict.items())).keys()
 
     axislist = []
     name0 = None
@@ -411,7 +413,7 @@ def useKeys(dict, typedict, timeIsLinear=0,
     linCoordToInd = None
     errorOccurred = 0
     for i0, i1 in keys:
-        path, name = dict[(i0, i1)]
+        path, name = mydict[(i0, i1)]
         if name0 is None:
             name0 = name
         values, units, dummy = typedict[(path, name)]
@@ -425,29 +427,29 @@ def useKeys(dict, typedict, timeIsLinear=0,
     return fullaxis, name0, compressPart, coordToInd, firstunits, partition, linCoordToInd, errorOccurred
 
 
-def copyDict(dict):
+def copyDict(mydict):
     """Copy a dictionary-like object dict to a true dictionary"""
     result = {}
-    for key in list(dict.keys()):
-        result[key] = dict[key]
+    for key in mydict.keys():
+        result[key] = mydict[key]
 
     return result
 
 
-def disambig(name, dict, num, comparator, value):
+def disambig(name, mydict, num, comparator, value):
     """ Make an unique name from name, wrt to the keys in dictionary dict.
     Try using num first. comparator(value,dict[name]) returns 0 if equal, 1 if not.
     """
-    if name not in dict or not comparator(value, dict[name]):
+    if name not in mydict or not comparator(value, mydict[name]):
         uniqname = name
     else:
         uniqname = '%s_%d' % (name, num)
-        if uniqname in dict and comparator(value, dict[uniqname]):
+        if uniqname in mydict and comparator(value, mydict[uniqname]):
             trial_name = uniqname
             for letter in string.lowercase:
                 uniqname = '%s_%s' % (trial_name, letter)
-                if uniqname not in dict or not comparator(
-                        value, dict[uniqname]):
+                if uniqname not in mydict or not comparator(
+                        value, mydict[uniqname]):
                     break
             else:
                 raise BaseException(
@@ -483,7 +485,7 @@ def compareVarDictValues(val1, val2):
 
 
 def cleanupAttrs(attrs):
-    for attname in list(attrs.keys()):
+    for attname in attrs.keys():
         attval = attrs[attname]
         if isinstance(attval, numpy.ndarray):
             if attval.ndim == 0:
@@ -506,7 +508,7 @@ def validateAttrs(node):
     else:
         parenttype = None
     atts = node.getExternalDict()
-    for attname in list(atts.keys()):
+    for attname in atts.keys():
         (attval, datatype) = atts[attname]  # (XML value, datatype)
         constraint = node.extra.get(attname)
         if constraint is not None:
@@ -584,7 +586,9 @@ def cloneWithLatCheck(axis):
     except CDMSError:
         b = mycopy.genGenericBounds()
         mycopy.setBounds(b)
-    for k, v in list(axis.attributes.items()):
+    import pdb
+    pdb.set_trace()
+    for k, v in axis.attributes.items():
         setattr(mycopy, k, v)
     return mycopy
 
@@ -602,9 +606,9 @@ def addAttrs(fobj, eattrs):
                 varobj.__dict__[eattr] = evalue
 
 
-def setNodeDict(node, dict):
-    for key in list(dict.keys()):
-        value = dict[key]
+def setNodeDict(node, mydict):
+    for key in mydict.keys():
+        value = mydict[key]
         if (isinstance(value, numpy.integer) or
                 isinstance(value, int)):
             datatype = CdLong
@@ -922,6 +926,8 @@ def main(argv):
     else:
         template = None
 
+    import pdb
+    pdb.set_trace()
     axisdict = {}
     vardict = {}
     filemap = {}
@@ -997,6 +1003,8 @@ def main(argv):
         #   for non-partitioned axes only
         #
         tempmap = {}
+        import pdb
+        pdb.set_trace()
         for axis in list(extendDset.axes.values()):
             if not ((splitOnTime and (axis.isTime() or axis.id == timeid)) or
                     (splitOnLevel and (axis.isLevel() or axis.id == levelid))):
@@ -1022,6 +1030,9 @@ def main(argv):
         #   and axis_or_id is the id of a partitioned dimension, or
         #   the transient axis object associated with a non-partitioned dimension
         #
+
+        import pdb
+        pdb.set_trace()
         for var in list(extendDset.variables.values()):
             tempdomain = []
             for id in var.getAxisIds():
@@ -1109,12 +1120,12 @@ def main(argv):
         boundsids = []
         if splitOnTime:
             tmpdict = {}
-            for axisname in list(f.axes.keys()):
+            for axisname in f.axes.keys():
                 axis = f[axisname]
                 # was if axis.isTime() and hasattr(axis, 'bounds'):
                 if axis.isTime() and (axis.getBounds() is not None):
                     tmpdict[axis.bounds] = 1
-            boundsids = list(tmpdict.keys())
+            boundsids = tmpdict.keys()
 
         # For forecasts, get the time at which the forecast begins (tau=0) which
         # is nbdate,nbsec
@@ -1129,7 +1140,7 @@ def main(argv):
                 nbsec, cdtime.Seconds)  # fctau0 as type comptime
             fc_time_attrs = []
 
-        varnames = list(f.variables.keys())
+        varnames = f.variables.keys()
 
         # Try to force all axes to be included, but only small ones, length<100.
         # This section was motivated by a need to preserve the cloud axes isccp_prs,isccp_tau.
@@ -1137,6 +1148,8 @@ def main(argv):
         # variable per axis...
         crude_var_axes = [[ax[0] for ax in var.getDomain()]
                           for var in list(f.variables.values())]
+        import pdb
+        pdb.set_trace()
         var_axes = set().union(*crude_var_axes)
         other_axes = list(set(f.axes.values()) - var_axes)
         if len(other_axes) > 0:
@@ -1151,7 +1164,7 @@ def main(argv):
             varnames.append(axisvar.id)
         # ...try to force all axes to be considered
 
-        varnames.sort()
+        varnames = sorted(varnames)
         for varname in varnames:
 
             # If --var-locate is specified for the variable, match the basename
@@ -1372,7 +1385,9 @@ def main(argv):
     # Generate varindex, by combining variable names with
     # identical varentry values.
     varindex = []
-    varnames = sorted(filemap.keys())
+#    varnames = sorted(filemap.keys())
+    varnames = OrderedDict(sorted(filemap.items())).keys()
+
     for varname in varnames:
         varentry = sorted(filemap[varname])
 
@@ -1397,7 +1412,7 @@ def main(argv):
     if forecast:
         # The data files' time axis is interpreted to be tau time, i.e. the forecast_period.
         # Find the axis, and remember it in timedict.
-        for key in list(timedict.keys()):
+        for key in timedict.keys():
             values, units, calendar = timedict[key]
             if prevcal is not None and calendar != prevcal:
                 sameCalendars = 0
@@ -1416,7 +1431,7 @@ def main(argv):
             fc_units = basic_units
             timedict[key] = (values, fc_units, calendar)
     else:       # splitOnTime is true
-        for key in list(timedict.keys()):
+        for key in timedict.keys():
             values, units, calendar = timedict[key]
             if prevcal is not None and calendar != prevcal:
                 sameCalendars = 0
@@ -1439,6 +1454,9 @@ def main(argv):
         # >>> that all variables can have the same time axis..  For now, just raise an error
         # >>> if there are time axis differences at this point.
         values0, units0, calendar0 = timedict[list(timedict.keys())[0]]
+        import pdb
+        pdb.set_trace()
+
         timedict_same = all([((values0 == values1).all() and units0 == units1 and calendar0 == calendar1)
                              for (values1, units1, calendar1) in list(timedict.values())])
         if not timedict_same:
@@ -1449,7 +1467,7 @@ def main(argv):
         fc_time_attr = fc_time_attrs[0]
         # go through all time attributes (each a dictionary)
         for fcta in fc_time_attrs:
-            for attrn in list(fc_time_attr.keys()):
+            for attrn in fc_time_attr.keys():
                 if attrn not in fcta:
                     # key attrn isn't in all time attributes
                     del fc_time_attr[attrn]
@@ -1461,7 +1479,7 @@ def main(argv):
         # Finally, add the appropriate standard_name to it, if we haven't already gotten one from
         # the data file.  If the file has anything other than 'forecast_period', it's wrong, but
         # we'll stick with it anyway.
-        if 'standard_name' not in list(fc_time_attr.keys()):
+        if 'standard_name' not in fc_time_attr.keys():
             fc_time_attr['standard_name'] = 'forecast_period'
 
     # Create partitioned axes
@@ -1575,7 +1593,7 @@ def main(argv):
         axisobj.units = units
         # For forecasts, give the time axis some saved attributes.
         if forecast and axisobj.isTime():
-            for attr in list(fc_time_attr.keys()):
+            for attr in fc_time_attr.keys():
                 if not hasattr(axisobj, attr):
                     setattr(axisobj, attr, fc_time_attr[attr])
         if timeIsLinear and axisobj.isTime():
@@ -1655,7 +1673,9 @@ def main(argv):
                     duplicatevars[tuple(varindexname)] = (currentpath, path)
             else:
                 newslicedict[(i0, i1, j0, j1, fctau0)] = path
-        keys = sorted(newslicedict.keys())
+#        keys = sorted(newslicedict.keys())
+        keys = OrderedDict(sorted(newslicedict.items())).keys()
+
         newslicelist = []
         for i0, i1, j0, j1, fctau0 in keys:
             path = newslicedict[(i0, i1, j0, j1, fctau0)]
@@ -1665,7 +1685,7 @@ def main(argv):
     # Check if any duplicated variables are a function of longitude or latitude.
     # Raise an exception if so.
     illegalvars = []
-    for varlist in list(duplicatevars.keys()):
+    for varlist in duplicatevars.keys():
         for varname in varlist:
             if (excludeList is not None) and (varname in excludeList):
                 continue
@@ -1679,9 +1699,12 @@ def main(argv):
             "Variable '%s' is duplicated, and is a function of lat or lon: files %s, %s" %
             illegalvars[0])
 
+    import pdb
+    pdb.set_trace()
+
     if verbose and len(list(duplicatevars.values())) > 0:
         print('Duplicate variables:', file=sys.stderr)
-        for varlist in list(duplicatevars.keys()):
+        for varlist in duplicatevars.keys():
             path1, path2 = duplicatevars[varlist]
             print('\t', varlist, '\t', path1, '\t', path2, file=sys.stderr)
 
@@ -1706,7 +1729,7 @@ def main(argv):
     validateAttrs(datasetnode)
 
     timeWasOverridden = 0
-    keys = sorted(axisdict.keys())
+    keys = OrderedDict(sorted(axisdict.items())).keys()
     for key in keys:
         axis = axisdict[key]
         tcode = axis.typecode()
@@ -1764,9 +1787,12 @@ def main(argv):
         validateAttrs(node)
         datasetnode.addId(axis.id, node)
 
-    keys = sorted(vardict.keys())
-    keys = vardict.keys()
-    keys = list(keys).sort()
+#    keys = sorted(vardict.keys())
+#    keys = vardict.keys()
+#    keys = list(keys).sort()
+    keys = OrderedDict(sorted(vardict.items())).keys()
+    import pdb
+    pdb.set_trace()
     for key in keys:
         if (includeList is not None) and (key not in includeList):
             continue

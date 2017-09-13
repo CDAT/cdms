@@ -139,7 +139,9 @@ class AbstractVariable(CdmsObj, Slab):
         if not hasattr(self,'missing_value'):
             self.missing_value = None
         else:
-            if isinstance(self.missing_value,str):
+            if isinstance(self.missing_value,bytes):
+                self.missing_value = None
+            elif isinstance(self.missing_value,str):
                 self.missing_value = None
             elif numpy.isnan(self.missing_value):
               self.missing_value = None
@@ -186,12 +188,12 @@ class AbstractVariable(CdmsObj, Slab):
                 result = numpy.ma.masked_array(ar)
             elif missing==inf or missing!=missing: # (x!=x) ==> x is NaN
                 result = numpy.ma.masked_object(ar, missing, copy=0)
-            elif ar.dtype.char=='c':
+            elif ar.dtype.char == 'c' or ar.dtype.char == 'S':
                 # umath.equal is not implemented
                 resultmask = (ar==missing)
                 if not resultmask.any():
                     resultmask = numpy.ma.nomask
-                result = numpy.ma.masked_array(ar, mask=resultmask, fill_value=missing)
+                result = numpy.ma.masked_array(ar, mask=resultmask, fill_value=missing).astype(str)
             else:
                 result = numpy.ma.masked_values(ar, missing, copy=0)
         elif ar is numpy.ma.masked:

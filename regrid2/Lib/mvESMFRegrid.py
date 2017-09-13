@@ -11,9 +11,9 @@ import re
 import numpy
 
 import ESMF
-from regrid2 import esmf
-from regrid2 import RegridError
-from regrid2 import GenericRegrid
+from . import esmf
+from . import RegridError
+from .mvGenericRegrid import GenericRegrid
 
 ESMF.Manager(debug=False)
 HAVE_MPI = False
@@ -77,7 +77,7 @@ class ESMFRegrid(GenericRegrid):
 
         self.regridMethod = BILINEAR
         self.regridMethodStr = 'linear'
-        if isinstance(regridMethod, bytes):
+        if isinstance(regridMethod, str):
             if re.search('conserv', regridMethod.lower()):
                 self.regridMethod = CONSERVE
                 self.regridMethodStr = 'conserve'
@@ -88,7 +88,7 @@ class ESMFRegrid(GenericRegrid):
         # data stagger
         self.staggerloc = CENTER
         self.staggerlocStr = 'center'
-        if isinstance(staggerLoc, bytes):
+        if isinstance(staggerLoc, str):
             if re.search('vface', staggerLoc.lower(), re.I):
                 self.staggerloc = VFACE
                 self.staggerlocStr = 'vcorner'

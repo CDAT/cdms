@@ -116,7 +116,7 @@ class TestCurvilinearGrids(basetest.CDMSBaseTest):
         self.assertFalse(not numpy.ma.allclose(latx.data, latb, atol=1.e-5))
         latx = latsamp[14:19, 25:31]
         self.assertFalse(not numpy.ma.allclose(latx.data, latb, atol=1.e-5))
-        latrad = latsamp * numpy.pi / 180.0
+        latrad = latsamp[:] * numpy.pi / 180.0
 
         f.close()
 

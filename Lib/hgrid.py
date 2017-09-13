@@ -15,6 +15,7 @@ from .axis import getAutoBounds, allclose
 from . import bindex
 from . import _bindex
 from functools import reduce
+import copy
 
 MethodNotImplemented = "Method not yet implemented"
 
@@ -271,10 +272,9 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         cufile is a Cdunif file, NOT a CDMS file.
         gridtitle is a string identifying the grid.
         """
-        import copy
 
-        lat = numpy.ma.filled(self._lataxis_)
-        lon = numpy.ma.filled(self._lonaxis_)
+        lat = numpy.ma.filled(self._lataxis_[:])
+        lon = numpy.ma.filled(self._lonaxis_[:])
         blat, blon = self.getBounds()
         mask = self.getMask()
 
@@ -325,14 +325,13 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
 
     def toGenericGrid(self, gridid=None):
 
-        import copy
         from .auxcoord import TransientAuxAxis1D
         from .coord import TransientVirtualAxis
         from .gengrid import TransientGenericGrid
 
-        lat = numpy.ma.filled(self._lataxis_)
+        lat = numpy.ma.filled(self._lataxis_[:])
         latunits = self._lataxis_.units
-        lon = numpy.ma.filled(self._lonaxis_)
+        lon = numpy.ma.filled(self._lonaxis_[:])
         lonunits = self._lonaxis_.units
         blat, blon = self.getBounds()
         mask = self.getMask()
@@ -587,12 +586,12 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         if self._index_ is None:
             # Trying to stick in Stephane Raynaud's patch for autodetection
             nj,ni = self._lataxis_.shape
-            dlon = numpy.max(self._lonaxis_)-numpy.min(self._lonaxis_)
+            dlon = numpy.max(self._lonaxis_[:])-numpy.min(self._lonaxis_[:])
             dx = max(dlon/ni,dlon/nj)
-            dlat = numpy.max(self._lataxis_)-numpy.min(self._lataxis_)
+            dlat = numpy.max(self._lataxis_[:])-numpy.min(self._lataxis_[:])
             dy = max(dlat/ni,dlat/nj)
-            latlin = numpy.ravel(numpy.ma.filled(self._lataxis_))
-            lonlin = numpy.ravel(numpy.ma.filled(self._lonaxis_))
+            latlin = numpy.ravel(numpy.ma.filled(self._lataxis_[:]))
+            lonlin = numpy.ravel(numpy.ma.filled(self._lonaxis_[:]))
             _bindex.setDeltas(dx,dy)
             self._index_ = bindex.bindexHorizontalGrid(latlin, lonlin)
 
@@ -608,13 +607,12 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         'indexspecs' is a list of index specifications suitable for slicing a
           variable with the given grid.
         """
-
         ni, nj = self.shape
         index = self.getIndex()
         latspec = spec[CoordTypeToLoc[LatitudeType]]
         lonspec = spec[CoordTypeToLoc[LongitudeType]]
-        latlin = numpy.ravel(numpy.ma.filled(self._lataxis_))
-        lonlin = numpy.ravel(numpy.ma.filled(self._lonaxis_))
+        latlin = numpy.ravel(numpy.ma.filled(self._lataxis_[:]))
+        lonlin = numpy.ravel(numpy.ma.filled(self._lonaxis_[:]))
         points = bindex.intersectHorizontalGrid(latspec, lonspec, latlin, lonlin, index)
         if len(points)==0:
             raise CDMSError('No data in the specified region, longitude=%s, latitude=%s'%(repr(lonspec), repr(latspec)))
@@ -623,7 +621,7 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         numpy.put(fullmask, points, 0)
         fullmask = numpy.reshape(fullmask, (ni,nj))
         
-        iind = points/nj
+        iind = points//nj
         jind = points - iind*nj
         imin, imax, jmin, jmax = (min(iind), max(iind)+1, min(jind), max(jind)+1)
         submask = fullmask[imin:imax, jmin:jmax]

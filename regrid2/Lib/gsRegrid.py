@@ -1,4 +1,4 @@
-#/usr/bin/env python
+#!/usr/bin/env python
 
 """
 Regridding of curvilinear structured grids
@@ -28,17 +28,19 @@ C_DOUBLE_P = POINTER(c_double)
 # libcf
 try:
     from pycf import libCFConfig, __path__
-except:
+except BaseException:
     raise ImportError('Error: could not import pycf')
 
-LIBCFDIR  = __path__[0] + "/pylibcf"
+LIBCFDIR = __path__[0] + "/pylibcf"
 
 __FILE__ = sys._getframe().f_code.co_filename
 
+
 def catchError(status, lineno):
     if status != 0:
-        raise RegridError("ERROR in %s: status = %d at line %d" \
-            % (__FILE__, status, lineno))
+        raise RegridError("ERROR in %s: status = %d at line %d"
+                          % (__FILE__, status, lineno))
+
 
 def getTensorProduct(axis, dim, dims):
     """
@@ -49,8 +51,9 @@ def getTensorProduct(axis, dim, dims):
     @param dims sizes of all coordinates
     @return coordinate values obtained by tensor product
     """
-    return numpy.outer(numpy.outer( numpy.ones(dims[:dim], axis.dtype), axis),
-                      numpy.ones(dims[dim+1:], axis.dtype)).reshape(dims)
+    return numpy.outer(numpy.outer(numpy.ones(dims[:dim], axis.dtype), axis),
+                       numpy.ones(dims[dim + 1:], axis.dtype)).reshape(dims)
+
 
 def makeCurvilinear(coords):
     """
@@ -67,15 +70,15 @@ def makeCurvilinear(coords):
         coord = coords[i]
         if len(coord.shape) == 1:
             # axis
-            dims.append( len(coord) )
+            dims.append(len(coord))
             count1DAxes += 1
         elif len(coord.shape) == rank:
             # fully curvilinear
-            dims.append( coord.shape[i] )
+            dims.append(coord.shape[i])
         else:
             # assumption: all 1D axes preceed curvilinear
             # coordinates!!!
-            dims.append( coord.shape[i - count1DAxes] )
+            dims.append(coord.shape[i - count1DAxes])
 
     for i in range(rank):
         nd = len(coords[i].shape)
@@ -87,12 +90,13 @@ def makeCurvilinear(coords):
             coords[i] = getTensorProduct(coords[i][:], i, dims)
         elif rank == 3 and nd == 2 and i > 0:
             # assume leading coordinate is an axis
-            o1 = numpy.ones( (len(coords[0]),), coords[i].dtype )
+            o1 = numpy.ones((len(coords[0]),), coords[i].dtype)
             coords[i] = numpy.ma.outer(o1, coords[i]).reshape(dims)
         else:
-            raise RegridError("ERROR in %s: funky mixture of axes and curvilinear coords %s" \
-                % (__FILE__, str([x.shape for x in coords])))
+            raise RegridError("ERROR in %s: funky mixture of axes and curvilinear coords %s"
+                              % (__FILE__, str([x.shape for x in coords])))
     return coords, dims
+
 
 def makeCoordsCyclic(coords, dims):
     """
@@ -108,9 +112,9 @@ def makeCoordsCyclic(coords, dims):
     eps = 1.e-3
 
     # some models already overlap
-    diff1 = abs(coords[-1][...,-2] - coords[-1][...,0])
-    diff2 = abs(coords[-1][...,-2] - coords[-1][...,0] - 360.0)
-    diff3 = abs(coords[-1][...,-2] - coords[-1][...,0] + 360.0)
+    diff1 = abs(coords[-1][..., -2] - coords[-1][..., 0])
+    diff2 = abs(coords[-1][..., -2] - coords[-1][..., 0] - 360.0)
+    diff3 = abs(coords[-1][..., -2] - coords[-1][..., 0] + 360.0)
     adiff = numpy.sum(numpy.minimum(diff1, numpy.minimum(diff2, diff3))) \
         / float(dims[-1])
     if adiff < eps:
@@ -118,9 +122,9 @@ def makeCoordsCyclic(coords, dims):
         return coords, dims
 
     # some models are already periodic
-    diff1 = abs(coords[-1][...,-1] - coords[-1][...,0])
-    diff2 = abs(coords[-1][...,-1] - coords[-1][...,0] - 360.0)
-    diff3 = abs(coords[-1][...,-1] - coords[-1][...,0] + 360.0)
+    diff1 = abs(coords[-1][..., -1] - coords[-1][..., 0])
+    diff2 = abs(coords[-1][..., -1] - coords[-1][..., 0] - 360.0)
+    diff3 = abs(coords[-1][..., -1] - coords[-1][..., 0] + 360.0)
     adiff = numpy.sum(numpy.minimum(diff1, numpy.minimum(diff2, diff3))) \
         / float(dims[-1])
     if adiff < eps:
@@ -130,23 +134,24 @@ def makeCoordsCyclic(coords, dims):
     # make cyclic by appending a column to the coordinates
     newCoords = []
     newDims = list(copy.copy(dims))
-    newDims[-1] += 1 # append to the right
+    newDims[-1] += 1  # append to the right
     for i in range(len(coords)):
-        newCoords.append( numpy.zeros( newDims, coords[i].dtype ) )
+        newCoords.append(numpy.zeros(newDims, coords[i].dtype))
         newCoords[i][..., 0:-1] = coords[i][...]
-        newCoords[i][...,   -1] = coords[i][...,  0]
+        newCoords[i][..., -1] = coords[i][..., 0]
 
     # add modulo term, want deltas ~ order of dlon otherwise add
     # or subtract a periodicity length
     nlon = dims[-1]
-    dlon = 360.0 / float(nlon) # average resolution
-    tol = 360.0 - min(5, nlon)*dlon
+    dlon = 360.0 / float(nlon)  # average resolution
+    tol = 360.0 - min(5, nlon) * dlon
     mask1 = (newCoords[-1][..., -1] - newCoords[-1][..., -2] < -tol)
     mask2 = (newCoords[-1][..., -1] - newCoords[-1][..., -2] > +tol)
-    newCoords[-1][..., -1] += 360.0*mask1
-    newCoords[-1][..., -1] -= 360.0*mask2
+    newCoords[-1][..., -1] += 360.0 * mask1
+    newCoords[-1][..., -1] -= 360.0 * mask2
 
     return newCoords, newDims
+
 
 def checkForCoordCut(coords, dims):
     """
@@ -159,7 +164,8 @@ def checkForCoordCut(coords, dims):
             False for no cut
     """
 
-    # Assume latitude is next to last coordinate and longitude is last coordinate!!!
+    # Assume latitude is next to last coordinate and longitude is last
+    # coordinate!!!
 
     rank = len(dims)
     if rank < 2:
@@ -176,9 +182,9 @@ def checkForCoordCut(coords, dims):
     # Check to see if the top row has already be dealt with by the modeling
     # agency. Last row is repeated in reverse.
 
-    topRow = coords[-2][..., nlat-1, :]
-    revTop = coords[-2][..., nlat-1, ::-1]
-    nextRow = coords[-2][..., nlat-2, :]  # Reverse nextRow
+    topRow = coords[-2][..., nlat - 1, :]
+    revTop = coords[-2][..., nlat - 1, ::-1]
+    nextRow = coords[-2][..., nlat - 2, :]  # Reverse nextRow
     diffs = abs(revTop - nextRow)
 
     # If already accounted for all diffs are 0.
@@ -189,7 +195,8 @@ def checkForCoordCut(coords, dims):
     # Lon of max latitude -- Looking for a rotated pole
     maxLats = numpy.where(abs(lat - numpy.max(lat)) < eps)
     inTopRow = False
-    if len(maxLats[0] > 0): inTopRow = numpy.all(maxLats[-2] == nlat-1)
+    if len(maxLats[0] > 0):
+        inTopRow = numpy.all(maxLats[-2] == nlat - 1)
     if not inTopRow:
         # The max lats are not in the top row. The cut may already be handled
         # print 'no cut: max lat not in top row.' + \
@@ -197,7 +204,7 @@ def checkForCoordCut(coords, dims):
         return False
 
     # Only in top row.
-    maxLatInd = lat[..., nlat-1, :].argmax()
+    maxLatInd = lat[..., nlat - 1, :].argmax()
     maxLonInd = lat[..., maxLatInd].argmax()
     rowOfMaxLat = lat[..., maxLonInd, :]
     diffs = rowOfMaxLat - topRow
@@ -224,21 +231,25 @@ def checkForCoordCut(coords, dims):
     diffs = numpy.diff(topRow)
     if firstInd == 0:
         if revTop.argmin() == 0:
-            if topRow[firstInd] == revTop[0]: minCount += 1
+            if topRow[firstInd] == revTop[0]:
+                minCount += 1
     else:
         minCount += 1
         # Look for next Minima
     index = firstInd + 1
     while diffs[index] > 0:
         index += 1
-        if index == nlon: break
-    nextIndex = topRow[index+1:].argmin() + index+1
-    if nextIndex != index+1 and nextIndex != nlon-1: minCount += 1
+        if index == nlon:
+            break
+    nextIndex = topRow[index + 1:].argmin() + index + 1
+    if nextIndex != index + 1 and nextIndex != nlon - 1:
+        minCount += 1
     if minCount == 1:
         # print "no cut: one pole"
         return False
 
     return True
+
 
 def handleCoordsCut(coords, dims, bounds):
     """
@@ -252,15 +263,10 @@ def handleCoordsCut(coords, dims, bounds):
             connectivity information across the cut
     """
 
-    # Assume latitude is next to last coordinate and longitude is 
+    # Assume latitude is next to last coordinate and longitude is
     # last coordinate!!!
 
     dims = coords[-2].shape
-    rank = len(dims)
-    nlat, nlon = dims[-2], dims[-1]
-
-    epsExp = 3
-    eps = 10**(-1*epsExp)
 
     # Add row to top with connectivity information. This means rearranging
     # the top row
@@ -274,29 +280,28 @@ def handleCoordsCut(coords, dims, bounds):
         """
         for i in range(len(array)):
             # An edge
-            if len(numpy.where(array[i, :]==True)[0]) >= 2:
-                if newI[i] < 0: newI[i] = (nlon-1) - i
-                if newI[(nlon-1)-i] < 0: newI[(nlon-1)-i] = i
+            if len(numpy.where(array[i, :] == True)[0]) >= 2:
+                if newI[i] < 0:
+                    newI[i] = (nlon - 1) - i
+                if newI[(nlon - 1) - i] < 0:
+                    newI[(nlon - 1) - i] = i
 
-    lonb = bounds[-1][..., nlat-1, ...]
-    latb = bounds[-2][..., nlat-1, ...]
+            # Assume mkCyclic == True
+            newI = numpy.arange(nlon - 1, -1, -1) - 1
+            newI[nlon - 1] = 0  # Complete the rotation
 
-    # Assume mkCyclic == True
-    newI = numpy.arange(nlon-1, -1, -1)-1
-    newI[nlon-1] = 0 #  Complete the rotation
+            # Build new coordinate array and adjust dims
+            newCoords = []
+            newDims = list(copy.copy(dims))
+            newDims[-2] += 1
 
-    # Build new coordinate array and adjust dims
-    newCoords = []
-    newDims = list(copy.copy(dims))
-    newDims[-2] += 1
+            for i in range(len(coords)):
+                newCoords.append(numpy.zeros(newDims, coords[i].dtype))
+                newCoords[i][..., 0:dims[-2], :] = coords[i][...]
+                newCoords[i][..., dims[-2], :] = coords[i][..., dims[-2] - 1, newI]
 
-    for i in range(len(coords)):
-        nD = len(dims)
-        newCoords.append( numpy.zeros( newDims, coords[i].dtype ) )
-        newCoords[i][..., 0:dims[-2], :] = coords[i][...]
-        newCoords[i][..., dims[-2], :] = coords[i][..., dims[-2]-1, newI]
+            return newCoords, newDims, newI
 
-    return newCoords, newDims, newI
 
 class Regrid:
 
@@ -308,7 +313,7 @@ class Regrid:
         @param src_grid source grid, a list of [x, y, ...] coordinates
                         or a cdms2.grid.Transient
         @param dst_grid destination grid, a list of [x, y, ...] coordinates
-        @param src_bounds list of cell bounding coordinates (to be used when 
+        @param src_bounds list of cell bounding coordinates (to be used when
                           handling a cut in coordinates)
         @param mkCyclic Add a column to the right side of the grid to complete
                a cyclic grid
@@ -337,11 +342,14 @@ class Regrid:
 
         # Open the shaped library
         dynLibFound = False
+        for sosuffix in '.dylib', '.dll', '.DLL', '.so', '.a':
+            if os.path.exists(LIBCFDIR + sosuffix):
+                dynLibFound = True
         CFfile = self.find('pylibcf.*', __path__[0])
         if os.path.exists(CFfile):
             try:
                 self.lib = CDLL(CFfile)
-            except:
+            except BaseException: 
                 pass
 #        for sosuffix in '.dylib', '.dll', '.DLL', '.so', '.a':
 #            if os.path.exists(LIBCFDIR + sosuffix):
@@ -351,23 +359,23 @@ class Regrid:
 #                    break
 #                except:
 #                    pass
-        if self.lib == None:
+        if self.lib is None:
             if not dynLibFound:
-                raise RegridError("ERROR in %s: could not find shared library %s.{so,dylib,dll,DLL}" \
-                    % (__FILE__, LIBCFDIR))
-                raise RegridError("ERROR in %s: could not open shared library %s.{so,dylib,dll,DLL}" \
-                    % (__FILE__, LIBCFDIR))
+                raise RegridError("ERROR in %s: could not find shared library %s.{so,dylib,dll,DLL}"
+                                  % (__FILE__, LIBCFDIR))
+            raise RegridError("ERROR in %s: could not open shared library %s.{so,dylib,dll,DLL}"
+                              % (__FILE__, LIBCFDIR))
 
         # Number of space dimensions
         self.rank = len(src_grid)
 
         if len(dst_grid) != self.rank:
-            raise RegridError("ERROR in %s: len(dst_grid) = %d != %d" \
-                % (__FILE__, len(dst_grid), self.rank))
+            raise RegridError("ERROR in %s: len(dst_grid) = %d != %d"
+                              % (__FILE__, len(dst_grid), self.rank))
 
         if self.rank <= 0:
-            raise RegridError("ERROR in %s: must have at least one dimension, rank = %d" \
-                % (__FILE__, self.rank))
+            raise RegridError("ERROR in %s: must have at least one dimension, rank = %d"
+                              % (__FILE__, self.rank))
 
         # Convert src_grid/dst_grid to curvilinear grid, if need be
         if self.rank > 1:
@@ -379,15 +387,15 @@ class Regrid:
             src_gridNew, src_dimsNew = makeCoordsCyclic(src_grid, src_dims)
             if self.verbose:
                 aa, bb = str(src_dims), str(src_dimsNew)
-                print(('...  src_dims = %s, after making cyclic src_dimsNew = %s' \
-                    % (aa, bb)))
+                print(('...  src_dims = %s, after making cyclic src_dimsNew = %s'
+                       % (aa, bb)))
                 for i in range(self.rank):
-                    print(('...... src_gridNew[%d].shape = %s' \
-                        % (i, str(src_gridNew[i].shape))))
+                    print(('...... src_gridNew[%d].shape = %s'
+                           % (i, str(src_gridNew[i].shape))))
             # flag indicating that the grid was extended
-            if reduce(lambda x, y:x+y, \
-                          [src_dimsNew[i] - src_dims[i] \
-                               for i in range(self.rank)]) > 0:
+            if reduce(lambda x, y: x + y,
+                      [src_dimsNew[i] - src_dims[i]
+                       for i in range(self.rank)]) > 0:
                 self.extendedGrid = True
             # reset
             src_grid = src_gridNew
@@ -401,7 +409,7 @@ class Regrid:
             if isCut:
                 # No cut
                 src_gridNew, src_dimsNew, dst_Index = handleCoordsCut(src_grid,
-                                                     src_dims, src_bounds)
+                                                                      src_dims, src_bounds)
                 if dst_Index is not None:
                     self.handleCut = True
                     self.extendedGrid = self.extendedGrid
@@ -410,8 +418,8 @@ class Regrid:
                     self.extendedGrid = self.extendedGrid
                 if self.verbose:
                     aa, bb = str(src_dims), str(src_dimsNew)
-                    print(('...  src_dims = %s, after making cyclic src_dimsNew = %s' \
-                        % (aa, bb)))
+                    print(('...  src_dims = %s, after making cyclic src_dimsNew = %s'
+                           % (aa, bb)))
                 src_grid = src_gridNew
                 src_dims = src_dimsNew
                 self.dst_Index = dst_Index
@@ -434,8 +442,8 @@ class Regrid:
         units = ""
         coordid = c_int(-1)
         for i in range(self.rank):
-            data =  numpy.array( src_grid[i], numpy.float64 )
-            self.src_coords.append( data )
+            data = numpy.array(src_grid[i], numpy.float64)
+            self.src_coords.append(data)
             dataPtr = data.ctypes.data_as(C_DOUBLE_P)
             name = "src_coord%d" % i
             # assume [lev,] lat, lon ordering
@@ -453,8 +461,8 @@ class Regrid:
             catchError(status, sys._getframe().f_lineno)
             self.src_coordids[i] = coordid
 
-            data =  numpy.array( dst_grid[i], numpy.float64 )
-            self.dst_coords.append( data )
+            data = numpy.array(dst_grid[i], numpy.float64)
+            self.dst_coords.append(data)
             dataPtr = data.ctypes.data_as(C_DOUBLE_P)
             name = "dst_coord%d" % i
             status = self.lib.nccf_def_coord(self.rank, self.dst_dims,
@@ -464,7 +472,7 @@ class Regrid:
                                              byref(coordid))
             catchError(status, sys._getframe().f_lineno)
             self.dst_coordids[i] = coordid
-         
+
         # Build grid objects
         status = self.lib.nccf_def_grid(self.src_coordids, "src_grid",
                                         byref(self.src_gridid))
@@ -484,9 +492,9 @@ class Regrid:
         Get the periodicity lengths of the coordinates
         @return numpy array, values inf indicate no periodicity
         """
-        coord_periodicity = numpy.zeros( (self.rank,), numpy.float64 )
+        coord_periodicity = numpy.zeros((self.rank,), numpy.float64)
         status = self.lib.nccf_inq_grid_periodicity(self.src_gridid,
-                                 coord_periodicity.ctypes.data_as(C_DOUBLE_P))
+                                                    coord_periodicity.ctypes.data_as(C_DOUBLE_P))
         catchError(status, sys._getframe().f_lineno)
         return coord_periodicity
 
@@ -512,28 +520,29 @@ class Regrid:
             catchError(status, sys._getframe().f_lineno)
 
     def find(self, pattern, path):
-        result=""
+        result = ""
         for root, dirs, files in os.walk(path):
             for name in files:
                 if fnmatch.fnmatch(name, pattern):
-                    result=os.path.join(root, name)
+                    result = os.path.join(root, name)
         return result
 
     def setValidMask(self, inMask):
         """
         Set valid mask array for the grid
         @param inMask flat numpy array of type numpy.int32 or a valid cdms2 variable
-                    with its mask set. 
+                    with its mask set.
                     0 - invalid, 1 - valid data
-        @note This must be invoked before computing the weights, the 
+        @note This must be invoked before computing the weights, the
         mask is a property of the grid (not the data).
         """
         if self.weightsComputed:
             raise RegridError('Must set mask before computing weights')
-    
-        mask = numpy.array(inMask, dtype = numpy.int32)
-    
-        # extend src data if grid was made cyclic and or had a cut accounted for
+
+        mask = numpy.array(inMask, dtype=numpy.int32)
+
+        # extend src data if grid was made cyclic and or had a cut accounted
+        # for
         newMask = self._extend(mask)
         c_intmask = newMask.ctypes.data_as(POINTER(c_int))
         status = self.lib.nccf_set_grid_validmask(self.src_gridid,
@@ -544,11 +553,11 @@ class Regrid:
     def setMask(self, inDataOrMask):
         """
         Set mask array. The mask is defined for nodes
-        @param inDataOrMask cdms2 array or flat mask array, 
+        @param inDataOrMask cdms2 array or flat mask array,
                                 0 - valid data
-                                1 - invalid data      
+                                1 - invalid data
         @note this definition is compatible with the numpy masked arrays
-        @note see setValidMask for the opposite definition 
+        @note see setValidMask for the opposite definition
         @note should be called before computing the weights
         """
         mask = None
@@ -559,7 +568,7 @@ class Regrid:
             # flat mask array
             mask = inDataOrMask
         # reversing the meaning 1 == valid, 0 == invalid
-        mask = 1 - numpy.array(inDataOrMask, dtype = numpy.int32)
+        mask = 1 - numpy.array(inDataOrMask, dtype=numpy.int32)
         # now calling our own mask setter
         self.setValidMask(mask)
 
@@ -577,29 +586,30 @@ class Regrid:
         catchError(status, sys._getframe().f_lineno)
         self.weightsComputed = True
 
-    def apply(self, src_data_in, dst_data, missingValue = None):
+    def apply(self, src_data_in, dst_data, missingValue=None):
         """
         Apply interpolation
         @param src_data data on source grid
         @param dst_data data on destination grid
-        @param missingValue value that should be set for points falling outside the src domain, 
+        @param missingValue value that should be set for points falling outside the src domain,
                             pass None if these should not be touched.
         """
         if not self.weightsComputed:
             raise RegridError('Weights must be set before applying the regrid')
-        # extend src data if grid was made cyclic and or had a cut accounted for
+        # extend src data if grid was made cyclic and or had a cut accounted
+        # for
         src_data = self._extend(src_data_in)
 
         # Check
-        if reduce(operator.iand, [src_data.shape[i] == self.src_dims[i] \
-                                 for i in range(self.rank)]) == False:
-            raise RegridError(("ERROR in %s: supplied src_data have wrong shape " \
-                                  + "%s != %s") % (__FILE__, str(src_data.shape), \
-                                     str(tuple([d for d in self.src_dims]))))
-        if reduce(operator.iand, [dst_data.shape[i] == self.dst_dims[i] \
-                                 for i in range(self.rank)]) == False:
-            raise RegridError(("ERROR in %s: supplied dst_data have wrong shape " \
-                + "%s != %s") % (__FILE__, str(dst_data.shape),
+        if reduce(operator.iand, [src_data.shape[i] == self.src_dims[i]
+                                  for i in range(self.rank)]) == False:
+            raise RegridError(("ERROR in %s: supplied src_data have wrong shape "
+                               + "%s != %s") % (__FILE__, str(src_data.shape),
+                                                   str(tuple([d for d in self.src_dims]))))
+        if reduce(operator.iand, [dst_data.shape[i] == self.dst_dims[i]
+                                  for i in range(self.rank)]) == False:
+            raise RegridError(("ERROR in %s: supplied dst_data have wrong shape "
+                               + "%s != %s") % (__FILE__, str(dst_data.shape),
                                  str(tuple([d for d in self.dst_dims]))))
 
         # Create temporary data objects
@@ -610,24 +620,24 @@ class Regrid:
         units = ""
         time_dimname = ""
 
-        status = self.lib.nccf_def_data(self.src_gridid, "src_data", \
-                                        standard_name, units, time_dimname, \
+        status = self.lib.nccf_def_data(self.src_gridid, "src_data",
+                                        standard_name, units, time_dimname,
                                         byref(src_dataid))
         catchError(status, sys._getframe().f_lineno)
 
         if src_data.dtype != dst_data.dtype:
-            try: # try recasting
-              src_data = src_data.astype(dst_data.dtype)
-              warnings.warn("mismatch in src and dst data types (%s vs %s) we recasted src to dst" \
+            try:  # try recasting
+                warnings.warn("mismatch in src and dst data types (%s vs %s) we recasted src to dst"
+                              % (src_data.dtype, dst_data.dtype))
+                src_data = src_data.astype(dst_data.dtype)
+            except BaseException:
+                try:
+                    warnings.warn("mismatch in src and dst data types (%s vs %s) we recasted dst to src"
+                                  % (src_data.dtype, dst_data.dtype))
+                    dst_data = dst_data.astype(src_data.dtype)
+                except BaseException:
+                    raise RegridError("ERROR in %s: mismatch in src and dst data types (%s vs %s)"
                                       % (__FILE__, src_data.dtype, dst_data.dtype))
-            except: # ok maybe the over way around will work?
-              try:
-                dst_data = dst_data.astype(src_data.dtype)
-                warnings.warn("mismatch in src and dst data types (%s vs %s) we recasted dst to src" \
-                                        % (__FILE__, src_data.dtype, dst_data.dtype))
-              except:
-                raise RegridError("ERROR in %s: mismatch in src and dst data types (%s vs %s)" \
-                    % (__FILE__, src_data.dtype, dst_data.dtype))
 
         # only float64 and float32 data types are supported for interpolation
         if src_data.dtype == numpy.float64:
@@ -635,22 +645,24 @@ class Regrid:
             if missingValue is not None:
                 fill_value = c_double(missingValue)
             ptr = src_data.ctypes.data_as(POINTER(c_double))
-            status = self.lib.nccf_set_data_double(src_dataid, ptr, save, fill_value)
+            status = self.lib.nccf_set_data_double(
+                src_dataid, ptr, save, fill_value)
             catchError(status, sys._getframe().f_lineno)
         elif src_data.dtype == numpy.float32:
             fill_value = c_float(libCFConfig.NC_FILL_FLOAT)
             if missingValue is not None:
                 fill_value = c_float(missingValue)
             ptr = src_data.ctypes.data_as(POINTER(c_float))
-            status = self.lib.nccf_set_data_float(src_dataid, ptr, save, fill_value)
+            status = self.lib.nccf_set_data_float(
+                src_dataid, ptr, save, fill_value)
             catchError(status, sys._getframe().f_lineno)
         else:
-            raise RegridError("ERROR in %s: invalid src_data type %s (neither float nor double)" \
-                % (__FILE__, src_data.dtype))
+            raise RegridError("ERROR in %s: invalid src_data type %s (neither float nor double)"
+                              % (__FILE__, src_data.dtype))
 
-        status = self.lib.nccf_def_data(self.dst_gridid, "dst_data", \
-                                        standard_name, units, time_dimname, \
-                                            byref(dst_dataid))
+        status = self.lib.nccf_def_data(self.dst_gridid, "dst_data",
+                                        standard_name, units, time_dimname,
+                                        byref(dst_dataid))
         catchError(status, sys._getframe().f_lineno)
         if dst_data.dtype == numpy.float64:
             fill_value = c_double(libCFConfig.NC_FILL_DOUBLE)
@@ -658,7 +670,8 @@ class Regrid:
                 fill_value = c_double(missingValue)
                 dst_data[:] = missingValue
             ptr = dst_data.ctypes.data_as(POINTER(c_double))
-            status = self.lib.nccf_set_data_double(dst_dataid, ptr, save, fill_value)
+            status = self.lib.nccf_set_data_double(
+                dst_dataid, ptr, save, fill_value)
             catchError(status, sys._getframe().f_lineno)
         elif dst_data.dtype == numpy.float32:
             fill_value = c_float(libCFConfig.NC_FILL_FLOAT)
@@ -666,16 +679,18 @@ class Regrid:
                 fill_value = c_float(missingValue)
                 dst_data[:] = missingValue
             ptr = dst_data.ctypes.data_as(POINTER(c_float))
-            status = self.lib.nccf_set_data_float(dst_dataid, ptr, save, fill_value)
+            status = self.lib.nccf_set_data_float(
+                dst_dataid, ptr, save, fill_value)
             catchError(status, sys._getframe().f_lineno)
         else:
-            raise RegridError("ERROR in %s: invalid dst_data type = %s" \
-                % (__FILE__, dst_data.dtype))
+            raise RegridError("ERROR in %s: invalid dst_data type = %s"
+                              % (__FILE__, dst_data.dtype))
 
         # Now apply weights
-        status = self.lib.nccf_apply_regrid(self.regridid, src_dataid, dst_dataid)
+        status = self.lib.nccf_apply_regrid(
+            self.regridid, src_dataid, dst_dataid)
         catchError(status, sys._getframe().f_lineno)
-        
+
         # Clean up
         status = self.lib.nccf_free_data(src_dataid)
         catchError(status, sys._getframe().f_lineno)
@@ -684,16 +699,15 @@ class Regrid:
 
         return dst_data
 
-    def __call__(self, src_data, dst_data, missingValue = None):
+    def __call__(self, src_data, dst_data, missingValue=None):
         """
         Apply interpolation (synonymous to apply method)
         @param src_data data on source grid
         @param dst_data data on destination grid
-        @param missingValue value that should be set for points falling outside the src domain, 
+        @param missingValue value that should be set for points falling outside the src domain,
                             pass None if these should not be touched.
         """
         self.apply(src_data, dst_data, missingValue)
-
 
     def getNumValid(self):
         """
@@ -716,7 +730,7 @@ class Regrid:
         """
         res = c_int(-1)
         status = self.lib.nccf_inq_regrid_ntargets(self.regridid,
-                                                  byref(res))
+                                                   byref(res))
         catchError(status, sys._getframe().f_lineno)
         return res.value
 
@@ -742,16 +756,17 @@ class Regrid:
         """
         dinds = numpy.array(dst_indices)
         sinds = (c_int * 2**self.rank)()
-        weights = numpy.zeros( (2**self.rank,), numpy.float64 )
+        weights = numpy.zeros((2**self.rank,), numpy.float64)
         status = self.lib.nccf_inq_regrid_weights(self.regridid,
-                                                  dinds.ctypes.data_as(POINTER(c_double)),
+                                                  dinds.ctypes.data_as(
+                                                      POINTER(c_double)),
                                                   sinds,
                                                   weights.ctypes.data_as(POINTER(c_double)))
         catchError(status, sys._getframe().f_lineno)
         # convert the flat indices to index sets
         ori_inds = []
         for i in range(2**self.rank):
-            inx = numpy.zeros( (self.rank,), numpy.int32 )
+            inx = numpy.zeros((self.rank,), numpy.int32)
             self.lib.nccf_get_multi_index(self.rank, self.src_dims,
                                           sinds[i],
                                           inx.ctypes.data_as(POINTER(c_int)))
@@ -807,10 +822,12 @@ class Regrid:
         posPtr = targetPos.ctypes.data_as(POINTER(c_double))
         adjustFunc = None
         hit_bounds = numpy.zeros((self.rank),
-                                  dtype = int).ctypes.data_as(POINTER(c_int))
+                                 dtype=int).ctypes.data_as(POINTER(c_int))
         # no periodicity
-        coord_periodicity = float('inf') * numpy.ones((self.rank), targetPos.dtype)
-        coord_periodicity_ptr = coord_periodicity.ctypes.data_as(POINTER(c_double))
+        coord_periodicity = float(
+            'inf') * numpy.ones((self.rank), targetPos.dtype)
+        coord_periodicity_ptr = coord_periodicity.ctypes.data_as(
+            POINTER(c_double))
         res = copy.copy(dindicesGuess)
         resPtr = res.ctypes.data_as(POINTER(c_double))
         src_coords = (POINTER(c_double) * self.rank)()
@@ -834,10 +851,11 @@ class Regrid:
 
 ######################################################################
 
+
 def testMakeCyclic():
 
-    y = numpy.array([-90.0 + i*30.0 for i in range(7)])
-    x = numpy.array([(i+0.5)*60.0 for i in range(6)])
+    y = numpy.array([-90.0 + i * 30.0 for i in range(7)])
+    x = numpy.array([(i + 0.5) * 60.0 for i in range(6)])
     yy = getTensorProduct(y, 0, [len(y), len(x)])
     xx = getTensorProduct(x, 1, [len(y), len(x)])
     coords = [yy, xx]
@@ -848,15 +866,17 @@ def testMakeCyclic():
 #    print 'cyclic lons'
 #    print newCoords[1]
 
+
 def testHandleCut():
 
     # Need tripolar grid
     import cdms2
     filename = "data/so_Omon_GFDL-ESM2M_1pctCO2_r1i1p2_000101-000512_2timesteps.nc"
     f = cdms2.open(filename)
-    if not f: return
+    if not f:
+        return
 
-    so = f.variables['so'][0, 0, :, :]
+    so = f.variables['so'][0, 0, :,:]
     if 'lon' in list(f.variables.keys()):
         alllat = f.variables['lat']
         alllon = f.variables['lon']
@@ -871,6 +891,7 @@ def testHandleCut():
     newCoords, newDims = makeCoordsCyclic(coords, dims)
     newCoords, newDims = handleCoordsCut(newCoords, newDims, bounds)
 
+
 def testOuterProduct():
 
     # 2d
@@ -882,7 +903,7 @@ def testOuterProduct():
     # 3d
     z = numpy.array([100, 200])
 
-    #Mixed coordinates and axes
+    # Mixed coordinates and axes
 
     aa = makeCurvilinear([z, yy, xx])
 #    for g in aa:
@@ -891,7 +912,8 @@ def testOuterProduct():
 
 def test():
     def func1(coords):
-        return coords[0]*coords[1] + coords[2]
+        return coords[0] * coords[1] + coords[2]
+
     def func2(coords):
         return coords[0] * coords[1]
 
@@ -919,7 +941,7 @@ def test():
     posTol = 1.e-3
     rg.computeWeights(maxNumIters, posTol)
 
-    # number of valid points (some destination points may fall 
+    # number of valid points (some destination points may fall
     # outside the domain)
     nvalid = rg.getNumValid()
 
@@ -935,10 +957,10 @@ def test():
     # data
     src_coords = rg.getSrcGrid()
     dst_coords = rg.getDstGrid()
-    #print 'src_coords = ', src_coords
-    #print 'dst_coords = ', dst_coords
-    src_data = numpy.array( func1(src_coords), numpy.float32 )
-    dst_data = -numpy.ones( dst_coords[0].shape, numpy.float32 )
+    # print 'src_coords = ', src_coords
+    # print 'dst_coords = ', dst_coords
+    src_data = numpy.array(func1(src_coords), numpy.float32)
+    dst_data = -numpy.ones(dst_coords[0].shape, numpy.float32)
 
     # regrid
     rg(src_data, dst_data)
@@ -946,25 +968,27 @@ def test():
 
     # check
     error = numpy.sum(abs(dst_data - func1(dst_coords)))
-    #print dst_data
-    #print func(dst_coords)
+    # print dst_data
+    # print func(dst_coords)
     print(('error = ', error))
+
 
 def testMasking():
     import numpy.ma as ma
 
     def func1(coords):
-        return coords[0]*coords[1]
+        return coords[0] * coords[1]
+
     def func2(coords):
         return coords[0] * coords[1]
 
     # source grid, tensor product of axes
-    src_x = ma.masked_array([1, 2, 3, 4, 5, 6], mask = [0,0,1,0,0,0])
-    src_y = ma.masked_array([10, 20, 30, 40, 50],mask = [0,0,0,1,0])
+    src_x = ma.masked_array([1, 2, 3, 4, 5, 6], mask=[0, 0, 1, 0, 0, 0])
+    src_y = ma.masked_array([10, 20, 30, 40, 50], mask=[0, 0, 0, 1, 0])
 
     # destination grid, product of axes
-    dst_x = numpy.array([0.5,1,1.5, 2.0, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5,8.5,9.5])
-    dst_y = numpy.array([15., 20., 25., 30., 35.,40.,45.,50.,55])
+    dst_x = numpy.array([0.5, 1, 1.5, 2.0, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5])
+    dst_y = numpy.array([15., 20., 25., 30., 35., 40., 45., 50., 55])
 
     # regridding constructor
     rg = Regrid([src_x, src_y],
@@ -976,14 +1000,14 @@ def testMasking():
 
     # Mask needs to be set before weights are computed
     mask = rg.getSrcGrid()[0] == 3
-    mask[:,3] = True
+    mask[:, 3] = True
     rg.setValidMask(mask)
     rg.setMask(mask)
     maxNumIters = 20
     posTol = 1.e-2
     rg.computeWeights(maxNumIters, posTol)
 
-    # number of valid points (some destination points may fall 
+    # number of valid points (some destination points may fall
     # outside the domain)
     nvalid = rg.getNumValid()
 
@@ -999,10 +1023,10 @@ def testMasking():
     # data
     src_coords = rg.getSrcGrid()
     dst_coords = rg.getDstGrid()
-    #print 'src_coords = ', src_coords
-    #print 'dst_coords = ', dst_coords
-    src_data = numpy.array( func1(src_coords), numpy.float32 )
-    dst_data = -numpy.ones( dst_coords[0].shape, numpy.float32 )
+    # print 'src_coords = ', src_coords
+    # print 'dst_coords = ', dst_coords
+    src_data = numpy.array(func1(src_coords), numpy.float32 )
+    dst_data = -numpy.ones(dst_coords[0].shape, numpy.float32 )
 
     # regrid
     rg(src_data, dst_data)
@@ -1010,14 +1034,14 @@ def testMasking():
 
     # check
     error = numpy.sum(abs(dst_data - func1(dst_coords)))
-    #print dst_data
-    #print func(dst_coords)
+    # print dst_data
+    # print func(dst_coords)
     print(('error = ', error))
 
+
 if __name__ == '__main__':
-    #testOuterProduct()
+    # testOuterProduct()
     test()
     testMasking()
-    #testMakeCyclic()
-    #testHandleCut()
-
+    # testMakeCyclic()
+    # testHandleCut()

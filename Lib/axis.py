@@ -688,6 +688,8 @@ class AbstractAxis(CdmsObj):
         self._doubledata_ = None
 
     def __str__(self):
+        import pdb
+        pdb.set_trace()
         return "\n".join(self.listall()) + "\n"
 
     __repr__ = __str__
@@ -2187,13 +2189,16 @@ class FileAxis(AbstractAxis):
             raise CDMSError(ReadOnlyAxis + self.id)
         if self.parent is None:
             raise CDMSError(FileWasClosed + self.id)
-        if isinstance(index, slice):
-            low = index.start
-            high = index.stop
-            if(self.isUnlimited() and (high >= Max32int)):
-                high = self.__len__()
-            high = min(Max32int, high)
-            return self._obj_.setslice(*(low, high, numpy.ma.filled(value)))
+        # need setslice to create a new shape using [newaxis]    
+        if(isinstance(index, slice)):
+            if(index.start is not None):
+                if(self.shape[0] < index.start):
+                    low = index.start
+                    high = index.stop
+                    if(self.isUnlimited() and (high >= Max32int)):
+                        high = self.__len__()
+                    high = min(Max32int, high)
+                    return self._obj_.setslice(*(low, high, numpy.ma.filled(value)))
         return self._obj_.setitem(*(index, numpy.ma.filled(value)))
 
     def __setslice__(self, low, high, value):

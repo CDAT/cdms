@@ -8,7 +8,7 @@ import cdms2  # ESMP_Initialize()
 import unittest
 import ESMF
 from regrid2 import esmf
-from regrid2 import ESMFRegrid
+from regrid2.mvESMFRegrid import ESMFRegrid  # noqa
 import numpy
 import numpy as np
 

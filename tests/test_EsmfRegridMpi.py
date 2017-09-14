@@ -16,7 +16,6 @@ import ESMF
 import time
 import copy
 import sys
-import pdb
 from functools import reduce
 try:
     from mpi4py import MPI
@@ -35,7 +34,6 @@ class Test(unittest.TestCase):
         pass
 
     def test_2d_esmf(self):
-        pdb.set_trace()
         # print 'running test_2d_esmf...'
         f = cdms2.open(cdat_info.get_sampledata_path() +
                        '/so_Omon_ACCESS1-0_historical_r1i1p1_185001-185412_2timesteps.nc')
@@ -71,7 +69,6 @@ class Test(unittest.TestCase):
 
     def test_2d_esmf_interface(self):
         # print 'running test_2d_esmf_interface...'
-        pdb.set_trace()
         f = cdms2.open(cdat_info.get_sampledata_path() +
                        '/so_Omon_ACCESS1-0_historical_r1i1p1_185001-185412_2timesteps.nc')
         so = f('so')[0, 0, :, :]

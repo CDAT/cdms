@@ -64,10 +64,9 @@ from .mvCdmsRegrid import CdmsRegrid
 try:
     from .gsStaticVariable import StaticFileVariable
     from .gsTimeVariable import TimeFileVariable
-except:
+except BaseException:
     pass
 
 from .restApi import esgfConnection, esgfDataset, FacetConnection
 
 MV = MV2
-

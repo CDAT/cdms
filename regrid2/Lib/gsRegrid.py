@@ -298,7 +298,8 @@ def handleCoordsCut(coords, dims, bounds):
             for i in range(len(coords)):
                 newCoords.append(numpy.zeros(newDims, coords[i].dtype))
                 newCoords[i][..., 0:dims[-2], :] = coords[i][...]
-                newCoords[i][..., dims[-2], :] = coords[i][..., dims[-2] - 1, newI]
+                newCoords[i][..., dims[-2],
+                             :] = coords[i][..., dims[-2] - 1, newI]
 
             return newCoords, newDims, newI
 
@@ -349,7 +350,7 @@ class Regrid:
         if os.path.exists(CFfile):
             try:
                 self.lib = CDLL(CFfile)
-            except BaseException: 
+            except BaseException:
                 pass
 #        for sosuffix in '.dylib', '.dll', '.DLL', '.so', '.a':
 #            if os.path.exists(LIBCFDIR + sosuffix):
@@ -605,12 +606,12 @@ class Regrid:
                                   for i in range(self.rank)]) == False:
             raise RegridError(("ERROR in %s: supplied src_data have wrong shape "
                                + "%s != %s") % (__FILE__, str(src_data.shape),
-                                                   str(tuple([d for d in self.src_dims]))))
+                                                str(tuple([d for d in self.src_dims]))))
         if reduce(operator.iand, [dst_data.shape[i] == self.dst_dims[i]
                                   for i in range(self.rank)]) == False:
             raise RegridError(("ERROR in %s: supplied dst_data have wrong shape "
                                + "%s != %s") % (__FILE__, str(dst_data.shape),
-                                 str(tuple([d for d in self.dst_dims]))))
+                                                str(tuple([d for d in self.dst_dims]))))
 
         # Create temporary data objects
         src_dataid = c_int(-1)
@@ -876,7 +877,7 @@ def testHandleCut():
     if not f:
         return
 
-    so = f.variables['so'][0, 0, :,:]
+    so = f.variables['so'][0, 0, :, :]
     if 'lon' in list(f.variables.keys()):
         alllat = f.variables['lat']
         alllon = f.variables['lon']
@@ -987,7 +988,8 @@ def testMasking():
     src_y = ma.masked_array([10, 20, 30, 40, 50], mask=[0, 0, 0, 1, 0])
 
     # destination grid, product of axes
-    dst_x = numpy.array([0.5, 1, 1.5, 2.0, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5])
+    dst_x = numpy.array([0.5, 1, 1.5, 2.0, 2.5, 3.5,
+                         4.5, 5.5, 6.5, 7.5, 8.5, 9.5])
     dst_y = numpy.array([15., 20., 25., 30., 35., 40., 45., 50., 55])
 
     # regridding constructor
@@ -1025,8 +1027,8 @@ def testMasking():
     dst_coords = rg.getDstGrid()
     # print 'src_coords = ', src_coords
     # print 'dst_coords = ', dst_coords
-    src_data = numpy.array(func1(src_coords), numpy.float32 )
-    dst_data = -numpy.ones(dst_coords[0].shape, numpy.float32 )
+    src_data = numpy.array(func1(src_coords), numpy.float32)
+    dst_data = -numpy.ones(dst_coords[0].shape, numpy.float32)
 
     # regrid
     rg(src_data, dst_data)

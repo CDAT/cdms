@@ -1,5 +1,5 @@
-## Automatically adapted for numpy.oldnumeric Aug 01, 2007 by 
-## Further modified to be pure new numpy June 24th 2008
+# Automatically adapted for numpy.oldnumeric Aug 01, 2007 by
+# Further modified to be pure new numpy June 24th 2008
 
 """CDMS HorizontalGrid objects"""
 
@@ -19,16 +19,20 @@ import copy
 
 MethodNotImplemented = "Method not yet implemented"
 
+
 def _flatten(boundsar):
     boundsshape = boundsar.shape
-    if len(boundsshape)>2:
-        newshape = (reduce((lambda x,y: x*y), boundsshape[:-1], 1), boundsshape[-1])
+    if len(boundsshape) > 2:
+        newshape = (reduce((lambda x, y: x * y),
+                           boundsshape[:-1], 1), boundsshape[-1])
         boundsar.shape = newshape
     return boundsar
 
+
 class AbstractHorizontalGrid(AbstractGrid):
 
-    def __init__(self, latAxis, lonAxis, id=None, maskvar=None, tempmask=None, node=None):
+    def __init__(self, latAxis, lonAxis, id=None,
+                 maskvar=None, tempmask=None, node=None):
         """Create a horizontal grid.
         """
         AbstractGrid.__init__(self, node)
@@ -52,8 +56,9 @@ class AbstractHorizontalGrid(AbstractGrid):
     def getBounds(self):
         """Get the grid cell boundaries, as a tuple (latitudeBounds, longitudeBounds)
         """
-        latbnds, lonbnds = (self._lataxis_.getExplicitBounds(), self._lonaxis_.getExplicitBounds())
-        if (latbnds is None or lonbnds is None) and getAutoBounds() in [1,2]:
+        latbnds, lonbnds = (self._lataxis_.getExplicitBounds(),
+                            self._lonaxis_.getExplicitBounds())
+        if (latbnds is None or lonbnds is None) and getAutoBounds() in [1, 2]:
             nlatbnds, nlonbnds = self.genBounds()
             if latbnds is None:
                 latbnds = nlatbnds
@@ -87,19 +92,19 @@ class AbstractHorizontalGrid(AbstractGrid):
         """
         raise CDMSError(MethodNotImplemented)
 
-    def listall (self, all=None):
-        result=[]
+    def listall(self, all=None):
+        result = []
         result.append('Grid has Python id %s.' % hex(id(self)))
         return result
 
-    def setMask(self,mask,permanent=0):
+    def setMask(self, mask, permanent=0):
         self._maskVar_ = mask
 
     def subGridRegion(self, latRegion, lonRegion):
         raise CDMSError(MethodNotImplemented)
 
     def hasCoordType(self, coordType):
-        return ((coordType==LatitudeType) or (coordType==LongitudeType))
+        return ((coordType == LatitudeType) or (coordType == LongitudeType))
 
     def checkConvex(self):
         """Check that each cell of the grid is convex in lon-lat space, with nodes defined counter-clockwise.
@@ -117,13 +122,13 @@ class AbstractHorizontalGrid(AbstractGrid):
         ncell, nnode = lonb.shape
         badmask = zeros((ncell,))
         for n0 in range(nnode):
-            n1 = (n0+1)%nnode
-            n2 = (n1+1)%nnode
-            vec0lon = lonb[:,n1] - lonb[:,n0]
-            vec0lat = latb[:,n1] - latb[:,n0]
-            vec1lon = lonb[:,n2] - lonb[:,n1]
-            vec1lat = latb[:,n2] - latb[:,n1]
-            cross = vec0lon*vec1lat - vec0lat*vec1lon
+            n1 = (n0 + 1) % nnode
+            n2 = (n1 + 1) % nnode
+            vec0lon = lonb[:, n1] - lonb[:, n0]
+            vec0lat = latb[:, n1] - latb[:, n0]
+            vec1lon = lonb[:, n2] - lonb[:, n1]
+            vec1lat = latb[:, n2] - latb[:, n1]
+            cross = vec0lon * vec1lat - vec0lat * vec1lon
 
             mask = where(less(cross, 0.0), 1, 0)
             badmask = logical_or(mask, badmask)
@@ -170,27 +175,27 @@ class AbstractHorizontalGrid(AbstractGrid):
             savelons = lonb2[k]
 
             # Loop twice
-            for node in range(2*nnode):
-                n0 = node%nnode
-                n1 = (n0+1)%nnode
-                vec0lon = lonb2[k,n1]-lonb2[k,n0]
-                if vec0lon>threshold:
-                    lonb2[k,n1] -= 360.0
-                elif vec0lon<-threshold:
-                    lonb2[k,n1] += 360.0
+            for node in range(2 * nnode):
+                n0 = node % nnode
+                n1 = (n0 + 1) % nnode
+                vec0lon = lonb2[k, n1] - lonb2[k, n0]
+                if vec0lon > threshold:
+                    lonb2[k, n1] -= 360.0
+                elif vec0lon < -threshold:
+                    lonb2[k, n1] += 360.0
 
             # If the cross-product test still fails, restore
             # the original values and add to the nonConvexCells list
             for n0 in range(nnode):
-                n1 = (n0+1)%nnode
-                n2 = (n1+1)%nnode
-                vec0lon = lonb2[k,n1] - lonb2[k,n0]
-                vec0lat = latb2[k,n1] - latb2[k,n0]
-                vec1lon = lonb2[k,n2] - lonb2[k,n1]
-                vec1lat = latb2[k,n2] - latb2[k,n1]
-                cross = vec0lon*vec1lat - vec0lat*vec1lon
+                n1 = (n0 + 1) % nnode
+                n2 = (n1 + 1) % nnode
+                vec0lon = lonb2[k, n1] - lonb2[k, n0]
+                vec0lat = latb2[k, n1] - latb2[k, n0]
+                vec1lon = lonb2[k, n2] - lonb2[k, n1]
+                vec1lat = latb2[k, n2] - latb2[k, n1]
+                cross = vec0lon * vec1lat - vec0lat * vec1lon
 
-                if cross<0:
+                if cross < 0:
                     lonb2[k] = savelons
                     newbadcells.append(nonConvexCells[k])
                     break
@@ -204,14 +209,18 @@ class AbstractHorizontalGrid(AbstractGrid):
 
         return array(newbadcells)
 
+
 class AbstractCurveGrid(AbstractHorizontalGrid):
 
-    def __init__(self, latAxis, lonAxis, id=None, maskvar=None, tempmask=None, node=None):
+    def __init__(self, latAxis, lonAxis, id=None,
+                 maskvar=None, tempmask=None, node=None):
         """Create a curvilinear grid.
         """
         if latAxis.shape != lonAxis.shape:
-            raise CDMSError('Latitude and longitude axes must have the same shape.')
-        AbstractHorizontalGrid.__init__(self, latAxis, lonAxis, id, maskvar, tempmask, node)
+            raise CDMSError(
+                'Latitude and longitude axes must have the same shape.')
+        AbstractHorizontalGrid.__init__(
+            self, latAxis, lonAxis, id, maskvar, tempmask, node)
         self._index_ = None
 
     def clone(self, copyData=1):
@@ -220,7 +229,7 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         return TransientCurveGrid(newlat, newlon, id=self.id)
 
     def __repr__(self):
-        return "<CurveGrid, id: %s, shape: %s>"%(self.id, repr(self.shape))
+        return "<CurveGrid, id: %s, shape: %s>" % (self.id, repr(self.shape))
     __str__ = __repr__
 
     def getMesh(self, transpose=None):
@@ -229,24 +238,29 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         latbounds and lonbounds according to the tuple, (1,0,2) in this case.
         """
         if self._mesh_ is None:
-            LAT=0
-            LON=1
+            LAT = 0
+            LON = 1
             latbounds, lonbounds = self.getBounds()
-##             ## following work aronud a numpy.ma bug
-##             latbounds=latbounds.filled()
-##             lonbounds=lonbounds.filled()
+# following work aronud a numpy.ma bug
+# latbounds=latbounds.filled()
+# lonbounds=lonbounds.filled()
             if latbounds is None or lonbounds is None:
-                raise CDMSError('No boundary data is available for grid %s'%self.id)
-            if (transpose is not None) and (transpose[1]==0):
-                latbounds = numpy.transpose(latbounds, (1,0,2))
-                lonbounds = numpy.transpose(lonbounds, (1,0,2))
-            mesh = numpy.zeros((self.size(),2,latbounds.shape[-1]),latbounds.dtype.char)
-            mesh[:,LAT,:] = numpy.reshape(latbounds,(self.size(),latbounds.shape[-1]))
-            mesh[:,LON,:]  = numpy.reshape(lonbounds,(self.size(),latbounds.shape[-1]))
+                raise CDMSError(
+                    'No boundary data is available for grid %s' %
+                    self.id)
+            if (transpose is not None) and (transpose[1] == 0):
+                latbounds = numpy.transpose(latbounds, (1, 0, 2))
+                lonbounds = numpy.transpose(lonbounds, (1, 0, 2))
+            mesh = numpy.zeros(
+                (self.size(), 2, latbounds.shape[-1]), latbounds.dtype.char)
+            mesh[:, LAT, :] = numpy.reshape(
+                latbounds, (self.size(), latbounds.shape[-1]))
+            mesh[:, LON, :] = numpy.reshape(
+                lonbounds, (self.size(), latbounds.shape[-1]))
             self._mesh_ = mesh
         return self._mesh_
 
-    def _getShape (self):
+    def _getShape(self):
         return self._lataxis_.shape
 
     # Don't try to generate bounds for curvilinear grids
@@ -285,7 +299,7 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
             tmp = 1 - mask
             mask[:] = tmp.astype(mask.dtype.char)
             mask = mask.astype(numpy.int32)
-        ngrid = ni*nj
+        ngrid = ni * nj
         centerLat = copy.copy(lat)
         centerLat.shape = (ngrid,)
         centerLon = copy.copy(lon)
@@ -293,9 +307,9 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         mask.shape = (ngrid,)
 
         clat = numpy.ma.filled(copy.copy(blat))
-        clat.shape = (ngrid,4)
+        clat.shape = (ngrid, 4)
         clon = numpy.ma.filled(copy.copy(blon))
-        clon.shape = (ngrid,4)
+        clon.shape = (ngrid, 4)
 
         # Write the file
         if gridTitle is None:
@@ -305,18 +319,22 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         cufile.createDimension("grid_corners", 4)
         cufile.createDimension("grid_rank", 2)
         griddims = cufile.createVariable("grid_dims", 'i', ("grid_rank",))
-        gridcenterlat = cufile.createVariable("grid_center_lat", 'd', ("grid_size",))
+        gridcenterlat = cufile.createVariable(
+            "grid_center_lat", 'd', ("grid_size",))
         gridcenterlat.units = "degrees"
-        gridcenterlon = cufile.createVariable("grid_center_lon", 'd', ("grid_size",))
+        gridcenterlon = cufile.createVariable(
+            "grid_center_lon", 'd', ("grid_size",))
         gridcenterlon.units = "degrees"
         gridimask = cufile.createVariable("grid_imask", 'i', ("grid_size",))
         gridimask.units = "unitless"
-        gridcornerlat = cufile.createVariable("grid_corner_lat", 'd', ("grid_size","grid_corners"))
+        gridcornerlat = cufile.createVariable(
+            "grid_corner_lat", 'd', ("grid_size", "grid_corners"))
         gridcornerlat.units = "degrees"
-        gridcornerlon = cufile.createVariable("grid_corner_lon", 'd', ("grid_size","grid_corners"))
+        gridcornerlon = cufile.createVariable(
+            "grid_corner_lon", 'd', ("grid_size", "grid_corners"))
         gridcornerlon.units = "degrees"
 
-        griddims[:] = numpy.array([nj,ni], numpy.int32)
+        griddims[:] = numpy.array([nj, ni], numpy.int32)
         gridcenterlat[:] = centerLat
         gridcenterlon[:] = centerLon
         gridimask[:] = mask
@@ -337,7 +355,7 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         mask = self.getMask()
 
         ni, nj = self.shape
-        ngrid = ni*nj
+        ngrid = ni * nj
         centerLat = copy.copy(lat)
         centerLat.shape = (ngrid,)
         centerLon = copy.copy(lon)
@@ -346,16 +364,16 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
             mask.shape = (ngrid,)
 
         cornerLat = numpy.ma.filled(copy.copy(blat))
-        cornerLat.shape = (ngrid,4)
+        cornerLat.shape = (ngrid, 4)
         cornerLon = numpy.ma.filled(copy.copy(blon))
-        cornerLon.shape = (ngrid,4)
+        cornerLon.shape = (ngrid, 4)
 
-        iaxis = TransientVirtualAxis("cell",ngrid)
+        iaxis = TransientVirtualAxis("cell", ngrid)
 
         lataxis = TransientAuxAxis1D(centerLat, axes=(iaxis,), bounds=cornerLat,
-                                  attributes={'units':latunits}, id="latitude")
+                                     attributes={'units': latunits}, id="latitude")
         lonaxis = TransientAuxAxis1D(centerLon, axes=(iaxis,), bounds=cornerLon,
-                                  attributes={'units':lonunits}, id="longitude")
+                                     attributes={'units': lonunits}, id="longitude")
         grid = TransientGenericGrid(lataxis, lonaxis, id=gridid, tempmask=mask)
 
         return grid
@@ -371,34 +389,34 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         latvar = self._lataxis_.writeToFile(file)
         lonvar = self._lonaxis_.writeToFile(file)
         if self._maskVar_ is not None:
-            maskid = "mask_"+self.id
+            maskid = "mask_" + self.id
             file.write(self._maskVar_, id=maskid)
             latvar.maskid = maskid
             lonvar.maskid = maskid
         return (latvar, lonvar)
 
-    def writeg( self, file ):
+    def writeg(self, file):
         """Write self as a Gridspec file representing a curvilinear grid.
         The file, normally a CdmsFile, should already be open for writing
         and will be closed."""
         import time
         from .tvariable import TransientVariable
-        
+
         # Set attributes
-        if ( hasattr(file,'Conventions') ):
-            if ( file.Conventions.find('Gridspec')<0 ):
+        if (hasattr(file, 'Conventions')):
+            if (file.Conventions.find('Gridspec') < 0):
                 file.Conventions = file.Conventions + ' Gridspec-0.0'
         else:
             file.Conventions = 'Gridspec-0.0'
-        if ( hasattr(file,'gs_filetypes') ):
-            if ( file.gs_filetypes.find('Curvilinear_Tile')<0 ):
+        if (hasattr(file, 'gs_filetypes')):
+            if (file.gs_filetypes.find('Curvilinear_Tile') < 0):
                 file.gs_filetypes = file.gs_filetypes + ' Curvilinear_Tile'
         else:
             file.gs_filetypes = 'Curvilinear_Tile'
-        t=time.time()
-        id=int((t-int(t))*1.0e9)
+        t = time.time()
+        id = int((t - int(t)) * 1.0e9)
         file.gs_id = id
-        file.gs_originalfilename = os.path.basename( file.id )
+        file.gs_originalfilename = os.path.basename(file.id)
 
         newhistory = '\n' + time.ctime() + ' CDAT/CDMS AbstractCurveGrid'
         # ... The \n gives a newline in the CDMS Python and in the Cdunif C code
@@ -408,77 +426,80 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         # a real newline as the CF specification says, the libraries or ncdump
         # will have to be changed.
         # ... In the future we may want to add more history information.
-        file.history = getattr( self, 'history', '' ) + \
-                       getattr( file, 'history', '' ) + newhistory
+        file.history = getattr(self, 'history', '') + \
+            getattr(file, 'history', '') + newhistory
 
         # former tile variable and attributes
-        if ( hasattr(self,'long_name') and self.long_name!=None ):
+        if (hasattr(self, 'long_name') and self.long_name is not None):
             file.long_name = self.long_name
         else:
             file.long_name = 'gridspec_tile'
         # gs_geometryType is no longer required of Gridspec files, but as yet
         # there is no other proposal for describing the geometry (July 2010)
-        if ( hasattr(self,'gs_geometryType') and self.gs_geometryType!=None):
+        if (hasattr(self, 'gs_geometryType')
+                and self.gs_geometryType is not None):
             file.gs_geometryType = self.gs_geometryType
         else:
             file.gs_geometryType = 'spherical'
         # gs_discretizationType is no longer required of Gridspec files, but it's
         # harmless and may come in useful
-        if ( hasattr(self,'gs_discretizationType') and self.gs_discretizationType!=None ):
+        if (hasattr(self, 'gs_discretizationType')
+                and self.gs_discretizationType is not None):
             file.gs_discretizationType = self.gs_discretizationType
         else:
             file.gs_discretizationType = 'logically_rectangular'
 
         file.gs_lonv = 'gs_x'
         file.gs_latv = 'gs_y'
-    
+
         # Set up and write variables.  When written, cdms writes not only the arrays
         # but also their coordinates, e.g. gs_nip.
-        
-        x=self._lonaxis_
-        if ( not hasattr(x,'units') ):
+
+        x = self._lonaxis_
+        if (not hasattr(x, 'units')):
             print("Warning, no units found for longitude")
             x.units = 'degree_east'
-        if ( not hasattr(x,'standard_name') ):
+        if (not hasattr(x, 'standard_name')):
             print("Warning, no standard_name found for longitude axis")
             x.standard_name = 'longitude'
-        if ( x.standard_name == 'geographic_longitude'):
+        if (x.standard_name == 'geographic_longitude'):
             # temporary for updating test files
             x.standard_name = 'longitude'
         x.id = file.gs_lonv
         # _lonaxis_ is a TransientAxis2D, hence a TransientVariable
-        # But I don't know where the attribute _TransientVariable__domain comes from
-        
-        y=self._lataxis_
-        if ( not hasattr(y,'units') ):
+        # But I don't know where the attribute _TransientVariable__domain comes
+        # from
+
+        y = self._lataxis_
+        if (not hasattr(y, 'units')):
             print("Warning, no units found for latitude")
             y.units = 'degree_north'
-        if ( not hasattr(y,'standard_name') ):
+        if (not hasattr(y, 'standard_name')):
             print("Warning, no standard_name found for latitude axis")
             y.standard_name = 'latitude'
-        if ( y.standard_name == 'geographic_latitude'):
+        if (y.standard_name == 'geographic_latitude'):
             # temporary for updating test files
             y.standard_name = 'latitude'
         y.id = file.gs_latv
 
-        if( not hasattr(x,'_TransientVariable__domain') ):
+        if(not hasattr(x, '_TransientVariable__domain')):
             # There probably doesn't exist enough information to write a correct
             # grid, but this will help.
-            x._TransientVariable__domain = [ (x,), (y,) ]
-        x._TransientVariable__domain[0][0].id='gs_njp'
-        x._TransientVariable__domain[1][0].id='gs_nip'
-        if ( not hasattr(y,'_TransientVariable__domain') ) :
+            x._TransientVariable__domain = [(x,), (y,)]
+        x._TransientVariable__domain[0][0].id = 'gs_njp'
+        x._TransientVariable__domain[1][0].id = 'gs_nip'
+        if (not hasattr(y, '_TransientVariable__domain')):
             # There probably doesn't exist enough information to write a correct
             # grid, but this will help.
-            y._TransientVariable__domain = [ (x,), (y,) ]
-        y._TransientVariable__domain[0][0].id='gs_njp'
-        y._TransientVariable__domain[1][0].id='gs_nip'
+            y._TransientVariable__domain = [(x,), (y,)]
+        y._TransientVariable__domain[0][0].id = 'gs_njp'
+        y._TransientVariable__domain[1][0].id = 'gs_nip'
 
         file.write(x)
         file.write(y)
         file.close()
-    
-    def write_gridspec( self, filename ):
+
+    def write_gridspec(self, filename):
         """writes this grid to a Gridspec-compliant file, or does nothing if there is
         already a known file corresponding to this grid.  The filename should be a
         complete path."""
@@ -486,15 +507,16 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         # use never appeared (yet).
         # The functionality (other than checking gsfile) is now done by the writeg
         # method above.
-        if ( not hasattr( self, "gsfile" ) ):
-            self.gsfile=None
-            self.gspath=None
-        if ( self.gsfile!=None ):
-            return ( tcg.gsfile, tcg.gspath )
+        if (not hasattr(self, "gsfile")):
+            self.gsfile = None
+            self.gspath = None
+        if (self.gsfile is not None):
+            return (tcg.gsfile, tcg.gspath)
         else:
-            raise RuntimeError('The libCF/Gridspec API does not provide for writing CurveGrids<<<')
+            raise RuntimeError(
+                'The libCF/Gridspec API does not provide for writing CurveGrids<<<')
 
-    def init_from_gridspec( self, filename ):
+    def init_from_gridspec(self, filename):
         """reads to grid from a Gridspec-compliant file.  The filename should be a
         complete path.  The contents of the file may overwrite data in the existing
         grid object."""
@@ -505,14 +527,14 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         # - Another way to read a file is with the standard CDMS
         # pattern        file=cdms2.open(...);   g=file('grid') or g=file('')
         try:
-            f = cdms2.open( filename )
+            f = cdms2.open(filename)
         except IOError:
             print("Cannot open grid file for reading: ", filename)
             return
-        init_from_gridspec_file( self, f )
+        init_from_gridspec_file(self, f)
         f.close()
 
-    def init_from_gridspec_file( self, f ):
+    def init_from_gridspec_file(self, f):
         """reads to grid from a Gridspec-compliant file, f.  This f should be a
         CdmsFile object, already open for reading.  The contents of the file may
         overwrite data in the existing grid object."""
@@ -520,7 +542,7 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         # init function and should be called from __init__ .
         ax, ay, gs_attr = f.gridspec_file_contents()
         # ... gridspec_file_contents is defined in dataset.py
-        self.__init__( ay, ax )
+        self.__init__(ay, ax)
         self.gsfile = gs_attr['filebase']
         self.gspath = gs_attr['filepath']
         self.long_name = gs_attr['long_name']
@@ -560,7 +582,7 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         gridaxislist is the elements of newaxislist that correspond to the grid, in the
           preferred order of the grid.
         """
-        
+
         iaxis = self._lataxis_.getAxis(0)
         jaxis = self._lataxis_.getAxis(1)
         k = 0
@@ -576,8 +598,9 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
                 j = k
             k += 1
 
-        if i==-1 or j==-1:
-            raise RuntimeError('Grid lat/lon domains do not match variable domain')
+        if i == -1 or j == -1:
+            raise RuntimeError(
+                'Grid lat/lon domains do not match variable domain')
 
         return ((islice, jslice), (inewaxis, jnewaxis))
 
@@ -585,14 +608,14 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         """Get the grid index"""
         if self._index_ is None:
             # Trying to stick in Stephane Raynaud's patch for autodetection
-            nj,ni = self._lataxis_.shape
-            dlon = numpy.max(self._lonaxis_[:])-numpy.min(self._lonaxis_[:])
-            dx = max(dlon/ni,dlon/nj)
-            dlat = numpy.max(self._lataxis_[:])-numpy.min(self._lataxis_[:])
-            dy = max(dlat/ni,dlat/nj)
+            nj, ni = self._lataxis_.shape
+            dlon = numpy.max(self._lonaxis_[:]) - numpy.min(self._lonaxis_[:])
+            dx = max(dlon / ni, dlon / nj)
+            dlat = numpy.max(self._lataxis_[:]) - numpy.min(self._lataxis_[:])
+            dy = max(dlat / ni, dlat / nj)
             latlin = numpy.ravel(numpy.ma.filled(self._lataxis_[:]))
             lonlin = numpy.ravel(numpy.ma.filled(self._lonaxis_[:]))
-            _bindex.setDeltas(dx,dy)
+            _bindex.setDeltas(dx, dy)
             self._index_ = bindex.bindexHorizontalGrid(latlin, lonlin)
 
         return self._index_
@@ -613,22 +636,26 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         lonspec = spec[CoordTypeToLoc[LongitudeType]]
         latlin = numpy.ravel(numpy.ma.filled(self._lataxis_[:]))
         lonlin = numpy.ravel(numpy.ma.filled(self._lonaxis_[:]))
-        points = bindex.intersectHorizontalGrid(latspec, lonspec, latlin, lonlin, index)
-        if len(points)==0:
-            raise CDMSError('No data in the specified region, longitude=%s, latitude=%s'%(repr(lonspec), repr(latspec)))
+        points = bindex.intersectHorizontalGrid(
+            latspec, lonspec, latlin, lonlin, index)
+        if len(points) == 0:
+            raise CDMSError(
+                'No data in the specified region, longitude=%s, latitude=%s' %
+                (repr(lonspec), repr(latspec)))
 
-        fullmask = numpy.ones(ni*nj)
+        fullmask = numpy.ones(ni * nj)
         numpy.put(fullmask, points, 0)
-        fullmask = numpy.reshape(fullmask, (ni,nj))
-        
-        iind = points//nj
-        jind = points - iind*nj
-        imin, imax, jmin, jmax = (min(iind), max(iind)+1, min(jind), max(jind)+1)
+        fullmask = numpy.reshape(fullmask, (ni, nj))
+
+        iind = points // nj
+        jind = points - iind * nj
+        imin, imax, jmin, jmax = (
+            min(iind), max(iind) + 1, min(jind), max(jind) + 1)
         submask = fullmask[imin:imax, jmin:jmax]
 
         yid = self.getAxis(0).id
         xid = self.getAxis(1).id
-        indexspecs = {yid:slice(imin,imax), xid:slice(jmin,jmax)}
+        indexspecs = {yid: slice(imin, imax), xid: slice(jmin, jmax)}
 
         return submask, indexspecs
 
@@ -661,7 +688,7 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
     def reconcile(self, axes):
         """Return a grid that is consistent with the axes, or None.
         For curvilinear grids this means that the grid-related axes are
-        contained in the 'axes' list. 
+        contained in the 'axes' list.
         """
         result = self
         selfaxes = self.getAxisList()
@@ -670,16 +697,17 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
             if selfaxes[i] not in axes:
                 missing.append(i)
                 result = None
-            
+
         # Some of the grid axes are not in the 'axes' list
         if result is None:
             result = self.clone()
             used = []                   # axes already matched
             for i in missing:
                 for item in axes:
-                    if (item not in used) and len(selfaxes[i])==len(item) and allclose(selfaxes[i], item):
-                        result._lataxis_.setAxis(i,item)
-                        result._lonaxis_.setAxis(i,item)
+                    if (item not in used) and len(selfaxes[i]) == len(
+                            item) and allclose(selfaxes[i], item):
+                        result._lataxis_.setAxis(i, item)
+                        result._lonaxis_.setAxis(i, item)
                         used.append(item)
                         break
                 else:
@@ -700,33 +728,42 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
             alonflat = numpy.ravel(alon)
             self._flataxes_ = (alatflat, alonflat)
         return self._flataxes_
-    shape = property(_getShape,None)
-    
-## PropertiedClasses.set_property (AbstractCurveGrid, 'shape', 
+    shape = property(_getShape, None)
+
+# PropertiedClasses.set_property (AbstractCurveGrid, 'shape',
 ##                                   AbstractCurveGrid._getShape, nowrite=1,
-##                                   nodelete=1)
+# nodelete=1)
+
 
 class DatasetCurveGrid(AbstractCurveGrid):
 
-    def __init__(self, latAxis, lonAxis, id, parent=None, maskvar=None, tempmask=None, node=None):
+    def __init__(self, latAxis, lonAxis, id, parent=None,
+                 maskvar=None, tempmask=None, node=None):
         """Create a file curvilinear grid.
         """
-        AbstractCurveGrid.__init__(self, latAxis, lonAxis, id, maskvar, tempmask, node)
+        AbstractCurveGrid.__init__(
+            self, latAxis, lonAxis, id, maskvar, tempmask, node)
         self.parent = parent
 
     def __repr__(self):
-        return "<DatasetCurveGrid, id: %s, shape: %s>"%(self.id, repr(self.shape))
+        return "<DatasetCurveGrid, id: %s, shape: %s>" % (
+            self.id, repr(self.shape))
+
 
 class FileCurveGrid(AbstractCurveGrid):
 
-    def __init__(self, latAxis, lonAxis, id, parent=None, maskvar=None, tempmask=None, node=None):
+    def __init__(self, latAxis, lonAxis, id, parent=None,
+                 maskvar=None, tempmask=None, node=None):
         """Create a file curvilinear grid.
         """
-        AbstractCurveGrid.__init__(self, latAxis, lonAxis, id, maskvar, tempmask, node)
+        AbstractCurveGrid.__init__(
+            self, latAxis, lonAxis, id, maskvar, tempmask, node)
         self.parent = parent
 
     def __repr__(self):
-        return "<FileCurveGrid, id: %s, shape: %s>"%(self.id, repr(self.shape))
+        return "<FileCurveGrid, id: %s, shape: %s>" % (
+            self.id, repr(self.shape))
+
 
 class TransientCurveGrid(AbstractCurveGrid):
 
@@ -738,10 +775,12 @@ class TransientCurveGrid(AbstractCurveGrid):
         if id is None:
             TransientCurveGrid.grid_count += 1
             id = 'grid_' + str(TransientCurveGrid.grid_count)
-        AbstractCurveGrid.__init__(self, latAxis, lonAxis, id, maskvar, tempmask)
+        AbstractCurveGrid.__init__(
+            self, latAxis, lonAxis, id, maskvar, tempmask)
 
     def __repr__(self):
-        return "<TransientCurveGrid, id: %s, shape: %s>"%(self.id, repr(self.shape))
+        return "<TransientCurveGrid, id: %s, shape: %s>" % (
+            self.id, repr(self.shape))
 
     def toCurveGrid(self, gridid=None):
         if gridid is None:
@@ -750,6 +789,7 @@ class TransientCurveGrid(AbstractCurveGrid):
             result = self.clone()
             result.id = gridid
         return result
+
 
 def readScripCurveGrid(fileobj, dims, whichType, whichGrid):
     """Read a 'native' SCRIP grid file, returning a transient curvilinear grid.
@@ -762,14 +802,14 @@ def readScripCurveGrid(fileobj, dims, whichType, whichGrid):
     from .coord import TransientAxis2D
 
     if 'S' in list(fileobj.variables.keys()):
-        if whichType=="grid":
+        if whichType == "grid":
             gridCornerLatName = 'grid_corner_lat'
             gridCornerLonName = 'grid_corner_lon'
             gridMaskName = 'grid_imask'
             gridCenterLatName = 'grid_center_lat'
             gridCenterLonName = 'grid_center_lon'
             titleName = 'title'
-        elif whichGrid=="destination":
+        elif whichGrid == "destination":
             gridCornerLatName = 'yv_b'
             gridCornerLonName = 'xv_b'
             gridMaskName = 'mask_b'
@@ -784,14 +824,14 @@ def readScripCurveGrid(fileobj, dims, whichType, whichGrid):
             gridCenterLonName = 'xc_a'
             titleName = 'source_grid'
     else:
-        if whichType=="grid":
+        if whichType == "grid":
             gridCornerLatName = 'grid_corner_lat'
             gridCornerLonName = 'grid_corner_lon'
             gridMaskName = 'grid_imask'
             gridCenterLatName = 'grid_center_lat'
             gridCenterLonName = 'grid_center_lon'
             titleName = 'title'
-        elif whichGrid=="destination":
+        elif whichGrid == "destination":
             gridCornerLatName = 'dst_grid_corner_lat'
             gridCornerLonName = 'dst_grid_corner_lon'
             gridMaskName = 'dst_grid_imask'
@@ -814,15 +854,16 @@ def readScripCurveGrid(fileobj, dims, whichType, whichGrid):
     nj = dims[0]
     gridshape = (ni, nj)
     boundsshape = (ni, nj, ncorners)
-    if hasattr(cornerLat, 'units') and string.lower(cornerLat.units)[0:6]=='radian':
-        cornerLat = (cornerLat*(180.0/numpy.pi)).reshape(boundsshape)
-        cornerLon = (cornerLon*(180.0/numpy.pi)).reshape(boundsshape)
+    if hasattr(cornerLat, 'units') and string.lower(
+            cornerLat.units)[0:6] == 'radian':
+        cornerLat = (cornerLat * (180.0 / numpy.pi)).reshape(boundsshape)
+        cornerLon = (cornerLon * (180.0 / numpy.pi)).reshape(boundsshape)
     else:
         cornerLat = cornerLat.reshape(boundsshape)
         cornerLon = cornerLon.reshape(boundsshape)
 
-    iaxis = TransientVirtualAxis("i",ni)
-    jaxis = TransientVirtualAxis("j",nj)
+    iaxis = TransientVirtualAxis("i", ni)
+    jaxis = TransientVirtualAxis("j", nj)
 
     if gridMaskName in vardict:
         # SCRIP convention: 0 for invalid data
@@ -831,33 +872,33 @@ def readScripCurveGrid(fileobj, dims, whichType, whichGrid):
         mask = mask.reshape(gridshape)
     else:
         mask = None
-        
+
     if gridCenterLatName in vardict:
         centerLat = fileobj(gridCenterLatName).reshape(gridshape)
         gclat = fileobj[gridCenterLatName]
-        if hasattr(gclat, "units") and string.lower(gclat.units)=='radians':
-            centerLat *= (180.0/numpy.pi)
+        if hasattr(gclat, "units") and string.lower(gclat.units) == 'radians':
+            centerLat *= (180.0 / numpy.pi)
     else:
-        centerLat = cornerLat[:,:,0]
+        centerLat = cornerLat[:, :, 0]
 
     if gridCenterLonName in vardict:
         centerLon = fileobj(gridCenterLonName).reshape(gridshape)
         gclon = fileobj[gridCenterLonName]
-        if hasattr(gclon, "units") and string.lower(gclon.units)=='radians':
-            centerLon *= (180.0/numpy.pi)
+        if hasattr(gclon, "units") and string.lower(gclon.units) == 'radians':
+            centerLon *= (180.0 / numpy.pi)
     else:
-        centerLon = cornerLon[:,:,0]
+        centerLon = cornerLon[:, :, 0]
 
-    if hasattr(fileobj,titleName):
+    if hasattr(fileobj, titleName):
         gridid = getattr(fileobj, titleName)
-        gridid = string.replace(string.strip(gridid), ' ','_')
+        gridid = string.replace(string.strip(gridid), ' ', '_')
     else:
-        gridid="<None>"
+        gridid = "<None>"
 
     lataxis = TransientAxis2D(centerLat, axes=(iaxis, jaxis), bounds=cornerLat,
-                              attributes={'units':'degrees_north'}, id="latitude")
+                              attributes={'units': 'degrees_north'}, id="latitude")
     lonaxis = TransientAxis2D(centerLon, axes=(iaxis, jaxis), bounds=cornerLon,
-                              attributes={'units':'degrees_east'}, id="longitude")
+                              attributes={'units': 'degrees_east'}, id="longitude")
     grid = TransientCurveGrid(lataxis, lonaxis, id=gridid, tempmask=mask)
 
     return grid

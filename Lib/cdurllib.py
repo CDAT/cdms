@@ -1,13 +1,20 @@
 """Customized URLopener"""
 
-import urllib.request, urllib.parse, urllib.error, getpass, socket, string, sys
+import urllib.request
+import urllib.parse
+import urllib.error
+import getpass
+import socket
+import string
+import sys
 
 MAXFTPCACHE = 10        # Trim the ftp cache beyond this size
+
 
 class CDURLopener(urllib.request.URLopener):
 
     def __init__(self, proxies=None):
-        urllib.request.URLopener.__init__(self,proxies)
+        urllib.request.URLopener.__init__(self, proxies)
         self._userObject = None
 
     # Attach an object to be returned with callbacks
@@ -17,12 +24,15 @@ class CDURLopener(urllib.request.URLopener):
     # Use FTP protocol
     def open_ftp(self, url):
         host, path = urllib.parse.splithost(url)
-        if not host: raise IOError('ftp error', 'no host given')
+        if not host:
+            raise IOError('ftp error', 'no host given')
         host, port = urllib.parse.splitport(host)
         user, host = urllib.parse.splituser(host)
         # if user: user, passwd = splitpasswd(user)
-        if user: passwd = getpass.getpass()
-        else: passwd = None
+        if user:
+            passwd = getpass.getpass()
+        else:
+            passwd = None
         host = urllib.parse.unquote(host)
         user = urllib.parse.unquote(user or '')
         passwd = urllib.parse.unquote(passwd or '')
@@ -36,7 +46,8 @@ class CDURLopener(urllib.request.URLopener):
         path = urllib.parse.unquote(path)
         dirs = string.splitfields(path, '/')
         dirs, file = dirs[:-1], dirs[-1]
-        if dirs and not dirs[0]: dirs = dirs[1:]
+        if dirs and not dirs[0]:
+            dirs = dirs[1:]
         key = (user, host, port, string.joinfields(dirs, '/'))
         # XXX thread unsafe!
         if len(self.ftpcache) > MAXFTPCACHE:
@@ -48,11 +59,13 @@ class CDURLopener(urllib.request.URLopener):
                     v.close()
         try:
             if key not in self.ftpcache:
-                print('Creating ftpwrapper: ',user,host,port,dirs)
+                print('Creating ftpwrapper: ', user, host, port, dirs)
                 self.ftpcache[key] = \
                     urllib.ftpwrapper(user, passwd, host, port, dirs)
-            if not file: type = 'D'
-            else: type = 'I'
+            if not file:
+                type = 'D'
+            else:
+                type = 'I'
             for attr in attrs:
                 attr, value = urllib.parse.splitvalue(attr)
                 if string.lower(attr) == 'type' and \
@@ -60,7 +73,8 @@ class CDURLopener(urllib.request.URLopener):
                     type = string.upper(value)
             (fp, retrlen) = self.ftpcache[key].retrfile(file, type)
             if retrlen is not None and retrlen >= 0:
-                import mimetools, io
+                import mimetools
+                import io
                 headers = mimetools.Message(io.StringIO(
                     'Content-Length: %d\n' % retrlen))
             else:
@@ -104,25 +118,25 @@ class CDURLopener(urllib.request.URLopener):
             if "content-length" in headers:
                 size = int(headers["Content-Length"])
             stayopen = reporthook(0, bs, size, self._userObject)
-            if stayopen==0:
+            if stayopen == 0:
                 raise KeyboardInterrupt
         bytesread = 0
         block = fp.read(bs)
         if reporthook:
             stayopen = reporthook(1, bs, size, self._userObject)
-            if stayopen==0:
+            if stayopen == 0:
                 raise KeyboardInterrupt
         while block:
             tfp.write(block)
             bytesread = bytesread + len(block)
-##             print blocknum, bytesread, size,
-##             if blocknum*blocksize!=bytesread:
-##                 print ' (*)'
-##             else:
-##                 print
+# print blocknum, bytesread, size,
+# if blocknum*blocksize!=bytesread:
+# print ' (*)'
+# else:
+# print
             if block and reporthook:
                 stayopen = reporthook(blocknum, bs, size, self._userObject)
-                if stayopen==0:
+                if stayopen == 0:
                     raise KeyboardInterrupt
             blocknum = blocknum + 1
             block = fp.read(bs)
@@ -132,23 +146,26 @@ class CDURLopener(urllib.request.URLopener):
         del tfp
         return result
 
+
 def sampleReportHook(blocknum, blocksize, size, userObj):
-    sizekb = size/1024
-    percent = min(100,int(100.0*float(blocknum*blocksize)/float(size)))
-    print("Read: %3d%% of %dK"%(percent,sizekb))
+    sizekb = size / 1024
+    percent = min(100, int(100.0 * float(blocknum * blocksize) / float(size)))
+    print("Read: %3d%% of %dK" % (percent, sizekb))
     return 1
+
 
 if __name__ == '__main__':
 
     import sys
-    if len(sys.argv)!=4:
+    if len(sys.argv) != 4:
         print('Usage: cdurllib.py URL filename blocksize')
         sys.exit(1)
 
     url = sys.argv[1]
     filename = sys.argv[2]
     blocksize = int(sys.argv[3])
-    
+
     urlopener = CDURLopener()
-    fname, headers = urlopener.retrieve(url, filename, sampleReportHook, blocksize)
+    fname, headers = urlopener.retrieve(
+        url, filename, sampleReportHook, blocksize)
     print(fname, 'written')

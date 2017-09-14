@@ -96,12 +96,12 @@ unspecified = "No value specified."
 
 # Automatically generate axis and grid boundaries in getBounds
 _autobounds = 2
-                                       # (for 1D lat/lon axes only.)
-                                       # Modes:
-                                       # 0 : off (not bounds generation)
-                                       # 1 : on  (generate bounds)
-                                       # 2 : grid (generate bounds for lat/lon
-                                       # grids only)
+# (for 1D lat/lon axes only.)
+# Modes:
+# 0 : off (not bounds generation)
+# 1 : on  (generate bounds)
+# 2 : grid (generate bounds for lat/lon
+# grids only)
 
 # Set autobounds mode to 'on' or 'off'. If on, getBounds will automatically
 # generate boundary information for an axis or grid, if not explicitly defined.
@@ -346,7 +346,7 @@ def mapLinearExt(axis, bounds, interval, indicator='ccn',
         (((aMinusEps) >= bdMaxRight) and (iind != 'n') and (xind == 'c')) or
         (((bPlusEps) < bdMinLeft) and (iind != 'n') and (yind == 'o')) or
         (((bPlusEps) <= bdMinLeft) and (iind != 'n') and (yind == 'c'))
-        ):
+    ):
         return None
 
     # The intersection is nonempty; use searchsorted to get left/right limits
@@ -363,13 +363,15 @@ def mapLinearExt(axis, bounds, interval, indicator='ccn',
     iEnd = ii + 2
     if(iStart < 0):
         iStart = 0
-    if(iEnd >= length): iEnd = length - 1
+    if(iEnd >= length):
+        iEnd = length - 1
 
     jStart = jj - 1
     jEnd = jj + 2
     if(jStart < 0):
         jStart = 0
-    if(jEnd >= length): jEnd = length - 1
+    if(jEnd >= length):
+        jEnd = length - 1
 
     #
     #  initialise the index to -1 (does not exist)
@@ -688,8 +690,6 @@ class AbstractAxis(CdmsObj):
         self._doubledata_ = None
 
     def __str__(self):
-        import pdb
-        pdb.set_trace()
         return "\n".join(self.listall()) + "\n"
 
     __repr__ = __str__
@@ -1951,7 +1951,7 @@ class TransientAxis(AbstractAxis):
             self._genericBounds_ = isGeneric
         else:
             if (getAutoBounds() == 1 or (getAutoBounds() ==
-                2 and (self.isLatitude() or self.isLongitude()))):
+                                         2 and (self.isLatitude() or self.isLongitude()))):
                 self._bounds_ = self.genGenericBounds()
                 self._genericBounds_ = True
             else:
@@ -2139,12 +2139,13 @@ class FileAxis(AbstractAxis):
                 hasattr(self.parent, 'format') and self.parent.format == "DRS"):
             # For negative strides, get the equivalent slice with positive stride,
             # then reverse the result.
-            if (isinstance(key, slice)) and (key.step is not None) and key.step <0:
+            if (isinstance(key, slice)) and (
+                    key.step is not None) and key.step < 0:
                 posslice = reverseSlice(key, len(self))
                 result = self._obj_.getitem(*(posslice,))
                 return result[::-1]
             else:
-                if isinstance(key, int) and key >=len(self):
+                if isinstance(key, int) and key >= len(self):
                     raise IndexError('Index out of bounds: %d' % key)
                 if not isinstance(key, tuple):
                     key = (key,)
@@ -2189,7 +2190,7 @@ class FileAxis(AbstractAxis):
             raise CDMSError(ReadOnlyAxis + self.id)
         if self.parent is None:
             raise CDMSError(FileWasClosed + self.id)
-        # need setslice to create a new shape using [newaxis]    
+        # need setslice to create a new shape using [newaxis]
         if(isinstance(index, slice)):
             if(index.start is not None):
                 if(self.shape[0] < index.start):
@@ -2198,7 +2199,8 @@ class FileAxis(AbstractAxis):
                     if(self.isUnlimited() and (high >= Max32int)):
                         high = self.__len__()
                     high = min(Max32int, high)
-                    return self._obj_.setslice(*(low, high, numpy.ma.filled(value)))
+                    return self._obj_.setslice(
+                        *(low, high, numpy.ma.filled(value)))
         return self._obj_.setitem(*(index, numpy.ma.filled(value)))
 
     def __setslice__(self, low, high, value):
@@ -2422,7 +2424,7 @@ def axisMatchIndex(axes, specifications=None, omit=None, order=None):
     elif isinstance(specifications, list):
         speclist = specifications
     elif isinstance(specifications, tuple):
-        speclist =list(specifications)
+        speclist = list(specifications)
     elif isinstance(specifications, int):
         speclist = [specifications]
     elif isinstance(specifications, types.FunctionType):
@@ -2451,7 +2453,7 @@ def axisMatchIndex(axes, specifications=None, omit=None, order=None):
     elif isinstance(omit, list):
         omitlist = omit
     elif isinstance(omit, tuple):
-        omitlist =list(omit)
+        omitlist = list(omit)
     elif isinstance(omit, int):
         omitlist = [omit]
     elif isinstance(omit, types.FunctionType):

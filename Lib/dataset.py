@@ -688,7 +688,8 @@ class Dataset(CdmsObj, cuDataset):
                                     break
 
                             if not foundname:
-                                print('Warning: cannot generate a grid for variable', var.id)
+                                print(
+                                    'Warning: cannot generate a grid for variable', var.id)
                                 continue
 
                         # Create the grid
@@ -946,7 +947,11 @@ class Dataset(CdmsObj, cuDataset):
                     try:
                         fileurl = os.path.join(dburl, self.datapath, filename)
                     except BaseException:
-                        print('Error joining', repr(dburl), self.datapath, filename)
+                        print(
+                            'Error joining',
+                            repr(dburl),
+                            self.datapath,
+                            filename)
                         raise
                 (scheme, netloc, path, parameters, query,
                  fragment) = urlparse(fileurl)
@@ -1023,11 +1028,11 @@ class Dataset(CdmsObj, cuDataset):
         retval = list(self.variables.values())
         if spatial:
             retval = [x for x in retval if x.id[
-                    0:7] != "bounds_" and x.id[
-                    0:8] != "weights_" and (
-                    (x.getLatitude() is not None) or (
-                        x.getLongitude() is not None) or (
-                        x.getLevel() is not None))]
+                0:7] != "bounds_" and x.id[
+                0:8] != "weights_" and (
+                (x.getLatitude() is not None) or (
+                    x.getLongitude() is not None) or (
+                    x.getLevel() is not None))]
         return retval
 
     def getAxis(self, id):
@@ -1120,7 +1125,8 @@ class CdmsFile(CdmsObj, cuDataset):
                         )
                         for coord in coords:
                             if coord not in list(self._file_.variables.keys()):
-                                cdunifvar = Cdunif.CdunifFile(hostObj.gridVars[coord][0], mode)
+                                cdunifvar = Cdunif.CdunifFile(
+                                    hostObj.gridVars[coord][0], mode)
                                 self._file_.variables[coord] = cdunifvar.variables[coord]
 
             # Get lists of 1D and auxiliary coordinate axes
@@ -1219,7 +1225,8 @@ class CdmsFile(CdmsObj, cuDataset):
                                     break
 
                             if not foundname:
-                                print('Warning: cannot generate a grid for variable', var.id)
+                                print(
+                                    'Warning: cannot generate a grid for variable', var.id)
                                 continue
 
                         # Create the grid
@@ -1231,7 +1238,9 @@ class CdmsFile(CdmsObj, cuDataset):
                                 if gridkey[3] in self.variables:
                                     maskvar = self.variables[gridkey[3]]
                                 else:
-                                    print('Warning: mask variable %s not found' % gridkey[3])
+                                    print(
+                                        'Warning: mask variable %s not found' %
+                                        gridkey[3])
                                     maskvar = None
                             else:
                                 maskvar = None
@@ -1244,7 +1253,8 @@ class CdmsFile(CdmsObj, cuDataset):
                                         lat, lon, gridname, parent=self, maskvar=maskvar)
                                 except BaseException:
                                     if(lat.rank() == 1 and lon.rank() == 1):
-                                        grid = FileRectGrid(self, gridname, lat, lon, gridkey[2], gridtype)
+                                        grid = FileRectGrid(
+                                            self, gridname, lat, lon, gridkey[2], gridtype)
 
                         self.grids[grid.id] = grid
                         self._gridmap_[gridkey] = grid
@@ -2115,11 +2125,11 @@ class CdmsFile(CdmsObj, cuDataset):
         retval = list(self.variables.values())
         if spatial:
             retval = [x for x in retval if x.id[
-                    0:7] != "bounds_" and x.id[
-                    0:8] != "weights_" and (
-                    (x.getLatitude() is not None) or (
-                        x.getLongitude() is not None) or (
-                        x.getLevel() is not None))]
+                0:7] != "bounds_" and x.id[
+                0:8] != "weights_" and (
+                (x.getLatitude() is not None) or (
+                    x.getLongitude() is not None) or (
+                    x.getLevel() is not None))]
         return retval
 
     def getAxis(self, id):

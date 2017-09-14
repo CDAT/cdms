@@ -289,7 +289,6 @@ def combineKeys(mydict, typedict, timeIsLinear=0,
     # Sort the projected time, level indices
     keys = OrderedDict(sorted(mydict.items())).keys()
 
-
     axislist = []
     prevend = None
     prevpath = None
@@ -297,7 +296,7 @@ def combineKeys(mydict, typedict, timeIsLinear=0,
     compressPart = []
     partition = []
     previ = 0
-    firstunits = None
+    firstunits = ""
     prevvals = None
     coordToInd = {(None, None): (None, None)}
     linCoordToInd = {(None, None): (None, None)}
@@ -308,7 +307,7 @@ def combineKeys(mydict, typedict, timeIsLinear=0,
         if name0 is None:
             name0 = name
         values, units, dummy = typedict[(path, name)]
-        if firstunits is None:
+        if firstunits is "":
             firstunits = units
         if prevend is not None and prevend >= i0:
             if prevend >= i1:
@@ -586,8 +585,6 @@ def cloneWithLatCheck(axis):
     except CDMSError:
         b = mycopy.genGenericBounds()
         mycopy.setBounds(b)
-    import pdb
-    pdb.set_trace()
     for k, v in axis.attributes.items():
         setattr(mycopy, k, v)
     return mycopy
@@ -926,8 +923,6 @@ def main(argv):
     else:
         template = None
 
-    import pdb
-    pdb.set_trace()
     axisdict = {}
     vardict = {}
     filemap = {}
@@ -1003,8 +998,6 @@ def main(argv):
         #   for non-partitioned axes only
         #
         tempmap = {}
-        import pdb
-        pdb.set_trace()
         for axis in list(extendDset.axes.values()):
             if not ((splitOnTime and (axis.isTime() or axis.id == timeid)) or
                     (splitOnLevel and (axis.isLevel() or axis.id == levelid))):
@@ -1031,8 +1024,6 @@ def main(argv):
         #   the transient axis object associated with a non-partitioned dimension
         #
 
-        import pdb
-        pdb.set_trace()
         for var in list(extendDset.variables.values()):
             tempdomain = []
             for id in var.getAxisIds():
@@ -1148,8 +1139,6 @@ def main(argv):
         # variable per axis...
         crude_var_axes = [[ax[0] for ax in var.getDomain()]
                           for var in list(f.variables.values())]
-        import pdb
-        pdb.set_trace()
         var_axes = set().union(*crude_var_axes)
         other_axes = list(set(f.axes.values()) - var_axes)
         if len(other_axes) > 0:
@@ -1361,7 +1350,7 @@ def main(argv):
 
             if forecast:
                 if (basepath, 'fctau0') not in fcdict:
-                    fcdict[(basepath, 'fctau0')] = ([fctau0], None, None)
+                    fcdict[(basepath, 'fctau0')] = ([fctau0], "", None)
 
             if varname in filemap:
                 filemap[varname].append(tuple(varentry))
@@ -1454,8 +1443,6 @@ def main(argv):
         # >>> that all variables can have the same time axis..  For now, just raise an error
         # >>> if there are time axis differences at this point.
         values0, units0, calendar0 = timedict[list(timedict.keys())[0]]
-        import pdb
-        pdb.set_trace()
 
         timedict_same = all([((values0 == values1).all() and units0 == units1 and calendar0 == calendar1)
                              for (values1, units1, calendar1) in list(timedict.values())])
@@ -1614,7 +1601,7 @@ def main(argv):
             domain, attributes, tcode = vardict[varname]
             for i in range(len(domain)):
                 item = domain[i]
-                if isinstance(item, bytes) and item == name:
+                if isinstance(item, str) and item == name:
                     domain[i] = axisobj
 
         # Add bounds variables to vardict, varindex
@@ -1634,7 +1621,7 @@ def main(argv):
                         if reprVar in varids:
                             varids.append(boundsname)
                     tmpdom = boundsinfo[0]
-                    if isinstance(tmpdom[1], bytes):
+                    if isinstance(tmpdom[1], str):
                         bndsobj = tmpdom[0]
                         boundsdomain = (bndsobj, axisobj)
                     else:
@@ -1698,9 +1685,6 @@ def main(argv):
         raise RuntimeError(
             "Variable '%s' is duplicated, and is a function of lat or lon: files %s, %s" %
             illegalvars[0])
-
-    import pdb
-    pdb.set_trace()
 
     if verbose and len(list(duplicatevars.values())) > 0:
         print('Duplicate variables:', file=sys.stderr)
@@ -1791,8 +1775,6 @@ def main(argv):
 #    keys = vardict.keys()
 #    keys = list(keys).sort()
     keys = OrderedDict(sorted(vardict.items())).keys()
-    import pdb
-    pdb.set_trace()
     for key in keys:
         if (includeList is not None) and (key not in includeList):
             continue

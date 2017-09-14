@@ -1,34 +1,39 @@
-## Automatically adapted for numpy.oldnumeric Aug 01, 2007 by 
-## Further modified to be pure new numpy June 24th 2008
+# Automatically adapted for numpy.oldnumeric Aug 01, 2007 by
+# Further modified to be pure new numpy June 24th 2008
 
 "Emulation of old cu package"
-import string, types, sys
+import string
+import types
+import sys
 from .error import CDMSError
 from .dataset import openDataset, createDataset
 from .tvariable import createVariable
 import numpy
 
+
 class cuDataset():
     "A mixin class to support the old cu interface"
-    def __init__ (self):
+
+    def __init__(self):
         self.cleardefault()
 
-    def __call__ (self, id, *args, **kwargs):
+    def __call__(self, id, *args, **kwargs):
         """Call a variable object with the given id. Exception if not found.
            Call the variable with the other arguments.
         """
-# note defined here because this is the class all the dataset-type classes inherit
+# note defined here because this is the class all the dataset-type classes
+# inherit
         v = self.variables.get(id)
         if v is None:
             try:
-                if ( self.is_gridspec_grid_file() and
-                     ( id=='' or id=='grid' or id=='gridspec' ) and
-                     len(args)==0 and len(kwargs)==0
-                     ):
+                if (self.is_gridspec_grid_file() and
+                        (id == '' or id == 'grid' or id == 'gridspec') and
+                    len(args) == 0 and len(kwargs) == 0
+                    ):
                     return self.readg()
                 else:
                     raise CDMSError("No such variable or grid, " + id)
-            except ( AttributeError, TypeError ):
+            except (AttributeError, TypeError):
                 raise CDMSError("No such variable, " + id)
         return v(*args, **kwargs)
 
@@ -48,19 +53,19 @@ class cuDataset():
         try:
             v = self.variables[vname]
         except KeyError:
-            raise CDMSError("No variable named " + vname + " in file " + \
-                  self.id)
+            raise CDMSError("No variable named " + vname + " in file " +
+                            self.id)
         return v
 
-    def default_variable (self, vname):
+    def default_variable(self, vname):
         "Set the default variable name."
         self.__dict__['default_variable_name'] = vname
 
-    def cleardefault (self):
+    def cleardefault(self):
         "Clear the default variable name."
         self.default_variable("no_default_variable_name_specified")
-    
-    def listall (self, vname=None, all=None):
+
+    def listall(self, vname=None, all=None):
         """Get info about data from the file.
         :::
         Options:::
@@ -68,11 +73,12 @@ class cuDataset():
         all :: (None/True/False/int) (None) include axes information
         :::
         """
-        if vname is None: vname = self.default_variable_name
+        if vname is None:
+            vname = self.default_variable_name
         try:
             m = numpy.get_printoptions()['threshold']
             result = []
-            result.append('*** Description of slab %s in file %s***' % \
+            result.append('*** Description of slab %s in file %s***' %
                           (vname, self.id))
             result.append('Name: ' + vname)
             v = self._v(vname)
@@ -94,23 +100,24 @@ class cuDataset():
                 result.append('Last: ' + str(axis[-1]))
                 if all:
                     result.append(str(self.dimensionarray(axis.id, vname)))
-            result.append ('*** End of description of %s ***' %vname)
+            result.append('*** End of description of %s ***' % vname)
             return result
         finally:
-            numpy.set_printoptions (threshold=m)
-        
-    def listattribute (self, vname=None):
+            numpy.set_printoptions(threshold=m)
+
+    def listattribute(self, vname=None):
         """Get attributes of data from the file.
         :::
         Options:::
         vname :: (str/None) (None) variable name
         :::
         """
-        if vname is None: vname = self.default_variable_name
+        if vname is None:
+            vname = self.default_variable_name
         v = self._v(vname)
         return list(v.attributes.keys())
 
-    def listdimension (self, vname=None):
+    def listdimension(self, vname=None):
         """Return a list of the dimension names associated with a variable.
            If no argument, return the file.axes.keys()
         :::
@@ -118,20 +125,20 @@ class cuDataset():
         vname :: (str/None) (None) variable name
         :::
         """
-        if vname is None: 
+        if vname is None:
             return list(self.axes.keys())
         v = self._v(vname)
         d = v.getDomain()
         x = [n[0] for n in d]
         return [getattr(n, 'id') for n in x]
 
-    def listglobal (self):
+    def listglobal(self):
         """Returns a list of the global attributes in the file.
         :::
         """
         return list(self.attributes.keys())
 
-    def listvariable (self):
+    def listvariable(self):
         """Return a list of the variables in the file.
         :::
         """
@@ -139,35 +146,37 @@ class cuDataset():
 
     listvariables = listvariable
 
-    def showglobal (self, device=None):
+    def showglobal(self, device=None):
         """Show the global attributes in the file.
         :::
         Options:::
         device :: (None/file) (None) output device
         :::
         """
-        if device is None: device=sys.stdout
+        if device is None:
+            device = sys.stdout
         device.write("Global attributes in file ")
         device.write(self.id)
         device.write(":\n")
         device.write(str(self.listglobal()))
         device.write("\n")
 
-    def showvariable (self, device=None):
+    def showvariable(self, device=None):
         """Show the variables in the file.
         :::
         Options:::
         device :: (None/file) (None) output device
         :::
         """
-        if device is None: device=sys.stdout
+        if device is None:
+            device = sys.stdout
         device.write("Variables in file ")
         device.write(self.id)
         device.write(":\n")
         device.write(str(self.listvariable()))
         device.write("\n")
 
-    def showattribute (self, vname=None, device=None):
+    def showattribute(self, vname=None, device=None):
         """Show the attributes of vname.
         :::
         Options:::
@@ -175,8 +184,10 @@ class cuDataset():
         device :: (None/file) (None) output device
         :::
         """
-        if device is None: device=sys.stdout
-        if vname is None: vname = self.default_variable_name
+        if device is None:
+            device = sys.stdout
+        if vname is None:
+            vname = self.default_variable_name
         device.write("Attributes of ")
         device.write(vname)
         device.write(" in file ")
@@ -184,8 +195,8 @@ class cuDataset():
         device.write(":\n")
         device.write(str(self.listattribute(vname)))
         device.write("\n")
-        
-    def showdimension (self, vname=None, device=None):
+
+    def showdimension(self, vname=None, device=None):
         """Show the dimension names associated with a variable.
         :::
         Options:::
@@ -193,8 +204,10 @@ class cuDataset():
         device :: (None/file) (None) output device
         :::
         """
-        if device is None: device=sys.stdout
-        if vname is None: vname = self.default_variable_name
+        if device is None:
+            device = sys.stdout
+        if vname is None:
+            vname = self.default_variable_name
         device.write("Dimension names of ")
         device.write(vname)
         device.write(" in file ")
@@ -202,8 +215,8 @@ class cuDataset():
         device.write(":\n")
         device.write(str(self.listdimension(vname)))
         device.write("\n")
-        
-    def showall (self, vname=None, all=None, device=None):
+
+    def showall(self, vname=None, all=None, device=None):
         """Show a full description of the variable.
         :::
         Options:::
@@ -212,13 +225,15 @@ class cuDataset():
         device :: (None/file) (None) output device
         :::
         """
-        if device is None: device=sys.stdout
-        if vname is None: vname = self.default_variable_name
+        if device is None:
+            device = sys.stdout
+        if vname is None:
+            vname = self.default_variable_name
         alist = self.listall(vname, all=all)
         device.write(string.join(alist, "\n"))
         device.write("\n")
 
-    def dimensionobject (self, dname, vname=None):
+    def dimensionobject(self, dname, vname=None):
         """CDMS axis object for the dimension named dname.
         :::
         Options:::
@@ -231,11 +246,11 @@ class cuDataset():
         axis :: (cdms2.axis.FileAxis) (0) file axis whose id is vname
         :::
         """
-        if vname is None: 
+        if vname is None:
             try:
                 return self.axes[dname]
             except KeyError:
-                raise CDMSError("No axis named " + dname + " in file " +\
+                raise CDMSError("No axis named " + dname + " in file " +
                                 self.id + ".")
         else:
             v = self._v(vname)
@@ -244,10 +259,10 @@ class cuDataset():
                 if x[0].id == dname:
                     return x[0]
             else:
-                raise CDMSError(vname + " has no axis named " + dname + \
+                raise CDMSError(vname + " has no axis named " + dname +
                                 " in file " + self.id + ".")
-        
-    def dimensionarray (self, dname, vname=None):
+
+    def dimensionarray(self, dname, vname=None):
         """Values of the dimension named dname.
         :::
         Options:::
@@ -261,8 +276,8 @@ class cuDataset():
         :::
         """
         return self.dimensionobject(dname, vname).getValue()
-    
-    def getdimensionunits (self, dname, vname=None):
+
+    def getdimensionunits(self, dname, vname=None):
         """Get the units for the given dimension.
         :::
         Options:::
@@ -278,7 +293,7 @@ class cuDataset():
         x = self.dimensionobject(dname, vname)
         return x.units
 
-    def getglobal (self, attribute):
+    def getglobal(self, attribute):
         """Get the value of the global attribute.
         :::
         Input:::
@@ -292,8 +307,8 @@ class cuDataset():
             return self.attributes[attribute]
         except KeyError:
             return None
-    
-    def getattribute (self, vname, attribute):
+
+    def getattribute(self, vname, attribute):
         """Get the value of attribute for variable vname
         :::
         Input:::
@@ -306,8 +321,8 @@ class cuDataset():
         """
         v = self._v(vname)
         return getattr(v, attribute)
-            
-    def getslab (self, vname, *args,**keys):
+
+    def getslab(self, vname, *args, **keys):
         """getslab('name', arg1, arg2, ....) returns a cdms variable
            containing the data.
 
@@ -337,10 +352,10 @@ class cuDataset():
         nargs = len(args)
         v = self._v(vname)
         if nargs == 0:
-           return v.subRegion()
+            return v.subRegion()
 # note CDMS treats None as a colon in getRegion and mapInterval
         ndims = v.rank()
-        cdms_args = [':'] * ndims 
+        cdms_args = [':'] * ndims
         i = 0
         idim = 0
         ne = 0
@@ -348,29 +363,31 @@ class cuDataset():
             if not (idim < ndims):
                 raise CDMSError("Too many arguments to getslab.")
             x = args[i]
-            if x == ':' or x == None:
+            if x == ':' or x is None:
                 i = i + 1
                 idim = idim + 1
                 continue
             elif x == Ellipsis:
-                if ne: raise CDMSError("Only one ellipsis allowed.")
+                if ne:
+                    raise CDMSError("Only one ellipsis allowed.")
                 idim = ndims - (nargs - i - 1)
                 i = i + 1
                 ne = 1
-            elif type(x) == tuple:
+            elif isinstance(x, tuple):
                 cdms_args[idim] = x
                 idim = idim + 1
                 i = i + 1
             else:
-                if not ((i+1) < nargs):
-                    raise CDMSError("Arguments to getslab not paired properly.")
+                if not ((i + 1) < nargs):
+                    raise CDMSError(
+                        "Arguments to getslab not paired properly.")
                 low = float(x)
-                high = float(args[i+1])
+                high = float(args[i + 1])
                 cdms_args[idim] = (low, high, 'cc')
                 idim = idim + 1
                 i = i + 2
         sq = keys.get('squeeze', 0)
-        result = v.subRegion(*tuple(cdms_args), **{'squeeze':sq})
+        result = v.subRegion(*tuple(cdms_args), **{'squeeze': sq})
         result.parent = self
         result.id = vname
         return result
@@ -391,7 +408,7 @@ class cuDataset():
         grid :: (cdms2.hgrid.TransientCurveGrid/cdms2.gengrid.TransientGenericGrid) (0) variable requested
         :::
         """
-        
+
         from . import hgrid, gengrid
 
         # Grid file
@@ -400,7 +417,7 @@ class cuDataset():
             whichType = "grid"
 
         # Destination grid from mapping file
-        elif whichGrid=="destination":
+        elif whichGrid == "destination":
             dims = self('dst_grid_dims')
             whichType = "mapping"
 
@@ -409,16 +426,16 @@ class cuDataset():
             dims = self('src_grid_dims')
             whichType = "mapping"
 
-        if len(dims)==2:
+        if len(dims) == 2:
             result = hgrid.readScripCurveGrid(self, dims, whichType, whichGrid)
-        elif len(dims)==1:
-            result = gengrid.readScripGenericGrid(self, dims, whichType, whichGrid)
+        elif len(dims) == 1:
+            result = gengrid.readScripGenericGrid(
+                self, dims, whichType, whichGrid)
         else:
-            raise CDMSError("Grid rank must be 1 or 2, found: %d"%len(dims))
+            raise CDMSError("Grid rank must be 1 or 2, found: %d" % len(dims))
 
-        if checkGrid==1:
+        if checkGrid == 1:
             nonConvexCells = result.checkConvex()
             result.fixCutCells(nonConvexCells)
 
         return result
-

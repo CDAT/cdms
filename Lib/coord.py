@@ -314,7 +314,8 @@ class AbstractAxis2D(AbstractCoordinateAxis):
             newbounds = None
         else:
             # bounds can be a numarray or DatasetVariable
-            newbounds = bounds[self.specs2slices(specs, force=1)[0]]
+            speclist = self._process_specs(specs, {})
+            newbounds = bounds[self.specs2slices(speclist, force=1)[0]]
 
         # Note: disable axis copy to preserve identity of grid and variable
         # domains

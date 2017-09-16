@@ -6,10 +6,9 @@ TransientVariable (created by createVariable)
 is a child of both AbstractVariable and the masked array class.
 Contains also the write part of the old cu interface.
 """
+import sys
 import json
 import re
-import types
-from . import typeconv
 import numpy
 from numpy import sctype2char
 from .error import CDMSError
@@ -219,6 +218,10 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         self.missing_value = self._getmissing()
 #        self._FillValue = self._getmissing()
         if id is not None:
+            # convert unicode to string
+            if sys.version_info < (3, 0, 0):
+                if isinstance(id, unicode): # noqa
+                    id = str(id)
             if not isinstance(id, str):
                 raise CDMSError('id must be a string')
             self.id = id
@@ -362,7 +365,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
     def getDomain(self):
         for i in range(self.rank()):
             if self.__domain[i] is None:
-                junk = self.getAxis(i)  # will force a fill in
+                self.getAxis(i)  # will force a fill in
         return self.__domain
 
     def getAxis(self, n):
@@ -505,7 +508,10 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             raise CDMSError("setdimattribute, dim out of bounds.")
         d = self.getAxis(dim)
         if field == "name":
-            if not isinstance(value, bytes):
+            if sys.version_info < (3, 0, 0):
+                if isinstance(value, unicode): # noqa
+                    value = str(value)
+            if not isinstance(value, str):
                 raise CDMSError("setdimattribute: name not a string")
             d.id = value
 
@@ -518,7 +524,10 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             self.setAxis(dim, a)
 
         elif field == "units":
-            if not isinstance(value, bytes):
+            if sys.version_info < (3, 0, 0):
+                if isinstance(value, unicode): # noqa
+                    value = str(value)
+            if not isinstance(value, str):
                 raise CDMSError("setdimattribute: units not a string")
             d.units = value
 
@@ -630,7 +639,6 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         sphereRadius: radius of the earth
         maxElev: maximum elevation for representation on the sphere
         """
-        from . import mvSphereMesh
         from . import mvVTKSGWriter
         from . import mvVsWriter
         try:

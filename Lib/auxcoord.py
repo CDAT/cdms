@@ -1,10 +1,12 @@
 """
 CDMS 1-D auxiliary coordinates.
 
-Note: In contrast to Axis objects (concrete classes subclassed from AbstractAxis), auxiliary coordinate variables are not monotonic in value, and do not share a name with the dimension.
+Note: In contrast to Axis objects (concrete classes subclassed from AbstractAxis),
+auxiliary coordinate variables are not monotonic in value, and do not share a name
+with the dimension.
 """
 
-## import internattr
+# import internattr
 from .error import CDMSError
 from .coord import AbstractCoordinateAxis
 from .fvariable import FileVariable
@@ -111,6 +113,3 @@ class TransientAuxAxis1D(AbstractAuxAxis1D, TransientVariable):
                                    id=id, copyaxes=copyaxes)
         if axes is not None:
             self.setBounds(bounds)
-
-# internattr.initialize_internal_attributes(TransientAuxAxis1D) # Copy
-# internal attrs from parents

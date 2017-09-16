@@ -6,7 +6,6 @@ from .cdxmllib import XMLParser
 from . import CDML
 import re
 from . import cdmsNode
-import string
 
 # Error constants
 InvalidAttribute = "Invalid attribute"
@@ -104,7 +103,7 @@ class CDMLParser(XMLParser):
                     attrs[attrname] = attdefault
         method(attrs)
 
-    #------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
     # CDML tags
 
     def start_attr(self, attrs):
@@ -123,7 +122,7 @@ class CDMLParser(XMLParser):
         attr.setValueFromString(attr.getContent(), attr.datatype)
         var.setExternalAttrFromAttr(attr)
 
-    #------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
 
     def start_axis(self, attrs):
         if self.verbose:
@@ -145,7 +144,7 @@ class CDMLParser(XMLParser):
     def end_axis(self):
         self.popCurrentNode()
 
-    #------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
     def start_cdml(self, attrs):
         if self.verbose:
             print(('cdml:', attrs))
@@ -153,7 +152,7 @@ class CDMLParser(XMLParser):
     def end_cdml(self):
         pass
 
-    #------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
 
     def start_component(self, attrs):
         if self.verbose:
@@ -162,7 +161,7 @@ class CDMLParser(XMLParser):
     def end_component(self):
         pass
 
-    #------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
     def start_compoundAxis(self, attrs):
         if self.verbose:
             print(('compoundAxis:', attrs))
@@ -170,7 +169,7 @@ class CDMLParser(XMLParser):
     def end_compoundAxis(self):
         pass
 
-    #------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
     def start_data(self, attrs):
         if self.verbose:
             print(('data:', attrs))
@@ -178,7 +177,7 @@ class CDMLParser(XMLParser):
     def end_data(self):
         pass
 
-    #------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
 
     def start_dataset(self, attrs):
         if self.verbose:
@@ -194,7 +193,7 @@ class CDMLParser(XMLParser):
         dataset = self.popCurrentNode()
         dataset.validate()
 
-    #------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
 
     def start_doclink(self, attrs):
         if self.verbose:
@@ -208,7 +207,7 @@ class CDMLParser(XMLParser):
     def end_doclink(self):
         self.popCurrentNode()
 
-    #------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
 
     def start_domElem(self, attrs):
         if self.verbose:
@@ -231,7 +230,7 @@ class CDMLParser(XMLParser):
     def end_domElem(self):
         pass
 
-    #------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
     def start_domain(self, attrs):
         if self.verbose:
             print(('domain:', attrs))
@@ -242,7 +241,7 @@ class CDMLParser(XMLParser):
     def end_domain(self):
         self.popCurrentNode()
 
-    #------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
 
     def start_rectGrid(self, attrs):
         if self.verbose:
@@ -259,7 +258,7 @@ class CDMLParser(XMLParser):
     def end_rectGrid(self):
         self.popCurrentNode()
 
-    #------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
 
     def start_linear(self, attrs):
         if self.verbose:
@@ -285,7 +284,7 @@ class CDMLParser(XMLParser):
     def end_linear(self):
         pass
 
-    #------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
 
     def start_variable(self, attrs):
         if self.verbose:
@@ -300,7 +299,7 @@ class CDMLParser(XMLParser):
     def end_variable(self):
         self.popCurrentNode()
 
-    #------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
 
     def start_xlink(self, attrs):
         if self.verbose:
@@ -316,7 +315,7 @@ class CDMLParser(XMLParser):
     def end_xlink(self):
         self.popCurrentNode()
 
-    #------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
 
     def cdml_syntax_error(self, lineno, message):
         print(('error near line %d:' % lineno, message))

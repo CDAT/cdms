@@ -6,7 +6,7 @@ import urllib.error
 import getpass
 import socket
 import string
-import sys
+import os
 
 MAXFTPCACHE = 10        # Trim the ftp cache beyond this size
 
@@ -78,7 +78,7 @@ class CDURLopener(urllib.request.URLopener):
                 headers = mimetools.Message(io.StringIO(
                     'Content-Length: %d\n' % retrlen))
             else:
-                headers = noheaders()
+                headers = ""
             return urllib.addinfourl(fp, headers, "ftp:" + url)
         except urllib.ftperrors() as msg:
             raise IOError('ftp error', msg).with_traceback(sys.exc_info()[2])
@@ -91,10 +91,10 @@ class CDURLopener(urllib.request.URLopener):
         if not filename and (not type or type == 'file'):
             try:
                 fp = self.open_local_file(url1)
-                hdrs = fp.info()
+                fp.info()
                 del fp
-                return url2pathname(urllib.parse.splithost(url1)[1]), hdrs
-            except IOError as msg:
+#                return url2pathname(urllib.parse.splithost(url1)[1]), hdrs
+            except IOError:
                 pass
         fp = self.open(url)
         headers = fp.info()

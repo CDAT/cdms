@@ -3,28 +3,26 @@
 
 "CDMS Variable objects, abstract interface"
 import numpy
-import types
 import string
 import re
 import warnings
-from . import cdmsNode
 from .cdmsobj import CdmsObj
 import cdms2
 from .slabinterface import Slab
-from .sliceut import *
+from .sliceut import splitSliceExt, splitSlice
 from .error import CDMSError
 from .axis import axisMatchIndex, axisMatchAxis, axisMatches, unspecified, CdtimeTypes, AbstractAxis
 from . import selectors
 import copy
 # from regrid2 import Regridder, PressureRegridder, CrossSectionRegridder
-#from .mvCdmsRegrid import CdmsRegrid
+# from .mvCdmsRegrid import CdmsRegrid
 from .mvCdmsRegrid import CdmsRegrid, getBoundList, _getCoordList
 
 from regrid2.mvGenericRegrid import guessPeriodicity
-#import PropertiedClasses
+# import PropertiedClasses
 from .convention import CF1
 from .grid import AbstractRectGrid
-#import internattr
+# import internattr
 
 InvalidRegion = "Invalid region: "
 OutOfRange = "Coordinate interval is out of range or intersection has no data: "
@@ -112,9 +110,9 @@ Could not find all the horizontal axes for order = %s in getMinHorizontalMask
 
 def setNumericCompatibility(mode):
     global _numeric_compatibility
-    if mode == True or mode == 'on':
+    if mode is True or mode == 'on':
         _numeric_compatibility = True
-    elif mode == False or mode == 'off':
+    elif mode is False or mode == 'off':
         _numeric_compatibility = False
 
 
@@ -479,7 +477,8 @@ class AbstractVariable(CdmsObj, Slab):
                 value = numpy.array(
                     [numpy.ma.default_fill_value(self)], selftype)
         # '?' for Boolean and object
-        elif isinstance(value, (str, numpy.string_, numpy.str, numpy.string0, numpy.str_)) and selftype in ['?', 'c', 'O', 'S']:
+        elif isinstance(value, (str, numpy.string_, numpy.str,
+                        numpy.string0, numpy.str_)) and selftype in ['?', 'c', 'O', 'S']:
             pass
         else:
             raise CDMSError('Invalid missing value %s' % repr(value))
@@ -949,13 +948,11 @@ class AbstractVariable(CdmsObj, Slab):
         if raweasy:
             return self._returnArray(result, squeeze)
 
-        #----------------------------------------------------------------------
+        # ----------------------------------------------------------------------
         #
         #  set ALL the axes (transient variable)
         #
-        #----------------------------------------------------------------------
-
-        wrapspec = speclist[wrapdim]
+        # ----------------------------------------------------------------------
 
         axes = []
         for i in range(self.rank()):
@@ -1118,7 +1115,8 @@ avariable.regrid: regridTool = 'esmf' requires bounds for source grid, will swit
                     regridMethod = 'linear'
                 if not hasattr(regrid2, "ESMFRegrid"):
                     message = """
-avariable.regrid: regridTool = 'esmf' but your version does not seems to be built with esmf, will switch to regridTool = 'libcf'
+avariable.regrid: regridTool = 'esmf' but your version does not
+seems to be built with esmf, will switch to regridTool = 'libcf'
                   """
                     warnings.warn(message, Warning)
                     regridTool = 'libcf'
@@ -1167,7 +1165,7 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
 
             srcGridMask = None
             # set the source mask if a mask is defined with the source data
-            if numpy.any(self.mask == True):
+            if numpy.any(self.mask is True):
                 srcGridMask = getMinHorizontalMask(self)
 
             # compute the interpolation weights
@@ -1596,8 +1594,8 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
         return self.subSlice().astype(tc)
 
 
-## internattr.add_internal_attribute(AbstractVariable, 'id', 'parent')
-#PropertiedClasses.set_property(AbstractVariable, 'missing_value', acts=AbstractVariable._setmissing, nodelete=1)
+# internattr.add_internal_attribute(AbstractVariable, 'id', 'parent')
+# PropertiedClasses.set_property(AbstractVariable, 'missing_value', acts=AbstractVariable._setmissing, nodelete=1)
 
 __rp = r'\s*([-txyz0-9]{1,1}|\(\s*\w+\s*\)|[.]{3,3})\s*'
 __crp = re.compile(__rp)
@@ -1658,7 +1656,6 @@ def order2index(axes, order):
         raise CDMSError(
             'order2index, order specified of bad type:' + str(type(order)))
     n = len(axes)
-    ie = n
     permutation = [None] * n
     j = 0
     pos = 0
@@ -1714,5 +1711,5 @@ def order2index(axes, order):
     return permutation
 
 
-from .tvariable import TransientVariable
-from . import MV2 as MV
+from .tvariable import TransientVariable # noqa
+from . import MV2 as MV # noqa

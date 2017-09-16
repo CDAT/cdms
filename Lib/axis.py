@@ -6,9 +6,6 @@ CDMS Axis objects
 """
 
 from future import standard_library
-standard_library.install_aliases()
-_debug = 0
-std_axis_attributes = ['name', 'units', 'length', 'values', 'bounds']
 import sys
 import types
 import copy
@@ -21,9 +18,11 @@ from .cdmsobj import CdmsObj, Max32int
 from .sliceut import reverseSlice, splitSlice, splitSliceExt
 from .error import CDMSError
 from . import forecast
-#import internattr
 from collections import UserList
 import warnings
+standard_library.install_aliases()
+_debug = 0
+std_axis_attributes = ['name', 'units', 'length', 'values', 'bounds']
 
 
 class AliasList (UserList):
@@ -2122,7 +2121,7 @@ class FileAxis(AbstractAxis):
         except KeyError:
             raise AttributeError("%s instance has no attribute %s." %
                                  (self.__class__.__name__, name))
-        if not name in self.__cdms_internals__(name):
+        if name not in self.__cdms_internals__(name):
             delattr(self._obj_, name)
             del(self.attributes[name])
 

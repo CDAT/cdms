@@ -5,7 +5,7 @@
 from __future__ import print_function
 from future.builtins import bytes
 import re
-#import bytes
+# import bytes
 
 # import warnings
 # warnings.warn("The xmllib module is obsolete.  Use xml.sax instead.",
@@ -555,11 +555,11 @@ class XMLParser:
                 self.syntax_error(
                     'namespace declaration inside namespace declaration')
             for attrname in list(attrdict.keys()):
-                if not attrname in self.__xml_namespace_attributes:
+                if attrname not in self.__xml_namespace_attributes:
                     self.syntax_error(
                         "unknown attribute `%s' in xml:namespace tag" %
                         attrname)
-            if not 'ns' in attrdict or not 'prefix' in attrdict:
+            if 'ns' not in attrdict or 'prefix' not in attrdict:
                 self.syntax_error('xml:namespace without required attributes')
             prefix = attrdict.get('prefix')
             if ncname.match(prefix) is None:
@@ -688,12 +688,12 @@ class XMLParser:
         attributes = self.attributes.get(nstag)
         if attributes is not None:
             for key in list(attrdict.keys()):
-                if not key in attributes:
+                if key not in attributes:
                     self.syntax_error(
                         "unknown attribute `%s' in tag `%s'" %
                         (attrnamemap[key], tagname))
             for key, val in list(attributes.items()):
-                if val is not None and not key in attrdict:
+                if val is not None and key not in attrdict:
                     attrdict[key] = val
         method = self.elements.get(nstag, (None, None))[0]
         self.finish_starttag(nstag, attrdict, method)

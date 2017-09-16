@@ -261,4 +261,5 @@ if __name__ == '__main__':
     ESMF.Manager(debug=True)
     suite = unittest.TestLoader().loadTestsFromTestCase(Test)
     unittest.TextTestRunner(verbosity=1).run(suite)
-    pl.show()
+    if PLOT:
+        pl.show()

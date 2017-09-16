@@ -53,7 +53,7 @@ def urlparse(url, scheme='', allow_fragments=1):
         return cached
     if len(_parse_cache) >= MAX_CACHE_SIZE:  # avoid runaway growth
         clear_cache()
-    netloc = path = params = query = fragment = ''
+    netloc = params = query = fragment = ''
     i = url.find(':')
     if i > 0:
         if url[:i] in ['http', 'ldap']:  # optimize the common case

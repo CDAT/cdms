@@ -3,11 +3,8 @@
 
 "Emulation of old cu package"
 import string
-import types
 import sys
 from .error import CDMSError
-from .dataset import openDataset, createDataset
-from .tvariable import createVariable
 import numpy
 
 
@@ -26,10 +23,9 @@ class cuDataset():
         v = self.variables.get(id)
         if v is None:
             try:
-                if (self.is_gridspec_grid_file() and
-                        (id == '' or id == 'grid' or id == 'gridspec') and
-                    len(args) == 0 and len(kwargs) == 0
-                    ):
+                if(self.is_gridspec_grid_file() and
+                    (id == '' or id == 'grid' or id == 'gridspec') and
+                        len(args) == 0 and len(kwargs) == 0):
                     return self.readg()
                 else:
                     raise CDMSError("No such variable or grid, " + id)
@@ -334,11 +330,13 @@ class cuDataset():
               (4) a cdms-style tuple of world coordinates e.g. (start, stop, 'cc')
         :::
         Options:::
-        args :: (*tuple/*cdms2.selectors.Selector) () tuple of type (val1,val2,'cob') for any given dimension or cdms selector
+        args :: (*tuple/*cdms2.selectors.Selector) () tuple of type (val1,val2,'cob')
+                for any given dimension or cdms selector
         :::
         Keys:::
         squeeze :: (int/True/False) (0) squeezes (removes) dimensions of length 1
-        order :: (str) ('...') reorder the dimensions, can use numbers or xyzt or dim names in between paranthesis
+        order :: (str) ('...') reorder the dimensions, can use numbers or xyzt or dim
+                 names in between paranthesis
         raw :: (int/True/False) (0) return a numpy.ma instead of a transient variable
         grid :: (cdms2.grid.AbstractGrid) (None) regrid the result to the grid passed
         :::

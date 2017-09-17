@@ -3,13 +3,11 @@
 from .error import CDMSError
 from . import cdmsobj
 from . import cdurlparse
-## import internattr
-import copy
+# import internattr
 import os
 import re
 import string
 import sys
-import types
 from .CDMLParser import CDMLParser
 from .cdmsobj import CdmsObj
 from .dataset import Dataset
@@ -180,7 +178,7 @@ class AbstractDatabase(CdmsObj):
     def __repr__(self):
         return "<Database '%s'>" % (self.uri)
 
-## internattr.add_internal_attribute(AbstractDatabase, 'uri', 'path')
+# internattr.add_internal_attribute(AbstractDatabase, 'uri', 'path')
 
 # Database implemented via LDAP (Lightweight Directory Access Protocol)
 
@@ -424,19 +422,22 @@ class LDAPDatabase(AbstractDatabase):
         result = [x.attributes['id'][0] for x in entries]
         return result
 
-## internattr.add_internal_attribute(LDAPDatabase, 'netloc', 'db')
+# internattr.add_internal_attribute(LDAPDatabase, 'netloc', 'db')
 
 
 class AbstractSearchResult:
 
     def __getitem__(self, key):
-        MethodNotImplemented = "Method not yet implemented"
+        ''' Method not yet implemented'''
+        pass
 
     def __len__(self):
-        MethodNotImplemented = "Method not yet implemented"
+        '''Method not yet implemented'''
+        pass
 
     def searchPredicate(self, predicate, tag=None):
-        MethodNotImplemented = "Method not yet implemented"
+        '''Method not yet implemented'''
+        pass
 
 
 class LDAPSearchResult(AbstractSearchResult):

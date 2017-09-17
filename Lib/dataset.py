@@ -46,10 +46,6 @@ try:
 except BaseException:
     libcf = None
 
-try:
-    from . import cache
-except ImportError:
-    pass
 
 DuplicateAxis = "Axis already defined: "
 
@@ -1366,7 +1362,7 @@ class CdmsFile(CdmsObj, cuDataset):
         if ar is None or (unlimited == 1 and getNetcdfUseParallelFlag() == 0):
             cufile.createDimension(name, None)
             if ar is None:
-                typecode = nupy.dtype(numpy.float).char
+                typecode = numpy.dtype(numpy.float).char
             else:
                 typecode = ar.dtype.char
         else:

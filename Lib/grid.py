@@ -2,7 +2,6 @@
 # Further modified to be pure new numpy June 24th 2008
 
 """CDMS Grid objects"""
-import types
 import re
 from .error import CDMSError
 import numpy  # , PropertiedClasses, internattr
@@ -11,8 +10,9 @@ import copy
 import string
 import sys
 from .cdmsobj import CdmsObj
-from .axis import TransientAxis, createAxis, createUniformLatitudeAxis, createUniformLongitudeAxis, getAutoBounds, createGaussianAxis, lookupArray, isSubsetVector
-import cdtime
+from .axis import TransientAxis, createAxis, createUniformLatitudeAxis
+from .axis import createUniformLongitudeAxis, getAutoBounds
+from .axis import createGaussianAxis, isSubsetVector
 
 MethodNotImplemented = "Method not yet implemented"
 
@@ -357,11 +357,11 @@ class AbstractRectGrid(AbstractGrid):
         maskArray = self.getMask()
         if maskArray is not None:
             if self._order_ == "yx":
-                submask = maskArray[latinterval[0]
-                    :latinterval[1], loninterval[0]:loninterval[1]]
+                submask = maskArray[latinterval[0]:latinterval[1],
+                                    loninterval[0]:loninterval[1]]
             else:
-                submask = maskArray[loninterval[0]
-                    :loninterval[1], latinterval[0]:latinterval[1]]
+                submask = maskArray[loninterval[0]:loninterval[1],
+                                    latinterval[0]:latinterval[1]]
         else:
             submask = None
 
@@ -491,7 +491,6 @@ class AbstractRectGrid(AbstractGrid):
         latindex = None
         if gridtype == 'generic':
             # Look for truncated grids: such that grid is a subset of grid2
-            found = 0
             for grid2 in gridlist:
                 if self.id == grid2.id:
                     continue
@@ -504,7 +503,6 @@ class AbstractRectGrid(AbstractGrid):
                 latIsSubset, latindex = isSubsetVector(lat[:], lat2[:], 1.e-2)
                 lonIsSubset, lonindex = isSubsetVector(lon[:], lon2[:], 1.e-2)
                 if latIsSubset and lonIsSubset:
-                    found = 1
                     if len(lat2) > nlats:
                         coverage = 'regional'
                     nlats = len(lat2)
@@ -726,7 +724,7 @@ class AbstractRectGrid(AbstractGrid):
 # nowrite=1,
 # nodelete=1)
 
-## internattr.add_internal_attribute (AbstractRectGrid, 'id', 'parent')
+# internattr.add_internal_attribute (AbstractRectGrid, 'id', 'parent')
 
 
 class RectGrid(AbstractRectGrid):
@@ -776,7 +774,7 @@ class FileRectGrid(AbstractRectGrid):
         self.parent = parent
         self._lataxis_ = latobj
         self._lonaxis_ = lonobj
-        if not order in ["yx", "xy"]:
+        if order not in ["yx", "xy"]:
             raise CDMSError('Grid order must be "yx" or "xy"')
         self._order_ = order
         self.setType(gridtype)
@@ -835,7 +833,7 @@ class TransientRectGrid(AbstractRectGrid):
         self._lataxis_.designateLatitude()
         self._lonaxis_ = lonobj
         self._lonaxis_.designateLongitude()
-        if not order in ["yx", "xy"]:
+        if order not in ["yx", "xy"]:
             raise CDMSError('Grid order must be "yx" or "xy"')
         self._order_ = order
         self.setType(gridtype)

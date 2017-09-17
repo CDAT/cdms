@@ -95,8 +95,6 @@ class TestRegridding(basetest.CDMSBaseTest):
         dat[0] = 2.0
         dat[1] = 4.0
         dat[2] = 6.0
-        import pdb
-        pdb.set_trace()
         var = cdms2.createVariable(
             dat, axes=(
                 lev, g), attributes={

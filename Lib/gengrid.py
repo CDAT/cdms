@@ -4,10 +4,10 @@
 """CDMS Generic Grids"""
 
 import numpy
-## import PropertiedClasses
+# import PropertiedClasses
 from . import bindex
 from .error import CDMSError
-from .grid import LongitudeType, LatitudeType, VerticalType, TimeType, CoordTypeToLoc
+from .grid import LongitudeType, LatitudeType, CoordTypeToLoc
 from .hgrid import AbstractHorizontalGrid
 from .axis import allclose
 
@@ -274,8 +274,7 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
             result = self.clone()
             for i in missing:
                 for item in axes:
-                    if (len(selfaxes[i]) == len(item)
-                        ) and allclose(selfaxes[i], item):
+                    if (len(selfaxes[i]) == len(item)) and allclose(selfaxes[i], item):
                         result._lataxis_.setAxis(i, item)
                         result._lonaxis_.setAxis(i, item)
                         break
@@ -305,7 +304,7 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
     shape = property(_getShape, None)
 
 # PropertiedClasses.set_property (AbstractGenericGrid, 'shape',
-##                                   AbstractGenericGrid._getShape, nowrite=1,
+#                                   AbstractGenericGrid._getShape, nowrite=1,
 # nodelete=1)
 
 

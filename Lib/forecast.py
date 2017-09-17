@@ -260,7 +260,7 @@ class forecasts():
         # Create the variable from the data, with mask:
         v0 = vars[0]
         a = numpy.asarray([v.data for v in vars])
-        if v0._mask == False:
+        if v0._mask is False:
             m = False
             v = cdms2.tvariable.TransientVariable(a)
         else:

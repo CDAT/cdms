@@ -233,8 +233,6 @@ valid choices are: 'libcf', 'esmf'""" % regridTool
             outdata = numpy.array(eval('dstData' + zros))
 
             # now iterate over all non lat/lon coordinates
-            diags = []
-            diag = 0
             for it in MultiArrayIter(nonHorizShape):
 
                 indices = it.getIndices()

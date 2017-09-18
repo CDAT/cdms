@@ -260,13 +260,13 @@ class forecasts():
         # Create the variable from the data, with mask:
         v0 = vars[0]
         a = numpy.asarray([v.data for v in vars])
-        if v0._mask is False:
-            m = False
-            v = cdms2.tvariable.TransientVariable(a)
-        else:
+        if v0._mask:
             m = numpy.asarray([v._mask for v in vars])
             v = cdms2.tvariable.TransientVariable(
                 a, mask=m, fill_value=v0._fill_value)
+        else:
+            m = False
+            v = cdms2.tvariable.TransientVariable(a)
 
         # Domain-related attributes:
             # We get the tomain from __getitem__ to make sure that fcs[var] is consistent

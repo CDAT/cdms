@@ -1,8 +1,8 @@
 import sys
 import os
 import os.path
-import numpy
-from ctypes import CDLL, c_char_p, c_int, byref, c_double, c_uint, pointer, create_string_buffer
+# from ctypes import CDLL, c_char_p, c_int, byref, c_double, c_uint, pointer, create_string_buffer
+from ctypes import CDLL, c_double, c_uint
 import cdms2
 import time
 import config
@@ -208,7 +208,7 @@ class GS_Regridder:
                          latend, kbegin, kend, lbegin, lend)
 
         # Read the output_file into a variable, and return the variable
-        f = cdms2.open(path + "/" + output_file)
+        f = cdms2.open(self.outpath + "/" + output_file)
         vout = f(scalar_name)
         f.close()
         return vout

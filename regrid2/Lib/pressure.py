@@ -63,7 +63,6 @@ class PressureRegridder:
         method is either 'log' to interpolate in the log of pressure, or 'linear' for linear interpolation.
         """
 
-        import cdms2
         from cdms2.avariable import AbstractVariable
         from cdms2.tvariable import TransientVariable
 
@@ -167,8 +166,8 @@ class PressureRegridder:
         #                                     A number -- the value to use in the search for possible missing data.
         #                               The presence of missing data at a grid point leads to recording 0.0 in the mask.
         #
-        #             missingMatch -- the comparison scheme used in searching for missing data in dataIn using the value passed
-        #                             in as missingValueIn. The choices are:
+        #             missingMatch -- the comparison scheme used in searching for missing data in dataIn using
+        #                             the value passed in as missingValueIn. The choices are:
         #                                  None -- used if None is the entry for missingValueIn
         #                                  exact -- used if missingValue is the exact value from the file
         #                                  greater -- the missing data value is equal to or greater than missingValueIn
@@ -194,7 +193,8 @@ class PressureRegridder:
         #
         #                           As  examples:
         #                                If the C order shape of 4D data is
-        #                                    (number of longitudes, number of times, number of levels, number of latitudes)
+        #                                    (number of longitudes, number of times, number of levels,
+        #                                     number of latitudes)
         #                                submit
         #                                     (0, 3, 2, 1)
         #
@@ -209,7 +209,8 @@ class PressureRegridder:
         #                              4D -- code assumes (3,2,1,0)
         #
         #              missingValueOut -- the value for the missing data used in writing the output data. If left at the
-        #                                 default entry, None, the code uses missingValueIn if present or as a last resort
+        #                                 default entry, None, the code uses missingValueIn if present or as a last
+        #                                 resort
         #                                 1.0e20
         #
         #
@@ -226,14 +227,14 @@ class PressureRegridder:
         #
         #                      dataOut = x.rgrd(dataIn, 1.e20, 'greater')
         #
-        #---------------------------------------------------------------------------------------------------------------------"""
+        # ----------------------------------------------------------------------------------------------------------"""
 
         # check the required input -- dataIn, missingValueIn and  missingMatch
 
         # make sure that dataIn is an array
 
         try:
-            z = len(dataIn)
+            len(dataIn)
         except TypeError:
             sendmsg('Error in calling the rgrd method -- dataIn must be an array')
             raise TypeError
@@ -242,7 +243,7 @@ class PressureRegridder:
 
         if missingValueIn is not None:
             try:
-                z = abs(missingValueIn)
+                abs(missingValueIn)
             except TypeError:
                 sendmsg(
                     'Error in calling the rgrd method -- missingvalueIn must be None or a number. Now it is  ',

@@ -18,6 +18,7 @@ from .fvariable import FileVariable
 from .variable import DatasetVariable
 from .tvariable import TransientVariable
 from .avariable import AbstractVariable
+from .axis import TransientVirtualAxis  # noqa
 from functools import reduce
 
 MethodNotImplemented = "Method not yet implemented"

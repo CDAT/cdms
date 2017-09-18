@@ -18,9 +18,9 @@ from .cdmsobj import CdmsObj, Max32int
 from .sliceut import reverseSlice, splitSlice, splitSliceExt
 from .error import CDMSError
 from . import forecast
-from collections import UserList
 import warnings
 standard_library.install_aliases()
+from collections import UserList # noqa
 _debug = 0
 std_axis_attributes = ['name', 'units', 'length', 'values', 'bounds']
 

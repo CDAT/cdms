@@ -677,7 +677,7 @@ def concatenate(arrays, axis=0, axisid=None, axisattributes=None):
             if axes is None:
                 break
             axes = commonAxes(tarrays[i + 2], axes, omit=axis)
-            grid = commonGrid1(a, grid, axes)
+            grid = commonGrid1(tarrays[i + 2], grid, axes)
     else:
         axes = tarrays[0].getAxisList()
         varattributes = tarrays[0].attributes

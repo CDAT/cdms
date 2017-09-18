@@ -7,7 +7,6 @@ No guarantee is provided whatsoever. Use at your own risk.
 David Kindig and Alex Pletzer, Tech-X Corp. (2012)
 """
 
-import numpy
 from regrid2 import gsRegrid
 from regrid2 import GenericRegrid
 

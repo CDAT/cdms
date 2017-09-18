@@ -1,7 +1,6 @@
 # Automatically adapted for numpy.oldnumeric Aug 02, 2007 by
 
 import numpy
-import cdms2
 import copy
 from . import _regrid
 from .error import RegridError
@@ -204,7 +203,7 @@ class Horizontal:
         nlati = shape[rank - ilat - 1]
         nloni = shape[rank - ilon - 1]
         if nlati != self.nlati or nloni != self.nloni:
-            raise ShapeError(
+            raise (
                 'array lat,lon (%i,%i) does not match grid lat,lon (%i,%i)' %
                 (nlati, nloni, self.nlati, self.nloni))
 
@@ -234,7 +233,8 @@ class Horizontal:
                     firstslice = ar[0]
                 else:
                     firstslice = ar[0, 0]
-                # inmask = numpy.logical_and( numpy.greater( numpy.absolute( firstslice - missing), numpy.absolute( 0.001*missing)), inmask)
+                # inmask = numpy.logical_and( numpy.greater( numpy.absolute( firstslice - missing),
+                # numpy.absolute( 0.001*missing)), inmask)
                 if issubclass(ar.dtype.type, numpy.floating):
                     inmask = numpy.where(
                         numpy.greater(
@@ -256,7 +256,8 @@ class Horizontal:
             # If armask is derived from the input array, it is probably consistent
             # with the missing value - don't bother recalculating it
             if missing is not None and armask is None:
-                # inmask = numpy.logical_and( numpy.greater( numpy.absolute( ar - missing), numpy.absolute( 0.001*missing)), inmask)
+                # inmask = numpy.logical_and( numpy.greater( numpy.absolute( ar - missing),
+                #  numpy.absolute( 0.001*missing)), inmask)
                 if issubclass(ar.dtype.type, numpy.floating):
                     inmask = numpy.where(
                         numpy.greater(
@@ -349,7 +350,9 @@ class Horizontal:
 class Regridder(Horizontal):
     def __init__(self, ingrid, outgrid):
         warnings.warn(
-            "While this will work for now, please note that the Regridder class has been renamed Horizontal, the name 'Regridder' will be deprecated in future version. Please edit your code accordingly",
+            "While this will work for now, please note that the Regridder class has been " +
+            "renamed Horizontal, the name 'Regridder' will be deprecated in future version. " +
+            "Please edit your code accordingly",
             Warning)
         Horizontal.__init__(self, ingrid, outgrid)
 

@@ -7,10 +7,10 @@ import numpy
 import cdms2
 import os
 import os.path
-## import PropertiedClasses
+# import PropertiedClasses
 from .error import CDMSError
-from .grid import AbstractGrid, LongitudeType, LatitudeType, VerticalType, TimeType, CoordTypeToLoc
-from .coord import TransientVirtualAxis
+from .grid import AbstractGrid, LongitudeType, LatitudeType, CoordTypeToLoc
+from .axis import TransientVirtualAxis
 from .axis import getAutoBounds, allclose
 from . import bindex
 from . import _bindex
@@ -400,7 +400,6 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         The file, normally a CdmsFile, should already be open for writing
         and will be closed."""
         import time
-        from .tvariable import TransientVariable
 
         # Set attributes
         if (hasattr(file, 'Conventions')):
@@ -436,15 +435,15 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
             file.long_name = 'gridspec_tile'
         # gs_geometryType is no longer required of Gridspec files, but as yet
         # there is no other proposal for describing the geometry (July 2010)
-        if (hasattr(self, 'gs_geometryType')
-                and self.gs_geometryType is not None):
+        if (hasattr(self, 'gs_geometryType') and
+                self.gs_geometryType is not None):
             file.gs_geometryType = self.gs_geometryType
         else:
             file.gs_geometryType = 'spherical'
         # gs_discretizationType is no longer required of Gridspec files, but it's
         # harmless and may come in useful
-        if (hasattr(self, 'gs_discretizationType')
-                and self.gs_discretizationType is not None):
+        if (hasattr(self, 'gs_discretizationType') and
+                self.gs_discretizationType is not None):
             file.gs_discretizationType = self.gs_discretizationType
         else:
             file.gs_discretizationType = 'logically_rectangular'
@@ -511,7 +510,7 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
             self.gsfile = None
             self.gspath = None
         if (self.gsfile is not None):
-            return (tcg.gsfile, tcg.gspath)
+            return (self.gsfile, self.gspath)
         else:
             raise RuntimeError(
                 'The libCF/Gridspec API does not provide for writing CurveGrids<<<')
@@ -531,7 +530,7 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         except IOError:
             print("Cannot open grid file for reading: ", filename)
             return
-        init_from_gridspec_file(self, f)
+        self.init_from_gridspec_file(self, f)
         f.close()
 
     def init_from_gridspec_file(self, f):
@@ -731,7 +730,7 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
     shape = property(_getShape, None)
 
 # PropertiedClasses.set_property (AbstractCurveGrid, 'shape',
-##                                   AbstractCurveGrid._getShape, nowrite=1,
+#                                   AbstractCurveGrid._getShape, nowrite=1,
 # nodelete=1)
 
 

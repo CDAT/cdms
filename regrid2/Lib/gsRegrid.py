@@ -9,16 +9,16 @@ No guarantee is provided whatsoever. Use at your own risk.
 
 
 # standard python includes
-from re import search, sub
+# from re import search, sub
 from ctypes import c_double, c_float, c_int, \
     c_wchar_p, CDLL, byref, POINTER
-import ctypes
+# import ctypes
 import operator
 import sys
 import os
 import copy
 import numpy
-import cdms2
+import warnings
 from regrid2 import RegridError
 from functools import reduce
 import fnmatch
@@ -280,7 +280,7 @@ def handleCoordsCut(coords, dims, bounds):
         """
         for i in range(len(array)):
             # An edge
-            if len(numpy.where(array[i, :] == True)[0]) >= 2:
+            if len(numpy.where(array[i, :] == True)[0]) >= 2:  # noqa
                 if newI[i] < 0:
                     newI[i] = (nlon - 1) - i
                 if newI[(nlon - 1) - i] < 0:
@@ -603,15 +603,15 @@ class Regrid:
 
         # Check
         if reduce(operator.iand, [src_data.shape[i] == self.src_dims[i]
-                                  for i in range(self.rank)]) == False:
-            raise RegridError(("ERROR in %s: supplied src_data have wrong shape "
-                               + "%s != %s") % (__FILE__, str(src_data.shape),
-                                                str(tuple([d for d in self.src_dims]))))
+                                  for i in range(self.rank)]) == False:  # noqa
+            raise RegridError(("ERROR in %s: supplied src_data have wrong shape " +
+                               "%s != %s") % (__FILE__, str(src_data.shape),
+                                              str(tuple([d for d in self.src_dims]))))
         if reduce(operator.iand, [dst_data.shape[i] == self.dst_dims[i]
-                                  for i in range(self.rank)]) == False:
-            raise RegridError(("ERROR in %s: supplied dst_data have wrong shape "
-                               + "%s != %s") % (__FILE__, str(dst_data.shape),
-                                                str(tuple([d for d in self.dst_dims]))))
+                                  for i in range(self.rank)]) == False:  # noqa
+            raise RegridError(("ERROR in %s: supplied dst_data have wrong shape " +
+                               "%s != %s") % (__FILE__, str(dst_data.shape),
+                                              str(tuple([d for d in self.dst_dims]))))
 
         # Create temporary data objects
         src_dataid = c_int(-1)
@@ -784,7 +784,7 @@ class Regrid:
         """
 
         # extended dimensions
-        nlatX, nlonX = self.src_dims[-2], self.src_dims[-1]
+        # nlatX, nlonX = self.src_dims[-2], self.src_dims[-1]
         # original dimensions, before extension
         # assuming ..., lat, lon ordering
         nlat, nlon = src_data.shape[-2:]
@@ -877,7 +877,7 @@ def testHandleCut():
     if not f:
         return
 
-    so = f.variables['so'][0, 0, :, :]
+    # so = f.variables['so'][0, 0, :, :]
     if 'lon' in list(f.variables.keys()):
         alllat = f.variables['lat']
         alllon = f.variables['lon']
@@ -893,22 +893,22 @@ def testHandleCut():
     newCoords, newDims = handleCoordsCut(newCoords, newDims, bounds)
 
 
-def testOuterProduct():
+# def testOuterProduct():
 
     # 2d
-    x = numpy.array([1, 2, 3, 4])
-    y = numpy.array([10, 20, 30])
-    xx = getTensorProduct(x, 0, [len(x), len(y)])
-    yy = getTensorProduct(y, 1, [len(x), len(y)])
+    # x = numpy.array([1, 2, 3, 4])
+    # y = numpy.array([10, 20, 30])
+    # xx = getTensorProduct(x, 0, [len(x), len(y)])
+    # yy = getTensorProduct(y, 1, [len(x), len(y)])
 
     # 3d
-    z = numpy.array([100, 200])
+    # z = numpy.array([100, 200])
 
     # Mixed coordinates and axes
 
-    aa = makeCurvilinear([z, yy, xx])
-#    for g in aa:
-#        print g
+    # aa = makeCurvilinear([z, yy, xx])
+    # for g in aa:
+    #     print g
 
 
 def test():
@@ -934,9 +934,9 @@ def test():
 #    rg = Regrid([src_x, src_y],
 #                [dst_x, dst_y])
 
-    initialIndexGuess = numpy.array([0.0, 0.0, 0.0])
-    indices = rg._findIndices(numpy.array([1.5, 18.0, 140.0]),
-                              20, 1.e-2, initialIndexGuess)
+    # initialIndexGuess = numpy.array([0.0, 0.0, 0.0])
+    # indices = rg._findIndices(numpy.array([1.5, 18.0, 140.0]),
+    #                           20, 1.e-2, initialIndexGuess)
 
     maxNumIters = 20
     posTol = 1.e-3
@@ -996,9 +996,9 @@ def testMasking():
     rg = Regrid([src_x, src_y],
                 [dst_x, dst_y])
 
-    initialIndexGuess = numpy.array([0.0, 0.0, 0.0])
-    indices = rg._findIndices(numpy.array([1.5, 18.0, 140.0]),
-                              20, 1.e-2, initialIndexGuess)
+    # initialIndexGuess = numpy.array([0.0, 0.0, 0.0])
+    # indices = rg._findIndices(numpy.array([1.5, 18.0, 140.0]),
+    #                           20, 1.e-2, initialIndexGuess)
 
     # Mask needs to be set before weights are computed
     mask = rg.getSrcGrid()[0] == 3

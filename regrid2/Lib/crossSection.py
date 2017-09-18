@@ -3,7 +3,6 @@
 import cdms2
 import numpy
 import copy
-import string
 from . import _regrid
 from .error import RegridError
 
@@ -154,7 +153,6 @@ class CrossSectionRegridder:
         method is either 'log' to interpolate in the log of pressure, or 'linear' for linear interpolation.
         """
 
-        import cdms2
         from cdms2.avariable import AbstractVariable
         from cdms2.tvariable import TransientVariable
 
@@ -346,7 +344,7 @@ class CrossSectionRegridder:
         # make sure that dataIn is an array
 
         try:
-            z = len(dataIn)
+            len(dataIn)
         except TypeError:
             sendmsg('Error in calling the rgrd method -- dataIn must be an array')
             raise TypeError
@@ -375,7 +373,7 @@ class CrossSectionRegridder:
 
         if missingValueIn is not None:
             try:
-                z = abs(missingValueIn)
+                abs(missingValueIn)
             except TypeError:
                 sendmsg(
                     'Error in calling the rgrd method -- missingvalueIn must be None or a number. Now it is  ',
@@ -482,7 +480,7 @@ class CrossSectionRegridder:
 
         #      ------------- call rgdlength to regrid latitude  ---------------
 
-        amskout = _regrid.rgdlength(
+        _regrid.rgdlength(
             ilat,
             itim1,
             itim2,
@@ -1066,7 +1064,6 @@ def rmserror(data1, data2):
 
 
 if __name__ == '__main__':
-    import cdms2
     import math
 
     latIn = cdms2.createUniformLatitudeAxis(90.0, 46, -4.0)

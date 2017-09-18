@@ -6,7 +6,6 @@
 #
 
 
-import os
 import socket
 from OpenSSL import crypto, SSL
 
@@ -80,7 +79,6 @@ def deserialize_certs(inp_dat):
 
     dat = inp_dat
 
-    import base64
     while dat:
 
         # find start of cert, get length
@@ -173,7 +171,7 @@ def myproxy_logon_py(hostname, username, passphrase,
     dat = conn.recv(8192)
     if debuglevel(2):
         print("debug: dumping cert data to myproxy.dump")
-        f = file('myproxy.dump', 'w')
+        f = open('myproxy.dump', 'w')
         f.write(dat)
         f.close()
 
@@ -202,14 +200,14 @@ def myproxy_logon_py(hostname, username, passphrase,
     if debuglevel(1):
         print("debug: write proxy and certs to", outfile)
     if isinstance(outfile, str):
-        f = file(outfile, 'w')
+        f = open(outfile, 'w')
     else:
         f = outfile
     f.write(pem_certs[0])
     f.write(privatekey)
     for c in pem_certs[1:]:
         f.write(c)
-    if isinstance(file, str):
+    if isinstance(outfile, str):
         f.close()
 
 

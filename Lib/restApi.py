@@ -1,4 +1,3 @@
-import cdms2
 import urllib.request
 import urllib.error
 import urllib.parse
@@ -8,7 +7,6 @@ try:
 except BaseException:
     pass
 import os
-#import bz2
 
 
 class esgfConnectionException(Exception):
@@ -24,7 +22,7 @@ class esgfFilesException(Exception):
     # def __init__(self,value):
     # self.value=value
     # def __repr__(self):
-    ##     msg =  "rest API error: %s" % repr(value)
+    #      msg =  "rest API error: %s" % repr(value)
     # print msg
     # return msg
 
@@ -174,7 +172,7 @@ class esgfConnection(object):
         return val
 
     def __setitem__(self, key, value):
-        if not key in list(self.params.keys()):
+        if key not in list(self.params.keys()):
             raise self.EsgfObjectException(
                 "Invalid key: %s, valid keys are: %s" %
                 (repr(key), repr(
@@ -186,7 +184,7 @@ class esgfConnection(object):
     def _search(self, search="", searchType=None, stringType=False):
         if searchType is None:
             searchType = self.defaultSearchType
-        if not searchType in self.validSearchTypes:
+        if searchType not in self.validSearchTypes:
             raise self.EsgfObjectException(
                 "Valid Search types are: %s" %
                 repr(
@@ -230,12 +228,9 @@ class esgfConnection(object):
 
         for k in list(keys.keys()):
             if k == "stringType":
-                stringType = keys[k]
                 continue
             elif k == "type":
                 continue
-            # elif not k in self.searchableKeys:
-            ##     raise self.EsgfObjectException("Invalid key: %s, valid keys are: %s" % (repr(k),repr(self.params.keys())))
             if keys[k] is not None:
                 params[k] = keys[k]
 
@@ -311,7 +306,7 @@ class esgfConnection(object):
         resps = self.request(**keys)
         stringType = keys.get("stringType", False)
         if stringType:
-            return resp
+            return resps
         datasets = []
         for resp in resps:
             for r in resp[:]:
@@ -325,7 +320,7 @@ class esgfConnection(object):
                             k = f.get("name")
                             tmpkeys[k] = self.extractTag(f)
                         if tmpkeys["type"] == "Dataset":
-                            datasetid = tmpkeys["id"]
+                            # datasetid = tmpkeys["id"]
                             # print datasetid,self.restPath
                             # print "KEYS FOR DATASET",keys.keys()
                             datasets.append(
@@ -366,7 +361,8 @@ class esgfDataset(esgfConnection):
                     tmp.replace(")s", ")"))
             elif "project" in keys and keys["project"] == "cmip5":
                 self.datasetids = genutil.StringConstructor(
-                    "%(project).%(product).%(institute).%(model).%(experiment).%(time_frequency).%(realm).%(cmor_table).%(ensemble)")
+                    "%(project).%(product).%(institute).%(model).%(experiment).%(time_frequency)." +
+                    "%(realm).%(cmor_table).%(ensemble)")
             else:
                 self.datasetids = None
         if isinstance(datasetids, genutil.StringConstructor):
@@ -417,15 +413,15 @@ class esgfDataset(esgfConnection):
         # We need to stick in there the bit from Luca to fill in the matching
         # key from facet for now it's empty
         files = []
-        skipped = [
-            "type",
-            "title",
-            "timestamp",
-            "service",
-            "id",
-            "score",
-            "file_url",
-            "service_type"]
+#        skipped = [
+#            "type",
+#            "title",
+#            "timestamp",
+#            "service",
+#            "id",
+#            "score",
+#            "file_url",
+#            "service_type"]
         for r in resp[:]:
             if r.tag == "result":
                 for d in r[:][:]:
@@ -446,7 +442,7 @@ class esgfDataset(esgfConnection):
                         # if self.fileids is not None:
                         # try:
                         # if verbose: print "file:",keys["file_id"],self.fileids.template
-                        ##         k2 = self.fileids.reverse(keys["file_id"])
+                        #          k2 = self.fileids.reverse(keys["file_id"])
                         # if verbose: print "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",k2
                         # for k in k2.keys():
                         # keys[k]=k2[k]
@@ -455,8 +451,8 @@ class esgfDataset(esgfConnection):
                         # pass
                         # if verbose: print "KEYS FOR FILE:",keys.keys()
                         # if verbose: print "INKEYS:",inKeys.keys()
-                        ## matched = True
-                        ## matchWithKeys = {}
+                        #  matched = True
+                        #  matchWithKeys = {}
                         # for k in self.keys():
                         # if k in self.originalKeys.keys():
                         # matchWithKeys[k]=self.originalKeys[k]
@@ -473,17 +469,17 @@ class esgfDataset(esgfConnection):
                         # for k in keys.keys():
                         # if k in matchWithKeys.keys():
                         # if verbose: print "Testing:",k,keys[k]
-                        ##         v = matchWithKeys[k]
+                        #          v = matchWithKeys[k]
                         # if isinstance(v,(str,int,float)):
                         # if verbose: print "\tComparing with:",v
                         # if v != keys[k]:
-                        ##                 matched = False
+                        #                  matched = False
                         # if verbose: print "\t\tNOPE"
                         # break
                         # elif isinstance(v,list):
                         # if verbose: print "\tComparing with (and %i more):%s"%(len(v),v[0]),v
                         # if not keys[k] in v:
-                        ##                 matched = False
+                        #                  matched = False
                         # if verbose: print "\t\tNOPE"
                         # break
                         # else:
@@ -515,7 +511,7 @@ class esgfDataset(esgfConnection):
         if os.path.isdir(target):
             target = os.path.join(target, "esgfDatasetsCache.pckl")
         if os.path.exists(target):
-            f = open(source)
+            f = open(target)
             # dict=eval(bz2.decompress(f.read()))
             dico = eval(f.read())
             f.close()
@@ -556,22 +552,22 @@ class esgfDataset(esgfConnection):
         self.clearOriginalQueryCache()
 
     def search(self, **keys):
-        #search = self.generateRequest(**keys)
+        # search = self.generateRequest(**keys)
         stringType = keys.get("stringType", False)
         keys.update(self.originalKeys)
         st = ""
-        if not "limit" in keys:
+        if "limit" not in keys:
             keys["limit"] = [self["limit"]]
-        if not "offset" in keys:
+        if "offset" not in keys:
             keys["offset"] = [self["offset"]]
         for k in keys:
             if k in ["searchString", "stringType", ]:
                 continue
             for v in keys[k]:
                 st += "&%s=%s" % (k, v)
-            #st+="&%s=%s" % (k,keys[k])
+            # st+="&%s=%s" % (k,keys[k])
         # if self.resp is None:
-            #self.resp = self._search("dataset_id=%s%s" % (self["id"],st),stringType=stringType)
+            # self.resp = self._search("dataset_id=%s%s" % (self["id"],st),stringType=stringType)
         self.resp = self._search(st, stringType=stringType)
         if stringType:
             return self.resp
@@ -612,7 +608,8 @@ class esgfFiles(object):
         self.setMapping(mapping)
         self.remap()
         self.projects_dict = {
-            "CMIP5": "%(project).%(product).%(institute).%(model).%(experiment).%(time_frequency).%(realm).%(cmor_table).%(ensemble)"}
+            "CMIP5": "%(project).%(product).%(institute).%(model).%(experiment)." +
+            "%(time_frequency).%(realm).%(cmor_table).%(ensemble)"}
 
     def __getitem__(self, item):
         if isinstance(item, int):
@@ -651,7 +648,7 @@ class esgfFiles(object):
                 self.mapping = self.datasetids
             else:
                 for k in list(self.parent.keys()):
-                    if not k in ["limit", "offset", "text"]:
+                    if k not in ["limit", "offset", "text"]:
                         self.mapping += "%%(%s)" % k
         else:
             self.mapping = mapping
@@ -663,33 +660,33 @@ class esgfFiles(object):
             self.mapping = genutil.StringConstructor(self.mapping)
         # print "Stage 2:",self.mapping.template
 
-        ## vk = self.parent.keys()
+        #  vk = self.parent.keys()
         # for k in self.mapping.keys():
-        ##     ok = False
+        #      ok = False
         # if self.datasetids is not None:
-        ##         vk += self.datasetids.keys()
+        #          vk += self.datasetids.keys()
         # if k in self.datasetids.keys():
-        ##             ok = True
+        #              ok = True
         # if self.fileids is not None:
         # vk+=self.fileids.keys()
         # if k in self.fileids.keys():
-        ##             ok = True
+        #              ok = True
         # if k in self.parent.keys():
         # ok=True
         # Ok second to last hope... Matching to datasetids
         # if isinstance(self.datasetids,genutil.StringConstructor) and ok is False:
         # try:
-        ##             mapid = self.datasetids.reverse(self.parent.id)
+        #              mapid = self.datasetids.reverse(self.parent.id)
         # vk+=mapid.keys()
         # if k in mapid.keys():
-        ##                 ok = True
+        #                  ok = True
 
         # except:
         # print "Couldn't map: %s to %s" % (self.parent.id,self.datasetids.template)
         # pass
         # if ok is False:
-        ##         vk = set(vk)
-        ##         raise self.EsgfObjectException("Invalid mapping key: %s, valid keys are: %s" % (k,sorted(vk)))
+        #          vk = set(vk)
+        #          raise self.EsgfObjectException("Invalid mapping key: %s, valid keys are: %s" % (k,sorted(vk)))
 
     def remap(self, mapping=None, verbose=False):
         if mapping is None:
@@ -726,13 +723,13 @@ class esgfFiles(object):
                     cont = f[k]
                     if not isinstance(cont, (str, int, float)):
                         break
-                    if not cont in list(mappoint.keys()):
+                    if cont not in list(mappoint.keys()):
                         mappoint[cont] = {}
                 elif k in list(self.parent.keys()):
                     # if verbose: print tabs,k,f[k]
                     nok += 1
                     cont = self[k]
-                    if not cont in list(mappoint.keys()):
+                    if cont not in list(mappoint.keys()):
                         mappoint[cont] = {}
                 elif isinstance(self.fileids, genutil.StringConstructor):
                     try:
@@ -743,7 +740,7 @@ class esgfFiles(object):
                             # if verbose: print tabs,k,mapid[k]
                             nok += 1
                             cont = mapid[k]
-                            if not cont in list(mappoint.keys()):
+                            if cont not in list(mappoint.keys()):
                                 mappoint[cont] = {}
                     except BaseException:
                         break

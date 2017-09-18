@@ -1,4 +1,4 @@
-#/usr/bin/env python
+#!/usr/bin/env python
 
 """
 A variable-like object extending over multiple tiles
@@ -9,13 +9,11 @@ No guarantee is provided whatsoever. Use at your own risk.
 
 import operator
 import cdms2
-import types
 from cdms2.error import CDMSError
-from cdms2.hgrid import AbstractCurveGrid, TransientCurveGrid, FileCurveGrid
+from cdms2.hgrid import TransientCurveGrid, FileCurveGrid
 from cdms2.coord import TransientAxis2D, TransientVirtualAxis
 from cdms2.Cdunif import CdunifFile
 from cdms2.coord import FileAxis2D
-from cdms2.gengrid import FileGenericGrid
 from cdms2.fvariable import FileVariable
 from cdms2.axis import FileAxis
 from functools import reduce
@@ -196,8 +194,8 @@ class StaticFileVariable(StaticVariable):
                 coords = u.variables[varName].coordinates.split()
 
             # Get lists of 1D and auxiliary coordinate axes
-            coords1d = f._convention_.getAxisIds(u.variables)
-            coordsaux = f._convention_.getAxisAuxIds(u.variables, coords1d)
+            # coords1d = f._convention_.getAxisIds(u.variables)
+            # coordsaux = f._convention_.getAxisAuxIds(u.variables, coords1d)
 
             # Convert the variable into a FileVariable
             f.variables[varName] = FileVariable(

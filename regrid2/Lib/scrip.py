@@ -343,8 +343,13 @@ class DistwgtRegridder(ScripRegridder):
 
 def readRegridder(fileobj, mapMethod=None, checkGrid=1):
     """Read a regridder from an open fileobj.
+<<<<<<< HEAD
     mapMethod is one of "conservative", "bilinear", "bicubic", or "distwgt". If unspecified, it defaults to the method
     defined in the file.
+=======
+    mapMethod is one of "conservative", "bilinear", "bicubic", or "distwgt".
+    If unspecified, it defaults to the method defined in the file.
+>>>>>>> master
     If 'checkGrid' is 1 (default), the grid cells are checked for convexity,
     and 'repaired' if necessary.
     """
@@ -393,7 +398,11 @@ def readRegridder(fileobj, mapMethod=None, checkGrid=1):
             srcarea = fileobj('src_grid_area')
             dstarea = fileobj('dst_grid_area')
         else:  # NCAR stuff
+<<<<<<< HEAD
             if "S2" in list(fileobj.variables.keys()):
+=======
+            if "S2" in fileobj.variables.keys():
+>>>>>>> master
                 remapMatrix = fileobj("S2")
                 sh = list(remapMatrix.shape)
                 if len(sh) == 2 and sh[-1] == 2:

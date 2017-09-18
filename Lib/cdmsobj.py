@@ -9,8 +9,12 @@ import os
 import re
 import string
 import sys
+<<<<<<< HEAD
 # import types
 # import internattr
+=======
+import types
+>>>>>>> master
 
 # Data types
 
@@ -252,7 +256,11 @@ def generateTime(matchobj, timespecs):
         elif mospec in ('%g', '%eg'):
             imo = _monthMapLower[mostr]
         elif mospec in ('%m', '%em', '%n', '%en'):
+<<<<<<< HEAD
             imo = int(mostr)
+=======
+            imo = string.atoi(mostr)
+>>>>>>> master
     if dyspec:
         pat, name, dimtype, pos = _specifierMap[dyspec]
         dystr = matchobj.group(name)
@@ -268,7 +276,11 @@ def generateTime(matchobj, timespecs):
     if sespec:
         pat, name, dimtype, pos = _specifierMap[sespec]
         sestr = matchobj.group(name)
+<<<<<<< HEAD
         ise = int(sestr)
+=======
+        ise = string.atoi(sestr)
+>>>>>>> master
     return cdtime.comptime(iyr, imo, idy, ihr, imi, ise)
 
 # Find all files in 'direc' which match 'template'.
@@ -317,7 +329,11 @@ def matchingFiles(direc, template):
         if dimtypes['level'] is not None:
             matchnames[_level] = int(matchobj.group('level'))
         if dimtypes['elevel'] is not None:
+<<<<<<< HEAD
             matchnames[_elevel] = int(matchobj.group('elevel'))
+=======
+            matchnames[_elevel] = string.atoi(matchobj.group('elevel'))
+>>>>>>> master
         matchfiles.append((candfile, matchnames))
 
     return matchfiles
@@ -420,7 +436,11 @@ def searchPattern(objlist, pattern, attribute=None, tag=None):
     if tag is not None:
         tag = string.lower(tag)
     regexp = re.compile(pattern)
+<<<<<<< HEAD
     if not isinstance(objlist, list):
+=======
+    if not isinstance(objlist, types.ListType):
+>>>>>>> master
         objlist = [objlist]
 
     returnlist = []
@@ -442,7 +462,11 @@ def matchPattern(objlist, pattern, attribute=None, tag=None):
     if tag is not None:
         tag = string.lower(tag)
     regexp = re.compile(pattern)
+<<<<<<< HEAD
     if not isinstance(objlist, list):
+=======
+    if not isinstance(objlist, types.ListType):
+>>>>>>> master
         objlist = [objlist]
 
     returnlist = []
@@ -473,7 +497,11 @@ def matchPattern(objlist, pattern, attribute=None, tag=None):
 def searchPredicate(objlist, predicate, tag=None):
     if tag is not None:
         tag = string.lower(tag)
+<<<<<<< HEAD
     if not isinstance(objlist, list):
+=======
+    if not isinstance(objlist, types.ListType):
+>>>>>>> master
         objlist = [objlist]
 
     returnlist = []
@@ -484,7 +512,6 @@ def searchPredicate(objlist, predicate, tag=None):
 
 # ------------------------------------------------------------------------
 # Classes
-
 # Generic CDMS object has a tree node, attributes
 
 
@@ -498,7 +525,11 @@ class CdmsObj (object):
 
     def _listatts(self):
         dic = {}
+<<<<<<< HEAD
         for nm, val in list(self.__dict__.items()):
+=======
+        for nm, val in self.__dict__.items():
+>>>>>>> master
             if (nm[0] != '_' and nm not in self.__cdms_internals__) or nm in [
                     '_FillValue']:
                 dic[nm] = val
@@ -530,7 +561,11 @@ class CdmsObj (object):
                 parenttype = None
             atts = node.getExternalDict()
             adict = self.__dict__
+<<<<<<< HEAD
             for attname in list(atts.keys()):
+=======
+            for attname in atts.keys():
+>>>>>>> master
                 (attval, datatype) = atts[attname]  # (XML value, datatype)
                 constraint = node.extra.get(attname)
                 if constraint is not None:
@@ -541,14 +576,22 @@ class CdmsObj (object):
                     if reqtype != datatype and datatype == CdString and scaletype == CdScalar:
                         if reqtype in (CdFloat, CdDouble):
                             try:
+<<<<<<< HEAD
                                 attval = float(attval)
+=======
+                                attval = string.atof(attval)
+>>>>>>> master
                             except BaseException:
                                 raise RuntimeError(
                                     "%s=%s must be a float" %
                                     (attname, attval))
                         elif reqtype in (CdShort, CdInt, CdLong, CdInt64):
                             try:
+<<<<<<< HEAD
                                 attval = int(attval)
+=======
+                                attval = string.atoi(attval)
+>>>>>>> master
                             except BaseException:
                                 raise RuntimeError(
                                     "%s=%s must be an integer" %
@@ -569,6 +612,7 @@ class CdmsObj (object):
         :::
         Output:::
         result :: (int/True/False) (0) True if the attribute with name attname
+<<<<<<< HEAD
                   is a string attribute which contains the compiled regular expression
                   pattern, or if attname is None and pattern matches at least one
                   string attribute, False if the attribute is not found or is not a string
@@ -577,12 +621,26 @@ class CdmsObj (object):
         if attname is None:
             for attval in list(self.attributes.values()):
                 if isinstance(attval, bytes) and pattern.search(
+=======
+        is a string attribute which contains the compiled regular expression
+        pattern, or if attname is None and pattern matches at least one string
+        attribute, False if the attribute is not found or is not a string.
+        :::
+        """
+        if attname is None:
+            for attval in self.attributes.values():
+                if isinstance(attval, types.StringType) and pattern.search(
+>>>>>>> master
                         attval) is not None:
                     return 1
             return 0
         elif attname in self.attributes:
             attval = self.attributes[attname]
+<<<<<<< HEAD
             return (isinstance(attval, bytes) and
+=======
+            return (isinstance(attval, types.StringType) and
+>>>>>>> master
                     pattern.search(attval) is not None)
         else:
             return 0
@@ -604,6 +662,7 @@ class CdmsObj (object):
         :::
         Output:::
         result :: (int/True/False) (0) True if the attribute with name attname
+<<<<<<< HEAD
                   is a string attribute which matches the compiled regular expression
                   pattern, or if attname is None and pattern matches at least one
                   string attribute, False if the attribute is not found or is not a string
@@ -612,12 +671,26 @@ class CdmsObj (object):
         if attname is None:
             for attval in list(self.attributes.values()):
                 if isinstance(attval, bytes) and pattern.match(
+=======
+        is a string attribute which matches the compiled regular expression
+        pattern, or if attname is None and pattern matches at least one string
+        attribute, False if the attribute is not found or is not a string
+        :::
+        """
+        if attname is None:
+            for attval in self.attributes.values():
+                if isinstance(attval, types.StringType) and pattern.match(
+>>>>>>> master
                         attval) is not None:
                     return 1
             return 0
         elif attname in self.attributes:
             attval = self.attributes[attname]
+<<<<<<< HEAD
             return (isinstance(attval, bytes) and
+=======
+            return (isinstance(attval, types.StringType) and
+>>>>>>> master
                     pattern.match(attval) is not None)
         else:
             return 0
@@ -627,8 +700,14 @@ class CdmsObj (object):
     # internal node tag.
     def searchPattern(self, pattern, attribute, tag):
         """
+<<<<<<< HEAD
         Search for a pattern in a string-valued attribute. If attribute is None, search
         all string attributes. If tag is not None, it must match the internal node tag.
+=======
+        Search for a pattern in a string-valued attribute. If attribute is
+        None, search all string attributes. If tag is not None,
+        it must match the internal node tag.
+>>>>>>> master
         :::
         Input:::
         pattern :: (str) (0) pattern
@@ -652,8 +731,14 @@ class CdmsObj (object):
     # internal node tag.
     def matchPattern(self, pattern, attribute, tag):
         """
+<<<<<<< HEAD
         Match for a pattern in a string-valued attribute. If attribute is None, search
         all string attributes. If tag is not None, it must match the internal node tag.
+=======
+        Match for a pattern in a string-valued attribute.
+        If attribute is None, search all string attributes.
+        If tag is not None, it must match the internal node tag.
+>>>>>>> master
         :::
         Input:::
         pattern :: (str) (0) pattern
@@ -678,8 +763,13 @@ class CdmsObj (object):
     def searchPredicate(self, predicate, tag):
         """
         Apply a truth-valued predicate. Return a list containing a single instance:
+<<<<<<< HEAD
              [self] if the predicate is true and either tag is None or matches the object node tag.
         If the predicate returns false, return an empty list
+=======
+        [self] if the predicate is true and either tag is None or matches the object
+        node tag. If the predicate returns false, return an empty list
+>>>>>>> master
         :::
         Input:::
         predicate :: (function) (0) predicate
@@ -714,7 +804,11 @@ class CdmsObj (object):
         :::
         """
         if self._node_ is None:
+<<<<<<< HEAD
             raise CDMSError("No tree node found") # noqa
+=======
+            raise RuntimeError("No tree node found")
+>>>>>>> master
         self._node_.dump(path, format)
 
     def _getinternals(self):
@@ -732,4 +826,8 @@ if __name__ == '__main__':
     assert x.attributes['someatt'] == x.someatt
     assert '_node' not in x.attributes
     # need tests for the search routines...
+<<<<<<< HEAD
     print("Test passed.")
+=======
+    print "Test passed."
+>>>>>>> master

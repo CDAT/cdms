@@ -3339,6 +3339,12 @@ L210:
 	}
     }
 
+    if (k%2 != 0) { 
+        for (n=0;n<kk;n++) {
+            pa[k-n-1] = -pa[n];
+            pw[k-n-1] = pw[n];
+        }
+    }
     return 0;
 
 

@@ -316,7 +316,11 @@ class CdmsRegrid:
     """
 
     def __init__(self, srcGrid, dstGrid, dtype,
+<<<<<<< HEAD
                  regridMethod='linear', regridTool='libCF',
+=======
+                 regridMethod='linear', regridTool='esmf',
+>>>>>>> master
                  srcGridMask=None, srcGridAreas=None,
                  dstGridMask=None, dstGridAreas=None,
                  **args):
@@ -376,13 +380,16 @@ class CdmsRegrid:
                                      badCellIndices=dstBadCellIndices)
             # mask out the bad dst cells
             if len(dstBadCellIndices) > 0:
+
                 if dstGridMask is None:
                     dstGridMask = numpy.zeros(dstCoords[0].shape, numpy.bool)
+
                 for inds in dstBadCellIndices:
                     dstGridMask[inds] = 1  # True means invalid
 
             for c, b in zip(srcBounds, srcCoords):
                 if c.min() == b.min() or c.max() == b.max():
+<<<<<<< HEAD
                     print("""
 WARNING: Edge bounds are the same. The results of conservative regridding will not conserve.
 coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
@@ -391,7 +398,22 @@ coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
                dstBounds[0].min() < -90 or dstBounds[0].max() > 90:
                 print("WARNING: Bounds exceed +/-90 degree latitude: min/max lats = %g/%g" %
                       (srcBounds[0].min(), srcBounds[0].max()))
+=======
+                    print """
+WARNING: Edge bounds are the same. The results of conservative regridding will not conserve.
+coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
+              """ % (c.min(), b.min(), c.max(), b.max())
+
+            if srcBounds[0].min() < -90 or srcBounds[0].max() > 90 or \
+               dstBounds[0].min() < -90 or dstBounds[0].max() > 90:
+                print "WARNING: Bounds exceed +/-90 degree latitude: min/max lats = %g/%g" % \
+                    (srcBounds[0].min(), srcBounds[0].max())
+
+>>>>>>> master
             if not re.search('esmp', regridTool.lower()):
+                regridTool = 'esmf'
+
+            if not re.search('esmf', regridTool.lower()):
                 regridTool = 'esmf'
 
         # If LibCF handleCut is True, the bounds are needed to extend the grid
@@ -442,8 +464,12 @@ coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
 
         # sometimes the masked values are not set to missing_values,
         # sorry for the extra copy
+<<<<<<< HEAD
         srcData = numpy.array(
             srcVar.data * (1 - srcVar.mask), dtype=srcVar.dtype)
+=======
+        srcData = srcVar.data * (1 - srcVar.mask)
+>>>>>>> master
         srcData += srcVar.mask * missingValue
 
         # interpolate the data, MPI gather on processor 0
@@ -463,7 +489,11 @@ coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
         attrs = {}
         for a in srcVar.attributes:
             v = srcVar.attributes[a]
+<<<<<<< HEAD
             if isinstance(v, bytes):
+=======
+            if isinstance(v, types.StringType):
+>>>>>>> master
                 attrs[a] = v
 
         # if the missing value is present in the destination data, set

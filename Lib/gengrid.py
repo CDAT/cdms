@@ -4,12 +4,20 @@
 """CDMS Generic Grids"""
 
 import numpy
+<<<<<<< HEAD
 # import PropertiedClasses
 from . import bindex
 from .error import CDMSError
 from .grid import LongitudeType, LatitudeType, CoordTypeToLoc
 from .hgrid import AbstractHorizontalGrid
 from .axis import allclose
+=======
+import bindex
+from error import CDMSError
+from grid import LongitudeType, LatitudeType, CoordTypeToLoc
+from hgrid import AbstractHorizontalGrid
+from axis import allclose
+>>>>>>> master
 
 MethodNotImplemented = "Method not yet implemented"
 
@@ -304,7 +312,11 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
     shape = property(_getShape, None)
 
 # PropertiedClasses.set_property (AbstractGenericGrid, 'shape',
+<<<<<<< HEAD
 #                                   AbstractGenericGrid._getShape, nowrite=1,
+=======
+#                                 AbstractGenericGrid._getShape, nowrite=1,
+>>>>>>> master
 # nodelete=1)
 
 

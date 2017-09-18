@@ -13,13 +13,22 @@ from numpy.ma import indices, innerproduct, masked, put, putmask, rank, ravel  #
 from numpy.ma import set_fill_value, shape, size, isMA, isMaskedArray, is_mask, isarray  # noqa
 from numpy.ma import make_mask, mask_or, nomask   # noqa
 from numpy import sctype2char, get_printoptions, set_printoptions
+<<<<<<< HEAD
 from .avariable import AbstractVariable, getNumericCompatibility
 from .tvariable import TransientVariable, asVariable
 from .grid import AbstractRectGrid
 from .error import CDMSError
 # from numpy.ma import *
 from .axis import allclose as axisAllclose, TransientAxis, concatenate as axisConcatenate, take as axisTake
+=======
+from avariable import AbstractVariable, getNumericCompatibility
+from tvariable import TransientVariable, asVariable
+from grid import AbstractRectGrid
+from error import CDMSError
+# from numpy.ma import *
+from axis import allclose as axisAllclose, TransientAxis, concatenate as axisConcatenate, take as axisTake
 
+>>>>>>> master
 
 create_mask = make_mask_none
 e = numpy.e
@@ -354,7 +363,11 @@ def is_floating(x):
 def is_integer(x):
     "Is x a scalar integer, either python or numpy?"
     return (isinstance(x, numpy.integer) or isinstance(
+<<<<<<< HEAD
         x, int))
+=======
+        x, int) or isinstance(x, long))
+>>>>>>> master
 
 
 def get_print_limit():
@@ -551,7 +564,11 @@ def choose(myindices, t):
 
       The result has only the default axes.
     """
+<<<<<<< HEAD
     maresult = numpy.ma.choose(myindices, list(map(_makeMaskedArg, t)))
+=======
+    maresult = numpy.ma.choose(myindices, map(_makeMaskedArg, t))
+>>>>>>> master
     F = getattr(t, "fill_value", 1.e20)
     return TransientVariable(maresult, fill_value=F)
 
@@ -677,7 +694,11 @@ def concatenate(arrays, axis=0, axisid=None, axisattributes=None):
             if axes is None:
                 break
             axes = commonAxes(tarrays[i + 2], axes, omit=axis)
+<<<<<<< HEAD
             grid = commonGrid1(tarrays[i + 2], grid, axes)
+=======
+            grid = commonGrid1(a, grid, axes)
+>>>>>>> master
     else:
         axes = tarrays[0].getAxisList()
         varattributes = tarrays[0].attributes

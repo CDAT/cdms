@@ -218,6 +218,7 @@ class TestEsmpSmall(unittest.TestCase):
 
         lackConservLocal = srcFldIntegral - dstFldIntegral
 
+<<<<<<< HEAD
         print(('[%d] src corner lo = %s hi = %s dst corner lo = %s hi = %s' % (rk,
                                                                               str(srcLoCorner),
                                                                               str(srcHiCorner),
@@ -232,6 +233,22 @@ class TestEsmpSmall(unittest.TestCase):
         print(('[%d] checksum of src: %f checksum of dst: %f' % (rk, srcFldSum, dstFldSum)))
         print(('[%d] src total area integral: %g dst total area integral: %g diff: %g\n' % \
             (rk, srcFldIntegral, dstFldIntegral, lackConservLocal)))
+=======
+        print '[%d] src corner lo = %s hi = %s dst corner lo = %s hi = %s' % (rk,
+                                                                              str(srcLoCorner),
+                                                                              str(srcHiCorner),
+                                                                              str(dstLoCorner),
+                                                                              str(dstHiCorner))
+        print '[%d] src center lo = %s hi = %s dst center lo = %s hi = %s' % (rk,
+                                                                              str(srcLoCenter),
+                                                                              str(srcHiCenter),
+                                                                              str(dstLoCenter),
+                                                                              str(dstHiCenter))
+
+        print '[%d] checksum of src: %f checksum of dst: %f' % (rk, srcFldSum, dstFldSum)
+        print '[%d] src total area integral: %g dst total area integral: %g diff: %g\n' % \
+            (rk, srcFldIntegral, dstFldIntegral, lackConservLocal)
+>>>>>>> master
 
         if HAS_MPI:
             lackConserv = MPI.COMM_WORLD.reduce(
@@ -240,7 +257,11 @@ class TestEsmpSmall(unittest.TestCase):
             lackConserv = lackConservLocal
 
         if rk == 0:
+<<<<<<< HEAD
             print(('[0] total lack of conservation (should be small): %f' % lackConserv))
+=======
+            print '[0] total lack of conservation (should be small): %f' % lackConserv
+>>>>>>> master
             assert(abs(lackConserv) < 1.e-6)
 
         # cleanup
@@ -253,6 +274,10 @@ class TestEsmpSmall(unittest.TestCase):
 
 if __name__ == '__main__':
 
+<<<<<<< HEAD
     print("")  # Spacer
+=======
+    print ""  # Spacer
+>>>>>>> master
     suite = unittest.TestLoader().loadTestsFromTestCase(TestEsmpSmall)
     unittest.TextTestRunner(verbosity=1).run(suite)

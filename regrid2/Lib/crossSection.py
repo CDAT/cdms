@@ -3,8 +3,15 @@
 import cdms2
 import numpy
 import copy
+<<<<<<< HEAD
 from . import _regrid
 from .error import RegridError
+
+=======
+import string
+import _regrid
+from error import RegridError
+>>>>>>> master
 
 
 class CrossSectionRegridder:
@@ -89,8 +96,8 @@ class CrossSectionRegridder:
         self.nlevi = len(levIn)
         self.nlevo = len(levOut)
 
-        latIn, self.nlati = checkdimension(latIn[:], 'input latitude')
-        latOut, self.nlato = checkdimension(latOut[:], 'output latitude')
+        latIn, self.nlati = checkdimension(latIn, 'input latitude')
+        latOut, self.nlato = checkdimension(latOut, 'output latitude')
 
         # --- check for a single grid point in the latitude-level plane
 
@@ -201,6 +208,12 @@ class CrossSectionRegridder:
                 order = "zy"
             else:
                 order = "tzy"
+<<<<<<< HEAD
+=======
+
+        assert rank == len(
+            order), 'Order must be same length as array rank: %i' % len(ar.shape)
+>>>>>>> master
 
         assert rank == len(
             order), 'Order must be same length as array rank: %i' % len(ar.shape)
@@ -230,7 +243,11 @@ class CrossSectionRegridder:
 
         # Reconstruct the same class as on input
         # Mask fill_value and return results
+<<<<<<< HEAD
         print("INPUT IS VAR:", inputIsVariable)
+=======
+        print "INPUT IS VAR:", inputIsVariable
+>>>>>>> master
         if inputIsVariable == 1:
             result = numpy.ma.masked_values(outar, missing)
             result = cdms2.createVariable(result, fill_value=missing,
@@ -592,7 +609,11 @@ def generic_wts_bnds(lat):
             newLat = lat.clone()
             newLat.setBounds(None)
         bnds = lat.getBounds()
+<<<<<<< HEAD
     except BaseException:  # just an array....
+=======
+    except BaseException:
+>>>>>>> master
         newLat = cdms2.createAxis(lat)
         newLat.setBounds(None)
         bnds = newLat.getBounds()
@@ -690,6 +711,7 @@ def get_latitude_wts_bnds(checklatpass):
             wts = wts[::-1]
             bnds = bnds[::-1]
         return (wts, bnds)
+<<<<<<< HEAD
 
     # ------ must be generic latitude -------
 
@@ -697,6 +719,11 @@ def get_latitude_wts_bnds(checklatpass):
     if reverse_latitude == 'yes':
         wts = wts[::-1]
         bnds = bnds[::-1]
+=======
+
+    # ------ must be generic latitude -------
+    wts, bnds = generic_wts_bnds(checklatpass)
+>>>>>>> master
     return (wts, bnds)
 
 
@@ -994,11 +1021,19 @@ def sendmsg(msg, value1=None, value2=None):
     #
     #---------------------------------------------------------------------------------"""
 
+<<<<<<< HEAD
     print('*******************************************************************')
     if value1 is None:
         print(msg)
     elif value2 is None:
         print((msg, value1))
+=======
+    print '*******************************************************************'
+    if value1 is None:
+        print msg
+    elif value2 is None:
+        print msg, value1
+>>>>>>> master
     else:
         print((msg, value1, value2))
     print('*******************************************************************')
@@ -1093,4 +1128,8 @@ if __name__ == '__main__':
 
     print('expected cross section test case rms error =  0.18581882')
     # print 'expected cross section test case rms error =  0.23062'
+<<<<<<< HEAD
     print(('calculated cross section test case rms error = ', error))
+=======
+    print 'calculated cross section test case rms error = ', error
+>>>>>>> master

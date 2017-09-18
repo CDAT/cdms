@@ -1,16 +1,28 @@
 """CDMS database objects"""
 
+<<<<<<< HEAD
 from .error import CDMSError
 from . import cdmsobj
 from . import cdurlparse
 # import internattr
+=======
+from error import CDMSError
+import cdmsobj
+import cdurlparse
+>>>>>>> master
 import os
 import re
 import string
 import sys
+<<<<<<< HEAD
 from .CDMLParser import CDMLParser
 from .cdmsobj import CdmsObj
 from .dataset import Dataset
+=======
+from CDMLParser import CDMLParser
+from cdmsobj import CdmsObj
+from dataset import Dataset
+>>>>>>> master
 
 try:
     import ldap
@@ -164,7 +176,11 @@ class AbstractDatabase(CdmsObj):
             self._datacache_ = None
 
     def useRequestManager(self, lcBaseDN, useReplica=1, userid="anonymous"):
+<<<<<<< HEAD
         from . import cache
+=======
+        import cache
+>>>>>>> master
         self.enableCache()
         cache.useRequestManagerTransfer()
         self.lcBaseDN = lcBaseDN
@@ -172,13 +188,20 @@ class AbstractDatabase(CdmsObj):
         self.userid = userid
 
     def usingRequestManager(self):
+<<<<<<< HEAD
         from . import cache
+=======
+        import cache
+>>>>>>> master
         return (cache._transferMethod == cache._requestManagerTransfer)
 
     def __repr__(self):
         return "<Database '%s'>" % (self.uri)
+<<<<<<< HEAD
 
 # internattr.add_internal_attribute(AbstractDatabase, 'uri', 'path')
+=======
+>>>>>>> master
 
 # Database implemented via LDAP (Lightweight Directory Access Protocol)
 
@@ -233,14 +256,22 @@ class LDAPDatabase(AbstractDatabase):
             (text, datapath) = self._cdmlcache_[normaldn]
             uri = "ldap://%s/%s" % (self.netloc, normaldn)
             if cdmsobj._debug == 1:
+<<<<<<< HEAD
                 print('Loading %s from cached CDML' % uri)
+=======
+                print 'Loading %s from cached CDML' % uri
+>>>>>>> master
             dataset = loadString(text, uri, self, datapath)
             self._cache_[normaldn] = dataset
         else:
             if cdmsobj._debug == 1:
+<<<<<<< HEAD
                 print(
                     'Search filter: (objectclass=dataset), scope: base, base: "%s", attributes=["cdml"]' %
                     (dn,))
+=======
+                print 'Search filter: (objectclass=dataset), scope: base, base: "%s", attributes=["cdml"]' % (dn,)
+>>>>>>> master
             result = self.db.search_s(
                 dn, ldap.SCOPE_BASE, "objectclass=dataset", [
                     "cdml", "datapath"])
@@ -406,9 +437,13 @@ class LDAPDatabase(AbstractDatabase):
             atts = ["objectclass", "cdml", "id"] + attnames
 
         if cdmsobj._debug == 1:
+<<<<<<< HEAD
             print(
                 'Search filter:%s, scope %s, base: "%s", attributes=%s' %
                 (newfilter, repr(scope), base, repr(atts)))
+=======
+            print 'Search filter:%s, scope %s, base: "%s", attributes=%s' % (newfilter, repr(scope), base, repr(atts))
+>>>>>>> master
         if timeout is None:
             result = self.db.search_s(base, scope, newfilter, atts)
         else:
@@ -419,15 +454,22 @@ class LDAPDatabase(AbstractDatabase):
     def listDatasets(self):
         """ Return a list of the dataset IDs in this database."""
         entries = self.searchFilter(tag='dataset', scope=Onelevel)
+<<<<<<< HEAD
         result = [x.attributes['id'][0] for x in entries]
         return result
 
 # internattr.add_internal_attribute(LDAPDatabase, 'netloc', 'db')
 
+=======
+        result = map(lambda x: x.attributes['id'][0], entries)
+        return result
+
+>>>>>>> master
 
 class AbstractSearchResult:
 
     def __getitem__(self, key):
+<<<<<<< HEAD
         ''' Method not yet implemented'''
         pass
 
@@ -438,6 +480,15 @@ class AbstractSearchResult:
     def searchPredicate(self, predicate, tag=None):
         '''Method not yet implemented'''
         pass
+=======
+        self.MethodNotImplemented = "Method not yet implemented"
+
+    def __len__(self):
+        self.MethodNotImplemented = "Method not yet implemented"
+
+    def searchPredicate(self, predicate, tag=None):
+        self.MethodNotImplemented = "Method not yet implemented"
+>>>>>>> master
 
 
 class LDAPSearchResult(AbstractSearchResult):

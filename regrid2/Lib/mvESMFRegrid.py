@@ -10,9 +10,15 @@ import re
 import numpy
 
 import ESMF
+<<<<<<< HEAD
 from . import esmf
 from . import RegridError
 from .mvGenericRegrid import GenericRegrid
+=======
+from regrid2 import esmf
+from regrid2 import RegridError
+from regrid2 import GenericRegrid
+>>>>>>> master
 
 ESMF.Manager(debug=False)
 HAVE_MPI = False
@@ -76,7 +82,11 @@ class ESMFRegrid(GenericRegrid):
 
         self.regridMethod = BILINEAR
         self.regridMethodStr = 'linear'
+<<<<<<< HEAD
         if isinstance(regridMethod, str):
+=======
+        if isinstance(regridMethod, types.StringType):
+>>>>>>> master
             if re.search('conserv', regridMethod.lower()):
                 self.regridMethod = CONSERVE
                 self.regridMethodStr = 'conserve'
@@ -87,7 +97,11 @@ class ESMFRegrid(GenericRegrid):
         # data stagger
         self.staggerloc = CENTER
         self.staggerlocStr = 'center'
+<<<<<<< HEAD
         if isinstance(staggerLoc, str):
+=======
+        if isinstance(staggerLoc, types.StringType):
+>>>>>>> master
             if re.search('vface', staggerLoc.lower(), re.I):
                 self.staggerloc = VFACE
                 self.staggerlocStr = 'vcorner'
@@ -120,7 +134,11 @@ class ESMFRegrid(GenericRegrid):
 #        self.srcMaskValues = numpy.array([1],dtype = numpy.int32)
 #        self.dstMaskValues = numpy.array([1],dtype = numpy.int32)
 
+<<<<<<< HEAD
         if isinstance(regridMethod, str):
+=======
+        if isinstance(regridMethod, types.StringType):
+>>>>>>> master
             if re.search('conserv', regridMethod.lower()):
                 self.srcMaskValues = numpy.array([1], dtype=numpy.int32)
                 self.dstMaskValues = numpy.array([1], dtype=numpy.int32)

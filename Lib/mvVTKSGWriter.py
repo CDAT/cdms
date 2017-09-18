@@ -13,6 +13,7 @@ import time
 from . import mvBaseWriter
 
 
+
 class VTKSGWriter(mvBaseWriter.BaseWriter):
 
     def write(self, filename):
@@ -31,12 +32,21 @@ class VTKSGWriter(mvBaseWriter.BaseWriter):
         npts = self.mesh.shape[0]
         print('POINTS %d float' % npts, file=f)
         for i in range(npts):
+<<<<<<< HEAD
             print('%f %f %f' % tuple(self.mesh[i, :]), file=f)
         n0, n1, n2 = self.shape
         # nodal data
         print('POINT_DATA %d' % (n0 * n1 * n2), file=f)
         print('SCALARS %s float' % (self.var.id), file=f)
         print('LOOKUP_TABLE default', file=f)
+=======
+            print >> f, '%f %f %f' % tuple(self.mesh[i, :])
+        n0, n1, n2 = self.shape
+        # nodal data
+        print >> f, 'POINT_DATA %d' % (n0 * n1 * n2)
+        print >> f, 'SCALARS %s float' % (self.var.id)
+        print >> f, 'LOOKUP_TABLE default'
+>>>>>>> master
         if n0 > 1:
             for k in range(n0):
                 for j in range(n1):
@@ -45,7 +55,11 @@ class VTKSGWriter(mvBaseWriter.BaseWriter):
         else:
             for j in range(n1):
                 for i in range(n2):
+<<<<<<< HEAD
                     print('%f' % self.var[j, i], file=f)
+=======
+                    print >> f, '%f' % self.var[j, i]
+>>>>>>> master
         f.close()
 
 

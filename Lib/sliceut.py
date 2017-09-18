@@ -19,6 +19,7 @@ def sliceIntersect(aSlice, interval):
     irev = 0
     if k < 0:
         k = -k
+<<<<<<< HEAD
         pk = int(((j - i + k) / k) * k + i)
         j = int(i + 1)
         i = int(pk)
@@ -26,6 +27,15 @@ def sliceIntersect(aSlice, interval):
 
     # Calculate the intersection for an increasing slice
     px = int((int((p0 - i + k - 1) / k)) * k + i)
+=======
+        pk = ((j - i + k) / k) * k + i
+        j = i + 1
+        i = pk
+        irev = 1
+
+    # Calculate the intersection for an increasing slice
+    px = ((p0 - i + k - 1) / k) * k + i
+>>>>>>> master
     a = max(px, i)
     b = min(j, p1)
     if a < b:
@@ -38,7 +48,11 @@ def sliceIntersect(aSlice, interval):
 
     # Reverse the slice if necessary
     if irev == 1 and newSlice is not None:
+<<<<<<< HEAD
         px = int(-(int((-b + a + k) / k) * k - a))
+=======
+        px = -((-b + a + k) / k * k - a)
+>>>>>>> master
         newSlice = slice(px, a - 1, -k)
 
     return newSlice
@@ -74,7 +88,11 @@ def lenSlice(aSlice):
         stop = aSlice.start
         step = -step
 
+<<<<<<< HEAD
     return (int((stop - start - 1) / step) + 1)
+=======
+    return ((stop - start - 1) / step + 1)
+>>>>>>> master
 
 
 def reverseSlice(s, size):
@@ -96,6 +114,7 @@ def reverseSlice(s, size):
         j = -1
     elif -size - 1 < j < 0:
         j = j % size
+<<<<<<< HEAD
 
     if i < -size or j < -size - 1:
         raise RuntimeError("Invalid slice %s" % repr(s))
@@ -107,6 +126,16 @@ def reverseSlice(s, size):
 
 # if j==size:
 #         j = None
+=======
+
+    if i < -size or j < -size - 1:
+        raise 'Invalid slice', repr(s)
+
+    k = -k
+    pk = ((j - i + k) / k) * k + i
+    j = i + 1
+    i = pk % size
+>>>>>>> master
 
     return slice(i, j, k)
 
@@ -137,7 +166,11 @@ def splitSliceExt(s, size):
 
     _debug = 0
     if(_debug):
+<<<<<<< HEAD
         print("SSSS0: ", i, j, k)
+=======
+        print "SSSS0: ", i, j, k
+>>>>>>> master
 
     wrap = []
 
@@ -145,21 +178,38 @@ def splitSliceExt(s, size):
 
         iter = 0
         if(_debug):
+<<<<<<< HEAD
             print("SSSS1: iter ", iter, j, size, k)
         while(j > 0):
             if(_debug):
                 print(" ")
             if(_debug):
                 print("SSSS2: iter", iter, j, size, k)
+=======
+            print "SSSS1: iter ", iter, j, size, k
+        while(j > 0):
+            if(_debug):
+                print " "
+            if(_debug):
+                print "SSSS2: iter", iter, j, size, k
+>>>>>>> master
             jo = size
             if(iter > 0):
                 jo = size + 1
             if(_debug):
+<<<<<<< HEAD
                 print("SSSS3: iter", iter, j, jo)
             if(j < size):
                 jo = j
             if(_debug):
                 print("SSSS4: iter", iter, j, jo)
+=======
+                print "SSSS3: iter", iter, j, jo
+            if(j < size):
+                jo = j
+            if(_debug):
+                print "SSSS4: iter", iter, j, jo
+>>>>>>> master
             wrap.append(slice(i, jo, k))
             j = j - size
             i = 0
@@ -170,6 +220,7 @@ def splitSliceExt(s, size):
         wraprev = []
         iter = 0
         if(_debug):
+<<<<<<< HEAD
             print("SSSS1 neg: iter ", iter, i, j, size, k)
         while(i >= 0):
             if(_debug):
@@ -183,6 +234,21 @@ def splitSliceExt(s, size):
                 io = i
             if(_debug):
                 print("SSSS4 neg: iter", iter, i, j, io)
+=======
+            print "SSSS1 neg: iter ", iter, i, j, size, k
+        while(i >= 0):
+            if(_debug):
+                print " "
+            if(_debug):
+                print "SSSS2 neg: iter", iter, i, j, size, k
+            io = size - 1
+            if(_debug):
+                print "SSSS3 neg: iter", iter, i, j, io
+            if(i < size):
+                io = i
+            if(_debug):
+                print "SSSS4 neg: iter", iter, i, j, io
+>>>>>>> master
 
             # mf 20010405 python does not return nothing for
             # slice(size-1,size-1,-1); force it
@@ -199,6 +265,10 @@ def splitSliceExt(s, size):
             kk = len(wraprev) - k - 1
             wrap.append(wraprev[kk])
             if(_debug):
+<<<<<<< HEAD
                 print("SSSS5 neg: ", kk, wraprev[kk])
+=======
+                print "SSSS5 neg: ", kk, wraprev[kk]
+>>>>>>> master
 
     return (wrap)

@@ -5,6 +5,10 @@ Resource Locators", by R. Fielding, UC Irvine, June 1995.
 
 # Standard/builtin Python modules
 import string
+<<<<<<< HEAD
+=======
+from string import joinfields, splitfields, rfind
+>>>>>>> master
 
 # A classification of schemes ('' means apply by default)
 uses_relative = ['ftp', 'http', 'ldap', 'gopher', 'nntp', 'wais', 'file',
@@ -53,19 +57,30 @@ def urlparse(url, scheme='', allow_fragments=1):
         return cached
     if len(_parse_cache) >= MAX_CACHE_SIZE:  # avoid runaway growth
         clear_cache()
+<<<<<<< HEAD
     netloc = params = query = fragment = ''
     i = url.find(':')
+=======
+    find = string.find
+    netloc = params = query = fragment = ''
+    i = find(url, ':')
+>>>>>>> master
     if i > 0:
         if url[:i] in ['http', 'ldap']:  # optimize the common case
             scheme = string.lower(url[:i])
             url = url[i + 1:]
             if url[:2] == '//':
+<<<<<<< HEAD
                 i = url.find('/', 2)
+=======
+                i = find(url, '/', 2)
+>>>>>>> master
                 if i < 0:
                     i = len(url)
                 netloc = url[2:i]
                 url = url[i:]
             if allow_fragments:
+<<<<<<< HEAD
                 i = url.rfind('#')
                 if i >= 0:
                     fragment = url[i + 1:]
@@ -75,6 +90,17 @@ def urlparse(url, scheme='', allow_fragments=1):
                 query = url[i + 1:]
                 url = url[:i]
             i = url.find(';')
+=======
+                i = string.rfind(url, '#')
+                if i >= 0:
+                    fragment = url[i + 1:]
+                    url = url[:i]
+            i = find(url, '?')
+            if i >= 0:
+                query = url[i + 1:]
+                url = url[:i]
+            i = find(url, ';')
+>>>>>>> master
             if i >= 0:
                 params = url[i + 1:]
                 url = url[:i]
@@ -88,11 +114,16 @@ def urlparse(url, scheme='', allow_fragments=1):
             scheme, url = string.lower(url[:i]), url[i + 1:]
     if scheme in uses_netloc:
         if url[:2] == '//':
+<<<<<<< HEAD
             i = url.find('/', 2)
+=======
+            i = find(url, '/', 2)
+>>>>>>> master
             if i < 0:
                 i = len(url)
             netloc, url = url[2:i], url[i:]
     if allow_fragments and scheme in uses_fragment:
+<<<<<<< HEAD
         i = url.rfind('#')
         if i >= 0:
             url, fragment = url[:i], url[i + 1:]
@@ -102,6 +133,17 @@ def urlparse(url, scheme='', allow_fragments=1):
             url, query = url[:i], url[i + 1:]
     if scheme in uses_params:
         i = url.find(';')
+=======
+        i = string.rfind(url, '#')
+        if i >= 0:
+            url, fragment = url[:i], url[i + 1:]
+    if scheme in uses_query:
+        i = find(url, '?')
+        if i >= 0:
+            url, query = url[:i], url[i + 1:]
+    if scheme in uses_params:
+        i = find(url, ';')
+>>>>>>> master
         if i >= 0:
             url, params = url[:i], url[i + 1:]
     tuple = scheme, netloc, url, params, query, fragment
@@ -155,10 +197,17 @@ def urljoin(base, url, allow_fragments=1):
     if not path:
         return urlunparse((scheme, netloc, bpath,
                            params, query or bquery, fragment))
+<<<<<<< HEAD
     i = bpath.rfind('/')
     if i >= 0:
         path = bpath[:i] + '/' + path
     segments = path.split('/')
+=======
+    i = rfind(bpath, '/')
+    if i >= 0:
+        path = bpath[:i] + '/' + path
+    segments = splitfields(path, '/')
+>>>>>>> master
     if segments[-1] == '.':
         segments[-1] = ''
     while '.' in segments:
@@ -177,7 +226,11 @@ def urljoin(base, url, allow_fragments=1):
         segments[-1] = ''
     elif len(segments) >= 2 and segments[-1] == '..':
         segments[-2:] = ['']
+<<<<<<< HEAD
     return urlunparse((scheme, netloc, "/".join(segments),
+=======
+    return urlunparse((scheme, netloc, joinfields(segments, '/'),
+>>>>>>> master
                        params, query, fragment))
 
 
@@ -239,8 +292,13 @@ def test():
         else:
             fp = open(fn)
     else:
+<<<<<<< HEAD
         import io
         fp = io.StringIO(test_input)
+=======
+        import StringIO
+        fp = StringIO.StringIO(test_input)
+>>>>>>> master
     while True:
         line = fp.readline()
         if not line:
@@ -250,15 +308,26 @@ def test():
             continue
         url = words[0]
         parts = urlparse(url)
+<<<<<<< HEAD
         print('%-10s : %s' % (url, parts))
+=======
+        print '%-10s : %s' % (url, parts)
+>>>>>>> master
         abs = urljoin(base, url)
         if not base:
             base = abs
         wrapped = '<URL:%s>' % abs
+<<<<<<< HEAD
         print('%-10s = %s' % (url, wrapped))
         if len(words) == 3 and words[1] == '=':
             if wrapped != words[2]:
                 print('EXPECTED', words[2], '!!!!!!!!!!')
+=======
+        print '%-10s = %s' % (url, wrapped)
+        if len(words) == 3 and words[1] == '=':
+            if wrapped != words[2]:
+                print 'EXPECTED', words[2], '!!!!!!!!!!'
+>>>>>>> master
 
 
 if __name__ == '__main__':

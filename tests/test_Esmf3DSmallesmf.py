@@ -8,7 +8,11 @@ import cdms2  # ESMP_Initialize()
 import unittest
 import ESMF
 from regrid2 import esmf
+<<<<<<< HEAD
 from regrid2.mvESMFRegrid import ESMFRegrid  # noqa
+=======
+from regrid2 import ESMFRegrid
+>>>>>>> master
 import numpy
 import numpy as np
 
@@ -241,7 +245,11 @@ class TestESMPRegridderConserve(unittest.TestCase):
             self.assertEqual(maxlsd, maxlsi)
 
     def dtest2_3D_Native_Conserve(self):
+<<<<<<< HEAD
         print()
+=======
+        print
+>>>>>>> master
 #        srcDims, srcXYZCenter, srcData, srcBounds = makeGrid(5, 4, 3)
 #        dstDims, dstXYZCenter, dstData, dstBounds = makeGrid(5, 4, 3)
 
@@ -275,7 +283,11 @@ class TestESMPRegridderConserve(unittest.TestCase):
             ys.shape[0] - 1,
             xs.shape[0] - 1) * 100
 
+<<<<<<< HEAD
         print((srcData.dtype))
+=======
+        print srcData.dtype
+>>>>>>> master
         # Establish the Destination grid
 
 
@@ -304,9 +316,15 @@ class TestESMPRegridderConserve(unittest.TestCase):
             boundsx[:, :, i2] = xcorner[i2, 0]
         boundsx[:, :, -1] = xcorner[-1, 1]
 
+<<<<<<< HEAD
         print((boundsz[:, 1, 1]))
         print((boundsy[1, :, 1]))
         print((boundsx[1, 1, :]))
+=======
+        print boundsz[:, 1, 1]
+        print boundsy[1, :, 1]
+        print boundsx[1, 1, :]
+>>>>>>> master
 
         myCenter = [ZCenter, YCenter, XCenter]
 
@@ -380,7 +398,11 @@ class TestESMPRegridderConserve(unittest.TestCase):
             self.assertEqual(maxlsd, maxlsi)
 
     def xtest2_2D_Native_Conserve(self):
+<<<<<<< HEAD
         print()
+=======
+        print
+>>>>>>> master
         srcDims, srcXYZCenter, srcData, srcBounds = makeGrid(5, 4, 1)
         dstDims, dstXYZCenter, dstData, dstBounds = makeGrid(5, 4, 1)
 
@@ -456,7 +478,11 @@ class TestESMPRegridderConserve(unittest.TestCase):
 
 
 if __name__ == '__main__':
+<<<<<<< HEAD
     print("")  # Spacer
+=======
+    print ""  # Spacer
+>>>>>>> master
     ESMF.Manager(debug=True)
     suite = unittest.TestLoader().loadTestsFromTestCase(TestESMPRegridderConserve)
     unittest.TextTestRunner(verbosity=1).run(suite)

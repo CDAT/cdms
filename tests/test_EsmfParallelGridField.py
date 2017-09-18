@@ -120,6 +120,7 @@ dstFeld1 = ESMF.Field(srcGrid1, name='dstFeld1', staggerloc=CENTER,
 
 srcPtr = srcFeld1.data
 if pe == rootPe:
+<<<<<<< HEAD
     print('1. Create Grid, Field then GridAddCoord()')
 if pe == rootPe:
     print('2. GridCreate, GridAddCoord, FieldCreate')
@@ -129,6 +130,17 @@ print(('1. ', srcPtr.size, srcCrds[0].size))
 
 srcPtr = srcFeld1.data
 print(('1. ', srcPtr.size, srcCrds[0].size))
+=======
+    print '1. Create Grid, Field then GridAddCoord()'
+if pe == rootPe:
+    print '2. GridCreate, GridAddCoord, FieldCreate'
+if pe == rootPe:
+    print '3. Use a class to create the grid addCoords then the field'
+print '1. ', srcPtr.size, srcCrds[0].size
+
+srcPtr = srcFeld1.data
+print '1. ', srcPtr.size, srcCrds[0].size
+>>>>>>> master
 
 srcGrid2 = ESMF.Grid(maxIndex, num_peri_dims=0, coord_sys=COORDSYS)
 dstGrid2 = ESMF.Grid(maxIndex, num_peri_dims=0, coord_sys=COORDSYS)
@@ -139,10 +151,18 @@ dstFeld2 = ESMF.Field(dstGrid2, name='dstFeld2', staggerloc=CENTER,
                       typekind=R4)
 
 srcPtr = srcFeld2.data
+<<<<<<< HEAD
 print(('2. ', srcPtr.size, srcCrds[0].size))
+=======
+print '2. ', srcPtr.size, srcCrds[0].size
+>>>>>>> master
 
 srcStuff = createGridAndField(maxIndex)
 
 aa = srcStuff.getDataPointer()
 bb = srcStuff.getCoordPointer()
+<<<<<<< HEAD
 print(('3. ', aa.size, bb.size))
+=======
+print '3. ', aa.size, bb.size
+>>>>>>> master

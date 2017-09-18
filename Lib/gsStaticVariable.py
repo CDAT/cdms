@@ -20,8 +20,12 @@ from functools import reduce
 
 try:
     from pycf import libCFConfig as libcf
+<<<<<<< HEAD
 except BaseException:
     #    raise ImportError, 'Error: could not import pycf'
+=======
+except BaseException:  # raise ImportError, 'Error: could not import pycf'
+>>>>>>> master
     pass
 
 
@@ -36,7 +40,11 @@ def createTransientGrid(gFName, coordinates):
 
     fh = cdms2.open(gFName)
     gridid = None
+<<<<<<< HEAD
     if libcf.CF_GRIDNAME in list(fh.attributes.keys()):
+=======
+    if libcf.CF_GRIDNAME in fh.attributes.keys():
+>>>>>>> master
         gridid = getattr(fh, libcf.CF_GRIDNAME)
     xn, yn = coordinates.split()
 
@@ -195,7 +203,10 @@ class StaticFileVariable(StaticVariable):
 
             # Get lists of 1D and auxiliary coordinate axes
             # coords1d = f._convention_.getAxisIds(u.variables)
+<<<<<<< HEAD
             # coordsaux = f._convention_.getAxisAuxIds(u.variables, coords1d)
+=======
+>>>>>>> master
 
             # Convert the variable into a FileVariable
             f.variables[varName] = FileVariable(
@@ -270,7 +281,11 @@ class StaticTransientVariable(StaticVariable):
             vr.gridIndex = gridIndex
 
             grid = None
+<<<<<<< HEAD
             if 'coordinates' in list(vr.attributes.keys()):
+=======
+            if 'coordinates' in vr.attributes.keys():
+>>>>>>> master
                 grid = createTransientGrid(
                     gFName, vr.attributes['coordinates'])
             atts = dict(vr.attributes)

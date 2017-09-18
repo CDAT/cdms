@@ -210,9 +210,15 @@ class Mosaic:
 
                 # Get the triangle data. Need to find the three cells
                 # comprising a corner.
+<<<<<<< HEAD
                 if tn2 in list(self.tile_contacts.keys()):
                     t1n = list(self.tile_contacts[tn1].keys())
                     t2n = list(self.tile_contacts[tn2].keys())
+=======
+                if tn2 in self.tile_contacts.keys():
+                    t1n = self.tile_contacts[tn1].keys()
+                    t2n = self.tile_contacts[tn2].keys()
+>>>>>>> master
 
                     # Look for a tile in the main list. Now compare the adjacent
                     # tiles to 1 and 2 until there is match. Now we have tile 3
@@ -490,6 +496,7 @@ def test():
 
     m = open(options.mfile)
 
+<<<<<<< HEAD
     print("\nCoordinate Names")
     for c in m.coordinate_names:
         print(c)
@@ -503,5 +510,20 @@ def test():
     print()
 
 
+=======
+    print "\nCoordinate Names"
+    for c in m.coordinate_names:
+        print c
+
+    print "\nTile Contacts"
+    for t in m.tile_contacts:
+        print "%s -> %s" % (t, m.tile_contacts[t])
+    print "\nTile Contacts Complement"
+    for t in m.tile_contacts_compl:
+        print "%s -> %s" % (t, m.tile_contacts_compl[t])
+    print
+
+
+>>>>>>> master
 if __name__ == "__main__":
     test()

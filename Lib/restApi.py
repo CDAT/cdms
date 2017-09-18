@@ -1,12 +1,21 @@
+<<<<<<< HEAD
 import urllib.request
 import urllib.error
 import urllib.parse
+=======
+# import cdms2
+import urllib2
+>>>>>>> master
 import xml.etree.ElementTree
 try:
     import genutil
 except BaseException:
     pass
 import os
+<<<<<<< HEAD
+=======
+# import bz2
+>>>>>>> master
 
 
 class esgfConnectionException(Exception):
@@ -22,7 +31,11 @@ class esgfFilesException(Exception):
     # def __init__(self,value):
     # self.value=value
     # def __repr__(self):
+<<<<<<< HEAD
     #      msg =  "rest API error: %s" % repr(value)
+=======
+    #     msg =  "rest API error: %s" % repr(value)
+>>>>>>> master
     # print msg
     # return msg
 
@@ -39,7 +52,11 @@ class FacetConnection(object):
             if facet_param:
                 rqst = rqst + '&%s' % facet_param
             # print rqst
+<<<<<<< HEAD
             url = urllib.request.urlopen(rqst)
+=======
+            url = urllib2.urlopen(rqst)
+>>>>>>> master
         except Exception as msg:
             raise self.EsgfObjectException(msg)
         r = url.read()
@@ -74,7 +91,11 @@ class FacetConnection(object):
             if facet_param:
                 rqst = rqst + '&%s' % facet_param
                 # print rqst
+<<<<<<< HEAD
             url = urllib.request.urlopen(rqst)
+=======
+            url = urllib2.urlopen(rqst)
+>>>>>>> master
         except Exception as msg:
             raise self.EsgfObjectException(msg)
         r = url.read()
@@ -122,8 +143,12 @@ class esgfConnection(object):
         # Now figure out the facet fields
         self.serverOrder = []
         for e in all:
+<<<<<<< HEAD
             if e.tag == "lst" and "name" in list(
                     e.keys()) and e.get("name") == "responseHeader":
+=======
+            if e.tag == "lst" and "name" in e.keys() and e.get("name") == "responseHeader":
+>>>>>>> master
                 # ok found the Header
                 for s in e:
                     if s.get("name") == "params":
@@ -172,12 +197,20 @@ class esgfConnection(object):
         return val
 
     def __setitem__(self, key, value):
+<<<<<<< HEAD
         if key not in list(self.params.keys()):
             raise self.EsgfObjectException(
                 "Invalid key: %s, valid keys are: %s" %
                 (repr(key), repr(
                     list(
                         self.params.keys()))))
+=======
+        if key not in self.params.keys():
+            raise self.EsgfObjectException(
+                "Invalid key: %s, valid keys are: %s" %
+                (repr(key), repr(
+                    self.params.keys())))
+>>>>>>> master
         self.params[key] = value
         return
 
@@ -204,7 +237,11 @@ class esgfConnection(object):
             tmp = rqst[6:].replace("//", "/")
             rqst = rqst[:6] + tmp
             # print "Request:%s"%rqst
+<<<<<<< HEAD
             url = urllib.request.urlopen(rqst)
+=======
+            url = urllib2.urlopen(rqst)
+>>>>>>> master
         except Exception as msg:
             raise self.EsgfObjectException(msg)
         r = url.read()
@@ -226,16 +263,32 @@ class esgfConnection(object):
         # if self[k] is not None and k in self.searchableKeys and k!="type":
         # params[k]=self[k]
 
+<<<<<<< HEAD
         for k in list(keys.keys()):
             if k == "stringType":
                 continue
             elif k == "type":
                 continue
+=======
+        for k in keys.keys():
+            if k == "stringType":
+                # stringType = keys[k]
+                continue
+            elif k == "type":
+                continue
+            # elif not k in self.searchableKeys:
+            #     raise self.EsgfObjectException("Invalid key: %s, valid keys are: %s" %
+            #     (repr(k),repr(self.params.keys())))
+>>>>>>> master
             if keys[k] is not None:
                 params[k] = keys[k]
 
         search = ""
+<<<<<<< HEAD
         for k in list(params.keys()):
+=======
+        for k in params.keys():
+>>>>>>> master
             if isinstance(params[k], list):
                 for v in params[k]:
                     if isinstance(v, str):
@@ -320,7 +373,10 @@ class esgfConnection(object):
                             k = f.get("name")
                             tmpkeys[k] = self.extractTag(f)
                         if tmpkeys["type"] == "Dataset":
+<<<<<<< HEAD
                             # datasetid = tmpkeys["id"]
+=======
+>>>>>>> master
                             # print datasetid,self.restPath
                             # print "KEYS FOR DATASET",keys.keys()
                             datasets.append(
@@ -361,8 +417,13 @@ class esgfDataset(esgfConnection):
                     tmp.replace(")s", ")"))
             elif "project" in keys and keys["project"] == "cmip5":
                 self.datasetids = genutil.StringConstructor(
+<<<<<<< HEAD
                     "%(project).%(product).%(institute).%(model).%(experiment).%(time_frequency)." +
                     "%(realm).%(cmor_table).%(ensemble)")
+=======
+                    "%(project).%(product).%(institute).%(model).%(experiment)." +
+                    "%(time_frequency).%(realm).%(cmor_table).%(ensemble)")
+>>>>>>> master
             else:
                 self.datasetids = None
         if isinstance(datasetids, genutil.StringConstructor):
@@ -442,7 +503,11 @@ class esgfDataset(esgfConnection):
                         # if self.fileids is not None:
                         # try:
                         # if verbose: print "file:",keys["file_id"],self.fileids.template
+<<<<<<< HEAD
                         #          k2 = self.fileids.reverse(keys["file_id"])
+=======
+                        #         k2 = self.fileids.reverse(keys["file_id"])
+>>>>>>> master
                         # if verbose: print "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",k2
                         # for k in k2.keys():
                         # keys[k]=k2[k]
@@ -451,8 +516,13 @@ class esgfDataset(esgfConnection):
                         # pass
                         # if verbose: print "KEYS FOR FILE:",keys.keys()
                         # if verbose: print "INKEYS:",inKeys.keys()
+<<<<<<< HEAD
                         #  matched = True
                         #  matchWithKeys = {}
+=======
+                        # matched = True
+                        # matchWithKeys = {}
+>>>>>>> master
                         # for k in self.keys():
                         # if k in self.originalKeys.keys():
                         # matchWithKeys[k]=self.originalKeys[k]
@@ -469,17 +539,29 @@ class esgfDataset(esgfConnection):
                         # for k in keys.keys():
                         # if k in matchWithKeys.keys():
                         # if verbose: print "Testing:",k,keys[k]
+<<<<<<< HEAD
                         #          v = matchWithKeys[k]
                         # if isinstance(v,(str,int,float)):
                         # if verbose: print "\tComparing with:",v
                         # if v != keys[k]:
                         #                  matched = False
+=======
+                        #         v = matchWithKeys[k]
+                        # if isinstance(v,(str,int,float)):
+                        # if verbose: print "\tComparing with:",v
+                        # if v != keys[k]:
+                        #                 matched = False
+>>>>>>> master
                         # if verbose: print "\t\tNOPE"
                         # break
                         # elif isinstance(v,list):
                         # if verbose: print "\tComparing with (and %i more):%s"%(len(v),v[0]),v
                         # if not keys[k] in v:
+<<<<<<< HEAD
                         #                  matched = False
+=======
+                        #                 matched = False
+>>>>>>> master
                         # if verbose: print "\t\tNOPE"
                         # break
                         # else:
@@ -498,19 +580,28 @@ class esgfDataset(esgfConnection):
 
     def __str__(self):
         st = "Dataset Information\nid: %s\nKeys:\n" % self.id
+<<<<<<< HEAD
         for k in list(self.keys()):
+=======
+        for k in self.keys():
+>>>>>>> master
             st += "\t%s : %s\n" % (k, self[k])
         return st
 
     def clearWebCache(self):
         self.resp = None
 
+<<<<<<< HEAD
     def saveCache(self, target="."):
+=======
+    def saveCache(self, source, target="."):
+>>>>>>> master
         if self.resp is None:
             return
         if os.path.isdir(target):
             target = os.path.join(target, "esgfDatasetsCache.pckl")
         if os.path.exists(target):
+<<<<<<< HEAD
             f = open(target)
             # dict=eval(bz2.decompress(f.read()))
             dico = eval(f.read())
@@ -518,6 +609,15 @@ class esgfDataset(esgfConnection):
         else:
             dico = {}
         dico[self.id] = [self["timestamp"],
+=======
+            f = open(source)
+            # dict=eval(bz2.decompress(f.read()))
+            dict = eval(f.read())
+            f.close()
+        else:
+            dict = {}
+        dict[self.id] = [self["timestamp"],
+>>>>>>> master
                          xml.etree.ElementTree.tostring(self.resp),
                          self.originalKeys]
         f = open(target, "w")
@@ -527,18 +627,30 @@ class esgfDataset(esgfConnection):
 
     def loadCache(self, source):
         if isinstance(source, dict):
+<<<<<<< HEAD
             dico = source
+=======
+            dict = source
+>>>>>>> master
         else:
             if os.path.isdir(source):
                 source = os.path.join(source, "esgfDatasetsCache.pckl")
             if os.path.exists(source):
                 f = open(source)
                 # dict=eval(bz2.decompress(f.read()))
+<<<<<<< HEAD
                 dico = eval(f.read())
                 f.close()
             else:
                 dico = {}
         vals = dico.get(self.id, ["", None, {}])
+=======
+                dict = eval(f.read())
+                f.close()
+            else:
+                dict = {}
+        vals = dict.get(self.id, ["", None, {}])
+>>>>>>> master
         if vals[1] is not None:
             self.cacheTime = vals[0]
             self.resp = xml.etree.ElementTree.fromstring(vals[0])
@@ -637,7 +749,11 @@ class esgfFiles(object):
 
     def getMappingKeys(self):
         if isinstance(self.mapping, genutil.StringConstructor):
+<<<<<<< HEAD
             return list(self.mapping.keys())
+=======
+            return self.mapping.keys()
+>>>>>>> master
         else:
             return None
 
@@ -647,7 +763,11 @@ class esgfFiles(object):
             if self.datasetids is not None:
                 self.mapping = self.datasetids
             else:
+<<<<<<< HEAD
                 for k in list(self.parent.keys()):
+=======
+                for k in self.parent.keys():
+>>>>>>> master
                     if k not in ["limit", "offset", "text"]:
                         self.mapping += "%%(%s)" % k
         else:
@@ -660,6 +780,7 @@ class esgfFiles(object):
             self.mapping = genutil.StringConstructor(self.mapping)
         # print "Stage 2:",self.mapping.template
 
+<<<<<<< HEAD
         #  vk = self.parent.keys()
         # for k in self.mapping.keys():
         #      ok = False
@@ -671,22 +792,47 @@ class esgfFiles(object):
         # vk+=self.fileids.keys()
         # if k in self.fileids.keys():
         #              ok = True
+=======
+        # vk = self.parent.keys()
+        # for k in self.mapping.keys():
+        #     ok = False
+        # if self.datasetids is not None:
+        #         vk += self.datasetids.keys()
+        # if k in self.datasetids.keys():
+        #             ok = True
+        # if self.fileids is not None:
+        # vk+=self.fileids.keys()
+        # if k in self.fileids.keys():
+        #             ok = True
+>>>>>>> master
         # if k in self.parent.keys():
         # ok=True
         # Ok second to last hope... Matching to datasetids
         # if isinstance(self.datasetids,genutil.StringConstructor) and ok is False:
         # try:
+<<<<<<< HEAD
         #              mapid = self.datasetids.reverse(self.parent.id)
         # vk+=mapid.keys()
         # if k in mapid.keys():
         #                  ok = True
+=======
+        #             mapid = self.datasetids.reverse(self.parent.id)
+        # vk+=mapid.keys()
+        # if k in mapid.keys():
+        #                 ok = True
+>>>>>>> master
 
         # except:
         # print "Couldn't map: %s to %s" % (self.parent.id,self.datasetids.template)
         # pass
         # if ok is False:
+<<<<<<< HEAD
         #          vk = set(vk)
         #          raise self.EsgfObjectException("Invalid mapping key: %s, valid keys are: %s" % (k,sorted(vk)))
+=======
+        #         vk = set(vk)
+        #         raise self.EsgfObjectException("Invalid mapping key: %s, valid keys are: %s" % (k,sorted(vk)))
+>>>>>>> master
 
     def remap(self, mapping=None, verbose=False):
         if mapping is None:
@@ -703,6 +849,7 @@ class esgfFiles(object):
             mappoint = self.mapped
             tabs = ""
             nok = 0
+<<<<<<< HEAD
             nlevels = len(list(thismapping.keys()))
             # print "This mapping",thismapping.template,nlevels
             if nlevels == 0:
@@ -712,17 +859,33 @@ class esgfFiles(object):
                     ds = f['dataset_id_template_'].replace(")s", ")")
                     thismapping = genutil.StringConstructor(ds)
             for k in list(thismapping.keys()):
+=======
+            nlevels = len(thismapping.keys())
+            # print "This mapping",thismapping.template,nlevels
+            if nlevels == 0:
+                # ok no mapping, let's try to figure this one out
+                if 'dataset_id_template_' in f.keys():
+                    # print "We are good to go"
+                    ds = f['dataset_id_template_'].replace(")s", ")")
+                    thismapping = genutil.StringConstructor(ds)
+            for k in thismapping.keys():
+>>>>>>> master
                 # if verbose: print tabs,"keys:",k,"File keys:",f.keys()
                 # if k == self.mapping.keys()[0]:
                 # f.matched.keys()
                 # else:
                 # if verbose: print
+<<<<<<< HEAD
                 if k in list(f.keys()):
+=======
+                if k in f.keys():
+>>>>>>> master
                     # if verbose: print tabs,k,f[k]
                     nok += 1
                     cont = f[k]
                     if not isinstance(cont, (str, int, float)):
                         break
+<<<<<<< HEAD
                     if cont not in list(mappoint.keys()):
                         mappoint[cont] = {}
                 elif k in list(self.parent.keys()):
@@ -730,17 +893,34 @@ class esgfFiles(object):
                     nok += 1
                     cont = self[k]
                     if cont not in list(mappoint.keys()):
+=======
+                    if cont not in mappoint.keys():
+                        mappoint[cont] = {}
+                elif k in self.parent.keys():
+                    # if verbose: print tabs,k,f[k]
+                    nok += 1
+                    cont = self[k]
+                    if cont not in mappoint.keys():
+>>>>>>> master
                         mappoint[cont] = {}
                 elif isinstance(self.fileids, genutil.StringConstructor):
                     try:
                         mapid = self.fileids.reverse(self.parent.id)
                         # if verbose:
                         # print "MAPID:",k,mapid
+<<<<<<< HEAD
                         if k in list(mapid.keys()):
                             # if verbose: print tabs,k,mapid[k]
                             nok += 1
                             cont = mapid[k]
                             if cont not in list(mappoint.keys()):
+=======
+                        if k in mapid.keys():
+                            # if verbose: print tabs,k,mapid[k]
+                            nok += 1
+                            cont = mapid[k]
+                            if cont not in mappoint.keys():
+>>>>>>> master
                                 mappoint[cont] = {}
                     except BaseException:
                         break

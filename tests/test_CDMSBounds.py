@@ -66,7 +66,10 @@ class TestCDMSAutobounds(unittest.TestCase):
         self.assertAlmostEqual(bounds[0, 0], -179.999031067, 5)
         self.assertEqual(bounds[-1, 1], 180.00096893310547)
 #        self.assertAlmostEqual(bounds[-1, 1], 180.000984192, 5)
+<<<<<<< HEAD
         os.remove('testFile.nc')
+=======
+>>>>>>> master
 
     def test_BoundsReverse11th(self):
         exponent = -11
@@ -84,7 +87,10 @@ class TestCDMSAutobounds(unittest.TestCase):
         bounds = axis.getBounds()
         self.assertEqual(bounds[0, 0], 180.0)
         self.assertEqual(bounds[-1, 1], -180.0)
+<<<<<<< HEAD
         os.remove('testFile.nc')
+=======
+>>>>>>> master
 
     def test_Bounds11th(self):
         exponent = -11
@@ -102,7 +108,10 @@ class TestCDMSAutobounds(unittest.TestCase):
         bounds = axis.getBounds()
         self.assertEqual(bounds[0, 0], -180.0)
         self.assertEqual(bounds[-1, 1], 180.0)
+<<<<<<< HEAD
         os.remove('testFile.nc')
+=======
+>>>>>>> master
 
     def test_BoundsPolar(self):
         f=cdms2.open(cdat_info.get_sampledata_path() + "/stereographic.nc")

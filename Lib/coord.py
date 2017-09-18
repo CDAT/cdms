@@ -9,6 +9,7 @@ from . import cdmsNode
 import cdtime
 import copy
 import numpy
+<<<<<<< HEAD
 # import internattr
 from .cdmsobj import CdmsObj
 from .axis import TransientAxis
@@ -19,6 +20,21 @@ from .variable import DatasetVariable
 from .tvariable import TransientVariable
 from .avariable import AbstractVariable
 from .axis import TransientVirtualAxis  # noqa
+=======
+#
+#
+import string
+from axis import TransientAxis
+from cdmsobj import CdmsObj
+# from axis import createAxis, TransientVirtualAxis
+from axis import TransientVirtualAxis   # noqa
+from error import CDMSError
+from convention import level_aliases, time_aliases, forecast_aliases
+from fvariable import FileVariable
+from variable import DatasetVariable
+from tvariable import TransientVariable
+from avariable import AbstractVariable
+>>>>>>> master
 from functools import reduce
 
 MethodNotImplemented = "Method not yet implemented"
@@ -121,7 +137,11 @@ class AbstractCoordinateAxis(CdmsObj):
     # calendar.
     def getCalendar(self):
         if hasattr(self, 'calendar'):
+<<<<<<< HEAD
             calendar = self.calendar.lower()
+=======
+            calendar = string.lower(self.calendar)
+>>>>>>> master
         else:
             calendar = None
 
@@ -151,7 +171,11 @@ class AbstractCoordinateAxis(CdmsObj):
 
     # Return true iff the axis is a level axis
     def isLevel(self):
+<<<<<<< HEAD
         id = self.id.lower()
+=======
+        id = string.lower(self.id)
+>>>>>>> master
         if (hasattr(self, 'axis') and self.axis == 'Z'):
             return 1
         return ((id[0:3] == 'lev') or (id[0:5] == 'depth') or
@@ -164,14 +188,22 @@ class AbstractCoordinateAxis(CdmsObj):
 
     # Return true iff the axis is a time axis
     def isTime(self):
+<<<<<<< HEAD
         id = self.id.lower()
+=======
+        id = string.lower(self.id)
+>>>>>>> master
         if (hasattr(self, 'axis') and self.axis == 'T'):
             return 1
         return (id[0:4] == 'time') or (id in time_aliases)
 
     # Return true iff the axis is a forecast axis
     def isForecast(self):
+<<<<<<< HEAD
         id = self.id.lower()
+=======
+        id = string.lower(self.id)
+>>>>>>> master
         if (hasattr(self, 'axis') and self.axis == 'F'):
             return 1
         return (id[0:6] == 'fctau0') or (id in forecast_aliases)
@@ -197,7 +229,11 @@ class AbstractCoordinateAxis(CdmsObj):
         d = self.getValue()
         result.append('   Shape: ' + str(d.shape))
         flag = 1
+<<<<<<< HEAD
         for k in list(self.attributes.keys()):
+=======
+        for k in self.attributes.keys():
+>>>>>>> master
             if k in std_axis_attributes:
                 continue
             if flag:
@@ -228,11 +264,19 @@ class AbstractCoordinateAxis(CdmsObj):
         if persistent:
             self.calendar = calendarToTag.get(calendar, None)
             if self.calendar is None:
+<<<<<<< HEAD
                 raise CDMSError(calendar)
         else:
             self.__dict__['calendar'] = calendarToTag.get(calendar, None)
             if self.__dict__['calendar'] is None:
                 raise CDMSError(calendar)
+=======
+                raise CDMSError("InvalidCalendar" + calendar)
+        else:
+            self.__dict__['calendar'] = calendarToTag.get(calendar, None)
+            if self.__dict__['calendar'] is None:
+                raise CDMSError("InvalidCalendar" + calendar)
+>>>>>>> master
 
     def size(self, axis=None):
         "Number of elements in array, or in a particular axis."
@@ -312,8 +356,12 @@ class AbstractAxis2D(AbstractCoordinateAxis):
             newbounds = None
         else:
             # bounds can be a numarray or DatasetVariable
+<<<<<<< HEAD
             speclist = self._process_specs(specs, {})
             newbounds = bounds[self.specs2slices(speclist, force=1)[0]]
+=======
+            newbounds = bounds[specs]
+>>>>>>> master
 
         # Note: disable axis copy to preserve identity of grid and variable
         # domains

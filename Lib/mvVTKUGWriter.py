@@ -13,6 +13,7 @@ import time
 from . import mvBaseWriter
 
 
+
 class VTKUGWriter(mvBaseWriter.BaseWriter):
 
     def write(self, filename):
@@ -28,7 +29,11 @@ class VTKUGWriter(mvBaseWriter.BaseWriter):
         npts = self.mesh.shape[0]
         print('POINTS %d float' % npts, file=f)
         for i in range(npts):
+<<<<<<< HEAD
             print('%f %f %f' % tuple(self.mesh[i, :]), file=f)
+=======
+            print >> f, '%f %f %f' % tuple(self.mesh[i, :])
+>>>>>>> master
         n0, n1, n2 = self.shape
         ncells = (n0 - 1) * (n1 - 1) * (n2 - 1)
         if ncells != 0:
@@ -39,18 +44,32 @@ class VTKUGWriter(mvBaseWriter.BaseWriter):
                 for j in range(n1 - 1):
                     for i in range(n2 - 1):
                         index = i + n2 * (j + n1 * k)
+<<<<<<< HEAD
                         print('8 %d %d %d %d %d %d %d %d' %
                               (index, index + 1, index + 1 + n2, index + n2,
                                index + n1 * n2, index + n1 * n2 + 1,
                                index + n1 * n2 + 1 + n2, index + n1 * n2 + n2), file=f)
             print('CELL_TYPES %d' % ncells, file=f)
+=======
+                        print >> f, '8 %d %d %d %d %d %d %d %d' % \
+                            (index, index + 1, index + 1 + n2, index + n2,
+                             index + n1 * n2, index + n1 * n2 + 1,
+                             index + n1 * n2 + 1 + n2, index + n1 * n2 + n2)
+            print >> f, 'CELL_TYPES %d' % ncells
+>>>>>>> master
             for i in range(ncells):
                 # hexahedron
                 print(12, file=f)
             # nodal data
+<<<<<<< HEAD
             print('POINT_DATA %d' % (n0 * n1 * n2), file=f)
             print('SCALARS %s float' % (self.var.id), file=f)
             print('LOOKUP_TABLE default', file=f)
+=======
+            print >> f, 'POINT_DATA %d' % (n0 * n1 * n2)
+            print >> f, 'SCALARS %s float' % (self.var.id)
+            print >> f, 'LOOKUP_TABLE default'
+>>>>>>> master
             for k in range(n0):
                 for j in range(n1):
                     for i in range(n2):
@@ -63,19 +82,34 @@ class VTKUGWriter(mvBaseWriter.BaseWriter):
             for j in range(n1 - 1):
                 for i in range(n2 - 1):
                     index = i + n2 * j
+<<<<<<< HEAD
                     print('4 %d %d %d %d' %
                           (index, index + 1, index + 1 + n2, index + n2), file=f)
             print('CELL_TYPES %d' % ncells, file=f)
+=======
+                    print >> f, '4 %d %d %d %d' % \
+                        (index, index + 1, index + 1 + n2, index + n2)
+            print >> f, 'CELL_TYPES %d' % ncells
+>>>>>>> master
             for i in range(ncells):
                 # quad
                 print(9, file=f)
             # nodal data
+<<<<<<< HEAD
             print('POINT_DATA %d' % (n0 * n1 * n2), file=f)
             print('SCALARS %s float' % (self.var.id), file=f)
             print('LOOKUP_TABLE default', file=f)
             for j in range(n1):
                 for i in range(n2):
                     print('%f' % self.var[j, i], file=f)
+=======
+            print >> f, 'POINT_DATA %d' % (n0 * n1 * n2)
+            print >> f, 'SCALARS %s float' % (self.var.id)
+            print >> f, 'LOOKUP_TABLE default'
+            for j in range(n1):
+                for i in range(n2):
+                    print >> f, '%f' % self.var[j, i]
+>>>>>>> master
         f.close()
 
 

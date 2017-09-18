@@ -1,7 +1,11 @@
 """
 CDMS Xlink objects - pointers to other objects
 """
+<<<<<<< HEAD
 from .cdmsobj import CdmsObj
+=======
+from cdmsobj import CdmsObj
+>>>>>>> master
 
 
 class Xlink(CdmsObj):

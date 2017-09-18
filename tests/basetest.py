@@ -4,9 +4,11 @@ import numpy
 import tempfile
 import cdms2
 import os
-import cdat_info
-from imp import reload
+<<<<<<< HEAD:Test/basetest.py
 import imp
+=======
+import cdat_info
+>>>>>>> master:tests/basetest.py
 
 
 class CDMSBaseTest(unittest.TestCase):

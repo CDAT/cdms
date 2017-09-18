@@ -6,6 +6,7 @@ import numpy
 import string
 import re
 import warnings
+<<<<<<< HEAD
 from .cdmsobj import CdmsObj
 import cdms2
 from .slabinterface import Slab
@@ -23,6 +24,20 @@ from regrid2.mvGenericRegrid import guessPeriodicity
 from .convention import CF1
 from .grid import AbstractRectGrid
 # import internattr
+=======
+from cdmsobj import CdmsObj
+import cdms2
+from slabinterface import Slab
+from sliceut import splitSliceExt, splitSlice
+from error import CDMSError
+from axis import axisMatchIndex, axisMatchAxis, axisMatches, unspecified, CdtimeTypes, AbstractAxis
+import selectors
+import copy
+from mvCdmsRegrid import CdmsRegrid, getBoundList, _getCoordList
+from regrid2.mvGenericRegrid import guessPeriodicity
+from convention import CF1
+from grid import AbstractRectGrid
+>>>>>>> master
 
 InvalidRegion = "Invalid region: "
 OutOfRange = "Coordinate interval is out of range or intersection has no data: "
@@ -141,9 +156,13 @@ class AbstractVariable(CdmsObj, Slab):
         if not hasattr(self, 'missing_value'):
             self.missing_value = None
         else:
+<<<<<<< HEAD
             if isinstance(self.missing_value, bytes):
                 self.missing_value = None
             elif isinstance(self.missing_value, str):
+=======
+            if isinstance(self.missing_value, basestring):
+>>>>>>> master
                 self.missing_value = None
             elif numpy.isnan(self.missing_value):
                 self.missing_value = None
@@ -197,7 +216,11 @@ class AbstractVariable(CdmsObj, Slab):
                 if not resultmask.any():
                     resultmask = numpy.ma.nomask
                 result = numpy.ma.masked_array(
+<<<<<<< HEAD
                     ar, mask=resultmask, fill_value=missing).astype(str)
+=======
+                    ar, mask=resultmask, fill_value=missing)
+>>>>>>> master
             else:
                 result = numpy.ma.masked_values(ar, missing, copy=0)
         elif ar is numpy.ma.masked:
@@ -426,17 +449,32 @@ class AbstractVariable(CdmsObj, Slab):
     def getMissing(self, asarray=0):
         """Return the missing value as a scalar, or as
         a numpy array if asarray==1"""
+<<<<<<< HEAD
         try:
             mv = self.missing_value.item()
         except BaseException:
             mv = self.missing_value
 
+=======
+
+        if hasattr(self, 'missing_value'):
+            try:
+                mv = self.missing_value.item()
+            except BaseException:
+                mv = self.missing_value
+
+>>>>>>> master
         if mv is None and hasattr(self, '_FillValue'):
             mv = self._FillValue
 
         if asarray == 0 and isinstance(mv, numpy.ndarray):
             mv = mv[0]
+<<<<<<< HEAD
         if isinstance(mv, str) and self.dtype.char not in ['?', 'c', 'O', 'S']:
+=======
+        if isinstance(mv, types.StringType) and self.dtype.char not in [
+                '?', 'c', 'O', 'S']:
+>>>>>>> master
             try:
                 mv = float(mv)
             except BaseException:
@@ -1025,7 +1063,7 @@ class AbstractVariable(CdmsObj, Slab):
         One can use the regrid2.Regridder optional arguments as well.
 
         Example:
-        new_cdmsVar = cdmsVar.regrid(newGrid)  # uses libcf
+        new_cdmsVar = cdmsVar.regrid(newGrid)  # uses esmf
         new_cdmsVar = cdmsVar.regrid(newGrid, regridMethod = 'conserve',
                                      coordSys = 'cart')
 
@@ -1115,8 +1153,13 @@ avariable.regrid: regridTool = 'esmf' requires bounds for source grid, will swit
                     regridMethod = 'linear'
                 if not hasattr(regrid2, "ESMFRegrid"):
                     message = """
+<<<<<<< HEAD
 avariable.regrid: regridTool = 'esmf' but your version does not
 seems to be built with esmf, will switch to regridTool = 'libcf'
+=======
+avariable.regrid: regridTool = 'esmf' but your version does not seems to be built with esmf,
+will switch to regridTool = 'libcf'
+>>>>>>> master
                   """
                     warnings.warn(message, Warning)
                     regridTool = 'libcf'
@@ -1153,7 +1196,11 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
 
             if re.search('^regrid', regridTool, re.I):
                 if 'diag' in keywords and \
+<<<<<<< HEAD
                         isinstance(keywords['diag'], dict):
+=======
+                        isinstance(keywords['diag'], types.DictType):
+>>>>>>> master
                     keywords['diag']['regridTool'] = 'regrid'
 
                 # the original cdms2 regridder
@@ -1165,8 +1212,13 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
 
             srcGridMask = None
             # set the source mask if a mask is defined with the source data
+<<<<<<< HEAD
             if numpy.any(self.mask is True):
                 srcGridMask = getMinHorizontalMask(self)
+=======
+#            if numpy.any(self.mask == True):
+#                srcGridMask = getMinHorizontalMask(self)
+>>>>>>> master
 
             # compute the interpolation weights
             ro = CdmsRegrid(fromgrid, togrid,
@@ -1256,7 +1308,11 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
                 j = j + 1
             i = i + 1
 
+<<<<<<< HEAD
         for k, v in list(keys.items()):
+=======
+        for k, v in keys.items():
+>>>>>>> master
             if k in ['squeeze', 'raw', 'grid', 'order']:
                 continue
             i = self.getAxisIndex(k)
@@ -1307,15 +1363,25 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
         slicelist = []
         for i in range(self.rank()):
             key = speclist[i]
+<<<<<<< HEAD
             if isinstance(key, int):  # x[i]
                 slicelist.append(slice(key, key + 1))
             elif isinstance(key, slice):  # x[i:j:k]
+=======
+            if isinstance(key, types.IntType):  # x[i]
+                slicelist.append(slice(key, key + 1))
+            elif isinstance(key, types.SliceType):  # x[i:j:k]
+>>>>>>> master
                 slicelist.append(key)
             elif key is unspecified or key is None or key == ':':
                 slicelist.append(slice(0, len(self.getAxis(i))))
             elif key is Ellipsis:
                 raise CDMSError("Misuse of ellipsis in specification.")
+<<<<<<< HEAD
             elif isinstance(key, tuple):
+=======
+            elif isinstance(key, types.TupleType):
+>>>>>>> master
                 slicelist.append(slice(*key))
             else:
                 raise CDMSError('invalid index: %s' % str(key))
@@ -1353,9 +1419,15 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
                     if stop is None:
                         # stop=-1
                         adjustit = 0
+<<<<<<< HEAD
                 if (start is None or start < 0):
                     start = start % length
                 if (stop is None or stop < 0) and adjustit:
+=======
+                if start < 0:
+                    start = start % length
+                if stop < 0 and adjustit:
+>>>>>>> master
                     stop = stop % length
             if altered:
                 slicelist[i] = slice(start, stop, step)
@@ -1373,8 +1445,13 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
             elif item == ':' or item is None or item is unspecified:
                 axis = self.getAxis(i)
                 newitem = slice(0, len(axis))
+<<<<<<< HEAD
             elif isinstance(item, list) or \
                     isinstance(item, tuple):
+=======
+            elif isinstance(item, types.ListType) or \
+                    isinstance(item, types.TupleType):
+>>>>>>> master
                 axis = self.getAxis(i)
                 if len(item) == 2:        # (start,end)
                     indexInterval = axis.mapIntervalExt(item)
@@ -1405,11 +1482,19 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
                     indexInterval[1],
                     indexInterval[2])
             elif isinstance(item, numpy.floating) or \
+<<<<<<< HEAD
                     isinstance(item, float) or \
                     isinstance(item, numpy.integer) or \
                     isinstance(item, int) or \
                     isinstance(item, int) or \
                     isinstance(item, str) or \
+=======
+                    isinstance(item, types.FloatType) or \
+                    isinstance(item, numpy.integer) or \
+                    isinstance(item, types.IntType) or \
+                    isinstance(item, types.LongType) or \
+                    isinstance(item, types.StringType) or \
+>>>>>>> master
                     type(item) in CdtimeTypes:
                 axis = self.getAxis(i)
                 #
@@ -1497,10 +1582,17 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
     # numpy.ma overrides
 
     def __getitem__(self, key):
+<<<<<<< HEAD
         if isinstance(key, tuple):
             speclist = self._process_specs(key, {})
         else:
             if isinstance(key, int) and key >= len(self):
+=======
+        if isinstance(key, types.TupleType):
+            speclist = self._process_specs(key, {})
+        else:
+            if isinstance(key, types.IntType) and key >= len(self):
+>>>>>>> master
                 raise IndexError("Index too large: %d" % key)
             speclist = self._process_specs([key], {})
 
@@ -1593,9 +1685,12 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
         "return self as array of given type."
         return self.subSlice().astype(tc)
 
+<<<<<<< HEAD
 
 # internattr.add_internal_attribute(AbstractVariable, 'id', 'parent')
 # PropertiedClasses.set_property(AbstractVariable, 'missing_value', acts=AbstractVariable._setmissing, nodelete=1)
+=======
+>>>>>>> master
 
 __rp = r'\s*([-txyz0-9]{1,1}|\(\s*\w+\s*\)|[.]{3,3})\s*'
 __crp = re.compile(__rp)
@@ -1611,7 +1706,11 @@ def orderparse(order):
             remaining axes.
           (name) meaning an axis whose id is name
     """
+<<<<<<< HEAD
     if not isinstance(order, str):
+=======
+    if not isinstance(order, types.StringType):
+>>>>>>> master
         raise CDMSError('order arguments must be strings.')
     pos = 0
     result = []
@@ -1661,7 +1760,11 @@ def order2index(axes, order):
     pos = 0
     while j < len(result):
         item = result[j]
+<<<<<<< HEAD
         if isinstance(item, str):
+=======
+        if isinstance(item, types.StringType):
+>>>>>>> master
             if item == 't':
                 spec = 'time'
             elif item == 'x':
@@ -1685,7 +1788,11 @@ def order2index(axes, order):
                     break
             else:
                 raise CDMSError('No axis matching order spec %s' % str(item))
+<<<<<<< HEAD
         elif isinstance(item, int):
+=======
+        elif isinstance(item, types.IntType):
+>>>>>>> master
             if item in permutation:
                 raise CDMSError('Duplicate item in order %s' % order)
             if item >= n:
@@ -1709,7 +1816,13 @@ def order2index(axes, order):
                     permutation[j] = i
                     break
     return permutation
+<<<<<<< HEAD
 
 
 from .tvariable import TransientVariable # noqa
 from . import MV2 as MV # noqa
+=======
+
+from tvariable import TransientVariable  # noqa
+import MV2 as MV  # noqa
+>>>>>>> master

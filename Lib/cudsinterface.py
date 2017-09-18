@@ -3,8 +3,16 @@
 
 "Emulation of old cu package"
 import string
+<<<<<<< HEAD
 import sys
 from .error import CDMSError
+=======
+import types
+import sys
+from error import CDMSError
+# from dataset import openDataset, createDataset
+# from tvariable import createVariable
+>>>>>>> master
 import numpy
 
 
@@ -23,8 +31,13 @@ class cuDataset():
         v = self.variables.get(id)
         if v is None:
             try:
+<<<<<<< HEAD
                 if(self.is_gridspec_grid_file() and
                     (id == '' or id == 'grid' or id == 'gridspec') and
+=======
+                if (self.is_gridspec_grid_file() and
+                        (id == '' or id == 'grid' or id == 'gridspec') and
+>>>>>>> master
                         len(args) == 0 and len(kwargs) == 0):
                     return self.readg()
                 else:
@@ -122,11 +135,19 @@ class cuDataset():
         :::
         """
         if vname is None:
+<<<<<<< HEAD
             return list(self.axes.keys())
         v = self._v(vname)
         d = v.getDomain()
         x = [n[0] for n in d]
         return [getattr(n, 'id') for n in x]
+=======
+            return self.axes.keys()
+        v = self._v(vname)
+        d = v.getDomain()
+        x = map(lambda n: n[0], d)
+        return map(lambda n: getattr(n, 'id'), x)
+>>>>>>> master
 
     def listglobal(self):
         """Returns a list of the global attributes in the file.
@@ -331,7 +352,11 @@ class cuDataset():
         :::
         Options:::
         args :: (*tuple/*cdms2.selectors.Selector) () tuple of type (val1,val2,'cob')
+<<<<<<< HEAD
                 for any given dimension or cdms selector
+=======
+        for any given dimension or cdms selector
+>>>>>>> master
         :::
         Keys:::
         squeeze :: (int/True/False) (0) squeezes (removes) dimensions of length 1
@@ -371,7 +396,11 @@ class cuDataset():
                 idim = ndims - (nargs - i - 1)
                 i = i + 1
                 ne = 1
+<<<<<<< HEAD
             elif isinstance(x, tuple):
+=======
+            elif isinstance(x, types.TupleType):
+>>>>>>> master
                 cdms_args[idim] = x
                 idim = idim + 1
                 i = i + 1
@@ -407,7 +436,12 @@ class cuDataset():
         :::
         """
 
+<<<<<<< HEAD
         from . import hgrid, gengrid
+=======
+        import hgrid
+        import gengrid
+>>>>>>> master
 
         # Grid file
         if 'grid_dims' in list(self.variables.keys()):

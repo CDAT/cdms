@@ -106,7 +106,11 @@ class TestESMFRegridderConserve(unittest.TestCase):
     def test3_3x4_to_3x4(self):
         for d in dir(unittest):
             if re.search('assert', d):
+<<<<<<< HEAD
                 print(d)
+=======
+                print d
+>>>>>>> master
         # Test NonPeriodic grid Returning same grid
 
         roESMF = GenericRegrid(self.fromGrid3x4, self.toGrid3x4, self.data3x4.dtype,
@@ -150,7 +154,11 @@ class TestESMFRegridderConserve(unittest.TestCase):
 
 
 if __name__ == '__main__':
+<<<<<<< HEAD
     print("")  # Spacer
+=======
+    print ""  # Spacer
+>>>>>>> master
     ESMF.Manager()
     suite = unittest.TestLoader().loadTestsFromTestCase(TestESMFRegridderConserve)
     unittest.TextTestRunner(verbosity=2).run(suite)

@@ -17,6 +17,10 @@ class Test(unittest.TestCase):
 
 
 if __name__ == '__main__':
+<<<<<<< HEAD
     print("")  # Spacer
+=======
+    print ""  # Spacer
+>>>>>>> master
     suite = unittest.TestLoader().loadTestsFromTestCase(Test)
     unittest.TextTestRunner(verbosity=1).run(suite)

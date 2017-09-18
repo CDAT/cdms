@@ -10,6 +10,7 @@ import os
 import sys
 import string
 import urllib
+<<<<<<< HEAD
 from urllib.parse import urlparse, urlunparse
 from . import cdmsobj
 import re
@@ -26,6 +27,25 @@ from .fvariable import FileVariable
 from .tvariable import asVariable
 from .cdmsNode import CdDatatypes
 from . import convention
+=======
+import urlparse
+import cdmsobj
+import re
+from CDMLParser import CDMLParser
+from cdmsobj import CdmsObj
+from axis import Axis, FileAxis, FileVirtualAxis, isOverlapVector
+from coord import FileAxis2D, DatasetAxis2D
+from auxcoord import FileAuxAxis1D, DatasetAuxAxis1D
+from grid import RectGrid, FileRectGrid
+from hgrid import FileCurveGrid, DatasetCurveGrid
+from gengrid import FileGenericGrid, DatasetGenericGrid
+from variable import DatasetVariable
+from fvariable import FileVariable
+from tvariable import asVariable
+from cdmsNode import CdDatatypes
+import convention
+import warnings
+>>>>>>> master
 
 # Default is serial mode until setNetcdfUseParallelFlag(1) is called
 rk = 0
@@ -534,7 +554,11 @@ def parseFileMap(text):
 
 # A CDMS dataset consists of a CDML/XML file and one or more data files
 try:
+<<<<<<< HEAD
     from .cudsinterface import cuDataset
+=======
+    from cudsinterface import cuDataset
+>>>>>>> master
 except BaseException:
     pass
 
@@ -575,7 +599,11 @@ class Dataset(CdmsObj, cuDataset):
         self._gridmap_ = {}
         # Gridmap:(latname,lonname,order,maskname,gridclass) => grid
         (scheme, netloc, xmlpath, parameters,
+<<<<<<< HEAD
          query, fragment) = urlparse(uri)
+=======
+         query, fragment) = urlparse.urlparse(uri)
+>>>>>>> master
         self._xmlpath_ = xmlpath
         # Dictionary of dictionaries, keyed on node tags
         self.dictdict = {'variable': self.variables,
@@ -943,6 +971,7 @@ class Dataset(CdmsObj, cuDataset):
                     try:
                         fileurl = os.path.join(dburl, self.datapath, filename)
                     except BaseException:
+<<<<<<< HEAD
                         print(
                             'Error joining',
                             repr(dburl),
@@ -951,6 +980,12 @@ class Dataset(CdmsObj, cuDataset):
                         raise
                 (scheme, netloc, path, parameters, query,
                  fragment) = urlparse(fileurl)
+=======
+                        print 'Error joining', repr(dburl), self.datapath, filename
+                        raise
+                (scheme, netloc, path, parameters, query,
+                 fragment) = urlparse.urlparse(fileurl)
+>>>>>>> master
                 if scheme in ['file', ''] and os.path.isfile(path):
                     if cdmsobj._debug == 1:
                         sys.stdout.write(fileurl + '\n')
@@ -986,7 +1021,11 @@ class Dataset(CdmsObj, cuDataset):
             for dburl in dburls:
                 fileurl = os.path.join(dburl, self.datapath, filename)
                 (scheme, netloc, path, parameters, query,
+<<<<<<< HEAD
                  fragment) = urlparse(fileurl)
+=======
+                 fragment) = urlparse.urlparse(fileurl)
+>>>>>>> master
                 if scheme == 'ftp':
                     cache = self.parent.enableCache()
                     fileDN = (self.uri, filename)  # Global file name
@@ -1120,7 +1159,11 @@ class CdmsFile(CdmsObj, cuDataset):
                         coords = self._file_.variables[name].coordinates.split(
                         )
                         for coord in coords:
+<<<<<<< HEAD
                             if coord not in list(self._file_.variables.keys()):
+=======
+                            if coord not in self._file_.variables.keys():
+>>>>>>> master
                                 cdunifvar = Cdunif.CdunifFile(
                                     hostObj.gridVars[coord][0], mode)
                                 self._file_.variables[coord] = cdunifvar.variables[coord]
@@ -1438,6 +1481,11 @@ class CdmsFile(CdmsObj, cuDataset):
         """
         if newname is None:
             newname = axis.id
+
+        if len(newname) > 127:
+            msg = "axis name has more than 127 characters, name will be truncate"
+            warnings.warn(msg, UserWarning)
+            newname = newname[:127] if len(newname) > 127 else newname
 
         # If the axis already exists and has the same values, return existing
         if newname in self.axes:
@@ -1987,6 +2035,12 @@ class CdmsFile(CdmsObj, cuDataset):
             varid = var.id
         else:
             varid = id
+
+        if len(varid) > 127:
+            msg = "varid name has more than 127 characters, name will be truncate"
+            warnings.warn(msg, UserWarning)
+            varid = varid[:127] if len(varid) > 127 else varid
+
         if varid in self.variables:
             if pack:
                 raise CDMSError(

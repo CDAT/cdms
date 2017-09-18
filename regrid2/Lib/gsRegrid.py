@@ -9,10 +9,15 @@ No guarantee is provided whatsoever. Use at your own risk.
 
 
 # standard python includes
+<<<<<<< HEAD
 # from re import search, sub
 from ctypes import c_double, c_float, c_int, \
     c_wchar_p, CDLL, byref, POINTER
 # import ctypes
+=======
+from ctypes import c_double, c_float, c_int, \
+    c_char_p, CDLL, byref, POINTER
+>>>>>>> master
 import operator
 import sys
 import os
@@ -20,8 +25,13 @@ import copy
 import numpy
 import warnings
 from regrid2 import RegridError
+<<<<<<< HEAD
 from functools import reduce
 import fnmatch
+=======
+import warnings
+from functools import reduce
+>>>>>>> master
 
 C_DOUBLE_P = POINTER(c_double)
 
@@ -280,7 +290,11 @@ def handleCoordsCut(coords, dims, bounds):
         """
         for i in range(len(array)):
             # An edge
+<<<<<<< HEAD
             if len(numpy.where(array[i, :] == True)[0]) >= 2:  # noqa
+=======
+            if len(numpy.where(array[i, :])[0]) >= 2:
+>>>>>>> master
                 if newI[i] < 0:
                     newI[i] = (nlon - 1) - i
                 if newI[(nlon - 1) - i] < 0:
@@ -298,8 +312,12 @@ def handleCoordsCut(coords, dims, bounds):
             for i in range(len(coords)):
                 newCoords.append(numpy.zeros(newDims, coords[i].dtype))
                 newCoords[i][..., 0:dims[-2], :] = coords[i][...]
+<<<<<<< HEAD
                 newCoords[i][..., dims[-2],
                              :] = coords[i][..., dims[-2] - 1, newI]
+=======
+                newCoords[i][..., dims[-2], :] = coords[i][..., dims[-2] - 1, newI]
+>>>>>>> master
 
             return newCoords, newDims, newI
 
@@ -346,6 +364,7 @@ class Regrid:
         for sosuffix in '.dylib', '.dll', '.DLL', '.so', '.a':
             if os.path.exists(LIBCFDIR + sosuffix):
                 dynLibFound = True
+<<<<<<< HEAD
         CFfile = self.find('pylibcf.*', __path__[0])
         if os.path.exists(CFfile):
             try:
@@ -360,6 +379,13 @@ class Regrid:
 #                    break
 #                except:
 #                    pass
+=======
+                try:
+                    self.lib = CDLL(LIBCFDIR + sosuffix)
+                    break
+                except BaseException:
+                    pass
+>>>>>>> master
         if self.lib is None:
             if not dynLibFound:
                 raise RegridError("ERROR in %s: could not find shared library %s.{so,dylib,dll,DLL}"
@@ -602,6 +628,7 @@ class Regrid:
         src_data = self._extend(src_data_in)
 
         # Check
+<<<<<<< HEAD
         if reduce(operator.iand, [src_data.shape[i] == self.src_dims[i]
                                   for i in range(self.rank)]) == False:  # noqa
             raise RegridError(("ERROR in %s: supplied src_data have wrong shape " +
@@ -612,6 +639,14 @@ class Regrid:
             raise RegridError(("ERROR in %s: supplied dst_data have wrong shape " +
                                "%s != %s") % (__FILE__, str(dst_data.shape),
                                               str(tuple([d for d in self.dst_dims]))))
+=======
+        if not reduce(operator.iand, [src_data.shape[i] == self.src_dims[i] for i in range(self.rank)]):
+            raise RegridError(("ERROR in %s: supplied src_data have wrong shape " +
+                               "%s != %s") % (__FILE__, str(src_data.shape), str(tuple([d for d in self.src_dims]))))
+        if not reduce(operator.iand, [dst_data.shape[i] == self.dst_dims[i] for i in range(self.rank)]):
+            raise RegridError(("ERROR in %s: supplied dst_data have wrong shape " +
+                               "%s != %s") % (__FILE__, str(dst_data.shape), str(tuple([d for d in self.dst_dims]))))
+>>>>>>> master
 
         # Create temporary data objects
         src_dataid = c_int(-1)
@@ -783,8 +818,11 @@ class Regrid:
         @return extended source data (or source input data of no padding was applied)
         """
 
+<<<<<<< HEAD
         # extended dimensions
         # nlatX, nlonX = self.src_dims[-2], self.src_dims[-1]
+=======
+>>>>>>> master
         # original dimensions, before extension
         # assuming ..., lat, lon ordering
         nlat, nlon = src_data.shape[-2:]
@@ -871,14 +909,17 @@ def testMakeCyclic():
 def testHandleCut():
 
     # Need tripolar grid
-    import cdms2
     filename = "data/so_Omon_GFDL-ESM2M_1pctCO2_r1i1p2_000101-000512_2timesteps.nc"
     f = cdms2.open(filename)
     if not f:
         return
 
+<<<<<<< HEAD
     # so = f.variables['so'][0, 0, :, :]
     if 'lon' in list(f.variables.keys()):
+=======
+    if 'lon' in f.variables.keys():
+>>>>>>> master
         alllat = f.variables['lat']
         alllon = f.variables['lon']
     else:
@@ -893,6 +934,7 @@ def testHandleCut():
     newCoords, newDims = handleCoordsCut(newCoords, newDims, bounds)
 
 
+<<<<<<< HEAD
 # def testOuterProduct():
 
     # 2d
@@ -909,6 +951,15 @@ def testHandleCut():
     # aa = makeCurvilinear([z, yy, xx])
     # for g in aa:
     #     print g
+=======
+def testOuterProduct():
+
+    # 2d
+    x = numpy.array([1, 2, 3, 4])
+    y = numpy.array([10, 20, 30])
+    getTensorProduct(x, 0, [len(x), len(y)])
+    getTensorProduct(y, 1, [len(x), len(y)])
+>>>>>>> master
 
 
 def test():
@@ -934,10 +985,13 @@ def test():
 #    rg = Regrid([src_x, src_y],
 #                [dst_x, dst_y])
 
+<<<<<<< HEAD
     # initialIndexGuess = numpy.array([0.0, 0.0, 0.0])
     # indices = rg._findIndices(numpy.array([1.5, 18.0, 140.0]),
     #                           20, 1.e-2, initialIndexGuess)
 
+=======
+>>>>>>> master
     maxNumIters = 20
     posTol = 1.e-3
     rg.computeWeights(maxNumIters, posTol)
@@ -971,7 +1025,12 @@ def test():
     error = numpy.sum(abs(dst_data - func1(dst_coords)))
     # print dst_data
     # print func(dst_coords)
+<<<<<<< HEAD
     print(('error = ', error))
+
+=======
+    print 'error = ', error
+>>>>>>> master
 
 
 def testMasking():
@@ -996,10 +1055,13 @@ def testMasking():
     rg = Regrid([src_x, src_y],
                 [dst_x, dst_y])
 
+<<<<<<< HEAD
     # initialIndexGuess = numpy.array([0.0, 0.0, 0.0])
     # indices = rg._findIndices(numpy.array([1.5, 18.0, 140.0]),
     #                           20, 1.e-2, initialIndexGuess)
 
+=======
+>>>>>>> master
     # Mask needs to be set before weights are computed
     mask = rg.getSrcGrid()[0] == 3
     mask[:, 3] = True
@@ -1038,7 +1100,12 @@ def testMasking():
     error = numpy.sum(abs(dst_data - func1(dst_coords)))
     # print dst_data
     # print func(dst_coords)
+<<<<<<< HEAD
     print(('error = ', error))
+
+=======
+    print 'error = ', error
+>>>>>>> master
 
 
 if __name__ == '__main__':

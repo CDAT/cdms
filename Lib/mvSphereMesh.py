@@ -8,6 +8,10 @@ No guarantee is provided whatsoever. Use at your own risk.
 """
 
 import numpy
+<<<<<<< HEAD
+=======
+from types import NoneType
+>>>>>>> master
 from functools import reduce
 
 
@@ -35,7 +39,11 @@ class SphereMesh:
 
         # compute the min/max of elevation, needed
         # for normalization
+<<<<<<< HEAD
         if not isinstance(elvs, type(None)):
+=======
+        if not isinstance(elvs, NoneType):
+>>>>>>> master
             self.minElv = min(elvs[:])
             self.maxElv = max(elvs[:])
             if hasattr(elvs, 'positive'):
@@ -45,7 +53,11 @@ class SphereMesh:
         # determine the dimensionality and
         # whether the grid is rectilinear
         for axis in lons, lats, elvs:
+<<<<<<< HEAD
             if not isinstance(axis, type(None)):
+=======
+            if not isinstance(axis, NoneType):
+>>>>>>> master
                 self.ndims += 1
                 if len(axis.shape) != 1:
                     self.isRectilinear = False
@@ -54,7 +66,11 @@ class SphereMesh:
         if self.isRectilinear:
             self.shape = []
             for axis in lons, lats, elvs:
+<<<<<<< HEAD
                 if not isinstance(axis, type(None)):
+=======
+                if not isinstance(axis, NoneType):
+>>>>>>> master
                     self.shape.append(len(axis))
             self.shape.reverse()
 
@@ -64,7 +80,11 @@ class SphereMesh:
         # store lon, lat, elv as a curvilinear grid
         if self.isRectilinear:
             # apply tensore product of axes to generat curvilinear coordinates
+<<<<<<< HEAD
             if not isinstance(elvs, type(None)):
+=======
+            if not isinstance(elvs, NoneType):
+>>>>>>> master
                 self.elvs = numpy.outer(numpy.outer(numpy.ones(self.shape[:0], numpy.float32), elvs),
                                         numpy.ones(self.shape[0 + 1:], numpy.float32)).reshape(self.shape)
             else:
@@ -78,7 +98,11 @@ class SphereMesh:
             # already in curvilinear form
             self.lons = lons[:]
             self.lats = lats[:]
+<<<<<<< HEAD
             if not isinstance(elvs, type(None)):
+=======
+            if not isinstance(elvs, NoneType):
+>>>>>>> master
                 self.elvs = elvs[:]
             else:
                 self.elvs = numpy.zeros(self.shape, numpy.float32)
@@ -138,6 +162,7 @@ def test2DRect():
     print(sphere_mesh.getXYZCoords())
 
 
+
 def test2D():
     """
     Test data on 2D curvilinear grid
@@ -175,6 +200,7 @@ def test2D():
     print(sphere_mesh.getXYZCoords())
 
 
+
 def test3DRect():
     """
     Test data on 3d rectilinear grid
@@ -203,7 +229,11 @@ def test3DRect():
     var = cdms2.createVariable(data, id='fake_data_3d_rect',
                                axes=(elvs, lats, lons))
     sphere_mesh = SphereMesh(var)
+<<<<<<< HEAD
     print(sphere_mesh.getXYZCoords())
+=======
+    print sphere_mesh.getXYZCoords()
+>>>>>>> master
 
 
 def test3DposDown():
@@ -238,7 +268,11 @@ def test3DposDown():
     aa = sphereMesh.getXYZCoords()
     bb = aa.reshape((4, 5, 6, 3))
     for i in range(nlev):
+<<<<<<< HEAD
         print(levs1d[i], bb[i, 0, 0, :])
+=======
+        print levs1d[i], bb[i, 0, 0, :]
+>>>>>>> master
 
 
 if __name__ == '__main__':

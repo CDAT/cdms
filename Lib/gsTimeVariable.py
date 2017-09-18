@@ -316,10 +316,13 @@ class TimeFileVariable:
                 if hasattr(u.variables[varName], "coordinates"):
                     coords = u.variables[varName].coordinates.split()
 
+<<<<<<< HEAD
                 # Get lists of 1D and auxiliary coordinate axes
                 # coords1d = f._convention_.getAxisIds(u.variables)
                 # coordsaux = f._convention_.getAxisAuxIds(u.variables, coords1d)
 
+=======
+>>>>>>> master
                 # Convert the variable into a FileVariable
                 f.variables[varName] = FileVariable(
                     f, varName, u.variables[varName])
@@ -349,8 +352,12 @@ class TimeFileVariable:
                     f._convention_, f.variables)
                 gridname = ("grid%d_" % gridIndex) + "%dx%d" % lat.shape
 #                grid = FileGenericGrid(lat, lon, gridname, parent = f, maskvar = None)
+<<<<<<< HEAD
                 grid = FileCurveGrid(
                     lat, lon, gridname, parent=f, maskvar=None)
+=======
+                grid = FileCurveGrid(lat, lon, gridname, parent=f, maskvar=None)
+>>>>>>> master
                 f.variables[varName]._grid_ = grid
                 vars.append(f.variables[varName])
 
@@ -383,9 +390,15 @@ class TimeFileVariable:
         """
         return self.vars[gridIndex]
 
+<<<<<<< HEAD
 # ##############################################################################
 # ############# DEPRECIATED - Testing required to fully remove #################
 # ##############################################################################
+=======
+# ############################################################################# #
+# ############# DEPRECIATED - Testing required to fully remove ################ #
+# ############################################################################# #
+>>>>>>> master
 
 
 class TimeTransientVariable:

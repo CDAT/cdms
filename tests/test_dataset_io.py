@@ -23,7 +23,7 @@ class TestDatasetIO(basetest.CDMSBaseTest):
 
     def testScalarSlice(self):
         u = self.u
-        scalar = u[0,0,0]
+        scalar = u[0, 0, 0]
         self.assertEqual(scalar, 0.0)
 
     def testSize(self):
@@ -64,8 +64,17 @@ class TestDatasetIO(basetest.CDMSBaseTest):
         v1 = self.v.subSlice(1)
         v2 = self.v.subSlice(2)
         uout = out.write(u0)
+<<<<<<< HEAD:tests/test_dataset_io.py
         vout = out.write(v2, attributes=self.v.attributes, id='v', extend=1, index=2)
         uout.getTime()
+=======
+        vout = out.write(
+            v2,
+            attributes=self.v.attributes,
+            id='v',
+            extend=1,
+            index=2)
+>>>>>>> master:tests/test_dataset_io.py
         out.write(u1, index=1)
         out.write(v0)
         out.write(u2)
@@ -87,7 +96,7 @@ class TestDatasetIO(basetest.CDMSBaseTest):
         transient_u = self.u[:]
         self.file.close()
         with self.assertRaises(cdms2.CDMSError):
-            badslice = u[:,4:12,8:24]
+            badslice = u[:, 4:12, 8:24]
             badu = u.getValue()
 
         with self.assertRaises(cdms2.CDMSError):
@@ -97,13 +106,14 @@ class TestDatasetIO(basetest.CDMSBaseTest):
             badslice = u[0:1]
 
         with self.assertRaises(cdms2.CDMSError):
-            u[0,0,0]=-99.9
+            u[0, 0, 0] = -99.9
 
         with self.assertRaises(cdms2.CDMSError):
-            u[0:1]=-99.9
+            u[0:1] = -99.9
 
         with self.assertRaises(cdms2.CDMSError):
             u.assignValue(transient_u)
+
 
 if __name__ == '__main__':
     basetest.run()

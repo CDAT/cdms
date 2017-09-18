@@ -1,7 +1,10 @@
 import sys
 import os
 import os.path
+<<<<<<< HEAD
 # from ctypes import CDLL, c_char_p, c_int, byref, c_double, c_uint, pointer, create_string_buffer
+=======
+>>>>>>> master
 from ctypes import CDLL, c_double, c_uint
 import cdms2
 import time
@@ -197,7 +200,11 @@ class GS_Regridder:
         kbegin = 0
         kend = -1
 
+<<<<<<< HEAD
         print(("__call__  remapfile=", self.remapfile))
+=======
+        print "__call__  remapfile=", self.remapfile
+>>>>>>> master
         libcf.gs_fregrid(history, mosaic_in, mosaic_out, dir_in, dir_out,
                          input_file, nfiles, output_file, nfiles_out,
                          self.remapfile,
@@ -208,7 +215,11 @@ class GS_Regridder:
                          latend, kbegin, kend, lbegin, lend)
 
         # Read the output_file into a variable, and return the variable
+<<<<<<< HEAD
         f = cdms2.open(self.outpath + "/" + output_file)
+=======
+        f = cdms2.open(output_file)
+>>>>>>> master
         vout = f(scalar_name)
         f.close()
         return vout

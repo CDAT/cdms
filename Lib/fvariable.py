@@ -3,6 +3,7 @@
 
 "CDMS File-based variables."
 import numpy
+<<<<<<< HEAD
 from . import typeconv
 
 from .cdmsobj import Max32int
@@ -10,6 +11,14 @@ from .variable import DatasetVariable
 from .error import CDMSError
 from .sliceut import reverseSlice
 from .Cdunif import CdunifError
+=======
+
+from cdmsobj import Max32int
+from variable import DatasetVariable
+from error import CDMSError
+from sliceut import reverseSlice
+from Cdunif import CdunifError
+>>>>>>> master
 
 FileClosed = "Cannot read from closed file, variable: "
 FileClosedWrite = "Cannot write to a closed file, variable: "
@@ -28,11 +37,19 @@ class FileVariable(DatasetVariable):
             if '_FillValue' in self.__dict__.keys():
                 self.__dict__['missing_value'] = self.__dict__['_FillValue']
                 self.attributes['missing_value'] = self.__dict__['_FillValue']
+<<<<<<< HEAD
             if self.__dict__['missing_value'] is None:
                 self.__dict__[
                     'missing_value'] = numpy.ma.default_fill_value(self)
                 self.attributes['missing_value'] = numpy.ma.default_fill_value(
                     self)
+=======
+#            if self.__dict__['missing_value'] is None:
+#                self.__dict__[
+#                    'missing_value'] = numpy.ma.default_fill_value(self)
+#                self.attributes['missing_value'] = numpy.ma.default_fill_value(
+#                    self)
+>>>>>>> master
 
         val = self.__cdms_internals__ + ['name_in_file', ]
         self.___cdms_internals__ = val
@@ -51,7 +68,7 @@ class FileVariable(DatasetVariable):
     def typecode(self):
         # Compatibility: convert to new typecode
         tc = self._obj_.typecode()
-        tc = typeconv.convtypecode2(tc).char
+#        tc = typeconv.convtypecode2(tc).char
         return tc
 
     def assignValue(self, data):
@@ -156,7 +173,11 @@ class FileVariable(DatasetVariable):
         if (name not in self.__cdms_internals__) and (value is not None):
             try:
                 setattr(self._obj_, name, value)
+<<<<<<< HEAD
             except Exception:
+=======
+            except CdunifError:
+>>>>>>> master
                 raise CDMSError(
                     "Setting %s.%s=%s" %
                     (self.id, name, repr(value)))

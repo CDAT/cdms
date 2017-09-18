@@ -105,14 +105,22 @@ class GenericRegrid:
             self.dstGridShape = dstGrid[0].shape
             self.hasSrcBounds = False
             self.hasDstBounds = False
+
             if srcBounds is not None:
                 self.hasSrcBounds = True
+
             if dstBounds is not None:
                 self.hasDstBounds = True
+
             self.srcGridAreasShape = None
             self.dstGridAreasShape = None
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
             if srcGridAreas is not None:
                 self.srcGridAreasShape = srcGridAreas[0].shape
+
             if dstGridAreas is not None:
                 self.dstGridAreasShape = dstGridAreas[0].shape
 
@@ -128,6 +136,10 @@ class GenericRegrid:
                                            srcGridAreasShape=self.srcGridAreasShape,
                                            dstGridAreasShape=self.dstGridAreasShape,
                                            **args)
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
             self.tool.setCoords(srcGrid, dstGrid,
                                 srcGridMask=srcGridMask,
                                 srcBounds=srcBounds,
@@ -193,7 +205,12 @@ valid choices are: 'libcf', 'esmf'""" % regridTool
 
                 # interpolate mask
                 self.tool.apply(srcDataMaskFloat, dstDataMaskFloat,
+<<<<<<< HEAD
                                 rootPe=rootPe, globalIndexing=True, **args)
+=======
+                                rootPe=rootPe, globalIndexing=True,
+                                **args)
+>>>>>>> master
                 if re.search('conserv', self.regridMethod.lower(), re.I):
                     dstMask = numpy.array(
                         (dstDataMaskFloat > 1 - EPS), numpy.int32)
@@ -202,7 +219,12 @@ valid choices are: 'libcf', 'esmf'""" % regridTool
 
                 # interpolate the data
                 self.tool.apply(indata, dstData, rootPe=rootPe,
+<<<<<<< HEAD
                                 globalIndexing=True, **args)
+=======
+                                globalIndexing=True,
+                                **args)
+>>>>>>> master
 
                 # add missing values
                 dstData *= (1 - dstMask)
@@ -212,7 +234,10 @@ valid choices are: 'libcf', 'esmf'""" % regridTool
                 # no masking, just interpolate the data
                 self.tool.apply(srcData, dstData, rootPe=rootPe,
                                 globalIndexing=True, **args)
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
         else:
 
             nonHorizShape2 = dstData.shape[: -self.nGridDims]
@@ -250,9 +275,15 @@ valid choices are: 'libcf', 'esmf'""" % regridTool
                     # contribution later
                     indata *= (1 - (srcDataMaskFloat == 1))
 
+#                    srcDataMaskFloatData = srcDataMaskFloat * numpy.random.rand(srcHorizShape[0],srcHorizShape[1])*100
                     # interpolate mask
                     self.tool.apply(srcDataMaskFloat, dstDataMaskFloat,
+<<<<<<< HEAD
                                     rootPe=rootPe, globalIndexing=True, **args)
+=======
+                                    rootPe=rootPe, globalIndexing=True,
+                                    srcDataMask=(1 - srcDataMaskFloat), **args)
+>>>>>>> master
 
                     if re.search('conserv', self.regridMethod.lower(), re.I):
                         # cell interpolation
@@ -265,7 +296,12 @@ valid choices are: 'libcf', 'esmf'""" % regridTool
 
                 # interpolate the data, using the appropriate tool
                 self.tool.apply(indata, outdata, rootPe=rootPe,
+<<<<<<< HEAD
                                 globalIndexing=True, **args)
+=======
+                                globalIndexing=True,
+                                srcDataMask=srcDataMaskFloat, **args)
+>>>>>>> master
 
                 # apply missing value contribution
                 if missingValue is not None:

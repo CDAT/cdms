@@ -145,10 +145,17 @@ class Test(unittest.TestCase):
             (soInterpInterp >= 1e20), soInterpInterp)
 
         toc = time.time()
+<<<<<<< HEAD
         print('time to interpolate (ESMF interface) forward/backward: ', toc - tic)
         ntot = reduce(operator.mul, so.shape)
         avgdiff = numpy.sum(so - soInterpInterp) / float(ntot)
         print('avgdiff = ', avgdiff)
+=======
+        print 'time to interpolate (ESMF interface) forward/backward: ', toc - tic
+        ntot = reduce(operator.mul, so.shape)
+        avgdiff = numpy.sum(so - soInterpInterp) / float(ntot)
+        print 'avgdiff = ', avgdiff
+>>>>>>> master
         self.assertLess(abs(avgdiff), 3.0)
 
         if PLOT:
@@ -172,7 +179,11 @@ class Test(unittest.TestCase):
 
 
 if __name__ == '__main__':
+<<<<<<< HEAD
     print("")
+=======
+    print ""
+>>>>>>> master
     ESMF.Manager()
     suite = unittest.TestLoader().loadTestsFromTestCase(Test)
     unittest.TextTestRunner(verbosity=1).run(suite)

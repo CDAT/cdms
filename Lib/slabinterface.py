@@ -5,8 +5,13 @@
 import numpy
 import string
 import sys
+<<<<<<< HEAD
 from .error import CDMSError
 from .axis import std_axis_attributes
+=======
+from error import CDMSError
+from axis import std_axis_attributes
+>>>>>>> master
 import cdms2 as cdms
 
 
@@ -40,7 +45,11 @@ class Slab:
                        'long_name': '',
                        'units': ''}
         result = None
+<<<<<<< HEAD
         if name in list(defaultdict.keys()) and not hasattr(self, name):
+=======
+        if name in defaultdict.keys() and not hasattr(self, name):
+>>>>>>> master
             if name == 'filename':
                 if (not hasattr(self, 'parent')) or self.parent is None:
                     result = ''
@@ -94,7 +103,11 @@ class Slab:
         "List the legal axis field names."
         a = self.getAxis(dim)
         result = []
+<<<<<<< HEAD
         for x in std_axis_attributes + list(a.attributes.keys()):
+=======
+        for x in std_axis_attributes + a.attributes.keys():
+>>>>>>> master
             if x not in result:
                 result.append(x)
         return result
@@ -164,7 +177,11 @@ class Slab:
         result.append('shape: ' + str(self.shape))
         for x in Slab.std_slab_atts:
             result.append(x + ": " + str(self.getattribute(x)))
+<<<<<<< HEAD
         for x in list(self.attributes.keys()):
+=======
+        for x in self.attributes.keys():
+>>>>>>> master
             if x in Slab.std_slab_atts:
                 continue
             if x == 'name':
@@ -192,7 +209,10 @@ class Slab:
 def cdms_bounds2cu_bounds(b):
     "Bounds are  len(v) by 2 in cdms but len(v)+1 in cu"
     cub = numpy.ma.zeros(len(b) + 1, numpy.float32)
+<<<<<<< HEAD
     # b1 = b.astype(numpy.float32)
+=======
+>>>>>>> master
     if len(b) > 1:
         if (b[0, 0] < b[0, 1]) == (b[0, 0] < b[-1, 0]):
             cub[0] = b[0, 0]

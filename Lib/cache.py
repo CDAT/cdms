@@ -2,7 +2,11 @@
 CDMS cache management and file movement objects
 """
 import cdurllib
+<<<<<<< HEAD
 import urllib.parse
+=======
+import urlparse
+>>>>>>> master
 import tempfile
 import os
 import time
@@ -10,7 +14,11 @@ import cdmsobj
 import sys
 import errno
 import shelve
+<<<<<<< HEAD
 from .error import CDMSError
+=======
+from error import CDMSError
+>>>>>>> master
 MethodNotImplemented = "Method not yet implemented"
 SchemeNotSupported = "Scheme not supported: "
 LockError = "Lock error:"
@@ -41,9 +49,13 @@ def lock(filename):
     while (not success) and (tries < _lock_max_tries):
         try:
             if cdmsobj._debug:
+<<<<<<< HEAD
                 print(
                     'Process %d: Trying to acquire lock %s' %
                     (os.getpid(), path))
+=======
+                print 'Process %d: Trying to acquire lock %s' % (os.getpid(), path)
+>>>>>>> master
             fd = os.open(path, os.O_CREAT | os.O_WRONLY | os.O_EXCL, 0o666)
 
         # If the open failed because the file already exists, keep trying, otherwise
@@ -54,17 +66,25 @@ def lock(filename):
             tries = tries + 1
         else:
             if cdmsobj._debug:
+<<<<<<< HEAD
                 print(
                     'Process %d: Acquired lock %s after %d tries' %
                     (os.getpid(), path, tries))
+=======
+                print 'Process %d: Acquired lock %s after %d tries' % (os.getpid(), path, tries)
+>>>>>>> master
             success = 1
             break
 
         # Sleep until next retry
         if cdmsobj._debug:
+<<<<<<< HEAD
             print(
                 'Process %d: Failed to acquire lock %s, sleeping' %
                 (os.getpid(), path))
+=======
+            print 'Process %d: Failed to acquire lock %s, sleeping' % (os.getpid(), path)
+>>>>>>> master
         time.sleep(_lock_naptime)
 
     # Error if the lock could not be acquired
@@ -87,7 +107,11 @@ def unlock(filename):
 
     path = lockpath(filename)
     if cdmsobj._debug:
+<<<<<<< HEAD
         print('Process %d: Unlocking %s' % (os.getpid(), path))
+=======
+        print 'Process %d: Unlocking %s' % (os.getpid(), path)
+>>>>>>> master
     os.unlink(path)
 
 
@@ -104,9 +128,13 @@ def lockpath(filename):
         _cache_tempdir = os.path.join(tempfile.tempdir, 'cdms')
         if not os.path.isdir(_cache_tempdir):
             if cdmsobj._debug:
+<<<<<<< HEAD
                 print(
                     'Process %d: Creating cache directory %s' %
                     (os.getpid(), _cache_tempdir))
+=======
+                print 'Process %d: Creating cache directory %s' % (os.getpid(), _cache_tempdir)
+>>>>>>> master
             os.mkdir(_cache_tempdir, 0o777)
     return os.path.join(_cache_tempdir, filename)
 
@@ -153,7 +181,11 @@ def usePythonTransfer():
 
 def useRequestManagerTransfer():
     try:
+<<<<<<< HEAD
         import reqm  # noqa
+=======
+        import reqm   # noqa
+>>>>>>> master
     except ImportError:
         raise CDMSError(RequestManagerNotSupported)
     global _transferMethod
@@ -179,7 +211,11 @@ def copyFile(fromURL, toURL, callback=None,
         else:
             callback = cdurllib.sampleReportHook
     (scheme, netloc, path, parameters, query,
+<<<<<<< HEAD
      fragment) = urllib.parse.urlparse(fromURL)
+=======
+     fragment) = urlparse.urlparse(fromURL)
+>>>>>>> master
     if scheme == 'ftp':
         if _transferMethod == _pythonTransfer:
             urlopener = cdurllib.CDURLopener()
@@ -226,17 +262,26 @@ def copyFile(fromURL, toURL, callback=None,
         while True:
             signal.signal(signal.SIGALRM, handler)
             estim = server.estimate(token)
+<<<<<<< HEAD
             print('Estimate: ', estim)
+=======
+            print 'Estimate: ', estim
+>>>>>>> master
             if estim <= 0.0:
                 break
             signal.alarm(3)             # Number of seconds between polls
             signal.pause()
 
         # !!!! Remove this when gsincftp uses the right target name !!!
+<<<<<<< HEAD
 
 #         oldpath = os.path.join(os.path.dirname(toURL),path)
 # os.rename(oldpath,toURL)
 
+=======
+        #         oldpath = os.path.join(os.path.dirname(toURL),path)
+        # os.rename(oldpath,toURL)
+>>>>>>> master
         # !!!!
 
         return
@@ -304,9 +349,13 @@ class Cache:
         lock("index_lock")
         try:
             if cdmsobj._debug:
+<<<<<<< HEAD
                 print(
                     'Process %d: Adding cache file %s,\n   key %s' %
                     (os.getpid(), path, filekey))
+=======
+                print 'Process %d: Adding cache file %s,\n   key %s' % (os.getpid(), path, filekey)
+>>>>>>> master
             self.index = shelve.open(self.indexpath)
             self.index[filekey] = path
         except BaseException:
@@ -360,8 +409,12 @@ class Cache:
                 useReplica=useReplica)
             # Make cache files world writeable
             os.chmod(toPath, 0o666)
+<<<<<<< HEAD
         except BaseException:
             # Remove the notification on error, and the temp file, then
+=======
+        except BaseException:            # Remove the notification on error, and the temp file, then
+>>>>>>> master
             # re-raise
             self.deleteEntry(filekey)
             if os.path.isfile(toPath):
@@ -410,9 +463,13 @@ class Cache:
             success = 0
             for i in range(maxtries):
                 if cdmsobj._debug:
+<<<<<<< HEAD
                     print(
                         'Process %d: Waiting for read completion, %s' %
                         (os.getpid(), repr(filekey)))
+=======
+                    print 'Process %d: Waiting for read completion, %s' % (os.getpid(), repr(filekey))
+>>>>>>> master
                 time.sleep(naptime)
                 tempname = self.get(filekey)
 
@@ -441,9 +498,13 @@ class Cache:
             fpath = tempname
 
         if cdmsobj._debug:
+<<<<<<< HEAD
             print(
                 'Process %d: Got file %s from cache %s' %
                 (os.getpid(), fromURL, fpath))
+=======
+            print 'Process %d: Got file %s from cache %s' % (os.getpid(), fromURL, fpath)
+>>>>>>> master
         return fpath
 
     def delete(self):
@@ -459,9 +520,13 @@ class Cache:
                     continue  # Don't remove read-pending notifications
                 try:
                     if cdmsobj._debug:
+<<<<<<< HEAD
                         print(
                             'Process %d: Deleting cache file %s' %
                             (os.getpid(), path))
+=======
+                        print 'Process %d: Deleting cache file %s' % (os.getpid(), path)
+>>>>>>> master
                     os.unlink(path)
                 except BaseException:
                     pass

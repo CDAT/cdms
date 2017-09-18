@@ -1,7 +1,11 @@
 """FTP Progress dialog"""
 
+<<<<<<< HEAD
 from wxPython.wx import wxProgressDialog
 from wxPython.wx import wxPD_CAN_ABORT, wxPD_APP_MODAL, wxPD_REMAINING_TIME
+=======
+from wxPython.wx import wxProgressDialog, wxPD_CAN_ABORT, wxPD_APP_MODAL, wxPD_REMAINING_TIME
+>>>>>>> master
 from cdms import cache
 
 _progressParent = None                  # Parent frame of progress gui

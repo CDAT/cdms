@@ -11,7 +11,12 @@ import cdtime
 import re
 import string
 import sys
+<<<<<<< HEAD
 from .error import CDMSError
+=======
+from types import StringType, TupleType, IntType, FloatType, ListType, NoneType
+from error import CDMSError
+>>>>>>> master
 
 # Regular expressions
 # Note: allows digit as first character
@@ -263,7 +268,11 @@ class CdmsNode:
     # Set the external attribute dictionary. The input dictionary
     # is of the form {name:value,...} where value is a string.
     def setExternalDict(self, dict):
+<<<<<<< HEAD
         for key in list(dict.keys()):
+=======
+        for key in dict.keys():
+>>>>>>> master
             self.attribute[key] = (dict[key], CdString)
 
     # Write to a file, with formatting.
@@ -368,7 +377,11 @@ class CdmsNode:
                 (attval, datatype) = self.attribute[attname]
                 # attvalstr = _Illegal.sub(mapIllegalToEntity,str(attval))  #
                 # Map illegal chars to entities
+<<<<<<< HEAD
                 if isinstance(attval, str):
+=======
+                if not isinstance(attval, StringType):
+>>>>>>> master
                     attval = repr(attval)
                 attvalstr = string.strip(attval)
                 # Make sure continuation lines are preceded with a space
@@ -381,7 +394,11 @@ class CdmsNode:
         for attname in list(self.attribute.keys()):
             if validAttrs and (attname not in validAttrs):
                 (attval, datatype) = self.attribute[attname]
+<<<<<<< HEAD
                 if isinstance(attval, str):
+=======
+                if not isinstance(attval, StringType):
+>>>>>>> master
                     attval = repr(attval)
                 # Make sure continuation lines are preceded with a space
                 attval = re.sub('\n', '\n ', attval)
@@ -394,7 +411,11 @@ class CdmsNode:
         #     fd.write("value: %s"%(content,))
 
         # Write user attributes
+<<<<<<< HEAD
         if isinstance(userAttrs, str):
+=======
+        if isinstance(userAttrs, StringType):
+>>>>>>> master
             newAttrs = [userAttrs]
         else:
             newAttrs = userAttrs
@@ -418,7 +439,11 @@ class CdmsNode:
         for attname in list(self.attribute.keys()):
             if attname in validKeys:
                 (atttype, default) = self.dtd[attname]
+<<<<<<< HEAD
                 if isinstance(atttype, tuple):
+=======
+                if isinstance(atttype, TupleType):
+>>>>>>> master
                     attval = self.getExternalAttr(attname)
                     assert attval in atttype, 'Invalid attribute %s=%s must be in %s' % (
                         attname, attval, repr(atttype))
@@ -426,9 +451,13 @@ class CdmsNode:
                     attval = self.getExternalAttr(attname)
                     if idtable:
                         if attval not in idtable:
+<<<<<<< HEAD
                             print(
                                 'Warning: ID reference not found: %s=%s' %
                                 (attname, attval))
+=======
+                            print 'Warning: ID reference not found: %s=%s' % (attname, attval)
+>>>>>>> master
 
         # Validate children
         for node in self.children():
@@ -499,7 +528,12 @@ class VariableNode(CdmsNode):
     # Create a variable.
     # If validate is true, validate immediately
     def __init__(self, id, datatype, domain):
+<<<<<<< HEAD
         assert isinstance(datatype, str), 'Invalid datatype: ' + repr(datatype)
+=======
+        assert isinstance(
+            datatype, StringType), 'Invalid datatype: ' + repr(datatype)
+>>>>>>> master
         assert datatype in CdDatatypes, 'Invalid datatype: ' + repr(datatype)
         CdmsNode.__init__(self, "variable", id)
         self.datatype = datatype
@@ -531,8 +565,14 @@ class AxisNode(CdmsNode):
     # If datatype is None, assume values [0,1,..,length-1]
     # data is a numpy array, if specified
     def __init__(self, id, length, datatype=CdLong, data=None):
+<<<<<<< HEAD
         assert isinstance(length, int), 'Invalid length: ' + repr(length)
         assert isinstance(datatype, str), 'Invalid datatype: ' + repr(datatype)
+=======
+        assert isinstance(length, IntType), 'Invalid length: ' + repr(length)
+        assert isinstance(
+            datatype, StringType), 'Invalid datatype: ' + repr(datatype)
+>>>>>>> master
         assert datatype in CdDatatypes, 'Invalid datatype: ' + repr(datatype)
         if data is not None:
             assert isinstance(
@@ -573,7 +613,11 @@ class AxisNode(CdmsNode):
         for numstring in stringlist:
             if numstring == '':
                 continue
+<<<<<<< HEAD
             numlist.append(float(numstring))
+=======
+            numlist.append(string.atof(numstring))
+>>>>>>> master
         if len(numlist) > 0:
             # NB! len(zero-length array) causes IndexError on Linux!
             dataArray = numpy.array(numlist, numericType)
@@ -588,7 +632,11 @@ class AxisNode(CdmsNode):
         for numstring in stringlist:
             if numstring == '':
                 continue
+<<<<<<< HEAD
             numlist.append(int(numstring))
+=======
+            numlist.append(string.atoi(numstring))
+>>>>>>> master
         dataArray = numpy.array(numlist, numpy.int)
         if len(dataArray) > 0:
             self.partition = dataArray
@@ -812,11 +860,19 @@ class AxisNode(CdmsNode):
 class LinearDataNode(CdmsNode):
 
     validStartTypes = [
+<<<<<<< HEAD
         int, float, type(
             cdtime.comptime(0)), type(
             cdtime.reltime(
                 0, "hours"))]
     validDeltaTypes = [int, float, list]
+=======
+        IntType, FloatType, type(
+            cdtime.comptime(0)), type(
+            cdtime.reltime(
+                0, "hours"))]
+    validDeltaTypes = [IntType, FloatType, ListType]
+>>>>>>> master
 
     def __init__(self, start, delta, length):
         assert isinstance(start, numpy.floating) or isinstance(start, numpy.integer) or (
@@ -824,7 +880,11 @@ class LinearDataNode(CdmsNode):
         assert isinstance(start, numpy.floating) or isinstance(start, numpy.integer) or (
             type(delta) in self.validDeltaTypes), 'Invalid delta argument: ' + repr(delta)
         assert isinstance(
+<<<<<<< HEAD
             length, int), 'Invalid length argument: ' + repr(length)
+=======
+            length, IntType), 'Invalid length argument: ' + repr(length)
+>>>>>>> master
         CdmsNode.__init__(self, "linear")
         self.delta = delta
         self.length = length
@@ -1042,7 +1102,11 @@ class DomElemNode(CdmsNode):
         if format:
             fd.write(tablevel * '\t')
         fd.write('<' + self.tag)
+<<<<<<< HEAD
         for attname in list(self.attribute.keys()):
+=======
+        for attname in self.attribute.keys():
+>>>>>>> master
             (attval, datatype) = self.attribute[attname]
             # attvalstr = string.replace(str(attval),'"',"'") # Map " to '
             attvalstr = _Illegal.sub(
@@ -1067,12 +1131,21 @@ class AttrNode(CdmsNode):
 
     def __init__(self, name, value=None):
         CdmsNode.__init__(self, "attr")
+<<<<<<< HEAD
         if not (isinstance(value, int) or
                 isinstance(value, numpy.integer) or
                 isinstance(value, float) or
                 isinstance(value, numpy.floating) or
                 isinstance(value, str) or
                 isinstance(value, type(None))):
+=======
+        if not (isinstance(value, IntType) or
+                isinstance(value, numpy.integer) or
+                isinstance(value, FloatType) or
+                isinstance(value, numpy.floating) or
+                isinstance(value, StringType) or
+                isinstance(value, NoneType)):
+>>>>>>> master
             raise CDMSError('Invalid attribute type: ' + repr(value))
         self.name = name
         self.value = value
@@ -1089,11 +1162,19 @@ class AttrNode(CdmsNode):
     def getDatatype(self):
         if self.datatype:
             return self.datatype
+<<<<<<< HEAD
         elif isinstance(self.value, str):
             return CdString
         elif isinstance(self.value, float) or isinstance(self.value, numpy.floating):
             return CdDouble
         elif isinstance(self.value, int) or isinstance(self.value, numpy.integer):
+=======
+        elif isinstance(self.value, StringType):
+            return CdString
+        elif isinstance(self.value, FloatType) or isinstance(self.value, numpy.floating):
+            return CdDouble
+        elif isinstance(self.value, IntType) or isinstance(self.value, numpy.integer):
+>>>>>>> master
             return CdLong
         else:
             raise CDMSError('Invalid attribute type: ' + repr(self.value))
@@ -1105,18 +1186,30 @@ class AttrNode(CdmsNode):
     #   Returns ValueError if the conversion fails
     def setValueFromString(self, valString, datatype):
         val = None
+<<<<<<< HEAD
         if not isinstance(valString, str):
+=======
+        if not isinstance(valString, StringType):
+>>>>>>> master
             raise CDMSError('input value is not a string')
         if datatype == CdString:
             val = valString
         elif datatype in (CdShort, CdInt, CdLong):
             try:
+<<<<<<< HEAD
                 val = int(valString)
+=======
+                val = string.atoi(valString)
+>>>>>>> master
             except ValueError:
                 raise CDMSError('value is not an integer: ' + valString)
         elif datatype in (CdFloat, CdDouble):
             try:
+<<<<<<< HEAD
                 val = float(valString)
+=======
+                val = string.atof(valString)
+>>>>>>> master
             except ValueError:
                 raise CDMSError('value is not floating-point: ' + valString)
         self.value = val
@@ -1229,14 +1322,24 @@ if __name__ == '__main__':
 
     def printType(axis):
         if axis.dataRepresent == CdLinear:
+<<<<<<< HEAD
             print('linear')
         else:
             print('vector')
+=======
+            print 'linear'
+        else:
+            print 'vector'
+>>>>>>> master
 
     def testit(a, b):
         import copy
         x = copy.copy(a)
+<<<<<<< HEAD
         print(x.extend(b).getData())
+=======
+        print x.extend(b).getData()
+>>>>>>> master
         printType(x)
 
     # testit(mAxis,nAxis)

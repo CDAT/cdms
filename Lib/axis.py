@@ -4,8 +4,12 @@
 """
 CDMS Axis objects
 """
+<<<<<<< HEAD
 
 from future import standard_library
+=======
+import string
+>>>>>>> master
 import sys
 import types
 import copy
@@ -13,6 +17,7 @@ import numpy
 # import regrid2._regrid
 from . import cdmsNode
 import cdtime
+<<<<<<< HEAD
 from . import cdmsobj
 from .cdmsobj import CdmsObj, Max32int
 from .sliceut import reverseSlice, splitSlice, splitSliceExt
@@ -21,6 +26,18 @@ from . import forecast
 import warnings
 standard_library.install_aliases()
 from collections import UserList # noqa
+=======
+import cdmsobj
+from cdmsobj import CdmsObj, Max32int
+from sliceut import reverseSlice, splitSlice, splitSliceExt
+from error import CDMSError
+import forecast
+import warnings
+from UserList import UserList
+# import internattr
+
+
+>>>>>>> master
 _debug = 0
 std_axis_attributes = ['name', 'units', 'length', 'values', 'bounds']
 
@@ -30,6 +47,7 @@ class AliasList (UserList):
         UserList.__init__(self, alist)
 
     def __setitem__(self, i, value):
+<<<<<<< HEAD
         self.data[i] = value.lower()
 
     def __setslice(self, i, j, values):
@@ -37,9 +55,19 @@ class AliasList (UserList):
 
     def append(self, value):
         self.data.append(value.lower())
+=======
+        self.data[i] = string.lower(value)
+
+    def __setslice(self, i, j, values):
+        self.data[i:j] = map(lambda x: string.lower(x), values)
+
+    def append(self, value):
+        self.data.append(string.lower(value))
+>>>>>>> master
 
     def extend(self, values):
         self.data.extend(list(map(str.lower, values)))
+
 
 
 level_aliases = AliasList(['plev'])
@@ -99,8 +127,12 @@ _autobounds = 2
 # Modes:
 # 0 : off (not bounds generation)
 # 1 : on  (generate bounds)
+<<<<<<< HEAD
 # 2 : grid (generate bounds for lat/lon
 # grids only)
+=======
+# 2 : grid (generate bounds for lat/lon grids only)
+>>>>>>> master
 
 # Set autobounds mode to 'on' or 'off'. If on, getBounds will automatically
 # generate boundary information for an axis or grid, if not explicitly defined.
@@ -136,12 +168,15 @@ def createGaussianAxis(nlat):
 
     lats, wts, bnds = regrid2._regrid.gridattr(nlat, 'gaussian')
 
+<<<<<<< HEAD
     # For odd number of latitudes, gridattr returns 0 in the second half of
     # lats
     if nlat % 2:
         mid = int(nlat / 2)
         lats[mid + 1:] = -lats[:mid][::-1]
 
+=======
+>>>>>>> master
     latBounds = numpy.zeros((nlat, 2), numpy.float)
     latBounds[:, 0] = bnds[:-1]
     latBounds[:, 1] = bnds[1:]
@@ -189,12 +224,19 @@ def createUniformLongitudeAxis(startLon, nlon, deltaLon):
     lon.setBounds(lonBounds)
     return lon
 
+<<<<<<< HEAD
 
 def mapLinearIntersection(xind, yind, iind,
                           aMinusEps, aPlusEps, bPlusEps, bMinusEps,
                           boundLeft, nodeSubI, boundRight):
     """
+=======
+>>>>>>> master
 
+def mapLinearIntersection(xind, yind, iind,
+                          aMinusEps, aPlusEps, bPlusEps, bMinusEps,
+                          boundLeft, nodeSubI, boundRight):
+    """
     Return true iff the coordinate interval (a,b) intersects the node
     nodeSubI or cell bounds [boundLeft,boundRight], where the interval
     (a,b) is defined by:
@@ -259,7 +301,11 @@ def mapLinearExt(axis, bounds, interval, indicator='ccn',
     intersection is empty.
     """
 
+<<<<<<< HEAD
     indicator = indicator.lower()
+=======
+    indicator = string.lower(indicator)
+>>>>>>> master
     length = len(axis)
 
     # Make the interval and search array non-decreasing
@@ -689,7 +735,11 @@ class AbstractAxis(CdmsObj):
         self._doubledata_ = None
 
     def __str__(self):
+<<<<<<< HEAD
         return "\n".join(self.listall()) + "\n"
+=======
+        return string.join(self.listall(), "\n") + "\n"
+>>>>>>> master
 
     __repr__ = __str__
 
@@ -907,14 +957,24 @@ class AbstractAxis(CdmsObj):
         for val in self[:]:
             comptime = cdtime.reltime(val, self.units).tocomp(calendar)
             s = repr(comptime)
+<<<<<<< HEAD
             tt = str.split(s, ' ')
 
             ttt = str.split(tt[0], '-')
+=======
+            tt = string.split(s, ' ')
+
+            ttt = string.split(tt[0], '-')
+>>>>>>> master
             yr = int(ttt[0])
             mo = int(ttt[1])
             da = int(ttt[2])
 
+<<<<<<< HEAD
             ttt = str.split(tt[1], ':')
+=======
+            ttt = string.split(tt[1], ':')
+>>>>>>> master
             hr = int(ttt[0])
             dtg = "%04d%02d%02d%02d" % (yr, mo, da, hr)
             result.append(dtg)
@@ -1118,7 +1178,11 @@ class AbstractAxis(CdmsObj):
     # calendar.
     def getCalendar(self):
         if hasattr(self, 'calendar'):
+<<<<<<< HEAD
             calendar = self.calendar.lower()
+=======
+            calendar = string.lower(self.calendar)
+>>>>>>> master
         else:
             calendar = None
 
@@ -1153,7 +1217,11 @@ class AbstractAxis(CdmsObj):
         if self.isTime():
             if type(value) in CdtimeTypes:
                 value = value.torel(self.units, self.getCalendar()).value
+<<<<<<< HEAD
             elif isinstance(value, str) and value not in [':', unspecified]:
+=======
+            elif isinstance(value, types.StringType) and value not in [':', unspecified]:
+>>>>>>> master
                 cal = self.getCalendar()
                 value = cdtime.s2c(value, cal).torel(self.units, cal).value
         return value
@@ -1165,7 +1233,11 @@ class AbstractAxis(CdmsObj):
             #
             # mf 20010419 test if attribute is a string (non CF), set to 360.0
             #
+<<<<<<< HEAD
             if(isinstance(cycle, str)):
+=======
+            if(isinstance(cycle, types.StringType)):
+>>>>>>> master
                 cycle = 360.0
         else:
             cycle = 360.0
@@ -1249,7 +1321,11 @@ class AbstractAxis(CdmsObj):
         # check length of indicator if overridden by user
         #
 
+<<<<<<< HEAD
         indicator = indicator.lower()
+=======
+        indicator = string.lower(indicator)
+>>>>>>> master
         if len(indicator) == 2:
             indicator += 'n'
 
@@ -1462,16 +1538,27 @@ class AbstractAxis(CdmsObj):
 
                 sn = splitSliceExt(slice(i, j, k), size)
                 if(_debug):
+<<<<<<< HEAD
                     print("SSSS1-------------------- ", sn, len(sn))
+=======
+                    print "SSSS1-------------------- ", sn, len(sn)
+>>>>>>> master
 
                 for kk in range(0, len(sn)):
                     sl = sn[kk]
                     if(_debug):
+<<<<<<< HEAD
                         print("SSSSSSSS kk = ", kk, sl)
                     part = self[sl] + kk * modulo
                     if(_debug):
                         print("SSSSSSSSSSSSSSS modulo",
                               part[0], part[-1], modulo)
+=======
+                        print "SSSSSSSS kk = ", kk, sl
+                    part = self[sl] + kk * modulo
+                    if(_debug):
+                        print "SSSSSSSSSSSSSSS modulo", part[0], part[-1], modulo
+>>>>>>> master
                     if(kk == 0):
                         data = part
                     else:
@@ -1490,12 +1577,20 @@ class AbstractAxis(CdmsObj):
 
                 s1, s2 = splitSlice(slice(i, j, k), size)
                 if(_debug):
+<<<<<<< HEAD
                     print("SSSS0: original ", s1, s2)
+=======
+                    print "SSSS0: original ", s1, s2
+>>>>>>> master
 
                 part1 = self[s1]
                 part2 = self[s2] + modulo
                 if(_debug):
+<<<<<<< HEAD
                     print("SSSSSSSSSSSSSSS modulo", self[0], self[-1], modulo)
+=======
+                    print "SSSSSSSSSSSSSSS modulo", self[0], self[-1], modulo
+>>>>>>> master
                 data = numpy.concatenate((part1, part2))
                 if fullBounds is not None:
                     bounds1 = fullBounds[s1]
@@ -1517,6 +1612,7 @@ class AbstractAxis(CdmsObj):
             id=self.id,
             copy=1,
             genericBounds=isGeneric[0])
+<<<<<<< HEAD
 
         if self.isLatitude():
             newaxis.designateLatitude()
@@ -1528,6 +1624,19 @@ class AbstractAxis(CdmsObj):
             newaxis.designateTime()
 
         for attname in list(self.attributes.keys()):
+=======
+
+        if self.isLatitude():
+            newaxis.designateLatitude()
+        if self.isLongitude():
+            newaxis.designateLongitude()
+        if self.isLevel():
+            newaxis.designateLevel()
+        if self.isTime():
+            newaxis.designateTime()
+
+        for attname in self.attributes.keys():
+>>>>>>> master
             if attname not in ["datatype", "length", "isvar",
                                "name_in_file", "partition", "partition_length"]:
                 setattr(newaxis, attname, getattr(self, attname))
@@ -1655,7 +1764,11 @@ class AbstractAxis(CdmsObj):
         except CDMSError:
             b = mycopy.genGenericBounds()
             mycopy.setBounds(b, isGeneric=False)
+<<<<<<< HEAD
         for k, v in list(self.attributes.items()):
+=======
+        for k, v in self.attributes.items():
+>>>>>>> master
             setattr(mycopy, k, v)
         return mycopy
 
@@ -1682,7 +1795,11 @@ class AbstractAxis(CdmsObj):
         result.append('   First:  ' + str(d[0]))
         result.append('   Last:   ' + str(d[-1]))
         flag = 1
+<<<<<<< HEAD
         for k in list(self.attributes.keys()):
+=======
+        for k in self.attributes.keys():
+>>>>>>> master
             if k in std_axis_attributes:
                 continue
             if flag:
@@ -1730,7 +1847,11 @@ class Axis(AbstractAxis):
             if axisNode.partition is not None:
                 flatpart = axisNode.partition
                 self.__dict__['partition'] = numpy.reshape(
+<<<<<<< HEAD
                     flatpart, (len(flatpart) // 2, 2))
+=======
+                    flatpart, (len(flatpart) / 2, 2))
+>>>>>>> master
                 self.attributes['partition'] = self.partition
         self.id = axisNode.id
 
@@ -1743,16 +1864,24 @@ class Axis(AbstractAxis):
         length = len(node)
 
         # Allow key of form (slice(i,j),) etc.
+<<<<<<< HEAD
         if isinstance(key, tuple) and len(key) == 1:
             key = key[0]
 
         if isinstance(key, (int, numpy.int, numpy.int32)):  # x[i]
+=======
+        if isinstance(key, types.TupleType) and len(key) == 1:
+            key = key[0]
+
+        if isinstance(key, (types.IntType, numpy.int, numpy.int32)):  # x[i]
+>>>>>>> master
             if key >= length:
                 raise IndexError('index out of bounds')
             else:
                 # Don't generate the entire array (if linear) just for one
                 # value
                 return node.data[key % length]
+<<<<<<< HEAD
         elif isinstance(key, slice):  # x[i:j:k]
             if self._data_ is None:
                 self._data_ = node.getData()
@@ -1762,6 +1891,17 @@ class Axis(AbstractAxis):
                 self._data_ = node.getData()
             return self._data_
         elif isinstance(key, tuple):
+=======
+        elif isinstance(key, types.SliceType):  # x[i:j:k]
+            if self._data_ is None:
+                self._data_ = node.getData()
+            return self._data_[key.start:key.stop:key.step]
+        elif isinstance(key, types.EllipsisType):  # x[...]
+            if self._data_ is None:
+                self._data_ = node.getData()
+            return self._data_
+        elif isinstance(key, types.TupleType):
+>>>>>>> master
             raise IndexError('axis is one-dimensional')
         else:
             raise IndexError('index must be an integer: %s' % repr(key))
@@ -1820,7 +1960,11 @@ class Axis(AbstractAxis):
 
     def getCalendar(self):
         if hasattr(self, 'calendar'):
+<<<<<<< HEAD
             calendar = self.calendar.lower()
+=======
+            calendar = string.lower(self.calendar)
+>>>>>>> master
         elif self.parent is not None and hasattr(self.parent, 'calendar'):
             calendar = self.parent.calendar.lower()
         else:
@@ -2033,7 +2177,11 @@ class FileAxis(AbstractAxis):
             self.name_in_file = name_in_file
         # Combine the attributes of the variable object, if any
         if obj is not None:
+<<<<<<< HEAD
             for attname in list(self._obj_.__dict__.keys()):
+=======
+            for attname in self._obj_.__dict__.keys():
+>>>>>>> master
                 attval = getattr(self._obj_, attname)
                 if not isinstance(attval, types.BuiltinFunctionType):
                     self.__dict__[attname] = attval
@@ -2043,7 +2191,11 @@ class FileAxis(AbstractAxis):
 
     def getData(self):
         if cdmsobj._debug == 1:
+<<<<<<< HEAD
             print('Getting array for axis', self.id)
+=======
+            print 'Getting array for axis', self.id
+>>>>>>> master
         if self.parent is None:
             raise CDMSError(FileWasClosed + self.id)
         try:
@@ -2138,30 +2290,52 @@ class FileAxis(AbstractAxis):
                 hasattr(self.parent, 'format') and self.parent.format == "DRS"):
             # For negative strides, get the equivalent slice with positive stride,
             # then reverse the result.
+<<<<<<< HEAD
             if (isinstance(key, slice)) and (
+=======
+            if (isinstance(key, types.SliceType)) and (
+>>>>>>> master
                     key.step is not None) and key.step < 0:
                 posslice = reverseSlice(key, len(self))
                 result = self._obj_.getitem(*(posslice,))
                 return result[::-1]
             else:
+<<<<<<< HEAD
                 if isinstance(key, int) and key >= len(self):
                     raise IndexError('Index out of bounds: %d' % key)
                 if not isinstance(key, tuple):
+=======
+                if isinstance(key, types.IntType) and key >= len(self):
+                    raise IndexError('Index out of bounds: %d' % key)
+                if not isinstance(key, types.TupleType):
+>>>>>>> master
                     key = (key,)
                 return self._obj_.getitem(*key)
         if self._data_ is None:
             self._data_ = self.getData()
         length = len(self._data_)
+<<<<<<< HEAD
         if isinstance(key, int):  # x[i]
+=======
+        if isinstance(key, types.IntType):  # x[i]
+>>>>>>> master
             if key >= length:
                 raise IndexError('index out of bounds')
             else:
                 return self._data_[key % length]
+<<<<<<< HEAD
         elif isinstance(key, slice):  # x[i:j:k]
             return self._data_[key.start:key.stop:key.step]
         elif isinstance(key, type(Ellipsis)):  # x[...]
             return self._data_
         elif isinstance(key, tuple):
+=======
+        elif isinstance(key, types.SliceType):  # x[i:j:k]
+            return self._data_[key.start:key.stop:key.step]
+        elif isinstance(key, types.EllipsisType):  # x[...]
+            return self._data_
+        elif isinstance(key, types.TupleType):
+>>>>>>> master
             raise IndexError('axis is one-dimensional')
         else:
             raise IndexError(
@@ -2189,6 +2363,7 @@ class FileAxis(AbstractAxis):
             raise CDMSError(ReadOnlyAxis + self.id)
         if self.parent is None:
             raise CDMSError(FileWasClosed + self.id)
+<<<<<<< HEAD
         # need setslice to create a new shape using [newaxis]
         if(isinstance(index, slice)):
             if(index.start is not None):
@@ -2200,6 +2375,8 @@ class FileAxis(AbstractAxis):
                     high = min(Max32int, high)
                     return self._obj_.setslice(
                         *(low, high, numpy.ma.filled(value)))
+=======
+>>>>>>> master
         return self._obj_.setitem(*(index, numpy.ma.filled(value)))
 
     def __setslice__(self, low, high, value):
@@ -2258,7 +2435,11 @@ class FileAxis(AbstractAxis):
                     boundsArray = numpy.ma.filled(boundsVar)
                     self._boundsArray_ = boundsArray  # for climatology performance
                 except KeyError as err:
+<<<<<<< HEAD
                     print(err)
+=======
+                    print err
+>>>>>>> master
                     boundsArray = None
         else:
             boundsArray = self._boundsArray_
@@ -2314,7 +2495,11 @@ class FileAxis(AbstractAxis):
 
     def getCalendar(self):
         if hasattr(self, 'calendar'):
+<<<<<<< HEAD
             calendar = self.calendar.lower()
+=======
+            calendar = string.lower(self.calendar)
+>>>>>>> master
         elif self.parent is not None and hasattr(self.parent, 'calendar'):
             calendar = self.parent.calendar.lower()
         else:
@@ -2422,9 +2607,15 @@ def axisMatchIndex(axes, specifications=None, omit=None, order=None):
         speclist = [specifications]
     elif isinstance(specifications, list):
         speclist = specifications
+<<<<<<< HEAD
     elif isinstance(specifications, tuple):
         speclist = list(specifications)
     elif isinstance(specifications, int):
+=======
+    elif isinstance(specifications, types.TupleType):
+        speclist = list(specifications)
+    elif isinstance(specifications, types.IntType):
+>>>>>>> master
         speclist = [specifications]
     elif isinstance(specifications, types.FunctionType):
         speclist = [specifications]
@@ -2451,9 +2642,15 @@ def axisMatchIndex(axes, specifications=None, omit=None, order=None):
         omitlist = [omit]
     elif isinstance(omit, list):
         omitlist = omit
+<<<<<<< HEAD
     elif isinstance(omit, tuple):
         omitlist = list(omit)
     elif isinstance(omit, int):
+=======
+    elif isinstance(omit, types.TupleType):
+        omitlist = list(omit)
+    elif isinstance(omit, types.IntType):
+>>>>>>> master
         omitlist = [omit]
     elif isinstance(omit, types.FunctionType):
         omitlist = [omit]
@@ -2542,8 +2739,13 @@ def axisMatches(axis, specification):
 
        3. an axis object; will match if it is the same object as axis.
     """
+<<<<<<< HEAD
     if isinstance(specification, str):
         s = specification.lower()
+=======
+    if isinstance(specification, basestring):
+        s = string.lower(specification)
+>>>>>>> master
         s = s.strip()
         while s[0] == '(':
             if s[-1] != ')':
@@ -2583,7 +2785,11 @@ def concatenate(axes, id=None, attributes=None):
 
     data = numpy.ma.concatenate([ax[:] for ax in axes])
     boundsArray = [ax.getBounds() for ax in axes]
+<<<<<<< HEAD
     if any(elem is None for elem in boundsArray):
+=======
+    if any([x is None for x in boundsArray]):
+>>>>>>> master
         bounds = None
     else:
         bounds = numpy.ma.concatenate(boundsArray)

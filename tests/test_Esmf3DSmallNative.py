@@ -51,7 +51,11 @@ def esmfGrid(grid, cds, sloc):
         ijkBE.append(slice(lo[ind], hi[ind], None))
         shape.append(hi[ind] - lo[ind])
 
+<<<<<<< HEAD
     print(ijkBE)
+=======
+    print ijkBE
+>>>>>>> master
     xyzPtr = []
     for i in range(ndims):
         xyzPtr.append(grid.get_coords(i, staggerloc=sloc))
@@ -74,9 +78,15 @@ def makeGrid(nx, ny, nz):
     yb = numpy.linspace(ybob, ytob, ny + 1)
     zb = numpy.linspace(zbob, ztob, nz + 1)
 
+<<<<<<< HEAD
     print((x, xb))
     print((y, yb))
     print((z, zb))
+=======
+    print x, xb
+    print y, yb
+    print z, zb
+>>>>>>> master
 
     xx = numpy.outer(numpy.ones(ny), x)
     yy = numpy.outer(y, numpy.ones(nx))
@@ -194,10 +204,17 @@ class TestESMPRegridderConserve(unittest.TestCase):
         maxii = MPI.COMM_WORLD.reduce(maxlii, op=MPI.MAX, root=self.rootPe)
 
         if self.pe == self.rootPe:
+<<<<<<< HEAD
             print((minsd, minsi))
             print((minsd, minii))
             print((maxsd, maxsi))
             print((maxsd, maxii))
+=======
+            print(minsd, minsi)
+            print(minsd, minii)
+            print(maxsd, maxsi)
+            print(maxsd, maxii)
+>>>>>>> master
             self.assertEqual(minsd, minsi)
             self.assertEqual(minsd, minii)
             self.assertEqual(maxsd, maxsi)
@@ -295,7 +312,11 @@ class TestESMPRegridderConserve(unittest.TestCase):
             self.assertEqual(maxsd, maxii)
 
     def xtest3_mvESMFRegrid_pregenSlabs(self):
+<<<<<<< HEAD
         print('\ntest3')
+=======
+        print '\ntest3'
+>>>>>>> master
         srcDims, srcXYZCenter, srcData, srcBounds = makeGrid(5, 4, 3)
         dstDims, dstXYZCenter, dstData, dstBounds = makeGrid(5, 4, 3)
 
@@ -321,8 +342,13 @@ class TestESMPRegridderConserve(unittest.TestCase):
 
         ro.apply(srcDataSec, dstDataSec, rootPe=None)
 
+<<<<<<< HEAD
         print(('src', srcDataSec.min(), srcDataSec.max(), srcDataSec.shape))
         print(('dst', dstDataSec.min(), dstDataSec.max(), dstDataSec.shape))
+=======
+        print 'src', srcDataSec.min(), srcDataSec.max(), srcDataSec.shape
+        print 'dst', dstDataSec.min(), dstDataSec.max(), dstDataSec.shape
+>>>>>>> master
 
         sA = ro.getSrcAreas(rootPe=self.rootPe)
         dA = ro.getDstAreas(rootPe=self.rootPe)
@@ -330,7 +356,11 @@ class TestESMPRegridderConserve(unittest.TestCase):
         dF = ro.getDstAreaFractions(rootPe=self.rootPe)
 
     def Xtest4_mvESMFRegrid_esmfSlabs(self):
+<<<<<<< HEAD
         print('\ntest4')
+=======
+        print '\ntest4'
+>>>>>>> master
         srcDims, srcXYZCenter, srcData, srcBounds = makeGrid(5, 4, 3)
         dstDims, dstXYZCenter, dstData, dstBounds = makeGrid(5, 4, 3)
 
@@ -344,8 +374,13 @@ class TestESMPRegridderConserve(unittest.TestCase):
         ro.computeWeights()
 
         ro.apply(srcData, dstData, rootPe=self.rootPe, globalIndexing=True)
+<<<<<<< HEAD
         print(('src', srcData.min(), srcData.max(), srcData.shape))
         print(('dst', dstData.min(), dstData.max(), dstData.shape))
+=======
+        print 'src', srcData.min(), srcData.max(), srcData.shape
+        print 'dst', dstData.min(), dstData.max(), dstData.shape
+>>>>>>> master
 
         sA = ro.getSrcAreas(rootPe=self.rootPe)
         dA = ro.getDstAreas(rootPe=self.rootPe)
@@ -353,7 +388,11 @@ class TestESMPRegridderConserve(unittest.TestCase):
         dF = ro.getDstAreaFractions(rootPe=self.rootPe)
 
     def xtest5_mvGenericRegrid(self):
+<<<<<<< HEAD
         print('\ntest5')
+=======
+        print '\ntest5'
+>>>>>>> master
         srcDims, srcXYZCenter, srcData, srcBounds = makeGrid(5, 4, 3)
         dstDims, dstXYZCenter, dstData, dstBounds = makeGrid(5, 4, 3)
 
@@ -366,8 +405,13 @@ class TestESMPRegridderConserve(unittest.TestCase):
         diag = {'srcAreas': None, 'srcAreaFractions': None,
                 'dstAreas': None, 'dstAreaFractions': None}
         ro.apply(srcData, dstData, rootPe=self.rootPe)
+<<<<<<< HEAD
         print(('src', srcData.min(), srcData.max(), srcData.shape))
         print(('dst', dstData.min(), dstData.max(), dstData.shape))
+=======
+        print 'src', srcData.min(), srcData.max(), srcData.shape
+        print 'dst', dstData.min(), dstData.max(), dstData.shape
+>>>>>>> master
 
         sA = diag['srcAreas']
         dA = diag['dstAreas']
@@ -376,7 +420,11 @@ class TestESMPRegridderConserve(unittest.TestCase):
 
 
 if __name__ == '__main__':
+<<<<<<< HEAD
     print("")  # Spacer
+=======
+    print ""  # Spacer
+>>>>>>> master
     ESMF.Manager(debug=True)
     suite = unittest.TestLoader().loadTestsFromTestCase(TestESMPRegridderConserve)
     unittest.TextTestRunner(verbosity=1).run(suite)

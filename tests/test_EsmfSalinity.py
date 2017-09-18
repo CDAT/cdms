@@ -253,6 +253,7 @@ class Test(unittest.TestCase):
 
         # check for nans
         if numpy.isnan(srcFracPtr).sum() > 0:
+<<<<<<< HEAD
             print('[%d] *** %d Nans found in srcFracPtr!!' % (self.pe, numpy.isnan().sum(srcFracPtr)))
         if numpy.isnan(dstFracPtr).sum() > 0:
             print('[%d] *** %d Nans found in dstFracPtr!!' % (self.pe, numpy.isnan().sum(dstFracPtr)))
@@ -260,6 +261,15 @@ class Test(unittest.TestCase):
         print('[%d] checksum of src: %g checksum of dst: %g' % (self.pe, srcFldSum, dstFldSum))
         print('[%d] src total area integral: %g dst total area integral: %g diff: %g\n' % \
             (self.pe, srcFldIntegral, dstFldIntegral, lackConservLocal))
+=======
+            print '[%d] *** %d Nans found in srcFracPtr!!' % (self.pe, numpy.isnan().sum(srcFracPtr))
+        if numpy.isnan(dstFracPtr).sum() > 0:
+            print '[%d] *** %d Nans found in dstFracPtr!!' % (self.pe, numpy.isnan().sum(dstFracPtr))
+
+        print '[%d] checksum of src: %g checksum of dst: %g' % (self.pe, srcFldSum, dstFldSum)
+        print '[%d] src total area integral: %g dst total area integral: %g diff: %g\n' % \
+            (self.pe, srcFldIntegral, dstFldIntegral, lackConservLocal)
+>>>>>>> master
 
         if HAS_MPI:
             lackConserv = MPI.COMM_WORLD.reduce(
@@ -268,7 +278,11 @@ class Test(unittest.TestCase):
             lackConserv = lackConservLocal
 
         if self.pe == 0:
+<<<<<<< HEAD
             print('ROOT: total lack of conservation (should be small): %f' % lackConserv)
+=======
+            print 'ROOT: total lack of conservation (should be small): %f' % lackConserv
+>>>>>>> master
 
         # cleanup
         regrid.destroy()
@@ -359,8 +373,13 @@ class Test(unittest.TestCase):
 
             dstDataMMin = dstDataM.min()
             dstDataMMax = dstDataM.max()
+<<<<<<< HEAD
             print('Number of zero valued cells', zeroVal.sum())
             print('min/max value of dstDataM: %f %f' % (dstDataMMin, dstDataMMax))
+=======
+            print 'Number of zero valued cells', zeroVal.sum()
+            print 'min/max value of dstDataM: %f %f' % (dstDataMMin, dstDataMMax)
+>>>>>>> master
             self.assertLess(dstDataMMax, so.max())
 
     def test2_ESMFRegrid(self):
@@ -407,7 +426,11 @@ class Test(unittest.TestCase):
         r.computeWeights()
         finish = (time.time() - start)
 
+<<<<<<< HEAD
         print('\nSeconds to computeWeights -> finish  = %f s' % numpy.round(finish, 2))
+=======
+        print '\nSeconds to computeWeights -> finish  = %f s' % numpy.round(finish, 2)
+>>>>>>> master
 
         # Get the source data slab/ create dst data container
         localSrcData = so[0, 0, srcSlab[0], srcSlab[1]].data
@@ -425,10 +448,17 @@ class Test(unittest.TestCase):
         if self.pe == 0:
             # checks
             dstDataMask = (dstData == so.missing_value)
+<<<<<<< HEAD
             print('number of masked values = ', dstDataMask.sum())
             dstDataMin = dstData[:].min()
             dstDataMax = dstData[:].max()
             print('min/max value of dstData: %f %f' % (dstDataMin, dstDataMax))
+=======
+            print 'number of masked values = ', dstDataMask.sum()
+            dstDataMin = dstData[:].min()
+            dstDataMax = dstData[:].max()
+            print 'min/max value of dstData: %f %f' % (dstDataMin, dstDataMax)
+>>>>>>> master
             self.assertLess(dstDataMax, so[0, 0, ...].max())
 
     def test3_genericRegrid(self):
@@ -466,11 +496,19 @@ class Test(unittest.TestCase):
         if self.pe == 0:
             # checks
             dstDataMask = (dstData == so.missing_value)
+<<<<<<< HEAD
             print('number of masked values = ', dstDataMask.sum())
             dstDataFltd = dstData * (1 - dstDataMask)
             dstDataMax = dstDataFltd.max()
             dstDataMin = dstDataFltd.min()
             print('min/max value of dstData: %f %f' % (dstDataMin, dstDataMax))
+=======
+            print 'number of masked values = ', dstDataMask.sum()
+            dstDataFltd = dstData * (1 - dstDataMask)
+            dstDataMax = dstDataFltd.max()
+            dstDataMin = dstDataFltd.min()
+            print 'min/max value of dstData: %f %f' % (dstDataMin, dstDataMax)
+>>>>>>> master
             self.assertLess(dstDataMax, so.max())
 
     def test4_cdmsRegrid(self):
@@ -493,13 +531,22 @@ class Test(unittest.TestCase):
         # checks
         if self.pe == 0:
             dstDataMask = dstData.mask
+<<<<<<< HEAD
             print('number of masked values = ', dstDataMask.sum())
+=======
+            print 'number of masked values = ', dstDataMask.sum()
+>>>>>>> master
             self.assertTrue(str(type(dstData)), str(type(clt)))
             dstDataMin = dstData.min()
             dstDataMax = dstData.max()
             zeroValCnt = (dstData == 0).sum()
+<<<<<<< HEAD
             print('Number of zero valued cells', zeroValCnt)
             print('min/max value of dstData: %f %f' % (dstDataMin, dstDataMax))
+=======
+            print 'Number of zero valued cells', zeroValCnt
+            print 'min/max value of dstData: %f %f' % (dstDataMin, dstDataMax)
+>>>>>>> master
             self.assertLess(dstDataMax, so.max())
 
     def test5_regrid(self):
@@ -517,8 +564,13 @@ class Test(unittest.TestCase):
             zeroValCnt = (dstData == 0).sum()
             dstDataMin = dstDataFltd.min()
             dstDataMax = dstDataFltd.max()
+<<<<<<< HEAD
             print('Number of zero valued cells', zeroValCnt)
             print('min/max value of dstData: %f %f' % (dstDataMin, dstDataMax))
+=======
+            print 'Number of zero valued cells', zeroValCnt
+            print 'min/max value of dstData: %f %f' % (dstDataMin, dstDataMax)
+>>>>>>> master
             self.assertLess(dstDataMax, so.max())
             if PLOT:
                 pylab.figure(1)
@@ -532,7 +584,11 @@ class Test(unittest.TestCase):
 
 
 if __name__ == '__main__':
+<<<<<<< HEAD
     print("")
+=======
+    print ""
+>>>>>>> master
 
     suite = unittest.TestLoader().loadTestsFromTestCase(Test)
     unittest.TextTestRunner(verbosity=1).run(suite)

@@ -14,13 +14,21 @@ class AliasList (UserList):
         UserList.__init__(self, alist)
 
     def __setitem__(self, i, value):
+<<<<<<< HEAD
         self.data[i] = value.lower()
 
     def __setslice(self, i, j, values):
         self.data[i:j] = [x.lower() for x in values]
+=======
+        self.data[i] = string.lower(value)
+
+    def __setslice(self, i, j, values):
+        self.data[i:j] = map(lambda x: string.lower(x), values)
+>>>>>>> master
 
     def append(self, value):
         self.data.append(value.lower())
+
 
 
 level_aliases = AliasList(['plev'])
@@ -120,9 +128,13 @@ class CFConvention(COARDSConvention):
                 # Note: not everything referenced by .coordinates attribute is
                 # in fact a coordinate axis, e.g., scalar coordinates
                 if not WITH_GRIDSPEC_SUPPORT:
+<<<<<<< HEAD
                     print(
                         'Warning: coordinate attribute points to non-existent variable: %s' %
                         key)
+=======
+                    print 'Warning: coordinate attribute points to non-existent variable: %s' % key
+>>>>>>> master
                 del coorddict[key]
                 continue
             # Omit scalar dimensions, and dimensions greater than 2-D
@@ -204,11 +216,23 @@ class CFConvention(COARDSConvention):
     def axisIsLatitude(self, axis):
         if (hasattr(axis, 'axis') and axis.axis == 'Y'):
             return True
+<<<<<<< HEAD
         elif (hasattr(axis, 'units') and axis.units.lower() in [
              'degrees_north', 'degree_north', 'degree_n', 'degrees_n', 'degreen', 'degreesn'] and
              not (axis.isLongitude() or axis.isLevel() or axis.isTime())):
             return True
         elif (hasattr(axis, 'standard_name') and axis.standard_name.lower() == 'latitude'):
+=======
+        elif (hasattr(axis, 'units') and string.lower(axis.units) in ['degrees_north',
+                                                                      'degree_north',
+                                                                      'degree_n',
+                                                                      'degrees_n'
+                                                                      'degreen',
+                                                                      'degreesn'] and
+              not (axis.isLongitude() or axis.isLevel() or axis.isTime())):
+            return True
+        elif (hasattr(axis, 'standard_name') and string.lower(axis.standard_name) == 'latitude'):
+>>>>>>> master
             return True
         else:
             return AbstractConvention.axisIsLatitude(self, axis)
@@ -216,11 +240,20 @@ class CFConvention(COARDSConvention):
     def axisIsLongitude(self, axis):
         if (hasattr(axis, 'axis') and axis.axis == 'X'):
             return True
+<<<<<<< HEAD
         elif (hasattr(axis, 'units') and axis.units.lower() in [
              'degrees_east', 'degree_east', 'degree_e', 'degrees_e', 'degreee', 'degreese'] and
              not (axis.isLatitude() or axis.isLevel() or axis.isTime())):
             return True
         elif (hasattr(axis, 'standard_name') and axis.standard_name.lower() == 'longitude'):
+=======
+        elif (hasattr(axis, 'units') and string.lower(axis.units) in
+                ['degrees_east', 'degree_east', 'degree_e',
+                 'degrees_e', 'degreee', 'degreese'] and
+                not (axis.isLatitude() or axis.isLevel() or axis.isTime())):
+            return True
+        elif (hasattr(axis, 'standard_name') and string.lower(axis.standard_name) == 'longitude'):
+>>>>>>> master
             return True
         else:
             return AbstractConvention.axisIsLongitude(self, axis)
@@ -232,9 +265,13 @@ class CFConvention(COARDSConvention):
             if boundsid in dset.variables:
                 result = dset[boundsid]
             else:
+<<<<<<< HEAD
                 print(
                     'Warning: bounds variable not found in %s: %s' %
                     (dset.id, boundsid))
+=======
+                print 'Warning: bounds variable not found in %s: %s' % (dset.id, boundsid)
+>>>>>>> master
                 result = None
         else:
             result = None

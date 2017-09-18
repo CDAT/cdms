@@ -1,5 +1,8 @@
 #!/usr/bin/env python
+<<<<<<< HEAD
 from __future__ import print_function
+=======
+>>>>>>> master
 import shutil
 import glob
 import sys
@@ -92,7 +95,11 @@ def findDiffFiles(log):
                         file2 = log[k].split()[2]
                     except:
                         file2 = log[k].split()[1][:-1]+log[j].split()[0]
+<<<<<<< HEAD
                         print(("+++++++++++++++++++++++++",file2))
+=======
+                        print "+++++++++++++++++++++++++",file2
+>>>>>>> master
             if log[j].find("Saving image diff") > -1:
                 diff = log[j].split()[-1]
                 # break
@@ -100,10 +107,17 @@ def findDiffFiles(log):
 
 
 def run_command(command, join_stderr=True):
+<<<<<<< HEAD
     if isinstance(command, str):
         command = shlex.split(command)
     if args.verbosity > 0:
         print("Executing %s in %s" % (" ".join(command), os.getcwd()))
+=======
+    if isinstance(command, basestring):
+        command = shlex.split(command)
+    if args.verbosity > 0:
+        print "Executing %s in %s" % (" ".join(command), os.getcwd())
+>>>>>>> master
     if join_stderr:
         stderr = subprocess.STDOUT
     else:
@@ -119,7 +133,11 @@ def run_command(command, join_stderr=True):
         read = P.stdout.readline().rstrip()
         out.append(read)
         if args.verbosity > 1 and len(read) != 0:
+<<<<<<< HEAD
             print(read)
+=======
+            print read
+>>>>>>> master
     return P, out
 
 
@@ -165,6 +183,7 @@ if args.subdir:
     tmpdir = tempfile.mkdtemp()
     os.chdir(tmpdir)
     names = [ os.path.join(root,t) for t in names]
+<<<<<<< HEAD
     print("RUNNNIG FROM:",tmpdir)
 
 if len(names)==0:
@@ -173,6 +192,16 @@ if len(names)==0:
 
 if args.verbosity > 1:
     print(("Names:", names))
+=======
+    print "RUNNNIG FROM:",tmpdir
+
+if len(names)==0:
+    print "No tests to run"
+    sys.exit(0)
+
+if args.verbosity > 1:
+    print("Names:", names)
+>>>>>>> master
 
 # Make sure we have sample data
 cdat_info.download_sample_data_files(os.path.join(sys.prefix,"share","cdms2","test_data_files.txt"),cdat_info.get_sampledata_path())
@@ -183,7 +212,11 @@ results = {}
 failed = []
 for d in outs:
     results.update(d)
+<<<<<<< HEAD
     nm = list(d.keys())[0]
+=======
+    nm = d.keys()[0]
+>>>>>>> master
     if d[nm]["result"] != 0:
         failed.append(nm)
 if args.subdir:
@@ -194,12 +227,21 @@ f.write(repr(failed))
 f.close()
 
 if args.verbosity > 0:
+<<<<<<< HEAD
     print("Ran %i tests, %i failed (%.2f%% success)" %\
         (len(outs), len(failed), 100. - float(len(failed)) / len(outs) * 100.))
     if len(failed) > 0:
         print("Failed tests:")
         for f in failed:
             print("\t", f)
+=======
+    print "Ran %i tests, %i failed (%.2f%% success)" %\
+        (len(outs), len(failed), 100. - float(len(failed)) / len(outs) * 100.)
+    if len(failed) > 0:
+        print "Failed tests:"
+        for f in failed:
+            print "\t", f
+>>>>>>> master
 if args.html or args.package or args.dropbox:
     if not os.path.exists("tests_html"):
         os.makedirs("tests_html")
@@ -208,8 +250,13 @@ if args.html or args.package or args.dropbox:
     js = ""
 
     fi = open("index.html", "w")
+<<<<<<< HEAD
     print("<!DOCTYPE html>", file=fi)
     print("""<html><head><title>VCS Test Results %s</title>
+=======
+    print>>fi, "<!DOCTYPE html>"
+    print>>fi, """<html><head><title>VCS Test Results %s</title>
+>>>>>>> master
     <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.13/css/jquery.dataTables.css">
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.12.4.js"></script>
     <script type="text/javascript" charset="utf8"
@@ -222,15 +269,24 @@ if args.html or args.package or args.dropbox:
             });
                 } );
     </script>
+<<<<<<< HEAD
     </head>""" % time.asctime(), file=fi)
     print("<body><h1>VCS Test results: %s</h1>" % time.asctime(), file=fi)
     print("<table id='table_id' class='display'>", file=fi)
     print("<thead><tr><th>Test</th><th>Result</th><th>Start Time</th><th>End Time</th><th>Time</th></tr></thead>", file=fi)
     print("<tfoot><tr><th>Test</th><th>Result</th><th>Start Time</th><th>End Time</th><th>Time</th></tr></tfoot>", file=fi)
+=======
+    </head>""" % time.asctime()
+    print>>fi, "<body><h1>VCS Test results: %s</h1>" % time.asctime()
+    print>>fi, "<table id='table_id' class='display'>"
+    print>>fi, "<thead><tr><th>Test</th><th>Result</th><th>Start Time</th><th>End Time</th><th>Time</th></tr></thead>"
+    print>>fi, "<tfoot><tr><th>Test</th><th>Result</th><th>Start Time</th><th>End Time</th><th>Time</th></tr></tfoot>"
+>>>>>>> master
 
     for t in sorted(results.keys()):
         result = results[t]
         nm = t.split("/")[-1][:-3]
+<<<<<<< HEAD
         print("<tr><td>%s</td>" % nm, end=' ', file=fi)
         fe = codecs.open("%s.html" % nm, "w", encoding="utf-8")
         print("<!DOCTYPE html>", file=fe)
@@ -263,12 +319,50 @@ if args.html or args.package or args.dropbox:
             time.ctime(t["start"]), time.ctime(t["end"]), t["end"] - t["start"]), file=fi)
 
     print("</table></body></html>", file=fi)
+=======
+        print>>fi, "<tr><td>%s</td>" % nm,
+        fe = codecs.open("%s.html" % nm, "w", encoding="utf-8")
+        print>>fe, "<!DOCTYPE html>"
+        print>>fe, "<html><head><title>%s</title>" % nm
+        if result["result"] == 0:
+            print>>fi, "<td><a href='%s.html'>OK</a></td>" % nm,
+            print>>fe, "</head><body>"
+            print>>fe, "<a href='index.html'>Back To Results List</a>"
+        else:
+            print>>fi, "<td><a href='%s.html'>Fail</a></td>" % nm,
+            print>>fe, "<script type='text/javascript'>%s</script></head><body>" % js
+            print>>fe, "<a href='index.html'>Back To Results List</a>"
+            print>>fe, "<h1>Failed test: %s on %s</h1>" % (nm, time.asctime())
+            file1, file2, diff = findDiffFiles(result["log"])
+            if file1 != "":
+                print>>fe, '<div id="comparison"></div><script type="text/javascript"> ImageCompare.compare(' +\
+                    'document.getElementById("comparison"), "%s", "%s"); </script>' % (
+                        abspath(file2, nm, "test"), abspath(file1, nm, "source"))
+                print>>fe, "<div><a href='index.html'>Back To Results List</a></div>"
+                print>>fe, "<div id='diff'><img src='%s' alt='diff file'></div>" % abspath(
+                    diff, nm, "diff")
+                print>>fe, "<div><a href='index.html'>Back To Results List</a></div>"
+        print>>fe, '<div id="output"><h1>Log</h1><pre>%s</pre></div>' % "\n".join(result[
+                                                                                  "log"])
+        print>>fe, "<a href='index.html'>Back To Results List</a>"
+        print>>fe, "</body></html>"
+        fe.close()
+        t = result["times"]
+        print>>fi, "<td>%s</td><td>%s</td><td>%s</td></tr>" % (
+            time.ctime(t["start"]), time.ctime(t["end"]), t["end"] - t["start"])
+
+    print>>fi, "</table></body></html>"
+>>>>>>> master
     fi.close()
     if args.html:
         webbrowser.open("file://%s/index.html" % os.getcwd())
 else:
     if len(failed) == 0 and args.subdir:
+<<<<<<< HEAD
         print("Remving temp run dir: %s" % tmpdir)
+=======
+        print "Remving temp run dir: %s" % tmpdir
+>>>>>>> master
         os.chdir(root)
         shutil.rmtree(tmpdir)
 
@@ -277,12 +371,20 @@ if args.package or args.dropbox:
     os.chdir(tmpdir)
     tnm = "results_%s_%s_%s.tar.bz2" % (os.uname()[0],os.uname()[1],time.strftime("%Y-%m-%d_%H:%M"))
     t = tarfile.open(tnm, "w:bz2")
+<<<<<<< HEAD
     print("PATH TARRING FROM: %s" % os.getcwd())
+=======
+    print "PATH TARRING FROM: %s" % os.getcwd()
+>>>>>>> master
     t.add("tests_html")
     t.add("tests_html")
     t.close()
     if args.verbosity > 0:
+<<<<<<< HEAD
         print("Packaged Result Info in:", tnm)
+=======
+        print "Packaged Result Info in:", tnm
+>>>>>>> master
 if args.dropbox: 
     import dropbox
     dbx = dropbox.Dropbox(os.environ.get("DROPBOX_TOKEN",""))
@@ -291,6 +393,10 @@ if args.dropbox:
     f.close()
 
 if args.subdir and len(failed)!=0:
+<<<<<<< HEAD
     print("Do not removing to clean temp directory: %s" % tmpdir)
+=======
+    print "Do not removing to clean temp directory: %s" % tmpdir
+>>>>>>> master
 os.chdir(root)
 sys.exit(len(failed))

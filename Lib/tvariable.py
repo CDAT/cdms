@@ -9,6 +9,10 @@ Contains also the write part of the old cu interface.
 import sys
 import json
 import re
+<<<<<<< HEAD
+=======
+import types
+>>>>>>> master
 import numpy
 from numpy import sctype2char
 from .error import CDMSError
@@ -43,14 +47,22 @@ def fromJSON(jsn):
                 a["_values"],
                 dtype=a["_dtype"]),
             id=a["id"])
+<<<<<<< HEAD
         for k, v in a.items():
+=======
+        for k, v in a.iteritems():
+>>>>>>> master
             if k not in ["_values", "id", "_dtype"]:
                 setattr(ax, k, v)
         axes.append(ax)
     # Now prep the variable
     V = createVariable(D["_values"], id=D["id"], typecode=D["_dtype"])
     V.setAxisList(axes)
+<<<<<<< HEAD
     for k, v in D.items():
+=======
+    for k, v in D.iteritems():
+>>>>>>> master
         if k not in ["id", "_values", "_axes",
                      "_grid", "_fill_value", "_dtype", ]:
             setattr(V, k, v)
@@ -163,7 +175,11 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             pass
         if fill_value is not None:
             self._setmissing(fill_value)
+<<<<<<< HEAD
         if attributes is not None and "_FillValue" in list(attributes.keys()):
+=======
+        if attributes is not None and "_FillValue" in attributes.keys():
+>>>>>>> master
             self._setmissing(attributes["_FillValue"])
 
         # tile index, None means no mosaic
@@ -639,8 +655,13 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         sphereRadius: radius of the earth
         maxElev: maximum elevation for representation on the sphere
         """
+<<<<<<< HEAD
         from . import mvVTKSGWriter
         from . import mvVsWriter
+=======
+        import mvVTKSGWriter
+        import mvVsWriter
+>>>>>>> master
         try:
             # required by mvVsWriter
             import tables                # noqa
@@ -962,4 +983,8 @@ if __name__ == '__main__':
         f.getdimattribute(
             0, 'bounds'), f2.getdimattribute(
             0, 'bounds'))
+<<<<<<< HEAD
     print("Transient Variable test passed ok.")
+=======
+    print "Transient Variable test passed ok."
+>>>>>>> master

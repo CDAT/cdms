@@ -74,17 +74,22 @@ class TestMV2(basetest.CDMSBaseTest):
     def testMulDiv(self):
         scalar_mul = self.u_file * 2
         broadcast_mul = scalar_mul * self.other_u_file
+<<<<<<< HEAD:Test/test_mv2.py
+        self.assertTrue(MV2.allequal(broadcast_mul[0] / self.u_file[0] / self.other_u_file, 2))
+        scalar_right = 1 / self.u_file[:]
+=======
         self.assertTrue(
             MV2.allequal(
                 broadcast_mul[0] /
                 self.u_file[0] /
                 self.other_u_file,
                 2))
-        scalar_right = 1 / self.u_file[:]
+        scalar_right = 1 / self.u_file
+>>>>>>> master:tests/test_mv2.py
         self.assertTrue(MV2.allclose(scalar_mul * scalar_right, 2))
 
     def testTypeCoercion(self):
-        x9 = 3 * self.u_file[:]
+        x9 = 3 * self.u_file
         x15 = x9.astype(numpy.float32)
         self.assertTrue(x15.dtype.char == numpy.sctype2char(numpy.float32))
 
@@ -332,3 +337,7 @@ class TestMV2(basetest.CDMSBaseTest):
 
 if __name__ == "__main__":
     basetest.run()
+<<<<<<< HEAD:Test/test_mv2.py
+
+=======
+>>>>>>> master:tests/test_mv2.py

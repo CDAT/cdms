@@ -45,9 +45,14 @@ class TestCDMSFileReadWrite(basetest.CDMSBaseTest):
         self.assertEqual(self.file.Conventions, "CF1.0")
 
     def testRewriteAxis(self):
+<<<<<<< HEAD:Test/test_cdmsfile_rw.py
         self.var.getLatitude()[self.NLAT // 2] = 6.5
+        self.assertNotEqual(self.var.getLatitude()[self.NLAT//2], self.latarr[self.NLAT//2])
+=======
+        self.var.getLatitude()[self.NLAT / 2] = 6.5
         self.assertNotEqual(self.var.getLatitude()[
-                            self.NLAT // 2], self.latarr[self.NLAT // 2])
+                            self.NLAT / 2], self.latarr[self.NLAT / 2])
+>>>>>>> master:tests/test_cdmsfile_rw.py
         self.var.getLatitude().standard_name = "Latitude"
         self.assertEqual(self.var.getLatitude().standard_name, "Latitude")
         self.latarr[self.NLAT // 2] = 6.5
@@ -72,8 +77,12 @@ class TestCDMSFileReadWrite(basetest.CDMSBaseTest):
         self.assertEqual(var.attributes["long_name"], "Test variable")
         self.assertEqual(var.long_name, "Test variable")
         self.assertEqual(var[0, 4, 0], -self.u[0, 4, 0])
+<<<<<<< HEAD:Test/test_cdmsfile_rw.py
+        self.assertEqual(var.getLatitude()[self.NLAT//2], self.latarr[self.NLAT//2])
+=======
         self.assertEqual(var.getLatitude()[
-                         self.NLAT // 2], self.latarr[self.NLAT // 2])
+                         self.NLAT / 2], self.latarr[self.NLAT / 2])
+>>>>>>> master:tests/test_cdmsfile_rw.py
         self.assertEqual(var.getLatitude().standard_name, "Latitude")
         p0 = g["p0"]
         val = p0.getValue()

@@ -51,12 +51,12 @@ class TestCDMSFileMaskedArrayReadWrite(basetest.CDMSBaseTest):
 
     def testRewriteAxis(self):
         latAttrs = self.var.getLatitude().attributes
-        self.var.getLatitude()[self.NLAT // 2] = 6.5
+        self.var.getLatitude()[self.NLAT / 2] = 6.5
         self.assertNotEqual(self.var.getLatitude()[
-                            self.NLAT // 2], self.latarr[self.NLAT // 2])
+                            self.NLAT / 2], self.latarr[self.NLAT / 2])
         self.var.getLatitude().standard_name = "Latitude"
         self.assertEqual(self.var.getLatitude().standard_name, "Latitude")
-        self.latarr[self.NLAT // 2] = 6.5
+        self.latarr[self.NLAT / 2] = 6.5
 
     def testMaskedVariable(self):
         masked = self.file.createVariable(

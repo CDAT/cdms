@@ -20,9 +20,14 @@ try:
     from pycf import libCFConfig, __path__
     LIBCF = __path__[0] + '/pylibcf'
 
+<<<<<<< HEAD
 except BaseException:
     # raise ImportError, 'Error: could not import pycf'
     print('Error: could not import pycf')
+=======
+except BaseException:    # raise ImportError, 'Error: could not import pycf'
+    print 'Error: could not import pycf'
+>>>>>>> master
 
 
 def open(hostfile, mode='r'):
@@ -204,9 +209,15 @@ class Host:
 
         # Populate the variables dictionary, avoid the grids
         self.variables = {}
+<<<<<<< HEAD
         for item in list(self.statVars.keys()):
             self.variables[item] = StaticFileVariable(self, item)
         for item in list(self.timeVars.keys()):
+=======
+        for item in self.statVars.keys():
+            self.variables[item] = StaticFileVariable(self, item)
+        for item in self.timeVars.keys():
+>>>>>>> master
             self.variables[item] = TimeFileVariable(self, item)
 
     def __initialize(self):
@@ -310,7 +321,11 @@ class Host:
         Coordinates variables contained within the host object
         @return list of coordinate names
         """
+<<<<<<< HEAD
         return list(self.gridVars.keys())
+=======
+        return self.gridVars.keys()
+>>>>>>> master
 
     def getNumGrids(self):
         """
@@ -396,14 +411,22 @@ class Host:
         List a variable's dimensions
         @return [nGrids, (n0, n1, ...)]
         """
+<<<<<<< HEAD
         return list(self.dimensions.keys())
+=======
+        return self.dimensions.keys()
+>>>>>>> master
 
     def listglobal(self):
         """
         List global attributes of host file
         @return a list of the global attributes in the file
         """
+<<<<<<< HEAD
         return list(self.attributes.keys())
+=======
+        return self.attributes.keys()
+>>>>>>> master
 
     def getglobal(self, attName):
         """
@@ -529,13 +552,19 @@ def test():
 
     options, args = parser.parse_args()
     if not options.hostFilename:
+<<<<<<< HEAD
         print("""need to provide a host file, use -h
 to get a full list of options""")
+=======
+        print """need to provide a host file, use -h
+to get a full list of options"""
+>>>>>>> master
         sys.exit(1)
 
     print('open file..., create grdspec file object...')
     gf = cdms2.open(options.hostFilename)
     if gf._status_ == 'closed':
+<<<<<<< HEAD
         print("File not opened")
         sys.exit(1)
     print()
@@ -556,14 +585,42 @@ to get a full list of options""")
     print(gf['distance'][0].shape)
     print('acess time dependent data...', "V" in gf.listvariables())
     print(gf['V'][0].size)
+=======
+        print "File not opened"
+        sys.exit(1)
+    print
+    print "type=", type(gf)
+    print 'listvariable...'
+    print gf.listvariable()
+    print 'listattributes...'
+    print gf.listattribute('distance')
+    print gf.listattribute('v')
+    print 'listglobals...'
+    print gf.listglobal()
+    print 'print...'
+    print gf
+    print 'access static data...', 'distance' in gf.listvariable()
+    print type(gf['distance'])
+    di = gf['distance']
+    print di[0].size
+    print gf['distance'][0].shape
+    print 'acess time dependent data...', "V" in gf.listvariables()
+    print gf['V'][0].size
+>>>>>>> master
 
     # Test the mosaic
     print('getMosaic...', 'getMosaic' in dir(gf))
     mosaic = gf.getMosaic()
     for c in mosaic.coordinate_names:
+<<<<<<< HEAD
         print(c)
     for t in mosaic.tile_contacts:
         print("%s -> %s" % (t, mosaic.tile_contacts[t]))
+=======
+        print c
+    for t in mosaic.tile_contacts:
+        print "%s -> %s" % (t, mosaic.tile_contacts[t])
+>>>>>>> master
 
 ##############################################################################
 

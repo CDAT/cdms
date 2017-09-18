@@ -1,8 +1,16 @@
 
 """Classes to support easy selection of climate data"""
+<<<<<<< HEAD
 from .axis import axisMatches
 from .error import CDMSError
 from .grid import AbstractRectGrid, defaultRegion, setRegionSpecs, LongitudeType, LatitudeType, TimeType, VerticalType
+=======
+import types
+# import cdtime
+from axis import axisMatches
+from error import CDMSError
+from grid import AbstractRectGrid, defaultRegion, setRegionSpecs, LongitudeType, LatitudeType, TimeType, VerticalType
+>>>>>>> master
 
 _debug = 0
 
@@ -53,7 +61,11 @@ class Selector:
             else:
                 self.refine(positionalComponent(a))
 
+<<<<<<< HEAD
         for k, v in list(kwargs.items()):
+=======
+        for k, v in kwargs.items():
+>>>>>>> master
             self.refine(kwselect(k, v))
 
     def __repr__(self):
@@ -163,12 +175,17 @@ class Selector:
         while(components):
             axes = result.getAxisList()
             if _debug:
+<<<<<<< HEAD
                 print("Axes:", axes)
+=======
+                print "Axes:", axes
+>>>>>>> master
             specifications = [':'] * len(axes)
             confined_by = [None] * len(axes)
             aux = {}  # for extra state
             overflow = []
             if _debug:
+<<<<<<< HEAD
                 print("Component list:", components)
             for c in components:
                 if c.specify(result, axes, specifications, confined_by, aux):
@@ -183,6 +200,22 @@ class Selector:
                     print("-----------------")
             if _debug:
                 print('About to call subRegion:', specifications)
+=======
+                print "Component list:", components
+            for c in components:
+                if c.specify(result, axes, specifications, confined_by, aux):
+                    if _debug:
+                        print 'Defer ' + repr(c)
+                    overflow.append(c)
+                elif _debug:
+                    print "After applying", c, ":"
+                    print "specifications=", specifications
+                    print "Confined_by", confined_by
+                    print "aux", aux
+                    print "-----------------"
+            if _debug:
+                print 'About to call subRegion:', specifications
+>>>>>>> master
             fetched = result.subRegion(*specifications)
             axismap = list(range(len(axes)))
             for c in components:
@@ -201,9 +234,15 @@ class Selector:
            grid is not None or \
            raw != 0 or \
            result is variable:
+<<<<<<< HEAD
             # result is variable when there are no components, for example.
             return result.subRegion(squeeze=squeeze, order=order, grid=grid,
                                     raw=raw)
+=======
+                # result is variable when there are no components, for example.
+                return result.subRegion(squeeze=squeeze, order=order,
+                                        grid=grid, raw=raw)
+>>>>>>> master
         else:
             return result
 

@@ -40,7 +40,11 @@ class AttributeDict:
 
     def items(self):
         result = []
+<<<<<<< HEAD
         for name, value in list(self._owner.__dict__.items()):
+=======
+        for name, value in self._owner.__dict__.items():
+>>>>>>> master
             if self._owner.is_internal_attribute(name):
                 continue
             result.append((name, value))
@@ -48,7 +52,11 @@ class AttributeDict:
 
     def keys(self):
         result = []
+<<<<<<< HEAD
         for name in list(self._owner.__dict__.keys()):
+=======
+        for name in self._owner.__dict__.keys():
+>>>>>>> master
             if self._owner.is_internal_attribute(name):
                 continue
             result.append(name)
@@ -63,7 +71,11 @@ class AttributeDict:
 
     def values(self):
         result = []
+<<<<<<< HEAD
         for name, value in list(self._owner.__dict__.items()):
+=======
+        for name, value in self._owner.__dict__.items():
+>>>>>>> master
             if self._owner.is_internal_attribute(name):
                 continue
             result.append(value)
@@ -96,7 +108,11 @@ class InternalAttributesClass (_PCLASS):
         if not isinstance(newAttributes, dict) and \
            not isinstance(newAttributes, AttributeDict):
             raise ValueError("Argument must be a dictionary")
+<<<<<<< HEAD
         for n in list(self.__dict__.keys()):
+=======
+        for n in self.__dict__.keys():
+>>>>>>> master
             if not self.is_internal_attribute(n):
                 del self.__dict__[n]
         for n, v in list(newAttributes.items()):

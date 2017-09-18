@@ -554,7 +554,11 @@ class XMLParser:
             if namespace:
                 self.syntax_error(
                     'namespace declaration inside namespace declaration')
+<<<<<<< HEAD
             for attrname in list(attrdict.keys()):
+=======
+            for attrname in attrdict.keys():
+>>>>>>> master
                 if attrname not in self.__xml_namespace_attributes:
                     self.syntax_error(
                         "unknown attribute `%s' in xml:namespace tag" %
@@ -657,7 +661,11 @@ class XMLParser:
         # translate namespace of attributes
         # map from new name to old name (used for error reporting)
         attrnamemap = {}
+<<<<<<< HEAD
         for key in list(attrdict.keys()):
+=======
+        for key in attrdict.keys():
+>>>>>>> master
             attrnamemap[key] = key
         if self.__use_namespaces:
             nattrdict = {}
@@ -687,12 +695,20 @@ class XMLParser:
             attrdict = nattrdict
         attributes = self.attributes.get(nstag)
         if attributes is not None:
+<<<<<<< HEAD
             for key in list(attrdict.keys()):
+=======
+            for key in attrdict.keys():
+>>>>>>> master
                 if key not in attributes:
                     self.syntax_error(
                         "unknown attribute `%s' in tag `%s'" %
                         (attrnamemap[key], tagname))
+<<<<<<< HEAD
             for key, val in list(attributes.items()):
+=======
+            for key, val in attributes.items():
+>>>>>>> master
                 if val is not None and key not in attrdict:
                     attrdict[key] = val
         method = self.elements.get(nstag, (None, None))[0]
@@ -846,11 +862,19 @@ class TestXMLParser(XMLParser):
 
     def handle_xml(self, encoding, standalone):
         self.flush()
+<<<<<<< HEAD
         print('xml: encoding =', encoding, 'standalone =', standalone)
 
     def handle_doctype(self, tag, pubid, syslit, data):
         self.flush()
         print('DOCTYPE:', tag, repr(data))
+=======
+        print 'xml: encoding =', encoding, 'standalone =', standalone
+
+    def handle_doctype(self, tag, pubid, syslit, data):
+        self.flush()
+        print 'DOCTYPE:', tag, repr(data)
+>>>>>>> master
 
     def handle_data(self, data):
         self.testdata = self.testdata + data
@@ -861,6 +885,7 @@ class TestXMLParser(XMLParser):
         data = self.testdata
         if data:
             self.testdata = ""
+<<<<<<< HEAD
             print('data:', repr(data))
 
     def handle_cdata(self, data):
@@ -870,6 +895,17 @@ class TestXMLParser(XMLParser):
     def handle_proc(self, name, data):
         self.flush()
         print('processing:', name, repr(data))
+=======
+            print 'data:', repr(data)
+
+    def handle_cdata(self, data):
+        self.flush()
+        print 'cdata:', repr(data)
+
+    def handle_proc(self, name, data):
+        self.flush()
+        print 'processing:', name, repr(data)
+>>>>>>> master
 
     def handle_comment(self, data):
         self.flush()
@@ -936,7 +972,11 @@ def test(args=None):
         try:
             f = open(file, 'r')
         except IOError as msg:
+<<<<<<< HEAD
             print(file, ":", msg)
+=======
+            print file, ":", msg
+>>>>>>> master
             sys.exit(1)
 
     data = f.read()
@@ -957,11 +997,19 @@ def test(args=None):
         t1 = time()
         print(msg)
         if do_time:
+<<<<<<< HEAD
             print('total time: %g' % (t1 - t0))
         sys.exit(1)
     t1 = time()
     if do_time:
         print('total time: %g' % (t1 - t0))
+=======
+            print 'total time: %g' % (t1 - t0)
+        sys.exit(1)
+    t1 = time()
+    if do_time:
+        print 'total time: %g' % (t1 - t0)
+>>>>>>> master
 
 
 if __name__ == '__main__':

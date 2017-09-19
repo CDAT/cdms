@@ -4,9 +4,8 @@ import numpy
 import tempfile
 import cdms2
 import os
-import cdat_info
-from imp import reload
 import imp
+import cdat_info
 
 
 class CDMSBaseTest(unittest.TestCase):

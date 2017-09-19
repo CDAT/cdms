@@ -34,7 +34,7 @@ def diffElements(el1, el2):
 
 
 class TestCDScan(basetest.CDMSBaseTest):
-    def dtestScan(self):
+    def testScan(self):
         argv = 'cdscan -q -d test -x some_junk.xml u_2000.nc u_2001.nc u_2002.nc v_2000.nc v_2001.nc v_2002.nc'.split()
         pth = cdat_info.get_sampledata_path()
         os.chdir(pth)

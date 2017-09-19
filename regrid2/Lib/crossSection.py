@@ -7,6 +7,7 @@ from . import _regrid
 from .error import RegridError
 
 
+
 class CrossSectionRegridder:
     """    #-----------------------------------------------------------------------------------------------
     #
@@ -89,8 +90,8 @@ class CrossSectionRegridder:
         self.nlevi = len(levIn)
         self.nlevo = len(levOut)
 
-        latIn, self.nlati = checkdimension(latIn[:], 'input latitude')
-        latOut, self.nlato = checkdimension(latOut[:], 'output latitude')
+        latIn, self.nlati = checkdimension(latIn, 'input latitude')
+        latOut, self.nlato = checkdimension(latOut, 'output latitude')
 
         # --- check for a single grid point in the latitude-level plane
 
@@ -692,11 +693,7 @@ def get_latitude_wts_bnds(checklatpass):
         return (wts, bnds)
 
     # ------ must be generic latitude -------
-
-    wts, bnds = generic_wts_bnds(checklat)
-    if reverse_latitude == 'yes':
-        wts = wts[::-1]
-        bnds = bnds[::-1]
+    wts, bnds = generic_wts_bnds(checklatpass)
     return (wts, bnds)
 
 

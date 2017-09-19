@@ -179,7 +179,6 @@ class AbstractDatabase(CdmsObj):
         return "<Database '%s'>" % (self.uri)
 
 # internattr.add_internal_attribute(AbstractDatabase, 'uri', 'path')
-
 # Database implemented via LDAP (Lightweight Directory Access Protocol)
 
 

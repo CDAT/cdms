@@ -59,7 +59,7 @@ try:
       mpicc="mpicc"
       subprocess.check_call([mpicc,"--version"])
     os.environ["CC"]=mpicc
-    os.environ["CFLAGS"]="-w -g"
+    os.environ["CFLAGS"]="-w -g -O0"
 except:
     os.environ["CFLAGS"]="-w -g -O0"
     pass
@@ -73,17 +73,18 @@ setup (name = "cdms2",
        package_dir = {'cdms2': 'Lib'},
        include_dirs = ['Include', 'Include/py3c', numpy.lib.utils.get_include()] + cdat_info.cdunif_include_directories,
        scripts = ['Script/cdscan', 'Script/convertcdms.py',"Script/myproxy_logon"],
+       data_files = [("share/cdms2",["share/test_data_files.txt"])],
        ext_modules = [Extension('cdms2.Cdunif',
                                 ['Src/Cdunifmodule.c'],
                                 library_dirs = cdat_info.cdunif_library_directories,
                                 libraries = cdat_info.cdunif_libraries,
                                 define_macros = macros,
                                 runtime_library_dirs = [libs_pth],
-                                extra_compile_args = [ "-L%s"% libs_pth],
+                                extra_compile_args = [ "-L%s"% libs_pth, "-g", "-O0"],
                                 ),
                       Extension('cdms2._bindex',
                                 ['Src/_bindexmodule.c', 'Src/bindex.c'],
-                                extra_compile_args = [ "-L%s"% libs_pth],
+                                extra_compile_args = [ "-L%s"% libs_pth, "-g", "-O0"],
                                 runtime_library_dirs = [libs_pth],
                                 ) 
                      ]

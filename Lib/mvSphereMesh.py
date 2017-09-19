@@ -11,6 +11,7 @@ import numpy
 from functools import reduce
 
 
+
 class SphereMesh:
 
     def __init__(self, var, sphereThickness=0.1):
@@ -138,6 +139,7 @@ def test2DRect():
     print(sphere_mesh.getXYZCoords())
 
 
+
 def test2D():
     """
     Test data on 2D curvilinear grid
@@ -173,6 +175,7 @@ def test2D():
                                )
     sphere_mesh = SphereMesh(var)
     print(sphere_mesh.getXYZCoords())
+
 
 
 def test3DRect():

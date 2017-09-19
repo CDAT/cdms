@@ -9,9 +9,8 @@ class TestNumpyWithNetCDF4(basetest.CDMSBaseTest):
         cdms2.setNetcdfClassicFlag(0)
         for i, t in enumerate([numpy.byte, numpy.short, numpy.int32, numpy.uint32, numpy.float, numpy.float32,
                                numpy.double, numpy.ubyte, numpy.ushort, numpy.int, numpy.uint, numpy.int64, numpy.uint64]):
-#        for i, t in enumerate([ numpy.int    ]):
             data = numpy.array([0], dtype=t)
-            print(i, t, data.dtype, data.dtype.char)
+            print(i,t,data.dtype,data.dtype.char)
             var = cdms2.createVariable(data)
             var.param = -99
             f = self.getTempFile('test_%s.nc' % data.dtype.char, 'w')

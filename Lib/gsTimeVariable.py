@@ -316,10 +316,8 @@ class TimeFileVariable:
                 if hasattr(u.variables[varName], "coordinates"):
                     coords = u.variables[varName].coordinates.split()
 
-                # Get lists of 1D and auxiliary coordinate axes
                 # coords1d = f._convention_.getAxisIds(u.variables)
                 # coordsaux = f._convention_.getAxisAuxIds(u.variables, coords1d)
-
                 # Convert the variable into a FileVariable
                 f.variables[varName] = FileVariable(
                     f, varName, u.variables[varName])

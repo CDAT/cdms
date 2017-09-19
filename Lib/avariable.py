@@ -14,8 +14,6 @@ from .error import CDMSError
 from .axis import axisMatchIndex, axisMatchAxis, axisMatches, unspecified, CdtimeTypes, AbstractAxis
 from . import selectors
 import copy
-# from regrid2 import Regridder, PressureRegridder, CrossSectionRegridder
-# from .mvCdmsRegrid import CdmsRegrid
 from .mvCdmsRegrid import CdmsRegrid, getBoundList, _getCoordList
 
 from regrid2.mvGenericRegrid import guessPeriodicity
@@ -426,10 +424,12 @@ class AbstractVariable(CdmsObj, Slab):
     def getMissing(self, asarray=0):
         """Return the missing value as a scalar, or as
         a numpy array if asarray==1"""
-        try:
-            mv = self.missing_value.item()
-        except BaseException:
-            mv = self.missing_value
+
+        if hasattr(self, 'missing_value'):
+            try:
+                mv = self.missing_value.item()
+            except BaseException:
+                mv = self.missing_value
 
         if mv is None and hasattr(self, '_FillValue'):
             mv = self._FillValue
@@ -1025,7 +1025,7 @@ class AbstractVariable(CdmsObj, Slab):
         One can use the regrid2.Regridder optional arguments as well.
 
         Example:
-        new_cdmsVar = cdmsVar.regrid(newGrid)  # uses libcf
+        new_cdmsVar = cdmsVar.regrid(newGrid)  # uses esmf
         new_cdmsVar = cdmsVar.regrid(newGrid, regridMethod = 'conserve',
                                      coordSys = 'cart')
 
@@ -1165,8 +1165,8 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
 
             srcGridMask = None
             # set the source mask if a mask is defined with the source data
-            if numpy.any(self.mask is True):
-                srcGridMask = getMinHorizontalMask(self)
+#            if numpy.any(self.mask == True):
+#                srcGridMask = getMinHorizontalMask(self)
 
             # compute the interpolation weights
             ro = CdmsRegrid(fromgrid, togrid,
@@ -1596,7 +1596,6 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
 
 # internattr.add_internal_attribute(AbstractVariable, 'id', 'parent')
 # PropertiedClasses.set_property(AbstractVariable, 'missing_value', acts=AbstractVariable._setmissing, nodelete=1)
-
 __rp = r'\s*([-txyz0-9]{1,1}|\(\s*\w+\s*\)|[.]{3,3})\s*'
 __crp = re.compile(__rp)
 

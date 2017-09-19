@@ -236,7 +236,6 @@ def copyFile(fromURL, toURL, callback=None,
 
 #         oldpath = os.path.join(os.path.dirname(toURL),path)
 # os.rename(oldpath,toURL)
-
         # !!!!
 
         return

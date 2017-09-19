@@ -21,8 +21,8 @@ try:
     LIBCF = __path__[0] + '/pylibcf'
 
 except BaseException:
-    # raise ImportError, 'Error: could not import pycf'
     print('Error: could not import pycf')
+
 
 
 def open(hostfile, mode='r'):

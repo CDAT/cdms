@@ -51,7 +51,7 @@ class FileVariable(DatasetVariable):
     def typecode(self):
         # Compatibility: convert to new typecode
         tc = self._obj_.typecode()
-        tc = typeconv.convtypecode2(tc).char
+#        tc = typeconv.convtypecode2(tc).char
         return tc
 
     def assignValue(self, data):

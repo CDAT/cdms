@@ -665,5 +665,4 @@ class DatasetVariable(AbstractVariable):
 # PropertiedClasses.set_property (DatasetVariable, 'dtype',
 #                                   DatasetVariable._getdtype, nowrite=1,
 # nodelete=1)
-
 # internattr.add_internal_attribute(DatasetVariable, 'domain')

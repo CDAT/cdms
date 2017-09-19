@@ -4,7 +4,9 @@ import numpy
 import copy
 from . import _regrid
 from .error import RegridError
+import copy
 import warnings
+import cdms2
 
 _debug = 0                              # Set to 1 for debug
 
@@ -93,7 +95,6 @@ class Horizontal:
                     the same shape as the output array.
         """
 
-        import cdms2
         from cdms2.avariable import AbstractVariable
         from cdms2.tvariable import TransientVariable
 

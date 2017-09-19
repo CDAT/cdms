@@ -376,8 +376,10 @@ class CdmsRegrid:
                                      badCellIndices=dstBadCellIndices)
             # mask out the bad dst cells
             if len(dstBadCellIndices) > 0:
+
                 if dstGridMask is None:
                     dstGridMask = numpy.zeros(dstCoords[0].shape, numpy.bool)
+
                 for inds in dstBadCellIndices:
                     dstGridMask[inds] = 1  # True means invalid
 
@@ -387,11 +389,16 @@ class CdmsRegrid:
 WARNING: Edge bounds are the same. The results of conservative regridding will not conserve.
 coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
               """ % (c.min(), b.min(), c.max(), b.max()))
+
             if srcBounds[0].min() < -90 or srcBounds[0].max() > 90 or \
                dstBounds[0].min() < -90 or dstBounds[0].max() > 90:
                 print("WARNING: Bounds exceed +/-90 degree latitude: min/max lats = %g/%g" %
                       (srcBounds[0].min(), srcBounds[0].max()))
+
             if not re.search('esmp', regridTool.lower()):
+                regridTool = 'esmf'
+
+            if not re.search('esmf', regridTool.lower()):
                 regridTool = 'esmf'
 
         # If LibCF handleCut is True, the bounds are needed to extend the grid

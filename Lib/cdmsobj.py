@@ -484,7 +484,6 @@ def searchPredicate(objlist, predicate, tag=None):
 
 # ------------------------------------------------------------------------
 # Classes
-
 # Generic CDMS object has a tree node, attributes
 
 
@@ -629,6 +628,7 @@ class CdmsObj (object):
         """
         Search for a pattern in a string-valued attribute. If attribute is None, search
         all string attributes. If tag is not None, it must match the internal node tag.
+        it must match the internal node tag.
         :::
         Input:::
         pattern :: (str) (0) pattern
@@ -654,6 +654,7 @@ class CdmsObj (object):
         """
         Match for a pattern in a string-valued attribute. If attribute is None, search
         all string attributes. If tag is not None, it must match the internal node tag.
+        If tag is not None, it must match the internal node tag.
         :::
         Input:::
         pattern :: (str) (0) pattern

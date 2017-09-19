@@ -783,7 +783,6 @@ class Regrid:
         @return extended source data (or source input data of no padding was applied)
         """
 
-        # extended dimensions
         # nlatX, nlonX = self.src_dims[-2], self.src_dims[-1]
         # original dimensions, before extension
         # assuming ..., lat, lon ordering
@@ -871,7 +870,6 @@ def testMakeCyclic():
 def testHandleCut():
 
     # Need tripolar grid
-    import cdms2
     filename = "data/so_Omon_GFDL-ESM2M_1pctCO2_r1i1p2_000101-000512_2timesteps.nc"
     f = cdms2.open(filename)
     if not f:
@@ -901,15 +899,11 @@ def testHandleCut():
     # xx = getTensorProduct(x, 0, [len(x), len(y)])
     # yy = getTensorProduct(y, 1, [len(x), len(y)])
 
-    # 3d
     # z = numpy.array([100, 200])
-
     # Mixed coordinates and axes
-
     # aa = makeCurvilinear([z, yy, xx])
     # for g in aa:
     #     print g
-
 
 def test():
     def func1(coords):
@@ -937,7 +931,6 @@ def test():
     # initialIndexGuess = numpy.array([0.0, 0.0, 0.0])
     # indices = rg._findIndices(numpy.array([1.5, 18.0, 140.0]),
     #                           20, 1.e-2, initialIndexGuess)
-
     maxNumIters = 20
     posTol = 1.e-3
     rg.computeWeights(maxNumIters, posTol)
@@ -974,6 +967,7 @@ def test():
     print(('error = ', error))
 
 
+
 def testMasking():
     import numpy.ma as ma
 
@@ -999,7 +993,6 @@ def testMasking():
     # initialIndexGuess = numpy.array([0.0, 0.0, 0.0])
     # indices = rg._findIndices(numpy.array([1.5, 18.0, 140.0]),
     #                           20, 1.e-2, initialIndexGuess)
-
     # Mask needs to be set before weights are computed
     mask = rg.getSrcGrid()[0] == 3
     mask[:, 3] = True
@@ -1039,6 +1032,7 @@ def testMasking():
     # print dst_data
     # print func(dst_coords)
     print(('error = ', error))
+
 
 
 if __name__ == '__main__':

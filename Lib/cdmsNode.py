@@ -501,6 +501,7 @@ class VariableNode(CdmsNode):
     def __init__(self, id, datatype, domain):
         assert isinstance(datatype, str), 'Invalid datatype: ' + repr(datatype)
         assert datatype in CdDatatypes, 'Invalid datatype: ' + repr(datatype)
+        assert datatype in CdDatatypes, 'Invalid datatype: ' + repr(datatype)
         CdmsNode.__init__(self, "variable", id)
         self.datatype = datatype
         self.setDomain(domain)

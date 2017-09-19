@@ -12,6 +12,7 @@ Alex Pletzer, Tech-X Corp. (2011)
 from . import mvSphereMesh
 
 
+
 class BaseWriter:
 
     def __init__(self, var, sphereRadius=1.0, maxElev=0.1):
@@ -26,7 +27,6 @@ class BaseWriter:
         sphere_mesh = mvSphereMesh.SphereMesh(var, maxElev)
 
         self.shape = sphere_mesh.shape
-
         # there is currently a bug in vizSchema which causes
         # visit to crash if the leading index is 1, this is
         # a workaround the problem

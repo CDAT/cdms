@@ -9,6 +9,7 @@ except BaseException:
 import os
 
 
+
 class esgfConnectionException(Exception):
     pass
 
@@ -231,6 +232,7 @@ class esgfConnection(object):
                 continue
             elif k == "type":
                 continue
+            #     (repr(k),repr(self.params.keys())))
             if keys[k] is not None:
                 params[k] = keys[k]
 

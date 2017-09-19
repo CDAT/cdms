@@ -26,6 +26,8 @@ from .fvariable import FileVariable
 from .tvariable import asVariable
 from .cdmsNode import CdDatatypes
 from . import convention
+import warnings
+from collections import OrderedDict
 
 # Default is serial mode until setNetcdfUseParallelFlag(1) is called
 rk = 0
@@ -1148,7 +1150,7 @@ class CdmsFile(CdmsObj, cuDataset):
                             self, name, cdunifvar)
 
             # Build axis list
-            for name in list(self._file_.dimensions.keys()):
+            for name in sorted(self._file_.dimensions.keys()):
                 if name in coords1d:
                     cdunifvar = self._file_.variables[name]
                 elif name in coordsaux:
@@ -1156,6 +1158,7 @@ class CdmsFile(CdmsObj, cuDataset):
                 else:
                     cdunifvar = None
                 self.axes[name] = FileAxis(self, name, cdunifvar)
+            self.axes = OrderedDict(sorted(self.axes.items()))
 
             # Attach boundary variables
             for name in coordsaux:
@@ -1438,6 +1441,11 @@ class CdmsFile(CdmsObj, cuDataset):
         """
         if newname is None:
             newname = axis.id
+
+        if len(newname) > 127:
+            msg = "axis name has more than 127 characters, name will be truncate"
+            warnings.warn(msg, UserWarning)
+            newname = newname[:127] if len(newname) > 127 else newname
 
         # If the axis already exists and has the same values, return existing
         if newname in self.axes:
@@ -1987,6 +1995,12 @@ class CdmsFile(CdmsObj, cuDataset):
             varid = var.id
         else:
             varid = id
+
+        if len(varid) > 127:
+            msg = "varid name has more than 127 characters, name will be truncate"
+            warnings.warn(msg, UserWarning)
+            varid = varid[:127] if len(varid) > 127 else varid
+
         if varid in self.variables:
             if pack:
                 raise CDMSError(

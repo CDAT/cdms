@@ -558,6 +558,7 @@ def validateAttrs(node):
                                 print("")
 
 
+
 def cloneWithLatCheck(axis):
     """Clone an axis, ensuring that latitudes (in degrees) are in the range [-90:90]"""
 

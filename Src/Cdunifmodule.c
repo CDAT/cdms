@@ -1167,9 +1167,6 @@ static void collect_attributes(PyCdunifFileObject *file, int varid,
 				;
 				Py_END_ALLOW_THREADS
 				;
-				if ((py_type == NPY_STRING)) {
-					length = strlen(s) + 1;
-				}
 				s[length] = '\0';
 				string = PyStr_FromString(s);
 				free(s);
@@ -2007,14 +2004,18 @@ static char close_doc[] = "";
 /* Method table */
 
 static PyMethodDef PyCdunifFileObject_methods[] = { { "close",
-		(PyCFunction) PyCdunifFileObject_close, 1, close_doc }, {
-		"createDimension", (PyCFunction) PyCdunifFileObject_new_dimension, 1,
-		createDimension_doc }, { "createVariable",
-		(PyCFunction) PyCdunifFileObject_new_variable, 1, createVariable_doc },
+		(PyCFunction) PyCdunifFileObject_close, 1, close_doc },
+        {"createDimension", (PyCFunction) PyCdunifFileObject_new_dimension, 1,
+                            createDimension_doc },
+		{ "createVariable", (PyCFunction) PyCdunifFileObject_new_variable, 1,
+		                    createVariable_doc },
 		{ "readDimension", (PyCFunction) PyCdunifFileObject_read_dimension, 1,
-				read_dimension_doc }, { "sync",
-				(PyCFunction) PyCdunifFileObject_sync, 1, sync_doc }, { "flush",
-				(PyCFunction) PyCdunifFileObject_sync, 1, flush_doc }, { NULL,
+				            read_dimension_doc },
+		{ "sync",
+				(PyCFunction) PyCdunifFileObject_sync, 1, sync_doc },
+		{ "flush",
+				(PyCFunction) PyCdunifFileObject_sync, 1, flush_doc },
+		{ NULL,
 				NULL } /* sentinel */
 };
 
@@ -2247,10 +2248,10 @@ PyCdunifVariableObject_assign(PyCdunifVariableObject *self, PyObject *args) {
 
 static PyObject *
 PyCdunifVariableObject_typecode(PyCdunifVariableObject *self, PyObject *args) {
-	char t;
+	char t[1];
 	if (!PyArg_ParseTuple(args, ""))
 		return NULL;
-	t = typecode(self->type);
+	*t = typecode(self->type);
 	return PyStr_FromStringAndSize(&t, (Py_ssize_t) 1);
 }
 
@@ -2525,6 +2526,7 @@ PyCdunifVariable_ReadAsArray(PyCdunifVariableObject *self,
 	if( self->type != NPY_STRING) {
 		array = (PyArrayObject *) PyArray_SimpleNew(d, dims, self->type);
     }
+
 	if (array != NULL && nitems > 0) {
 		if (self->nd == 0) {
 			long zero = 0;
@@ -2564,9 +2566,9 @@ PyCdunifVariable_ReadAsArray(PyCdunifVariableObject *self,
 							/ indices[i].stride + 1;
 				}
 				Py_BEGIN_ALLOW_THREADS
-				;
+
 				acquire_Cdunif_lock()
-				;
+
 
                 if (self->type == NPY_STRING) {
                     if( d > 1) {
@@ -2611,7 +2613,7 @@ PyCdunifVariable_ReadAsArray(PyCdunifVariableObject *self,
                             array->data);
                 }
 				release_Cdunif_lock()
-				;
+
 				Py_END_ALLOW_THREADS
 				;
 				if (ret == -1) {

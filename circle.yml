@@ -1,24 +1,35 @@
 general:
-  branches:
-    ignore:
+    #branches:
+    #  ignore:
       # We only want to build pull requests for testing. If something is merged,
       # then we are prepping for release an there is no need to build it again.
-      - master
+      #  - master
+#  artifacts:
+#      - tests_html
+#      - tests_png
 
 checkout:
   post:
     - ./scripts/checkout_merge_commit.sh
 
+#machine:
 machine:
-  services:
-    - docker
+#    xcode:
+#        version: 7.2
+    pre:
+        - sudo -H pip install --upgrade virtualenv
+        - ls
+        - pwd
+        - bash cdms/scripts/circleci_mac_machine_pre.sh
+    #services:
+    #    - docker
 
 dependencies:
-  # Note, we used to use the naive caching of docker images, but found that it was quicker
-  # just to pull each time. #rollondockercaching
-  override:
-    - docker pull cdat/conda:conda-forge-cdms2
-
+    override:
+        - bash ./scripts/circleci_mac_dep.sh
+          #   - docker pull cdat/conda:conda-forge-cdms2
+  
 test:
   override:
-      - docker run -it -v `pwd`:/git_repo -a STDOUT -a STDERR -P cdat/conda:conda-forge-cdms2 /git_repo/scripts/circle.sh
+      - bash ./scripts/circleci_mac.sh
+        # - docker run -it -v `pwd`:/git_repo -a STDOUT -a STDERR -P cdat/conda:conda-forge-cdms2 /git_repo/scripts/circle.sh

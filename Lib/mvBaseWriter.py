@@ -12,7 +12,6 @@ Alex Pletzer, Tech-X Corp. (2011)
 from . import mvSphereMesh
 
 
-
 class BaseWriter:
 
     def __init__(self, var, sphereRadius=1.0, maxElev=0.1):

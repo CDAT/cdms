@@ -408,8 +408,6 @@ class cuDataset():
         """
 
         from . import hgrid, gengrid
-        import gengrid
-
         # Grid file
         if 'grid_dims' in list(self.variables.keys()):
             dims = self('grid_dims')

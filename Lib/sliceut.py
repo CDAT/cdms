@@ -77,7 +77,6 @@ def lenSlice(aSlice):
     return (int((stop - start - 1) / step) + 1)
 
 
-
 def reverseSlice(s, size):
     """For 'reversed' slices (slices with negative stride),
     return an equivalent slice with positive step. For positive

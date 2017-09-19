@@ -4,7 +4,6 @@ import numpy
 import copy
 from . import _regrid
 from .error import RegridError
-import copy
 import warnings
 import cdms2
 

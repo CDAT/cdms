@@ -20,7 +20,6 @@ from .tvariable import TransientVariable
 from .avariable import AbstractVariable
 from .axis import TransientVirtualAxis  # noqa
 from functools import reduce
-from functools import reduce
 
 MethodNotImplemented = "Method not yet implemented"
 NoSuchAxisOrGrid = "No such axis or grid: "

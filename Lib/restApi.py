@@ -9,7 +9,6 @@ except BaseException:
 import os
 
 
-
 class esgfConnectionException(Exception):
     pass
 

@@ -24,7 +24,6 @@ except BaseException:
     print('Error: could not import pycf')
 
 
-
 def open(hostfile, mode='r'):
     """
     Open host file

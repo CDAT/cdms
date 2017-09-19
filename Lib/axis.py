@@ -25,8 +25,6 @@ _debug = 0
 std_axis_attributes = ['name', 'units', 'length', 'values', 'bounds']
 
 
-
-
 class AliasList (UserList):
     def __init__(self, alist):
         UserList.__init__(self, alist)
@@ -42,7 +40,6 @@ class AliasList (UserList):
 
     def extend(self, values):
         self.data.extend(list(map(str.lower, values)))
-
 
 
 level_aliases = AliasList(['plev'])

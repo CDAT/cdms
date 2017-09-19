@@ -3,8 +3,6 @@
 
 "CDMS File-based variables."
 import numpy
-from . import typeconv
-
 from .cdmsobj import Max32int
 from .variable import DatasetVariable
 from .error import CDMSError

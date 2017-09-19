@@ -13,7 +13,6 @@ import time
 from . import mvBaseWriter
 
 
-
 class VTKSGWriter(mvBaseWriter.BaseWriter):
 
     def write(self, filename):

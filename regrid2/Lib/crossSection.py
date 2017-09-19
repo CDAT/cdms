@@ -7,7 +7,6 @@ from . import _regrid
 from .error import RegridError
 
 
-
 class CrossSectionRegridder:
     """    #-----------------------------------------------------------------------------------------------
     #

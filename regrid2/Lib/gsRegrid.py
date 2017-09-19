@@ -6,8 +6,6 @@ Alex Pletzer and Dave Kindig, Tech-X (2011)
 This code is provided with the hope that it will be useful.
 No guarantee is provided whatsoever. Use at your own risk.
 """
-
-
 # standard python includes
 # from re import search, sub
 from ctypes import c_double, c_float, c_int, \
@@ -869,6 +867,7 @@ def testMakeCyclic():
 
 def testHandleCut():
 
+    import cdms2
     # Need tripolar grid
     filename = "data/so_Omon_GFDL-ESM2M_1pctCO2_r1i1p2_000101-000512_2timesteps.nc"
     f = cdms2.open(filename)
@@ -967,7 +966,6 @@ def test():
     print(('error = ', error))
 
 
-
 def testMasking():
     import numpy.ma as ma
 
@@ -1032,7 +1030,6 @@ def testMasking():
     # print dst_data
     # print func(dst_coords)
     print(('error = ', error))
-
 
 
 if __name__ == '__main__':

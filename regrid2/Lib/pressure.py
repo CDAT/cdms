@@ -6,7 +6,6 @@ from .error import RegridError
 import copy
 
 
-
 class PressureRegridder:
     """    #-----------------------------------------------------------------------------------------------
     #

@@ -12,6 +12,8 @@ import time
 import webbrowser
 import shlex
 import cdat_info
+import numpy.distutils
+import distutils
 
 root = os.getcwd()
 cpus = multiprocessing.cpu_count()
@@ -175,7 +177,7 @@ if args.verbosity > 1:
     print(("Names:", names))
 
 # Make sure we have sample data
-cdat_info.download_sample_data_files(os.path.join(sys.prefix,"share","cdms2","test_data_files.txt"),cdat_info.get_sampledata_path())
+cdat_info.download_sample_data_files(os.path.join(distutils.sysconfig.get_python_lib(),"share","cdms2","test_data_files.txt"),cdat_info.get_sampledata_path())
 
 p = multiprocessing.Pool(args.cpus)
 outs = p.map(run_nose, names)

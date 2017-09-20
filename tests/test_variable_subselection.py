@@ -9,6 +9,7 @@ import os
 import sys
 from cdms2 import MV2 as MV
 import basetest
+import cdat_info
 
 
 class TestVariableSubselection(basetest.CDMSBaseTest):
@@ -64,8 +65,8 @@ class TestVariableSubselection(basetest.CDMSBaseTest):
     def testNegativeStride(self):
         fw = self.getDataFile('ps.wrap.test.0E.nc')
         ps = fw.getVariable('ps')
-        pth = os.path.dirname(os.path.abspath(__file__))
-        fc = cdms2.Cdunif.CdunifFile(os.path.join(pth, "data", 'ps.wrap.test.0E.nc'))
+        pth = cdat_info.get_sampledata_path()
+        fc = cdms2.Cdunif.CdunifFile(os.path.join(pth,'ps.wrap.test.0E.nc'))
         psc = fc.variables['ps']
         psb = psc[:]
         s3c = psb[0, ::-1]

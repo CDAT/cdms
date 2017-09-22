@@ -121,5 +121,14 @@ class TestRegridding(basetest.CDMSBaseTest):
         self.assertLess(abs(dat2[0, 0] - 3.26185), 1.e-4)
 
 
+    def testRegrid2Unicode(self):
+        f = cdms2.open(cdms2.cdat_info.get_sampledata_path()+"/clt.nc")
+        s = f("clt",slice(0,1),squeeze=True)
+        g = f["u"].getGrid()
+        # works
+        s2 = s.regrid(g, regridTool="esmf", regridMethod="linear")
+        # fails
+        s2 =  s.regrid(g, regridTool=u"esmf", regridMethod=u"linear")
+
 if __name__ == "__main__":
     basetest.run()

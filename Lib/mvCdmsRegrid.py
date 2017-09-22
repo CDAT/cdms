@@ -353,12 +353,15 @@ class CdmsRegrid:
         srcCoords = _getCoordList(srcGrid)
         dstCoords = _getCoordList(dstGrid)
 
+        regridTool = str(regridTool)  # force string if unicode or byte
+        regridMethod = str(regridMethod)
+
         # retrieve and build a bounds list for conservative from the grids
         # We can't use the coords lists because if they are converted to
         # curvilinear
         # Set the tool to esmf if conservative selected. This overrides the
         # regridTool selection
-        self.regridMethod = regridMethod
+        self.regridMethod = str(regridMethod)
         if re.search('conserv', regridMethod.lower()):
             srcBadCellIndices = []
             srcBounds = getBoundList(srcCoords, srcGridMask,

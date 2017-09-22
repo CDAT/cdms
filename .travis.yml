@@ -26,6 +26,12 @@ script:
 - echo $TRAVIS_PULL_REQUEST
 - python setup.py install
 - python run_tests.py -v2 -s
+- conda create -n py2 python=2.7
+- source activate py2
+- conda install -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf libdrs_f pyopenssl nose requests flake8 esmf
+- export UVCDAT_ANONYMOUS_LOG=False
+- python setup.py install
+- python run_tests.py -v2 -s
 env:
   global:
     secure: Z06idl4BP01QMhrocmfuYV4CcbLmb5ZJZoXXymDr5sLIIfqdMiSL/CfDCRkIwl44vKpTN5R9AAhQV6iNMdU0NOQQrftHJyT5YV4y966FuAA1v9ev7y/cgExJFv7M/4E37WAN6YIcO7E42KZReeNKOAodorpqoT87MW6FAImZbrM=

@@ -230,7 +230,6 @@ class CrossSectionRegridder:
 
         # Reconstruct the same class as on input
         # Mask fill_value and return results
-        print("INPUT IS VAR:", inputIsVariable)
         if inputIsVariable == 1:
             result = numpy.ma.masked_values(outar, missing)
             result = cdms2.createVariable(result, fill_value=missing,

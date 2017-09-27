@@ -26,7 +26,6 @@ script:
 - mkdir /home/travis/.esg
 - echo ${ESGF_PWD} | myproxyclient logon -s esgf-node.llnl.gov -p 7512 -t 12 -S -b -l ${ESGF_USER} -o /home/travis/.esg/esgf.cert
 - cp tests/dodsrc /home/travis/.dodsrc
-- python run_tests.py -v2 -s tests/test_all_formats.py
 - python setup.py install
 - python run_tests.py -v2 -s
 - conda create -n py2 python=2.7

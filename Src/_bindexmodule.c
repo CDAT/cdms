@@ -517,7 +517,7 @@ MODULE_INIT_FUNC(_bindex)
 {
         PyObject *m, *d, *j;
  
-        import_array ();
+        import_array1(NULL);
         m = PyModule_Create(&moduledef);
         d = PyModule_GetDict(m);
         ErrorObject = PyStr_FromString("_bindex.error");

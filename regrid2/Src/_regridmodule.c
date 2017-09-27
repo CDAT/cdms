@@ -2484,7 +2484,7 @@ MODULE_INIT_FUNC (_regrid) {
   }
 
 #ifdef import_array
-  import_array();
+  import_array1(NULL);
 #endif
 
   /* add symbolic constants to the module */

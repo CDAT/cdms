@@ -28,7 +28,7 @@ cmd="echo ${ESGF_PWD} | myproxyclient logon -s esgf-node.llnl.gov -p 7512 -t 12 
 $cmd
 stty echo
 
-cmd="cp tests/dodsrc /Users/distiller/.dodsrc"
+cmd="cp tests/dodsrccircleci /Users/distiller/.dodsrc"
 echo $cmd
 $cmd
 

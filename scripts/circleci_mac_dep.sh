@@ -15,6 +15,10 @@ cmd="conda install -c uvcdat/label/nightly -c conda-forge -c uvcdat libcf distar
 echo $cmd
 $cmd
 
+cmd="install_name_tool -change /usr/lib/libcurl.4.dylib @rpath/libcurl.4.dylib /Users/distiller/miniconda/bin/ncdump"
+echo $cmd
+$cmd 
+
 cmd="export UVCDAT_ANONYMOUS_LOG=False"
 echo $cmd
 $cmd

@@ -23,15 +23,13 @@ cmd="mkdir /Users/distiller/.esg"
 echo $cmd
 $cmd
 
-stty -echo
-cmd="echo ${ESGF_PWD} | myproxyclient logon -s esgf-node.llnl.gov -p 7512 -t 12 -S -b -l ${ESGF_USER} -o /Users/distiller/.esg/esgf.cert"
-$cmd
-stty echo
+cmd="echo ${ESGF_PWD} | myproxyclient logon -s esgf-node.llnl.gov -p 7512 -t 12 -S -b -l ${ESGF_USER} -o /Users/distiller/.esg/esgf.cert "
+eval $cmd
 
 cmd="openssl pkcs12 -export -inkey /Users/distiller/.esg/esgf.cert -in /Users/distiller/.esg/esgf.cert -name esgf  -out /Users/distiller/.esg/esgf.p12 -passout pass:esgf"
 $cmd
 
-cmd="sudo security import /Users/distiller/.esg/esgf.p12 -A -P esgf -k "/Library/Keychains/System.keychain" 
+cmd="sudo security import /Users/distiller/.esg/esgf.p12 -A -P esgf -k /Library/Keychains/System.keychain"
 echo $cmd
 $cmd
 

@@ -19,12 +19,14 @@ cmd="export UVCDAT_ANONYMOUS_LOG=False"
 echo $cmd
 $cmd
 
-cmd="mkdir /home/travis/.esg"
+cmd="mkdir /Users/distiller/.esg"
 echo $cmd
 $cmd
 
-cmd="echo ${ESGF_PWD} | myproxyclient logon -s esgf-node.llnl.gov -p 7512 -t 12 -S -b -l ${ESGF_USER} -o /home/travis/.esg/esgf.cert"
+stty -echo
+cmd="echo ${ESGF_PWD} | myproxyclient logon -s esgf-node.llnl.gov -p 7512 -t 12 -S -b -l ${ESGF_USER} -o /Users/distiller/.esg/esgf.cert"
 $cmd
+stty echo
 
 cmd="cp tests/dodsrc /Users/distiller/.dodsrc"
 echo $cmd

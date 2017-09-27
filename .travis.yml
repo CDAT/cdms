@@ -16,7 +16,7 @@ before_install:
 
 script:
 #- conda install -c uvcdat/label/nightly -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8
-- conda install -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf libdrs_f pyopenssl nose requests flake8
+- conda install -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf libdrs_f pyopenssl nose requests flake8 myproxyclient
 - conda install -c nesii/channel/dev-esmf -c conda-forge esmpy=7.1.0.dev32
 - export UVCDAT_ANONYMOUS_LOG=False
 - echo $TRAVIS_BRANCH

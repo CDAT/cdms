@@ -1,0 +1,6 @@
+HTTP.VERBOSE=0
+HTTP.COOKIEJAR=/home/travis/.esg/.dods_cookies
+HTTP.SSL.CERTIFICATE=/home/travis/.esg/esgf.cert
+HTTP.SSL.KEY=/home/travis/.esg/esgf.cert
+HTTP.SSL.CAPATH=/home/travis/.esg/
+

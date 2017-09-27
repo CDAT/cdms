@@ -1,11 +1,8 @@
 os:
-#    - osx
     - linux
-
 sudo: required
 services:
     - docker
-
 before_install:
 - if [ "$TRAVIS_OS_NAME" = "linux" ]; then wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh; fi
 - if [ "$TRAVIS_OS_NAME" = "osx" ]; then wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh; fi
@@ -14,9 +11,7 @@ before_install:
 - conda config --set always_yes yes --set changeps1 no
 - conda update -y -q conda
 - conda install gcc future
-
 script:
-#- conda install -c uvcdat/label/nightly -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8
 - conda install -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf libdrs_f pyopenssl nose requests flake8
 - conda install -c nesii/channel/dev-esmf -c conda-forge esmpy=7.1.0.dev32
 - export UVCDAT_ANONYMOUS_LOG=False
@@ -24,6 +19,10 @@ script:
 - export TRAVIS_PR_BRANCH=$TRAVIS_BRANCH
 - echo $TRAVIS_EVENT_TYPE
 - echo $TRAVIS_PULL_REQUEST
+- mkdir /home/travis/.esg
+- echo ${ESGF_PWD} | myproxyclient logon -s esgf-node.llnl.gov -p 7512 -t 12 -S -b -l ${ESGF_USER} -o /home/travis/.esg/esgf.cert
+- cp tests/dodsrc /home/travis/.dodsrc
+- python run_tests.py -v2 -s tests/test_all_formats.py
 - python setup.py install
 - python run_tests.py -v2 -s
 - conda create -n py2 python=2.7
@@ -32,8 +31,14 @@ script:
 - export UVCDAT_ANONYMOUS_LOG=False
 - python setup.py install
 - python run_tests.py -v2 -s
+
 env:
   global:
-    secure: Z06idl4BP01QMhrocmfuYV4CcbLmb5ZJZoXXymDr5sLIIfqdMiSL/CfDCRkIwl44vKpTN5R9AAhQV6iNMdU0NOQQrftHJyT5YV4y966FuAA1v9ev7y/cgExJFv7M/4E37WAN6YIcO7E42KZReeNKOAodorpqoT87MW6FAImZbrM=
+  - secure: Z06idl4BP01QMhrocmfuYV4CcbLmb5ZJZoXXymDr5sLIIfqdMiSL/CfDCRkIwl44vKpTN5R9AAhQV6iNMdU0NOQQrftHJyT5YV4y966FuAA1v9ev7y/cgExJFv7M/4E37WAN6YIcO7E42KZReeNKOAodorpqoT87MW6FAImZbrM=
+  - secure: wnCfDP5NqpGhu/o2RDluLUwjZIBMnlqtvXr0Hyk4kjY1s5LjK4RA3S6xgwYVgiYxKpnoaaDZDsilyPs4mzV600okkkYhNeL4CShxxwVDbx11MT9MIHgNTExmcy9fAutABE/Baq79kv9hhDGa+lVA7EK+jVyPB7X5T7aR4saW7kghyUg7gZ+NwFxpE2b/uFbFx2BI3UiedCM9u898jLdYF3GdiA0fa+4+NA0nl/CXgtOYyC28QLedojb5gpoFNdkcCZMDcVooZJ5DgSPBkYmbtYj+MDoz5jP1CY24q58+4TIz4eELunHfZ2BaCcLU9/5rF+bOciOErGQkfaieUHcrB8MpxC17vTgGfWx2mdsKj6ZXSZonUf+pscwDcDrMm5+R1XkUJeKWe9dBb6VsbaHoAlCiWL63SZqOVu80QOu1oDw48c9dq3W2mgXEnqe9TrWtkD63lccTCeTqltyB7Nrkb000rnrBZN4MwYFM5UFRT6B3/BsrTJrqUwCZPr7SCWQmiMnOFBnUBL1A9ng2TnMCnDz1Y7ubIpxDO7Z4vDx9D57fiH9kSxr0AxvQeLhMwAJc4sNaeVTXVo9EVbldKybQxe1KqtrYA+1XvMdMT/mcm7A8ghbFtXNjUMOxLxeQ93Ztpg18PAqrtANoERYZKrodoJ/BjUhYnUz0JbiND2dQ5lo=
+  - secure: q+VWTmcHAjnw2znCKyCjZ+QNYh13/Q11/zSgH46P2ecqHNXpk94jR/hneHDpy0sv1SiKHMWm+i2pi/B7toyC1GUW4LpInifxuMs3s3ohNSo4gplIP+2gw/LPoPdiPIYVaovOqUg6o1GSYOklxHKXVQ/XjGvhVw65YKXGfGGX1IhyLhJGqtVTPnjHsBMoXVD4HHUS8ET1OLfCCaT1983AejNnwYgYGth4iemdLjk73FeEIg17buuZo/UcVVCyBdKDUEEt3ILfZ6lqPzKvK8f4SX/JbSHQkGe1PDGDq4H+gJ0C53eQr1Ffj7W/vSWTW15JyIaIA9bkpwW3bg96Mg3Lp13WL/5T/A7ImJenVANOKfQMLF6HP9u9dcPMTyx/6+/NVV2oM8u5Z48XeJlvDbDIpaOjBt2yF85bWLLW35UqBRA9s8eW4rbKi6ktr1aDcrdy7yE4PSmNNV6989tm/LhlSWLrQVYlEgkvKF2TGOc5neBzawVrGRzGLSznbK7CYbJscKuGRYs0GIX7p1Ip6sypagozFBebSkjQPp8Ypm0eqLO6I+SsyYOcfgimY2uhWVKRx1nDTcFEMLKMU2VDxquQGZ0WGAQ1qy6rXjQUYqgRKRAIjMZs5cWUiKMLmrHBaWGkP56p1yqe6j1sxHH7ISPSoKY21OH8fuEit17MJyaj+hQ=
+
 after_success:
-    - if [ $TRAVIS_BRANCH == "master" -a $TRAVIS_PULL_REQUEST == "false" -a "$TRAVIS_OS_NAME" = "linux" ]; then docker run -v `pwd`:/travis_home -e CONDA_UPLOAD_TOKEN=${CONDA_UPLOAD_TOKEN} -a STDOUT cdat/conda:conda-forge-cdms2 /travis_home/scripts/conda_upload.sh ; fi
+- if [ $TRAVIS_BRANCH == "master" -a $TRAVIS_PULL_REQUEST == "false" -a "$TRAVIS_OS_NAME"
+  = "linux" ]; then docker run -v `pwd`:/travis_home -e CONDA_UPLOAD_TOKEN=${CONDA_UPLOAD_TOKEN}
+  -a STDOUT cdat/conda:conda-forge-cdms2 /travis_home/scripts/conda_upload.sh ; fi

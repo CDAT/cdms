@@ -3381,7 +3381,7 @@ MODULE_INIT_FUNC (Cdunif) {
 
 	/* Import the array module */
 #ifdef import_array
-	import_array();
+	import_array1(NULL);
 #endif
     d = PyModule_GetDict(m);
 

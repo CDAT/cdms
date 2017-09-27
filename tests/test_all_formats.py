@@ -31,6 +31,11 @@ class TestFormats(basetest.CDMSBaseTest):
         data=f['wvhgtsfc']
         self.assertEqual(data.missing_value, 9.999e20)
 
+    def testESGF(self):
+        f = cdms2.open("https://aims3.llnl.gov/thredds/dodsC/cmip5_css01_data/cmip5/output1/BCC/bcc-csm1-1-m/1pctCO2/day/ocean/day/r1i1p1/v20120910/tos/tos_day_bcc-csm1-1-m_1pctCO2_r1i1p1_02800101-02891231.nc")
+        self.assertEqual(f.listvariables(), ['time_bnds', 'rlon_bnds', 'tos', 'lon', 'rlat_bnds', 'lat'])
+        data=f['tos']
+        self.assertEqual(data[1,84,4], 303.6062927246094)
 
 if __name__ == "__main__":
     basetest.run()

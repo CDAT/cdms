@@ -32,7 +32,6 @@ script:
 - conda create -n py2 python=2.7
 - source activate py2
 - conda install -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 esmf
-- conda install -c nadeau1 -c conda-forge esmf esmpy
 - export UVCDAT_ANONYMOUS_LOG=False
 - python setup.py install
 - python run_tests.py -v2 -s

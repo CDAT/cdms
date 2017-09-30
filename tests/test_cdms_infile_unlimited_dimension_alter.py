@@ -35,3 +35,8 @@ class TestCDMSInFileUnlimtedDimAlter(unittest.TestCase):
         os.remove("nc4.nc")
 
 
+if __name__ == '__main__':
+    print("")
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestCDMSInFileUnlimtedDimAlter)
+    unittest.TextTestRunner(verbosity=2).run(suite)
+

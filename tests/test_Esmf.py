@@ -176,6 +176,6 @@ class TestESMFRegridding(unittest.TestCase):
 
 if __name__ == '__main__':
     ESMF.Manager()
-    print ""
+    print("")
     suite = unittest.TestLoader().loadTestsFromTestCase(TestESMFRegridding)
     unittest.TextTestRunner(verbosity=2).run(suite)

@@ -98,7 +98,7 @@ class Test(unittest.TestCase):
         dstCells = [lats, lons]
         dstNodes = [dstLatCorner, dstLonCorner]
 
-        print 'running test2_2d_esmf_native_tripolar_fraction...'
+        print('running test2_2d_esmf_native_tripolar_fraction...')
         tic = time.time()
         # create grid
         srcMaxIndex = numpy.array(so.shape, dtype=numpy.int32)
@@ -236,7 +236,7 @@ class Test(unittest.TestCase):
                 pl.title('destination')
                 pl.suptitle("Red == location of nan's")
 
-            print srcHasNan, dstHasNan
+            print((srcHasNan, dstHasNan))
 
             # Do they have nans?
             self.assertFalse(srcHasNan, True)
@@ -257,8 +257,9 @@ class Test(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    print ""
+    print("")
     ESMF.Manager(debug=True)
     suite = unittest.TestLoader().loadTestsFromTestCase(Test)
     unittest.TextTestRunner(verbosity=1).run(suite)
-    pl.show()
+    if PLOT:
+        pl.show()

@@ -19,6 +19,7 @@
 #include <math.h>
 
 #include <string.h>
+#include "py3c.h"
 
 static PyObject *ErrorObject;            /* locally raised exception */
 
@@ -2458,20 +2459,33 @@ static struct PyMethodDef rgd_methods[] = {
 };
 
 
- /*************************************************************************
+static struct PyModuleDef moduledef = {
+PyModuleDef_HEAD_INIT, 
+"_regrid",
+NULL,
+-1,
+rgd_methods
+};
+
+/*************************************************************************
  *                                                                        *
  * INITIALIZATION FUNCTION        
  * 
  *                                                                        *
 \**************************************************************************/
 
-void init_regrid()
-{
+MODULE_INIT_FUNC (_regrid) {
   PyObject *m, *d;
   
   /* create this module and add the functions */
-  m = Py_InitModule("_regrid", rgd_methods);
-  import_array();
+  m = PyModule_Create(&moduledef);
+  if(m == NULL) {
+      return(NULL);
+  }
+
+#ifdef import_array
+  import_array1(NULL);
+#endif
 
   /* add symbolic constants to the module */
   d = PyModule_GetDict(m);
@@ -2481,8 +2495,8 @@ void init_regrid()
   /* check for errors */
   if(PyErr_Occurred())
     Py_FatalError("can't initialize module _regrid");
+  return(m);
 }
-
 
 
  /*************************************************************************

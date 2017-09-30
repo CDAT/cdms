@@ -59,13 +59,13 @@ def deserialize_response(msg):
     lines = msg.split('\n')
 
     # get response value
-    responselines = filter(lambda x: x.startswith('RESPONSE'), lines)
+    responselines = [x for x in lines if x.startswith('RESPONSE')]
     responseline = responselines[0]
     response = int(responseline.split('=')[1])
 
     # get error text
     errortext = ""
-    errorlines = filter(lambda x: x.startswith('ERROR'), lines)
+    errorlines = [x for x in lines if x.startswith('ERROR')]
     for e in errorlines:
         etext = e.split('=')[1]
         errortext += etext
@@ -124,39 +124,39 @@ def myproxy_logon_py(hostname, username, passphrase,
 
     # connect to myproxy server
     if debuglevel(1):
-        print "debug: connect to myproxy server"
+        print("debug: connect to myproxy server")
     conn = SSL.Connection(context, socket.socket())
     conn.connect((hostname, port))
 
     # send globus compatibility stuff
     if debuglevel(1):
-        print "debug: send globus compat byte"
+        print("debug: send globus compat byte")
     conn.write('0')
 
     # send get command
     if debuglevel(1):
-        print "debug: send get command"
+        print("debug: send get command")
     cmd_get = CMD_GET % (username, passphrase, lifetime)
     conn.write(cmd_get)
 
     # process server response
     if debuglevel(1):
-        print "debug: get server response"
+        print("debug: get server response")
     dat = conn.recv(8192)
     if debuglevel(1):
-        print dat
+        print(dat)
     response, errortext = deserialize_response(dat)
     if response:
         raise GetException(errortext)
     else:
         if debuglevel(1):
-            print "debug: server response ok"
+            print("debug: server response ok")
 
     # generate and send certificate request
     # - The client will generate a public/private key pair and send a
     #   NULL-terminated PKCS#10 certificate request to the server.
     if debuglevel(1):
-        print "debug: send cert request"
+        print("debug: send cert request")
     certreq, privatekey = create_cert_req()
     conn.send(certreq)
 
@@ -167,45 +167,47 @@ def myproxy_logon_py(hostname, username, passphrase,
 
     # - n certs
     if debuglevel(1):
-        print "debug: receive certs"
+        print("debug: receive certs")
     dat = conn.recv(8192)
     if debuglevel(2):
-        print "debug: dumping cert data to myproxy.dump"
-        f = file('myproxy.dump', 'w')
+        print("debug: dumping cert data to myproxy.dump")
+        f = open('myproxy.dump', 'w')
         f.write(dat)
         f.close()
 
     # process server response
     if debuglevel(1):
-        print "debug: get server response"
+        print("debug: get server response")
     resp = conn.recv(8192)
     response, errortext = deserialize_response(resp)
     if response:
         raise RetrieveProxyException(errortext)
     else:
         if debuglevel(1):
-            print "debug: server response ok"
+            print("debug: server response ok")
 
     # deserialize certs from received cert data
     pem_certs = deserialize_certs(dat)
     if len(pem_certs) != numcerts:
-        print "Warning: %d certs expected, %d received" % (numcerts, len(pem_certs))
+        print(
+            "Warning: %d certs expected, %d received" %
+            (numcerts, len(pem_certs)))
 
     # write certs and private key to file
     # - proxy cert
     # - private key
     # - rest of cert chain
     if debuglevel(1):
-        print "debug: write proxy and certs to", outfile
+        print("debug: write proxy and certs to", outfile)
     if isinstance(outfile, str):
-        f = file(outfile, 'w')
+        f = open(outfile, 'w')
     else:
         f = outfile
     f.write(pem_certs[0])
     f.write(privatekey)
     for c in pem_certs[1:]:
         f.write(c)
-    if isinstance(file, str):
+    if isinstance(outfile, str):
         f.close()
 
 

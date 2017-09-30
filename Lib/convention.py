@@ -1,8 +1,7 @@
 """ metadata conventions """
 
-import string
-from error import CDMSError
-from UserList import UserList
+from .error import CDMSError
+from collections import UserList
 
 # On in order to turn off some warnings
 WITH_GRIDSPEC_SUPPORT = True
@@ -15,13 +14,13 @@ class AliasList (UserList):
         UserList.__init__(self, alist)
 
     def __setitem__(self, i, value):
-        self.data[i] = string.lower(value)
+        self.data[i] = value.lower()
 
     def __setslice(self, i, j, values):
-        self.data[i:j] = map(lambda x: string.lower(x), values)
+        self.data[i:j] = [x.lower() for x in values]
 
     def append(self, value):
-        self.data.append(string.lower(value))
+        self.data.append(value.lower())
 
 
 level_aliases = AliasList(['plev'])
@@ -43,11 +42,11 @@ class AbstractConvention:
         raise CDMSError(MethodNotImplemented)
 
     def axisIsLatitude(self, axis):
-        id = string.lower(axis.id)
+        id = axis.id.lower()
         return (id[0:3] == 'lat') or (id in latitude_aliases)
 
     def axisIsLongitude(self, axis):
-        id = string.lower(axis.id)
+        id = axis.id.lower()
         return (id[0:3] == 'lon') or (id in longitude_aliases)
 
     def getVarLatId(self, var, vardict=None):
@@ -80,7 +79,7 @@ class NUGConvention(AbstractConvention):
     def getAxisIds(self, vardict):
         "Get 1-D coordinate axis IDs."
         result = []
-        for name in vardict.keys():
+        for name in list(vardict.keys()):
             dimensions = vardict[name].dimensions
             if len(dimensions) == 1 and (name in dimensions):
                 result.append(name)
@@ -106,37 +105,39 @@ class CFConvention(COARDSConvention):
     def getAxisAuxIds(self, vardict, axiskeys):
         "Get Axis2D and AuxAxis1D IDs"
         coorddict = {}
-        for var in vardict.values():
+        for var in list(vardict.values()):
             if hasattr(var, 'coordinates'):
-                coordnames = string.split(var.coordinates)
+                coordnames = var.coordinates.split()
                 for item in coordnames:
                     # Don't include if already a 1D coordinate axis.
                     if item in axiskeys:
                         continue
                     coorddict[item] = 1
-        for key in coorddict.keys():
+        for key in list(coorddict.keys()):
             try:
                 coord = vardict[key]
             except KeyError:
                 # Note: not everything referenced by .coordinates attribute is
                 # in fact a coordinate axis, e.g., scalar coordinates
                 if not WITH_GRIDSPEC_SUPPORT:
-                    print 'Warning: coordinate attribute points to non-existent variable: %s' % key
+                    print(
+                        'Warning: coordinate attribute points to non-existent variable: %s' %
+                        key)
                 del coorddict[key]
                 continue
             # Omit scalar dimensions, and dimensions greater than 2-D
             if len(coord.shape) not in [1, 2]:
                 del coorddict[key]
-        return coorddict.keys()
+        return list(coorddict.keys())
 
     def getDsetnodeAuxAxisIds(self, dsetnode):
         "Get auxiliary axis IDs from a dataset node"
         coorddict = {}
         dsetdict = dsetnode.getIdDict()
-        for node in dsetdict.values():
+        for node in list(dsetdict.values()):
             coordnames = node.getExternalAttr('coordinates')
             if coordnames is not None:
-                coordnames = string.split(coordnames)
+                coordnames = coordnames.split()
                 for item in coordnames:
                     # Don't include if already a 1D coordinate axis.
                     if item in dsetdict and dsetdict[item].tag == 'axis':
@@ -148,7 +149,7 @@ class CFConvention(COARDSConvention):
                     if domnode.getChildCount() not in [1, 2]:
                         continue
                     coorddict[item] = 1
-        return coorddict.keys()
+        return list(coorddict.keys())
 
     def getVarLatId(self, var, vardict):
         lat = None
@@ -159,7 +160,7 @@ class CFConvention(COARDSConvention):
             return (lat, nlat)
 
         if hasattr(var, 'coordinates'):
-            coordnames = string.split(var.coordinates)
+            coordnames = var.coordinates.split()
             for name in coordnames:
                 coord = vardict.get(name)
 
@@ -184,7 +185,7 @@ class CFConvention(COARDSConvention):
             return (lon, nlon)
 
         if hasattr(var, 'coordinates'):
-            coordnames = string.split(var.coordinates)
+            coordnames = var.coordinates.split()
             for name in coordnames:
                 coord = vardict.get(name)
 
@@ -203,15 +204,11 @@ class CFConvention(COARDSConvention):
     def axisIsLatitude(self, axis):
         if (hasattr(axis, 'axis') and axis.axis == 'Y'):
             return True
-        elif (hasattr(axis, 'units') and string.lower(axis.units) in ['degrees_north',
-                                                                      'degree_north',
-                                                                      'degree_n',
-                                                                      'degrees_n'
-                                                                      'degreen',
-                                                                      'degreesn'] and
-              not (axis.isLongitude() or axis.isLevel() or axis.isTime())):
+        elif (hasattr(axis, 'units') and axis.units.lower() in [
+             'degrees_north', 'degree_north', 'degree_n', 'degrees_n', 'degreen', 'degreesn'] and
+             not (axis.isLongitude() or axis.isLevel() or axis.isTime())):
             return True
-        elif (hasattr(axis, 'standard_name') and string.lower(axis.standard_name) == 'latitude'):
+        elif (hasattr(axis, 'standard_name') and axis.standard_name.lower() == 'latitude'):
             return True
         else:
             return AbstractConvention.axisIsLatitude(self, axis)
@@ -219,12 +216,11 @@ class CFConvention(COARDSConvention):
     def axisIsLongitude(self, axis):
         if (hasattr(axis, 'axis') and axis.axis == 'X'):
             return True
-        elif (hasattr(axis, 'units') and string.lower(axis.units) in
-                ['degrees_east', 'degree_east', 'degree_e',
-                 'degrees_e', 'degreee', 'degreese'] and
-                not (axis.isLatitude() or axis.isLevel() or axis.isTime())):
+        elif (hasattr(axis, 'units') and axis.units.lower() in [
+             'degrees_east', 'degree_east', 'degree_e', 'degrees_e', 'degreee', 'degreese'] and
+             not (axis.isLatitude() or axis.isLevel() or axis.isTime())):
             return True
-        elif (hasattr(axis, 'standard_name') and string.lower(axis.standard_name) == 'longitude'):
+        elif (hasattr(axis, 'standard_name') and axis.standard_name.lower() == 'longitude'):
             return True
         else:
             return AbstractConvention.axisIsLongitude(self, axis)
@@ -236,7 +232,9 @@ class CFConvention(COARDSConvention):
             if boundsid in dset.variables:
                 result = dset[boundsid]
             else:
-                print 'Warning: bounds variable not found in %s: %s' % (dset.id, boundsid)
+                print(
+                    'Warning: bounds variable not found in %s: %s' %
+                    (dset.id, boundsid))
                 result = None
         else:
             result = None

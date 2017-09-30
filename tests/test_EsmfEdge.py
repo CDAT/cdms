@@ -142,17 +142,17 @@ class TestESMFEDGE(unittest.TestCase):
         regridObj1(vFld, cvFld)
 
         if self.pe == 0:
-            print cuFldPtr.shape, self.datadstGrid.shape
+            print((cuFldPtr.shape, self.datadstGrid.shape))
             cuFldArr = numpy.reshape(cuFldPtr, self.datadstGrid.shape)
             cvFldArr = numpy.reshape(cvFldPtr, self.datadstGrid.shape)
 
-            print
-            print "U's"
-            print self.dataEdge2
-            print cuFldArr
-            print
-            print self.dataEdge1
-            print cvFldArr
+            print()
+            print("U's")
+            print((self.dataEdge2))
+            print(cuFldArr)
+            print()
+            print((self.dataEdge1))
+            print(cvFldArr)
 
 
 if __name__ == "__main__":

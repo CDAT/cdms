@@ -6,20 +6,20 @@ Alex Pletzer and Dave Kindig, Tech-X (2011)
 This code is provided with the hope that it will be useful.
 No guarantee is provided whatsoever. Use at your own risk.
 """
-
-
 # standard python includes
+# from re import search, sub
 from ctypes import c_double, c_float, c_int, \
-    c_char_p, CDLL, byref, POINTER
+    c_wchar_p, CDLL, byref, POINTER
+# import ctypes
 import operator
 import sys
 import os
 import copy
 import numpy
-import cdms2
-from regrid2 import RegridError
 import warnings
+from regrid2 import RegridError
 from functools import reduce
+import fnmatch
 
 C_DOUBLE_P = POINTER(c_double)
 
@@ -278,7 +278,7 @@ def handleCoordsCut(coords, dims, bounds):
         """
         for i in range(len(array)):
             # An edge
-            if len(numpy.where(array[i, :])[0]) >= 2:
+            if len(numpy.where(array[i, :] == True)[0]) >= 2:  # noqa
                 if newI[i] < 0:
                     newI[i] = (nlon - 1) - i
                 if newI[(nlon - 1) - i] < 0:
@@ -296,7 +296,8 @@ def handleCoordsCut(coords, dims, bounds):
             for i in range(len(coords)):
                 newCoords.append(numpy.zeros(newDims, coords[i].dtype))
                 newCoords[i][..., 0:dims[-2], :] = coords[i][...]
-                newCoords[i][..., dims[-2], :] = coords[i][..., dims[-2] - 1, newI]
+                newCoords[i][..., dims[-2],
+                             :] = coords[i][..., dims[-2] - 1, newI]
 
             return newCoords, newDims, newI
 
@@ -343,11 +344,20 @@ class Regrid:
         for sosuffix in '.dylib', '.dll', '.DLL', '.so', '.a':
             if os.path.exists(LIBCFDIR + sosuffix):
                 dynLibFound = True
-                try:
-                    self.lib = CDLL(LIBCFDIR + sosuffix)
-                    break
-                except BaseException:
-                    pass
+        CFfile = self.find('pylibcf.*', __path__[0])
+        if os.path.exists(CFfile):
+            try:
+                self.lib = CDLL(CFfile)
+            except BaseException:
+                pass
+#        for sosuffix in '.dylib', '.dll', '.DLL', '.so', '.a':
+#            if os.path.exists(LIBCFDIR + sosuffix):
+#                dynLibFound = True
+#                try:
+#                    self.lib = CDLL(LIBCFDIR + sosuffix)
+#                    break
+#                except:
+#                    pass
         if self.lib is None:
             if not dynLibFound:
                 raise RegridError("ERROR in %s: could not find shared library %s.{so,dylib,dll,DLL}"
@@ -376,11 +386,11 @@ class Regrid:
             src_gridNew, src_dimsNew = makeCoordsCyclic(src_grid, src_dims)
             if self.verbose:
                 aa, bb = str(src_dims), str(src_dimsNew)
-                print '...  src_dims = %s, after making cyclic src_dimsNew = %s' \
-                    % (aa, bb)
+                print(('...  src_dims = %s, after making cyclic src_dimsNew = %s'
+                       % (aa, bb)))
                 for i in range(self.rank):
-                    print '...... src_gridNew[%d].shape = %s' \
-                        % (i, str(src_gridNew[i].shape))
+                    print(('...... src_gridNew[%d].shape = %s'
+                           % (i, str(src_gridNew[i].shape))))
             # flag indicating that the grid was extended
             if reduce(lambda x, y: x + y,
                       [src_dimsNew[i] - src_dims[i]
@@ -407,8 +417,8 @@ class Regrid:
                     self.extendedGrid = self.extendedGrid
                 if self.verbose:
                     aa, bb = str(src_dims), str(src_dimsNew)
-                    print '...  src_dims = %s, after making cyclic src_dimsNew = %s' \
-                        % (aa, bb)
+                    print(('...  src_dims = %s, after making cyclic src_dimsNew = %s'
+                           % (aa, bb)))
                 src_grid = src_gridNew
                 src_dims = src_dimsNew
                 self.dst_Index = dst_Index
@@ -417,8 +427,8 @@ class Regrid:
         self.dst_dims = (c_int * self.rank)()
 
         # Build coordinate objects
-        src_dimnames = (c_char_p * self.rank)()
-        dst_dimnames = (c_char_p * self.rank)()
+        src_dimnames = (c_wchar_p * self.rank)()
+        dst_dimnames = (c_wchar_p * self.rank)()
         for i in range(self.rank):
             src_dimnames[i] = 'src_n%d' % i
             dst_dimnames[i] = 'dst_n%d' % i
@@ -508,6 +518,14 @@ class Regrid:
             status = self.lib.nccf_free_coord(self.dst_coordids[i])
             catchError(status, sys._getframe().f_lineno)
 
+    def find(self, pattern, path):
+        result = ""
+        for root, dirs, files in os.walk(path):
+            for name in files:
+                if fnmatch.fnmatch(name, pattern):
+                    result = os.path.join(root, name)
+        return result
+
     def setValidMask(self, inMask):
         """
         Set valid mask array for the grid
@@ -582,12 +600,16 @@ class Regrid:
         src_data = self._extend(src_data_in)
 
         # Check
-        if not reduce(operator.iand, [src_data.shape[i] == self.src_dims[i] for i in range(self.rank)]):
+        if reduce(operator.iand, [src_data.shape[i] == self.src_dims[i]
+                                  for i in range(self.rank)]) == False:  # noqa
             raise RegridError(("ERROR in %s: supplied src_data have wrong shape " +
-                               "%s != %s") % (__FILE__, str(src_data.shape), str(tuple([d for d in self.src_dims]))))
-        if not reduce(operator.iand, [dst_data.shape[i] == self.dst_dims[i] for i in range(self.rank)]):
+                               "%s != %s") % (__FILE__, str(src_data.shape),
+                                              str(tuple([d for d in self.src_dims]))))
+        if reduce(operator.iand, [dst_data.shape[i] == self.dst_dims[i]
+                                  for i in range(self.rank)]) == False:  # noqa
             raise RegridError(("ERROR in %s: supplied dst_data have wrong shape " +
-                               "%s != %s") % (__FILE__, str(dst_data.shape), str(tuple([d for d in self.dst_dims]))))
+                               "%s != %s") % (__FILE__, str(dst_data.shape),
+                                              str(tuple([d for d in self.dst_dims]))))
 
         # Create temporary data objects
         src_dataid = c_int(-1)
@@ -759,6 +781,7 @@ class Regrid:
         @return extended source data (or source input data of no padding was applied)
         """
 
+        # nlatX, nlonX = self.src_dims[-2], self.src_dims[-1]
         # original dimensions, before extension
         # assuming ..., lat, lon ordering
         nlat, nlon = src_data.shape[-2:]
@@ -844,13 +867,15 @@ def testMakeCyclic():
 
 def testHandleCut():
 
+    import cdms2
     # Need tripolar grid
     filename = "data/so_Omon_GFDL-ESM2M_1pctCO2_r1i1p2_000101-000512_2timesteps.nc"
     f = cdms2.open(filename)
     if not f:
         return
 
-    if 'lon' in f.variables.keys():
+    # so = f.variables['so'][0, 0, :, :]
+    if 'lon' in list(f.variables.keys()):
         alllat = f.variables['lat']
         alllon = f.variables['lon']
     else:
@@ -865,14 +890,19 @@ def testHandleCut():
     newCoords, newDims = handleCoordsCut(newCoords, newDims, bounds)
 
 
-def testOuterProduct():
+# def testOuterProduct():
 
     # 2d
-    x = numpy.array([1, 2, 3, 4])
-    y = numpy.array([10, 20, 30])
-    getTensorProduct(x, 0, [len(x), len(y)])
-    getTensorProduct(y, 1, [len(x), len(y)])
+    # x = numpy.array([1, 2, 3, 4])
+    # y = numpy.array([10, 20, 30])
+    # xx = getTensorProduct(x, 0, [len(x), len(y)])
+    # yy = getTensorProduct(y, 1, [len(x), len(y)])
 
+    # z = numpy.array([100, 200])
+    # Mixed coordinates and axes
+    # aa = makeCurvilinear([z, yy, xx])
+    # for g in aa:
+    #     print g
 
 def test():
     def func1(coords):
@@ -897,6 +927,9 @@ def test():
 #    rg = Regrid([src_x, src_y],
 #                [dst_x, dst_y])
 
+    # initialIndexGuess = numpy.array([0.0, 0.0, 0.0])
+    # indices = rg._findIndices(numpy.array([1.5, 18.0, 140.0]),
+    #                           20, 1.e-2, initialIndexGuess)
     maxNumIters = 20
     posTol = 1.e-3
     rg.computeWeights(maxNumIters, posTol)
@@ -907,12 +940,12 @@ def test():
 
     # number of destination points
     ndstpts = rg.getNumDstPoints()
-    print 'nvalid = ', nvalid, ' ndstpts = ', ndstpts
+    print(('nvalid = ', nvalid, ' ndstpts = ', ndstpts))
 
     # get the indices and weights for a single target location
     dst_indices = [4, 2, 1]
     inds, weights = rg.getIndicesAndWeights(dst_indices)
-    print 'indices and weights are: ', inds, weights
+    print(('indices and weights are: ', inds, weights))
 
     # data
     src_coords = rg.getSrcGrid()
@@ -924,13 +957,13 @@ def test():
 
     # regrid
     rg(src_data, dst_data)
-    print 'after interp: dst_data = ', dst_data
+    print(('after interp: dst_data = ', dst_data))
 
     # check
     error = numpy.sum(abs(dst_data - func1(dst_coords)))
     # print dst_data
     # print func(dst_coords)
-    print 'error = ', error
+    print(('error = ', error))
 
 
 def testMasking():
@@ -955,6 +988,9 @@ def testMasking():
     rg = Regrid([src_x, src_y],
                 [dst_x, dst_y])
 
+    # initialIndexGuess = numpy.array([0.0, 0.0, 0.0])
+    # indices = rg._findIndices(numpy.array([1.5, 18.0, 140.0]),
+    #                           20, 1.e-2, initialIndexGuess)
     # Mask needs to be set before weights are computed
     mask = rg.getSrcGrid()[0] == 3
     mask[:, 3] = True
@@ -970,12 +1006,12 @@ def testMasking():
 
     # number of destination points
     ndstpts = rg.getNumDstPoints()
-    print 'nvalid = ', nvalid, ' ndstpts = ', ndstpts
+    print(('nvalid = ', nvalid, ' ndstpts = ', ndstpts))
 
     # get the indices and weights for a single target location
     dst_indices = [4, 2, 1]
     inds, weights = rg.getIndicesAndWeights(dst_indices)
-    print 'indices and weights are: ', inds, weights
+    print(('indices and weights are: ', inds, weights))
 
     # data
     src_coords = rg.getSrcGrid()
@@ -987,13 +1023,13 @@ def testMasking():
 
     # regrid
     rg(src_data, dst_data)
-    print 'after interp: dst_data =\n', dst_data
+    print(('after interp: dst_data =\n', dst_data))
 
     # check
     error = numpy.sum(abs(dst_data - func1(dst_coords)))
     # print dst_data
     # print func(dst_coords)
-    print 'error = ', error
+    print(('error = ', error))
 
 
 if __name__ == '__main__':

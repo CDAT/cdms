@@ -3,9 +3,8 @@
 import cdms2
 import numpy
 import copy
-import string
-import _regrid
-from error import RegridError
+from . import _regrid
+from .error import RegridError
 
 
 class CrossSectionRegridder:
@@ -154,7 +153,6 @@ class CrossSectionRegridder:
         method is either 'log' to interpolate in the log of pressure, or 'linear' for linear interpolation.
         """
 
-        import cdms2
         from cdms2.avariable import AbstractVariable
         from cdms2.tvariable import TransientVariable
 
@@ -162,7 +160,7 @@ class CrossSectionRegridder:
         if isinstance(ar, AbstractVariable):
             attrs = copy.copy(ar.attributes)
             varid = ar.id
-            axislist = list(map(lambda x: x[0].clone(), ar.getDomain()))
+            axislist = list([x[0].clone() for x in ar.getDomain()])
             inputIsVariable = 1
             if order is None:
                 order = ar.getOrder()
@@ -207,7 +205,7 @@ class CrossSectionRegridder:
         assert rank == len(
             order), 'Order must be same length as array rank: %i' % len(ar.shape)
 
-        order = string.lower(order)
+        order = str.lower(order)
 
         # Map order to positionIn
         positionIn = [None] * 3
@@ -593,7 +591,7 @@ def generic_wts_bnds(lat):
             newLat = lat.clone()
             newLat.setBounds(None)
         bnds = lat.getBounds()
-    except BaseException:
+    except BaseException:  # just an array....
         newLat = cdms2.createAxis(lat)
         newLat.setBounds(None)
         bnds = newLat.getBounds()
@@ -991,14 +989,14 @@ def sendmsg(msg, value1=None, value2=None):
     #
     #---------------------------------------------------------------------------------"""
 
-    print '*******************************************************************'
+    print('*******************************************************************')
     if value1 is None:
-        print msg
+        print(msg)
     elif value2 is None:
-        print msg, value1
+        print((msg, value1))
     else:
-        print msg, value1, value2
-    print '*******************************************************************'
+        print((msg, value1, value2))
+    print('*******************************************************************')
 
     return None
 
@@ -1045,9 +1043,9 @@ def rmserror(data1, data2):
     #---------------------------------------------------------------------------------"""
 
     if data1.shape != data2.shape:
-        print 'Error in shape in rmserror'
-        print 'data1 shape = ', data1.shape
-        print 'data2 shape = ', data2.shape
+        print('Error in shape in rmserror')
+        print(('data1 shape = ', data1.shape))
+        print(('data2 shape = ', data2.shape))
         raise ValueError
 
     d1 = numpy.ravel(data1)
@@ -1088,6 +1086,6 @@ if __name__ == '__main__':
     # find the rms error
     error = rmserror(dataOut, dataCheck)
 
-    print 'expected cross section test case rms error =  0.18581882'
+    print('expected cross section test case rms error =  0.18581882')
     # print 'expected cross section test case rms error =  0.23062'
-    print 'calculated cross section test case rms error = ', error
+    print(('calculated cross section test case rms error = ', error))

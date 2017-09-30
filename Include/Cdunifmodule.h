@@ -69,119 +69,119 @@ typedef struct {
 
 /* Open a Cdunif file (i.e. create a new file object) */
 #define PyCdunifFile_Open_RET PyCdunifFileObject *
-#define PyCdunifFile_Open_PROTO Py_PROTO((char *filename, char *mode))
+#define PyCdunifFile_Open_PROTO (char *filename, char *mode)
 #define PyCdunifFile_Open_NUM 2
 
 /* Close a Cdunif file. Returns -1 if there was an error. */
 #define PyCdunifFile_Close_RET int
-#define PyCdunifFile_Close_PROTO Py_PROTO((PyCdunifFileObject *file))
+#define PyCdunifFile_Close_PROTO (PyCdunifFileObject *file)
 #define PyCdunifFile_Close_NUM 3
 
 /* Ensure that all data is written to the disk file.
    Returns 0 if there was an error. */
 #define PyCdunifFile_Sync_RET int
-#define PyCdunifFile_Sync_PROTO Py_PROTO((PyCdunifFileObject *file))
+#define PyCdunifFile_Sync_PROTO (PyCdunifFileObject *file)
 #define PyCdunifFile_Sync_NUM 4
 
 /* Create a new dimension. Returns -1 if there was an error. */
 #define PyCdunifFile_CreateDimension_RET int
 #define PyCdunifFile_CreateDimension_PROTO \
-        Py_PROTO((PyCdunifFileObject *file, char *name, long size))
+        (PyCdunifFileObject *file, char *name, long size)
 #define PyCdunifFile_CreateDimension_NUM 5
 
 /* Create a Cdunif variable and return the variable object */
 #define PyCdunifFile_CreateVariable_RET PyCdunifVariableObject *
 #define PyCdunifFile_CreateVariable_PROTO \
-      Py_PROTO((PyCdunifFileObject *file, char *name, int typecode, \
-                char **dimension_names, int ndim))
+      (PyCdunifFileObject *file, char *name, int typecode, \
+                char **dimension_names, int ndim)
 #define PyCdunifFile_CreateVariable_NUM 6
 
 /* Return an object referring to an existing variable */
 #define PyCdunifFile_GetVariable_RET PyCdunifVariableObject *
 #define PyCdunifFile_GetVariable_PROTO \
-	  Py_PROTO((PyCdunifFileObject *file, char *name))
+	  (PyCdunifFileObject *file, PyObject *name)
 #define PyCdunifFile_GetVariable_NUM 7
 
 /* Get variable rank */
 #define PyCdunifVariable_GetRank_RET int
-#define PyCdunifVariable_GetRank_PROTO Py_PROTO((PyCdunifVariableObject *var))
+#define PyCdunifVariable_GetRank_PROTO (PyCdunifVariableObject *var)
 #define PyCdunifVariable_GetRank_NUM 8
 
 /* Get variable shape */
 #define PyCdunifVariable_GetShape_RET size_t *
-#define PyCdunifVariable_GetShape_PROTO Py_PROTO((PyCdunifVariableObject *var))
+#define PyCdunifVariable_GetShape_PROTO (PyCdunifVariableObject *var)
 #define PyCdunifVariable_GetShape_NUM 9
 
 /* Allocate and initialize index structures for reading/writing data */
 #define PyCdunifVariable_Indices_RET PyCdunifIndex *
-#define PyCdunifVariable_Indices_PROTO Py_PROTO((PyCdunifVariableObject *var))
+#define PyCdunifVariable_Indices_PROTO (PyCdunifVariableObject *var)
 #define PyCdunifVariable_Indices_NUM 10
 
 /* Read data and return an array object */
 #define PyCdunifVariable_ReadAsArray_RET PyArrayObject *
 #define PyCdunifVariable_ReadAsArray_PROTO \
-	  Py_PROTO((PyCdunifVariableObject *var, PyCdunifIndex *indices))
+	  (PyCdunifVariableObject *var, PyCdunifIndex *indices)
 #define PyCdunifVariable_ReadAsArray_NUM 11
 
 /* Write array. Returns -1 if there was an error.  */
 #define PyCdunifVariable_WriteArray_RET int
 #define PyCdunifVariable_WriteArray_PROTO \
-	  Py_PROTO((PyCdunifVariableObject *var, PyCdunifIndex *indices, \
-		    PyObject *array))
+	  (PyCdunifVariableObject *var, PyCdunifIndex *indices, \
+		    PyObject *array)
 #define PyCdunifVariable_WriteArray_NUM 12
 
 /* Get file attribute */
 #define PyCdunifFile_GetAttribute_RET PyObject *
 #define PyCdunifFile_GetAttribute_PROTO \
-	  Py_PROTO((PyCdunifFileObject *var, char *name))
+	  (PyCdunifFileObject *var, PyObject *name)
 #define PyCdunifFile_GetAttribute_NUM 13
 
 /* Set file attribute */
 #define PyCdunifFile_SetAttribute_RET int
 #define PyCdunifFile_SetAttribute_PROTO \
-	  Py_PROTO((PyCdunifFileObject *var, char *name, PyObject *value))
+	  (PyCdunifFileObject *var, PyObject *name, PyObject *value)
 #define PyCdunifFile_SetAttribute_NUM 14
 
 /* Set file attribute to string value */
-#define PyCdunifFile_SetAttributeString_RET int
-#define PyCdunifFile_SetAttributeString_PROTO \
-	  Py_PROTO((PyCdunifFileObject *var, char *name, char *value))
-#define PyCdunifFile_SetAttributeString_NUM 15
+#define PyCdunifFile_SetAttributeUnicode_RET int
+#define PyCdunifFile_SetAttributeUnicode_PROTO \
+	  (PyCdunifFileObject *var, char *name, char *value)
+#define PyCdunifFile_SetAttributeUnicode_NUM 15
 
 /* Get variable attribute */
 #define PyCdunifVariable_GetAttribute_RET PyObject *
 #define PyCdunifVariable_GetAttribute_PROTO \
-	  Py_PROTO((PyCdunifVariableObject *var, char *name))
+	  (PyCdunifVariableObject *var, PyObject *name)
 #define PyCdunifVariable_GetAttribute_NUM 16
 
 /* Set variable attribute */
 #define PyCdunifVariable_SetAttribute_RET int
 #define PyCdunifVariable_SetAttribute_PROTO \
-	  Py_PROTO((PyCdunifVariableObject *var, char *name, PyObject *value))
+	  (PyCdunifVariableObject *var, PyObject *nameobj, PyObject *value)
 #define PyCdunifVariable_SetAttribute_NUM 17
 
 /* Set variable attribute to string value */
-#define PyCdunifVariable_SetAttributeString_RET int
-#define PyCdunifVariable_SetAttributeString_PROTO \
-	  Py_PROTO((PyCdunifVariableObject *var, char *name, char *value))
-#define PyCdunifVariable_SetAttributeString_NUM 18
+#define PyCdunifVariable_SetAttributeUnicode_RET int
+#define PyCdunifVariable_SetAttributeUnicode_PROTO \
+	  (PyCdunifVariableObject *var, char *name, char *value)
+#define PyCdunifVariable_SetAttributeUnicode_NUM 18
 
 /* Add entry to the history */
 #define PyCdunifFile_AddHistoryLine_RET int
 #define PyCdunifFile_AddHistoryLine_PROTO \
-	  Py_PROTO((PyCdunifFileObject *self, char *text))
+	  (PyCdunifFileObject *self, char *text)
 #define PyCdunifFile_AddHistoryLine_NUM 19
 
 /* Write string. Returns -1 if there was an error.  */
-#define PyCdunifVariable_WriteString_RET int
-#define PyCdunifVariable_WriteString_PROTO \
-	  Py_PROTO((PyCdunifVariableObject *var, PyStringObject *value))
-#define PyCdunifVariable_WriteString_NUM 20
+#define PyCdunifVariable_WriteUnicode_RET int
+#define PyCdunifVariable_WriteUnicode_PROTO \
+	  (PyCdunifVariableObject *var, PyUnicodeObject *value)
+#define PyCdunifVariable_WriteUnicode_NUM 20
 
 /* Read string  */
-#define PyCdunifVariable_ReadAsString_RET PyStringObject *
+#define PyCdunifVariable_ReadAsString_RET PyUnicodeObject *
 #define PyCdunifVariable_ReadAsString_PROTO \
-	  Py_PROTO((PyCdunifVariableObject *var))
+	  (PyCdunifVariableObject *var)
 #define PyCdunifVariable_ReadAsString_NUM 21
 
 /* Total number of C API pointers */
@@ -196,8 +196,8 @@ typedef struct {
 extern PyTypeObject PyCdunifFile_Type;
 extern PyTypeObject PyCdunifVariable_Type;
 #else
-staticforward PyTypeObject PyCdunifFile_Type;
-staticforward PyTypeObject PyCdunifVariable_Type;
+static PyTypeObject PyCdunifFile_Type;
+static PyTypeObject PyCdunifVariable_Type;
 #endif
 
 /* Type check macros */
@@ -226,21 +226,21 @@ static PyCdunifVariable_ReadAsString_RET PyCdunifVariable_ReadAsString \
   PyCdunifVariable_ReadAsString_PROTO;
 static PyCdunifVariable_WriteArray_RET PyCdunifVariable_WriteArray \
   PyCdunifVariable_WriteArray_PROTO;
-static PyCdunifVariable_WriteString_RET PyCdunifVariable_WriteString \
-  PyCdunifVariable_WriteString_PROTO;
+static PyCdunifVariable_WriteUnicode_RET PyCdunifVariable_WriteUnicode \
+  PyCdunifVariable_WriteUnicode_PROTO;
 static PyCdunifFile_GetAttribute_RET PyCdunifFile_GetAttribute \
   PyCdunifFile_GetAttribute_PROTO;
 static PyCdunifFile_SetAttribute_RET PyCdunifFile_SetAttribute \
   PyCdunifFile_SetAttribute_PROTO;
-static PyCdunifFile_SetAttributeString_RET PyCdunifFile_SetAttributeString \
-  PyCdunifFile_SetAttributeString_PROTO;
+static PyCdunifFile_SetAttributeUnicode_RET PyCdunifFile_SetAttributeUnicode \
+  PyCdunifFile_SetAttributeUnicode_PROTO;
 static PyCdunifVariable_GetAttribute_RET PyCdunifVariable_GetAttribute \
   PyCdunifVariable_GetAttribute_PROTO;
 static PyCdunifVariable_SetAttribute_RET PyCdunifVariable_SetAttribute \
   PyCdunifVariable_SetAttribute_PROTO;
-static PyCdunifVariable_SetAttributeString_RET \
-  PyCdunifVariable_SetAttributeString \
-  PyCdunifVariable_SetAttributeString_PROTO;
+static PyCdunifVariable_SetAttributeUnicode_RET \
+  PyCdunifVariable_SetAttributeUnicode \
+  PyCdunifVariable_SetAttributeUnicode_PROTO;
 static PyCdunifFile_AddHistoryLine_RET PyCdunifFile_AddHistoryLine \
   PyCdunifFile_AddHistoryLine_PROTO;
 
@@ -292,29 +292,29 @@ static void **PyCdunif_API;
 #define PyCdunifVariable_WriteArray \
   (*(PyCdunifVariable_WriteArray_RET (*)PyCdunifVariable_WriteArray_PROTO) \
    PyCdunif_API[PyCdunifVariable_WriteArray_NUM])
-#define PyCdunifVariable_WriteString \
-  (*(PyCdunifVariable_WriteString_RET (*)PyCdunifVariable_WriteString_PROTO) \
-   PyCdunif_API[PyCdunifVariable_WriteString_NUM])
+#define PyCdunifVariable_WriteUnicode \
+  (*(PyCdunifVariable_WriteUnicode_RET (*)PyCdunifVariable_WriteUnicode_PROTO) \
+   PyCdunif_API[PyCdunifVariable_WriteUnicode_NUM])
 #define PyCdunifFile_GetAttribute \
   (*(PyCdunifFile_GetAttribute_RET (*)PyCdunifFile_GetAttribute_PROTO) \
    PyCdunif_API[PyCdunifFile_GetAttribute_NUM])
 #define PyCdunifFile_SetAttribute \
   (*(PyCdunifFile_SetAttribute_RET (*)PyCdunifFile_SetAttribute_PROTO) \
    PyCdunif_API[PyCdunifFile_SetAttribute_NUM])
-#define PyCdunifFile_SetAttributeString \
-  (*(PyCdunifFile_SetAttributeString_RET \
-     (*)PyCdunifFile_SetAttributeString_PROTO) \
-   PyCdunif_API[PyCdunifFile_SetAttributeString_NUM])
+#define PyCdunifFile_SetAttributeUnicode \
+  (*(PyCdunifFile_SetAttributeUnicode_RET \
+     (*)PyCdunifFile_SetAttributeUnicode_PROTO) \
+   PyCdunif_API[PyCdunifFile_SetAttributeUnicode_NUM])
 #define PyCdunifVariable_GetAttribute \
   (*(PyCdunifVariable_GetAttribute_RET (*)PyCdunifVariable_GetAttribute_PROTO) \
    PyCdunif_API[PyCdunifVariable_GetAttribute_NUM])
 #define PyCdunifVariable_SetAttribute \
   (*(PyCdunifVariable_SetAttribute_RET (*)PyCdunifVariable_SetAttribute_PROTO) \
    PyCdunif_API[PyCdunifVariable_SetAttribute_NUM])
-#define PyCdunifVariable_SetAttributeString \
-  (*(PyCdunifVariable_SetAttributeString_RET \
-     (*)PyCdunifVariable_SetAttributeString_PROTO) \
-   PyCdunif_API[PyCdunifVariable_SetAttributeString_NUM])
+#define PyCdunifVariable_SetAttributeUnicode \
+  (*(PyCdunifVariable_SetAttributeUnicode_RET \
+     (*)PyCdunifVariable_SetAttributeUnicode_PROTO) \
+   PyCdunif_API[PyCdunifVariable_SetAttributeUnicode_NUM])
 #define PyCdunifFile_AddHistoryLine \
   (*(PyCdunifFile_AddHistoryLine_RET \
      (*)PyCdunifFile_AddHistoryLine_PROTO) \

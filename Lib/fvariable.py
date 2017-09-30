@@ -3,12 +3,11 @@
 
 "CDMS File-based variables."
 import numpy
-
-from cdmsobj import Max32int
-from variable import DatasetVariable
-from error import CDMSError
-from sliceut import reverseSlice
-from Cdunif import CdunifError
+from .cdmsobj import Max32int
+from .variable import DatasetVariable
+from .error import CDMSError
+from .sliceut import reverseSlice
+from .Cdunif import CdunifError
 
 FileClosed = "Cannot read from closed file, variable: "
 FileClosedWrite = "Cannot write to a closed file, variable: "
@@ -21,17 +20,17 @@ class FileVariable(DatasetVariable):
         DatasetVariable.__init__(self, parent, varname)
         self._obj_ = cdunifobj
         if cdunifobj is not None:
-            for attname, attval in cdunifobj.__dict__.items():
+            for attname, attval in list(cdunifobj.__dict__.items()):
                 self.__dict__[attname] = attval
                 self.attributes[attname] = attval
             if '_FillValue' in self.__dict__.keys():
                 self.__dict__['missing_value'] = self.__dict__['_FillValue']
                 self.attributes['missing_value'] = self.__dict__['_FillValue']
-#            if self.__dict__['missing_value'] is None:
-#                self.__dict__[
-#                    'missing_value'] = numpy.ma.default_fill_value(self)
-#                self.attributes['missing_value'] = numpy.ma.default_fill_value(
-#                    self)
+            if self.__dict__['missing_value'] is None:
+                self.__dict__[
+                    'missing_value'] = numpy.ma.default_fill_value(self)
+                self.attributes['missing_value'] = numpy.ma.default_fill_value(
+                    self)
 
         val = self.__cdms_internals__ + ['name_in_file', ]
         self.___cdms_internals__ = val
@@ -155,7 +154,7 @@ class FileVariable(DatasetVariable):
         if (name not in self.__cdms_internals__) and (value is not None):
             try:
                 setattr(self._obj_, name, value)
-            except CdunifError:
+            except Exception:
                 raise CDMSError(
                     "Setting %s.%s=%s" %
                     (self.id, name, repr(value)))

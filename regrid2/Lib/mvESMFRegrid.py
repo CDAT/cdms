@@ -6,14 +6,13 @@ No guarantee is provided whatsoever. Use at your own risk.
 
 David Kindig and Alex Pletzer, Tech-X Corp. (2012)
 """
-import types
 import re
 import numpy
 
 import ESMF
-from regrid2 import esmf
-from regrid2 import RegridError
-from regrid2 import GenericRegrid
+from . import esmf
+from . import RegridError
+from .mvGenericRegrid import GenericRegrid
 
 ESMF.Manager(debug=False)
 HAVE_MPI = False
@@ -77,7 +76,7 @@ class ESMFRegrid(GenericRegrid):
 
         self.regridMethod = BILINEAR
         self.regridMethodStr = 'linear'
-        if isinstance(regridMethod, types.StringType):
+        if isinstance(regridMethod, str):
             if re.search('conserv', regridMethod.lower()):
                 self.regridMethod = CONSERVE
                 self.regridMethodStr = 'conserve'
@@ -88,7 +87,7 @@ class ESMFRegrid(GenericRegrid):
         # data stagger
         self.staggerloc = CENTER
         self.staggerlocStr = 'center'
-        if isinstance(staggerLoc, types.StringType):
+        if isinstance(staggerLoc, str):
             if re.search('vface', staggerLoc.lower(), re.I):
                 self.staggerloc = VFACE
                 self.staggerlocStr = 'vcorner'
@@ -121,7 +120,7 @@ class ESMFRegrid(GenericRegrid):
 #        self.srcMaskValues = numpy.array([1],dtype = numpy.int32)
 #        self.dstMaskValues = numpy.array([1],dtype = numpy.int32)
 
-        if isinstance(regridMethod, types.StringType):
+        if isinstance(regridMethod, str):
             if re.search('conserv', regridMethod.lower()):
                 self.srcMaskValues = numpy.array([1], dtype=numpy.int32)
                 self.dstMaskValues = numpy.array([1], dtype=numpy.int32)

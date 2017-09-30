@@ -161,7 +161,7 @@ class TestESMFRegridderMasked(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    print ""  # Spacer
+    print("")  # Spacer
     ESMF.Manager(debug=True)
     suite = unittest.TestLoader().loadTestsFromTestCase(TestESMFRegridderMasked)
     unittest.TextTestRunner(verbosity=1).run(suite)

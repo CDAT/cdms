@@ -2,14 +2,15 @@
 CDMS module-level functions and definitions
 """
 
-import cdmsNode
+from . import cdmsNode
 import cdtime
 import glob
 import os
 import re
 import string
 import sys
-import types
+# import types
+# import internattr
 
 # Data types
 
@@ -235,7 +236,7 @@ def generateTime(matchobj, timespecs):
     if yrspec:
         pat, name, dimtype, pos = _specifierMap[yrspec]
         yrstr = matchobj.group(name)
-        iyr = string.atoi(yrstr)
+        iyr = int(yrstr)
 
         # Map 2-digit year to [1950,2049)
         if yrspec in ('%y', '%ey'):
@@ -251,23 +252,23 @@ def generateTime(matchobj, timespecs):
         elif mospec in ('%g', '%eg'):
             imo = _monthMapLower[mostr]
         elif mospec in ('%m', '%em', '%n', '%en'):
-            imo = string.atoi(mostr)
+            imo = int(mostr)
     if dyspec:
         pat, name, dimtype, pos = _specifierMap[dyspec]
         dystr = matchobj.group(name)
-        idy = string.atoi(dystr)
+        idy = int(dystr)
     if hrspec:
         pat, name, dimtype, pos = _specifierMap[hrspec]
         hrstr = matchobj.group(name)
-        ihr = string.atoi(hrstr)
+        ihr = int(hrstr)
     if mispec:
         pat, name, dimtype, pos = _specifierMap[mispec]
         mistr = matchobj.group(name)
-        imi = string.atoi(mistr)
+        imi = int(mistr)
     if sespec:
         pat, name, dimtype, pos = _specifierMap[sespec]
         sestr = matchobj.group(name)
-        ise = string.atoi(sestr)
+        ise = int(sestr)
     return cdtime.comptime(iyr, imo, idy, ihr, imi, ise)
 
 # Find all files in 'direc' which match 'template'.
@@ -314,9 +315,9 @@ def matchingFiles(direc, template):
         if dimtypes['etime'] != [None, None, None, None, None, None]:
             matchnames[_etime] = generateTime(matchobj, dimtypes['etime'])
         if dimtypes['level'] is not None:
-            matchnames[_level] = string.atoi(matchobj.group('level'))
+            matchnames[_level] = int(matchobj.group('level'))
         if dimtypes['elevel'] is not None:
-            matchnames[_elevel] = string.atoi(matchobj.group('elevel'))
+            matchnames[_elevel] = int(matchobj.group('elevel'))
         matchfiles.append((candfile, matchnames))
 
     return matchfiles
@@ -419,7 +420,7 @@ def searchPattern(objlist, pattern, attribute=None, tag=None):
     if tag is not None:
         tag = string.lower(tag)
     regexp = re.compile(pattern)
-    if not isinstance(objlist, types.ListType):
+    if not isinstance(objlist, list):
         objlist = [objlist]
 
     returnlist = []
@@ -441,7 +442,7 @@ def matchPattern(objlist, pattern, attribute=None, tag=None):
     if tag is not None:
         tag = string.lower(tag)
     regexp = re.compile(pattern)
-    if not isinstance(objlist, types.ListType):
+    if not isinstance(objlist, list):
         objlist = [objlist]
 
     returnlist = []
@@ -472,7 +473,7 @@ def matchPattern(objlist, pattern, attribute=None, tag=None):
 def searchPredicate(objlist, predicate, tag=None):
     if tag is not None:
         tag = string.lower(tag)
-    if not isinstance(objlist, types.ListType):
+    if not isinstance(objlist, list):
         objlist = [objlist]
 
     returnlist = []
@@ -496,7 +497,7 @@ class CdmsObj (object):
 
     def _listatts(self):
         dic = {}
-        for nm, val in self.__dict__.items():
+        for nm, val in list(self.__dict__.items()):
             if (nm[0] != '_' and nm not in self.__cdms_internals__) or nm in [
                     '_FillValue']:
                 dic[nm] = val
@@ -528,7 +529,7 @@ class CdmsObj (object):
                 parenttype = None
             atts = node.getExternalDict()
             adict = self.__dict__
-            for attname in atts.keys():
+            for attname in list(atts.keys()):
                 (attval, datatype) = atts[attname]  # (XML value, datatype)
                 constraint = node.extra.get(attname)
                 if constraint is not None:
@@ -539,14 +540,14 @@ class CdmsObj (object):
                     if reqtype != datatype and datatype == CdString and scaletype == CdScalar:
                         if reqtype in (CdFloat, CdDouble):
                             try:
-                                attval = string.atof(attval)
+                                attval = float(attval)
                             except BaseException:
                                 raise RuntimeError(
                                     "%s=%s must be a float" %
                                     (attname, attval))
                         elif reqtype in (CdShort, CdInt, CdLong, CdInt64):
                             try:
-                                attval = string.atoi(attval)
+                                attval = int(attval)
                             except BaseException:
                                 raise RuntimeError(
                                     "%s=%s must be an integer" %
@@ -567,20 +568,20 @@ class CdmsObj (object):
         :::
         Output:::
         result :: (int/True/False) (0) True if the attribute with name attname
-        is a string attribute which contains the compiled regular expression
-        pattern, or if attname is None and pattern matches at least one string
-        attribute, False if the attribute is not found or is not a string.
+                  is a string attribute which contains the compiled regular expression
+                  pattern, or if attname is None and pattern matches at least one
+                  string attribute, False if the attribute is not found or is not a string
         :::
         """
         if attname is None:
-            for attval in self.attributes.values():
-                if isinstance(attval, types.StringType) and pattern.search(
+            for attval in list(self.attributes.values()):
+                if isinstance(attval, bytes) and pattern.search(
                         attval) is not None:
                     return 1
             return 0
         elif attname in self.attributes:
             attval = self.attributes[attname]
-            return (isinstance(attval, types.StringType) and
+            return (isinstance(attval, bytes) and
                     pattern.search(attval) is not None)
         else:
             return 0
@@ -602,20 +603,20 @@ class CdmsObj (object):
         :::
         Output:::
         result :: (int/True/False) (0) True if the attribute with name attname
-        is a string attribute which matches the compiled regular expression
-        pattern, or if attname is None and pattern matches at least one string
-        attribute, False if the attribute is not found or is not a string
+                  is a string attribute which matches the compiled regular expression
+                  pattern, or if attname is None and pattern matches at least one
+                  string attribute, False if the attribute is not found or is not a string
         :::
         """
         if attname is None:
-            for attval in self.attributes.values():
-                if isinstance(attval, types.StringType) and pattern.match(
+            for attval in list(self.attributes.values()):
+                if isinstance(attval, bytes) and pattern.match(
                         attval) is not None:
                     return 1
             return 0
         elif attname in self.attributes:
             attval = self.attributes[attname]
-            return (isinstance(attval, types.StringType) and
+            return (isinstance(attval, bytes) and
                     pattern.match(attval) is not None)
         else:
             return 0
@@ -625,8 +626,8 @@ class CdmsObj (object):
     # internal node tag.
     def searchPattern(self, pattern, attribute, tag):
         """
-        Search for a pattern in a string-valued attribute. If attribute is
-        None, search all string attributes. If tag is not None,
+        Search for a pattern in a string-valued attribute. If attribute is None, search
+        all string attributes. If tag is not None, it must match the internal node tag.
         it must match the internal node tag.
         :::
         Input:::
@@ -651,8 +652,8 @@ class CdmsObj (object):
     # internal node tag.
     def matchPattern(self, pattern, attribute, tag):
         """
-        Match for a pattern in a string-valued attribute.
-        If attribute is None, search all string attributes.
+        Match for a pattern in a string-valued attribute. If attribute is None, search
+        all string attributes. If tag is not None, it must match the internal node tag.
         If tag is not None, it must match the internal node tag.
         :::
         Input:::
@@ -678,8 +679,8 @@ class CdmsObj (object):
     def searchPredicate(self, predicate, tag):
         """
         Apply a truth-valued predicate. Return a list containing a single instance:
-        [self] if the predicate is true and either tag is None or matches the object
-        node tag. If the predicate returns false, return an empty list
+             [self] if the predicate is true and either tag is None or matches the object node tag.
+        If the predicate returns false, return an empty list
         :::
         Input:::
         predicate :: (function) (0) predicate
@@ -714,7 +715,7 @@ class CdmsObj (object):
         :::
         """
         if self._node_ is None:
-            raise RuntimeError("No tree node found")
+            raise CDMSError("No tree node found") # noqa
         self._node_.dump(path, format)
 
     def _getinternals(self):
@@ -732,4 +733,4 @@ if __name__ == '__main__':
     assert x.attributes['someatt'] == x.someatt
     assert '_node' not in x.attributes
     # need tests for the search routines...
-    print "Test passed."
+    print("Test passed.")

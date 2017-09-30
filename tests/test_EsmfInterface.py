@@ -101,9 +101,9 @@ class Test(unittest.TestCase):
         # gather the data on proc 0
         soInterpEsmfInterfaceRoot = dstFld.getData(rootPe=0)
 
-        print '[%d] esmfInterface chksum = %f' % (mype, soInterpEsmfInterface.sum())
+        print(('[%d] esmfInterface chksum = %f' % (mype, soInterpEsmfInterface.sum())))
         if mype == 0:
-            print 'ROOT esmfInterface chksum = %f' % soInterpEsmfInterfaceRoot.sum()
+            print(('ROOT esmfInterface chksum = %f' % soInterpEsmfInterfaceRoot.sum()))
 
         # Native ESMP
         srcMaxIndex = numpy.array(so[0, 0, ...].shape[::-1], dtype=numpy.int32)
@@ -224,9 +224,9 @@ class Test(unittest.TestCase):
         else:
             chksumsESMP = chksumESMP
 
-        print '[%d] ESMP chksum = %f' % (mype, chksumESMP)
+        print(('[%d] ESMP chksum = %f' % (mype, chksumESMP)))
         if mype == 0:
-            print 'ROOT ESMP chksum = %f' % numpy.sum(chksumsESMP)
+            print(('ROOT ESMP chksum = %f' % numpy.sum(chksumsESMP)))
 
         if mype == 0:
             chksumESMPRoot = numpy.sum(chksumsESMP)
@@ -266,7 +266,7 @@ class Test(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    print ""
+    print("")
     suite = unittest.TestLoader().loadTestsFromTestCase(Test)
     unittest.TextTestRunner(verbosity=1).run(suite)
     if PLOT:

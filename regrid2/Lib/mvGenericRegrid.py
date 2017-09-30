@@ -199,8 +199,7 @@ valid choices are: 'libcf', 'esmf'""" % regridTool
 
                 # interpolate mask
                 self.tool.apply(srcDataMaskFloat, dstDataMaskFloat,
-                                rootPe=rootPe, globalIndexing=True,
-                                **args)
+                                rootPe=rootPe, globalIndexing=True, **args)
                 if re.search('conserv', self.regridMethod.lower(), re.I):
                     dstMask = numpy.array(
                         (dstDataMaskFloat > 1 - EPS), numpy.int32)
@@ -209,8 +208,7 @@ valid choices are: 'libcf', 'esmf'""" % regridTool
 
                 # interpolate the data
                 self.tool.apply(indata, dstData, rootPe=rootPe,
-                                globalIndexing=True,
-                                **args)
+                                globalIndexing=True, **args)
 
                 # add missing values
                 dstData *= (1 - dstMask)

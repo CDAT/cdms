@@ -123,9 +123,9 @@ def compare_fields_grid(field1, field2, itrp_tol, csrv_tol, parallel=False,
             csrv = True
 
         # print out diagnostic information
-        print "  Mean relative error = " + str(total_error_global)
-        print "  Max  relative error = " + str(max_error_global)
-        print "  Conservation  error = " + str(csrv_error_global)
+        print(("  Mean relative error = " + str(total_error_global)))
+        print(("  Max  relative error = " + str(max_error_global)))
+        print(("  Conservation  error = " + str(csrv_error_global)))
         # print "  Min error   = "+str(min_error_global)
         # print "  srcmass     = "+str(mass1_global)
         # print "  dstmass     = "+str(mass2_global)
@@ -139,10 +139,10 @@ def compare_fields_grid(field1, field2, itrp_tol, csrv_tol, parallel=False,
     # print pass or fail
     assert (itrp and csrv)
     if (itrp and csrv):
-        print "PET{0} - PASS".format(ESMF.local_pet())
+        print(("PET{0} - PASS".format(ESMF.local_pet())))
         correct = True
     else:
-        print "PET{0} - FAIL".format(ESMF.local_pet())
+        print(("PET{0} - FAIL".format(ESMF.local_pet())))
 
     return total_error_global, csrv_error_global
 
@@ -760,6 +760,6 @@ class TestESMP_GridToMeshRegridCsrv(unittest.TestCase):
 if __name__ == '__main__':
 
     ESMF.Manager(debug=True)
-    print ""  # Spacer
+    print("")  # Spacer
     suite = unittest.TestLoader().loadTestsFromTestCase(TestESMP_GridToMeshRegridCsrv)
     unittest.TextTestRunner(verbosity=1).run(suite)

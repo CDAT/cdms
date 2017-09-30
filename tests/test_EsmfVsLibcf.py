@@ -304,7 +304,7 @@ class Test(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    print ""
+    print("")
     ESMF.Manager()
     suite = unittest.TestLoader().loadTestsFromTestCase(Test)
     unittest.TextTestRunner(verbosity=1).run(suite)

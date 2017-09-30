@@ -4,6 +4,7 @@ import numpy
 import tempfile
 import cdms2
 import os
+import imp
 import cdat_info
 
 
@@ -22,7 +23,7 @@ class CDMSBaseTest(unittest.TestCase):
 
     def setUp(self):
         global cdms2
-        cdms2 = reload(cdms2)
+        cdms2 = imp.reload(cdms2)
         self.orig_cwd = os.getcwd()
         self.files = []
         self.NTIME = 3

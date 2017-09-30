@@ -1,12 +1,11 @@
 # Automatically adapted for numpy.oldnumeric Aug 02, 2007 by
 
 import numpy
-import cdms2
-import _regrid
-import string
 import copy
-from error import RegridError
+from . import _regrid
+from .error import RegridError
 import warnings
+import cdms2
 
 _debug = 0                              # Set to 1 for debug
 
@@ -69,14 +68,14 @@ class Horizontal:
         if _debug == 1:
             import sys
             sys.stdout = open('debug_regrid.txt', 'w')
-            print "bsin = ", numpy.array2string(bsin, precision=3)
-            print "bnin = ", numpy.array2string(bnin, precision=3)
-            print "bwin = ", numpy.array2string(bwin, precision=3)
-            print "bein = ", numpy.array2string(bein, precision=3)
-            print "bsout = ", numpy.array2string(bsout, precision=3)
-            print "bnout = ", numpy.array2string(bnout, precision=3)
-            print "bwout = ", numpy.array2string(bwout, precision=3)
-            print "beout = ", numpy.array2string(beout, precision=3)
+            print(("bsin = ", numpy.array2string(bsin, precision=3)))
+            print(("bnin = ", numpy.array2string(bnin, precision=3)))
+            print(("bwin = ", numpy.array2string(bwin, precision=3)))
+            print(("bein = ", numpy.array2string(bein, precision=3)))
+            print(("bsout = ", numpy.array2string(bsout, precision=3)))
+            print(("bnout = ", numpy.array2string(bnout, precision=3)))
+            print(("bwout = ", numpy.array2string(bwout, precision=3)))
+            print(("beout = ", numpy.array2string(beout, precision=3)))
 
         self.londx, self.lonpt, self.wtlon, self.latdx, self.latpt, self.wtlat = _regrid.maparea(
             self.nloni, self.nlono, self.nlati, self.nlato, bnin, bnout, bsin, bsout, bein, beout, bwin, bwout)
@@ -114,7 +113,7 @@ class Horizontal:
         if isinstance(ar, AbstractVariable):
             attrs = copy.copy(ar.attributes)
             varid = ar.id
-            axislist = list(map(lambda x: x[0].clone(), ar.getDomain()))
+            axislist = list([x[0].clone() for x in ar.getDomain()])
             inputIsVariable = 1
             if order is None:
                 order = ar.getOrder()
@@ -173,7 +172,7 @@ class Horizontal:
         assert rank == len(
             order), 'Order must be same length as array rank: %i' % len(ar.shape)
 
-        order = string.lower(order)
+        order = order.lower()
 
         # Map order to ilon, ilat ...
         itim1 = itim2 = 0
@@ -234,6 +233,8 @@ class Horizontal:
                     firstslice = ar[0]
                 else:
                     firstslice = ar[0, 0]
+                # inmask = numpy.logical_and( numpy.greater( numpy.absolute( firstslice - missing),
+                # numpy.absolute( 0.001*missing)), inmask)
                 if issubclass(ar.dtype.type, numpy.floating):
                     inmask = numpy.where(
                         numpy.greater(
@@ -255,6 +256,8 @@ class Horizontal:
             # If armask is derived from the input array, it is probably consistent
             # with the missing value - don't bother recalculating it
             if missing is not None and armask is None:
+                # inmask = numpy.logical_and( numpy.greater( numpy.absolute( ar - missing),
+                #  numpy.absolute( 0.001*missing)), inmask)
                 if issubclass(ar.dtype.type, numpy.floating):
                     inmask = numpy.where(
                         numpy.greater(
@@ -347,8 +350,8 @@ class Horizontal:
 class Regridder(Horizontal):
     def __init__(self, ingrid, outgrid):
         warnings.warn(
-            "While this will work for now, please note that the Regridder class has been renamed" +
-            "Horizontal, the name 'Regridder' will be deprecated in future version." +
+            "While this will work for now, please note that the Regridder class has been " +
+            "renamed Horizontal, the name 'Regridder' will be deprecated in future version. " +
             "Please edit your code accordingly",
             Warning)
         Horizontal.__init__(self, ingrid, outgrid)

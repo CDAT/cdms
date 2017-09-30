@@ -13,12 +13,12 @@ from numpy.ma import indices, innerproduct, masked, put, putmask, rank, ravel  #
 from numpy.ma import set_fill_value, shape, size, isMA, isMaskedArray, is_mask, isarray  # noqa
 from numpy.ma import make_mask, mask_or, nomask   # noqa
 from numpy import sctype2char, get_printoptions, set_printoptions
-from avariable import AbstractVariable, getNumericCompatibility
-from tvariable import TransientVariable, asVariable
-from grid import AbstractRectGrid
-from error import CDMSError
+from .avariable import AbstractVariable, getNumericCompatibility
+from .tvariable import TransientVariable, asVariable
+from .grid import AbstractRectGrid
+from .error import CDMSError
 # from numpy.ma import *
-from axis import allclose as axisAllclose, TransientAxis, concatenate as axisConcatenate, take as axisTake
+from .axis import allclose as axisAllclose, TransientAxis, concatenate as axisConcatenate, take as axisTake
 
 
 create_mask = make_mask_none
@@ -354,7 +354,7 @@ def is_floating(x):
 def is_integer(x):
     "Is x a scalar integer, either python or numpy?"
     return (isinstance(x, numpy.integer) or isinstance(
-        x, int) or isinstance(x, long))
+        x, int))
 
 
 def get_print_limit():
@@ -551,7 +551,7 @@ def choose(myindices, t):
 
       The result has only the default axes.
     """
-    maresult = numpy.ma.choose(myindices, map(_makeMaskedArg, t))
+    maresult = numpy.ma.choose(myindices, list(map(_makeMaskedArg, t)))
     F = getattr(t, "fill_value", 1.e20)
     return TransientVariable(maresult, fill_value=F)
 
@@ -677,7 +677,7 @@ def concatenate(arrays, axis=0, axisid=None, axisattributes=None):
             if axes is None:
                 break
             axes = commonAxes(tarrays[i + 2], axes, omit=axis)
-            grid = commonGrid1(a, grid, axes)
+            grid = commonGrid1(tarrays[i + 2], grid, axes)
     else:
         axes = tarrays[0].getAxisList()
         varattributes = tarrays[0].attributes

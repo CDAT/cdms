@@ -9,7 +9,7 @@ No guarantee is provided whatsoever. Use at your own risk.
 Alex Pletzer, Tech-X Corp. (2011)
 """
 
-import mvSphereMesh
+from . import mvSphereMesh
 
 
 class BaseWriter:
@@ -26,6 +26,12 @@ class BaseWriter:
         sphere_mesh = mvSphereMesh.SphereMesh(var, maxElev)
 
         self.shape = sphere_mesh.shape
+        # there is currently a bug in vizSchema which causes
+        # visit to crash if the leading index is 1, this is
+        # a workaround the problem
+        if self.shape[0] == 1:
+            self.shape = list(sphere_mesh.shape[1:]) + [1, ]
+
         self.mesh = sphere_mesh.getXYZCoords(sphereRadius)
 
     def write(self, filename):

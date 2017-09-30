@@ -5,8 +5,8 @@
 import numpy
 import string
 import sys
-from error import CDMSError
-from axis import std_axis_attributes
+from .error import CDMSError
+from .axis import std_axis_attributes
 import cdms2 as cdms
 
 
@@ -40,7 +40,7 @@ class Slab:
                        'long_name': '',
                        'units': ''}
         result = None
-        if name in defaultdict.keys() and not hasattr(self, name):
+        if name in list(defaultdict.keys()) and not hasattr(self, name):
             if name == 'filename':
                 if (not hasattr(self, 'parent')) or self.parent is None:
                     result = ''
@@ -88,13 +88,13 @@ class Slab:
 
     def listattributes(self):
         "Return a list of attribute names."
-        return self.attributes.keys()
+        return list(self.attributes.keys())
 
     def listdimattributes(self, dim):
         "List the legal axis field names."
         a = self.getAxis(dim)
         result = []
-        for x in std_axis_attributes + a.attributes.keys():
+        for x in std_axis_attributes + list(a.attributes.keys()):
             if x not in result:
                 result.append(x)
         return result
@@ -146,7 +146,7 @@ class Slab:
         for nd in range(self.rank()):
             result.append('** Dimension ' + str(nd + 1) + ' **')
             result = result + self.getAxis(nd).listall(1)
-        print string.join(result, '\n')
+        print(string.join(result, '\n'))
 
     def listdimnames(self):
         "Return a list of the names of the dimensions."
@@ -164,7 +164,7 @@ class Slab:
         result.append('shape: ' + str(self.shape))
         for x in Slab.std_slab_atts:
             result.append(x + ": " + str(self.getattribute(x)))
-        for x in self.attributes.keys():
+        for x in list(self.attributes.keys()):
             if x in Slab.std_slab_atts:
                 continue
             if x == 'name':
@@ -192,6 +192,7 @@ class Slab:
 def cdms_bounds2cu_bounds(b):
     "Bounds are  len(v) by 2 in cdms but len(v)+1 in cu"
     cub = numpy.ma.zeros(len(b) + 1, numpy.float32)
+    # b1 = b.astype(numpy.float32)
     if len(b) > 1:
         if (b[0, 0] < b[0, 1]) == (b[0, 0] < b[-1, 0]):
             cub[0] = b[0, 0]

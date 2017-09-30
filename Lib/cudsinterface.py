@@ -3,11 +3,8 @@
 
 "Emulation of old cu package"
 import string
-import types
 import sys
-from error import CDMSError
-# from dataset import openDataset, createDataset
-# from tvariable import createVariable
+from .error import CDMSError
 import numpy
 
 
@@ -26,8 +23,8 @@ class cuDataset():
         v = self.variables.get(id)
         if v is None:
             try:
-                if (self.is_gridspec_grid_file() and
-                        (id == '' or id == 'grid' or id == 'gridspec') and
+                if(self.is_gridspec_grid_file() and
+                    (id == '' or id == 'grid' or id == 'gridspec') and
                         len(args) == 0 and len(kwargs) == 0):
                     return self.readg()
                 else:
@@ -82,7 +79,7 @@ class cuDataset():
             result.append('Name: ' + vname)
             v = self._v(vname)
             a = v.attributes
-            for x, y in a.items():
+            for x, y in list(a.items()):
                 result.append(x + ": " + str(y))
             d = v.getDomain()
             nd = 0
@@ -114,7 +111,7 @@ class cuDataset():
         if vname is None:
             vname = self.default_variable_name
         v = self._v(vname)
-        return v.attributes.keys()
+        return list(v.attributes.keys())
 
     def listdimension(self, vname=None):
         """Return a list of the dimension names associated with a variable.
@@ -125,23 +122,23 @@ class cuDataset():
         :::
         """
         if vname is None:
-            return self.axes.keys()
+            return list(self.axes.keys())
         v = self._v(vname)
         d = v.getDomain()
-        x = map(lambda n: n[0], d)
-        return map(lambda n: getattr(n, 'id'), x)
+        x = [n[0] for n in d]
+        return [getattr(n, 'id') for n in x]
 
     def listglobal(self):
         """Returns a list of the global attributes in the file.
         :::
         """
-        return self.attributes.keys()
+        return list(self.attributes.keys())
 
     def listvariable(self):
         """Return a list of the variables in the file.
         :::
         """
-        return self.variables.keys()
+        return list(self.variables.keys())
 
     listvariables = listvariable
 
@@ -334,11 +331,12 @@ class cuDataset():
         :::
         Options:::
         args :: (*tuple/*cdms2.selectors.Selector) () tuple of type (val1,val2,'cob')
-        for any given dimension or cdms selector
+                for any given dimension or cdms selector
         :::
         Keys:::
         squeeze :: (int/True/False) (0) squeezes (removes) dimensions of length 1
-        order :: (str) ('...') reorder the dimensions, can use numbers or xyzt or dim names in between paranthesis
+        order :: (str) ('...') reorder the dimensions, can use numbers or xyzt or dim
+                 names in between paranthesis
         raw :: (int/True/False) (0) return a numpy.ma instead of a transient variable
         grid :: (cdms2.grid.AbstractGrid) (None) regrid the result to the grid passed
         :::
@@ -373,7 +371,7 @@ class cuDataset():
                 idim = ndims - (nargs - i - 1)
                 i = i + 1
                 ne = 1
-            elif isinstance(x, types.TupleType):
+            elif isinstance(x, tuple):
                 cdms_args[idim] = x
                 idim = idim + 1
                 i = i + 1
@@ -409,11 +407,9 @@ class cuDataset():
         :::
         """
 
-        import hgrid
-        import gengrid
-
+        from . import hgrid, gengrid
         # Grid file
-        if 'grid_dims' in self.variables.keys():
+        if 'grid_dims' in list(self.variables.keys()):
             dims = self('grid_dims')
             whichType = "grid"
 

@@ -1,8 +1,8 @@
 # Automatically adapted for numpy.oldnumeric Aug 02, 2007 by
 
 import cdms2
-import _scrip
-from error import RegridError
+from . import _scrip
+from .error import RegridError
 import numpy
 from functools import reduce
 
@@ -343,8 +343,8 @@ class DistwgtRegridder(ScripRegridder):
 
 def readRegridder(fileobj, mapMethod=None, checkGrid=1):
     """Read a regridder from an open fileobj.
-    mapMethod is one of "conservative", "bilinear", "bicubic", or "distwgt".
-    If unspecified, it defaults to the method defined in the file.
+    mapMethod is one of "conservative", "bilinear", "bicubic", or "distwgt". If unspecified, it defaults to the method
+    defined in the file.
     If 'checkGrid' is 1 (default), the grid cells are checked for convexity,
     and 'repaired' if necessary.
     """
@@ -369,7 +369,7 @@ def readRegridder(fileobj, mapMethod=None, checkGrid=1):
             raise RegridError("Unrecognized map method: %s" % mapString)
 
     convention = 'SCRIP'
-    if fileobj.variables.keys().count('S'):
+    if list(fileobj.variables.keys()).count('S'):
         convention = 'NCAR'
     if convention == 'SCRIP':
         remapMatrix = fileobj('remap_matrix').filled()
@@ -393,7 +393,7 @@ def readRegridder(fileobj, mapMethod=None, checkGrid=1):
             srcarea = fileobj('src_grid_area')
             dstarea = fileobj('dst_grid_area')
         else:  # NCAR stuff
-            if "S2" in fileobj.variables.keys():
+            if "S2" in list(fileobj.variables.keys()):
                 remapMatrix = fileobj("S2")
                 sh = list(remapMatrix.shape)
                 if len(sh) == 2 and sh[-1] == 2:

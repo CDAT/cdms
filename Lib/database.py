@@ -1,15 +1,16 @@
 """CDMS database objects"""
 
-from error import CDMSError
-import cdmsobj
-import cdurlparse
+from .error import CDMSError
+from . import cdmsobj
+from . import cdurlparse
+# import internattr
 import os
 import re
 import string
 import sys
-from CDMLParser import CDMLParser
-from cdmsobj import CdmsObj
-from dataset import Dataset
+from .CDMLParser import CDMLParser
+from .cdmsobj import CdmsObj
+from .dataset import Dataset
 
 try:
     import ldap
@@ -153,7 +154,7 @@ class AbstractDatabase(CdmsObj):
 
     def enableCache(self):
         if self._datacache_ is None:
-            import cache
+            from . import cache
             self._datacache_ = cache.Cache()
         return self._datacache_
 
@@ -163,7 +164,7 @@ class AbstractDatabase(CdmsObj):
             self._datacache_ = None
 
     def useRequestManager(self, lcBaseDN, useReplica=1, userid="anonymous"):
-        import cache
+        from . import cache
         self.enableCache()
         cache.useRequestManagerTransfer()
         self.lcBaseDN = lcBaseDN
@@ -171,12 +172,13 @@ class AbstractDatabase(CdmsObj):
         self.userid = userid
 
     def usingRequestManager(self):
-        import cache
+        from . import cache
         return (cache._transferMethod == cache._requestManagerTransfer)
 
     def __repr__(self):
         return "<Database '%s'>" % (self.uri)
 
+# internattr.add_internal_attribute(AbstractDatabase, 'uri', 'path')
 # Database implemented via LDAP (Lightweight Directory Access Protocol)
 
 
@@ -230,12 +232,14 @@ class LDAPDatabase(AbstractDatabase):
             (text, datapath) = self._cdmlcache_[normaldn]
             uri = "ldap://%s/%s" % (self.netloc, normaldn)
             if cdmsobj._debug == 1:
-                print 'Loading %s from cached CDML' % uri
+                print('Loading %s from cached CDML' % uri)
             dataset = loadString(text, uri, self, datapath)
             self._cache_[normaldn] = dataset
         else:
             if cdmsobj._debug == 1:
-                print 'Search filter: (objectclass=dataset), scope: base, base: "%s", attributes=["cdml"]' % (dn,)
+                print(
+                    'Search filter: (objectclass=dataset), scope: base, base: "%s", attributes=["cdml"]' %
+                    (dn,))
             result = self.db.search_s(
                 dn, ldap.SCOPE_BASE, "objectclass=dataset", [
                     "cdml", "datapath"])
@@ -300,7 +304,7 @@ class LDAPDatabase(AbstractDatabase):
     # ldapattrs is a dictionary, keyed on attribute name.
     # Values are lists of attribute values.
     def setExternalDict(self, ldapattrs):
-        for attname in ldapattrs.keys():
+        for attname in list(ldapattrs.keys()):
             attvals = ldapattrs[attname]
             if attname == 'objectclass':
                 continue
@@ -401,7 +405,9 @@ class LDAPDatabase(AbstractDatabase):
             atts = ["objectclass", "cdml", "id"] + attnames
 
         if cdmsobj._debug == 1:
-            print 'Search filter:%s, scope %s, base: "%s", attributes=%s' % (newfilter, repr(scope), base, repr(atts))
+            print(
+                'Search filter:%s, scope %s, base: "%s", attributes=%s' %
+                (newfilter, repr(scope), base, repr(atts)))
         if timeout is None:
             result = self.db.search_s(base, scope, newfilter, atts)
         else:
@@ -412,20 +418,25 @@ class LDAPDatabase(AbstractDatabase):
     def listDatasets(self):
         """ Return a list of the dataset IDs in this database."""
         entries = self.searchFilter(tag='dataset', scope=Onelevel)
-        result = map(lambda x: x.attributes['id'][0], entries)
+        result = [x.attributes['id'][0] for x in entries]
         return result
+
+# internattr.add_internal_attribute(LDAPDatabase, 'netloc', 'db')
 
 
 class AbstractSearchResult:
 
     def __getitem__(self, key):
-        self.MethodNotImplemented = "Method not yet implemented"
+        ''' Method not yet implemented'''
+        pass
 
     def __len__(self):
-        self.MethodNotImplemented = "Method not yet implemented"
+        '''Method not yet implemented'''
+        pass
 
     def searchPredicate(self, predicate, tag=None):
-        self.MethodNotImplemented = "Method not yet implemented"
+        '''Method not yet implemented'''
+        pass
 
 
 class LDAPSearchResult(AbstractSearchResult):

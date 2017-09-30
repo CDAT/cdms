@@ -17,7 +17,7 @@ class TestFormats(basetest.CDMSBaseTest):
             f.write(a)
         f=cdms2.open("bad.nc")
         listdim = f.listdimension()
-        self.assertEqual(listdim[1], ax.id[0:127])
+        self.assertEqual(listdim[0], ax.id[0:127])
         f.close()
 
     def testVarID(self):

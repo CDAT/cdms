@@ -8,6 +8,6 @@ python run_tests.py -v2 -s
 RESULT=$?
 source activate py3
 python run_tests.py -v2 -s
-RESULT=$RESULT+$?
+RESULT=$(( $RESULT + $? ))
 if [ $RESULT -eq 0 -a $CIRCLE_BRANCH != "master" ]; then bash ./ci-support/conda_upload.sh ; fi
 exit $RESULT

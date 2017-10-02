@@ -21,9 +21,14 @@ echo $cmd
 $cmd
 
 # Create Python 2 environment
-cmd="conda create -n py2 python2"
+cmd="conda create -n py2 python=2.7"
 echo $cmd
 $cmd
+
+# Activate python 2 environment
+cmd="source activate py2"
+echo $cmd
+$cmd 
 
 cmd="conda install -n py2  -c uvcdat/label/nightly -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient"
 echo $cmd
@@ -42,10 +47,6 @@ cmd="export UVCDAT_ANONYMOUS_LOG=False"
 echo $cmd
 $cmd
 
-# Activate python 2 environment
-cmd="source activate py2"
-echo $cmd
-$cmd 
 
 # Retrieve certificates from ESGF
 cmd="mkdir /Users/distiller/.esg"

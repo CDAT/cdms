@@ -11,11 +11,30 @@ cmd="export PATH=${HOME}/miniconda/bin:${PATH}"
 echo $cmd
 $cmd
 
-cmd="conda install -c uvcdat/label/nightly -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient"
+# Create Python 3 environment
+cmd="conda create -n py3 -c uvcdat/label/nightly -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient"
 echo $cmd
 $cmd
 
-cmd="install_name_tool -change /usr/lib/libcurl.4.dylib @rpath/libcurl.4.dylib /Users/distiller/miniconda/bin/ncdump"
+cmd="conda install -n py3 -c nadeau1 esmf esmpy"
+echo $cmd
+$cmd
+
+# Create Python 2 environment
+cmd="conda create -n py2 python2"
+echo $cmd
+$cmd
+
+cmd="conda install -n py2  -c uvcdat/label/nightly -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient"
+echo $cmd
+$cmd
+
+# add relative path to ncdump
+cmd="install_name_tool -change /usr/lib/libcurl.4.dylib @rpath/libcurl.4.dylib /Users/distiller/miniconda/env/py2/bin/ncdump"
+echo $cmd
+$cmd 
+
+cmd="install_name_tool -change /usr/lib/libcurl.4.dylib @rpath/libcurl.4.dylib /Users/distiller/miniconda/env/py3/bin/ncdump"
 echo $cmd
 $cmd 
 
@@ -23,6 +42,12 @@ cmd="export UVCDAT_ANONYMOUS_LOG=False"
 echo $cmd
 $cmd
 
+# Activate python 2 environment
+cmd="source activate py2"
+echo $cmd
+$cmd 
+
+# Retrieve certificates from ESGF
 cmd="mkdir /Users/distiller/.esg"
 echo $cmd
 $cmd
@@ -37,14 +62,23 @@ cmd="sudo security import /Users/distiller/.esg/esgf.p12 -A -P esgf -k /Library/
 echo $cmd
 $cmd
 
-cmd="sudo security add-trusted-cert -d -r trustRoot -k "/Library/Keychains/System.keychain" /Users/distiller/.esg/esgf.cert" 
+cmd="sudo security add-trusted-cert -d -r trustRoot -k '/Library/Keychains/System.keychain' /Users/distiller/.esg/esgf.cert" 
 echo $cmd
 $cmd
-
 
 cmd="cp tests/dodsrccircleci /Users/distiller/.dodsrc"
 echo $cmd
 $cmd
+
+# compile cdms on py2 and py3 environemt.
+
+cmd="python setup.py install"
+echo $cmd
+$cmd
+
+cmd="source activate py3"
+echo $cmd
+$cmd 
 
 cmd="python setup.py install"
 echo $cmd

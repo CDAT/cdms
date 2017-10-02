@@ -16,7 +16,7 @@ fi
 echo "Building python 3"
 source activate py3
 mkdir ~/conda-bld
-conda install -q anaconda-client conda-build
+conda install -n root -q anaconda-client conda-build
 conda config --set anaconda_upload no
 export CONDA_BLD_PATH=${HOME}/conda-bld
 export VERSION="2.12"

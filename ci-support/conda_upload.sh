@@ -28,11 +28,11 @@ rm -rf uvcdat
 python ./prep_for_build.py
 echo "Building now"
 echo "use nesii/label/dev-esmf for py3"
-conda build $PKG_NAME -c nesii/label/dev-esmf -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.13
+conda build $PKG_NAME -c nesii/label/dev-esmf -c nadeau1 -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.13
 anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-$VERSION.`date +%Y`*-np113py27*_0.tar.bz2 --force
-conda build $PKG_NAME -c nesii/label/dev-esmf -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.12
+conda build $PKG_NAME -c nesii/label/dev-esmf -c nadeau1 -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.12
 anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-$VERSION.`date +%Y`*-np112py27*_0.tar.bz2 --force
-conda build $PKG_NAME -c nesii/label/dev-esmf -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.11
+conda build $PKG_NAME -c nesii/label/dev-esmf -c nadeau1 -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.11
 anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-$VERSION.`date +%Y`*-np111py27*_0.tar.bz2 --force
 
 # Python 2 section

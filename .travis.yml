@@ -38,6 +38,7 @@ script:
 - export UVCDAT_ANONYMOUS_LOG=False
 #- python setup.py install
 #- python run_tests.py -v2 -s
+- pwd
 
 env:
   global:
@@ -52,4 +53,4 @@ after_success:
 - ls /home/travis/UV-CDAT
 - ls /home/travis/UV-CDAT/cdms
 - ls /home/travis/UV-CDAT/cdms/ci-support
-- /home/travis/UV-CDAT/cdms/ci-support/conda_upload.sh 
+- ci-support/conda_upload.sh 

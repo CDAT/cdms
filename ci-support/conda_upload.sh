@@ -6,7 +6,7 @@ if [ `uname` == "Linux" ]; then
     OS=linux-64
     echo "Linux OS"
     export PATH="$HOME/miniconda/bin:$PATH"
-    conda update -y -q conda
+#    conda update -y -q conda  # -R issue woraround
 else
     echo "Mac OS"
     OS=osx-64

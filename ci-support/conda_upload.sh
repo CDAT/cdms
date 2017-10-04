@@ -16,6 +16,8 @@ fi
 echo "Building python 3"
 source activate py3
 mkdir ${HOME}/conda-bld
+# pin conda so that conda-build does not update it
+echo "conda ==4.3.21" >> ~/miniconda/conda-meta/pinned  # Pin conda as workaround for conda/conda#6030
 conda install -n root -q anaconda-client conda-build
 conda config --set anaconda_upload no
 export CONDA_BLD_PATH=${HOME}/conda-bld

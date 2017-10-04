@@ -25,7 +25,7 @@ html_theme_path = [easydev.get_path_sphinx_themes()]
 #sys.path.insert(0, os.path.abspath('.'))
 #sys.path.insert(0,os.path.join(sys.prefix,"lib","python2.7","site-packages"))
 #sys.path.insert(0,os.path.join(sys.prefix,"lib","python2.7","site-packages","cdms2"))
-sys.path.insert(0,"/software/anaconda2/envs/uvcdat-2.6.1/lib/python2.7/site-packages")
+sys.path.insert(0,"/software/anaconda2/envs/dev/lib/python2.7/site-packages")
 print os.path.join(sys.prefix,"lib","python2.7","site-packages")
 
 # -- General configuration ------------------------------------------------
@@ -171,12 +171,12 @@ html_theme = 'haiku'
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-html_logo = 'uvcdat.png'
+html_logo = 'manual/images/uvcdat.png'
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-html_favicon = 'globe.png'
+# html_favicon = 'globe.png'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

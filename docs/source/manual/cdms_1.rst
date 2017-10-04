@@ -67,11 +67,14 @@ from file sample.nc into variable u:
 
    import MV2
    import cdms2
-   f = cdms2.open('clt.nc')
+   import cdat_info
+   f = cdms2.open(cdat_info.get_sampledata_path()+'/clt.nc')
+   f2 = cdms2.open(cdat_info.get_sampledata_path()+'/geos5-sample.nc')
    u = f('u')
    v = f('v')
    smallvar=MV2.reshape(MV2.arange(20),(4,5),id='small variable').astype(MV2.float32) 
    largevar=MV2.reshape(MV2.arange(400),(20,20),id="large variable").astype(MV2.float32)
+
 .. doctest::
 
     >>> f = cdms2.open('clt.nc')
@@ -470,7 +473,7 @@ grid. Note that:
 
    >>> # y and x are index coordinate axes
    >>> f.axes.keys() 
-   ['y', 'x', 'nvert'] 
+   ['nvert', 'x', 'y'] 
    
    >>> # Read data for variable sample
    >>> sample = f('sample')
@@ -532,7 +535,7 @@ illustrates the grid, in this case a geodesic grid.
    >>> f.variables.keys()
    ['lat', 'sample', 'bounds_lon', 'lon', 'bounds_lat']
    >>> f.axes.keys() 
-   ['y', 'x', 'nvert']
+   ['nvert', 'x', 'y']
    >>> zs = f('sample')
    >>> g = zs.getGrid()
    >>> g
@@ -570,21 +573,19 @@ representation. Similarly, a rectangular grid can be represented as
 curvilinear. The method toCurveGrid is used to convert a non-generic
 grid to curvilinear representation:
 
-.. testcode:: *
+.. doctest:: *
 
-   >>> f = cdms2.open('clt.nc')
+   >>> f = cdms2.open(cdat_info.get_sampledata_path()+'/clt.nc')
    >>> clt = f('clt')
    >>> rectgrid = clt.getGrid()
    >>> rectgrid.shape
+   (46, 72)
    >>> curvegrid = rectgrid.toCurveGrid()
    >>> curvegrid
+   <TransientCurveGrid, id: grid_9, shape: (46, 72)>
    >>> genericgrid = curvegrid.toGenericGrid()
    >>> genericgrid
-   
-.. testoutput::
-
-   (46, 72)
-
+   <TransientGenericGrid, id: grid_1, shape: (3312,)>
 
 1.10 Regridding
 ^^^^^^^^^^^^^^^
@@ -612,21 +613,27 @@ a rectangular grid) to a 96x192 rectangular Gaussian grid:
    >>> f = cdms2.open('clt.nc')
    >>> u = f('u')
    >>> u.shape
-   ((1, 2, 80, 97)
+   (1, 2, 80, 97)
    >>> t63_grid = cdms2.createGaussianGrid(96)
    >>> u63 = u.regrid(t63_grid)
    >>> u63.shape
-   (3, 96, 192)
+   (1, 2, 96, 192)
 
 To regrid a variable ``uold`` to the same grid as variable ``vnew``:
 
 .. doctest::
 
-   >>> uold.shape(3, 16, 32)
-   >>> vnew.shape(3, 96, 192)
-   >>> t63_grid = vnew.getGrid() # Obtain the grid for vnew
+   >>> f = cdms2.open('clt.nc')
+   >>> uold = f('u')
+   >>> unew = f2('uwnd')
+   >>> uold.shape
+   (1, 2, 80, 97)
+   >>> unew.shape
+   (1, 14, 181, 360)
+   >>> t63_grid = unew.getGrid() # Obtain the grid for vnew
    >>> u63 = u.regrid(t63_grid)
-   >>> u63.shape(3, 96, 192)
+   >>> u63.shape
+   (1, 2, 181, 360)
 
 1.10.2 SCRIP Regridder
 ''''''''''''''''''''''
@@ -653,27 +660,27 @@ The steps to regrid a variable are:
 Steps 1 and 2 need only be done once. The regridder can be used as often
 as necessary.
 
-For example, suppose the source data on a T42 grid is to be mapped to a
-POP curvilinear grid. Assume that SCRIP generated a remapping file named
-rmp_T42_to_POP43_conserv.nc:
-
-.. doctest::
-
-   >>> # Import regrid package for regridder functions
-   >>> import regrid, cdms
-   
-   >>> # Get the source variable
-   >>> f = cdms.open('sampleT42Grid.nc') 
-   >>> dat = f('src_array') 
-   >>> f.close()
-   
-   >>> # Read the regridder from the remapper file
-   >>> remapf = cdms.open('rmp_T42_to_POP43_conserv.nc') 
-   >>> regridf = regrid.readRegridder(remapf) 
-   >>> remapf.close()
-   
-   >>> # Regrid the source variable
-   >>> popdat = regridf(dat)
+#For example, suppose the source data on a T42 grid is to be mapped to a
+#POP curvilinear grid. Assume that SCRIP generated a remapping file named
+#rmp_T42_to_POP43_conserv.nc:
+#
+#.. doctest::
+#
+#   >>> # Import regrid package for regridder functions
+#   >>> import regrid2, cdms2
+#   
+#   >>> # Get the source variable
+#   >>> f = cdms2.open('sampleT42Grid.nc') 
+#   >>> dat = f('src_array') 
+#   >>> f.close()
+#   
+#   >>> # Read the regridder from the remapper file
+#   >>> remapf = cdms2.open('rmp_T42_to_POP43_conserv.nc') 
+#   >>> regridf = regrid2.readRegridder(remapf) 
+#   >>> remapf.close()
+#   
+#   >>> # Regrid the source variable
+#   >>> popdat = regridf(dat)
 
 Regridding is discussed in `Chapter 4 <cdms_4.html>`__.
 
@@ -698,7 +705,7 @@ units=" days since 1996-1-1". To create a relative time type:
    >>> import cdtime
    >>> rt = cdtime.reltime(28.0, "days since 1996-1-1")
    >>> rt
-   28.00 days since 1996-1-1
+   28.000000 days since 1996-1-1
    >>> rt.value
    28.0
    >>> rt.units
@@ -712,10 +719,11 @@ minute , and the floating-point field second . For example:
 
     >>> ct = cdtime.comptime(1996,2,28,12,10,30)
     >>> ct
-    -2-28 12:10:30.0
-    ct.year
-    ct.month
-       
+    1996-2-28 12:10:30.0
+    >>> ct.year
+    1996
+    >>> ct.month
+    2
 
 The conversion functions tocomp and torel convert between the two
 representations. For instance, suppose that the time axis of a variable
@@ -727,7 +735,7 @@ value corresponding to January 1, 1990:
     >>> ct = cdtime.comptime(1990,1)
     >>> rt = ct.torel("days since 1979")
     >>> rt.value
-    .0
+    4018.0
 
 Time values can be used to specify intervals of time to read. The syntax
 time=(c1,c2) specifies that data should be read for times t such that
@@ -735,21 +743,24 @@ c1<=t<=c2:
 
 .. doctest::
 
-    >>> c1 = cdtime.comptime(1990,1)
-    >>> c2 = cdtime.comptime(1991,1)
-    >>> ua = f[' ua']
-    >>> ua.shape
-    480, 17, 73, 144)
-    >>> x = ua.subRegion(time=(c1,c2))
+    >>> fh = cdms2.open(cdat_info.get_sampledata_path() + "/tas_6h.nc")
+    >>> c1 = cdtime.comptime(1980,1)
+    >>> c2 = cdtime.comptime(1980,2)
+    >>> tas = fh['tas']
+    >>> tas.shape
+    (484, 45, 72)
+    >>> x = tas.subRegion(time=(c1,c2))
     >>> x.shape
-    12, 17, 73, 144)
+    (125, 45, 72)
 
 or string representations can be used:
 
 
 .. doctest::
 
-    >>> x = ua.subRegion(time=('1990-1','1991-1'))
+    >>> fh = cdms2.open(cdat_info.get_sampledata_path() + "/tas_6h.nc")
+    >>> tas = fh['tas']
+    >>> x = tas.subRegion(time=('1980-1','1980-2'))
 
 Time types are described in Chapter 3.
 
@@ -771,18 +782,18 @@ For example:
 
 .. doctest::
 
-   >>> import cdms, vcs
-   >>> f = cdms.open('sample.nc')
-   >>> f['time'][:] # Print the time coordinates
-   [ 0., 6., 12., 18., 24., 30., 36., 42., 48., 54., 60., 66., 72., 78., 84., 90.,]
-   >>> precip = f('prc', time=24.0) # Read precip data
-   >>> precip.shape
-   (1, 32, 64)
+   >>> import cdms2, vcs, cdat_info
+   >>> fh=cdms2.open(cdat_info.get_sampledata_path() + "/tas_cru_1979.nc")
+   >>> fh['time'][:] # Print the time coordinates
+   array([ 1476.,  1477.,  1478.,  1479.,  1480.,  1481.,  1482.,  1483.,
+           1484.,  1485.,  1486.,  1487.])
+
+   >>> tas = fh('tas', time=1479) 
+   >>> tas.shape
+   (1, 36, 72)
    >>> w = vcs.init() # Initialize a canvas
-   'Template' is currently set to P_default.
-   Graphics method 'Boxfill' is currently set to Gfb_default.
-   >>> w.plot(precip) # Generate a plot
-   (generates a boxfill plot)
+   >>> w.plot(tas) # Generate a plot
+   <vcs.displayplot.Dp object at...
 
 By default for rectangular grids, a boxfill plot of the lat-lon slice is
 produced. Since variable precip includes information on time, latitude,
@@ -811,13 +822,11 @@ Protocol (LDAP).
 
 Here is an example of accessing data via a database:
 
-.. doctest::
-
-   >>> db = cdms.connect() # Connect to the default database.
-   >>> f = db.open('ncep_reanalysis_mo') # Open a dataset.
-   >>> f.variables.keys() # List the variables in the dataset.
-   ['ua', 'evs', 'cvvta', 'tauv', 'wap', 'cvwhusa', 'rss', 'rls', ... 'prc', 'ts', 'va']
-
-
+#.. doctest::
+#
+#   >>> db = cdms.connect() # Connect to the default database.
+#   >>> f = db.open('ncep_reanalysis_mo') # Open a dataset.
+#   >>> f.variables.keys() # List the variables in the dataset.
+#   ['ua', 'evs', 'cvvta', 'tauv', 'wap', 'cvwhusa', 'rss', 'rls', ... 'prc', 'ts', 'va']
 
 Databases are discussed further in `Section 2.7 <cdms_2.html#2.7>`__.

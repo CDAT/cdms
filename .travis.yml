@@ -11,8 +11,8 @@ before_install:
 - if [ "$TRAVIS_OS_NAME" = "osx" ]; then wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh; fi
 
 # workaround python config issue
-- if [ "$TRAVIS_OS_NAME" = "linux" ]; then export_PYTHON_SYSCONFIGDATA_NAME=_sysconfig_x86_64_conda_cos6_linux_gnu; fi
-- if [ "$TRAVIS_OS_NAME" = "osx" ]; then export_PYTHON_SYSCONFIGDATA_NAME=_sysconfig_x86_64-apple-darwin13.4.0; fi
+- if [ "$TRAVIS_OS_NAME" = "linux" ]; then export _PYTHON_SYSCONFIGDATA_NAME=_sysconfig_x86_64_conda_cos6_linux_gnu; fi
+- if [ "$TRAVIS_OS_NAME" = "osx" ]; then export _PYTHON_SYSCONFIGDATA_NAME=_sysconfig_x86_64-apple-darwin13.4.0; fi
 
 - export PATH="$HOME/miniconda/bin:$PATH"
 - bash miniconda.sh -b -p $HOME/miniconda

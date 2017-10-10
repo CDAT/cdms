@@ -6,13 +6,9 @@ services:
     - docker
 
 before_install:
-- if [ "$TRAVIS_OS_NAME" = "linux" ]; then wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh; fi
+- if [ "$TRAVIS_OS_NAME" = "linux" ]; then wget https://repo.continuum.io/miniconda/Miniconda3-4.3.21-Linux-x86_64.sh -O miniconda.sh; fi
 #- if [ "$TRAVIS_OS_NAME" = "linux" ]; then wget https://repo.continuum.io/miniconda/Miniconda3-4.3.21-Linux-x86_64.sh  -O miniconda.sh; fi
 - if [ "$TRAVIS_OS_NAME" = "osx" ]; then wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh; fi
-
-# workaround python config issue
-- if [ "$TRAVIS_OS_NAME" = "linux" ]; then export _PYTHON_SYSCONFIGDATA_NAME=_sysconfig_x86_64_conda_cos6_linux_gnu; fi
-- if [ "$TRAVIS_OS_NAME" = "osx" ]; then export _PYTHON_SYSCONFIGDATA_NAME=_sysconfig_x86_64-apple-darwin13.4.0; fi
 
 - export PATH="$HOME/miniconda/bin:$PATH"
 - bash miniconda.sh -b -p $HOME/miniconda
@@ -37,7 +33,7 @@ script:
 - echo ${ESGF_PWD} | myproxyclient logon -s esgf-node.llnl.gov -p 7512 -t 12 -S -b -l ${ESGF_USER} -o /home/travis/.esg/esgf.cert
 - cp tests/dodsrc /home/travis/.dodsrc
 - python setup.py install
-#- python run_tests.py -v2 -s
+- python run_tests.py -v2 -s
 # Python 2.7 environment
 - conda create -n py2 python=2.7
 - source activate py2
@@ -45,7 +41,7 @@ script:
 - conda install -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 
 - export UVCDAT_ANONYMOUS_LOG=False
 - python setup.py install
-#- python run_tests.py -v2 -s
+- python run_tests.py -v2 -s
 - pwd
 
 env:

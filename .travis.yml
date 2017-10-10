@@ -51,7 +51,7 @@ env:
 
 after_success:
 - if [ $TRAVIS_BRANCH != "master" -a $TRAVIS_PULL_REQUEST == "false" -a "$TRAVIS_OS_NAME"
-  = "linux" ]; then docker run -v `pwd`:/travis_home -e CONDA_UPLOAD_TOKEN=${CONDA_UPLOAD_TOKEN}
+  = "linux" ]; then docker run -v /home/travis:/travis_home -e CONDA_UPLOAD_TOKEN=${CONDA_UPLOAD_TOKEN}
   -a STDOUT -a STDERR cdat/conda:conda-forge-cdms2 /travis_home/ci-support/conda_upload.sh ; fi
 - ls /home/travis
 - ls /home/travis/build/UV-CDAT

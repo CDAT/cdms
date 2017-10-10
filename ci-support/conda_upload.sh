@@ -5,7 +5,9 @@ echo "Trying to upload conda"
 if [ `uname` == "Linux" ]; then
     OS=linux-64
     echo "Linux OS"
-    export PATH="$HOME/miniconda/bin:$PATH"
+    export PATH="/travis_home/miniconda/bin:$PATH"
+    echo $PATH
+    which conda
 #    conda update -y -q conda  # -R issue woraround
 else
     echo "Mac OS"

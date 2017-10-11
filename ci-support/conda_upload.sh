@@ -5,7 +5,7 @@ echo "Trying to upload conda"
 if [ `uname` == "Linux" ]; then
     OS=linux-64
     echo "Linux OS"
-    yum install -y wget
+    yum install -y wget git
     wget --no-check https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh  -O miniconda3.sh
     bash miniconda3.sh -b -p $HOME/miniconda
     export PATH=$HOME/miniconda/bin:$PATH

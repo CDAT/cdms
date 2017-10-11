@@ -5,22 +5,23 @@ echo "Trying to upload conda"
 if [ `uname` == "Linux" ]; then
     OS=linux-64
     echo "Linux OS"
-    which python
     yum install -y wget
     wget --no-check https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh  -O miniconda3.sh
     bash miniconda3.sh -b -p $HOME/miniconda
     export PATH=$HOME/miniconda/bin:$PATH
     echo $PATH
+    which python
     export UVCDAT_ANONYMOUS_LOG=False
     echo "Creating python 3 env"
     conda create -n py3 python=3.6
     conda install -n py3 -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy libdrs_f pyopenssl nose requests flake8 myproxyclient
     conda install -n py3 -c nesii/channel/dev-esmf -c conda-forge esmpy=7.1.0.dev34; fi
+    echo "Creating certificate"
     source activate py3
     mkdir ${HOME}/.esg
     echo ${ESGF_PWD} | myproxyclient logon -s esgf-node.llnl.gov -p 7512 -t 12 -S -b -l ${ESGF_USER} -o ${HOME}/.esg/esgf.cert
-    source deactivate
     cp tests/dodsrc ${HOME}.dodsrc
+    source deactivate
 # Python 2.7 environment
     echo "Creating python 2 env"
     conda create -n py2 python=2.7

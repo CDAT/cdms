@@ -55,4 +55,4 @@ after_success:
   -e CONDA_UPLOAD_TOKEN=${CONDA_UPLOAD_TOKEN}
   -e ESGF_PWD=${ESGF_PWD}
   -e ESGF_USER=${ESGF_USER}
-  -a STDOUT -a STDERR cdat/conda:conda-forge-cdms2 /travis_home/ci-support/conda_upload.sh ; fi
+  -a STDOUT -a STDERR centos:6.8 /travis_home/ci-support/conda_upload.sh ; fi

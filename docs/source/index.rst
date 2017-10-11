@@ -10,6 +10,8 @@ Contents:
 
 .. toctree::
    manual/cdms_1
+   manual/cdms_2
+   manual/cdms_3
 #   AbstractAxis
 #   AbstractVariable
 #   avariable

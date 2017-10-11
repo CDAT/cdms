@@ -72,7 +72,9 @@ latitude, longitude).
    >>> julyavg.long_name = "mean July surface temperature"
    >>> out = cdms2.open('janjuly.nc','w')
    >>> out.write(janavg)
+   <cdms2.fvariable.FileVariable object...
    >>> out.write(julyavg)
+   <cdms2.fvariable.FileVariable object...
    >>> out.comment = "Average January/July from Jones dataset"
    >>> jones.close()
    >>> out.close()
@@ -904,8 +906,8 @@ Table 2.14 CdmsFile Methods
 +--------------------------+--------------------------+--------------------------+
 | ``Variable``             | ``createVariable(String  | Create a new Variable.   |
 |                          | id, String datatype,List | This is a persistent     |
-|                          |  axes, fill_value=None)` | object which can be used |
-|                          | `                        | to read or write         |
+|                          | axes, fill_value=None)`` | object which can be used |
+|                          |                          | to read or write         |
 |                          |                          | variable data to the     |
 |                          |                          | file. ``id`` is a String |
 |                          |                          | name which is unique     |
@@ -1776,7 +1778,6 @@ Table 2.25 Dataset Methods
 |                          |                          |   ``t = f.axes['time']`` |
 +--------------------------+--------------------------+--------------------------+
 | ``None``                 | ``close()``              | Close the dataset.       |
-                                                                                
 +--------------------------+--------------------------+--------------------------+
 | ``RectGrid``             | ``createRectGrid(id, lat | Create a RectGrid in the |
 |                          | , lon, order, type="gene | dataset. This is not a   |

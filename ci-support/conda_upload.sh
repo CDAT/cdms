@@ -13,6 +13,8 @@ if [ `uname` == "Linux" ]; then
     which python
     export UVCDAT_ANONYMOUS_LOG=False
     echo "Creating python 3 env"
+    conda config --set always_yes yes --set changeps1 no
+    conda install -n root gcc future
     conda create -n py3 python=3.6
     conda install -n py3 -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy libdrs_f pyopenssl nose requests flake8 myproxyclient
     conda install -n py3 -c nesii/channel/dev-esmf -c conda-forge esmpy=7.1.0.dev34; fi
@@ -20,6 +22,8 @@ if [ `uname` == "Linux" ]; then
     source activate py3
     mkdir ${HOME}/.esg
     echo ${ESGF_PWD} | myproxyclient logon -s esgf-node.llnl.gov -p 7512 -t 12 -S -b -l ${ESGF_USER} -o ${HOME}/.esg/esgf.cert
+    cd travis_home
+    ls
     cp tests/dodsrc ${HOME}.dodsrc
     source deactivate
 # Python 2.7 environment

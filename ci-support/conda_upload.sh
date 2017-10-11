@@ -5,7 +5,7 @@ echo "Trying to upload conda"
 if [ `uname` == "Linux" ]; then
     OS=linux-64
     echo "Linux OS"
-    yum install -y wget git
+    yum install -y wget git gcc
     wget --no-check https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh  -O miniconda3.sh
     bash miniconda3.sh -b -p $HOME/miniconda
     export PATH=$HOME/miniconda/bin:$PATH
@@ -22,6 +22,7 @@ if [ `uname` == "Linux" ]; then
     source activate py3
     mkdir ${HOME}/.esg
     echo ${ESGF_PWD} | myproxyclient logon -s esgf-node.llnl.gov -p 7512 -t 12 -S -b -l ${ESGF_USER} -o ${HOME}/.esg/esgf.cert
+    ls ${HOME}/.esg
     cd travis_home
     ls
     cp tests/dodsrc ${HOME}.dodsrc

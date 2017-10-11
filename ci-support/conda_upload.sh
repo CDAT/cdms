@@ -6,7 +6,7 @@ if [ `uname` == "Linux" ]; then
     OS=linux-64
     echo "Linux OS"
     yum install -y wget git gcc
-    wget --no-check https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh  -O miniconda3.sh
+    wget --no-check https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh  -O miniconda3.sh 2> /dev/null
     bash miniconda3.sh -b -p $HOME/miniconda
     export PATH=$HOME/miniconda/bin:$PATH
     echo $PATH

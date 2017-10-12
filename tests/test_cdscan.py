@@ -1,9 +1,11 @@
 
 import basetest
 from cdms2.cdscan import main as cdscan
-import os, sys
+import os
+import sys
 import xml.etree.ElementTree as ET
 import cdat_info
+
 
 def diffElements(el1, el2):
     if el1.tag != el2.tag:
@@ -44,6 +46,7 @@ class TestCDScan(basetest.CDMSBaseTest):
         results = diffElements(b_root, new_root)
         self.assertIsNone(results)
         os.unlink("some_junk.xml")
+
 
 if __name__ == "__main__":
     basetest.run()

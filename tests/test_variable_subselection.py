@@ -11,6 +11,7 @@ from cdms2 import MV2 as MV
 import basetest
 import cdat_info
 
+
 class TestVariableSubselection(basetest.CDMSBaseTest):
     def setUp(self):
         super(TestVariableSubselection, self).setUp()
@@ -65,7 +66,7 @@ class TestVariableSubselection(basetest.CDMSBaseTest):
         fw = self.getDataFile('ps.wrap.test.0E.nc')
         ps = fw.getVariable('ps')
         pth = cdat_info.get_sampledata_path()
-        fc = cdms2.Cdunif.CdunifFile(os.path.join(pth, 'ps.wrap.test.0E.nc'))
+        fc = cdms2.Cdunif.CdunifFile(os.path.join(pth,'ps.wrap.test.0E.nc'))
         psc = fc.variables['ps']
         psb = psc[:]
         s3c = psb[0, ::-1]

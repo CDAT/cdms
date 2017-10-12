@@ -3,6 +3,7 @@
 import ESMF
 import unittest
 
+
 class Test(unittest.TestCase):
     def setUp(self):
         pass
@@ -15,13 +16,7 @@ class Test(unittest.TestCase):
         ESMF.Manager()
 
 
-if __name__ == '__main__': 
-    print "" # Spacer
+if __name__ == '__main__':
+    print("")  # Spacer
     suite = unittest.TestLoader().loadTestsFromTestCase(Test)
-    unittest.TextTestRunner(verbosity = 1).run(suite)
-    
-
-
-
-
-    
+    unittest.TextTestRunner(verbosity=1).run(suite)

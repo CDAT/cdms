@@ -1,9 +1,11 @@
 """FTP Progress dialog"""
 
-from wxPython.wx import *
+from wxPython.wx import wxProgressDialog
+from wxPython.wx import wxPD_CAN_ABORT, wxPD_APP_MODAL, wxPD_REMAINING_TIME
 from cdms import cache
 
 _progressParent = None                  # Parent frame of progress gui
+
 
 def setProgressParent(parent):
     """
@@ -12,7 +14,9 @@ def setProgressParent(parent):
     """
     global _progressParent
     _progressParent = parent
-    cache.useWindow()                   # Notify cache module that window dialogs should be used.
+    # Notify cache module that window dialogs should be used.
+    cache.useWindow()
+
 
 def getProgressParent():
     """
@@ -20,6 +24,7 @@ def getProgressParent():
     Usage: getProgressParent()
     """
     return _progressParent
+
 
 def updateProgressGui(blocknum, blocksize, size, prog):
     """
@@ -31,25 +36,27 @@ def updateProgressGui(blocknum, blocksize, size, prog):
 
     Return: 0 to signal that a cancel has been received, 1 to continue reading.
     """
-    sizekb = size/1024L
-    percent = min(100,int(100.0*float(blocknum*blocksize)/float(size)))
-    if percent<100:
-        noInterrupt = prog.Update(percent,"Read: %3d%% of %dK"%(percent,sizekb))
+    sizekb = size / 1024
+    percent = min(100, int(100.0 * float(blocknum * blocksize) / float(size)))
+    if percent < 100:
+        noInterrupt = prog.Update(
+            percent, "Read: %3d%% of %dK" %
+            (percent, sizekb))
     else:
         noInterrupt = 1                    # Don't interrupt - finish up cleanly
         prog.Destroy()
-    if noInterrupt==0:
+    if noInterrupt == 0:
         prog.Destroy()
     return noInterrupt
+
 
 class CdProgressDialog(wxProgressDialog):
 
     # <frame> is the parent frame.
     # filename is the file being read.
     def __init__(self, frame, filename):
-        wxProgressDialog.__init__(self,"FTP: %s"%filename,
-                         "Connecting ...",
-                         100,
-                         frame,
-                         wxPD_CAN_ABORT | wxPD_APP_MODAL | wxPD_REMAINING_TIME)
-
+        wxProgressDialog.__init__(self, "FTP: %s" % filename,
+                                  "Connecting ...",
+                                  100,
+                                  frame,
+                                  wxPD_CAN_ABORT | wxPD_APP_MODAL | wxPD_REMAINING_TIME)

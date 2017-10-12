@@ -40,8 +40,9 @@ class TestCompression(basetest.CDMSBaseTest):
         a = cdms2.MV2.zeros((1000, 2100), 'd')
         cdms2.setNetcdfDeflateLevelFlag(9)
 
-        f = self.getTempFile("crap_justdeflate9.nc",'w')
+        f = self.getTempFile("crap_justdeflate9.nc", 'w')
         f.write(a)
+
 
 if __name__ == "__main__":
     basetest.run()

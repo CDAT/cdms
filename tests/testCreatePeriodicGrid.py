@@ -4,7 +4,7 @@ $Id: testEsmf3DSmallesmf.py 2403 2012-07-31 23:07:16Z dkindig $
 With and without masking
 """
 
-import cdms2  
+import cdms2
 import unittest
 import ESMF
 from regrid2 import esmf
@@ -15,10 +15,10 @@ from ESMF.test.test_api.grid_utilities import *
 
 HAS_MPI = False
 try:
-        from mpi4py import MPI
-        HAS_MPI = True
-except:
-        pass
+    from mpi4py import MPI
+    HAS_MPI = True
+except BaseException:
+    pass
 
 import re
 
@@ -34,8 +34,8 @@ class TestESMFRegridderConserve(unittest.TestCase):
         self.pe = 0
         self.np = 1
         if HAS_MPI:
-                self.pe = MPI.COMM_WORLD.Get_rank()
-                self.np = MPI.COMM_WORLD.Get_size()
+            self.pe = MPI.COMM_WORLD.Get_rank()
+            self.np = MPI.COMM_WORLD.Get_size()
 
     def test_field_regrid_periodic(self):
         parallel = False
@@ -43,48 +43,47 @@ class TestESMFRegridderConserve(unittest.TestCase):
         srcgrid = grid_create_periodic(60, 30, corners=True, domask=True)
         dstgrid = grid_create_periodic(55, 28, corners=True)
 
-        srcGrid2D = esmf.EsmfStructGrid(srcgrid.coords[0][0].shape, periodicity = 1,
-                                        coordSys = None,hasBounds=True)
+        srcGrid2D = esmf.EsmfStructGrid(srcgrid.coords[0][0].shape, periodicity=1,
+                                        coordSys=None, hasBounds=True)
 
-        mycoords = [srcgrid.coords[0][1],srcgrid.coords[0][0]]
+        mycoords = [srcgrid.coords[0][1], srcgrid.coords[0][0]]
         srcGrid2D.setCoords(mycoords,
-                            staggerloc = ESMF.StaggerLoc.CENTER,
-                            globalIndexing = True)
+                            staggerloc=ESMF.StaggerLoc.CENTER,
+                            globalIndexing=True)
 
-        mycoords = [srcgrid.coords[3][1],srcgrid.coords[3][0]]
+        mycoords = [srcgrid.coords[3][1], srcgrid.coords[3][0]]
         srcGrid2D.setCoords(mycoords,
-                            staggerloc = ESMF.StaggerLoc.CORNER,
-                            globalIndexing = True)
+                            staggerloc=ESMF.StaggerLoc.CORNER,
+                            globalIndexing=True)
 
         dstGrid2D = esmf.EsmfStructGrid(dstgrid.coords[0][0].shape, periodicity=1,
-                                        coordSys = None, hasBounds=True)
+                                        coordSys=None, hasBounds=True)
 
-        mycoords = [dstgrid.coords[0][1],dstgrid.coords[0][0]]
+        mycoords = [dstgrid.coords[0][1], dstgrid.coords[0][0]]
         dstGrid2D.setCoords(mycoords,
-                            staggerloc = ESMF.StaggerLoc.CENTER,
-                            globalIndexing = True)
+                            staggerloc=ESMF.StaggerLoc.CENTER,
+                            globalIndexing=True)
 
-        mycoords = [dstgrid.coords[3][1],dstgrid.coords[3][0]]
+        mycoords = [dstgrid.coords[3][1], dstgrid.coords[3][0]]
         dstGrid2D.setCoords(mycoords,
-                            staggerloc = ESMF.StaggerLoc.CORNER,
-                            globalIndexing = True)
-
+                            staggerloc=ESMF.StaggerLoc.CORNER,
+                            globalIndexing=True)
 
         # create the Fields
         srcfield = esmf.EsmfStructField(srcGrid2D,
-                                        'srcDataCtr', 
+                                        'srcDataCtr',
                                         srcgrid.coords[0][0].dtype,
                                         ESMF.StaggerLoc.CENTER)
 
-        dstfield = esmf.EsmfStructField(dstGrid2D, 
-                                        'dstDataCtr', 
+        dstfield = esmf.EsmfStructField(dstGrid2D,
+                                        'dstDataCtr',
                                         dstgrid.coords[0][0].dtype,
                                         ESMF.StaggerLoc.CENTER)
 
-        exactfield = esmf.EsmfStructField(dstGrid2D, 
-                                        'exactDataCtr', 
-                                        dstgrid.coords[0][0].dtype,
-                                        ESMF.StaggerLoc.CENTER)
+        exactfield = esmf.EsmfStructField(dstGrid2D,
+                                          'exactDataCtr',
+                                          dstgrid.coords[0][0].dtype,
+                                          ESMF.StaggerLoc.CENTER)
 
 #        srcfield = ESMF.Field(srcgrid, name='srcfield')
 #        dstfield = ESMF.Field(dstgrid, name='dstfield')
@@ -92,14 +91,14 @@ class TestESMFRegridderConserve(unittest.TestCase):
 
         # create the fraction fields
         srcfracfield = esmf.EsmfStructField(srcGrid2D,
-                                        'srcfracfield', 
-                                        srcgrid.coords[0][0].dtype,
-                                        ESMF.StaggerLoc.CENTER)
+                                            'srcfracfield',
+                                            srcgrid.coords[0][0].dtype,
+                                            ESMF.StaggerLoc.CENTER)
 
         dstfracfield = esmf.EsmfStructField(dstGrid2D,
-                                        'dstfracfield', 
-                                        srcgrid.coords[0][0].dtype,
-                                        ESMF.StaggerLoc.CENTER)
+                                            'dstfracfield',
+                                            srcgrid.coords[0][0].dtype,
+                                            ESMF.StaggerLoc.CENTER)
 
 #        srcfracfield = ESMF.Field(srcgrid, name='srcfracfield')
 #        dstfracfield = ESMF.Field(dstgrid, name='dstfracfield')
@@ -110,11 +109,11 @@ class TestESMFRegridderConserve(unittest.TestCase):
 
         # run the ESMF regridding
         regridOut = esmf.EsmfRegrid(srcfield, dstfield,
-                               srcMaskValues = np.array([0]),
-                               regridMethod = ESMF.RegridMethod.CONSERVE,
-                               unMappedAction = ESMF.UnmappedAction.ERROR,
-                               srcFrac=srcfracfield,
-                               dstFrac=dstfracfield)
+                                    srcMaskValues=np.array([0]),
+                                    regridMethod=ESMF.RegridMethod.CONSERVE,
+                                    unMappedAction=ESMF.UnmappedAction.ERROR,
+                                    srcFrac=srcfracfield,
+                                    dstFrac=dstfracfield)
         regridOut()
 
 #        regridSrc2Dst = ESMF.Regrid(srcfield, dstfield,
@@ -132,13 +131,14 @@ class TestESMFRegridderConserve(unittest.TestCase):
 
         # compare results and output PASS or FAIL
         meanrel, csrvrel = compare_fields_grid(dstfield.field, exactfield.field, 10E-2, 10e-15, parallel=parallel,
-                            dstfracfield=dstfracfield.field, mass1=srcmass, mass2=dstmass)
+                                               dstfracfield=dstfracfield.field, mass1=srcmass, mass2=dstmass)
 
         self.assertAlmostEqual(meanrel, 0.0016447124122954575)
         self.assertAlmostEqual(csrvrel, 0.0)
 
+
 if __name__ == '__main__':
-    print "" # Spacer
+    print ""  # Spacer
     ESMF.Manager(debug=True)
     suite = unittest.TestLoader().loadTestsFromTestCase(TestESMFRegridderConserve)
-    unittest.TextTestRunner(verbosity = 1).run(suite)
+    unittest.TextTestRunner(verbosity=1).run(suite)

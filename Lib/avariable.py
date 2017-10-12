@@ -478,7 +478,7 @@ class AbstractVariable(CdmsObj, Slab):
                     [numpy.ma.default_fill_value(self)], selftype)
         # '?' for Boolean and object
         elif isinstance(value, (str, numpy.string_, numpy.str,
-                        numpy.string0, numpy.str_)) and selftype in ['?', 'c', 'O', 'S']:
+                                numpy.string0, numpy.str_)) and selftype in ['?', 'c', 'O', 'S']:
             pass
         else:
             raise CDMSError('Invalid missing value %s' % repr(value))
@@ -1462,9 +1462,10 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
             add_offset = numpy.array([0.0], resulttype)
 
         if ar is not numpy.ma.masked:
-            result = scale_factor * ar + add_offset
-            if isinstance(result, numpy.ma.MaskedArray):
-                result = result.astype(resulttype)
+            result = scale_factor * ar.data[:] + add_offset
+            if isinstance(ar, numpy.ma.MaskedArray):
+                result = numpy.ma.masked_array(
+                    result, mask=ar.mask).astype(resulttype)
                 numpy.ma.set_fill_value(
                     result, numpy.ma.default_fill_value(0.))
             else:
@@ -1710,5 +1711,5 @@ def order2index(axes, order):
     return permutation
 
 
-from .tvariable import TransientVariable # noqa
-from . import MV2 as MV # noqa
+from .tvariable import TransientVariable  # noqa
+from . import MV2 as MV  # noqa

@@ -202,8 +202,8 @@ class Selector:
            raw != 0 or \
            result is variable:
             # result is variable when there are no components, for example.
-                return result.subRegion(squeeze=squeeze, order=order,
-                                        grid=grid, raw=raw)
+            return result.subRegion(squeeze=squeeze, order=order,
+                                    grid=grid, raw=raw)
         else:
             return result
 

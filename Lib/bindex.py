@@ -17,7 +17,7 @@ def bindexHorizontalGrid(latlin, lonlin):
          latlon:
             lonlin is the raveled longitude values.
 
-    Returns 
+    Returns
     -------
          resulting index.
     """

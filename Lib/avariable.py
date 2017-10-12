@@ -40,7 +40,7 @@ def getMinHorizontalMask(var):
 
     Parameters
     ----------
-    var 
+    var
         CDMS variable with a mask
 
     Return
@@ -171,7 +171,7 @@ class AbstractVariable(CdmsObj, Slab):
         grid:
             if given, result is regridded ont this grid.
         order:
-            if given, result is permuted into this order 
+            if given, result is permuted into this order
 
         Returns
         -------
@@ -264,7 +264,7 @@ class AbstractVariable(CdmsObj, Slab):
         return result
 
     def generateGridkey(self, convention, vardict):
-        """Determine if the variable is gridded. 
+        """Determine if the variable is gridded.
 
         Parameters
         ----------
@@ -416,7 +416,7 @@ class AbstractVariable(CdmsObj, Slab):
         """Get the n-th axis.
         Parameters
         ----------
-            n: 
+            n:
                Axis number
         Returns
         -------
@@ -458,11 +458,11 @@ class AbstractVariable(CdmsObj, Slab):
 
     def getAxisListIndex(self, axes=None, omit=None, order=None):
         """Return a list of indices of axis objects;
-           
+
            Note
            ----
            If axes is **not** `None`, include only certain axes.
-           less the ones specified in omit. 
+           less the ones specified in omit.
 
            If axes is `None`, use all axes of this variable.
 
@@ -471,7 +471,7 @@ class AbstractVariable(CdmsObj, Slab):
         return axisMatchIndex(self.getAxisList(), axes, omit, order)
 
     def getAxisList(self, axes=None, omit=None, order=None):
-        """Get the list of axis objects; 
+        """Get the list of axis objects;
 
         Note
         ----
@@ -489,7 +489,7 @@ class AbstractVariable(CdmsObj, Slab):
         """Get a list of axis identifiers.
 
         Returns
-        ------- 
+        -------
         array list of axis ids"""
 
         return [x[0].id for x in self.getDomain()]
@@ -503,9 +503,9 @@ class AbstractVariable(CdmsObj, Slab):
            Parameters
            ----------
                asarray :
-                   '0' : scalar 
+                   '0' : scalar
                    '1' : numpy array
-           Return 
+           Return
            ------
                the missing value as a scalar, or as a numpy array if asarray==1"""
 
@@ -537,12 +537,12 @@ class AbstractVariable(CdmsObj, Slab):
         self.setMissing(value)
 
     def setMissing(self, value):
-        """Set the missing value. 
+        """Set the missing value.
 
         Parameters
         ----------
-            value 
-                scalar, a single-valued numpy array, or None. 
+            value
+                scalar, a single-valued numpy array, or None.
 
         Note
         ----
@@ -569,7 +569,7 @@ class AbstractVariable(CdmsObj, Slab):
                     [numpy.ma.default_fill_value(self)], selftype)
         # '?' for Boolean and object
         elif isinstance(value, (str, numpy.string_, numpy.str,
-                        numpy.string0, numpy.str_)) and selftype in ['?', 'c', 'O', 'S']:
+                                numpy.string0, numpy.str_)) and selftype in ['?', 'c', 'O', 'S']:
             pass
         else:
             raise CDMSError('Invalid missing value %s' % repr(value))
@@ -610,7 +610,7 @@ class AbstractVariable(CdmsObj, Slab):
         return self.getForecastTime()
 
     def getLevel(self):
-        """Get the first vertical level dimension in the domain. 
+        """Get the first vertical level dimension in the domain.
 
         Returns
         -------
@@ -679,7 +679,7 @@ class AbstractVariable(CdmsObj, Slab):
         ----------
              id:
                  0 or 1
-        returns 
+        returns
         -------
             the order string, such as t, z, y, x (time, level, lat, lon).
 
@@ -687,12 +687,12 @@ class AbstractVariable(CdmsObj, Slab):
         ----
         * if ids == 0 (the default) for an axis that is not t,z,x,y
           the order string will contain a (-) character in that location.
-          The result string will be of the same length as the number 
+          The result string will be of the same length as the number
           of axes. This makes it easy to loop over the dimensions.
 
         * if ids == 1 those axes will be represented in the order
           string as (id) where id is that axis' id. The result will
-          be suitable for passing to order2index to get the 
+          be suitable for passing to order2index to get the
           corresponding axes, and to orderparse for dividing up into
           components.
         """
@@ -807,7 +807,7 @@ class AbstractVariable(CdmsObj, Slab):
 
     def getSlice(self, *specs, **keys):
         """getSlice takes arguments of the following forms and produces
-           a return array. 
+           a return array.
 
            Parameter
            ---------
@@ -818,12 +818,12 @@ class AbstractVariable(CdmsObj, Slab):
            grid:
                if given, result is regridded ont this grid.
            order:
-               if given, result is permuted into this order 
+               if given, result is permuted into this order
            numericSqueeze:
                if index slice is given, eliminate that dimension.
            isitem:
                if given, result is return as a scaler for 0-D data
-        
+
 
            Note
            ----
@@ -833,7 +833,7 @@ class AbstractVariable(CdmsObj, Slab):
            #. an instance of the slice class
            #. a tuple, which will be used as arguments to create a slice
            #. `None` or `:`, which means a slice covering that entire dimension
-           #. Ellipsis (...), which means to fill the slice list with `:` 
+           #. Ellipsis (...), which means to fill the slice list with `:`
              leaving only enough room at the end for the remaining positional arguments
 
            There can be keyword arguments of the form key = value, where
@@ -876,15 +876,18 @@ class AbstractVariable(CdmsObj, Slab):
                 * (x, y)
                     * Map the half-open coordinate interval [x,y) to index interval.
                 * (x, y, 'cc')
-                    * Map the closed interval [x,y] to index interval. Other options are 'oo' (open), 'oc' (open on the left), and 'co' (open on the right, the default).
+                    * Map the closed interval [x,y] to index interval. Other options
+                      are 'oo' (open), 'oc' (open on the left), and 'co'
+                      (open on the right, the default).
                 * (x, y, 'co', cycle)
-                    * Map the coordinate interval with wraparound. If no cycle is specified, wraparound will occur iff axis.isCircular() is true.
+                    * Map the coordinate interval with wraparound. If no cycle is
+                      specified, wraparound will occur iff axis.isCircular() is true.
         Ellipsis
                  Represents the full range of all dimensions bracketed by non-Ellipsis items.
         None, colon
                  Represents the full range of one dimension.
 
-        Note 
+        Note
         ----
         Only one dimension may be wrapped.
 
@@ -1362,9 +1365,10 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
         ----------
         newLevel :
              is an axis of the result pressure levels.
-        method : 
-             is optional, either `log` to interpolate in the log of pressure (default), or `linear` for linear interpolation.
-        missing and order : 
+        method :
+             is optional, either `log` to interpolate in the log of pressure (default),
+             or `linear` for linear interpolation.
+        missing and order :
              are as for regrid.PressureRegridder.
 
         """
@@ -1386,7 +1390,7 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
         -----------
           newLevel :
               is an axis of the result pressure levels.
-          newLatitude : 
+          newLatitude :
               is an axis of latitude values.
           method : Optional
               either "log" to interpolate in the log of pressure (default),
@@ -1642,7 +1646,7 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
         return (hasattr(self, "scale_factor") or hasattr(self, "add_offset"))
 
     def decode(self, ar):
-        """Decode compressed data. 
+        """Decode compressed data.
 
          Parameter
          ---------
@@ -1912,5 +1916,5 @@ def order2index(axes, order):
     return permutation
 
 
-from .tvariable import TransientVariable # noqa
-from . import MV2 as MV # noqa
+from .tvariable import TransientVariable  # noqa
+from . import MV2 as MV  # noqa

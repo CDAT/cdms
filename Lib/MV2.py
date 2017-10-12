@@ -5,7 +5,7 @@
 import numpy
 from numpy import character, float, float32, float64  # noqa
 from numpy import int, int8, int16, int32, int64, byte  # noqa
-from numpy import  ubyte, uint8, uint16, uint32, uint64, long   # noqa
+from numpy import ubyte, uint8, uint16, uint32, uint64, long   # noqa
 from numpy.ma import allclose, allequal, common_fill_value  # noqa
 from numpy.ma import make_mask_none, dot, filled  # noqa
 from numpy.ma import getmask, getmaskarray, identity  # noqa

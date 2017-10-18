@@ -9,10 +9,11 @@ Welcome to cdms2's documentation!
 Contents:
 
 .. toctree::
-   manual/cdms_1
-   manual/cdms_2
-   manual/cdms_3
    manual/cdms_4
+
+#   manual/cdms_2
+#   manual/cdms_3
+#   manual/cdms_4
 #   AbstractAxis
 #   AbstractVariable
 #   avariable

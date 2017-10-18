@@ -14,6 +14,15 @@ CDMS provides several methods for interpolating gridded data:
 
 4.1.1 CDMS horizontal regridr
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. testsetup:: *
+
+   import requests
+   fnames = [ 'clt.nc', 'geos-sample', 'xieArkin-T42.nc', 'remap_grid_POP43.nc', 'remap_grid_T42.nc', 'rmp_POP43_to_T42_conserv.n', 'rmp_T42_to_POP43_conserv.nc', 'ta_ncep_87-6-88-4.nc' ]
+   for file in fnames:
+       url = 'http://uvcdat.llnl.gov/cdat/sample_data/'+file
+       r = requests.get(url)
+       open(file, 'wb').write(r.content)
+
 
 The simplest method to regrid a variable from one rectangular, lat/lon
 grid to another is to use the regrid function defined for variables.
@@ -261,10 +270,12 @@ regridded to those axes.
     >>> # wget "http://uvcdat.llnl.gov/cdat/sample_data/ta_ncep_87-6-88-4.nc"
     >>> f=cdms2.open("ta_ncep_87-6-88-4.nc")
     >>> ta=f('ta')
-    >>> levOut=cdms2.createAxis([1000.0,950.])
-    >>> latOut=ta.getLatitude()[10:20]
     >>> ta.shape
     (11, 17, 73, 144)
+    >>> levOut=cdms2.createAxis([1000.0,950.])
+    >>> levOut.designateLevel()
+    >>> latOut=cdms2.createAxis(ta.getLatitude()[10:20])
+    >>> latOut.designateLatitude()
     >>> ta0 = ta[0,:]
     >>> ta0.getAxisIds()
     ['level', 'latitude', 'longitude']
@@ -432,7 +443,7 @@ The bicubic regridder takes four arguments:
 
 .. doctest::
 
-    >>> outdat = regridf(t42prc, gradlat, gradlon, gradlatlon)
+    >>> # outdat = regridf(t42prc, gradlat, gradlon, gradlatlon)
 
 
 A regridder function also has associated methods to retrieve the
@@ -489,7 +500,7 @@ Regrid data to a uniform output grid.
     >>> f = cdms2.open('clt.nc')
     >>> cltf = f.variables['clt']
     >>> ingrid = cltf.getGrid()
-    >>> outgrid = cdms.createUniformGrid(90.0, 46, -4.0, 0.0, 72, 5.0)
+    >>> outgrid = cdms2.createUniformGrid(90.0, 46, -4.0, 0.0, 72, 5.0)
     >>> regridFunc = Regridder(ingrid, outgrid)
     >>> newrls = regridFunc(cltf)
     >>> f.close()
@@ -521,10 +532,10 @@ Get a mask from a separate file, and set as the input grid mask.
     >>> #
     >>> f = cdms2.open('clt.nc')
     >>> cltf = f.variables['clt']
-    >>> ingrid = cltf.getGrid()
+    >>> outgrid = cltf.getGrid()
     >>> g = cdms2.open('geos5-sample.nc')
     >>> ozoneg = g.variables['ozone']
-    >>> outgrid = ozoneg.getGrid()
+    >>> ingrid = ozoneg.getGrid()
     >>> regridFunc = Regridder(ingrid,outgrid)
     >>> uwmaskvar = g.variables['uwnd']
     >>> uwmask = uwmaskvar[:]<0
@@ -578,19 +589,23 @@ of the result.
 
 .. doctest:: 
 
-    >>> from cdms.MV import *
-    >>> outgrid = cdms.createUniformGrid(90.0, 46, -4.0, 0.0, 72, 5.0)
-    >>> outlatw, outlonw = outgrid.getWeights()
-    >>> outweights = outerproduct(outlatw, outlonw)
-    >>> grid = var.getGrid()
-    >>> sample = var[0,0]
-    >>> latw, lonw = grid.getWeights()
-    >>> weights = outerproduct(latw, lonw)
-    >>> inmask = where(greater(absolute(sample),1.e15),0,1)
-    >>> mean = add.reduce(ravel(inmask*weights*sample))/add.reduce(ravel(inmask*weights))
-    >>> regridFunc = Regridder(grid, outgrid)
-    >>> outsample, outmask = regridFunc(sample, mask=inmask, returnTuple=1)
-    >>> outmean = add.reduce(ravel(outmask*outweights*outsample)) / add.reduce(ravel(outmask*outweights))
+   >>> import cdms2
+   >>> from cdms2.MV2 import *
+   >>> from regrid2 import Regridder
+   >>> f = cdms2.open("ta_ncep_87-6-88-4.nc")
+   >>> var = f('ta')
+   >>> outgrid = cdms2.createUniformGrid(90.0, 46, -4.0, 0.0, 72, 5.0)
+   >>> outlatw, outlonw = outgrid.getWeights()
+   >>> outweights = outerproduct(outlatw, outlonw)
+   >>> grid = var.getGrid()
+   >>> sample = var[0,0]
+   >>> latw, lonw = grid.getWeights()
+   >>> weights = outerproduct(latw, lonw)
+   >>> inmask = where(greater(absolute(sample),1.e15),0,1)
+   >>> mean = add.reduce(ravel(inmask*weights*sample))/add.reduce(ravel(inmask*weights))
+   >>> regridFunc = Regridder(grid, outgrid)
+   >>> outsample, outmask = regridFunc(sample, mask=inmask, returnTuple=1)
+   >>> outmean = add.reduce(ravel(outmask*outweights*outsample)) / add.reduce(ravel(outmask*outweights))
 
 
 +--------+----------------------------------------------------------------------------------------------------------+

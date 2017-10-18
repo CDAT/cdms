@@ -17,12 +17,18 @@ CDMS provides several methods for interpolating gridded data:
 .. testsetup:: *
 
    import requests
-   fnames = [ 'clt.nc', 'geos-sample', 'xieArkin-T42.nc', 'remap_grid_POP43.nc', 'remap_grid_T42.nc', 'rmp_POP43_to_T42_conserv.n', 'rmp_T42_to_POP43_conserv.nc', 'ta_ncep_87-6-88-4.nc' ]
+   fnames = [ 'clt.nc', 'geos-sample', 'xieArkin-T42.nc', 'remap_grid_POP43.nc', 'remap_grid_T42.nc', 'rmp_POP43_to_T42_conserv.n', 'rmp_T42_to_POP43_conserv.nc', 'ta_ncep_87-6-88-4.nc', 'rmp_T42_to_C02562_conserv.nc' ]
    for file in fnames:
        url = 'http://uvcdat.llnl.gov/cdat/sample_data/'+file
        r = requests.get(url)
        open(file, 'wb').write(r.content)
 
+.. testcleanup:: *
+
+    import os
+    fnames = [ 'clt.nc', 'geos-sample', 'xieArkin-T42.nc', 'remap_grid_POP43.nc', 'remap_grid_T42.nc', 'rmp_POP43_to_T42_conserv.n', 'rmp_T42_to_POP43_conserv.nc', 'ta_ncep_87-6-88-4.nc', 'rmp_T42_to_C02562_conserv.nc' ]
+    for file in fnames:
+       os.remove(file)
 
 The simplest method to regrid a variable from one rectangular, lat/lon
 grid to another is to use the regrid function defined for variables.
@@ -643,46 +649,34 @@ Regrid from a curvilinear to a generic grid, using a conservative
 remapping. Compute the area-weighted means on input and output for
 comparison.
 
-.. raw:: html
+.. doctest::
 
-   <figure class="highlight">
-
-::
-
-    import cdms, regrid, MA
-
-    # Open the SCRIP remapping file and data file
-    direc = ''
-    fremap = cdms.open(direc+'rmp_T42_to_C02562_conserv.nc')
-    fdat = cdms.open(direc+'sampleT42Grid.nc')
-
-    # Input data array
-    dat = fdat('src_array')
-
-    # Read the SCRIP regridder
-    regridf = regrid.readRegridder(fremap)
-
-    # Regrid the variable
-    outdat = regridf(dat)
-
-    # Get the cell area and fraction arrays. Areas are computed only
-    # for conservative regridding.
-    srcfrac = regridf.getSourceFraction()
-    srcarea = regridf.getSourceArea()
-    dstfrac = regridf.getDestinationFraction()
-    dstarea = regridf.getDestinationArea()
-
-    # Calculate area-weighted means
-    inmean = MA.sum(srcfrac*srcarea*MA.ravel(dat)) / MA.sum(srcfrac*srcarea)
-    outmean = MA.sum(dstfrac*dstarea*MA.ravel(outdat)) / MA.sum(dstfrac*dstarea)
-    print 'Input mean:', inmean
-    print 'Output mean:', outmean
-
-    fremap.close)
-    fdat.close()
-
-.. raw:: html
-
-   </figure>
-
+    >>> # wget "http://uvcdat.llnl.gov/cdat/sample_data/remap_grid_T42.nc"
+    >>> # wget http://uvcdat.llnl.gov/cdat/sample_data/rmp_T42_to_C02562_conserv.nc
+    >>> # wget "http://uvcdat.llnl.gov/cdat/sample_data/xieArkin-T42.nc"
+    >>> import cdms2, regrid2, MV2
+    >>> # Open the SCRIP remapping file and data file
+    >>> fremap = cdms2.open('rmp_T42_to_C02562_conserv.nc')
+    >>> fdat = cdms2.open('xieArkin-T42.nc')
+    >>> # Input data array
+    >>> dat = fdat('prc')[0,:]
+    >>> # Read the SCRIP regridder
+    >>> regridf = regrid2.readRegridder(fremap)
+    >>> # Regrid the variable
+    >>> outdat = regridf(dat)
+    >>> # Get the cell area and fraction arrays. Areas are computed only
+    >>> # for conservative regridding.
+    >>> srcfrac = regridf.getSourceFraction()
+    >>> srcarea = regridf.getSourceArea()
+    >>> dstfrac = regridf.getDestinationFraction()
+    >>> dstarea = regridf.getDestinationArea()
+    >>> # calculate area-weighted means
+    >>> inmean = MV2.sum(srcfrac*srcarea*MV2.ravel(dat)) / MV2.sum(srcfrac*srcarea)
+    >>> outmean = MV2.sum(dstfrac*dstarea*MV2.ravel(outdat)) / MV2.sum(dstfrac*dstarea)
+    >>> print 'Input mean:', inmean
+    Input mean: 2.60376502339
+    >>> print 'Output mean:', outmean
+    Output mean: 2.60376502339
+    >>> fremap.close()
+    >>> fdat.close()
 

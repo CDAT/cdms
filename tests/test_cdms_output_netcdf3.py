@@ -18,4 +18,4 @@ class CDMSNc3(unittest.TestCase):
             cmd = cmd.split()
             p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
             o, e = p.communicate()
-            self.assertEqual(o.find("_IsNetcdf4"),-1)
+            self.assertEqual(str(o).find("_IsNetcdf4"),-1)

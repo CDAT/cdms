@@ -13,6 +13,7 @@ Contents:
    manual/cdms_2
    manual/cdms_3
    manual/cdms_4
+   manual/cdms_5
 
 #   AbstractAxis
 #   AbstractVariable

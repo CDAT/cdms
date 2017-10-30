@@ -276,6 +276,7 @@ def useNetcdf3():
     setNetcdfShuffleFlag(0)
     setNetcdfDeflateFlag(0)
     setNetcdfDeflateLevelFlag(0)
+    setNetcdf4Flag(0)
 
 # Create a tree from a file path.
 # Returns the parse tree root node.
@@ -1446,7 +1447,7 @@ class CdmsFile(CdmsObj, cuDataset):
             newname = axis.id
 
         if len(newname) > 127:
-            msg = "axis name has more than 127 characters, name will be truncate"
+            msg = "axis name has more than 127 characters, name will be truncated"
             warnings.warn(msg, UserWarning)
             newname = newname[:127] if len(newname) > 127 else newname
 
@@ -1962,7 +1963,7 @@ class CdmsFile(CdmsObj, cuDataset):
             if (Cdunif.CdunifGetNCFLAGS("shuffle") != 0) or (Cdunif.CdunifGetNCFLAGS(
                     "deflate") != 0) or (Cdunif.CdunifGetNCFLAGS("deflate_level") != 0):
                 import warnings
-                warnings.warn("Files are written with compression and shuffling\n" +
+                warnings.warn("Files are written with compression and no shuffling\n" +
                               "You can query different values of compression using the functions:\n" +
                               "cdms2.getNetcdfShuffleFlag() returning 1 if shuffling is enabled, " +
                               "0 otherwise\ncdms2.getNetcdfDeflateFlag() returning 1 if deflate is used, " +
@@ -1972,8 +1973,9 @@ class CdmsFile(CdmsObj, cuDataset):
                               "use the functions:\nvalue = 0\ncdms2.setNetcdfShuffleFlag(value) " +
                               "## where value is either 0 or 1\ncdms2.setNetcdfDeflateFlag(value) " +
                               "## where value is either 0 or 1\ncdms2.setNetcdfDeflateLevelFlag(value) " +
-                              "## where value is a integer between 0 and 9 included\n\nTurning all values " +
-                              "to 0 will produce NetCDF3 Classic files\nTo Force NetCDF4 output with " +
+                              "## where value is a integer between 0 and 9 included\n\nTo " +
+                              "produce NetCDF3 Classic files use:\ncdms2.useNetCDF3()\n" +
+                              "To Force NetCDF4 output with " +
                               "classic format and no compressing use:\ncdms2.setNetcdf4Flag(1)\n" +
                               "NetCDF4 file with no shuffling or deflate and noclassic will be open " +
                               "for parallel i/o", Warning)

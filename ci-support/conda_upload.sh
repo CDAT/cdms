@@ -6,8 +6,8 @@ if [ `uname` == "Linux" ]; then
     OS=linux-64
     echo "Linux OS"
     yum install -y wget git gcc
-    wget --no-check https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh  -O miniconda2.sh 2> /dev/null
-    bash miniconda2.sh -b -p $HOME/miniconda
+    wget --no-check https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh  -O miniconda3.sh 2> /dev/null
+    bash miniconda3.sh -b -p $HOME/miniconda
     export PATH=$HOME/miniconda/bin:$PATH
     echo $PATH
     which python
@@ -16,7 +16,7 @@ if [ `uname` == "Linux" ]; then
     conda config --set always_yes yes --set changeps1 no
     conda install -n root gcc future
     conda create -n py3 python=3.6
-    conda install -n py3 -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy libdrs_f pyopenssl nose requests flake8 myproxyclient
+    conda install -n py3 -c conda-forge -c uvcdat setuptools libcf distarray cdtime libcdms cdat_info numpy libdrs_f pyopenssl nose requests flake8 myproxyclient numpy
     conda install -n py3 -c nesii/channel/dev-esmf -c conda-forge esmpy=7.1.0.dev34
     echo "Creating certificate"
     source activate py3
@@ -30,7 +30,7 @@ if [ `uname` == "Linux" ]; then
 # Python 2.7 environment
     echo "Creating python 2 env"
     conda create -n py2 python=2.7
-    conda install -n py2 -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8
+    conda install -n py2 -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8numpy
 #    conda update -y -q conda  # -R issue woraround
 else
     echo "Mac OS"

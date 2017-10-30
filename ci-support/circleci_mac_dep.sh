@@ -16,7 +16,7 @@ cmd="conda create -n py3 -c uvcdat/label/nightly -c conda-forge -c uvcdat libcf 
 echo $cmd
 $cmd
 
-cmd="conda install -n py3 -c nadeau1 esmf esmpy"
+cmd="conda install -n py3 -c nadeau1 -c conda-forge esmf esmpy"
 echo $cmd
 $cmd
 

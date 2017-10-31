@@ -7,8 +7,11 @@ if [ `uname` == "Linux" ]; then
     echo "Linux OS"
     yum install -y wget git gcc
     wget --no-check https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh  -O miniconda3.sh 2> /dev/null
-    bash miniconda3.sh -b -p $HOME/miniconda
-    export PATH=$HOME/miniconda/bin:$PATH
+    wget --no-check https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh  -O miniconda2.sh 2> /dev/null
+    bash miniconda3.sh -b -p ${HOME}/miniconda3
+    bash miniconda2.sh -b -p ${HOME}/miniconda2
+    export SYSPATH=$PATH
+    export PATH=${HOME}/miniconda3/bin:${SYSPATH}
     echo $PATH
     which python
     export UVCDAT_ANONYMOUS_LOG=False
@@ -28,6 +31,8 @@ if [ `uname` == "Linux" ]; then
     cp tests/dodsrc ${HOME}.dodsrc
     source deactivate
 # Python 2.7 environment
+    export PATH=${HOME}/miniconda2/bin:${SYSPATH}
+    echo $PATH
     echo "Creating python 2 env"
     conda create -n py2 python=2.7
     conda install -n py2 -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8numpy
@@ -38,6 +43,10 @@ else
 fi
 
 # Python 3 section
+if [ `uname` == "Linux" ]; then
+    export PATH=${HOME}/miniconda3/bin:${SYSPATH}
+    echo $PATH
+fi
 echo "Building python 3"
 source activate py3
 mkdir ${HOME}/conda-bld
@@ -56,14 +65,18 @@ rm -rf uvcdat
 python ./prep_for_build.py
 echo "Building now"
 echo "use nesii/label/dev-esmf for py3"
-conda build $PKG_NAME -c nesii/label/dev-esmf -c nadeau1 -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.13
+CONDA_PY=36 conda build $PKG_NAME -c nesii/label/dev-esmf -c nadeau1 -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.13
 anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-$VERSION.`date +%Y`*-np113py3*_0.tar.bz2 --force
-conda build $PKG_NAME -c nesii/label/dev-esmf -c nadeau1 -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.12
+CONDA_PY=36 conda build $PKG_NAME -c nesii/label/dev-esmf -c nadeau1 -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.12
 anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-$VERSION.`date +%Y`*-np112py3*_0.tar.bz2 --force
-conda build $PKG_NAME -c nesii/label/dev-esmf -c nadeau1 -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.11
+CONDA_PY=36 conda build $PKG_NAME -c nesii/label/dev-esmf -c nadeau1 -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.11
 anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-$VERSION.`date +%Y`*-np111py3*_0.tar.bz2 --force
 
 # Python 2 section
+if [ `uname` == "Linux" ]; then
+    export PATH=${HOME}/miniconda2/bin:${SYSPATH}
+    echo $PATH
+fi
 echo "Building python 2"
 source activate py2
 which python

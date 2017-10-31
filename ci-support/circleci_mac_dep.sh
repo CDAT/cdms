@@ -12,11 +12,11 @@ echo $cmd
 $cmd
 
 # Create Python 3 environment
-cmd="conda create -n py3 -c uvcdat/label/nightly -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient"
+cmd="conda create -n py3 -c uvcdat/label/nightly -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy libdrs_f pyopenssl nose requests flake8 myproxyclient"
 echo $cmd
 $cmd
 
-cmd="conda install -n py3 -c nadeau1 esmf esmpy"
+cmd="conda install -n py3 -c nadeau1 -c conda-forge esmf esmpy"
 echo $cmd
 $cmd
 

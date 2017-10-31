@@ -13,6 +13,7 @@ if [ `uname` == "Linux" ]; then
     export SYSPATH=$PATH
     export PATH=${HOME}/miniconda3/bin:${SYSPATH}
     echo $PATH
+    conda install -n root -q anaconda-client conda-build
     which python
     export UVCDAT_ANONYMOUS_LOG=False
     echo "Creating python 3 env"
@@ -33,6 +34,7 @@ if [ `uname` == "Linux" ]; then
 # Python 2.7 environment
     export PATH=${HOME}/miniconda2/bin:${SYSPATH}
     echo $PATH
+    conda install -n root -q anaconda-client conda-build
     echo "Creating python 2 env"
     conda create -n py2 python=2.7
     conda install -n py2 -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8numpy
@@ -52,7 +54,6 @@ source activate py3
 mkdir ${HOME}/conda-bld
 # pin conda so that conda-build does not update it
 echo "conda ==4.3.21" >> ~/miniconda3/conda-meta/pinned  # Pin conda as workaround for conda/conda#6030
-conda install -n root -q anaconda-client conda-build
 conda config --set anaconda_upload no
 export CONDA_BLD_PATH=${HOME}/conda-bld
 export VERSION="2.12"

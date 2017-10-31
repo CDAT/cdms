@@ -82,6 +82,8 @@ if [ `uname` == "Linux" ]; then
     echo $PATH
 fi
 echo "Building python 2"
+conda build purge
+conda clean --all
 source activate py2
 which python
 conda install -n root -q anaconda-client conda-build

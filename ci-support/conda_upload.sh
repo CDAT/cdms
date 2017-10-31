@@ -3,7 +3,7 @@ PKG_NAME=cdms2
 USER=uvcdat
 echo "Trying to upload conda"
 mkdir ${HOME}/conda-bld
-export CONDA_BLD_PATH=${HOME}/conda-bld
+#export CONDA_BLD_PATH=${HOME}/conda-bld
 export VERSION="2.12"
 if [ `uname` == "Linux" ]; then
     OS=linux-64

@@ -66,7 +66,7 @@ git clone git://github.com/UV-CDAT/conda-recipes
 cd conda-recipes
 # uvcdat creates issues for build -c uvcdat confises package and channel
 rm -rf uvcdat
-python ./prep_for_build.py
+python ./prep_for_build.py -b ${TRAVIS_BRANCH}
 echo "Building now"
 echo "use nesii/label/dev-esmf for py3"
 CONDA_PY=36 conda build $PKG_NAME -c nesii/label/dev-esmf -c nadeau1 -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.13

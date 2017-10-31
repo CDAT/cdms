@@ -51,8 +51,9 @@ env:
 
 after_success:
 - if [ $TRAVIS_BRANCH != "master" -a $TRAVIS_PULL_REQUEST == "false" -a "$TRAVIS_OS_NAME"
-  = "linux" ]; then docker run -v `pwd`:/travis_home
+  == "linux" ]; then docker run -v `pwd`:/travis_home
   -e CONDA_UPLOAD_TOKEN=${CONDA_UPLOAD_TOKEN}
   -e ESGF_PWD=${ESGF_PWD}
   -e ESGF_USER=${ESGF_USER}
+  -e TRAVIS_BRANCH=${TRAVIS_BRANCH}
   -a STDOUT -a STDERR centos:6.8 /travis_home/ci-support/conda_upload.sh ; fi

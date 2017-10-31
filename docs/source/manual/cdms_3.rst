@@ -100,7 +100,7 @@ The following table describes the methods for creating time types.
 A relative time type has two members, value and units. Both can be set.
 
 Table 3.2 Relative Time Members
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 +----------+---------+-------------------------------------------------------+
 | Type     | Name    | Summary                                               |
@@ -190,10 +190,11 @@ Compare time values.
    >>> c = comptime(1996,2,28)      
    >>> print c.cmp(r)               
    1
-#   >>> print r.cmp(c)               
-#   -1
-#   >>> print r.cmp(r)               
-#   1
+
+..   >>> print r.cmp(c)               
+..   -1
+..   >>> print r.cmp(r)               
+..   1
                     
 Subtract an interval of time.
 

@@ -1,5 +1,5 @@
 CHAPTER 4 Regridding Data
-^^^^^^^^^^^^^^^^^^^^^^^^^
+-------------------------
 
 4.1 Overview
 ^^^^^^^^^^^^
@@ -86,7 +86,7 @@ is generated at line 9, and the regridding is performed at line 10:
 
 
 Notes
------
+~~~~~
 
 **Line #3** Makes the CDMS module available.
 
@@ -309,7 +309,7 @@ instance of Regridder is a function which regrids data from rectangular
 input to output grids.
 
 Table 4.1 CDMS Regridder Constructor
-------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. csv-table:: REgridder Constructure
    :header:  "Constructor", "Description"
@@ -324,7 +324,7 @@ SCRIP regridder functions are created with the ``regrid.readRegridder``
 function:
 
 Table 4.2 SCRIP Regridder Constructor
--------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. csv-table:: 
    :header:  "Constructor", "Description"
@@ -363,7 +363,7 @@ missing data, or the input and/or output grids are masked, the logic
 becomes more complicated.
 
 Step 1
-------
+~~~~~~
 
 The regridder function first forms an input mask. This mask is either
 two-dimensional or n-dimensional, depending on the rank of the
@@ -385,7 +385,7 @@ is obtained from the data array mask if present.
    input array, it is used as the input mask.
 
 Step 2
-------
+~~~~~~
 
 The data is then regridded. In the two-dimensional case, the input mask
 is ‘broadcast’ across the other dimensions of the array. In other words,
@@ -397,7 +397,7 @@ overlaps a non-missing input grid cell. This is useful for calculating
 area-weighted means of masked data.
 
 Step 3
-------
+~~~~~~
 
 Finally, if the output grid has a mask, it is applied to the result
 array. Where the output mask is 0, data values are set to the missing
@@ -406,7 +406,7 @@ variable will have a mask value of 1 (invalid value) for those output
 grid cells which completely overlap input grid cells with missing values
 
 Table 4.3 CDMS Regridder function
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. csv-table:: 
    :header:  "Type", "Function", "Description"
@@ -466,7 +466,7 @@ In addition, a conservative regridder has the associated grid cell areas
 for source and target grids.
 
 Table 4.4 SCRIP Regridder functions
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 +-------------------------------+--------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | Return Type                   | Method                                                                                     | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -492,7 +492,7 @@ Table 4.4 SCRIP Regridder functions
 ^^^^^^^^^^^^
 
 4.4.1 CDMS regridder
-^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~
 
 **Example:**
 
@@ -641,7 +641,7 @@ of the result.
 +--------+----------------------------------------------------------------------------------------------------------+
 
 4.4.2 SCRIP regridder
-^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~
 
 **Example:**
 
@@ -680,3 +680,7 @@ comparison.
     >>> fremap.close()
     >>> fdat.close()
 
+
+
+
+a

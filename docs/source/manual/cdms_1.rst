@@ -2,7 +2,6 @@ CHAPTER 1
 ---------
 
 CHAPTER 1 Introduction
-~~~~~~~~~~~~~~~~~~~~~~
 
 1.1 Overview
 ^^^^^^^^^^^^
@@ -834,13 +833,13 @@ distributed computing environment. At present CDMS supports one
 particular type of database, based on the Lightweight Directory Access
 Protocol (LDAP).
 
-Here is an example of accessing data via a database:
+.. Here is an example of accessing data via a database:
 
-#.. doctest::
-#
-#   >>> db = cdms.connect() # Connect to the default database.
-#   >>> f = db.open('ncep_reanalysis_mo') # Open a dataset.
-#   >>> f.variables.keys() # List the variables in the dataset.
-#   ['ua', 'evs', 'cvvta', 'tauv', 'wap', 'cvwhusa', 'rss', 'rls', ... 'prc', 'ts', 'va']
+.. .. doctest::
+ 
+..   >>> db = cdms.connect() # Connect to the default database.
+..   >>> f = db.open('ncep_reanalysis_mo') # Open a dataset.
+..   >>> f.variables.keys() # List the variables in the dataset.
+..   ['ua', 'evs', 'cvvta', 'tauv', 'wap', 'cvwhusa', 'rss', 'rls', ... 'prc', 'ts', 'va']
 
 Databases are discussed further in `Section 2.7 <cdms_2.html#2.7>`__.

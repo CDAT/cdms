@@ -3,6 +3,7 @@ CHAPTER 2 CDMS Python Application Programming Interface
 
 2.1 Overview
 ^^^^^^^^^^^^
+
 .. testsetup:: *
 
    import requests
@@ -3574,7 +3575,7 @@ remove the singleton level dimension from the result array.
 
 
 2.12.1 Example 1
-----------------
+^^^^^^^^^^^^^^^^
 
 In this example, two datasets are opened, containing surface air
 temperature (‘tas’) and upper-air temperature (‘ta’) respectively.
@@ -3675,7 +3676,7 @@ results are written to a netCDF file. For brevity, the functions
 
 
 2.12.2 Example 2
-----------------
+^^^^^^^^^^^^^^^^
 
 In the next example, the pointwise variance of a variable over time is
 calculated, for all times in a dataset. The name of the dataset and
@@ -3814,132 +3815,6 @@ The result of running this script is as follows:
    information are carried with the computations, so the continents are
    plotted correctly.
 
-.. raw:: html
 
-   <div class="row center">
 
-`Previous </documentation/cdms/cdms_1.html>`__ `Table of
-Contents </documentation/cdms/cdms.html>`__
-`Next </documentation/cdms/cdms_3.html>`__
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   <footer>
-
-.. raw:: html
-
-   <div class="container">
-
-.. raw:: html
-
-   <div class="row">
-
-.. raw:: html
-
-   <div class="col-sm-3 footernav">
-
-Project Information
-
--  `Mission </mission.html>`__
--  `Governance </governance.html>`__
--  `Acknowledgements </acknowledgements.html>`__
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   <div class="col-sm-3 footernav">
-
-Contribute
-^^^^^^^^^^
-
--  `GitHub Project Page <https://github.com/UV-CDAT/uvcdat>`__
--  `Wiki <https://github.com/UV-CDAT/uvcdat/wiki>`__
--  `Report a Bug <https://github.com/UV-CDAT/uvcdat/issues/new>`__
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   <div class="col-sm-3 footernav">
-
-Press
-^^^^^
-
--  `Presentations </presentations.html>`__
--  `Publications </publications.html>`__
--  `Reports </reports.html>`__
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   <div class="col-sm-3 footernav">
-
-Info
-^^^^
-
--  `Animations </animations.html>`__
--  `Design Documents </design.html>`__
--  `Use Cases <https://github.com/UV-CDAT/uvcdat/wiki/Use-Cases>`__
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   </div>
-
---------------
-
-.. raw:: html
-
-   <div class="row bottom-links">
-
-.. raw:: html
-
-   <div class="col-sm-12 footer-links">
-
-`AIMS <https://aims.llnl.gov/>`__ • `LLNL <http://www.llnl.gov/>`__ •
-`Privacy & Legal
-Notice <https://raw.github.com/UV-CDAT/uvcdat/master/docs/Legal.txt>`__
-• `LLNL-WEB-460691 <https://www.llnl.gov/disclaimer.html>`__ • `Site
-Issues <https://github.com/aims-group/uvcdat-site/issues>`__ •
-`Contact <contact.html>`__
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   </footer>
-
-.. |image0| image:: /images/uvcdat.png
-   :class: logo
-   :target: /
-.. |Diagram 1| image:: /images/diagram1.jpg
 

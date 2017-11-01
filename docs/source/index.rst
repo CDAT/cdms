@@ -16,6 +16,7 @@ Contents:
    manual/cdms_5
    manual/cdms_6
    manual/cdms_7
+   manual/cdms_appendix
 
 #   AbstractAxis
 #   AbstractVariable

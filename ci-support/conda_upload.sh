@@ -70,11 +70,11 @@ python ./prep_for_build.py -b ${TRAVIS_BRANCH}
 echo "Building now"
 echo "use nesii/label/dev-esmf for py3"
 CONDA_PY=36 conda build $PKG_NAME -c nesii/label/dev-esmf -c nadeau1 -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.13
-anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-$VERSION.`date +%Y`*-np113py3*_0.tar.bz2 --force
+anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly ${CONDA_PREFIX}/conda-bld/$OS/$PKG_NAME-$VERSION.`date +%Y`*-np113py3*_0.tar.bz2 --force
 CONDA_PY=36 conda build $PKG_NAME -c nesii/label/dev-esmf -c nadeau1 -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.12
-anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-$VERSION.`date +%Y`*-np112py3*_0.tar.bz2 --force
+anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly ${CONDA_PREFIX}/conda-bld/$OS/$PKG_NAME-$VERSION.`date +%Y`*-np112py3*_0.tar.bz2 --force
 CONDA_PY=36 conda build $PKG_NAME -c nesii/label/dev-esmf -c nadeau1 -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.11
-anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-$VERSION.`date +%Y`*-np111py3*_0.tar.bz2 --force
+anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly ${CONDA_PREFIX}/conda-bld/$OS/$PKG_NAME-$VERSION.`date +%Y`*-np111py3*_0.tar.bz2 --force
 
 # Python 2 section
 if [ `uname` == "Linux" ]; then
@@ -91,10 +91,10 @@ conda config --set anaconda_upload no
 cd ${HOME}/conda-recipes
 echo "Building now"
 CONDA_PY=27 conda build $PKG_NAME -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.13
-anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-$VERSION.`date +%Y`*-np113py27*_0.tar.bz2 --force
+anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly ${CONDA_PREFIX}/conda-bld/$OS/$PKG_NAME-$VERSION.`date +%Y`*-np113py27*_0.tar.bz2 --force
 CONDA_PY=27 conda build $PKG_NAME -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.12 
-anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-$VERSION.`date +%Y`*-np112py27*_0.tar.bz2 --force
+anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly ${CONDA_PREFIX}/conda-bld/$OS/$PKG_NAME-$VERSION.`date +%Y`*-np112py27*_0.tar.bz2 --force
 CONDA_PY=27 conda build $PKG_NAME -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.11 
-anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-$VERSION.`date +%Y`*-np111py27*_0.tar.bz2 --force
+anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly ${CONDA_PREFIX}/conda-bld/$OS/$PKG_NAME-$VERSION.`date +%Y`*-np111py27*_0.tar.bz2 --force
 
 

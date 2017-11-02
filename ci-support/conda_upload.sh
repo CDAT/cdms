@@ -58,7 +58,9 @@ source activate py3
 which python
 conda install -n root -q anaconda-client conda-build
 # pin conda so that conda-build does not update it
-echo "conda ==4.3.21" >> ~/miniconda3/conda-meta/pinned  # Pin conda as workaround for conda/conda#6030
+if [ `uname` == "Darwin" ]; then
+    echo "conda ==4.3.21" >> ~/miniconda/conda-meta/pinned  # Pin conda as workaround for conda/conda#6030
+fi
 conda config --set anaconda_upload no
 echo "Cloning recipes"
 cd ${HOME}
@@ -66,7 +68,7 @@ git clone git://github.com/UV-CDAT/conda-recipes
 cd conda-recipes
 # uvcdat creates issues for build -c uvcdat confises package and channel
 rm -rf uvcdat
-python ./prep_for_build.py -b ${TRAVIS_BRANCH}
+python ./prep_for_build.py
 echo "Building now"
 echo "use nesii/label/dev-esmf for py3"
 CONDA_PY=36 conda build $PKG_NAME -c nesii/label/dev-esmf -c nadeau1 -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.13

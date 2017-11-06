@@ -35,11 +35,11 @@ echo $cmd
 $cmd
 
 # add relative path to ncdump
-cmd="install_name_tool -change /usr/lib/libcurl.4.dylib @rpath/libcurl.4.dylib /Users/distiller/miniconda/env/py2/bin/ncdump"
+cmd="install_name_tool -change /usr/lib/libcurl.4.dylib @rpath/libcurl.4.dylib ${HOME}/miniconda/env/py2/bin/ncdump"
 echo $cmd
 $cmd 
 
-cmd="install_name_tool -change /usr/lib/libcurl.4.dylib @rpath/libcurl.4.dylib /Users/distiller/miniconda/env/py3/bin/ncdump"
+cmd="install_name_tool -change /usr/lib/libcurl.4.dylib @rpath/libcurl.4.dylib ${HOME}/miniconda/env/py3/bin/ncdump"
 echo $cmd
 $cmd 
 

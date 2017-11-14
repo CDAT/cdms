@@ -28,6 +28,8 @@ from .cdmsNode import CdDatatypes
 from . import convention
 import warnings
 from collections import OrderedDict
+import visuspy
+from Visus import Visus
 
 # Default is serial mode until setNetcdfUseParallelFlag(1) is called
 rk = 0
@@ -338,8 +340,14 @@ Output:::
 file :: (cdms2.dataset.CdmsFile) (0) file to read from
 :::
     """
+    import pdb
+    pdb.set_trace()
     uri = uri.strip()
     (scheme, netloc, path, parameters, query, fragment) = urlparse(uri)
+
+    if("readdataset" in query):
+        visus=True
+
     if scheme in ('', 'file'):
         if netloc:
             # In case of relative path...
@@ -388,7 +396,15 @@ file :: (cdms2.dataset.CdmsFile) (0) file to read from
                 return CdmsFile(path, mode)
     elif scheme in ['http', 'gridftp', 'https']:
 
-        if (dods):
+        if (visus):
+            visuspy.SetCommandLine()
+            visuspy.IdxModule.attach()
+            dataset=visuspy.Dataset_loadDataset(uri)
+            if(dataset) == None:
+                return None;
+            dataset.visus='visuspy'
+            return Dataset(uri, mode, None, None, dataset)
+        elif (dods):
             if mode != 'r':
                 raise ModeNotSupported(mode)
             # DODS file?
@@ -570,7 +586,11 @@ class Dataset(CdmsObj, cuDataset):
         # Path of data files relative to parent db.
         # Note: .directory is the location of data relative to the location of
         # the XML file
-        self.datapath = datapath
+        if hasattr(datapath, 'visus'):
+            self.visus = datapath
+            self.datapath = None
+        else:
+            self.datapath = datapath
         self.variables = {}
         self.axes = {}
         self.grids = {}
@@ -767,6 +787,16 @@ class Dataset(CdmsObj, cuDataset):
                         fckeys.sort()
                     if varname in self.variables:
                         self.variables[varname]._varpart_ = [tpart, levpart]
+        if hasattr(self, 'visus'):
+            box=self.visus.get().getBox()
+            nFields = self.visus.get().getFields().capacity()
+            for i in range(nFields):
+                Title=self.visus.get().getFields()[i].getDescription()
+                field=self.visus.get().getFields()[i]
+                self.variables[Title] = Visus(self.visus, field, i)
+                import pdb
+                pdb.set_trace()
+                print self.variables['TAULOW'][0,1]
 
     def getConvention(self):
         """Get the metadata convention associated with this dataset or file."""
@@ -1269,6 +1299,8 @@ class CdmsFile(CdmsObj, cuDataset):
         return self
 
     def __exit__(self, type, value, traceback):
+        if(visus):
+            visuspy.IdxModule.detach()
         if type is None:
             self.close()
         else:

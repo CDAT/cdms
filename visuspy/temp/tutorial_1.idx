@@ -1,0 +1,16 @@
+(version)
+6
+(box)
+0 15 0 15 0 15
+(fields)
+myfield uint32 format(0) default_value(0) min(0) max(0) 
+(bits)
+V012012012012
+(bitsperblock)
+12
+(blocksperfile)
+1
+(interleave block)
+0
+(filename_template)
+./tutorial_1/%01x.bin

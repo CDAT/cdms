@@ -54,7 +54,7 @@ class TextIdx(unittest.TestCase):
     access=dataset.get().createAccess()
     
     sampleid=0
-    slice_box=box.getZSlab(0,1)
+    slice_box=box.getZSlab(4,5)
       
     query=QueryPtr(Query(dataset.get(),ord('r')))
     query.get().position=Position(slice_box)

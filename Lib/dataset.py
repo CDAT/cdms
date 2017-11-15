@@ -340,8 +340,6 @@ Output:::
 file :: (cdms2.dataset.CdmsFile) (0) file to read from
 :::
     """
-    import pdb
-    pdb.set_trace()
     uri = uri.strip()
     (scheme, netloc, path, parameters, query, fragment) = urlparse(uri)
 
@@ -794,9 +792,6 @@ class Dataset(CdmsObj, cuDataset):
                 Title=self.visus.get().getFields()[i].getDescription()
                 field=self.visus.get().getFields()[i]
                 self.variables[Title] = Visus(self.visus, field, i)
-                import pdb
-                pdb.set_trace()
-                print self.variables['TAULOW'][0,1]
 
     def getConvention(self):
         """Get the metadata convention associated with this dataset or file."""

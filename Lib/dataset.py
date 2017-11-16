@@ -2196,7 +2196,7 @@ class CdmsFile(CdmsObj, cuDataset):
 
     def __repr__(self):
         filerep = repr(self._file_)
-        loc = string.find(filerep, "file")
+        loc = filerep.find("file")
         if loc == -1:
             loc = 0
         return "<CDMS " + filerep[loc:-1] + ", status: %s>" % self._status_

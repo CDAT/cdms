@@ -5,9 +5,7 @@
 import re
 from .error import CDMSError
 import numpy  # , PropertiedClasses, internattr
-# import regrid2._regrid
 import copy
-import string
 import sys
 from .cdmsobj import CdmsObj
 from .axis import TransientAxis, createAxis, createUniformLatitudeAxis
@@ -195,7 +193,7 @@ class AbstractGrid (CdmsObj):
         return result
 
     def __str__(self):
-        return string.join(self.listall(), "\n") + "\n"
+        return "\n".join(self.listall())
 
     __repr__ = __str__
 

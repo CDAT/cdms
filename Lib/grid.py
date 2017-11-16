@@ -5,7 +5,6 @@
 import re
 from .error import CDMSError
 import numpy  # , PropertiedClasses, internattr
-import regrid2._regrid
 import copy
 import sys
 from .cdmsobj import CdmsObj

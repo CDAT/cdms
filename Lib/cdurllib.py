@@ -1,5 +1,6 @@
 """Customized URLopener"""
 
+from __future__ import print_function
 import urllib.request
 import urllib.parse
 import urllib.error

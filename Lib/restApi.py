@@ -1,3 +1,4 @@
+from __future__ import print_function
 import urllib.request
 import urllib.error
 import urllib.parse

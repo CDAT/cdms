@@ -3,6 +3,7 @@
 
 """CDMS HorizontalGrid objects"""
 
+from __future__ import print_function
 import numpy
 import cdms2
 import os

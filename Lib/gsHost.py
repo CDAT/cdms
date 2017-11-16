@@ -9,6 +9,7 @@ This code is provided with the hope that it will be useful.
 No guarantee is provided whatsoever. Use at your own risk.
 """
 
+from __future__ import print_function
 from ctypes import c_char_p, c_int, CDLL, byref
 import cdms2
 from cdms2.error import CDMSError

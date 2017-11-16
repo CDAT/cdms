@@ -5,7 +5,7 @@
 import numpy
 from numpy import character, float, float32, float64  # noqa
 from numpy import int, int8, int16, int32, int64, byte  # noqa
-from numpy import  ubyte, uint8, uint16, uint32, uint64, long   # noqa
+from numpy import ubyte, uint8, uint16, uint32, uint64, long   # noqa
 from numpy.ma import allclose, allequal, common_fill_value  # noqa
 from numpy.ma import make_mask_none, dot, filled  # noqa
 from numpy.ma import getmask, getmaskarray, identity  # noqa
@@ -340,13 +340,14 @@ def _conv_axis_arg(axis):
         axis = 0
     return axis
 
+
 def squeeze(x):
     "call numpy.squeeze on ndarray and rebuild tvariable."
-    ta = _makeMaskedArg(x)
+    # ta = _makeMaskedArg(x)
     maresult = numpy.squeeze(x._data)
     axes, attributes, id, grid = _extractMetadata(x)
     return TransientVariable(
-    maresult, axes=axes, attributes=attributes, grid=grid, id=id)
+        maresult, axes=axes, attributes=attributes, grid=grid, id=id)
 
 
 def is_masked(x):

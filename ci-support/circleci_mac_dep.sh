@@ -12,7 +12,7 @@ echo $cmd
 $cmd
 
 # Create Python 3 environment
-cmd="conda create -n py3 -c uvcdat/label/nightly -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy libdrs_f pyopenssl nose requests flake8 myproxyclient libnetcdf netcdf-fortran=4.4.4=3"
+cmd="conda create -n py3 -c uvcdat/label/nightly -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy libdrs_f pyopenssl nose requests flake8 myproxyclient netcdf-fortran=4.4.4=3"
 echo $cmd
 $cmd
 

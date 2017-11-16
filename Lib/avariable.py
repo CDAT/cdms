@@ -1497,9 +1497,6 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
 
     # numpy.ma overrides
 
-    def squeeze(self):
-        return(MV.squeeze(self))
-
     def __getitem__(self, key):
         if isinstance(key, tuple):
             speclist = self._process_specs(key, {})

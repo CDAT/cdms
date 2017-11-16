@@ -12,11 +12,11 @@ echo $cmd
 $cmd
 
 # Create Python 3 environment
-cmd="conda create -n py3 -c uvcdat/label/nightly -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy libdrs_f pyopenssl nose requests flake8 myproxyclient libnetcdf netcdf-fortran=4.4.4=3"
+cmd="conda create -n py3 -c uvcdat/label/nightly -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy libdrs_f pyopenssl nose requests flake8 myproxyclient"
 echo $cmd
 $cmd
 
-cmd="conda install -n py3 -c nadeau1 -c conda-forge esmf esmpy netcdf-fortran=4.4.4=3"
+cmd="conda install -n py3 -c nadeau1 -c conda-forge esmf esmpy"
 echo $cmd
 $cmd
 
@@ -30,7 +30,7 @@ cmd="source activate py2"
 echo $cmd
 $cmd 
 
-cmd="conda install -n py2  -c uvcdat/label/nightly -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient netcdf-fortran=4.4.4=3"
+cmd="conda install -n py2  -c uvcdat/label/nightly -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient"
 echo $cmd
 $cmd
 

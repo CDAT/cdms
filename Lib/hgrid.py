@@ -676,7 +676,7 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
     def checkAxes(self, axes):
         """Return 1 iff every element of self.getAxisList() is in the list 'axes'."""
         for item in self.getAxisList():
-            if item.shape not in [axis.shape for axis in axes]:
+            if item not in axes:
                 result = 0
                 break
         else:

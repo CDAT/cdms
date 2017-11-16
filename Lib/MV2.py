@@ -340,6 +340,14 @@ def _conv_axis_arg(axis):
         axis = 0
     return axis
 
+def squeeze(x):
+    "squeze array"
+    ta = _makeMaskedArg(x)
+    maresult = numpy.squeeze(x._data)
+    axes, attributes, id, grid = _extractMetadata(x)
+    return TransientVariable(
+    maresult, axes=axes, attributes=attributes, grid=grid, id=id)
+
 
 def is_masked(x):
     "Is x a 0-D masked value?"

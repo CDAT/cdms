@@ -2,6 +2,7 @@
 # Further modified to be pure new numpy June 24th 2008
 
 """ CDMS dataset and file objects"""
+from __future__ import print_function
 from .error import CDMSError
 from . import Cdunif
 import numpy

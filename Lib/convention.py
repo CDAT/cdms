@@ -1,5 +1,6 @@
 """ metadata conventions """
 
+from __future__ import print_function
 from .error import CDMSError
 from collections import UserList
 

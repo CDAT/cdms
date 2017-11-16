@@ -7,6 +7,7 @@ This code is provided with the hope that it will be useful.
 No guarantee is provided whatsoever. Use at your own risk.
 """
 
+from __future__ import print_function
 # standard python includes
 from re import search, sub
 from ctypes import c_char_p, c_int, CDLL, byref

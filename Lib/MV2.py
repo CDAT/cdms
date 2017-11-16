@@ -341,7 +341,7 @@ def _conv_axis_arg(axis):
     return axis
 
 def squeeze(x):
-    "squeze array"
+    "call numpy.squeeze on ndarray and rebuild tvariable."
     ta = _makeMaskedArg(x)
     maresult = numpy.squeeze(x._data)
     axes, attributes, id, grid = _extractMetadata(x)

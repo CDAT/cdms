@@ -274,7 +274,8 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
             result = self.clone()
             for i in missing:
                 for item in axes:
-                    if (len(selfaxes[i]) == len(item)) and allclose(selfaxes[i], item):
+                    if (len(selfaxes[i]) == len(item)) and \
+                         allclose(selfaxes[i], item):
                         result._lataxis_.setAxis(i, item)
                         result._lonaxis_.setAxis(i, item)
                         break

@@ -2,8 +2,8 @@
 # Further modified to be pure new numpy June 24th 2008
 
 "Read part of the old cu slab interface implemented over CDMS"
+from __future__ import print_function
 import numpy
-import string
 import sys
 from .error import CDMSError
 from .axis import std_axis_attributes
@@ -146,7 +146,7 @@ class Slab:
         for nd in range(self.rank()):
             result.append('** Dimension ' + str(nd + 1) + ' **')
             result = result + self.getAxis(nd).listall(1)
-        print(string.join(result, '\n'))
+        print("\n".join(result))
 
     def listdimnames(self):
         "Return a list of the names of the dimensions."
@@ -185,7 +185,7 @@ class Slab:
         "Write info about slab; include dimension values and weights if flag"
         if device is None:
             device = sys.stdout
-        device.write(string.join(self.listall(all=flag), "\n"))
+        device.write("\n".join(self.listall(all=flag)))
         device.write("\n")
 
 

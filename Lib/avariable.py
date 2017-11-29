@@ -1547,6 +1547,12 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
 
     __rmul__ = __mul__
 
+    def __floordiv__(self, other):
+        return MV.floor_divide(self, other)
+
+    def __truediv__(self, other):
+        return MV.true_divide(self, other)
+
     def __div__(self, other):
         return MV.divide(self, other)
 

@@ -3,6 +3,7 @@
 
 """CDMS HorizontalGrid objects"""
 
+from __future__ import print_function
 import numpy
 import cdms2
 import os
@@ -662,7 +663,7 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         return (self._lataxis_.getAxis(0), self._lataxis_.getAxis(1))
 
     def isClose(self, g):
-        """Return 1 iff g is a grid of the same type and shape. A real element-by-element
+        """Return 1 if g is a grid of the same type and shape. A real element-by-element
         comparison would be too expensive here."""
         if g is None:
             return 0

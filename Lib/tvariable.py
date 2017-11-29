@@ -137,6 +137,8 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
     __rsub__ = AbstractVariable.__rsub__
     __isub__ = AbstractVariable.__isub__
     __div__ = AbstractVariable.__div__
+    __truediv__ = AbstractVariable.__truediv__
+    __floordiv__ = AbstractVariable.__floordiv__
     __rdiv__ = AbstractVariable.__rdiv__
     __idiv__ = AbstractVariable.__idiv__
     __pow__ = AbstractVariable.__pow__

@@ -3,6 +3,7 @@ Parse (absolute and relative) URLs.  See RFC 1808: "Relative Uniform
 Resource Locators", by R. Fielding, UC Irvine, June 1995.
 """
 
+from __future__ import print_function
 # Standard/builtin Python modules
 import string
 

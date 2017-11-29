@@ -5,10 +5,14 @@ import cdms2
 import pdb
 class Visus:
     def __init__(self, visus, field, i):
+        #pdb.set_trace()
         self.visus=visus
         self.field=field
         self.box=visus.get().getBox()
         self.access=visus.get().createAccess()
+        self.nlat=int(self.visus.get().getBox().size().withY(1).toString().split()[0])
+        self.nlon=int(self.visus.get().getBox().size().withX(1).toString().split()[1])
+
         self.timeMin = int(visus.get().getTimesteps().getMin())
         self.timeMax = int(visus.get().getTimesteps().getMax())
         self.timeArray =  visus.get().getTimesteps().asVector()

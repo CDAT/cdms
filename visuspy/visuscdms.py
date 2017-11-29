@@ -55,9 +55,13 @@ class TextIdx(unittest.TestCase):
     
     sampleid=0
     slice_box=box.getZSlab(4,5)
+    slice_boxX=box.getXSlab(0,2500)
+    slice_boxY=box.getYSlab(0,500)
       
     query=QueryPtr(Query(dataset.get(),ord('r')))
     query.get().position=Position(slice_box)
+    query.get().position=Position(slice_boxX)
+    query.get().position=Position(slice_boxY)
     query.get().field=field
     time = dataset.get().getTimesteps().getAt(689)
     query.get().time=689

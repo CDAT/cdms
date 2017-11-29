@@ -6,5 +6,6 @@ import pdb
 pdb.set_trace()
 dir(f)
 mydata=f['TAULOW']
+f['TAULOW'][:,:,:,:]
 pass
 

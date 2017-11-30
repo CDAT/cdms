@@ -589,12 +589,12 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         i = j = -1
         for d in domainlist:
             if d.shape == iaxis.shape:
-                if numpy.allclose(d[:], iaxis[:]) == True:
+                if numpy.allclose(d[:], iaxis[:]) is True:
                     inewaxis = newaxislist[k]
                     islice = slicelist[k]
                     i = k
             if d.shape == jaxis.shape:
-                if numpy.allclose(d[:], jaxis[:]) == True:
+                if numpy.allclose(d[:], jaxis[:]) is True:
                     jnewaxis = newaxislist[k]
                     jslice = slicelist[k]
                     j = k
@@ -680,7 +680,7 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         """Return 1 iff every element of self.getAxisList() is in the list 'axes'."""
         for item in self.getAxisList():
             # if all [False, False, ....] result=0
-            if not any([allclose(item[:],axis[:]) for axis in axes]):
+            if not any([allclose(item[:], axis[:]) for axis in axes]):
                 result = 0
                 break
         else:

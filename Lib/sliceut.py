@@ -1,4 +1,4 @@
-
+from __future__ import print_function
 "Utilities for manipulating slices"
 
 # Intersect a slice with a half-open interval [i,j).

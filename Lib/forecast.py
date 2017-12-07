@@ -1,6 +1,7 @@
 # Forecast support, experimental coding
 # probably all this will be rewritten, put in a different directory, etc.
 
+from __future__ import print_function
 import numpy
 import cdtime
 import cdms2

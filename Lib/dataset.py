@@ -2,6 +2,7 @@
 # Further modified to be pure new numpy June 24th 2008
 
 """ CDMS dataset and file objects"""
+from __future__ import print_function
 from .error import CDMSError
 from . import Cdunif
 import numpy
@@ -2196,7 +2197,7 @@ class CdmsFile(CdmsObj, cuDataset):
 
     def __repr__(self):
         filerep = repr(self._file_)
-        loc = string.find(filerep, "file")
+        loc = filerep.find("file")
         if loc == -1:
             loc = 0
         return "<CDMS " + filerep[loc:-1] + ", status: %s>" % self._status_

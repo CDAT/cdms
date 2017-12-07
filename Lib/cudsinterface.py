@@ -2,7 +2,7 @@
 # Further modified to be pure new numpy June 24th 2008
 
 "Emulation of old cu package"
-import string
+from __future__ import print_function
 import sys
 from .error import CDMSError
 import numpy
@@ -226,7 +226,7 @@ class cuDataset():
         if vname is None:
             vname = self.default_variable_name
         alist = self.listall(vname, all=all)
-        device.write(string.join(alist, "\n"))
+        device.write("n".join(alist))
         device.write("\n")
 
     def dimensionobject(self, dname, vname=None):

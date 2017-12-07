@@ -1497,6 +1497,9 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
 
     # numpy.ma overrides
 
+    def squeeze(self):
+        return(MV.squeeze(self))
+
     def __getitem__(self, key):
         if isinstance(key, tuple):
             speclist = self._process_specs(key, {})
@@ -1543,6 +1546,12 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
         return MV.multiply(self, other)
 
     __rmul__ = __mul__
+
+    def __floordiv__(self, other):
+        return MV.floor_divide(self, other)
+
+    def __truediv__(self, other):
+        return MV.true_divide(self, other)
 
     def __div__(self, other):
         return MV.divide(self, other)

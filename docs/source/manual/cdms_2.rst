@@ -1109,7 +1109,7 @@ The figure below illustrates several important points:
    In this example, the database ‘CDMS’ contains two datasets, each of
    which contain several variables.
 
-|Diagram 1|
+%|Diagram 1|
 
 Figure 1
 

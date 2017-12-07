@@ -15,6 +15,9 @@
 import sys
 import os
 import shlex
+import easydev
+
+html_theme_path = [easydev.get_path_sphinx_themes()]
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -22,7 +25,7 @@ import shlex
 #sys.path.insert(0, os.path.abspath('.'))
 #sys.path.insert(0,os.path.join(sys.prefix,"lib","python2.7","site-packages"))
 #sys.path.insert(0,os.path.join(sys.prefix,"lib","python2.7","site-packages","cdms2"))
-sys.path.insert(0,"/software/anaconda2/envs/uvcdat-2.6.1/lib/python2.7/site-packages")
+sys.path.insert(0,"/software/anaconda2/envs/dev/lib/python2.7/site-packages")
 print os.path.join(sys.prefix,"lib","python2.7","site-packages")
 
 # -- General configuration ------------------------------------------------
@@ -33,12 +36,37 @@ print os.path.join(sys.prefix,"lib","python2.7","site-packages")
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
+#extensions = [
+#    'easydev.copybutton',
+#    'sphinx.ext.viewcode',
+#    'sphinx.ext.imgmath',
+#    'sphinx.ext.ifconfig',
+#    'sphinx.ext.coverage',
+#    'sphinx.ext.doctest',
+#    'sphinx.ext.intersphinx',
+#    'matplotlib.sphinxext.only_directives',
+#    'matplotlib.sphinxext.plot_directive',
+#    'sphinx.ext.napoleon'
+#]
 extensions = [
-    'sphinx.ext.autodoc',
+    'easydev.copybutton',
     'sphinx.ext.todo',
-    'sphinx.ext.viewcode',
+    'sphinx.ext.autodoc',
+    'sphinx.ext.graphviz',
+    'sphinx.ext.doctest',
+    'sphinx.ext.napoleon'
 ]
 
+napoleon_google_docstring = True
+napoleon_numpy_docstring = True
+napoleon_include_private_with_doc = False
+napoleon_include_special_with_doc = True
+napoleon_use_admonition_for_examples = True
+napoleon_use_admonition_for_notes = True
+napoleon_use_admonition_for_references = True
+napoleon_use_ivar = False
+napoleon_use_rtype = False
+napolean_use_param = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -73,7 +101,7 @@ release = ''
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = 'en'
+language = None
 
 # There are two options for replacing |today|: either, you set today to some
 # non-false value, then it is used:
@@ -118,19 +146,18 @@ todo_include_todos = True
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #html_theme = 'alabaster'
-html_theme = 'sphinxdoc'
+#html_theme = 'sphinxdoc'
 #html_theme = 'nature'
 #html_theme = 'agogo'
 #html_theme = 'pyramid'
 #html_theme = 'epub'
-#html_theme = 'haiku'
+html_theme = 'haiku'
+#html_theme = 'classic'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-#html_theme_options = {
-#    "rightsidebar": "false",
-#    "relbarbgcolor": "black"}
+#html_theme_options = { "stickysidebar" : "true" }
 
 # Add any paths that contain custom themes here, relative to this directory.
 #html_theme_path = []
@@ -144,12 +171,12 @@ html_theme = 'sphinxdoc'
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-#html_logo = None
+html_logo = 'manual/images/uvcdat.png'
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-#html_favicon = None
+# html_favicon = 'globe.png'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -186,7 +213,7 @@ html_static_path = ['_static']
 #html_split_index = False
 
 # If true, links to the reST sources are added to the pages.
-#html_show_sourcelink = True
+html_show_sourcelink = True 
 
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
 #html_show_sphinx = True
@@ -233,6 +260,7 @@ latex_elements = {
 
 # Latex figure (float) alignment
 #'figure_align': 'htbp',
+  'classoptions': ',oneside',
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
@@ -245,11 +273,11 @@ latex_documents = [
 
 # The name of an image file (relative to this directory) to place at the top of
 # the title page.
-#latex_logo = None
+latex_logo = 'manual/images/uvcdat.png'
 
 # For "manual" documents, if this is true, then toplevel headings are parts,
 # not chapters.
-#latex_use_parts = False
+latex_toplevel_sectioning = "chapter"
 
 # If true, show page references after internal links.
 #latex_show_pagerefs = False
@@ -301,71 +329,7 @@ texinfo_documents = [
 #texinfo_no_detailmenu = False
 
 
-# -- Options for Epub output ----------------------------------------------
+# Example configuration for intersphinx: refer to the Python standard library.
+intersphinx_mapping = {'https://docs.python.org/': None}
 
-# Bibliographic Dublin Core info.
-epub_title = project
-epub_author = author
-epub_publisher = author
-epub_copyright = copyright
 
-# The basename for the epub file. It defaults to the project name.
-#epub_basename = project
-
-# The HTML theme for the epub output. Since the default themes are not optimized
-# for small screen space, using the same theme for HTML and epub output is
-# usually not wise. This defaults to 'epub', a theme designed to save visual
-# space.
-#epub_theme = 'epub'
-
-# The language of the text. It defaults to the language option
-# or 'en' if the language is not set.
-#epub_language = ''
-
-# The scheme of the identifier. Typical schemes are ISBN or URL.
-#epub_scheme = ''
-
-# The unique identifier of the text. This can be a ISBN number
-# or the project homepage.
-#epub_identifier = ''
-
-# A unique identification for the text.
-#epub_uid = ''
-
-# A tuple containing the cover image and cover page html template filenames.
-#epub_cover = ()
-
-# A sequence of (type, uri, title) tuples for the guide element of content.opf.
-#epub_guide = ()
-
-# HTML files that should be inserted before the pages created by sphinx.
-# The format is a list of tuples containing the path and title.
-#epub_pre_files = []
-
-# HTML files shat should be inserted after the pages created by sphinx.
-# The format is a list of tuples containing the path and title.
-#epub_post_files = []
-
-# A list of files that should not be packed into the epub file.
-epub_exclude_files = ['search.html']
-
-# The depth of the table of contents in toc.ncx.
-#epub_tocdepth = 3
-
-# Allow duplicate toc entries.
-#epub_tocdup = True
-
-# Choose between 'default' and 'includehidden'.
-#epub_tocscope = 'default'
-
-# Fix unsupported image types using the Pillow.
-#epub_fix_images = False
-
-# Scale large images.
-#epub_max_image_width = 0
-
-# How to display URL addresses: 'footnote', 'no', or 'inline'.
-#epub_show_urls = 'inline'
-
-# If false, no index is generated.
-#epub_use_index = True

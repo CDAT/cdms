@@ -1,8 +1,8 @@
-CHAPTER 6 Climate Data Markup Language (CDML)
----------------------------------------------
+Climate Data Markup Language (CDML)
+-----------------------------------
 
-6.1 Introduction
-~~~~~~~~~~~~~~~~
+Introduction
+~~~~~~~~~~~~
 
 The Climate Data Markup Language (CDML) is the markup language used to
 represent metadata in CDMS. CDML is based on the W3C XML standard
@@ -21,8 +21,8 @@ future.
 
 CDML files have the file extension .xml or .cdml.
 
-6.2 Elements
-~~~~~~~~~~~~
+Elements
+~~~~~~~~
 
 A CDML document consists of a nested collection of elements. An element
 is a description of the metadata associated with a CDMS object. The form
@@ -71,8 +71,8 @@ Table 6.1 CDML Tags
 | variable   | Variable                              |
 +------------+---------------------------------------+
 
-6.3 Special Characters
-~~~~~~~~~~~~~~~~~~~~~~
+Special Characters
+~~~~~~~~~~~~~~~~~~
 
 XML reserves certain characters for markup. If they appear as content,
 they must be encoded to avoid confusion with markup:
@@ -102,8 +102,8 @@ would appear in an attribute string as:
 
 **comment = "Certain &quot;special characters&quot;, such as &lt;, &gt;, and &apos;, must be encoded."**
 
-6.4 Identifiers
-~~~~~~~~~~~~~~~
+Identifiers
+~~~~~~~~~~~
 
 In CDMS, all objects in a dataset have a unique string identifier. The
 id attribute holds the value of this identifier. If the variable, axis,
@@ -118,16 +118,16 @@ case), an underscore (_), or a colon (:). Characters after the first
 must be alphanumeric, an underscore, or colon. There is no restriction
 on the length of an identifier.
 
-6.5 CF Metadata Standard
-~~~~~~~~~~~~~~~~~~~~~~~~
+CF Metadata Standard
+~~~~~~~~~~~~~~~~~~~~
 
 `The CF metadata standard <http://cfconventions.org/>`__ defines a set
 of conventions for usage of netCDF. This standard is supported by CDML.
 The document defines names and usage for metadata attributes. CF
 supersedes the GDT 1.3 standard.
 
-6.6 CDML Syntax
-~~~~~~~~~~~~~~~
+CDML Syntax
+~~~~~~~~~~~
 
 The following notation is used in this section:
 
@@ -150,8 +150,8 @@ Version 1.0.
 
 ``prolog ::= <?xml version="1.0"?> <!DOCTYPE dataset SYSTEM "http://www-pcmdi.llnl.gov/~drach/cdms/cdml.dtd">``
 
-6.6.1 Dataset Element
-^^^^^^^^^^^^^^^^^^^^^
+Dataset Element
+^^^^^^^^^^^^^^^
 
 A dataset element describes a single dataset. The content is a list of
 elements corresponding to the axes, grids, and variables contained in
@@ -219,8 +219,8 @@ into files. The format is:
 The pathname is appended to the value of the directory attribute, to
 obtain an absolute pathname.
 
-6.6.2 Axis Element
-^^^^^^^^^^^^^^^^^^
+Axis Element
+^^^^^^^^^^^^
 
 An axis element describes a single coordinate axis. The content can be a
 blank-separated list of axis values or a linear element. A linear
@@ -278,8 +278,8 @@ Table 6.4
      "``units``", "Y", "Y", "Y", "Units of a physical quantity"
      "``weights``", "N", "N", "N", "Name of the weights array" 
 
-6.6.3 partition attribute
-^^^^^^^^^^^^^^^^^^^^^^^^^
+Partition attribute
+^^^^^^^^^^^^^^^^^^^
 
 
 For an axis in a dataset, the .partition attribute describes how an axis
@@ -304,8 +304,8 @@ Note that the end index of the second interval is strictly less than the
 start index of the following interval. This indicates that data for that
 period is missing.
 
-6.6.4 Grid Element
-^^^^^^^^^^^^^^^^^^
+Grid Element
+^^^^^^^^^^^^
 
 A grid element describes a horizontal, latitude-longitude grid which is
 rectilinear in topology,
@@ -341,8 +341,8 @@ Table 6.5 RectGrid Attributes
 
    </table>
 
-6.6.5 Variable Element
-^^^^^^^^^^^^^^^^^^^^^^
+Variable Element
+^^^^^^^^^^^^^^^^
 
 A variable element describes a data variable. The domain of the variable
 is an ordered list of domain elements naming the axes on which the
@@ -1700,8 +1700,8 @@ The datatype is one of: **Char**, **Short**, **Long**, **Float**,
 **datatype=**"``attribute-datatype``"**>** ``attribute-value``
 **</attr>**
 
-6.7 A Sample CDML Document
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+A Sample CDML Document
+~~~~~~~~~~~~~~~~~~~~~~
 
 Dataset "sample" has two variables, and six axes.
 

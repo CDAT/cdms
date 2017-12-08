@@ -3,12 +3,16 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to cdms2's documentation!
-=================================
+CDMS documentation
+==================
 
-Contents:
+**Version :** |release|
+
+**Table of content:**
 
 .. toctree::
+   :numbered: 4
+
    manual/cdms_1
    manual/cdms_2
    manual/cdms_3

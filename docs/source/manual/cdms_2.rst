@@ -1,8 +1,8 @@
-CHAPTER 2 CDMS Python Application Programming Interface
--------------------------------------------------------
+CDMS Python Application Programming Interface
+---------------------------------------------
 
-2.1 Overview
-^^^^^^^^^^^^
+Overview
+^^^^^^^^
 
 .. testsetup:: *
 
@@ -65,8 +65,8 @@ Table 2.1 Python types used in CDMS
 | Tuple        | An ordered sequence of objects, which need not be of the same type. Unlike lists, tuples elements cannot be inserted or appended. Tuples are denoted with parentheses, e.g., ``(1, 2.0, 'x', 'y')``   |
 +--------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
-2.2 A first example
-^^^^^^^^^^^^^^^^^^^
+A first example
+^^^^^^^^^^^^^^^
 
 The following Python script reads January and July monthly temperature
 data from an input dataset, averages over time, and writes the results
@@ -460,8 +460,8 @@ Table 2.3 Class Tags
 +--------------+---------------------+
 
 
-2.4 CdmsObj
-^^^^^^^^^^^
+CdmsObj
+^^^^^^^
 
 A CdmsObj is the base class for all CDMS database objects. At the
 application level, CdmsObj objects are never created and used directly.
@@ -522,8 +522,8 @@ Table 2.5 Getting and setting attributes
 +--------------------------------------+--------------------------------------+
 
 
-2.5 CoordinateAxis
-^^^^^^^^^^^^^^^^^^
+CoordinateAxis
+^^^^^^^^^^^^^^
 
 A CoordinateAxis is a variable that represents coordinate information.
 It may be contained in a file or dataset, or may be transient
@@ -734,8 +734,8 @@ equivalent to the two contiguous index intervals ``2 <= n < 0`` and
    </figure>
 
 
-2.6 CdmsFile
-^^^^^^^^^^^^
+CdmsFile
+^^^^^^^^
 A ``CdmsFile`` is a physical file, accessible via the ``cdunif``
 interface. netCDF files are accessible in read-write mode. All other
 formats (DRS, HDF, GrADS/GRIB, POP, QL) are accessible read-only.
@@ -1084,8 +1084,8 @@ Table 2.15 CDMS Datatypes
 +-----------------+-----------------------------------+
 
 
-2.7 Database
-^^^^^^^^^^^^
+Database
+^^^^^^^^
 A Database is a collection of datasets and other CDMS objects. It
 consists of a hierarchical collection of objects, with the database
 being at the root, or top of the hierarchy. A database is used to:
@@ -1678,8 +1678,8 @@ database
    </figure>
 
 
-2.8 Dataset
-^^^^^^^^^^^
+Dataset
+^^^^^^^
 A Dataset is a virtual file. It consists of a metafile, in CDML/XML
 representation, and one or more data files.
 
@@ -1888,8 +1888,8 @@ Table 2.25 Dataset Methods
 +--------------------------+--------------------------+--------------------------+
 
 
-2.9 MV module
-^^^^^^^^^^^^^
+MV module
+^^^^^^^^^
 
 The fundamental CDMS data object is the variable. A variable is
 comprised of:
@@ -2056,8 +2056,8 @@ Table 2.27 MV functions
 +---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 
-2.10 HorizontalGrid
-^^^^^^^^^^^^^^^^^^^
+HorizontalGrid
+^^^^^^^^^^^^^^
 
 A HorizontalGrid represents a latitude-longitude coordinate system. In
 addition, it optionally describes how lat-lon space is partitioned into
@@ -2479,8 +2479,8 @@ Table 2.32 RectGrid Methods, additional to HorizontalGrid
 +--------------------------+--------------------------+--------------------------+
 
 
-2.11 Variable
-^^^^^^^^^^^^^
+Variable
+^^^^^^^^
 
 A Variable is a multidimensional data object, consisting of:
 
@@ -3148,7 +3148,8 @@ Table 2.35 Variable Methods
 |                          |                          | identifier.              |
 +--------------------------+--------------------------+--------------------------+
 
-**Example:** Get a region of data.
+Example Get a region of data.
+*****************************
 
 Variable ta is a function of (time, latitude, longitude). Read data
 corresponding to all times, latitudes -45.0 up to but not
@@ -3570,12 +3571,12 @@ remove the singleton level dimension from the result array.
 
 
 
-2.12 Examples
-^^^^^^^^^^^^^
+Examples
+^^^^^^^^
 
 
-2.12.1 Example 1
-^^^^^^^^^^^^^^^^
+Example 1
+*********
 
 In this example, two datasets are opened, containing surface air
 temperature (‘tas’) and upper-air temperature (‘ta’) respectively.
@@ -3675,8 +3676,8 @@ results are written to a netCDF file. For brevity, the functions
 
 
 
-2.12.2 Example 2
-^^^^^^^^^^^^^^^^
+Example 2
+*********
 
 In the next example, the pointwise variance of a variable over time is
 calculated, for all times in a dataset. The name of the dataset and

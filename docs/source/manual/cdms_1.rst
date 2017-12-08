@@ -1,10 +1,8 @@
-CHAPTER 1
----------
+Introduction
+------------
 
-CHAPTER 1 Introduction
-
-1.1 Overview
-^^^^^^^^^^^^
+Overview
+^^^^^^^^
 
 The Climate Data Management System is an object-oriented data management
 system, specialized for organizing multidimensional, gridded data used
@@ -17,8 +15,8 @@ Numeric module (http://www.numpy.org). A number of excellent tutorials
 on Python are available in books or on the Internet. For example, see
 the `Python Foundation's homepage <http://python.org>`__.
 
-1.2 Variables
-^^^^^^^^^^^^^
+Variables
+^^^^^^^^^
 
 The basic unit of computation in CDMS is the variable. A variable is
 essentially a multidimensional data array, augmented with a domain, a
@@ -52,8 +50,8 @@ This illustrates several points:
    longitude coordinates as ``u`` and ``v``, and the time coordinate is
    the first time of ``u`` and ``v``.
 
-1.3 File I/O
-^^^^^^^^^^^^
+File I/O
+^^^^^^^^
 
 A variable can be obtained from a file or collection of files, or can be
 generated as the result of a computation. Files can be in any of the
@@ -117,8 +115,8 @@ A variable can be written to a file with the write function:
    <cdms2.fvariable.FileVariable object at ...
    >>> g.close()
 
-1.4 Coordinate Axes
-^^^^^^^^^^^^^^^^^^^
+Coordinate Axes
+^^^^^^^^^^^^^^^
 
 A coordinate axis is a variable that represents coordinate information.
 Typically an axis is associated with one or more variables in a file or
@@ -210,8 +208,8 @@ example:
    >>> print t.units
    months since 1978-12
 
-1.5 Attributes
-^^^^^^^^^^^^^^
+Attributes
+^^^^^^^^^^
 
 As mentioned above, variables can have associated attributes ,
 name-value pairs. In fact, nearly all CDMS objects can have associated
@@ -249,8 +247,8 @@ In general internal attributes should not be modified directly. One
 exception is the id attribute, the name of the variable. It is used in
 plotting and I/O, and can be set directly.
 
-1.6 Masked values
-^^^^^^^^^^^^^^^^^
+Masked values
+^^^^^^^^^^^^^
 
 Optionally, variables have a mask that represents where data are
 missing. If present, the mask is an array of ones and zeros having the
@@ -298,8 +296,8 @@ is based, at
 
 `http://www.numpy.org/ <http://www.numpy.org/>`__.
 
-1.7 File Variables
-^^^^^^^^^^^^^^^^^^
+File Variables
+^^^^^^^^^^^^^^
 
 A variable can be obtained either from a file, a collection of files, or
 as the result of computation. Correspondingly there are three types of
@@ -396,8 +394,8 @@ The datatype of the variable is determined with the typecode function:
    >>> u.typecode() 
    'f'
 
-1.8 Dataset Variables
-^^^^^^^^^^^^^^^^^^^^^
+Dataset Variables
+^^^^^^^^^^^^^^^^^
 
 The third type of variable, a *dataset variable*, is associated with a
 *dataset*, a collection of files that is treated as a single file. A
@@ -432,8 +430,8 @@ The metafile **cdsample.xml** is then used like an ordinary data file:
    >>> u.shape
    (3, 16, 32)
 
-1.9 Grids
-^^^^^^^^^
+Grids
+^^^^^^^^
 
 A latitude-longitude grid represents the coordinate information
 associated with a variable. A grid encapsulates:
@@ -463,8 +461,8 @@ CDMS supports two types of nonrectangular grid:
    However, it is more difficult to determine adjacency relationships
    between grid points.
 
-1.9.1 Example: a curvilinear grid
-'''''''''''''''''''''''''''''''''
+Example: a curvilinear grid
+'''''''''''''''''''''''''''
 
 In this example, variable sample is defined on a 128x192 curvilinear
 grid. Note that:
@@ -537,8 +535,8 @@ grid. Note that:
 
    Figure1: Curvilinear Grid
 
-1.9.2 Example: a generic grid
-'''''''''''''''''''''''''''''
+Example: a generic grid
+'''''''''''''''''''''''
 
 In this example variable zs is defined on a generic grid. Figure 2
 illustrates the grid, in this case a geodesic grid.
@@ -600,8 +598,8 @@ grid to curvilinear representation:
    >>> genericgrid
    <TransientGenericGrid, id: ..., shape: (3312,)>
 
-1.10 Regridding
-^^^^^^^^^^^^^^^
+Regridding
+^^^^^^^^^^
 
 Regridding is the process of mapping variables from one grid to another.
 CDMS supports two forms of regridding. Which one you use depends on the
@@ -614,8 +612,8 @@ class of grids being transformed:
 -  To interpolate from any lat-lon grid, rectangular or non-rectangular,
    use the SCRIP regridder.
 
-1.10.1 CDMS Regridder
-'''''''''''''''''''''
+CDMS Regridder
+''''''''''''''
 
 The built-in CDMS regridder is used to transform data from one
 rectangular grid to another. For example, to regrid variable ``u`` (from
@@ -648,8 +646,8 @@ To regrid a variable ``uold`` to the same grid as variable ``vnew``:
    >>> u63.shape
    (1, 2, 181, 360)
 
-1.10.2 SCRIP Regridder
-''''''''''''''''''''''
+SCRIP Regridder
+'''''''''''''''
 
 To interpolate between any lat-lon grid types, the SCRIP regridder may
 be used. The SCRIP package was developed at [Los Alamos National
@@ -697,8 +695,8 @@ as necessary.
 
 Regridding is discussed in `Chapter 4 <cdms_4.html>`__.
 
-1.11 Time types
-^^^^^^^^^^^^^^^
+Time types
+^^^^^^^^^^
 
 CDMS provides extensive support for time values in the cdtime module.
 cdtime also defines a set of calendars , specifying the number of days
@@ -777,8 +775,8 @@ or string representations can be used:
 
 Time types are described in Chapter 3.
 
-1.12 Plotting data
-^^^^^^^^^^^^^^^^^^
+Plotting data
+^^^^^^^^^^^^^
 
 Data read via the CDMS Python interface can be plotted using the vcs
 module. This module, part of the Ultrascale Visualization Climate Data
@@ -818,8 +816,8 @@ The plot routine has a number of options for producing different types
 of plots, such as isofill and x-y plots. See `Chapter 5 <cdms_5.html>`__
 for details.
 
-1.13 Databases
-^^^^^^^^^^^^^^
+Databases
+^^^^^^^^^
 
 Datasets can be aggregated together into hierarchical collections,
 called databases . In typical usage, a program:

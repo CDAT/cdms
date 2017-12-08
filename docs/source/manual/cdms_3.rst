@@ -1,8 +1,8 @@
-CHAPTER 3 cdtime Module
------------------------
+Module: cdtime
+--------------
 
-3.1 Time types
-^^^^^^^^^^^^^^
+Time types
+^^^^^^^^^^
 .. testsetup:: *
 
    import requests
@@ -44,8 +44,8 @@ The ``cdtime`` module contains functions for converting between these
 forms, based on the common calendars used in climate simulation. Basic
 arithmetic and comparison operators are also available.
 
-3.2 Calendars
-^^^^^^^^^^^^^
+Calendars
+^^^^^^^^^
 
 A calendar specifies the number of days in each month, for a given year.
 cdtime supports these calendars:
@@ -70,8 +70,8 @@ changed with the command:
 
 ``cdtime.DefaultCalendar = newCalendar``
 
-3.3 Time Constructors
-^^^^^^^^^^^^^^^^^^^^^
+Time Constructors
+^^^^^^^^^^^^^^^^^
 
 The following table describes the methods for creating time types.
 
@@ -94,8 +94,8 @@ The following table describes the methods for creating time types.
    ,,"``second`` is a floating point number in the range 0.0 ,, 60.0. **Example:** ``c = cdtime.comptime(1996, 2, 28)``"
 
 
-3.4 Relative Time
-^^^^^^^^^^^^^^^^^
+Relative Time
+^^^^^^^^^^^^^
 
 A relative time type has two members, value and units. Both can be set.
 
@@ -110,8 +110,8 @@ Table 3.2 Relative Time Members
 | String   | units   | Relative units, of the form “unit(s) since basetime   |
 +----------+---------+-------------------------------------------------------+
 
-3.5 Component Time
-^^^^^^^^^^^^^^^^^^
+Component Time
+^^^^^^^^^^^^^^
 
 A component time type has six members, all of which are settable.
 
@@ -126,8 +126,8 @@ A component time type has six members, all of which are settable.
    "Integer", "minute", "Minute, in the range 0 .. 59"
    "Float", "second", "Seconds, in the range 0.0 .. 60.0"
 
-3.6 Time Methods
-^^^^^^^^^^^^^^^^
+Time Methods
+^^^^^^^^^^^^
 
 The following methods apply both to relative and component times.
 
@@ -151,8 +151,8 @@ The following methods apply both to relative and component times.
    "Reltime", "``t.torel(units, calendar=cdtime.DefaultCalendar)``", "Convert to relative time.  Returns the equivalent relative time."
    
 
-3.7 Examples
-^^^^^^^^^^^^
+Examples
+^^^^^^^^
 .. doctest:: 
 
    >>> from cdtime import *

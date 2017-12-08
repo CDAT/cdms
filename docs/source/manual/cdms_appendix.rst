@@ -38,11 +38,11 @@ FIGURE 1. CDMS Classes
 APPENDIX B
 ----------
 
-Version Notes
+Release Notes
 ~~~~~~~~~~~~~
 
-B.1 Version 4.0
-^^^^^^^^^^^^^^^
+Release 4.0
+^^^^^^^^^^^
 
 CDMS version 4.0 adds support for nonrectangular grids:
 
@@ -56,8 +56,8 @@ CDMS version 4.0 adds support for nonrectangular grids:
 -  The getMesh and clone methods were added for grids.
 -  An interface to the SCRIP package was added.
 
-B.2 Version 3.0 Overview
-^^^^^^^^^^^^^^^^^^^^^^^^
+Release 3.0 Overview
+^^^^^^^^^^^^^^^^^^^^
 
 CDMS version 3.0 is a significant enhancement of previous versions. The
 major changes were:
@@ -85,11 +85,11 @@ major changes were:
    can be built and installed separately. This significantly enhances
    the portability of the code.
 
-B.3 V3.0 Details
-^^^^^^^^^^^^^^^^
+Details
+*******
 
-B.3.1 AbstractVariable
-''''''''''''''''''''''
+AbstractVariable
+''''''''''''''''
 
 -  Functions getDomain, getSlice, rank, regrid, setMissing, size,
    subRegion, and subSlice were added.
@@ -107,8 +107,8 @@ B.3.1 AbstractVariable
 -  AbstractVariable implements arithmetic functions, astype.
 -  The write function was added.
 
-B.3.2 AbstractAxis
-''''''''''''''''''
+AbstractAxis
+''''''''''''
 
 -  The functions asComponentTime, asRelativeTime, clone, getAxisIds,
    getAxis-Index, getAxisList, getAxisListIndex, mapIntervalExt were
@@ -119,65 +119,65 @@ B.3.2 AbstractAxis
    closed. The intersection options 'n','e','b',and 's' were added to
    the interval indicator - see mapIntervalExt.
 
-B.3.3 AbstractDatabase
-''''''''''''''''''''''
+AbstractDatabase
+''''''''''''''''
 
 -  The function open is synonymous with openDataset.
 
-B.3.4 Dataset
-'''''''''''''
+Dataset
+'''''''
 
 -  The function open is synonymous with openDataset.
 
-B.3.5 cdms module
-'''''''''''''''''
+cdms module
+'''''''''''
 
 -  The functions asVariable, isVariable, and createVariable were added.
 -  The function setAutoReshapeMode was removed. It is replaced by the
    squeeze option for all I/O functions.
 
-B.3.6 CdmsFile
-''''''''''''''
+CdmsFile
+''''''''
 
 -  The function createVariable has a keyword fill\_value. The datatype
    may be a Numeric/MA typecode.
 -  The function write was added.
 
-B.3.7 CDMSError
-'''''''''''''''
+CDMSError
+'''''''''
 
 -  All errors are an instance of the class CDMSError.
 
-B.3.8 AbstractRectGrid
-''''''''''''''''''''''
+AbstractRectGrid
+''''''''''''''''
 
 -  The function createGaussianGrid was added.
 
-B.3.9 InternalAttributes
-''''''''''''''''''''''''
+InternalAttributes
+''''''''''''''''''
 
 -  The class InternalAttributes was added. It has methods
    add\_internal\_attribute, is\_internal\_attribute, and
    replace\_external\_attributes.
 
-B.3.10 TransientVariable
-''''''''''''''''''''''''
+TransientVariable
+'''''''''''''''''
 
 -  The class TransientVariable was added. It inherits from both
    AbstractVariable and MA.
 -  The cdms module function createVariable returns a transient variable.
 -  This class does not implement the functions getPaths or getTemplate.
 
-B.3.11 MV
-'''''''''
+MV
+''
 
 -  The MV submodule of cdms was added.
 
 APPENDIX C
 ----------
 
-``cu`` Module
-~~~~~~~~~~~~~
+Module `cu`
+~~~~~~~~~~~
 
 The ``cu`` module is the original UV-CDAT I/O interface. As of version 3
 it is emulated in the ``cdms`` module. It is maintained for backward
@@ -186,8 +186,8 @@ compatibility.
 The ``cu`` classes are ``Slab``, corresponding to ``TransientVariable``
 in CDMS, and ``cuDataset``, corresponding to ``Dataset`` in CDMS.
 
-C.1 Slab
-~~~~~~~~
+Slab
+~~~~
 
 Table C.1 Slab Methods
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -207,8 +207,8 @@ Table C.1 Slab Methods
 
 
 
-C.2 cuDataset
-~~~~~~~~~~~~~
+cuDataset
+~~~~~~~~~
 
 Table C.2 cuDataset Methods
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^

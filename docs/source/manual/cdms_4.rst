@@ -1,8 +1,8 @@
-CHAPTER 4 Regridding Data
--------------------------
+Regridding Data
+---------------
 
-4.1 Overview
-^^^^^^^^^^^^
+Overview
+^^^^^^^^
 
 CDMS provides several methods for interpolating gridded data:
 
@@ -12,8 +12,8 @@ CDMS provides several methods for interpolating gridded data:
 -  from one vertical (lat/level) cross-section to another vertical
    cross-section.
 
-4.1.1 CDMS horizontal regridr
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+CDMS horizontal regrider
+^^^^^^^^^^^^^^^^^^^^^^^^
 .. testsetup:: *
 
    import requests
@@ -107,8 +107,8 @@ Notes
 **Line #11** Reads all data for variable cltf, and calls the regridder
 function on that data, resulting in a transient variable cltnew.
 
-4.1.2 SCRIP horizontal regridder
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SCRIP horizontal regridder
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To interpolate between grids where one or both grids is non-rectangular,
 CDMS provides an interface to the SCRIP regridder package developed at
@@ -240,8 +240,8 @@ has shape (12, 64, 128), then the input grid must have shape (64,128).
 Similarly if the variable had a generic grid with shape (8092,), the
 last dimension of the variable would have length 8092.
 
-4.1.3 Pressure-level regridder
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Pressure-level regridder
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 To regrid a variable which is a function of latitude, longitude,
 pressure level, and (optionally) time to a new set of pressure levels,
@@ -262,8 +262,8 @@ returns a new variable ``d`` regridded to that dimension.
     >>> result.shape
     (11, 1, 73, 144)
 
-4.1.4 Cross-section regridder
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Cross-section regridder
+^^^^^^^^^^^^^^^^^^^^^^^
 
 To regrid a variable which is a function of latitude, height, and
 (optionally) time to a new latitude/height cross-section, use the
@@ -290,15 +290,15 @@ regridded to those axes.
     (2, 10, 144)
 
 
-4.2 regrid module
-^^^^^^^^^^^^^^^^^
+regrid module
+^^^^^^^^^^^^^
 
 The ``regrid`` module implements the CDMS regridding functionality as
 well as the SCRIP interface. Although this module is not strictly a part
 of CDMS, it is designed to work with CDMS objects.
 
-4.2.1 CDMS horizontal regridder
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+CDMS horizontal regridder
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. doctest::
 
@@ -317,8 +317,8 @@ Table 4.1 CDMS Regridder Constructor
 
    "regridFunction = Regridder(inputGrid, outputGrid)", "reate a regridder function which interpolates a data array from input to output grid. `Table 4.3 <#Table_4.3>`__ on page 131 describes the calling sequence of this function. ``inputGrid`` and ``outputGrid`` are CDMS grid objects. **Note:** To set the mask associated with inputGrid or outputGrid, use the grid setMask function."
 
-4.2.2 SCRIP Regridder
-^^^^^^^^^^^^^^^^^^^^^
+SCRIP Regridder
+^^^^^^^^^^^^^^^
 
 SCRIP regridder functions are created with the ``regrid.readRegridder``
 function:
@@ -341,8 +341,8 @@ Table 4.2 SCRIP Regridder Constructor
    "", ""
    "", "If ``checkGrid`` is 1 (default), the grid cells are checked for convexity, and 'repaired' if necessary. Grid cells may appear to be nonconvex if they cross a ``0 / 2pi`` boundary. The repair consists of shifting the cell vertices to the same side modulo 360 degrees."
 
-4.3 Regridder Functions
-^^^^^^^^^^^^^^^^^^^^^^^
+Regridder Functions
+^^^^^^^^^^^^^^^^^^^
 
 It is only necessary to specify the map method if it is not defined in
 the file.
@@ -352,8 +352,8 @@ convexity, and ‘repaired’ if necessary. Grid cells may appear to be
 nonconvex if they cross a ``0 / 2pi`` boundary. The repair consists of
 shifting the cell vertices to the same side modulo 360 degrees.
 
-4.3.1 CDMS regridder functions
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+CDMS regridder functions
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 A CDMS regridder function is an instance of the CDMS ``Regridder``
 class. The function is associated with rectangular input and output
@@ -424,8 +424,8 @@ Table 4.3 CDMS Regridder function
    , , "``dataArray`` is the result data array."
    , , "``maskArray`` is a Float32 array of the same shape as ``dataArray``, such that ``maskArray[i,j]`` is fraction of the output grid cell [i,j] overlapping a non-missing cell of the grid."
 
-4.3.2 SCRIP Regridder functions
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SCRIP Regridder functions
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 A SCRIP regridder function is an instance of the ScripRegridder class.
 Such a function is created by calling the regrid.readRegridder method.
@@ -640,8 +640,8 @@ of the result.
 | 13     | Calculate the area-weighted mean of the regridded data. mean and outmean should be approximately equal   |
 +--------+----------------------------------------------------------------------------------------------------------+
 
-4.4.2 SCRIP regridder
-~~~~~~~~~~~~~~~~~~~~~
+SCRIP regridder
+~~~~~~~~~~~~~~~
 
 **Example:**
 

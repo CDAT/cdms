@@ -62,6 +62,10 @@ class TextIdx(unittest.TestCase):
     query.get().position=Position(slice_box)
     query.get().position=Position(slice_boxX)
     query.get().position=Position(slice_boxY)
+    #query.get().position=Position(BoxNd_parseFromOldFormatString(3, "4 5 0 1200 0 500").toBox3())
+    #query.get().position=Position(BoxNd_parseFromOldFormatString(3, "1000 1500 500 1000 2 2").toBox3())
+    pdb.set_trace()
+    query.get().position=Position(BoxNd_parseFromOldFormatString(3, "2 3 2 3 2 3").toBox3())
     query.get().field=field
     time = dataset.get().getTimesteps().getAt(689)
     query.get().time=689

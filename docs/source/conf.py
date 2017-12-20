@@ -152,6 +152,7 @@ todo_include_todos = True
 #html_theme = 'pyramid'
 #html_theme = 'epub'
 html_theme = 'haiku'
+#html_theme = "sphinx_rtd_theme"
 #html_theme = 'classic'
 
 # Theme options are theme-specific and customize the look and feel of a theme

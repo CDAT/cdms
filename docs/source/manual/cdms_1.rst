@@ -4,14 +4,14 @@ Introduction
 Overview
 ^^^^^^^^
 
-The Climate Data Management System is an object-oriented data management
+The Community Data Management System is an object-oriented data management
 system, specialized for organizing multidimensional, gridded data used
 in climate analysis and simulation.
 
 CDMS is implemented as part of the Ultrascale Visualization Climate Data
 Analysis Tool (UV-CDAT), which uses the Python language. The examples in
 this chapter assume some familiarity with the language and the Python
-Numeric module (http://www.numpy.org). A number of excellent tutorials
+Numpy module (http://www.numpy.org). A number of excellent tutorials
 on Python are available in books or on the Internet. For example, see
 the `Python Foundation's homepage <http://python.org>`__.
 
@@ -28,8 +28,14 @@ the eastward and northward components of wind speed, respectively, and
 both variables are functions of time, latitude, and longitude, then the
 velocity for time 0 (first index) can be calculated as
 
+.. highlight:: python
+
 .. doctest::
 
+   >>> # wget "http://uvcdat.llnl.gov/cdat/sample_data/clt.nc"
+   >>> f1=cdms2.open("clt.nc")
+   >>> u = f1('u')
+   >>> v = f1('v')
    >>> from cdms2 import MV
    >>> vel = MV.sqrt(u[0]**2 + v[0]**2)
 
@@ -44,7 +50,7 @@ This illustrates several points:
    longitude.
 -  Variables can be used in computation. ``**`` is the Python
    exponentiation operator.
--  Arithmetic functions are defined in the ``cdms.MV`` module.
+-  Arithmetic functions are defined in the ``cdms2.MV2`` module.
 -  Operations on variables carry along the corresponding metadata where
    applicable. In the above example, ``vel`` has the same latitude and
    longitude coordinates as ``u`` and ``v``, and the time coordinate is
@@ -88,6 +94,7 @@ from file sample.nc into variable u:
 
 .. doctest::
 
+    >>> # wget "http://uvcdat.llnl.gov/cdat/sample_data/clt.nc"
     >>> f = cdms2.open('clt.nc')
     >>> u = f('u')
 
@@ -104,7 +111,7 @@ To read ``u`` at time 1.:
 
 .. doctest::
 
-    >>> u1 = f('u',time=1.)
+   >>> u1 = f('u',time=1.)
 
 A variable can be written to a file with the write function:
 
@@ -127,13 +134,13 @@ Often in climate applications an axis is a one-dimensional variable
 whose values are floating-point and strictly monotonic. In some cases an
 axis can be multidimensional (see `Grids <#1.9>`__). If an axis is
 associated with one of the canonical types latitude, longitude, level,
-or time, then the axis is called tep emporal .
+or time, then the axis is called temporal .
 
 The shape and physical ordering of a variable is represented by the
 variables domain , an ordered tuple of one-dimensional axes. In the
 previous example, the domain of the variable u is the tuple (time,
 latitude, longitude). This indicates the order of the dimensions, with
-the slowest- varying dimension listed first (time). The domain may be
+the slowest-varying dimension listed first (time). The domain may be
 accessed with the ``getAxisList()`` method:
 
 .. doctest::
@@ -256,7 +263,7 @@ shape of the data array. A mask value of one indicates that the
 corresponding data array element is missing or invalid.
 
 Arithmetic operations in CDMS take missing data into account. The same
-is true of the functions defined in the cdms.MV module. For example:
+is true of the functions defined in the cdms2.MV2 module. For example:
 
 .. doctest::
 

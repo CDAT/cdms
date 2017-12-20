@@ -14,6 +14,9 @@ CDMS provides several methods for interpolating gridded data:
 
 CDMS horizontal regrider
 ^^^^^^^^^^^^^^^^^^^^^^^^
+.. highlight:: python
+   :linenothreshold: 3
+
 .. testsetup:: *
 
    import requests

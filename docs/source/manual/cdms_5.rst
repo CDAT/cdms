@@ -22,6 +22,9 @@ dataset named ``'sample.xml'``.
 
 plotting a gridded variable
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. highlight:: python
+   :linenothreshold: 3
+
 .. testsetup:: *
 
    import requests

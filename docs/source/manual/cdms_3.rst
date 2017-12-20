@@ -3,6 +3,9 @@ Module: cdtime
 
 Time types
 ^^^^^^^^^^
+.. highlight:: python
+   :linenothreshold: 3
+
 .. testsetup:: *
 
    import requests

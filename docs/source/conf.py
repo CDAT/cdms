@@ -28,6 +28,9 @@ html_theme_path = [easydev.get_path_sphinx_themes()]
 sys.path.insert(0,"/software/anaconda2/envs/dev/lib/python2.7/site-packages")
 print os.path.join(sys.prefix,"lib","python2.7","site-packages")
 
+def setup(app):
+    app.add_javascript('jquery.js') 
+
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.

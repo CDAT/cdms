@@ -28,8 +28,6 @@ html_theme_path = [easydev.get_path_sphinx_themes()]
 sys.path.insert(0,"/software/anaconda2/envs/dev/lib/python2.7/site-packages")
 print os.path.join(sys.prefix,"lib","python2.7","site-packages")
 
-def setup(app):
-    app.add_javascript('jquery.js') 
 
 # -- General configuration ------------------------------------------------
 
@@ -59,6 +57,15 @@ extensions = [
     'sphinx.ext.doctest',
     'sphinx.ext.napoleon'
 ]
+
+jscopybutton_path = "copybutton.js"
+
+try:
+    from easydev.copybutton import get_copybutton_path 
+    from easydev.copybutton import copy_javascript_into_static_path
+    copy_javascript_into_static_path("_static", get_copybutton_path())
+except Exception:
+    print("could not copy the copybutton javascript")
 
 napoleon_google_docstring = True
 napoleon_numpy_docstring = True

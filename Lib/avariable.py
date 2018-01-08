@@ -1528,6 +1528,9 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
     def __add__(self, other):
         return MV.add(self, other)
 
+    def __copy__(self):
+        return MV.array(self, copy=1)
+
     __radd__ = __add__
 
     def __lshift__(self, n):

@@ -22,6 +22,7 @@ CDMS documentation
    manual/cdms_6
    manual/cdms_7
    manual/cdms_appendix
+   manual/sample_data
 
 #   AbstractAxis
 #   AbstractVariable

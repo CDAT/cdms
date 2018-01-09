@@ -1508,8 +1508,9 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
                 raise IndexError("Index too large: %d" % key)
             speclist = self._process_specs([key], {})
 
-        if [x for x in speclist if type(x) is numpy.ndarray] != []:
-            return self.data[speclist[0]]
+        if [x for x in speclist if (type(x) is numpy.ndarray or type(x) is list)] != []:
+            index = [x for x in speclist if (type(x) is numpy.ndarray or type(x) is list)]
+            return self.data.take(index)
         # Note: raw=0 ensures that a TransientVariable is returned
         return self.getSlice(numericSqueeze=1, raw=0, isitem=1, *speclist)
 

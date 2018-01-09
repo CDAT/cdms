@@ -1509,7 +1509,7 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
             speclist = self._process_specs([key], {})
 
         if [x for x in speclist if type(x) is numpy.ndarray] != []:
-            return self.data[x]
+            return self.data[speclist[0]]
         # Note: raw=0 ensures that a TransientVariable is returned
         return self.getSlice(numericSqueeze=1, raw=0, isitem=1, *speclist)
 

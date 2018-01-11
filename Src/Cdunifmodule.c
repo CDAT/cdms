@@ -2923,7 +2923,7 @@ PyCdunifVariableObject_item(PyCdunifVariableObject *self, Py_ssize_t i) {
 	if (indices != NULL) {
 		indices[0].start = i;
 		indices[0].stop = i + 1;
-		indices[0].item = 1;
+		indices[0].stride = 1;
 		return PyArray_Return(PyCdunifVariable_ReadAsArray(self, indices));
 	}
 	return NULL;

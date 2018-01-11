@@ -1,5 +1,6 @@
 import sys
-sys.path.insert(0, sys.prefix + "/lib/python2.7/site-packages/cdms2")
+XY=str(sys.version_info.major)+"."+str(sys.version_info.minor)
+sys.path.insert(3,sys.prefix + "/lib/python"+XY+"/site-packages/cdms2")
 import basetest
 import Cdunif
 import unittest
@@ -21,8 +22,8 @@ class TestCdunif(basetest.CDMSBaseTest):
         f=Cdunif.CdunifFile(self.filename)
         f.variables.keys()
         var=f.variables['expt_label']
-        self.assertEqual(var.getitem(slice(0,1,1)), ['Present day (PD)'])
-        self.assertEqual(var[0], ['Present day (PD)'])
+        self.assertEqual(var.getitem(slice(0,1,1))[0].decode('utf8'), 'Present day (PD)')
+        self.assertEqual(var[0][0].decode('utf8'),'Present day (PD)')
 
 if __name__ == '__main__':
     unittest.main()

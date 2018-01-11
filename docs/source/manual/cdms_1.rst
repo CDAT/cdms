@@ -44,7 +44,7 @@ This illustrates several points:
 -  Square brackets represent the slice operator. Indexing starts at 0,
    so ``u[0]`` selects from variable ``u`` for the first timepoint. The
    result of this slice operation is another variable. The slice
-   operator can be multidimensional, and follows the syntax of Numeric
+   operator can be multidimensional, and follows the syntax of Numpy
    Python arrays. In this example, ``u[0:10,:,1]`` would retrieve data
    for the first ten timepoints, at all latitudes, for the second
    longitude.
@@ -228,7 +228,7 @@ attributes, which are accessed using the Python dot notation:
    >>> print u.units 
    m/s
 
-Attribute values can be strings, scalars, or 1-D Numeric arrays.
+Attribute values can be strings, scalars, or 1-D Numpy arrays.
 
 When a variable is written to a file, not all the attributes are
 written. Some attributes, called internal attributes, are used for
@@ -298,7 +298,7 @@ variables ``missing_value`` attribute. The data and ``missing_value``
 attribute are then written to the file.
 
 Masking is covered in `Section 2.9 <cdms_2.html#2.9>`__. See also the
-documentation of the Python Numeric and MA modules, on which ``cdms.MV``
+documentation of the Python Numpy and MA modules, on which ``cdms.MV``
 is based, at
 
 `http://www.numpy.org/ <http://www.numpy.org/>`__.

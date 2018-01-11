@@ -143,7 +143,7 @@ where:
 
 -  canvas is a VCS Canvas object, created with the vcs.init method.
 
--  array is a variable, masked array, or Numeric array having between
+-  array is a variable, masked array, or Numpy array having between
    two and five dimensions. The last dimensions of the array is termed
    the 'x' dimension, the next-to-last the 'y' dimension, then 'z', 't',
    and 'w'. For example, if array is three-dimensional, the axes are
@@ -196,9 +196,9 @@ where:
     ,,"- ``cdtime.reltime(30.0, 'days since 1978-1-1').``"
     "``units``", "string",  "Data units. Defaults to ``variable.units``"
     "``variable``", "CDMS variable object", "Variable associated with the data. The variable grid must have the same shape as the data array."
-    "``xarray`` (``[y|z|t|w]array``)", "1-D Numeric array", "*Rectangular grids only*. Array of coordinate values, having the same length as the corresponding dimension. Defaults to xaxis[:\] (y|z|t|waxis[:])"
+    "``xarray`` (``[y|z|t|w]array``)", "1-D Numpy array", "*Rectangular grids only*. Array of coordinate values, having the same length as the corresponding dimension. Defaults to xaxis[:\] (y|z|t|waxis[:])"
     "``xaxis`` (``[y|z|t|w]axis``)", "CDMS axis object", "*Rectangular grids only*. Axis object. ``xaxis`` defaults to ``grid.getAxis(0)``, ``yaxis`` defaults to ``grid.getAxis(1)``"
-    "``xbounds`` (``ybounds``)", "2-D Numeric array",  "*Rectangular grids only*. Boundary array of shape ``(n,2)`` where ``n`` is the axis length. Defaults to ``xaxis.getBounds()``, or ``xaxis.genGenericBounds()`` if ``None``, similarly for ``ybounds``."
+    "``xbounds`` (``ybounds``)", "2-D Numpy array",  "*Rectangular grids only*. Boundary array of shape ``(n,2)`` where ``n`` is the axis length. Defaults to ``xaxis.getBounds()``, or ``xaxis.genGenericBounds()`` if ``None``, similarly for ``ybounds``."
 
     "``xname`` (``[y|z|t|w]name``)", "string", "*Rectangular grids only*. Axis name. Defaults to ``xaxis.id`` (``[y|z|t|w]axis.id``)"
     "``xrev`` (``yrev``)", "0 or 1", "If ``xrev`` (``yrev``) is 1, reverse the direction of the x-axis (y-axis). Defaults to 0, with the following exceptions:"

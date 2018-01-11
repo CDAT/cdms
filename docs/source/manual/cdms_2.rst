@@ -48,7 +48,7 @@ return an instance of a CDMS class, or one of the Python types:
    :header:  "Type", "Description"
    :widths:  10, 80
 
-   "Array",  "Numeric or masked multidimensional data array. All elements of the array are of the same type. Defined in the Numeric and MA modules."
+   "Array",  "Numpy or masked multidimensional data array. All elements of the array are of the same type. Defined in the Numpy and MV2 modules."
    "Comptime", "Absolute time value, a time with representation (year, month, day, hour, minute, second). Defined in the cdtime module. cf. reltime" 
    "Dictionary","An unordered 2,3collection of objects, indexed by key. All dictionaries in CDMS are indexed by strings, e.g.: ``axes['time']``"
    "Float", "Floating-point value."
@@ -128,10 +128,10 @@ Rather, they are called as module functions, e.g.,
    :header:  "Type", "Definition"
    :widths:  10, 80
 
-   "``Variable``", "``asVariable(s)``: Transform ``s`` into a transient variable. ``s`` is a masked array, Numeric array, or Variable. If ``s`` is already a transient variable, ``s`` is returned. See also: ``isVariable``."
+   "``Variable``", "``asVariable(s)``: Transform ``s`` into a transient variable. ``s`` is a masked array, Numpy array, or Variable. If ``s`` is already a transient variable, ``s`` is returned. See also: ``isVariable``."
    "``Axis``", "``createAxis(data, bounds=None)``:"
              , "Create a one-dimensional coordinate Axis, which is not associated with a file or dataset. This is useful for creating a grid which is not contained in a file or dataset."
-             ,   " * ``data`` is a one-dimensional, monotonic Numeric array. ``bounds`` is an array of shape ``(len(data),2)``, such that for all ``i``, ``data[i]`` is in the range ``[bounds[i,0],bounds[i,1] ]``. If ``bounds`` is not specified, the default boundaries are generated at the midpoints between the consecutive data values, provided that the autobounds mode is 'on' (the default)."
+             ,   " * ``data`` is a one-dimensional, monotonic Numpy array. ``bounds`` is an array of shape ``(len(data),2)``, such that for all ``i``, ``data[i]`` is in the range ``[bounds[i,0],bounds[i,1] ]``. If ``bounds`` is not specified, the default boundaries are generated at the midpoints between the consecutive data values, provided that the autobounds mode is 'on' (the default)."
              ,   " * See ``setAutoBounds``." 
              ,   " * Also see: ``CdmsFile.createAxis``"
    "``Axis``", "``createEqualAreaAxis(nlat)``:" 
@@ -157,7 +157,7 @@ Rather, they are called as module functions, e.g.,
                  ,  " * ``lon`` is a longitude axis, created by ``cdms.createAxis``." 
                  ,  " * ``order`` is a string with value 'yx' (the first grid dimension is latitude) or 'xy' (the first grid dimension is longitude)." 
                  ,  " * ``type`` is one of 'gaussian','uniform','equalarea',or 'generic'." 
-                 ,  " * If specified, ``mask`` is a two-dimensional, logical Numeric array (all values are zero or one) with the same shape as the grid."
+                 ,  " * If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
 
    "``RectGrid``", "``createUniformGrid(startLat, nlat, deltaLat, start-Lon, nlon, deltaLon, order='yx', mask=None)``:"
                  , "Create a uniform rectilinear grid.  The grid is not associated with a file or dataset. The grid boundaries are at the midpoints of the axis values." 
@@ -166,7 +166,7 @@ Rather, they are called as module functions, e.g.,
                  , " * ``deltaLat`` is the increment between latitudes. ``startLon`` is the starting longitude value."
                  , " * ``nlon`` is the number of longitudes. If ``nlon`` is 1, the grid longitude boundaries will be ``startLon`` +/- ``deltaLon/2``."
                  , " * ``deltaLon`` is the increment between longitudes. ``order`` is a string with value 'yx. (the first grid dimension is latitude) or .xy. (the first grid dimension is longitude)."
-                 , " * If specified, ``mask`` is a two-dimensional, logical Numeric array (all values are zero or one) with the same shape as the grid."
+                 , " * If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
    "``Axis``", "``createUniformLatitudeAxis(startLat , nlat, deltaLat)``:"
              , "Create a uniform latitude axis. The axis boundaries are at the midpoints of the axis values. The axis is designated as a circular latitude axis." 
              , " * ``startLat`` is the starting latitude value."
@@ -324,7 +324,7 @@ Axis objects.
 
    "``Array``", "``array = axis[i:j]``", "Read a slice of data from the external file or dataset. Data is returned in the physical ordering defined in the dataset. See Table 2.11 on page 51 for a description of slice operators."
    "``None``", "``axis[i:j] = array``", "Write a slice of data to the external file. Dataset axes are read-only."
-   "``None``", "``assignValue(array)``", "Set the entire value of the axis. ``array`` is a Numeric array, of the same dimensionality as the axis."
+   "``None``", "``assignValue(array)``", "Set the entire value of the axis. ``array`` is a Numpy array, of the same dimensionality as the axis."
    "``Axis``", "``clone(copyData=1)``", " Return a copy of the axis, as a transient axis. If copyData is 1 (the default) the data itself is copied."
    "``None``", "``designateLatitude(persistent=0)``", "Designate the axis to be a latitude axis. If persistent is true, the external file or dataset (if any) is modified. By default, the designation is temporary."
    "``None``", "``designateLevel(persistent=0)``", "Designate the axis to be a vertical level axis. If persistent is true, the external file or dataset (if any) is modified. By default, the designation is temporary."
@@ -350,7 +350,7 @@ Axis objects.
    "``Integer``", "``isTime()``", "Returns true iff the axis is a time axis."
    "``Integer``", "``len(axis)``", "The length of the axis if one-dimensional. If multidimensional, the length of the first dimension."
    "``Integer``", "``size()``", "The number of elements in the axis."
-   "``String``", "``typecode()``", "The ``Numeric`` datatype identifier."
+   "``String``", "``typecode()``", "The ``Numpy`` datatype identifier."
 
 
 
@@ -472,109 +472,35 @@ Cdms-Files. See “cu Module” on page 180.
    "``Axis``", "``copyAxis(axis, newname=None)``", "Copy ``axis`` values and attributes to a new axis in the file. The returned object is persistent: it can be used to write axis data to or read axis data from the file. If an axis already exists in the file, having the same name and coordinate values, it is returned.  It is an error if an axis of the same name exists, but with different coordinate values. ``axis`` is the axis object to be copied. ``newname``, if specified, is the string identifier of the new axis object. If not specified, the identifier of the input axis is used."
    "``Grid``", "``copyGrid(grid, newname=None)``", "Copy grid values and attributes to a new grid in the file. The returned grid is persistent. If a grid already exists in the file, having the same name and axes, it is returned. An error is raised if a grid of the same name exists, having different axes. ``grid`` is the grid object to be copied. ``newname``, if specified is the string identifier of the new grid object. If unspecified, the identifier of the input grid is used."
    "``Axis``", "``createAxis(id, ar, unlimited=0)``", "Create a new ``Axis``.  This is a persistent object which can be used to read or write axis data to the file. ``id`` is an alphanumeric string identifier, containing no blanks.  ``ar`` is the one-dimensional axis array. Set ``unlimited`` to ``cdms.Unlimited`` to indicate that the axis is extensible."
-   "``RectGrid``", "``createRectGrid(id, lat, lon, order, type='generic', mask=None)``", "Create a ``RectGrid`` in the file. This is not a persistent object: the order, type, and mask are not written to the file. However, the grid may be used for regridding operations.  ``lat`` is a latitude axis in the file.  ``lon`` is a longitude axis in the file.  ``order`` is a string with value ``'yx'`` (the latitude) or ``'xy'`` (the first grid dimension is longitude).  ``type`` is one of ``'gaussian'``,\ ``'unif orm'``,\ ``'equalarea'`` , or ``'generic'``. If specified, ``mask`` is a two-dimensional, logical Numeric array (all values are zero or one) with the same shape as the grid."
-   "``Variable``", "``createVariable(Stringid, String datatype, Listaxes, fill_value=None)``", "Create a new Variable.  This is a persistent object which can be used to read or write variable data to the file. ``id`` is a String name which is unique with respect to all other objects in the file. ``datatype`` is an ``MA`` typecode, e.g., ``MA.Float``, ``MA.Int``. ``axes`` is a list of Axis and/or Grid objects.  ``fill_value`` is the missing value (optional)."
+   "``RectGrid``", "``createRectGrid(id, lat, lon, order, type='generic', mask=None)``", "Create a ``RectGrid`` in the file. This is not a persistent object: the order, type, and mask are not written to the file. However, the grid may be used for regridding operations.  ``lat`` is a latitude axis in the file.  ``lon`` is a longitude axis in the file.  ``order`` is a string with value ``'yx'`` (the latitude) or ``'xy'`` (the first grid dimension is longitude).  ``type`` is one of ``'gaussian'``,\ ``'unif orm'``,\ ``'equalarea'`` , or ``'generic'``. If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
+   "``Variable``", "``createVariable(Stringid, String datatype, Listaxes, fill_value=None)``", "Create a new Variable.  This is a persistent object which can be used to read or write variable data to the file. ``id`` is a String name which is unique with respect to all other objects in the file. ``datatype`` is an ``MV2`` typecode, e.g., ``MV2.Float``, ``MV2.Int``. ``axes`` is a list of Axis and/or Grid objects.  ``fill_value`` is the missing value (optional)."
    "``Variable``", "``createVariableCopy(var, newname=None)``", "Create a new ``Variable``, with the   same name, axes, and attributes as the input variable. An error is raised if a variable of the same name exists in the file. ``var`` is the ``Variable`` to be copied. ``newname``, if specified is the name of the new variable. If unspecified, the returned variable has the same name as ``var``."
    ,," **Note:** Unlike copyAxis, the actual data is not copied to the new variable."
    "``CurveGrid`` or ``Generic-Grid``", "``readScripGrid(self, whichGrid='destination', check-Grid=1)``", "Read a curvilinear or generic grid from a SCRIP netCDF file. The file can be a SCRIP grid file or remapping file.  If a mapping file, ``whichGrid`` chooses the grid to read, either ``'source'`` or ``'destination'``. If ``checkGrid`` is ``1`` (default), the grid cells are checked for convexity, and 'repaired' if necessary.  Grid cells may appear to be nonconvex if they cross a ``0 / 2pi`` boundary. The repair consists of shifting the cell vertices to the same side modulo 360 degrees."
-   
-#  +--------------------------+--------------------------+--------------------------+
-#  | ``None``                 | ``sync()``               | Writes any pending       |
-#  |                          |                          | changes to the file.     |
-#  +--------------------------+--------------------------+--------------------------+
-#  | ``Variable``             | ::                       | Write a variable or      |
-#  |                          |                          | array to the file. The   |
-#  |                          |     write(var, attribute | return value is the      |
-#  |                          | s=None, axes=None, extbo | associated file          |
-#  |                          | unds=None, id=None, exte | variable.                |
-#  |                          | nd=None, fill_value=None |                          |
-#  |                          | , index=None, typecode=N | If the variable does not |
-#  |                          | one)                     | exist in the file, it is |
-#  |                          |                          | first defined and all    |
-#  |                          |                          | attributes written, then |
-#  |                          |                          | the data is written. By  |
-#  |                          |                          | default, the time        |
-#  |                          |                          | dimension of the         |
-#  |                          |                          | variable is defined as   |
-#  |                          |                          | the unlimited dimension  |
-#  |                          |                          | of the file. If the data |
-#  |                          |                          | is already defined, then |
-#  |                          |                          | data is extended or      |
-#  |                          |                          | overwritten depending on |
-#  |                          |                          | the value of keywords    |
-#  |                          |                          | ``extend`` and           |
-#  |                          |                          | ``index``, and the       |
-#  |                          |                          | unlimited dimension      |
-#  |                          |                          | values associated with   |
-#  |                          |                          | ``var``.                 |
-#  |                          |                          |                          |
-#  |                          |                          | ``var`` is a Variable,   |
-#  |                          |                          | masked array, or Numeric |
-#  |                          |                          | array. ``attributes`` is |
-#  |                          |                          | the attribute dictionary |
-#  |                          |                          | for the variable. The    |
-#  |                          |                          | default is               |
-#  |                          |                          | ``var.attributes``.      |
-#  |                          |                          | ``axes`` is the list of  |
-#  |                          |                          | file axes comprising the |
-#  |                          |                          | domain of the variable.  |
-#  |                          |                          | The default is to copy   |
-#  |                          |                          | ``var.getAxisList()``.   |
-#  |                          |                          | ``extbounds`` is the     |
-#  |                          |                          | unlimited dimension      |
-#  |                          |                          | bounds. Defaults to      |
-#  |                          |                          | ``var.getAxis(0).getBoun |
-#  |                          |                          | ds()``.                  |
-#  |                          |                          | ``id`` is the variable   |
-#  |                          |                          | name in the file.        |
-#  |                          |                          | Default is ``var.id``.   |
-#  |                          |                          | ``extend = 1`` causes    |
-#  |                          |                          | the first dimension to   |
-#  |                          |                          | be unlimited:            |
-#  |                          |                          | iteratively writeable.   |
-#  |                          |                          | The default is ``None``, |
-#  |                          |                          | in which case the first  |
-#  |                          |                          | dimension is extensible  |
-#  |                          |                          | if it is ``time.Set`` to |
-#  |                          |                          | ``0`` to turn off this   |
-#  |                          |                          | behaviour.               |
-#  |                          |                          | ``fill_value`` is the    |
-#  |                          |                          | missing value flag.      |
-#  |                          |                          | ``index`` is the         |
-#  |                          |                          | extended dimension index |
-#  |                          |                          | to write to. The default |
-#  |                          |                          | index is determined by   |
-#  |                          |                          | lookup relative to the   |
-#  |                          |                          | existing extended        |
-#  |                          |                          | dimension.               |
-#  |                          |                          |                          |
-#  |                          |                          | **Note:** data can also  |
-#  |                          |                          | be written by setting a  |
-#  |                          |                          | slice of a file          |
-#  |                          |                          | variable, and attributes |
-#  |                          |                          | can be written by        |
-#  |                          |                          | setting an attribute of  |
-#  |                          |                          | a file variable.         |
-#  +--------------------------+--------------------------+--------------------------+
+    "``None``", "``sync()``", "Writes any pending changes to the file."
+    "``Variable``", "``write(var, attributes=None, axes=None, extbounds=None, id=None, extend=None, fill_value=None, index=None, typecode=None)``","Write a variable or array to the file. The return value is the associated file variable."
+    ,,"If the variable does not exist in the file, it is first defined and all attributes written, then the data is written. By default, the time dimension of the variable is defined as the unlimited dimension of the file. If the data is already defined, then data is extended or overwritten depending on the value of keywords ``extend`` and ``index``, and the unlimited dimension values associated with ``var``."
+    ,,"* ``var`` is a Variable, masked array, or Numpy array."
+    ,,"* ``attributes`` is the attribute dictionary for the variable. The default is ``var.attributes``."
+    ,,"* ``axes`` is the list of file axes comprising the domain of the variable.  The default is to copy ``var.getAxisList()``."
+    ,,"* ``extbounds`` is the unlimited dimension bounds. Defaults to ``var.getAxis(0).getBounds()``."
+    ,,"* ``id`` is the variable name in the file.  Default is ``var.id``."
+    ,,"* ``extend = 1`` causes the first dimension to be unlimited: iteratively writeable."  
+    ,,"  * The default is ``None``, in which case the first dimension is extensible if it is ``time.Set`` to ``0`` to turn off this behaviour."
+    ,,"* ``fill_value`` is the missing value flag."
+    ,,"* ``index`` is the extended dimension index to write to. The default index is determined by lookup relative to the existing extended dimension."
+    ,," **Note:** data can also be written by setting a slice of a file variable, and attributes can be written by setting an attribute of a file variable."
 
+.. csv-table::  CDMS Datatypes
+   :header:  "CDMS Datatype", "Definition"
+   :widths:  20, 30
 
-Table 2.15 CDMS Datatypes
-
-+-----------------+-----------------------------------+
-| CDMS Datatype   | Definition                        |
-+=================+===================================+
-| ``CdChar``      | character                         |
-+-----------------+-----------------------------------+
-| ``CdDouble``    | double-precision floating-point   |
-+-----------------+-----------------------------------+
-| ``CdFloat``     | floating-point                    |
-+-----------------+-----------------------------------+
-| ``CdInt``       | integer                           |
-+-----------------+-----------------------------------+
-| ``CdLong``      | long integer                      |
-+-----------------+-----------------------------------+
-| ``CdShort``     | short integer                     |
-+-----------------+-----------------------------------+
+    "``CdChar``", "character"
+    "``CdDouble``", "double-precision floating-point"
+    "``CdFloat``", "floating-point"
+    "``CdInt``", "integer"
+    "``CdLong``", "long integer"
+    "``CdShort``", "short integer"
 
 
 Database
@@ -654,155 +580,67 @@ To access a database:
    ``db.close()``
 
 
-Table 2.16 Database Internal Attributes
+.. csv-table::  Database Internal Attributes
+   :header:  "Type", "Name", "Summary"
+   :widths:  20, 20, 80
 
-+------------------+------------------+----------------------------------------+
-| Type             | Name             | Summary                                |
-+==================+==================+========================================+
-| ``Dictionary``   | ``attributes``   | Database attribute dictionary          |
-+------------------+------------------+----------------------------------------+
-| ``LDAP``         | ``db``           | (LDAP only) LDAP database object       |
-+------------------+------------------+----------------------------------------+
-| ``String``       | ``netloc``       | Hostname, for server-based databases   |
-+------------------+------------------+----------------------------------------+
-| ``String``       | ``path``         | path name                              |
-+------------------+------------------+----------------------------------------+
-| ``String``       | ``uri``          | Uniform Resource Identifier            |
-+------------------+------------------+----------------------------------------+
+    "``Dictionary``", "``attributes``", "Database attribute dictionary"
+    "``LDAP``", "``db``", "(LDAP only) LDAP database object"
+    "``String``", "``netloc``", "Hostname, for server-based databases"
+    "``String``", "``path``", "path name"
+    "``String``", "``uri``", "Uniform Resource Identifier"
+
+------------
+
+.. csv-table::  Database Constructors
+   :header:  "Constructor", "Description"
+   :widths:  30, 80
+
+   "``db = cdms.connect(uri=None, user='', password='')``", "Connect to the database. ``uri`` is the Universal Resource Indentifier of the database. The form of the URI depends on the implementation of the database."
+   ,"For a Lightweight Directory Access Protocol (LDAP) database, the form is: ``ldap://host[:port]/dbname``."
+   ,"For example, if the database is located on host dbhost.llnl.gov, and is named ``'database=CDMS,ou=PCMDI,o=LLNL,c=US'``, the URI is: ``ldap://dbhost.llnl.gov/database=CDMS,ou=PCMDI,o=LLNL,c=US``. If unspecified, the URI defaults to the value of environment variable CDMSROOT. ``user`` is the user ID. If unspecified, an anonymous connection is made. ``password`` is the user password. A password is not required for an anonymous connection"
+
+------------
+
+.. csv-table::  Database Methods
+   :header:  "Type", "Method", "Definition"
+   :widths:  20, 30, 80
+
+    "None", "``close()``", "Close a database"
+    "List", "``listDatasets()``", "Return a list of the dataset IDs in this database. A dataset ID can be passed to the ``open`` command."
+    "Dataset", "``open(dsetid, mode='r')``", "Open a dataset."
+    , "* ``dsetid``"," is the string dataset identifier"
+    , "* ``mode``","is the open mode, 'r' - read-only, 'r+' - read-write, 'w' - create."
+    , "* ``openDataset``", "is a synonym for ``open``."
+    "SearchResult","``searchFilter(filter=None, tag=None, relbase=None, scope=Subtree, attnames=None, timeout=None)``","Search a CDMS database."
+    ,, "``filter`` is the string search filter. Simple filters have the form 'tag = value'. Simple filters can be combined using logical operators '&', '\|', '!' in prefix notation."
+    ,,
+    ,," **Example:**"
+    ,," * The filter ``'(&(objec)(id=cli))'`` finds all variables named 'cli'."
+    ,,"   - A formal definition of search filters is provided in the following section."
+    ,,"   - ``tag`` restricts the search to objects with that tag ('dataset' | 'variable' | 'database' | 'axis' | 'grid')."
+    ,,"   - ``relbase`` is the relative name of the base object of the search. The search is restricted to the base object and all objects below it in the hierarchy."
+    ,,
+    ,," **Example:**"
+    ,," * To search only dataset 'ncep_reanalysis_mo', specify:"
+    ,,"   - ``relbase='dataset=ncep_reanalysis_mo'``"
+    ,," * To search only variable 'ua' in 'ncep_reanalysis_mo', use:"
+    ,,"   - ``relbase='variable=ua, dataset=ncep_reanalysis_mo'``"
+    ,,
+    ,,"If no base is specified, the entire database is searched. See the ``scope`` argument also."
+    ,,"``scope`` is the search scope (**Subtree** | **Onelevel** | **Base**)."
+    ,," *  **Subtree** searches the base object and its descendants."
+    ,," *  **Onelevel** searches the base object and its immediate descendants."
+    ,," *  **Base**\ searches the base object alone."
+    ,," * The default is **Subtree**."
+    ,,"``attnames``: list of attribute names.  Restricts the attributes returned. If ``None``, all attributes are returned. Attributes 'id' and 'objectclass' are always included in the list."
+    ,,"``timeout``: integer number of seconds before timeout. The default is no timeout."
 
 
-Table 2.17 Database Constructors
+------------
 
-+---------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Constructor                                             | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-+=========================================================+==============================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================+
-| ``db = cdms.connect(uri=None, user="", password="")``   | Connect to the database. ``uri`` is the Universal Resource Indentifier of the database. The form of the URI depends on the implementation of the database. For a Lightweight Directory Access Protocol (LDAP) database, the form is: ``ldap://host[:port]/dbname``. For example, if the database is located on host dbhost.llnl.gov, and is named ``'database=CDMS,ou=PCMDI,o=LLNL,c=US'``, the URI is: ``ldap://dbhost.llnl.gov/database=CDMS,ou=PCMDI,o=LLNL,c=US``. If unspecified, the URI defaults to the value of environment variable CDMSROOT. ``user`` is the user ID. If unspecified, an anonymous connection is made. ``password`` is the user password. A password is not required for an anonymous connection   |
-+---------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-
-
-Table 2.18 Database Methods
-
-+--------------------------+--------------------------+--------------------------+
-| Type                     | Method                   | Definition               |
-+==========================+==========================+==========================+
-| None                     | ``close()``              | Close a database         |
-|                          |                          | connection.              |
-+--------------------------+--------------------------+--------------------------+
-| List                     | ``listDatasets()``       | Return a list of the     |
-|                          |                          | dataset IDs in this      |
-|                          |                          | database. A dataset ID   |
-|                          |                          | can be passed to the     |
-|                          |                          | ``open`` command.        |
-+--------------------------+--------------------------+--------------------------+
-| Dataset                  | ``open(dsetid, mode='r') | Open a dataset.          |
-|                          | ``                       |                          |
-|                          |                          | ``dsetid`` is the string |
-|                          |                          | dataset identifier       |
-|                          |                          |                          |
-|                          |                          | ``mode`` is the open     |
-|                          |                          | mode, 'r' - read-only,   |
-|                          |                          | 'r+' - read-write, 'w' - |
-|                          |                          | create.                  |
-|                          |                          |                          |
-|                          |                          | ``openDataset`` is a     |
-|                          |                          | synonym for ``open``.    |
-+--------------------------+--------------------------+--------------------------+
-| SearchResult             | ::                       | Search a CDMS database.  |
-|                          |                          |                          |
-|                          |     searchFilter(filter= | ``filter`` is the string |
-|                          | None, tag=None, relbase= | search filter. Simple    |
-|                          | None, scope=Subtree, att | filters have the form    |
-|                          | names=None, timeout=None | "tag = value". Simple    |
-|                          | )                        | filters can be combined  |
-|                          |                          | using logical operators  |
-|                          |                          | '&', '\|', '!' in prefix |
-|                          |                          | notation.                |
-|                          |                          |                          |
-|                          |                          | **Example:**             |
-|                          |                          |                          |
-|                          |                          | The filter               |
-|                          |                          | ``'(&(objec)(id=cli))'`` |
-|                          |                          | finds all variables      |
-|                          |                          | named "cli".             |
-|                          |                          |                          |
-|                          |                          | A formal definition of   |
-|                          |                          | search filters is        |
-|                          |                          | provided in the          |
-|                          |                          | following section.       |
-|                          |                          |                          |
-|                          |                          | ``tag`` restricts the    |
-|                          |                          | search to objects with   |
-|                          |                          | that tag ("dataset" \|   |
-|                          |                          | "variable" \| "database" |
-|                          |                          | \| "axis" \| "grid").    |
-|                          |                          |                          |
-|                          |                          | ``relbase`` is the       |
-|                          |                          | relative name of the     |
-|                          |                          | base object of the       |
-|                          |                          | search. The search is    |
-|                          |                          | restricted to the base   |
-|                          |                          | object and all objects   |
-|                          |                          | below it in the          |
-|                          |                          | hierarchy.               |
-|                          |                          |                          |
-|                          |                          | **Example:**             |
-|                          |                          |                          |
-|                          |                          | To search only dataset   |
-|                          |                          | 'ncep\_reanalysis\_mo',  |
-|                          |                          | specify:                 |
-|                          |                          |                          |
-|                          |                          | ``relbase="dataset=ncep_ |
-|                          |                          | reanalysis_mo" ``        |
-|                          |                          |                          |
-|                          |                          | To search only variable  |
-|                          |                          | 'ua' in                  |
-|                          |                          | 'ncep\_reanalysis\_mo',  |
-|                          |                          | use:                     |
-|                          |                          |                          |
-|                          |                          | ``relbase="variable=ua,d |
-|                          |                          | ataset=ncep_reanalysis_m |
-|                          |                          | o"``                     |
-|                          |                          |                          |
-|                          |                          | If no base is specified, |
-|                          |                          | the entire database is   |
-|                          |                          | searched. See the        |
-|                          |                          | ``scope`` argument also. |
-|                          |                          |                          |
-|                          |                          | ``scope`` is the search  |
-|                          |                          | scope (**Subtree** \|    |
-|                          |                          | **Onelevel** \|          |
-|                          |                          | **Base**).               |
-|                          |                          |                          |
-|                          |                          | -  **Subtree** searches  |
-|                          |                          |    the base object and   |
-|                          |                          |    its descendants.      |
-|                          |                          | -  **Onelevel** searches |
-|                          |                          |    the base object and   |
-|                          |                          |    its immediate         |
-|                          |                          |    descendants.          |
-|                          |                          | -  **Base**\ searches    |
-|                          |                          |    the base object       |
-|                          |                          |    alone.                |
-|                          |                          |                          |
-|                          |                          | The default is           |
-|                          |                          | **Subtree**.             |
-|                          |                          |                          |
-|                          |                          | ``attnames``: list of    |
-|                          |                          | attribute names.         |
-|                          |                          | Restricts the attributes |
-|                          |                          | returned. If ``None``,   |
-|                          |                          | all attributes are       |
-|                          |                          | returned. Attributes     |
-|                          |                          | 'id' and 'objectclass'   |
-|                          |                          | are always included in   |
-|                          |                          | the list.                |
-|                          |                          |                          |
-|                          |                          | ``timeout``: integer     |
-|                          |                          | number of seconds before |
-|                          |                          | timeout. The default is  |
-|                          |                          | no timeout.              |
-+--------------------------+--------------------------+--------------------------+
-
+.. highlight:: python
+   :linenothreshold: 0
 
 2.7.2 Searching a database
 
@@ -815,43 +653,22 @@ to those objects having an attribute which matches the filter. Simple
 filters have the form (tag = value), where value can contain wildcards.
 For example:
 
-.. raw:: html
+:: 
 
-   <figure class="highlight">
+  (id = ncep*)
+  (project = AMIP2)
 
-::
-
-    (id = ncep*)
-    (project = AMIP2)
-
-.. raw:: html
-
-   </figure>
-
-+--------------------------------------------------------------------+------------------------+
-| Simple filters can be combined with the logical operators ‘&’, ‘   | ’, ‘!’. For example,   |
-+--------------------------------------------------------------------+------------------------+
-
-.. raw:: html
-
-   <figure class="highlight">
+**Note**  Simple filters can be combined with the logical operators '&', '|', '!'. For example,
 
 ::
 
-    (&(id = bmrc*)(project = AMIP2))
+  (&(id = bmrc*)(project = AMIP2))
 
-.. raw:: html
-
-   </figure>
 
 matches all objects with id starting with bmrc, and a project attribute
 with value ‘AMIP2’.
 
 Formally, search filters are strings defined as follows:
-
-.. raw:: html
-
-   <figure class="highlight">
 
 ::
 
@@ -873,9 +690,6 @@ Formally, search filters are strings defined as follows:
     tag ::= string attribute name
     value ::= string attribute value, may include '*' as a wild card
 
-.. raw:: html
-
-   </figure>
 
 Attribute names are defined in the chapter on “Climate Data Markup
 Language (CDML)” on page 149. In addition, some special attributes are
@@ -903,27 +717,15 @@ several ways:
 -  The search can be restricted to the result of a previous search.
 -  A search result is accessed sequentially within a for loop:
 
-.. raw:: html
-
-   <figure class="highlight">
-
 ::
 
     result = db.searchFilter('(&(category=obs*)(id=ncep*))')
     for entry in result:
       print entry.name
 
-.. raw:: html
-
-   </figure>
-
 Search results can be narrowed using ``searchPredicate``. In the
 following example, the result of one search is itself searched for all
 variables defined on a 94x192 grid:
-
-.. raw:: html
-
-   <figure class="highlight">
 
 ::
 
@@ -946,9 +748,6 @@ variables defined on a 94x192 grid:
 
           o=LLNL, c=US
 
-.. raw:: html
-
-   </figure>
 
 
 Table 2.19 SearchResult Methods
@@ -1003,93 +802,48 @@ To access data via CDMS:
 In the next example, a portion of variable ‘ua’ is read from dataset
 ‘ncep\_reanalysis\_mo’:
 
-.. raw:: html
-
-   <figure class="highlight">
-
 ::
 
     dset = db.open('ncep_reanalysis_mo')
     ua = dset.variables['ua']
     data = ua[0,0]
 
-.. raw:: html
-
-   </figure>
-
 
 2.7.4 Examples of database searches
 
 In the following examples, db is the database opened with
 
-.. raw:: html
-
-   <figure class="highlight">
-
 ::
 
     db = cdms.connect()
-
-.. raw:: html
-
-   </figure>
 
 This defaults to the database defined in environment variable
 ``CDMSROOT``.
 
 **Example:** List all variables in dataset ‘ncep\_reanalysis\_mo’:
 
-.. raw:: html
-
-   <figure class="highlight">
-
 ::
 
-    for entry in db.searchFilter(filter = "parentid=ncep_reanalysis_mo",
-    tag = "variable"):
+    for entry in db.searchFilter(filter = "parentid=ncep_reanalysis_mo", tag = "variable"):
       print entry.name
 
-.. raw:: html
-
-   </figure>
 
 **Example:** Find all axes with bounds defined:
-
-.. raw:: html
-
-   <figure class="highlight">
 
 ::
 
     for entry in db.searchFilter(filter="bounds=*",tag="axis"):
       print entry.name
 
-.. raw:: html
-
-   </figure>
 
 **Example:** Locate all GDT datasets:
 
-.. raw:: html
-
-   <figure class="highlight">
-
 ::
 
-    for entry in
-    db.searchFilter(filter="Conventions=GDT*",tag="dataset"):
+    for entry in db.searchFilter(filter="Conventions=GDT*",tag="dataset"):
     print entry.name
 
-.. raw:: html
-
-   </figure>
-
-**Example:** Find all variables with missing time values, in observed
-datasets:
-
-.. raw:: html
-
-   <figure class="highlight">
+**Example:** Find all variables with missing time values, in observed datasets:
 
 ::
 
@@ -1101,30 +855,14 @@ datasets:
     for entry in result.searchPredicate(missingTime):
       print entry.name
 
-.. raw:: html
-
-   </figure>
-
 **Example:** Find all CMIP2 datasets having a variable with id “hfss”:
-
-.. raw:: html
-
-   <figure class="highlight">
 
 ::
 
     for entry in db.searchFilter(filter = "(&(project=CMIP2)(id=hfss))", tag = "variable"):
       print entry.getObject().parent.id
 
-.. raw:: html
-
-   </figure>
-
 **Example:** Find all observed variables on 73x144 grids:
-
-.. raw:: html
-
-   <figure class="highlight">
 
 ::
 
@@ -1132,15 +870,7 @@ datasets:
     for entry in result.searchPredicate(lambda x: x.getGrid().shape==(73,144),tag="variable"):
       print entry.name
 
-.. raw:: html
-
-   </figure>
-
 **Example:** Find all observed variables with more than 1000 timepoints:
-
-.. raw:: html
-
-   <figure class="highlight">
 
 ::
 
@@ -1148,16 +878,7 @@ datasets:
     for entry in result.searchPredicate(lambda x: len(x.getTime())>1000, tag = "variable"):
       print entry.name, len(entry.getObject().getTime())
 
-.. raw:: html
-
-   </figure>
-
-**Example:** Find the total number of each type of object in the
-database
-
-.. raw:: html
-
-   <figure class="highlight">
+**Example:** Find the total number of each type of object in the database
 
 ::
 
@@ -1165,10 +886,6 @@ database
     print len(db.searchFilter(tag="dataset")),"datasets"
     print len(db.searchFilter(tag="variable")),"variables"
     print len(db.searchFilter(tag="axis")),"axes"
-
-.. raw:: html
-
-   </figure>
 
 
 Dataset
@@ -1318,7 +1035,7 @@ Table 2.25 Dataset Methods
 |                          |                          |                          |
 |                          |                          | If specified, ``mask``   |
 |                          |                          | is a two-dimensional,    |
-|                          |                          | logical Numeric array    |
+|                          |                          | logical Numpy array    |
 |                          |                          | (all values are zero or  |
 |                          |                          | one) with the same shape |
 |                          |                          | as the grid.             |
@@ -1387,15 +1104,15 @@ MV module
 The fundamental CDMS data object is the variable. A variable is
 comprised of:
 
--  a masked data array, as defined in the NumPy MA module.
+-  a masked data array, as defined in the NumPy MV2 module.
 -  a domain: an ordered list of axes and/or grids.
 -  an attribute dictionary.
 
-The MV module is a work-alike replacement for the MA module, that
+The MV module is a work-alike replacement for the MV2 module, that
 carries along the domain and attribute information where appropriate. MV
-provides the same set of functions as MA. However, MV functions generate
+provides the same set of functions as MV2. However, MV functions generate
 transient variables as results. Often this simplifies scripts that
-perform computation. MA is part of the Python Numeric package,
+perform computation. MV2 is part of the Python Numpy package,
 documented at http://www.numpy.org.
 
 MV can be imported with the command:
@@ -1449,12 +1166,12 @@ attribute, it can also be set like any attribute:
 
    </figure>
 
-For completeness MV provides access to all the MA functions. The
+For completeness MV provides access to all the MV2 functions. The
 functions not listed in the following tables are identical to the
-corresponding MA function: ``allclose``, ``allequal``,
+corresponding MV2 function: ``allclose``, ``allequal``,
 ``common_fill_value``, ``compress``, ``create_mask``, ``dot``, ``e``,
 ``fill_value``, ``filled``, ``get_print_limit``, ``getmask``,
-``getmaskarray``, ``identity``, ``indices``, ``innerproduct``, ``isMA``,
+``getmaskarray``, ``identity``, ``indices``, ``innerproduct``, ``isMV2``,
 ``isMaskedArray``, ``is_mask``, ``isarray``, ``make_mask``,
 ``make_mask_none``, ``mask_or``, ``masked``, ``pi``, ``put``,
 ``putmask``, ``rank``, ``ravel``, ``set_fill_value``,
@@ -1467,9 +1184,9 @@ Table 2.26 Variable Constructors in module MV
 +--------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | Constructor                                                                                                        | Description                                                                                                                                                                                                                                                                                                                                                                                    |
 +====================================================================================================================+================================================================================================================================================================================================================================================================================================================================================================================================+
-| ``arrayrange(start, stop=None, step=1, typecode=None, axis=None, attributes=None, id=None)``                       | Just like ``MA.arange()`` except it returns a variable whose type can be specfied by the keyword argument typecode. The axis, attribute dictionary, and string identifier of the result variable may be specified. *Synonym:* ``arange``                                                                                                                                                       |
+| ``arrayrange(start, stop=None, step=1, typecode=None, axis=None, attributes=None, id=None)``                       | Just like ``MV2.arange()`` except it returns a variable whose type can be specfied by the keyword argument typecode. The axis, attribute dictionary, and string identifier of the result variable may be specified. *Synonym:* ``arange``                                                                                                                                                       |
 +--------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``masked_array(a, mask=None, fill_value=None, axes=None, attributes=None, id=None)``                               | Same as MA.masked\_array but creates a variable instead. If no axes are specified, the result has default axes, otherwise axes is a list of axis objects matching a.shape.                                                                                                                                                                                                                     |
+| ``masked_array(a, mask=None, fill_value=None, axes=None, attributes=None, id=None)``                               | Same as MV2.masked\_array but creates a variable instead. If no axes are specified, the result has default axes, otherwise axes is a list of axis objects matching a.shape.                                                                                                                                                                                                                     |
 +--------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | ``masked_object(data, value, copy=1, savespace=0, axes=None, attributes=None, id=None)``                           | Create variable masked where exactly data equal to value. Create the variable with the given list of axis objects, attribute dictionary, and string id.                                                                                                                                                                                                                                        |
 +--------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -1493,7 +1210,7 @@ Table 2.27 MV functions
 +---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | Function                                                            | Description                                                                                                                                                                                                                                                                                                                                                          |
 +=====================================================================+======================================================================================================================================================================================================================================================================================================================================================================+
-| ``argsort(x, axis=-1, fill_value=None)``                            | Return a Numeric array of indices for sorting along a given axis.                                                                                                                                                                                                                                                                                                    |
+| ``argsort(x, axis=-1, fill_value=None)``                            | Return a Numpy array of indices for sorting along a given axis.                                                                                                                                                                                                                                                                                                    |
 +---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | ``asarray(data, typecode=None)``                                    | Same as ``cdms.createVariable(data, typecode, copy=0)``. This is a short way of ensuring that something is an instance of a variable of a given type before proceeding, as in ``data = asarray(data)``. Also see the variable ``astype()`` function.                                                                                                                 |
 +---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -1541,7 +1258,7 @@ Table 2.27 MV functions
 +---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | ``sum(a, axis=0, fill_value=0)``                                    | Sum of elements along a certain axis using ``fill_value`` for missing.                                                                                                                                                                                                                                                                                               |
 +---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``take(a, indices, axis=0)``                                        | Return a selection of items from ``a``. See the documentation in the Numeric manual.                                                                                                                                                                                                                                                                                 |
+| ``take(a, indices, axis=0)``                                        | Return a selection of items from ``a``. See the documentation in the Numpy manual.                                                                                                                                                                                                                                                                                 |
 +---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | ``transpose(ar, axes=None)``                                        | Perform a reordering of the axes of array ar depending on the tuple of indices axes; the default is to reverse the order of the axes.                                                                                                                                                                                                                                |
 +---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -1639,7 +1356,7 @@ Table 2.31 HorizontalGrid Methods
 |                          |                          | ``(latitudeArray, longit |
 |                          |                          | udeArray)``,             |
 |                          |                          | where latitudeArray is a |
-|                          |                          | Numeric array of         |
+|                          |                          | Numpy array of         |
 |                          |                          | latitude bounds, and     |
 |                          |                          | similarly for            |
 |                          |                          | longitudeArray.The shape |
@@ -1709,7 +1426,7 @@ Table 2.31 HorizontalGrid Methods
 | Axis                     | ``getMask()``            | Get the mask array of    |
 |                          |                          | this grid, if            |
 |                          |                          | any.Returns a 2-D        |
-|                          |                          | Numeric array, having    |
+|                          |                          | Numpy array, having    |
 |                          |                          | the same shape as the    |
 |                          |                          | grid. If the mask is not |
 |                          |                          | explicitly defined, the  |
@@ -1760,7 +1477,7 @@ Table 2.31 HorizontalGrid Methods
 |                          |                          | the grid, but no I/O is  |
 |                          |                          | generated. ``mask`` is a |
 |                          |                          | two-dimensional,         |
-|                          |                          | Boolean-valued Numeric   |
+|                          |                          | Boolean-valued Numpy   |
 |                          |                          | array, having the same   |
 |                          |                          | shape as the grid.       |
 +--------------------------+--------------------------+--------------------------+
@@ -2027,8 +1744,8 @@ Table 2.34 Variable Constructors
 +--------------------------------------+--------------------------------------+
 | ``CdmsFile.createVariable(String id, | Create a Variable in a CdmsFile.     |
 |  String datatype, List       axesOr- | ``id`` is the name of the variable.  |
-| Grids)``                             | ``datatype`` is the MA or Numeric    |
-|                                      | typecode, for example, MA.Float.     |
+| Grids)``                             | ``datatype`` is the MV2 or Numpy    |
+|                                      | typecode, for example, MV2.Float.     |
 |                                      | ``axesOrGrids`` is a list of Axis    |
 |                                      | and/or Grid objects, on which the    |
 |                                      | variable is defined. Specifying a    |
@@ -2045,8 +1762,8 @@ Table 2.34 Variable Constructors
 | ::                                   | Create a transient variable, not     |
 |                                      | associated with a file or dataset.   |
 |     cdms.createVariable(array, typec | ``array`` is the data values: a      |
-| ode=None, copy=0, savespace=0,mask=N | Variable, masked array, or Numeric   |
-| one, fill_value=None, grid=None, axe | array. ``typecode`` is the MA        |
+| ode=None, copy=0, savespace=0,mask=N | Variable, masked array, or Numpy   |
+| one, fill_value=None, grid=None, axe | array. ``typecode`` is the MV2        |
 | s=None,attributes=None, id=None)     | typecode of the array. Defaults to   |
 |                                      | the typecode of array. ``copy`` is   |
 |                                      | an integer flag: if 1, the variable  |
@@ -2054,14 +1771,14 @@ Table 2.34 Variable Constructors
 |                                      | if 0 the variable data is shared     |
 |                                      | with array. ``savespace`` is an      |
 |                                      | integer flag: if set to 1, internal  |
-|                                      | Numeric operations will attempt to   |
+|                                      | Numpy operations will attempt to   |
 |                                      | avoid silent upcasting. ``mask`` is  |
 |                                      | an array of integers with value 0 or |
 |                                      | 1, having the same shape as array.   |
 |                                      | array elements with a corresponding  |
 |                                      | mask value of 1 are considered       |
 |                                      | invalid, and are not used for        |
-|                                      | subsequent Numeric operations. The   |
+|                                      | subsequent Numpy operations. The   |
 |                                      | default mask is obtained from array  |
 |                                      | if present, otherwise is None.       |
 |                                      | ``fill_value`` is the missing value  |
@@ -2133,8 +1850,8 @@ Table 2.35 Variable Methods
 +--------------------------+--------------------------+--------------------------+
 | Variable                 | ``astype(typecode)``     | Cast the variable to a   |
 |                          |                          | new datatype. Typecodes  |
-|                          |                          | are as for MV, MA, and   |
-|                          |                          | Numeric modules.         |
+|                          |                          | are as for MV, MV2, and   |
+|                          |                          | Numpy modules.         |
 +--------------------------+--------------------------+--------------------------+
 | Variable                 | ``clone(copyData=1)``    | Return a copy of a       |
 |                          |                          | transient variable.      |
@@ -2450,7 +2167,7 @@ Table 2.35 Variable Methods
 |                          |                          | of array match the input |
 |                          |                          | grid.                    |
 |                          |                          |                          |
-|                          |                          | ``mask`` is a Numeric    |
+|                          |                          | ``mask`` is a Numpy    |
 |                          |                          | array, of datatype       |
 |                          |                          | Integer or Float,        |
 |                          |                          | consisting of ones and   |
@@ -2569,7 +2286,7 @@ Table 2.35 Variable Methods
 |                          |                          | axes and attributes      |
 |                          |                          | corresponding to2,3 the  |
 |                          |                          | region read. If raw=1,   |
-|                          |                          | an MA masked array is    |
+|                          |                          | an MV2 masked array is    |
 |                          |                          | returned, equivalent to  |
 |                          |                          | the transient variable   |
 |                          |                          | without the axis and     |
@@ -2637,7 +2354,7 @@ Table 2.35 Variable Methods
 |                          |                          | dimension, as in normal  |
 |                          |                          | Python indexing.         |
 +--------------------------+--------------------------+--------------------------+
-| String                   | ``typecode()``           | The Numeric datatype     |
+| String                   | ``typecode()``           | The Numpy datatype     |
 |                          |                          | identifier.              |
 +--------------------------+--------------------------+--------------------------+
 
@@ -2856,7 +2573,7 @@ Table 2.38 Selector keywords
 +-----------------+----------------------------------------------------------------------+----------------------------------------------------------------------------+
 | ``order``       | Reorder the result.                                                  | Order string, e.g., “tzyx”                                                 |
 +-----------------+----------------------------------------------------------------------+----------------------------------------------------------------------------+
-| ``raw``         | Return a masked array (MA.array) rather than a transient variable.   | 0: return a transient variable (default); =1: return a masked array.       |
+| ``raw``         | Return a masked array (MV2.array) rather than a transient variable.   | 0: return a transient variable (default); =1: return a masked array.       |
 +-----------------+----------------------------------------------------------------------+----------------------------------------------------------------------------+
 | ``required``    | Require that the axis IDs be present.                                | List of axis identifiers.                                                  |
 +-----------------+----------------------------------------------------------------------+----------------------------------------------------------------------------+

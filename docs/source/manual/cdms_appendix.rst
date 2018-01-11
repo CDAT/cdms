@@ -62,9 +62,9 @@ Release 3.0 Overview
 CDMS version 3.0 is a significant enhancement of previous versions. The
 major changes were:
 
--  UV-CDAT/CDMS was integrated with the Numerical Python masked array
-   class MA.MaskedVariable. The MV submodule was added as a wrapper
-   around MA.
+-  UV-CDAT/CDMS was integrated with the Numpyal Python masked array
+   class MV2.MaskedVariable. The MV submodule was added as a wrapper
+   around MV.
 -  Methods that read data, such as subRegion, subSlice, and the slice
    operations, return instances of class TransientVariable. The plot and
    regrid modules were modified to handle masked array input. The
@@ -81,7 +81,7 @@ major changes were:
    allows CDMS classes to be subclassed more readily.
 -  The class Variable was renamed DatasetVariable.
 -  The cu module was emulated in cdms. cu and cdms methods can be mixed.
--  The code was modularized, so that Python, CDMS, and Numerical Python
+-  The code was modularized, so that Python, CDMS, and Numpyal Python
    can be built and installed separately. This significantly enhances
    the portability of the code.
 
@@ -94,7 +94,7 @@ AbstractVariable
 -  Functions getDomain, getSlice, rank, regrid, setMissing, size,
    subRegion, and subSlice were added.
 -  The functions getRegion, getSlice, getValue, and the slice operators
-   all return an instance of MA, a masked array. Singleton dimensions
+   all return an instance of MV, a masked array. Singleton dimensions
    are squeezed.
 -  The functions subRegion and subSlice return an instance of
    TransientVariable. Singleton dimensions are not squeezed.
@@ -140,7 +140,7 @@ CdmsFile
 ''''''''
 
 -  The function createVariable has a keyword fill\_value. The datatype
-   may be a Numeric/MA typecode.
+   may be a Numpy/MV typecode.
 -  The function write was added.
 
 CDMSError
@@ -164,7 +164,7 @@ TransientVariable
 '''''''''''''''''
 
 -  The class TransientVariable was added. It inherits from both
-   AbstractVariable and MA.
+   AbstractVariable and MV.
 -  The cdms module function createVariable returns a transient variable.
 -  This class does not implement the functions getPaths or getTemplate.
 

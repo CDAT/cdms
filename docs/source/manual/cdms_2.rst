@@ -371,7 +371,7 @@ Axis objects.
    ,,"* ``(x,y,indicator)``"
    ,,"* ``(x,y,indicator,cycle)``"
    ,,"* ``None or ':'``"
-   ,,"* where ``x`` and ``y`` are coordinates indicating the interval ``[x,y)``, and:"
+   ,,"* where ``x`` and ``y`` are coordinates indicating the interval ``[x,y]``, and:"
    ,,"* ``indicator`` is a two or three-character string, where the first character is ``'c'`` if the interval is closed on the left, ``'o'`` if open, and the second character has the same meaning for the right-hand point. If present, the third character specifies how the interval should be intersected with the axis"
    ,,"* ``'n'`` - select node values which are contained in the interval"
    ,,"* ``'b'`` -select axis elements for which the corresponding cell boundary intersects the interval"
@@ -752,15 +752,14 @@ variables defined on a 94x192 grid:
 
 Table 2.19 SearchResult Methods
 
-+----------------+--------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Type           | Method                                     | Definition                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-+================+============================================+==================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================+
-| ResultEntry    | ``[i]``                                    | Return the i-th search result. Results can also be returned in a for loop: ``for entry in db.searchResult(tag="dataset"):``                                                                                                                                                                                                                                                                                                                                                                                      |
-+----------------+--------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Integer        | ``len()``                                  | Number of entries in the result.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-+----------------+--------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| SearchResult   | ``searchPredicate(predicate, tag=None)``   | Refine a search result, with a predicate search. ``predicate`` is a function which takes a single CDMS object and returns true (1) if the object satisfies the predicate, 0 if not. ``tag`` restricts the search to objects of the class denoted by the tag. **Note**: In the current implementation, ``searchPredicate``\ is much less efficient than ``searchFilter``. For best performance, use ``searchFilter`` to narrow the scope of the search, then use ``searchPredicate`` for more general searches.   |
-+----------------+--------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+.. csv-table::  SearchResult Methods
+   :header:  "Type", "Method", "Definition"
+   :widths:  20, 30, 80
+
+    "ResultEntry", "``[i]``", "Return the i-th search result. Results can also be returned in a for loop: ``for entry in db.searchResult(tag="dataset"):``"
+    "Integer", "``len()``", "Number of entries in the result."
+    "SearchResult", " ``searchPredicate(predicate, tag=None)``", "Refine a search result, with a predicate search. ``predicate`` is a function which takes a single CDMS object and returns true (1) if the object satisfies the predicate, 0 if not. ``tag`` restricts the search to objects of the class denoted by the tag." 
+    ,,"**Note**: In the current implementation, ``searchPredicate`` is much less efficient than ``searchFilter``. For best performance, use ``searchFilter`` to narrow the scope of the search, then use ``searchPredicate`` for more general searches."
 
 A search result is a sequence of result entries. Each entry has a string
 name, the name of the object in the database hierarchy, and an attribute
@@ -773,22 +772,22 @@ with the ``getObject`` method.
 
 Table 2.20 ResultEntry Attributes
 
-+--------------+------------------+-----------------------------------------------------------------------------------------------------------------------+
-| Type         | Name             | Description                                                                                                           |
-+==============+==================+=======================================================================================================================+
-| String       | ``name``         | The name of this entry in the database.                                                                               |
-+--------------+------------------+-----------------------------------------------------------------------------------------------------------------------+
-| Dictionary   | ``attributes``   | The attributes returned from the search. ``attributes[key]`` is a list of all string values associated with the key   |
-+--------------+------------------+-----------------------------------------------------------------------------------------------------------------------+
+.. csv-table::  ResultEntry Attributes
+   :header:  "Type", "Method", "Definition"
+   :widths:  20, 30, 80
+
+    "String", "``name``", "The name of this entry in the database."
+    "Dictionary", "``attributes``", "The attributes returned from the search. ``attributes[key]`` is a list of all string values associated with the key"
 
 
 Table 2.21 ResultEntry Methods
 
-+---------------+-------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Type          | Method            | Definition                                                                                                                                                                                                                                                                           |
-+===============+===================+======================================================================================================================================================================================================================================================================================+
-| ``CdmsObj``   | ``getObject()``   | Return the CDMS object associated with this entry. **Note:** For many search applications it is unnecessary to access the associated CDMS object. For best performance this function should be used only when necessary, for example, to retrieve data associated with a variable.   |
-+---------------+-------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+.. csv-table::  ResultEntry Methods
+   :header:  "Type", "Method", "Definition"
+   :widths:  20, 30, 80
+
+    "``CdmsObj``", "``getObject()``", "Return the CDMS object associated with this entry."
+    ,, "**Note:** For many search applications it is unnecessary to access the associated CDMS object. For best performance this function should be used only when necessary, for example, to retrieve data associated with a variable."
 
 
 2.7.3 Accessing data
@@ -800,7 +799,7 @@ To access data via CDMS:
 #. Reference the portion of the variable to be read.
 
 In the next example, a portion of variable ‘ua’ is read from dataset
-‘ncep\_reanalysis\_mo’:
+‘ncep_reanalysis_mo’:
 
 ::
 
@@ -899,203 +898,76 @@ See “cu Module” on page 180.
 
 Table 2.22 Dataset Internal Attributes
 
-+--------------+------------------+----------------------------------------------------------------------------------------------------------+
-| Type         | Name             | Description                                                                                              |
-+==============+==================+==========================================================================================================+
-| Dictionary   | ``attributes``   | Dataset external attributes.                                                                             |
-+--------------+------------------+----------------------------------------------------------------------------------------------------------+
-| Dictionary   | ``axes``         | Axes contained in the dataset.                                                                           |
-+--------------+------------------+----------------------------------------------------------------------------------------------------------+
-| String       | ``datapath``     | Path of data files, relative to the parent database. If no parent, the datapath is absolute.             |
-+--------------+------------------+----------------------------------------------------------------------------------------------------------+
-| Dictionary   | ``grids``        | Grids contained in the dataset.                                                                          |
-+--------------+------------------+----------------------------------------------------------------------------------------------------------+
-| String       | ``mode``         | Open mode.                                                                                               |
-+--------------+------------------+----------------------------------------------------------------------------------------------------------+
-| Database     | ``parent``       | Database which contains this dataset. If the dataset is not part of a database, the value is ``None``.   |
-+--------------+------------------+----------------------------------------------------------------------------------------------------------+
-| String       | ``uri``          | Uniform Resource Identifier of this dataset.                                                             |
-+--------------+------------------+----------------------------------------------------------------------------------------------------------+
-| Dictionary   | ``variables``    | Variables contained in the dataset.                                                                      |
-+--------------+------------------+----------------------------------------------------------------------------------------------------------+
-| Dictionary   | ``xlinks``       | External links contained in the dataset.                                                                 |
-+--------------+------------------+----------------------------------------------------------------------------------------------------------+
+.. csv-table::  Dataset Internal Attributes
+   :header:  "Type", "Name", "Description"
+   :widths:  20, 30, 80
 
+    "Dictionary", "``attributes``", "Dataset external attributes."
+    "Dictionary", "``axes``", "Axes contained in the dataset."
+    "String", "``datapath``", "Path of data files, relative to the parent database. If no parent, the datapath is absolute."
+    "Dictionary", "``grids``", "Grids contained in the dataset."
+    "String", "``mode``", "Open mode."
+    "Database", "``parent``", "Database which contains this dataset. If the dataset is not part of a database, the value is ``None``."
+    "String", "``uri``", "Uniform Resource Identifier of this dataset."
+    "Dictionary", "``variables``", "Variables contained in the dataset."
+    "Dictionary", "``xlinks``", "External links contained in the dataset."
 
 Table 2.23 Dataset Constructors
 
-+-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Constructor                                               | Description                                                                                                                                                                                                       |
-+===========================================================+===================================================================================================================================================================================================================+
-| ``datasetobj = cdms.open(String uri, String mode='r')``   | Open the dataset specified by the Universal Resource Indicator, a CDML file. Returns a Dataset object. mode is one of the indicators listed in Table 2.24 on page 70. ``openDataset`` is a synonym for ``open``   |
-+-----------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+.. csv-table::  Dataset Internal Attributes
+   :header:  "Constructor", "Description"
+   :widths:  50, 80
+
+    "``datasetobj = cdms.open(String uri, String mode='r')``", "Open the dataset specified by the Universal Resource Indicator, a CDML file. Returns a Dataset object. mode is one of the indicators listed in Table 2.24 on page 70. ``openDataset`` is a synonym for ``open``"
 
 
 Table 2.24 Open Modes
 
-+--------+-----------------------------------------------------------------------+
-| Mode   | Definition                                                            |
-+========+=======================================================================+
-| ‘r’    | read-only                                                             |
-+--------+-----------------------------------------------------------------------+
-| ‘r+’   | read-write                                                            |
-+--------+-----------------------------------------------------------------------+
-| ‘a’    | read-write. Open the file if it exists, otherwise create a new file   |
-+--------+-----------------------------------------------------------------------+
-| ‘w’    | Create a new file, read-write                                         |
-+--------+-----------------------------------------------------------------------+
+.. csv-table::  Open Modes
+   :header:  "Mode", "Definition"
+   :widths:  50, 80
+
+   "‘r’", " read-only"
+   "‘r+’", "read-write"
+   "‘a’", "read-write. Open the file if it exists, otherwise create a new file"
+   "‘w’", " Create a new file, read-write"
 
 
 Table 2.25 Dataset Methods
 
-+--------------------------+--------------------------+--------------------------+
-| Type                     | Method                   | Definition               |
-+==========================+==========================+==========================+
-| Transient-Variable       | ``datasetobj(varname, se | Calling a Dataset object |
-|                          | lector)``                | as a function reads the  |
-|                          |                          | region of data defined   |
-|                          |                          | by the selector. The     |
-|                          |                          | result is a transient    |
-|                          |                          | variable, unless         |
-|                          |                          | ``raw = 1`` is           |
-|                          |                          | specified. See           |
-|                          |                          | "Selectors" on page 103. |
-|                          |                          | **Example:** The         |
-|                          |                          | following reads data for |
-|                          |                          | variable 'prc', year     |
-|                          |                          | 1980:                    |
-|                          |                          |                          |
-|                          |                          | ::                       |
-|                          |                          |                          |
-|                          |                          |     f = cdms.open('test. |
-|                          |                          | xml')                    |
-|                          |                          |     x = f('prc', time=(' |
-|                          |                          | 1980-1','1981-1'))       |
-+--------------------------+--------------------------+--------------------------+
-| Variable, Axis, or Grid  | ``datasetobj['id']``     | The square bracket       |
-|                          |                          | operator applied to a    |
-|                          |                          | dataset gets the         |
-|                          |                          | persistent variable,     |
-|                          |                          | axis or grid object      |
-|                          |                          | having the string        |
-|                          |                          | identifier. This does    |
-|                          |                          | not read the data for a  |
-|                          |                          | variable. Returns        |
-|                          |                          | ``None`` if not found.   |
-|                          |                          |                          |
-|                          |                          | **Example:**             |
-|                          |                          |                          |
-|                          |                          | ::                       |
-|                          |                          |                          |
-|                          |                          |     f = cdms.open('sampl |
-|                          |                          | e.xml')                  |
-|                          |                          |     v = f['prc']         |
-|                          |                          |                          |
-|                          |                          | gets the persistent      |
-|                          |                          | variable v, equivalent   |
-|                          |                          | to                       |
-|                          |                          | ``v =           f.variab |
-|                          |                          | les['prc']``.            |
-|                          |                          |                          |
-|                          |                          | **Example:**             |
-|                          |                          |                          |
-|                          |                          | | ``t = f['time']``      |
-|                          |                          | | gets the axis named    |
-|                          |                          |   'time', equivalent to  |
-|                          |                          |   ``t = f.axes['time']`` |
-+--------------------------+--------------------------+--------------------------+
-| ``None``                 | ``close()``              | Close the dataset.       |
-+--------------------------+--------------------------+--------------------------+
-| ``RectGrid``             | ``createRectGrid(id, lat | Create a RectGrid in the |
-|                          | , lon, order, type="gene | dataset. This is not a   |
-|                          | ric",           mask=Non | persistent object: the   |
-|                          | e)``                     | order, type, and mask    |
-|                          |                          | are not written to the   |
-|                          |                          | dataset. However, the    |
-|                          |                          | grid may be used for     |
-|                          |                          | regridding operations.   |
-|                          |                          |                          |
-|                          |                          | ``lat`` is a latitude    |
-|                          |                          | axis in the dataset.     |
-|                          |                          |                          |
-|                          |                          | ``lon`` is a longitude   |
-|                          |                          | axis in the dataset.     |
-|                          |                          |                          |
-|                          |                          | ``order`` is a string    |
-|                          |                          | with value "yx" (the     |
-|                          |                          | first grid dimension is  |
-|                          |                          | latitude) or "xy" (the   |
-|                          |                          | first grid dimension is  |
-|                          |                          | longitude).              |
-|                          |                          |                          |
-|                          |                          | ``type`` is one of       |
-|                          |                          | 'gaussian','uniform','eq |
-|                          |                          | ualarea',or              |
-|                          |                          | 'generic'                |
-|                          |                          |                          |
-|                          |                          | If specified, ``mask``   |
-|                          |                          | is a two-dimensional,    |
-|                          |                          | logical Numpy array    |
-|                          |                          | (all values are zero or  |
-|                          |                          | one) with the same shape |
-|                          |                          | as the grid.             |
-+--------------------------+--------------------------+--------------------------+
-| Axis                     | ``getAxis(id)``          | Get an axis object from  |
-|                          |                          | the file or dataset.     |
-|                          |                          |                          |
-|                          |                          | ``id`` is the string     |
-|                          |                          | axis identifier.         |
-+--------------------------+--------------------------+--------------------------+
-| Grid                     | ``getGrid(id)``          | Get a grid object from a |
-|                          |                          | file or dataset.         |
-|                          |                          |                          |
-|                          |                          | ``id`` is the string     |
-|                          |                          | grid identifier.         |
-+--------------------------+--------------------------+--------------------------+
-| List                     | ``getPaths()``           | Get a sorted list of     |
-|                          |                          | pathnames of datafiles   |
-|                          |                          | which comprise the       |
-|                          |                          | dataset. This does not   |
-|                          |                          | include the XML metafile |
-|                          |                          | path, which is stored in |
-|                          |                          | the .uri attribute.      |
-+--------------------------+--------------------------+--------------------------+
-| Variable                 | ``getVariable(id)``      | Get a variable object    |
-|                          |                          | from a file or dataset.  |
-|                          |                          |                          |
-|                          |                          | ``id`` is the string     |
-|                          |                          | variable identifier.     |
-+--------------------------+--------------------------+--------------------------+
-| CurveGrid or GenericGrid | ``readScripGrid(self, wh | Read a curvilinear or    |
-|                          | ichGrid='destination', c | generic grid from a      |
-|                          | heck-or Generic-Grid=1)` | SCRIP dataset. The       |
-|                          | `                        | dataset can be a SCRIP   |
-|                          |                          | grid file or remapping   |
-|                          |                          | file.                    |
-|                          |                          |                          |
-|                          |                          | If a mapping file,       |
-|                          |                          | ``whichGrid`` chooses    |
-|                          |                          | the grid to read, either |
-|                          |                          | ``"source"`` or          |
-|                          |                          | ``"destination"``.       |
-|                          |                          |                          |
-|                          |                          | If ``checkGrid`` is 1    |
-|                          |                          | (default), the grid      |
-|                          |                          | cells are checked for    |
-|                          |                          | convexity, and           |
-|                          |                          | 'repaired' if necessary. |
-|                          |                          | Grid cells may appear to |
-|                          |                          | be nonconvex if they     |
-|                          |                          | cross a ``0 / 2pi``      |
-|                          |                          | boundary. The repair     |
-|                          |                          | consists of shifting the |
-|                          |                          | cell vertices to the     |
-|                          |                          | same side modulo 360     |
-|                          |                          | degrees.                 |
-+--------------------------+--------------------------+--------------------------+
-| None                     | ``sync()``               | Write any pending        |
-|                          |                          | changes to the dataset.  |
-+--------------------------+--------------------------+--------------------------+
+.. csv-table::  Dataset Methods
+   :header:  "Type", "Definition", "Description"
+   :widths:  30, 30, 80
+
+    "Transient-Variable", "``datasetobj(varname, selector)``", "Calling a Dataset object as a function reads the region of data defined by the selector. The result is a transient variable, unless ``raw = 1`` is specified. See "Selectors" on page 103."
+    ,, "**Example:** The following reads data for variable 'prc', year 1980:"
+    ,, "   * f = cdms.open('test.  xml')"
+    ,, "   * x = f('prc', time=('1980-1','1981-1'))"
+    "Variable, Axis, or Grid", "``datasetobj['id']``", "The square bracket operator applied to a dataset gets the persistent variable, axis or grid object having the string identifier. This does not read the data for a variable. Returns ``None`` if not found."
+    ,, "**Example:**"
+    ,, "   * f = cdms.open('sampl e.xml')"
+    ,, "   * v = f['prc']"
+    ,, "   * gets the persistent variable v, equivalent to ``v =f.variab les['prc']``."
+    ,, "**Example:**"
+    ,, "``t = f['time']`` gets the axis named 'time', equivalent to ``t = f.axes['time']``"
+    "``None``", "``close()``", "Close the dataset."
+    "``RectGrid``", "``createRectGrid(id, lat, lon, order, type="generic", mask=None)``", "Create a RectGrid in the dataset. This is not a persistent object: the order, type, and mask are not written to the dataset. However, the grid may be used for regridding operations."
+    ,,"``lat`` is a latitude axis in the dataset."
+    ,,"``lon`` is a longitude axis in the dataset."
+    ,,"``order`` is a string with value "yx" (the first grid dimension is latitude) or "xy" (the first grid dimension is longitude)."
+    ,,"``type`` is one of 'gaussian','uniform','eq ualarea',or 'generic'"
+    ,,"If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
+    "Axis", "``getAxis(id)``", "Get an axis object from the file or dataset."
+    ,,"``id`` is the string axis identifier."
+    "Grid", "``getGrid(id)``", "Get a grid object from a file or dataset."
+    ,,"``id`` is the string grid identifier."
+    "List", "``getPaths()``", "Get a sorted list of pathnames of datafiles which comprise the dataset. This does not include the XML metafile path, which is stored in the .uri attribute."
+    "Variable", "``getVariable(id)``", "Get a variable object from a file or dataset."
+    ,,"``id`` is the string variable identifier."
+    "CurveGrid or GenericGrid", "``readScripGrid(self, whichGrid='destination', check-or Generic-Grid=1)``", "Read a curvilinear orgeneric grid from a SCRIP dataset. The dataset can be a SCRIP grid file or remappingfile."
+    ,, "If a mapping file, ``whichGrid`` chooses the grid to read, either ``"source"`` or ``"destination"``."
+    ,, " If ``checkGrid`` is 1 (default), the grid cells are checked for convexity, and 'repaired' if necessary.  Grid cells may appear to be nonconvex if they cross a ``0 / 2pi`` boundary. The repair consists of shifting the cell vertices to the same side modulo 360 degrees."
+    "None", "``sync()``", "Write any pending changes to the dataset."
 
 
 MV module
@@ -1117,35 +989,20 @@ documented at http://www.numpy.org.
 
 MV can be imported with the command:
 
-.. raw:: html
-
-   <figure class="highlight">
-
 ::
 
     import MV
 
-.. raw:: html
-
-   </figure>
-
 The command
-
-.. raw:: html
-
-   <figure class="highlight">
 
 ::
 
     from MV import *
 
-.. raw:: html
-
-   </figure>
 
 allows use of MV commands without any prefix.
 
-Table 2.26 on page 75 lists the constructors in MV. All functions return
+Table 2.26 lists the constructors in MV. All functions return
 a transient variable. In most cases the keywords axes, attributes, and
 id are available. axes is a list of axis objects which specifies the
 domain of the variable. attributes is a dictionary. id is a special
@@ -1154,17 +1011,9 @@ should not contain blanks or non-printing characters. It is used when
 the variable is plotted or written to a file. Since the id is just an
 attribute, it can also be set like any attribute:
 
-.. raw:: html
-
-   <figure class="highlight">
-
 ::
 
     var.id = 'temperature'
-
-.. raw:: html
-
-   </figure>
 
 For completeness MV provides access to all the MV2 functions. The
 functions not listed in the following tables are identical to the
@@ -1181,25 +1030,18 @@ http://numpy.sourceforge.net for a description of these functions.
 
 Table 2.26 Variable Constructors in module MV
 
-+--------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Constructor                                                                                                        | Description                                                                                                                                                                                                                                                                                                                                                                                    |
-+====================================================================================================================+================================================================================================================================================================================================================================================================================================================================================================================================+
-| ``arrayrange(start, stop=None, step=1, typecode=None, axis=None, attributes=None, id=None)``                       | Just like ``MV2.arange()`` except it returns a variable whose type can be specfied by the keyword argument typecode. The axis, attribute dictionary, and string identifier of the result variable may be specified. *Synonym:* ``arange``                                                                                                                                                       |
-+--------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``masked_array(a, mask=None, fill_value=None, axes=None, attributes=None, id=None)``                               | Same as MV2.masked\_array but creates a variable instead. If no axes are specified, the result has default axes, otherwise axes is a list of axis objects matching a.shape.                                                                                                                                                                                                                     |
-+--------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``masked_object(data, value, copy=1, savespace=0, axes=None, attributes=None, id=None)``                           | Create variable masked where exactly data equal to value. Create the variable with the given list of axis objects, attribute dictionary, and string id.                                                                                                                                                                                                                                        |
-+--------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``masked_values(data, value, rtol=1e-05, atol=1e-08, copy=1, savespace=0, axes=None, attributes=None, id=None)``   | Constructs a variable with the given list of axes and attribute dictionary, whose mask is set at those places where ``abs(data - value) &lt; atol + rtol * abs(data)``. This is a careful way of saying that those elements of the data that have value = value (to within a tolerance) are to be treated as invalid. If data is not of a floating point type, calls masked\_object instead.   |
-+--------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``ones(shape, typecode='l', savespace=0, axes=none, attributes=none, id=none)``                                    | return an array of all ones of the given length or shape.                                                                                                                                                                                                                                                                                                                                      |
-+--------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``reshape(a, newshape, axes=none, attributes=none, id=none)``                                                      | copy of a with a new shape.                                                                                                                                                                                                                                                                                                                                                                    |
-+--------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``resize(a, new_shape, axes=none, attributes=none, id=none)``                                                      | return a new array with the specified shape. the original arrays total size can be any size.                                                                                                                                                                                                                                                                                                   |
-+--------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``zeros(shape, typecode='l', savespace=0, axes=none, attributes=none, id=none)``                                   | an array of all zeros of the given length or shape                                                                                                                                                                                                                                                                                                                                             |
-+--------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+.. csv-table::  Variable Constructors in module MV
+   :header:  "Constructor", "Description"
+   :widths:  30,  80
+
+    "``arrayrange(start, stop=None, step=1, typecode=None, axis=None, attributes=None, id=None)``", "Just like ``MV2.arange()`` except it returns a variable whose type can be specfied by the keyword argument typecode. The axis, attribute dictionary, and string identifier of the result variable may be specified. *Synonym:* ``arange``"
+    "``masked_array(a, mask=None, fill_value=None, axes=None, attributes=None, id=None)``", "Same as MV2.masked\_array but creates a variable instead. If no axes are specified, the result has default axes, otherwise axes is a list of axis objects matching a.shape."
+    "``masked_object(data, value, copy=1, savespace=0, axes=None, attributes=None, id=None)``", "Create variable masked where exactly data equal to value. Create the variable with the given list of axis objects, attribute dictionary, and string id."
+    "``masked_values(data, value, rtol=1e-05, atol=1e-08, copy=1, savespace=0, axes=None, attributes=None, id=None)``", "Constructs a variable with the given list of axes and attribute dictionary, whose mask is set at those places where ``abs(data - value) &lt; atol + rtol * abs(data)``. This is a careful way of saying that those elements of the data that have value = value (to within a tolerance) are to be treated as invalid. If data is not of a floating point type, calls masked\_object instead."
+    "``ones(shape, typecode='l', savespace=0, axes=none, attributes=none, id=none)``", "return an array of all ones of the given length or shape."
+    "``reshape(a, newshape, axes=none, attributes=none, id=none)``", "copy of a with a new shape."
+    "``resize(a, new_shape, axes=none, attributes=none, id=none)``", "return a new array with the specified shape. the original arrays total size can be any size".
+    "``zeros(shape, typecode='l', savespace=0, axes=none, attributes=none, id=none)``", "an array of all zeros of the given length or shape"
 
 The following table describes the MV non-constructor functions. with the
 exception of argsort, all functions return a transient variable.
@@ -1207,63 +1049,37 @@ exception of argsort, all functions return a transient variable.
 
 Table 2.27 MV functions
 
-+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Function                                                            | Description                                                                                                                                                                                                                                                                                                                                                          |
-+=====================================================================+======================================================================================================================================================================================================================================================================================================================================================================+
-| ``argsort(x, axis=-1, fill_value=None)``                            | Return a Numpy array of indices for sorting along a given axis.                                                                                                                                                                                                                                                                                                    |
-+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``asarray(data, typecode=None)``                                    | Same as ``cdms.createVariable(data, typecode, copy=0)``. This is a short way of ensuring that something is an instance of a variable of a given type before proceeding, as in ``data = asarray(data)``. Also see the variable ``astype()`` function.                                                                                                                 |
-+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``average(a, axis=0, weights=None)``                                | Computes the average value of the non-masked elements of x along the selected axis. If weights is given, it must match the size and shape of x, and the value returned is: ``sum(a*weights)/sum(weights)`` In computing these sums, elements that correspond to those that are masked in x or weights are ignored.                                                   |
-+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``choose(condition, t)``                                            | Has a result shaped like array condition. ``t`` must be a tuple of two arrays ``t1`` and ``t2``. Each element of the result is the corresponding element of ``t1``\ where ``condition`` is true, and the corresponding element of ``t2`` where ``condition`` is false. The result is masked where ``condition`` is masked or where the selected element is masked.   |
-+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``concatenate(arrays, axis=0, axisid=None, axisattributes=None)``   | Concatenate the arrays along the given axis. Give the extended axis the id and attributes provided - by default, those of the first array.                                                                                                                                                                                                                           |
-+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``count(a, axis=None)``                                             | Count of the non-masked elements in ``a``, or along a certain axis.                                                                                                                                                                                                                                                                                                  |
-+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``isMaskedVariable(x)``                                             | Return true if ``x`` is an instance of a variable.                                                                                                                                                                                                                                                                                                                   |
-+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``masked_equal(x, value)``                                          | ``x`` masked where ``x`` equals the scalar value. For floating point values consider ``masked_values(x, value)`` instead.                                                                                                                                                                                                                                            |
-+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``masked_greater(x, value)``                                        | ``x`` masked where ``x > value``                                                                                                                                                                                                                                                                                                                                     |
-+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``masked_greater_equal(x, value)``                                  | ``x`` masked where ``x >= value``                                                                                                                                                                                                                                                                                                                                    |
-+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``masked_less(x, value)``                                           | ``x`` masked where ``x &lt; value``                                                                                                                                                                                                                                                                                                                                  |
-+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``masked_less_equal(x, value)``                                     | ``x`` masked where ``x &le; value``                                                                                                                                                                                                                                                                                                                                  |
-+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``masked_not_equal(x, value)``                                      | ``x`` masked where ``x != value``                                                                                                                                                                                                                                                                                                                                    |
-+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``masked_outside(x, v1, v2)``                                       | ``x`` with mask of all values of ``x`` that are outside ``[v1,v2]``                                                                                                                                                                                                                                                                                                  |
-+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``masked_where(condition, x, copy=1)``                              | Return ``x`` as a variable masked where condition is true. Also masked where ``x`` or ``condition`` masked. ``condition`` is a masked array having the same shape as ``x``.                                                                                                                                                                                          |
-+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``maximum(a, b=None)``                                              | Compute the maximum valid values of ``x`` if ``y`` is ``None``; with two arguments, return the element-wise larger of valid values, and mask the result where either ``x`` or ``y`` is masked.                                                                                                                                                                       |
-+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``minimum(a, b=None)``                                              | Compute the minimum valid values of ``x`` if ``y`` is None; with two arguments, return the element-wise smaller of valid values, and mask the result where either ``x`` or ``y`` is masked.                                                                                                                                                                          |
-+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``outerproduct(a, b)``                                              | Return a variable such that ``result[i, j] = a[i] * b[j]``. The result will be masked where ``a[i]`` or ``b[j]`` is masked.                                                                                                                                                                                                                                          |
-+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``power(a, b)``                                                     | ``a**b``                                                                                                                                                                                                                                                                                                                                                             |
-+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``product(a, axis=0, fill_value=1)``                                | Product of elements along axis using ``fill_value`` for missing elements.                                                                                                                                                                                                                                                                                            |
-+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``repeat(ar, repeats, axis=0)``                                     | Return ``ar`` repeated ``repeats`` times along ``axis``. ``repeats`` is a sequence of length ``ar.shape[axis]`` telling how many times to repeat each element.                                                                                                                                                                                                       |
-+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``set_default_fill_value(value_type, value)``                       | Set the default fill value for ``value_type`` to ``value``. ``value_type`` is a string: ‘real’,’complex’,’character’,’integer’,or ‘object’. ``value`` should be a scalar or single-element array.                                                                                                                                                                    |
-+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``sort(ar, axis=-1)``                                               | Sort array ``ar`` elementwise along the specified axis. The corresponding axis in the result has dummy values.                                                                                                                                                                                                                                                       |
-+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``sum(a, axis=0, fill_value=0)``                                    | Sum of elements along a certain axis using ``fill_value`` for missing.                                                                                                                                                                                                                                                                                               |
-+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``take(a, indices, axis=0)``                                        | Return a selection of items from ``a``. See the documentation in the Numpy manual.                                                                                                                                                                                                                                                                                 |
-+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``transpose(ar, axes=None)``                                        | Perform a reordering of the axes of array ar depending on the tuple of indices axes; the default is to reverse the order of the axes.                                                                                                                                                                                                                                |
-+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``where(condition, x, y)``                                          | ``x`` where ``condition`` is true, ``y`` otherwise                                                                                                                                                                                                                                                                                                                   |
-+---------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+.. csv-table::  MV functions
+   :header:  "Function", "Description"
+   :widths:  30,  80
+
+    "``argsort(x, axis=-1, fill_value=None)``", "Return a Numpy array of indices for sorting along a given axis."
+    "``asarray(data, typecode=None)``", "Same as ``cdms.createVariable(data, typecode, copy=0)``. This is a short way of ensuring that something is an instance of a variable of a given type before proceeding, as in ``data = asarray(data)``. Also see the variable ``astype()`` function."
+    "``average(a, axis=0, weights=None)``", "Computes the average value of the non-masked elements of x along the selected axis. If weights is given, it must match the size and shape of x, and the value returned is: ``sum(a*weights)/sum(weights)`` In computing these sums, elements that correspond to those that are masked in x or weights are ignored."                                                   |
+    "``choose(condition, t)``", "Has a result shaped like array condition. ``t`` must be a tuple of two arrays ``t1`` and ``t2``. Each element of the result is the corresponding element of ``t1``\ where ``condition`` is true, and the corresponding element of ``t2`` where ``condition`` is false. The result is masked where ``condition`` is masked or where the selected element is masked."
+    "``concatenate(arrays, axis=0, axisid=None, axisattributes=None)``", "Concatenate the arrays along the given axis. Give the extended axis the id and attributes provided - by default, those of the first array."
+    "``count(a, axis=None)``", "Count of the non-masked elements in ``a``, or along a certain axis."
+    "``isMaskedVariable(x)``", "Return true if ``x`` is an instance of a variable."
+    "``masked_equal(x, value)``", "``x`` masked where ``x`` equals the scalar value. For floating point values consider ``masked_values(x, value)`` instead."
+    "``masked_greater(x, value)``", "``x`` masked where ``x > value``"
+    "``masked_greater_equal(x, value)``", "``x`` masked where ``x >= value``"
+    "``masked_less(x, value)``", "``x`` masked where ``x &lt; value``"
+    "``masked_less_equal(x, value)``", "``x`` masked where ``x &le; value``"
+    "``masked_not_equal(x, value)``", "``x`` masked where ``x != value``"
+    "``masked_outside(x, v1, v2)``", "``x`` with mask of all values of ``x`` that are outside ``[v1,v2]``"
+    "``masked_where(condition, x, copy=1)``", "Return ``x`` as a variable masked where condition is true. Also masked where ``x`` or ``condition`` masked. ``condition`` is a masked array having the same shape as ``x``."
+    "``maximum(a, b=None)``", "Compute the maximum valid values of ``x`` if ``y`` is ``None``; with two arguments, return the element-wise larger of valid values, and mask the result where either ``x`` or ``y`` is masked."
+    "``minimum(a, b=None)``", "Compute the minimum valid values of ``x`` if ``y`` is None; with two arguments, return the element-wise smaller of valid values, and mask the result where either ``x`` or ``y`` is masked."
+    "``outerproduct(a, b)``", "Return a variable such that ``result[i, j] = a[i] * b[j]``. The result will be masked where ``a[i]`` or ``b[j]`` is masked."
+    "``power(a, b)``", "``a**b``"
+    "``product(a, axis=0, fill_value=1)``", "Product of elements along axis using ``fill_value`` for missing elements."
+    "``repeat(ar, repeats, axis=0)``", "Return ``ar`` repeated ``repeats`` times along ``axis``. ``repeats`` is a sequence of length ``ar.shape[axis]`` telling how many times to repeat each element."
+    "``set_default_fill_value(value_type, value)``", "Set the default fill value for ``value_type`` to ``value``. ``value_type`` is a string: ‘real’,’complex’,’character’,’integer’,or ‘object’. ``value`` should be a scalar or single-element array."
+    "``sort(ar, axis=-1)``", "Sort array ``ar`` elementwise along the specified axis. The corresponding axis in the result has dummy values."
+    "``sum(a, axis=0, fill_value=0)``", "Sum of elements along a certain axis using ``fill_value`` for missing."
+    "``take(a, indices, axis=0)``", "Return a selection of items from ``a``. See the documentation in the Numpy manual."
+    "``transpose(ar, axes=None)``", "Perform a reordering of the axes of array ar depending on the tuple of indices axes; the default is to reverse the order of the axes."
+    "``where(condition, x, y)``", "``x`` where ``condition`` is true, ``y`` otherwise"
 
 
 HorizontalGrid
@@ -1283,410 +1099,109 @@ CDMS supports several types of HorizontalGrids:
 
 Table 2.28
 
-+-------------------+----------------------------------------------------------------------------------+
-| Grid Type         | Definition                                                                       |
-+===================+==================================================================================+
-| ``RectGrid``      | Associated latitude an longitude are 1-D axes, with strictly monotonic values.   |
-+-------------------+----------------------------------------------------------------------------------+
-| ``CurveGrid``     | Latitude and longitude are 2-D coordinate axes (Axis2D).                         |
-+-------------------+----------------------------------------------------------------------------------+
-| ``GenericGrid``   | Latitude and longitude are 1-D auxiliary coordinate axis (AuxAxis1D)             |
-+-------------------+----------------------------------------------------------------------------------+
+.. csv-table::  Grids
+   :header:  "Grid Type", "Definition"
+   :widths:  30,  80
+
+    "``RectGrid``", "Associated latitude an longitude are 1-D axes, with strictly monotonic values."
+    "``GenericGrid``", "Latitude and longitude are 1-D auxiliary coordinate axis (AuxAxis1D)"
 
 
 Table 2.29 HorizontalGrid Internal Attribute
 
-+-----------------------+------------------+------------------------------------------------+
-| Type                  | Name             | Definition                                     |
-+=======================+==================+================================================+
-| Dictionary            | ``attributes``   | External attribute dictionary.                 |
-+-----------------------+------------------+------------------------------------------------+
-| String                | ``id``           | The grid identifier.                           |
-+-----------------------+------------------+------------------------------------------------+
-| Dataset or CdmsFile   | ``parent``       | The dataset or file which contains the grid.   |
-+-----------------------+------------------+------------------------------------------------+
-| Tuple                 | ``shape``        | The shape of the grid, a 2-tuple               |
-+-----------------------+------------------+------------------------------------------------+
+.. csv-table::  HorizontalGrid Internal Attribute
+   :header:  "Type", "Name", "Definition"
+   :widths:  30, 30,  80
 
-Table 2.31 on page 82 describes the methods that apply to all types of
-HorizontalGrids. Table 2.32 on page 86 describes the additional methods
-that are unique to RectGrids.
+    "Dictionary","``attributes``", "External attribute dictionary."
+    "String", "``id``", "The grid identifier."
+    "Dataset or CdmsFile", "``parent``", "The dataset or file which contains the grid."
+    "Tuple", "``shape``", "The shape of the grid, a 2-tuple"
 
 
 Table 2.30 RectGrid Constructors
 
-+---------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------+
-| Constructor                                                                                             | Description                                                                      |
-+=========================================================================================================+==================================================================================+
-| ``cdms.createRectGrid(lat, lon, order, type="generic", mask=None)``                                     | Create a grid not associated with a file or dataset. See Table 2.2 on page 33.   |
-+---------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------+
-| ``CdmsFile.createRectGrid(id, lat, lon, order, type="generic", mask=None)``                             | Create a grid associated with a file. See Table 2.14 on page 53.                 |
-+---------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------+
-| ``Dataset.createRectGrid(id, lat, lon, order, type="generic", mask=None)``                              | Create a grid associated with a dataset. See Table 2.25 on page 71.              |
-+---------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------+
-| ``cdms.createGaussianGrid(nlats, xorigin=0.0, order="yx")``                                             | See Table 2.2 on page 33.                                                        |
-+---------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------+
-| ``cdms.createGenericGrid(latArray, lonArray, latBounds=None, lonBounds=None, order="yx", mask=None)``   | See Table 2.2 on page 18.                                                        |
-+---------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------+
-| ``cdms.createGlobalMeanGrid(grid)``                                                                     | See Table 2.2 on page 18.                                                        |
-+---------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------+
-| ``cdms.createRectGrid(lat, lon, order, type="generic", mask=None)``                                     | See Table 2.2 on page 18.                                                        |
-+---------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------+
-| ``cdms.createUniformGrid(startLat, nlat, deltaLat, startLon, nlon, deltaLon, order="yx", mask=None)``   | See Table 2.2 on page 18.                                                        |
-+---------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------+
-| ``cdms.createZonalGrid(grid)``                                                                          | See Table 2.2 on page 18                                                         |
-+---------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------+
+.. csv-table::  RectGrid Constructors
+   :header:  "Constructor", "Description"
+   :widths:  30, 80
+
+    "``cdms.createRectGrid(lat, lon, order, type='generic', mask=None)``", "Create a grid not associated with a file or dataset. See Table 2.2"
+    "``CdmsFile.createRectGrid(id, lat, lon, order, type='generic', mask=None)``", "Create a grid associated with a file. See Table 2.14"
+    "``Dataset.createRectGrid(id, lat, lon, order, type='generic', mask=None)``", "Create a grid associated with a dataset. See Table 2.25"
+    "``cdms.createGaussianGrid(nlats, xorigin=0.0, order='yx')``", "See Table 2.2"
+    "``cdms.createGenericGrid(latArray, lonArray, latBounds=None, lonBounds=None, order='yx', mask=None)``", "See Table 2.2"
+    "``cdms.createGlobalMeanGrid(grid)``", "See Table 2.2."
+    "``cdms.createRectGrid(lat, lon, order, type='generic', mask=None)``", "See Table 2.2"
+    "``cdms.createUniformGrid(startLat, nlat, deltaLat, startLon, nlon, deltaLon, order='yx', mask=None)``", "See Table 2.2"
+    "``cdms.createZonalGrid(grid)``", " See Table 2.2"
 
 
 Table 2.31 HorizontalGrid Methods
 
-+--------------------------+--------------------------+--------------------------+
-| Type                     | Method                   | Description              |
-+==========================+==========================+==========================+
-| Horizontal-Grid          | ``clone()``              | Return a transient copy  |
-|                          |                          | of the grid.             |
-+--------------------------+--------------------------+--------------------------+
-| Axis                     | ``getAxis(Integer n)``   | Get the n-th axis.n is   |
-|                          |                          | either 0 or 1.           |
-+--------------------------+--------------------------+--------------------------+
-| Tuple                    | ``getBounds()``          | Get the grid boundary    |
-|                          |                          | arrays.                  |
-|                          |                          |                          |
-|                          |                          | Returns a tuple          |
-|                          |                          | ``(latitudeArray, longit |
-|                          |                          | udeArray)``,             |
-|                          |                          | where latitudeArray is a |
-|                          |                          | Numpy array of         |
-|                          |                          | latitude bounds, and     |
-|                          |                          | similarly for            |
-|                          |                          | longitudeArray.The shape |
-|                          |                          | of latitudeArray and     |
-|                          |                          | longitudeArray depend on |
-|                          |                          | the type of grid:        |
-|                          |                          |                          |
-|                          |                          | -  for rectangular grids |
-|                          |                          |    with shape (nlat,     |
-|                          |                          |    nlon), the boundary   |
-|                          |                          |    arrays have shape     |
-|                          |                          |    (nlat,2) and          |
-|                          |                          |    (nlon,2).             |
-|                          |                          | -  for curvilinear grids |
-|                          |                          |    with shape (nx, ny),  |
-|                          |                          |    the boundary arrays   |
-|                          |                          |    each have shape (nx,  |
-|                          |                          |    ny, 4).               |
-|                          |                          | -  for generic grids     |
-|                          |                          |    with shape (ncell,),  |
-|                          |                          |    the boundary arrays   |
-|                          |                          |    each have shape       |
-|                          |                          |    (ncell, nvert) where  |
-|                          |                          |    nvert is the maximum  |
-|                          |                          |    number of vertices    |
-|                          |                          |    per cell.             |
-|                          |                          |                          |
-|                          |                          | For rectilinear grids:   |
-|                          |                          | If no boundary arrays    |
-|                          |                          | are explicitly defined   |
-|                          |                          | (in the file or          |
-|                          |                          | dataset), the result     |
-|                          |                          | depends on the auto-     |
-|                          |                          | Bounds mode (see         |
-|                          |                          | ``cdms.setAutoBounds``)  |
-|                          |                          | and the grid             |
-|                          |                          | classification mode (see |
-|                          |                          | ``cdms.setClassifyGrids` |
-|                          |                          | `).                      |
-|                          |                          | By default, autoBounds   |
-|                          |                          | mode is enabled, in      |
-|                          |                          | which case the boundary  |
-|                          |                          | arrays are generated     |
-|                          |                          | based on the type of     |
-|                          |                          | grid. If disabled, the   |
-|                          |                          | return value is          |
-|                          |                          | (None,None).For          |
-|                          |                          | rectilinear grids: The   |
-|                          |                          | grid classification mode |
-|                          |                          | specifies how the grid   |
-|                          |                          | type is to be            |
-|                          |                          | determined. By default,  |
-|                          |                          | the grid type (Gaussian, |
-|                          |                          | uniform, etc.) is        |
-|                          |                          | determined by calling    |
-|                          |                          | grid.classifyInFamily.   |
-|                          |                          | If the mode is 'off'     |
-|                          |                          | grid.getType is used     |
-|                          |                          | instead.                 |
-+--------------------------+--------------------------+--------------------------+
-| Axis                     | ``getLatitude()``        | Get the latitude axis of |
-|                          |                          | this grid.               |
-+--------------------------+--------------------------+--------------------------+
-| Axis                     | ``getLongitude()``       | Get the latitude axis of |
-|                          |                          | this grid.               |
-+--------------------------+--------------------------+--------------------------+
-| Axis                     | ``getMask()``            | Get the mask array of    |
-|                          |                          | this grid, if            |
-|                          |                          | any.Returns a 2-D        |
-|                          |                          | Numpy array, having    |
-|                          |                          | the same shape as the    |
-|                          |                          | grid. If the mask is not |
-|                          |                          | explicitly defined, the  |
-|                          |                          | return value is          |
-|                          |                          | ``None``.                |
-+--------------------------+--------------------------+--------------------------+
-| Axis                     | ``getMesh(self, transpos | Generate a mesh array    |
-|                          | e=None)``                | for the meshfill         |
-|                          |                          | graphics method.If       |
-|                          |                          | transpose is defined to  |
-|                          |                          | a tuple, say (1,0),      |
-|                          |                          | first transpose          |
-|                          |                          | latbounds and lonbounds  |
-|                          |                          | according to the tuple,  |
-|                          |                          | in this case (1,0,2).    |
-+--------------------------+--------------------------+--------------------------+
-| None                     | ``setBounds(latBounds, l | Set the grid             |
-|                          | onBounds, persistent=0)` | boundaries.\ ``latBounds |
-|                          | `                        | ``                       |
-|                          |                          | is a NumPy array of      |
-|                          |                          | shape (n,2), such that   |
-|                          |                          | the boundaries of the    |
-|                          |                          | kth axis value are       |
-|                          |                          | ``[latBounds[k,0],latBou |
-|                          |                          | nds[k,1] ]``.            |
-|                          |                          | ``lonBounds`` is defined |
-|                          |                          | similarly for the        |
-|                          |                          | longitude array.         |
-|                          |                          | **Note:** By default,    |
-|                          |                          | the boundaries are not   |
-|                          |                          | written to the file or   |
-|                          |                          | dataset containing the   |
-|                          |                          | grid (if any). This      |
-|                          |                          | allows bounds to be set  |
-|                          |                          | on read-only files, for  |
-|                          |                          | regridding. If the       |
-|                          |                          | optional argument        |
-|                          |                          | ``persistent`` is set to |
-|                          |                          | 1, the boundary array is |
-|                          |                          | written to the file.     |
-+--------------------------+--------------------------+--------------------------+
-| None                     | ``setMask(mask, persiste | Set the grid mask. If    |
-|                          | nt=0)``                  | ``persistent == 1``, the |
-|                          |                          | mask values are written  |
-|                          |                          | to the associated file,  |
-|                          |                          | if any. Otherwise, the   |
-|                          |                          | mask is associated with  |
-|                          |                          | the grid, but no I/O is  |
-|                          |                          | generated. ``mask`` is a |
-|                          |                          | two-dimensional,         |
-|                          |                          | Boolean-valued Numpy   |
-|                          |                          | array, having the same   |
-|                          |                          | shape as the grid.       |
-+--------------------------+--------------------------+--------------------------+
-| Horizontal-Grid          | ``subGridRegion(latInter | Create a new grid        |
-|                          | val, lonInterval)``      | corresponding to the     |
-|                          |                          | coordinate region        |
-|                          |                          | defined by               |
-|                          |                          | ``latInterval, lonInterv |
-|                          |                          | al.``                    |
-|                          |                          |                          |
-|                          |                          | ``latInterval`` and      |
-|                          |                          | ``lonInterval`` are the  |
-|                          |                          | coordinate intervals for |
-|                          |                          | latitude and longitude,  |
-|                          |                          | respectively.            |
-|                          |                          |                          |
-|                          |                          | Each interval is a tuple |
-|                          |                          | having one of the forms: |
-|                          |                          |                          |
-|                          |                          | -  ``(x,y)``             |
-|                          |                          | -  ``(x,y,indicator)``   |
-|                          |                          | -  ``(x,y,indicator,cycl |
-|                          |                          | e)``                     |
-|                          |                          | -  ``None``              |
-|                          |                          |                          |
-|                          |                          | where ``x`` and ``y``    |
-|                          |                          | are coordinates          |
-|                          |                          | indicating the interval  |
-|                          |                          | ``[x,y)``, and:          |
-|                          |                          |                          |
-|                          |                          | ``indicator`` is a       |
-|                          |                          | two-character string,    |
-|                          |                          | where the first          |
-|                          |                          | character is 'c' if the  |
-|                          |                          | interval is closed on    |
-|                          |                          | the left, 'o' if open,   |
-|                          |                          | and the second character |
-|                          |                          | has the same meaning for |
-|                          |                          | the right-hand point.    |
-|                          |                          | (Default: 'co').         |
-|                          |                          |                          |
-|                          |                          | If ``cycle`` is          |
-|                          |                          | specified, the axis is   |
-|                          |                          | treated as circular with |
-|                          |                          | the given cycle value.   |
-|                          |                          | By default, if           |
-|                          |                          | ``grid.isCircular()`` is |
-|                          |                          | true, the axis is        |
-|                          |                          | treated as circular with |
-|                          |                          | a default value of       |
-|                          |                          | 360.0.                   |
-|                          |                          |                          |
-|                          |                          | An interval of ``None``  |
-|                          |                          | returns the full index   |
-|                          |                          | interval of the axis.    |
-|                          |                          |                          |
-|                          |                          | If a mask is defined,    |
-|                          |                          | the subgrid also has a   |
-|                          |                          | mask corresponding to    |
-|                          |                          | the index ranges.Note:   |
-|                          |                          | The result grid is not   |
-|                          |                          | associated with any file |
-|                          |                          | or dataset.              |
-+--------------------------+--------------------------+--------------------------+
-| Transient-CurveGrid      | ``toCurveGrid(gridid=Non | Convert to a curvilinear |
-|                          | e)``                     | grid. If the grid is     |
-|                          |                          | already curvilinear, a   |
-|                          |                          | copy of the grid object  |
-|                          |                          | is returned. ``gridid``  |
-|                          |                          | is the string identifier |
-|                          |                          | of the resulting         |
-|                          |                          | curvilinear grid object. |
-|                          |                          | If unspecified, the grid |
-|                          |                          | ID is copied. **Note:**  |
-|                          |                          | This method does not     |
-|                          |                          | apply to generic grids.  |
-+--------------------------+--------------------------+--------------------------+
-| Transient-GenericGrid    | ``toGenericGrid(gridid=N | Convert to a generic     |
-|                          | one)``                   | grid. If the grid is     |
-|                          |                          | already generic, a copy  |
-|                          |                          | of the grid is returned. |
-|                          |                          | ``gridid`` is the string |
-|                          |                          | identifier of the        |
-|                          |                          | resulting curvilinear    |
-|                          |                          | grid object. If          |
-|                          |                          | unspecified, the grid ID |
-|                          |                          | is copied.               |
-+--------------------------+--------------------------+--------------------------+
+.. csv-table::  HorizontalGrid Methods
+   :header:  "Type", "Method", "Description"
+   :widths:  30, 30, 80
+
+    "Horizontal-Grid", "``clone()``", "Return a transient copy of the grid."
+    "Axis", "``getAxis(Integer n)``", "Get the n-th axis.n is either 0 or 1."
+    "Tuple", "``getBounds()``", "Get the grid boundary arrays."
+    ,,"Returns a tuple ``(latitudeArray, longitudeArray)``, where latitudeArray is a Numpy array of latitude bounds, and similarly for longitudeArray.The shape of latitudeArray and longitudeArray depend on the type of grid:"
+    ,,"*  for rectangular grids with shape (nlat, nlon), the boundary arrays have shape (nlat,2) and (nlon,2)."
+    ,,"*  for curvilinear grids with shape (nx, ny), the boundary arrays each have shape (nx, ny, 4)."
+    ,,"*  for generic grids with shape (ncell,), the boundary arrays each have shape (ncell, nvert) where nvert is the maximum number of vertices per cell."
+    ,,"For rectilinear grids: If no boundary arrays are explicitly defined (in the file or dataset), the result depends on the auto- Bounds mode (see ``cdms.setAutoBounds``) and the grid classification mode (see ``cdms.setClassifyGrids` `)."
+    ,,"By default, autoBounds mode is enabled, in which case the boundary arrays are generated based on the type of grid. If disabled, the return value is (None,None).For rectilinear grids: The grid classification mode specifies how the grid type is to be determined. By default, the grid type (Gaussian, uniform, etc.) is determined by calling grid.classifyInFamily.  If the mode is 'off' grid.getType is used instead."
+    "Axis", "``getLatitude()``", "Get the latitude axis of this grid."
+    "Axis", "``getLongitude()``", " Get the latitude axis of this grid."
+    "Axis", "``getMask()``", "Get the mask array of this grid, if any.Returns a 2-D Numpy array, having the same shape as the grid. If the mask is not explicitly defined, the return value is ``None``."
+    "Axis", "``getMesh(self, transpose=None)``", "Generate a mesh array for the meshfill graphics method.If transpose is defined to a tuple, say (1,0), first transpose latbounds and lonbounds according to the tuple, in this case (1,0,2)."
+    "None", "``setBounds(latBounds, lonBounds, persistent=0)``", "Set the grid boundaries. ``latBounds`` is a NumPy array of shape (n,2), such that the boundaries of the kth axis value are ``[latBounds[k,0],latBou nds[k,1] ]``.  ``lonBounds`` is defined similarly for the longitude array."
+    ,,"**Note:** By default, the boundaries are not written to the file or dataset containing the grid (if any). This allows bounds to be set on read-only files, for regridding. If the optional argument ``persistent`` is set to the boundary array is written to the file."
+    "None", "``setMask(mask, persistent=0)``", "Set the grid mask. If ``persistent == 1``, the mask values are written to the associated file, if any. Otherwise, the mask is associated with the grid, but no I/O is generated. ``mask`` is a two-dimensional, Boolean-valued Numpy array, having the same shape as the grid."
+    "Horizontal-Grid", "``subGridRegion(latInterval, lonInterval)``", "Create a new grid corresponding to the coordinate region defined by ``latInterval, lonInterv al.``"
+    ,,"``latInterval`` and ``lonInterval`` are the coordinate intervals for latitude and longitude, respectively."
+    ,,"Each interval is a tuple having one of the forms:"
+    ,,"*  ``(x,y)``"
+    ,,"*  ``(x,y,indicator)``"
+    ,,"*  ``(x,y,indicator,cycle)``"
+    ,,"*  ``None``"
+    ,,"where ``x`` and ``y`` are coordinates indicating the interval ``[x,y)``, and:"
+    ,,"``indicator`` is a two-character string, where the first character is 'c' if the interval is closed on the left, 'o' if open, and the second character has the same meaning for the right-hand point.  (Default: 'co')."
+    ,,"If ``cycle`` is specified, the axis is treated as circular with the given cycle value.  By default, if ``grid.isCircular()`` is true, the axis is treated as circular with a default value of 360.0."
+   ,,"An interval of ``None`` returns the full index interval of the axis."
+   ,,"If a mask is defined, the subgrid also has a mask corresponding to the index ranges.Note: The result grid is not associated with any file or dataset."
+    "Transient-CurveGrid", "``toCurveGrid(gridid=None)``", "Convert to a curvilinear grid. If the grid is already curvilinear, a copy of the grid object is returned. ``gridid`` is the string identifier of the resulting curvilinear grid object.  If unspecified, the grid ID is copied." 
+    ,,"**Note:** This method does not apply to generic grids.  Transient-GenericGrid ``toGenericGrid(gridid=None)`` Convert to a generic grid. If the grid is already generic, a copy of the grid is returned.  ``gridid`` is the string identifier of the resulting curvilinear grid object. If unspecified, the grid ID is copied."
 
 
-Table 2.32 RectGrid Methods, additional to HorizontalGrid
-   Methods
+Table 2.32 RectGrid Methods, additional to HorizontalGrid Methods
 
-+--------------------------+--------------------------+--------------------------+
-| Type                     | Method                   | Description              |
-+==========================+==========================+==========================+
-| String                   | ``getOrder()``           | Get the grid ordering,   |
-|                          |                          | either "yx" if latitude  |
-|                          |                          | is the first axis, or    |
-|                          |                          | "xy" if longitude is the |
-|                          |                          | first axis.              |
-+--------------------------+--------------------------+--------------------------+
-| String                   | ``getType()``            | Get the grid type,       |
-|                          |                          | either "gaussian",       |
-|                          |                          | "uniform", "equalarea",  |
-|                          |                          | or "generic".            |
-+--------------------------+--------------------------+--------------------------+
-| (Array,Array)            | ``getWeights()``         | Get the normalized area  |
-|                          |                          | weight arrays, as a      |
-|                          |                          | tuple                    |
-|                          |                          | ``(latWeights,       lon |
-|                          |                          | Weights)``.              |
-|                          |                          | It is assumed that the   |
-|                          |                          | latitude and longitude   |
-|                          |                          | axes are defined in      |
-|                          |                          | degrees.                 |
-|                          |                          |                          |
-|                          |                          | The latitude weights are |
-|                          |                          | defined as:              |
-|                          |                          |                          |
-|                          |                          | ``latWeights[i] = 0.5 *  |
-|                          |                          | abs(sin(latBounds[i+1])  |
-|                          |                          | -       sin(latBounds[i] |
-|                          |                          | ))``                     |
-|                          |                          |                          |
-|                          |                          | The longitude weights    |
-|                          |                          | are defined as:          |
-|                          |                          |                          |
-|                          |                          | ``lonWeights[i] = abs(lo |
-|                          |                          | nBounds[i+1] - lonBounds |
-|                          |                          | [i])/360.0``             |
-|                          |                          |                          |
-|                          |                          | For a global grid, the   |
-|                          |                          | weight arrays are        |
-|                          |                          | normalized such that the |
-|                          |                          | sum of the weights is    |
-|                          |                          | 1.0                      |
-|                          |                          |                          |
-|                          |                          | **Example:**             |
-|                          |                          |                          |
-|                          |                          | Generate the 2-D weights |
-|                          |                          | array, such that         |
-|                          |                          | ``weights[i.j]`` is the  |
-|                          |                          | fractional area of grid  |
-|                          |                          | zone ``[i,j]``.          |
-|                          |                          |                          |
-|                          |                          | ::                       |
-|                          |                          |                          |
-|                          |                          |     from cdms import MV  |
-|                          |                          |     latwts, lonwts = gri |
-|                          |                          | d.getWeights()           |
-|                          |                          |     weights = MV.outerpr |
-|                          |                          | oduct(latwts, lonwts)    |
-|                          |                          |                          |
-|                          |                          | Also see the function    |
-|                          |                          | ``area_weights`` in      |
-|                          |                          | module                   |
-|                          |                          | ``pcmdi.weighting``.     |
-+--------------------------+--------------------------+--------------------------+
-| None                     | ``setType(gridtype)``    | Set the grid type.       |
-|                          |                          | ``gridtype`` is one of   |
-|                          |                          | "gaussian", "uniform",   |
-|                          |                          | "equalarea", or          |
-|                          |                          | "generic".               |
-+--------------------------+--------------------------+--------------------------+
-| RectGrid                 | ``subGrid((latStart,latS | Create a new grid, with  |
-|                          | top),(lonStart,lonStop)) | latitude index range     |
-|                          | ``                       | [latStart : latStop] and |
-|                          |                          | longitude index range    |
-|                          |                          | [lonStart : lonStop].    |
-|                          |                          | Either index range can   |
-|                          |                          | also be specified as     |
-|                          |                          | None, indicating that    |
-|                          |                          | the entire range of the  |
-|                          |                          | latitude or longitude is |
-|                          |                          | used.                    |
-|                          |                          |                          |
-|                          |                          | **Example:**             |
-|                          |                          |                          |
-|                          |                          | This creates newgrid     |
-|                          |                          | corresponding to all     |
-|                          |                          | latitudes and index      |
-|                          |                          | range [lonStart:lonStop] |
-|                          |                          | of oldgrid.              |
-|                          |                          |                          |
-|                          |                          | ``newgrid = oldgrid.subG |
-|                          |                          | rid(None, (lonStart, lon |
-|                          |                          | Stop))``                 |
-|                          |                          |                          |
-|                          |                          | If a mask is defined,    |
-|                          |                          | the subgrid also has a   |
-|                          |                          | mask corresponding to    |
-|                          |                          | the index ranges.        |
-|                          |                          |                          |
-|                          |                          | **Note:** The result     |
-|                          |                          | grid is not associated   |
-|                          |                          | with any file or         |
-|                          |                          | dataset.                 |
-+--------------------------+--------------------------+--------------------------+
-| RectGrid                 | ``transpose()``          | Create a new grid, with  |
-|                          |                          | axis order reversed. The |
-|                          |                          | grid mask is also        |
-|                          |                          | transposed.              |
-|                          |                          |                          |
-|                          |                          | **Note:** The result     |
-|                          |                          | grid is not associated   |
-|                          |                          | with any file or         |
-|                          |                          | dataset.                 |
-+--------------------------+--------------------------+--------------------------+
+.. csv-table::  RectGrid Methods, additional to HorizontalGrid Methods
+   :header:  "Type", "Method", "Description"
+   :widths:  30, 30, 80
+
+    "String", "``getOrder()``",  Get the grid ordering, either "yx" if latitude is the first axis, or "xy" if longitude is the first axis.  String ``getType()`` Get the grid type, either "gaussian", "uniform", "equalarea", or "generic".  (Array,Array) ``getWeights()`` Get the normalized area weight arrays, as a tuple ``(latWeights, lonWeights)``.  It is assumed that the latitude and longitude axes are defined in degrees."
+    ,,"The latitude weights are defined as:"
+    ,,"``latWeights[i] = 0.5 * abs(sin(latBounds[i+1]) - sin(latBounds[i]))``"
+    ,," The longitude weights are defined as:
+    ,,"``lonWeights[i] = abs(lonBounds[i+1] - lonBounds [i])/360.0``"
+    ,,"For a global grid, the weight arrays are normalized such that the sum of the weights is 1.0"
+    ,,"**Example:**"
+    ,,"Generate the 2-D weights array, such that ``weights[i.j]`` is the fractional area of grid zone ``[i,j]``."
+    ,,"* from cdms import MV"
+    ,,"* latwts, lonwts = gri d.getWeights()"
+    ,,"* weights = MV.outerproduct(latwts, lonwts)"
+    ,,"Also see the function ``area_weights`` in module ``pcmdi.weighting``."
+    ,,""
+    "None", "``setType(gridtype)``", "Set the grid type.  ``gridtype`` is one of "gaussian", "uniform", "equalarea", or "generic"."
+    "RectGrid", "``subGrid((latStart,latStop),(lonStart,lonStop))``", "Create a new grid, with latitude index range `` [latStart : latStop] and longitude index range [lonStart : lonStop].  Either index range can also be specified as None, indicating that the entire range of the latitude or longitude is used."
+    ,,"**Example:**"
+    ,,"This creates newgrid corresponding to all latitudes and index range [lonStart:lonStop] of oldgrid."
+    ,,"``newgrid = oldgrid.subGrid(None, (lonStart, lon Stop))``"
+    ,,"If a mask is defined, the subgrid also has a mask corresponding to the index ranges."
+    ,,"**Note:** The result grid is not associated with any file or dataset."
+    "RectGrid", "``transpose()``", "Create a new grid, with axis order reversed. The grid mask is also transposed."
+    ,,"**Note:** The result grid is not associated with any file or dataset."
 
 
 Variable
@@ -1719,644 +1234,125 @@ variable.
 
 Table 2.33 Variable Internal Attributes
 
-+-----------------------+----------------------+-----------------------------------------------------------------------------------------------------------------------------+
-| Type                  | Name                 | Definition                                                                                                                  |
-+=======================+======================+=============================================================================================================================+
-| Dictionary            | ``attributes``       | External attribute dictionary.                                                                                              |
-+-----------------------+----------------------+-----------------------------------------------------------------------------------------------------------------------------+
-| String                | ``id``               | Variable identifier.                                                                                                        |
-+-----------------------+----------------------+-----------------------------------------------------------------------------------------------------------------------------+
-| String                | ``name\_in\_file``   | The name of the variable in the file or files which represent the dataset. If different from id, the variable is aliased.   |
-+-----------------------+----------------------+-----------------------------------------------------------------------------------------------------------------------------+
-| Dataset or CdmsFile   | ``parent``           | The dataset or file which contains the variable.                                                                            |
-+-----------------------+----------------------+-----------------------------------------------------------------------------------------------------------------------------+
-| Tuple                 | ``shape``            | The length of each axis of the variable                                                                                     |
-+-----------------------+----------------------+-----------------------------------------------------------------------------------------------------------------------------+
+.. csv-table::  Variable Internal Attributes
+   :header:  "Type", "Name", "Definition"
+   :widths:  30, 30, 80
+
+    "Dictionary", "``attributes``", "External attribute dictionary."
+    "String", "``id``", "Variable identifier."
+    "String", "``name_in_file``", "The name of the variable in the file or files which represent the dataset. If different from id, the variable is aliased."
+    "Dataset or CdmsFile", "``parent``", "The dataset or file which contains the variable."
+    "Tuple", "``shape``", "The length of each axis of the variable"
 
 
 Table 2.34 Variable Constructors
 
-+--------------------------------------+--------------------------------------+
-| Constructor                          | Description                          |
-+======================================+======================================+
-| ``Dataset.createVariable(String id,  | Create a Variable in a Dataset. This |
-| String datatype, List axes)``        | function is not yet implemented.     |
-+--------------------------------------+--------------------------------------+
-| ``CdmsFile.createVariable(String id, | Create a Variable in a CdmsFile.     |
-|  String datatype, List       axesOr- | ``id`` is the name of the variable.  |
-| Grids)``                             | ``datatype`` is the MV2 or Numpy    |
-|                                      | typecode, for example, MV2.Float.     |
-|                                      | ``axesOrGrids`` is a list of Axis    |
-|                                      | and/or Grid objects, on which the    |
-|                                      | variable is defined. Specifying a    |
-|                                      | rectilinear grid is equivalent to    |
-|                                      | listing the grid latitude and        |
-|                                      | longitude axes, in the order defined |
-|                                      | for the grid. \*\*Note:\*\* this     |
-|                                      | argument can either be a list or a   |
-|                                      | tuple. If the tuple form is used,    |
-|                                      | and there is only one element, it    |
-|                                      | must have a following comma, e.g.:   |
-|                                      | ``(axisobj,)``.                      |
-+--------------------------------------+--------------------------------------+
-| ::                                   | Create a transient variable, not     |
-|                                      | associated with a file or dataset.   |
-|     cdms.createVariable(array, typec | ``array`` is the data values: a      |
-| ode=None, copy=0, savespace=0,mask=N | Variable, masked array, or Numpy   |
-| one, fill_value=None, grid=None, axe | array. ``typecode`` is the MV2        |
-| s=None,attributes=None, id=None)     | typecode of the array. Defaults to   |
-|                                      | the typecode of array. ``copy`` is   |
-|                                      | an integer flag: if 1, the variable  |
-|                                      | is created with a copy of the array, |
-|                                      | if 0 the variable data is shared     |
-|                                      | with array. ``savespace`` is an      |
-|                                      | integer flag: if set to 1, internal  |
-|                                      | Numpy operations will attempt to   |
-|                                      | avoid silent upcasting. ``mask`` is  |
-|                                      | an array of integers with value 0 or |
-|                                      | 1, having the same shape as array.   |
-|                                      | array elements with a corresponding  |
-|                                      | mask value of 1 are considered       |
-|                                      | invalid, and are not used for        |
-|                                      | subsequent Numpy operations. The   |
-|                                      | default mask is obtained from array  |
-|                                      | if present, otherwise is None.       |
-|                                      | ``fill_value`` is the missing value  |
-|                                      | flag. The default is obtained from   |
-|                                      | array if possible, otherwise is set  |
-|                                      | to 1.0e20 for floating point         |
-|                                      | variables, 0 for integer-valued      |
-|                                      | variables. ``grid`` is a rectilinear |
-|                                      | grid object. ``axes`` is a tuple of  |
-|                                      | axis objects. By default the axes    |
-|                                      | are obtained from array if present.  |
-|                                      | Otherwise for a dimension of length  |
-|                                      | n, the default axis has values [0.,  |
-|                                      | 1., ..., double(n)]. ``attributes``  |
-|                                      | is a dictionary of attribute values. |
-|                                      | The dictionary keys must be strings. |
-|                                      | By default the dictionary is         |
-|                                      | obtained from array if present,      |
-|                                      | otherwise is empty. ``id`` is the    |
-|                                      | string identifier of the variable.   |
-|                                      | By default the id is obtained from   |
-|                                      | array if possible, otherwise is set  |
-|                                      | to 'variable\_n' for some integer n. |
-+--------------------------------------+--------------------------------------+
+.. csv-table::  Variable Constructgors
+   :header:  "Constructor", "Description"
+   :widths:  30, 80
+
+    "``Dataset.createVariable(String id, String datatype, List axes)``", "Create a Variable in a Dataset. This function is not yet implemented."
+    "``CdmsFile.createVariable(String id, String datatype, List axes or Grids)", "Create a Variable in a CdmsFile."
+    ,,"``id`` is the name of the variable.  ``datatype`` is the MV2 or Numpy | typecode, for example, MV2.Float.  ``axesOrGrids`` is a list of Axis and/or Grid objects, on which the variable is defined. Specifying a rectilinear grid is equivalent to listing the grid latitude and longitude axes, in the order defined for the grid. \*\*Note:\*\* this argument can either be a list or a tuple. If the tuple form is used, and there is only one element, it must have a following comma, e.g.: ``(axisobj,)``."
+
+    "``cdms.createVariable(array, typecode=None, copy=0, savespace=0,mask=None, fill_value=None, grid=None, axes=None,attributes=None, id=None) ``", " Create a transient variable, not associated with a file or dataset.  ``array`` is the data values: a Variable, masked array, or Numpy array. ``typecode`` is the MV2 typecode of the array. Defaults to the typecode of array. ``copy`` is an integer flag: if 1, the variable is created with a copy of the array, if 0 the variable data is shared with array. ``savespace`` is an integer flag: if set to 1, internal Numpy operations will attempt to avoid silent upcasting. ``mask`` is an array of integers with value 0 or 1, having the same shape as array.  array elements with a corresponding mask value of 1 are considered invalid, and are not used for subsequent Numpy operations. The default mask is obtained from array if present, otherwise is None.  ``fill_value`` is the missing value flag. The default is obtained from array if possible, otherwise is set to 1.0e20 for floating point variables, 0 for integer-valued variables. ``grid`` is a rectilinear grid object. ``axes`` is a tuple of axis objects. By default the axes are obtained from array if present.  Otherwise for a dimension of length n, the default axis has values [0., 1., ..., double(n)]. ``attributes`` is a dictionary of attribute values.  The dictionary keys must be strings.  By default the dictionary is obtained from array if present, otherwise is empty. ``id`` is the string identifier of the variable.  By default the id is obtained from array if possible, otherwise is set to 'variable\_n' for some integer n."
 
 
 
 Table 2.35 Variable Methods
 
-+--------------------------+--------------------------+--------------------------+
-| Type                     | Method                   | Definition               |
-+==========================+==========================+==========================+
-| Variable                 | ``tvar = var[ i:j, m:n]` | Read a slice of data     |
-|                          | `                        | from the file or         |
-|                          |                          | dataset, resulting in a  |
-|                          |                          | transient variable.      |
-|                          |                          | Singleton dimensions are |
-|                          |                          | 'squeezed' out. Data is  |
-|                          |                          | returned in the physical |
-|                          |                          | ordering defined in the  |
-|                          |                          | dataset. The forms of    |
-|                          |                          | the slice operator are   |
-|                          |                          | listed in Table 2.36 on  |
-|                          |                          | page 102.                |
-+--------------------------+--------------------------+--------------------------+
-| None                     | ``var[ i:j, m:n] = array | Write a slice of data to |
-|                          | ``                       | the external dataset.    |
-|                          |                          | The forms of the slice   |
-|                          |                          | operator are listed in   |
-|                          |                          | Table 2.21 on page 32.   |
-|                          |                          | (Variables in CdmsFiles  |
-|                          |                          | only)                    |
-+--------------------------+--------------------------+--------------------------+
-| Variable                 | ``tvar = var(selector)`` | Calling a variable as a  |
-|                          |                          | function reads the       |
-|                          |                          | region of data defined   |
-|                          |                          | by the selector. The     |
-|                          |                          | result is a transient    |
-|                          |                          | variable, unless raw=1   |
-|                          |                          | keyword is specified.    |
-|                          |                          | See "Selectors" on page  |
-|                          |                          | 103.                     |
-+--------------------------+--------------------------+--------------------------+
-| None                     | ``assignValue(Array ar)` | Write the entire data    |
-|                          | `                        | array. Equivalent to     |
-|                          |                          | ``var[:] = ar``.         |
-|                          |                          | (Variables in CdmsFiles  |
-|                          |                          | only).                   |
-+--------------------------+--------------------------+--------------------------+
-| Variable                 | ``astype(typecode)``     | Cast the variable to a   |
-|                          |                          | new datatype. Typecodes  |
-|                          |                          | are as for MV, MV2, and   |
-|                          |                          | Numpy modules.         |
-+--------------------------+--------------------------+--------------------------+
-| Variable                 | ``clone(copyData=1)``    | Return a copy of a       |
-|                          |                          | transient variable.      |
-|                          |                          |                          |
-|                          |                          | If copyData is 1 (the    |
-|                          |                          | default) the variable    |
-|                          |                          | data is copied as well.  |
-|                          |                          | If copyData is 0, the    |
-|                          |                          | result transient         |
-|                          |                          | variable shares the      |
-|                          |                          | original transient       |
-|                          |                          | variables data array.    |
-+--------------------------+--------------------------+--------------------------+
-| Transient Variable       | ::                       | Return a lat/level       |
-|                          |                          | vertical cross-section   |
-|                          |     crossSectionRegrid(n | regridded to a new set   |
-|                          | ewLevel, newLatitude, me | of latitudes newLatitude |
-|                          | thod="log", missing=None | and levels newLevel. The |
-|                          | , order=None)            | variable should be a     |
-|                          |                          | function of latitude,    |
-|                          |                          | level, and (optionally)  |
-|                          |                          | time.                    |
-|                          |                          |                          |
-|                          |                          | ``newLevel`` is an axis  |
-|                          |                          | of the result pressure   |
-|                          |                          | levels.                  |
-|                          |                          |                          |
-|                          |                          | ``newLatitude`` is an    |
-|                          |                          | axis of the result       |
-|                          |                          | latitudes.               |
-|                          |                          |                          |
-|                          |                          | ``method`` is optional,  |
-|                          |                          | either "log" to          |
-|                          |                          | interpolate in the log   |
-|                          |                          | of pressure (default),   |
-|                          |                          | or "linear" for linear   |
-|                          |                          | interpolation.           |
-|                          |                          |                          |
-|                          |                          | ``missing`` is a missing |
-|                          |                          | data value. The default  |
-|                          |                          | is ``var.getMissing()``  |
-|                          |                          |                          |
-|                          |                          | ``order`` is an order    |
-|                          |                          | string such as "tzy" or  |
-|                          |                          | "zy". The default is     |
-|                          |                          | ``var.getOrder()``.      |
-|                          |                          |                          |
-|                          |                          | *See also:* ``regrid``,  |
-|                          |                          | ``pressureRegrid``.      |
-+--------------------------+--------------------------+--------------------------+
-| Axis                     | ``getAxis(n)``           | Get the n-th axis.       |
-|                          |                          |                          |
-|                          |                          | ``n`` is an integer.     |
-+--------------------------+--------------------------+--------------------------+
-| List                     | ``getAxisIds()``         | Get a list of axis       |
-|                          |                          | identifiers.             |
-+--------------------------+--------------------------+--------------------------+
-| Integer                  | ``getAxisIndex(axis_spec | Return the index of the  |
-|                          | )``                      | axis specificed by       |
-|                          |                          | axis\_spec. Return -1 if |
-|                          |                          | no match.                |
-|                          |                          |                          |
-|                          |                          | ``axis_spec`` is a       |
-|                          |                          | specification as defined |
-|                          |                          | for getAxisList          |
-+--------------------------+--------------------------+--------------------------+
-| List                     | ``getAxisList(axes=None, | Get an ordered list of   |
-|                          |  omit=None, order=None)` | axis objects in the      |
-|                          | `                        | domain of the variable.  |
-|                          |                          |                          |
-|                          |                          | If ``axes`` is not       |
-|                          |                          | ``None``, include only   |
-|                          |                          | certain axes. Otherwise  |
-|                          |                          | axes is a list of        |
-|                          |                          | specifications as        |
-|                          |                          | described below. Axes    |
-|                          |                          | are returned in the      |
-|                          |                          | order specified unless   |
-|                          |                          | the order keyword is     |
-|                          |                          | given.                   |
-|                          |                          |                          |
-|                          |                          | If ``omit`` is not       |
-|                          |                          | ``None``, omit those     |
-|                          |                          | specified by an integer  |
-|                          |                          | dimension number.        |
-|                          |                          | Otherwise omit is a list |
-|                          |                          | of specifications as     |
-|                          |                          | described below.         |
-|                          |                          |                          |
-|                          |                          | ``order`` is an optional |
-|                          |                          | string determining the   |
-|                          |                          | output order.            |
-|                          |                          |                          |
-|                          |                          | Specifications for the   |
-|                          |                          | axes or omit keywords    |
-|                          |                          | are a list, each element |
-|                          |                          | having one of the        |
-|                          |                          | following forms:         |
-|                          |                          |                          |
-|                          |                          | -  an integer dimension  |
-|                          |                          |    index, starting at 0. |
-|                          |                          | -  a string representing |
-|                          |                          |    an axis id or one of  |
-|                          |                          |    the strings 'time',   |
-|                          |                          |    'latitude', 'lat',    |
-|                          |                          |    'longitude', 'lon',   |
-|                          |                          |    'lev' or 'level'.     |
-|                          |                          | -  a function that takes |
-|                          |                          |    an axis as an         |
-|                          |                          |    argument and returns  |
-|                          |                          |    a value. If the value |
-|                          |                          |    returned is true, the |
-|                          |                          |    axis matches.         |
-|                          |                          | -  an axis object; will  |
-|                          |                          |    match if it is the    |
-|                          |                          |    same object as axis.  |
-|                          |                          |                          |
-|                          |                          | ``order`` can be a       |
-|                          |                          | string containing the    |
-|                          |                          | characters t,x,y,z, or   |
-|                          |                          | -. If a dash ('-') is    |
-|                          |                          | given, any elements of   |
-|                          |                          | the result not chosen    |
-|                          |                          | otherwise are filled in  |
-|                          |                          | from left to right with  |
-|                          |                          | remaining candidates.    |
-+--------------------------+--------------------------+--------------------------+
-| List                     | ``getAxisListIndex(axes= | Return a list of indices |
-|                          | None, omit=None, order=N | of axis objects.         |
-|                          | one)``                   | Arguments are as for     |
-|                          |                          | getAxisList.             |
-+--------------------------+--------------------------+--------------------------+
-| List                     | ``getDomain()``          | Get the domain. Each     |
-|                          |                          | element of the list is   |
-|                          |                          | itself a tuple of the    |
-|                          |                          | form                     |
-|                          |                          | ``(axis,start,length,tru |
-|                          |                          | e_length)``              |
-|                          |                          | where axis is an axis    |
-|                          |                          | object, start is the     |
-|                          |                          | start index of the       |
-|                          |                          | domain relative to the   |
-|                          |                          | axis object, length is   |
-|                          |                          | the length of the axis,  |
-|                          |                          | and true\_length is the  |
-|                          |                          | actual number of         |
-|                          |                          | (defined) points in the  |
-|                          |                          | domain. *See also:*      |
-|                          |                          | ``getAxisList``.         |
-+--------------------------+--------------------------+--------------------------+
-| Horizontal-Grid          | ``getGrid()``            | Return the associated    |
-|                          |                          | grid, or ``None`` if the |
-|                          |                          | variable is not gridded. |
-+--------------------------+--------------------------+--------------------------+
-| Axis                     | ``getLatitude()``        | Get the latitude axis,   |
-|                          |                          | or ``None`` if not       |
-|                          |                          | found.                   |
-+--------------------------+--------------------------+--------------------------+
-| Axis                     | ``getLevel()``           | Get the vertical level   |
-|                          |                          | axis, or ``None`` if not |
-|                          |                          | found.                   |
-+--------------------------+--------------------------+--------------------------+
-| Axis                     | ``getLongitude()``       | Get the longitude axis,  |
-|                          |                          | or ``None`` if not       |
-|                          |                          | found.                   |
-+--------------------------+--------------------------+--------------------------+
-| Various                  | ``getMissing()``         | Get the missing data     |
-|                          |                          | value, or ``None`` if    |
-|                          |                          | not found.               |
-+--------------------------+--------------------------+--------------------------+
-| String                   | ``getOrder()``           | Get the order string of  |
-|                          |                          | a spatio-temporal        |
-|                          |                          | variable. The order      |
-|                          |                          | string specifies the     |
-|                          |                          | physical ordering of the |
-|                          |                          | data. It is a string of  |
-|                          |                          | characters with length   |
-|                          |                          | equal to the rank of the |
-|                          |                          | variable, indicating the |
-|                          |                          | order of the variable's  |
-|                          |                          | time, level, latitude,   |
-|                          |                          | and/or longitude axes.   |
-|                          |                          | Each character is one    |
-|                          |                          | of:                      |
-|                          |                          |                          |
-|                          |                          | -  't': time             |
-|                          |                          | -  'z': vertical level   |
-|                          |                          | -  'y': latitude         |
-|                          |                          | -  'x': longitude        |
-|                          |                          | -  '-': the axis is not  |
-|                          |                          |    spatio-temporal.      |
-|                          |                          |                          |
-|                          |                          | **Example:**             |
-|                          |                          |                          |
-|                          |                          | A variable with ordering |
-|                          |                          | "tzyx" is 4-dimensional, |
-|                          |                          | where the ordering of    |
-|                          |                          | axes is (time, level,    |
-|                          |                          | latitude, longitude).    |
-|                          |                          |                          |
-|                          |                          | **Note:** The order      |
-|                          |                          | string is of the form    |
-|                          |                          | required for the order   |
-|                          |                          | argument of a regridder  |
-|                          |                          | function.                |
-+--------------------------+--------------------------+--------------------------+
-| List                     | ``getPaths(*intervals)`` | Get the file paths       |
-|                          |                          | associated with the      |
-|                          |                          | index region specified   |
-|                          |                          | by intervals.            |
-|                          |                          |                          |
-|                          |                          | ``intervals`` is a list  |
-|                          |                          | of scalars, 2-tuples     |
-|                          |                          | representing [i,j),      |
-|                          |                          | slices, and/or Ellipses. |
-|                          |                          | If no ``argument(s)``    |
-|                          |                          | are present, all file    |
-|                          |                          | paths associated with    |
-|                          |                          | the variable are         |
-|                          |                          | returned.                |
-|                          |                          |                          |
-|                          |                          | Returns a list of tuples |
-|                          |                          | of the form              |
-|                          |                          | (path,slicetuple), where |
-|                          |                          | path is the path of a    |
-|                          |                          | file, and slicetuple is  |
-|                          |                          | itself a tuple of        |
-|                          |                          | slices, of the same      |
-|                          |                          | length as the rank of    |
-|                          |                          | the variable,            |
-|                          |                          | representing the portion |
-|                          |                          | of the variable in the   |
-|                          |                          | file corresponding to    |
-|                          |                          | intervals.               |
-|                          |                          |                          |
-|                          |                          | **Note:** This function  |
-|                          |                          | is not defined for       |
-|                          |                          | transient variables.     |
-+--------------------------+--------------------------+--------------------------+
-| Axis                     | ``getTime()``            | Get the time axis, or    |
-|                          |                          | ``None`` if not found.   |
-+--------------------------+--------------------------+--------------------------+
-| Integer                  | ``len(var)``             | The length of the first  |
-|                          |                          | dimension of the         |
-|                          |                          | variable. If the         |
-|                          |                          | variable is              |
-|                          |                          | zero-dimensional         |
-|                          |                          | (scalar), a length of 0  |
-|                          |                          | is returned.             |
-|                          |                          |                          |
-|                          |                          | **Note:** ``size()``     |
-|                          |                          | returns the total number |
-|                          |                          | of elements.             |
-+--------------------------+--------------------------+--------------------------+
-| Transient Variable       | ``pressureRegrid (newLev | Return the variable      |
-|                          | el, method="log", missin | regridded to a new set   |
-|                          | g=None,       order=None | of pressure levels       |
-|                          | )``                      | newLevel. The variable   |
-|                          |                          | must be a function of    |
-|                          |                          | latitude, longitude,     |
-|                          |                          | pressure level, and      |
-|                          |                          | (optionally) time.       |
-|                          |                          |                          |
-|                          |                          | ``newLevel`` is an axis  |
-|                          |                          | of the result pressure   |
-|                          |                          | levels.                  |
-|                          |                          |                          |
-|                          |                          | ``method`` is optional,  |
-|                          |                          | either "log" to          |
-|                          |                          | interpolate in the log   |
-|                          |                          | of pressure (default),   |
-|                          |                          | or "linear" for linear   |
-|                          |                          | interpolation.           |
-|                          |                          |                          |
-|                          |                          | ``missing`` is a missing |
-|                          |                          | data value. The default  |
-|                          |                          | is ``var.getMissing()``  |
-|                          |                          |                          |
-|                          |                          | ``order`` is an order    |
-|                          |                          | string such as "tzyx" or |
-|                          |                          | "zyx". The default is    |
-|                          |                          | ``var.getOrder()``       |
-|                          |                          |                          |
-|                          |                          | See also: ``regrid``,    |
-|                          |                          | ``crossSectionRegrid``.  |
-+--------------------------+--------------------------+--------------------------+
-| Integer                  | ``rank()``               | The number of dimensions |
-|                          |                          | of the variable.         |
-+--------------------------+--------------------------+--------------------------+
-| Transient                | ::                       | Return the variable      |
-|                          |                          | regridded to the         |
-|                          |     regrid (togrid, miss | horizontal grid togrid.  |
-|                          | ing=None, order=None, Va |                          |
-|                          | riable mask=None)        | ``missing`` is a Float   |
-|                          |                          | specifying the missing   |
-|                          |                          | data value. The default  |
-|                          |                          | is 1.0e20.               |
-|                          |                          |                          |
-|                          |                          | ``order`` is a string    |
-|                          |                          | indicating the order of  |
-|                          |                          | dimensions of the array. |
-|                          |                          | It has the form returned |
-|                          |                          | from                     |
-|                          |                          | ``variable.getOrder()``. |
-|                          |                          | For example, the string  |
-|                          |                          | "tzyx" indicates that    |
-|                          |                          | the dimension order of   |
-|                          |                          | array is (time, level,   |
-|                          |                          | latitude, longitude). If |
-|                          |                          | unspecified, the         |
-|                          |                          | function assumes that    |
-|                          |                          | the last two dimensions  |
-|                          |                          | of array match the input |
-|                          |                          | grid.                    |
-|                          |                          |                          |
-|                          |                          | ``mask`` is a Numpy    |
-|                          |                          | array, of datatype       |
-|                          |                          | Integer or Float,        |
-|                          |                          | consisting of ones and   |
-|                          |                          | zeros. A value of 0 or   |
-|                          |                          | 0.0 indicates that the   |
-|                          |                          | corresponding data value |
-|                          |                          | is to be ignored for     |
-|                          |                          | purposes of regridding.  |
-|                          |                          | If mask is               |
-|                          |                          | two-dimensional of the   |
-|                          |                          | same shape as the input  |
-|                          |                          | grid, it overrides the   |
-|                          |                          | mask of the input grid.  |
-|                          |                          | If the mask has more     |
-|                          |                          | than two dimensions, it  |
-|                          |                          | must have the same shape |
-|                          |                          | as array. In this case,  |
-|                          |                          | the missing data value   |
-|                          |                          | is also ignored. Such an |
-|                          |                          | n-dimensional mask is    |
-|                          |                          | useful if the pattern of |
-|                          |                          | missing data varies with |
-|                          |                          | level (e.g., ocean data) |
-|                          |                          | or time. Note: If        |
-|                          |                          | neither missing or mask  |
-|                          |                          | is set, the default mask |
-|                          |                          | is obtained from the     |
-|                          |                          | mask of the array if     |
-|                          |                          | any.                     |
-|                          |                          |                          |
-|                          |                          | See also:                |
-|                          |                          | ``crossSectionRegrid``,  |
-|                          |                          | ``pressureRegrid``.      |
-+--------------------------+--------------------------+--------------------------+
-| ``None``                 | ``setAxis(n, axis)``     | Set the n-th axis        |
-|                          |                          | (0-origin index) of to a |
-|                          |                          | copy of axis.            |
-+--------------------------+--------------------------+--------------------------+
-| ``None``                 | ``setAxisList(axislist)` | Set all axes of the      |
-|                          | `                        | variable. axislist is a  |
-|                          |                          | list of axis objects.    |
-+--------------------------+--------------------------+--------------------------+
-| ``None``                 | ``setMissing(value)``    | Set the missing value.   |
-+--------------------------+--------------------------+--------------------------+
-| Integer                  | ``size()``               | Number of elements of    |
-|                          |                          | the variable.            |
-+--------------------------+--------------------------+--------------------------+
-| Variable                 | ::                       | Read a coordinate region |
-|                          |                          | of data, returning a     |
-|                          |     subRegion(*region, t | transient variable. A    |
-|                          | ime=None, level=None, la | region is a              |
-|                          | titude=None, longitude=N | hyperrectangle in        |
-|                          | one, squeeze=0, raw=0)   | coordinate space.        |
-|                          |                          |                          |
-|                          |                          | ``region`` is an         |
-|                          |                          | argument list, each item |
-|                          |                          | of which specifies an    |
-|                          |                          | interval of a coordinate |
-|                          |                          | axis. The intervals are  |
-|                          |                          | listed in the order of   |
-|                          |                          | the variable axes. If    |
-|                          |                          | trailing dimensions are  |
-|                          |                          | omitted, all values of   |
-|                          |                          | those dimensions are     |
-|                          |                          | retrieved. If an axis is |
-|                          |                          | circular                 |
-|                          |                          | (axis.isCircular() is    |
-|                          |                          | true) or cycle is        |
-|                          |                          | specified (see below),   |
-|                          |                          | then data will be read   |
-|                          |                          | with wraparound in that  |
-|                          |                          | dimension. Only one axis |
-|                          |                          | may be read with         |
-|                          |                          | wraparound. A coordinate |
-|                          |                          | interval has one of the  |
-|                          |                          | forms listed in Table    |
-|                          |                          | 2.37 on page 102. Also   |
-|                          |                          | see                      |
-|                          |                          | ``axis.mapIntervalExt``. |
-|                          |                          |                          |
-|                          |                          | The optional keyword     |
-|                          |                          | arguments ``time``,      |
-|                          |                          | ``level``, ``latitude``, |
-|                          |                          | and ``longitude`` may    |
-|                          |                          | also be used to specify  |
-|                          |                          | the dimension for which  |
-|                          |                          | the interval applies.    |
-|                          |                          | This is particularly     |
-|                          |                          | useful if the order of   |
-|                          |                          | dimensions is not known  |
-|                          |                          | in advance. An exception |
-|                          |                          | is raised if a keyword   |
-|                          |                          | argument conflicts with  |
-|                          |                          | a positional region      |
-|                          |                          | argument.                |
-|                          |                          |                          |
-|                          |                          | The optional keyword     |
-|                          |                          | argument ``squeeze``     |
-|                          |                          | determines whether or    |
-|                          |                          | not the shape of the     |
-|                          |                          | returned array contains  |
-|                          |                          | dimensions whose length  |
-|                          |                          | is 1; by default this    |
-|                          |                          | argument is 0, and such  |
-|                          |                          | dimensions are not       |
-|                          |                          | 'squeezed out'.          |
-|                          |                          |                          |
-|                          |                          | The optional keyword     |
-|                          |                          | argument ``raw``         |
-|                          |                          | specifies whether the    |
-|                          |                          | return object is a       |
-|                          |                          | variable or a masked     |
-|                          |                          | array. By default, a     |
-|                          |                          | transient variable is    |
-|                          |                          | returned, having the     |
-|                          |                          | axes and attributes      |
-|                          |                          | corresponding to2,3 the  |
-|                          |                          | region read. If raw=1,   |
-|                          |                          | an MV2 masked array is    |
-|                          |                          | returned, equivalent to  |
-|                          |                          | the transient variable   |
-|                          |                          | without the axis and     |
-|                          |                          | attribute information.   |
-+--------------------------+--------------------------+--------------------------+
-| Variable                 | ::                       | Read a slice of data,    |
-|                          |                          | returning a transient    |
-|                          |     subSlice(*specs, tim | variable. This is a      |
-|                          | e=None, level=None, lati | functional form of the   |
-|                          | tude=None, longitude=Non | slice operator [] with   |
-|                          | e, squeeze=0, raw=0)     | the squeeze option       |
-|                          |                          | turned off.              |
-|                          |                          |                          |
-|                          |                          | ``specs`` is an argument |
-|                          |                          | list, each element of    |
-|                          |                          | which specifies a slice  |
-|                          |                          | of the corresponding     |
-|                          |                          | dimension. There can be  |
-|                          |                          | zero or more positional  |
-|                          |                          | arguments, each of the   |
-|                          |                          | form:                    |
-|                          |                          |                          |
-|                          |                          | -  a single integer n,   |
-|                          |                          |    meaning               |
-|                          |                          |    ``slice(n, n+1)``     |
-|                          |                          | -  an instance of the    |
-|                          |                          |    slice class           |
-|                          |                          | -  a tuple, which will   |
-|                          |                          |    be used as arguments  |
-|                          |                          |    to create a slice     |
-|                          |                          | -  ':', which means a    |
-|                          |                          |    slice covering that   |
-|                          |                          |    entire dimension      |
-|                          |                          | -  Ellipsis (...), which |
-|                          |                          |    means to fill the     |
-|                          |                          |    slice list with ':'   |
-|                          |                          |    leaving only enough   |
-|                          |                          |    room at the end for   |
-|                          |                          |    the remaining         |
-|                          |                          |    positional arguments  |
-|                          |                          | -  a Python slice        |
-|                          |                          |    object, of the form   |
-|                          |                          |    ``slice(i,j,k)``      |
-|                          |                          |                          |
-|                          |                          | If there are fewer       |
-|                          |                          | slices than              |
-|                          |                          | corresponding            |
-|                          |                          | dimensions, all values   |
-|                          |                          | of the trailing          |
-|                          |                          | dimensions are read.     |
-|                          |                          |                          |
-|                          |                          | The keyword arguments    |
-|                          |                          | are defined as in        |
-|                          |                          | subRegion.               |
-|                          |                          |                          |
-|                          |                          | There must be no         |
-|                          |                          | conflict between the     |
-|                          |                          | positional arguments and |
-|                          |                          | the keywords.            |
-|                          |                          |                          |
-|                          |                          | In ``(a)-(c)`` and (f),  |
-|                          |                          | negative numbers are     |
-|                          |                          | treated as offsets from  |
-|                          |                          | the end of that          |
-|                          |                          | dimension, as in normal  |
-|                          |                          | Python indexing.         |
-+--------------------------+--------------------------+--------------------------+
-| String                   | ``typecode()``           | The Numpy datatype     |
-|                          |                          | identifier.              |
-+--------------------------+--------------------------+--------------------------+
+.. csv-table::  Variable Methods
+   :header:  "Type", "Method", "Definition"
+   :widths:  30, 30, 80
+
+    "Variable", "``tvar = var[ i:j, m:n]``","Read a slice of data from the file or dataset, resulting in a transient variable.  Singleton dimensions are 'squeezed' out. Data is returned in the physical ordering defined in the dataset. The forms of the slice operator are listed in Table 2.36"
+    "None", "``var[ i:j, m:n] = array``", "Write a slice of data to the external dataset.  The forms of the slice operator are listed in Table 2.21 on page 32.  (Variables in CdmsFiles only)"
+    "Variable", "``tvar = var(selector)``", "Calling a variable as a function reads the region of data defined by the selector. The result is a transient variable, unless raw=1 keyword is specified.  See "Selectors"."
+    "None", "``assignValue(Array ar)``", "Write the entire data array. Equivalent to ``var[:] = ar``.  (Variables in CdmsFiles only)."
+    "Variable", "``astype(typecode)``", "Cast the variable to a new datatype. Typecodes are as for MV, MV2, and Numpy modules."
+    "Variable", "``clone(copyData=1)``", "Return a copy of a transient variable."
+    ,,"If copyData is 1 (the default) the variable data is copied as well.  If copyData is 0, the result transient variable shares the original transient variables data array."
+    ,,"Transient Variable :: Return a lat/level vertical cross-section"
+    ,,"crossSectionRegrid(n regridded to a new set ewLevel, newLatitude, me of latitudes newLatitude thod="log", missing=None and levels newLevel. The , order=None) variable should be a function of latitude, level, and (optionally) time."
+    ,,"``newLevel`` is an axis of the result pressure levels."
+    ,,"``newLatitude`` is an axis of the result latitudes."
+    ,,"``method`` is optional, either "log" to interpolate in the log of pressure (default), or "linear" for linear interpolation."
+    ,,"``missing`` is a missing data value. The default is ``var.getMissing()``"
+    ,,"``order`` is an order string such as "tzy" or "zy". The default is ``var.getOrder()``."
+    ,,"*See also:* ``regrid``, ``pressureRegrid``."
+    ,,""
+    "Axis", "``getAxis(n)``", "Get the n-th axis."
+    ,,"``n`` is an integer."
+    "List", "``getAxisIds()``", "Get a list of axis identifiers."
+    "Integer", "``getAxisIndex(axis_spec)``", "Return the index of the axis specificed by axis\_spec. Return -1 if no match."
+    ,,"``axis_spec`` is a specification as defined for getAxisList"
+    "List", "``getAxisList(axes=None, omit=None, order=None)``", "Get an ordered list of axis objects in the domain of the variable."
+    ,,"If ``axes`` is not ``None``, include only certain axes. Otherwise axes is a list of specifications as described below. Axes are returned in the order specified unless the order keyword is given."
+    ,,"If ``omit`` is not ``None``, omit those specified by an integer dimension number.  Otherwise omit is a list of specifications as described below."  
+    ,,"``order`` is an optional string determining the output order."
+    ,,"Specifications for the axes or omit keywords are a list, each element having one of the following forms:"
+    ,,"*  an integer dimension index, starting at 0."
+    ,,"*  a string representing an axis id or one of the strings 'time', 'latitude', 'lat', 'longitude', 'lon', 'lev' or 'level'."
+    ,,"*  a function that takes an axis as an argument and returns a value. If the value returned is true, the axis matches."
+    ,,"*  an axis object; will match if it is the same object as axis."
+    ,,"``order`` can be a string containing the characters t,x,y,z, or * ."
+    ,,"If a dash ('-') is given, any elements of the result not chosen otherwise are filled in from left to right with remaining candidates."
+    "List", "``getAxisListIndex(axes=None, omit=None, order=None)``", "Return a list of indices of axis objects.  Arguments are as for getAxisList."
+    "List", "``getDomain()``", "Get the domain. Each element of the list is itself a tuple of the form ``(axis,start,length,tru e_length)`` where axis is an axis object, start is the start index of the domain relative to the axis object, length is the length of the axis, and true\_length is the actual number of (defined) points in the domain. *See also:* ``getAxisList``."
+    "Horizontal-Grid", "``getGrid()``", "Return the associated grid, or ``None`` if the variable is not gridded."
+    "Axis", "``getLatitude()``", "Get the latitude axis, or ``None`` if not found."
+    "Axis", "``getLevel()``", "Get the vertical level axis, or ``None`` if not found."
+    "Axis", "``getLongitude()``", "Get the longitude axis, or ``None`` if not found."
+    "Various", "``getMissing()``", "Get the missing data value, or ``None`` if not found."
+    ,, "String ``getOrder()`` Get the order string of a spatio-temporal variable. The order string specifies the physical ordering of the data. It is a string of characters with length equal to the rank of the variable, indicating the order of the variable's time, level, latitude, and/or longitude axes.  Each character is one of:"
+    ,, "*  't': time"
+    ,, "*  'z': vertical level"
+    ,, "*  'y': latitude"
+    ,, "*  'x': longitude"
+    ,, "*  '-': the axis is not spatio-temporal."
+    ,, ""
+    ,, "**Example:**"
+    ,, "A variable with ordering "tzyx" is 4-dimensional, where the ordering of axes is (time, level, latitude, longitude)."
+    ,, "**Note:** The order string is of the form required for the order argument of a regridder function."
+    "List", "``getPaths(*intervals)``", "Get the file paths associated with the index region specified by intervals."
+    ,,"``intervals`` is a list of scalars, 2-tuples representing [i,j), slices, and/or Ellipses.  If no ``argument(s)`` are present, all file paths associated with the variable are returned."
+    ,," Returns a list of tuples of the form (path,slicetuple), where path is the path of a file, and slicetuple is itself a tuple of slices, of the same length as the rank of the variable, representing the portion of the variable in the file corresponding to intervals."
+    ,, " **Note:** This function is not defined for transient variables."
+    "Axis", "``getTime()``", "Get the time axis, or ``None`` if not found."
+    "Integer", "``len(var)``", "The length of the first dimension of the variable. If the variable is zero-dimensional (scalar), a length of 0 is returned."
+    ,,"**Note:** ``size()`` returns the total number of elements."
+    "Transient Variable", "``pressureRegrid (newLevel, method="log", missin=None, order=None)``", Return the variable el, method="log", missin regridded to a new set g=None,       order=None of pressure levels)`` newLevel. The variable must be a function of latitude, longitude, pressure level, and (optionally) time."
+    ,, "``newLevel`` is an axis of the result pressure levels."
+    ,, "``method`` is optional, either "log" to interpolate in the log of pressure (default), or "linear" for linear interpolation."
+    ,, "``missing`` is a missing data value. The default is ``var.getMissing()``"
+    ,, "``order`` is an order string such as "tzyx" or "zyx". The default is ``var.getOrder()``"
+    ,, "See also: ``regrid``, ``crossSectionRegrid``."
+    ,, "Integer ``rank()`` The number of dimensions of the variable."
+    ,, "Transient :: Return the variable regridded to the regrid (togrid, miss horizontal grid togrid.  ing=None, order=None, Va riable mask=None) ``missing`` is a Float specifying the missing data value. The default is 1.0e20."
+    ,, "``order`` is a string indicating the order of dimensions of the array.  It has the form returned from ``variable.getOrder()``.  For example, the string "tzyx" indicates that the dimension order of array is (time, level, latitude, longitude). If unspecified, the function assumes that the last two dimensions of array match the input grid."
+    ,, "``mask`` is a Numpy array, of datatype Integer or Float, consisting of ones and zeros. A value of 0 or 0.0 indicates that the corresponding data value is to be ignored for purposes of regridding.  If mask is two-dimensional of the same shape as the input grid, it overrides the mask of the input grid.  If the mask has more than two dimensions, it must have the same shape as array. In this case, the missing data value is also ignored. Such an n-dimensional mask is useful if the pattern of missing data varies with level (e.g., ocean data) or time. Note: If neither missing or mask is set, the default mask is obtained from the mask of the array if any."
+    ,, "See also: ``crossSectionRegrid``, ``pressureRegrid``."
+    "``None``", "``setAxis(n, axis)``", "Set the n-th axis (0-origin index) of to a copy of axis."
+    "``None``", "``setAxisList(axislist)``", "Set all axes of the variable. axislist is a list of axis objects."
+    "``None``", "``setMissing(value)``", "Set the missing value.  Integer ``size()`` Number of elements of the variable."
+    "Variable", "subRegion(* region, time=None, level=None, latitude=None, longitude=None, squeeze=0, raw=0)", Read a coordinate region of data, returning a transient variable. A region is a hyperrectangle in coordinate space."
+    ,,"``region`` is an argument list, each item of which specifies an interval of a coordinate axis. The intervals are listed in the order of the variable axes. If trailing dimensions are omitted, all values of those dimensions are retrieved. If an axis is circular (axis.isCircular() is true) or cycle is specified (see below), then data will be read with wraparound in that dimension. Only one axis may be read with wraparound. A coordinate interval has one of the forms listed in Table 2.37 on page 102. Also see ``axis.mapIntervalExt``."
+    ,," The optional keyword arguments ``time``, ``level``, ``latitude``, and ``longitude`` may also be used to specify the dimension for which the interval applies.  This is particularly useful if the order of dimensions is not known in advance. An exception is raised if a keyword argument conflicts with a positional region argument."
+    ,,"The optional keyword argument ``squeeze`` determines whether or not the shape of the returned array contains dimensions whose length is 1; by default this argument is 0, and such dimensions are not 'squeezed out'."
+    ,,"The optional keyword argument ``raw`` specifies whether the return object is a variable or a masked array. By default, a transient variable is returned, having the axes and attributes corresponding to2,3 the region read. If raw=1, an MV2 masked array is returned, equivalent to the transient variable without the axis and attribute information."
+    "Variable", "``subSlice(*specs, time=None, level=None, latitude=None, longitude=None, squeeze=0, raw=0)``", "Read a slice of data, returning a transient variable. This is a functional form of the slice operator [] with the squeeze option turned off."
+    ,,"``specs`` is an argument list, each element of which specifies a slice of the corresponding dimension. There can be zero or more positional arguments, each of the form:"
+    ,,"*  a single integer n, meaning ``slice(n, n+1)``"
+    ,,"*  an instance of the slice class"
+    ,,"*  a tuple, which will be used as arguments to create a slice"
+    ,,"*  ':', which means a slice covering that entire dimension"
+    ,,"*  Ellipsis (...), which means to fill the slice list with ':' leaving only enough room at the end for the remaining positional arguments"
+    ,,"*  a Python slice object, of the form ``slice(i,j,k)``"
+    ,,"If there are fewer slices than corresponding dimensions, all values of the trailing dimensions are read."
+    ,,"The keyword arguments are defined as in subRegion."
+    ,,"There must be no conflict between the positional arguments and the keywords."
+    ,,"In ``(a)-(c)`` and (f), negative numbers are treated as offsets from the end of that dimension, as in normal Python indexing."
+    ,,"String ``typecode()`` The Numpy datatype identifier."
 
 Example Get a region of data.
 *****************************
@@ -2365,72 +1361,40 @@ Variable ta is a function of (time, latitude, longitude). Read data
 corresponding to all times, latitudes -45.0 up to but not
 including+45.0, longitudes 0.0 through and including longitude 180.0:
 
-.. raw:: html
-
-   <figure class="highlight">
-
 ::
 
     data = ta.subRegion(':', (-45.0,45.0,'co'), (0.0, 180.0))
 
-.. raw:: html
-
-   </figure>
-
 or equivalently:
-
-.. raw:: html
-
-   <figure class="highlight">
 
 ::
 
     data = ta.subRegion(latitude=(-45.0,45.0,'co'), longitude=(0.0,
     180.0)
 
-.. raw:: html
-
-   </figure>
-
 Read all data for March, 1980:
-
-.. raw:: html
-
-   <figure class="highlight">
 
 ::
 
     data = ta.subRegion(time=('1980-3','1980-4','co'))
 
-.. raw:: html
-
-   </figure>
-
 
 
 Table 2.36 Variable Slice Operators
 
-+-------------------+---------------------------------------------------------------+
-| Operator          | Description                                                   |
-+===================+===============================================================+
-| ``[i]``           | The ith element, zero-origin indexing.                        |
-+-------------------+---------------------------------------------------------------+
-| ``[i:j]``         | The ith element through, but not including, element j         |
-+-------------------+---------------------------------------------------------------+
-| ``[i:]``          | The ith element through the end                               |
-+-------------------+---------------------------------------------------------------+
-| ``[:j]``          | The beginning element through, but not including, element j   |
-+-------------------+---------------------------------------------------------------+
-| ``[:]``           | The entire array                                              |
-+-------------------+---------------------------------------------------------------+
-| ``[i:j:k]``       | Every kth element                                             |
-+-------------------+---------------------------------------------------------------+
-| ``[i:j, m:n]``    | Multidimensional slice                                        |
-+-------------------+---------------------------------------------------------------+
-| ``[i, ..., m]``   | (Ellipsis) All dimensions between those specified.            |
-+-------------------+---------------------------------------------------------------+
-| ``[-1]``          | Negative indices ‘wrap around’. -1 is the last element        |
-+-------------------+---------------------------------------------------------------+
+.. csv-table::  Variable Slice Operators
+   :header:  "Operator", "Description"
+   :widths:  30, 80
+
+    "``[i]``", "The ith element, zero-origin indexing."
+    "``[i:j]``", "The ith element through, but not including, element j"
+    "``[i:]``", "The ith element through the end"
+    "``[:j]``", "The beginning element through, but not including, element j"
+    "``[:]``", "The entire array"
+    "``[i:j:k]``", "Every kth element"
+    "``[i:j, m:n]``", "Multidimensional slice"
+    "``[i, ..., m]``", "(Ellipsis) All dimensions between those specified."
+    "``[-1]``", "Negative indices ‘wrap around’. -1 is the last element"
 
 
 

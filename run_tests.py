@@ -24,8 +24,7 @@ parser.add_argument("-H", "--html", action="store_true",
                     help="create and show html result page")
 parser.add_argument("-p", "--package", action="store_true",
                     help="package test results")
-parser.add_argument("-D", "--dropbox", action="store_true",
-                    help="upload packaged test results to dropbox (access token must be stored in the envirnoment variable DROPBOX_TOKEN)")
+
 parser.add_argument(
     "-c",
     "--coverage",
@@ -202,7 +201,7 @@ if args.verbosity > 0:
         print("Failed tests:")
         for f in failed:
             print("\t", f)
-if args.html or args.package or args.dropbox:
+if args.html or args.package:
     if not os.path.exists("tests_html"):
         os.makedirs("tests_html")
     os.chdir("tests_html")
@@ -274,7 +273,7 @@ else:
         os.chdir(root)
         shutil.rmtree(tmpdir)
 
-if args.package or args.dropbox:
+if args.package:
     import tarfile
     os.chdir(tmpdir)
     tnm = "results_%s_%s_%s.tar.bz2" % (os.uname()[0],os.uname()[1],time.strftime("%Y-%m-%d_%H:%M"))
@@ -285,12 +284,6 @@ if args.package or args.dropbox:
     t.close()
     if args.verbosity > 0:
         print("Packaged Result Info in:", tnm)
-if args.dropbox: 
-    import dropbox
-    dbx = dropbox.Dropbox(os.environ.get("DROPBOX_TOKEN",""))
-    f=open(tnm,"rb")
-    dbx.files_upload(f.read(),"/%s"%tnm)
-    f.close()
 
 if args.subdir and len(failed)!=0:
     print("Do not removing to clean temp directory: %s" % tmpdir)

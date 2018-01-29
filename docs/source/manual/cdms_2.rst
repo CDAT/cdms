@@ -1398,29 +1398,22 @@ Table 2.36 Variable Slice Operators
 
 
 
-Table 2.37 Index and Coordinate Intervals
+.. csv-table::  Index and Coordinate Intervals
+   :header:  "Interval Definition", "Example Interval Definition", "Example"
+   :widths:  30, 30, 80
 
-+------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------+
-| Interval Definition    | Example Interval Definition                                                                                                                                                                                                                                                                               | Example                                               |
-+========================+===========================================================================================================================================================================================================================================================================================================+=======================================================+
-| ``x``                  | single point, such that axis[i]==x In general x is a scalar. If the axis is a time axis, x may also be a cdtime relative time type, component time type, or string of the form ‘yyyy-mm-dd hh:mi:ss’ (where trailing fields of the string may be omitted.                                                 | ``180.0``                                             |
-|                        |                                                                                                                                                                                                                                                                                                           | ``cdtime.reltime(48,"hour s since 1980-1")``          |
-|                        |                                                                                                                                                                                                                                                                                                           | ``'1980-1-3'``                                        |
-+------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------+
-| ``(x,y)``              | indices i such that x ≤ axis[i] ≤ y                                                                                                                                                                                                                                                                       | ``(-180,180)``                                        |
-+------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------+
-| ``(x,y,'co')``         | ``x ≤ axis[i] < y``. The third item is defined as in mapInterval.                                                                                                                                                                                                                                         | ``(-90,90,'cc')``                                     |
-+------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------+
-| ``(x,y,'co',cycle)``   | ``x ≤ axis[i]< y``, with wraparound                                                                                                                                                                                                                                                                       | ``( 180, 180, 'co', 360.0)``                          |
-|                        | **Note:** It is not necesary to specify the cycle of a circular longitude axis, that is, for which ``axis.isCircular()`` is true.                                                                                                                                                                         |                                                       |
-+------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------+
-| ``slice(i,j,k)``       | slice object, equivalent to i:j:k in a slice operator. Refers to the indices i, i+k, i+2k, … up to but not including index j. If i is not specified or is None it defaults to 0. If j is not specified or is None it defaults to the length of the axis. The stride k defaults to 1. k may be negative.   | ``slice(1,10)``                                       |
-|                        |                                                                                                                                                                                                                                                                                                           | ``slice(,,-1)`` reverses the direction of the axis.   |
-+------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------+
-| ``':'``                | all axis values of one dimension                                                                                                                                                                                                                                                                          |                                                       |
-+------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------+
-| ``Ellipsis``           | all values of all intermediate axes                                                                                                                                                                                                                                                                       |                                                       |
-+------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------+
+
+    "``x``", "single point, such that axis[i]==x In general x is a scalar. If the axis is a time axis, x may also be a cdtime relative time type, component time type, or string of the form ‘yyyy-mm-dd hh:mi:ss’ (where trailing fields of the string may be omitted.", "`180.0`"
+    ,,"`cdtime.reltime(48,'hour s since 1980-1')`"
+    ,,"``'1980-1-3'``"
+    "`(x,y)`", "indices i such that x ≤ axis[i] ≤ y", "`(-180,180)`"
+    "`(x,y,'co')`", "`x ≤ axis[i] < y`. The third item is defined as in mapInterval.", "`(-90,90,'cc')`" 
+    "`(x,y,'co',cycle)`", "`x ≤ axis[i]< y`, with wraparound", "`( 180, 180, 'co', 360.0)`"
+    ,,"**Note:** It is not necesary to specify the cycle of a circular longitude axis, that is, for which `axis.isCircular()` is true."
+    "`slice(i,j,k)`", "slice object, equivalent to i:j:k in a slice operator. Refers to the indices i, i+k, i+2k, … up to but not including index j. If i is not specified or is None it defaults to 0. If j is not specified or is None it defaults to the length of the axis. The stride k defaults to 1. k may be negative.", "`slice(1,10)`"
+    "`slice(,,-1)`", "reverses the direction of the axis.",
+    "`:`", "all axis values of one dimension",
+    "`Ellipsis`", "all values of all intermediate axes"
 
 
 
@@ -1429,17 +1422,10 @@ Table 2.37 Index and Coordinate Intervals
 A selector is a specification of a region of data to be selected from a
 variable. For example, the statement
 
-.. raw:: html
-
-   <figure class="highlight">
-
 ::
 
     x = v(time='1979-1-1', level=(1000.0,100.0))
 
-.. raw:: html
-
-   </figure>
 
 means ‘select the values of variable v for time ‘1979-1-1’ and levels
 1000.0 to 100.0 inclusive, setting x to the result.’ Selectors are
@@ -1447,31 +1433,15 @@ generally used to represent regions of space and time.
 
 The form for using a selector is
 
-.. raw:: html
-
-   <figure class="highlight">
-
 ::
-
     result = v(s)
 
-.. raw:: html
-
-   </figure>
 
 where v is a variable and s is the selector. An equivalent form is
 
-.. raw:: html
-
-   <figure class="highlight">
-
 ::
-
     result = f('varid', s)
 
-.. raw:: html
-
-   </figure>
 
 where f is a file or dataset, and ‘varid’ is the string ID of a
 variable.
@@ -1479,33 +1449,17 @@ variable.
 A selector consists of a list of selector components. For example, the
 selector
 
-.. raw:: html
-
-   <figure class="highlight">
 
 ::
-
     time='1979-1-1', level=(1000.0,100.0)
-
-.. raw:: html
-
-   </figure>
 
 has two components: time=’1979-1-1’, and level=(1000.0,100.0). This
 illustrates that selector components can be defined with keywords, using
 the form:
 
-.. raw:: html
-
-   <figure class="highlight">
-
 ::
-
     keyword=value
 
-.. raw:: html
-
-   </figure>
 
 Note that for the keywords time, level, latitude, and longitude, the
 selector can be used with any variable. If the corresponding axis is not
@@ -1550,17 +1504,9 @@ Another form of selector components is the positional form, where the
 component order corresponds to the axis order of a variable. For
 example:
 
-.. raw:: html
-
-   <figure class="highlight">
-
 ::
-
     x9 = hus(('1979-1-1','1979-2-1'),1000.0)
 
-.. raw:: html
-
-   </figure>
 
 reads data for the range (‘1979-1-1’,’1979-2-1’) of the first axis, and
 coordinate value 1000.0 of the second axis. Non-keyword arguments of the
@@ -1573,78 +1519,37 @@ be defined and reused, independent of a particular variable. Selectors
 are constructed using the cdms.selectors.Selector class. The constructor
 takes an argument list of selector components. For example:
 
-.. raw:: html
-
-   <figure class="highlight">
-
 ::
-
     from cdms.selectors import Selector
     sel = Selector(time=('1979-1-1','1979-2-1'), level=1000.)
     x1 = v1(sel)
     x2 = v2(sel)
-
-.. raw:: html
-
-   </figure>
 
 For convenience CDMS provides several predefined selectors, which can be
 used directly or can be combined into more complex selectors. The
 selectors time, level, latitude, longitude, and required are equivalent
 to their keyword counterparts. For example:
 
-.. raw:: html
-
-   <figure class="highlight">
-
 ::
-
     from cdms import time, level
     x = hus(time('1979-1-1','1979-2-1'), level(1000.))
 
-.. raw:: html
-
-   </figure>
-
 and
 
-.. raw:: html
-
-   <figure class="highlight">
-
 ::
-
     x = hus(time=('1979-1-1','1979-2-1'), level=1000.)
 
-.. raw:: html
-
-   </figure>
-
 are equivalent. Additionally, the predefined selectors
-``latitudeslice``, ``longitudeslice``, ``levelslice``, and ``timeslice``
-take arguments ``(startindex, stopindex[, stride])``:
-
-.. raw:: html
-
-   <figure class="highlight">
+`latitudeslice`, `longitudeslice`, `levelslice`, and `timeslice`
+take arguments `(startindex, stopindex[, stride])`:
 
 ::
-
     from cdms import timeslice, levelslice
     x = v(timeslice(0,2), levelslice(16,17))
 
-.. raw:: html
-
-   </figure>
-
 Finally, a collection of selectors is defined in module cdutil.region:
 
-.. raw:: html
-
-   <figure class="highlight">
-
 ::
-
     from cdutil.region import *
     NH=NorthernHemisphere=domain(latitude=(0.,90.)
     SH=SouthernHemisphere=domain(latitude=(-90.,0.))
@@ -1652,16 +1557,8 @@ Finally, a collection of selectors is defined in module cdutil.region:
     NPZ=AZ=ArcticZone=domain(latitude=(66.6,90.))
     SPZ=AAZ=AntarcticZone=domain(latitude=(-90.,-66.6))
 
-.. raw:: html
-
-   </figure>
-
 Selectors can be combined using the & operator, or by refining them in
 the call:
-
-.. raw:: html
-
-   <figure class="highlight">
 
 ::
 
@@ -1671,11 +1568,6 @@ the call:
     sel3 = sel2 & level(1000.0)
     x1 = hus(sel3)
     x2 = hus(sel2, level=1000.0)
-
-.. raw:: html
-
-   </figure>
-
 
 
 2.11.2 Selector examples
@@ -1687,10 +1579,6 @@ monthly starting at 1979-1-1. There are 17 levels, the last level being
 1000.0. The name of the vertical level axis is ‘plev’. All the examples
 select the first two times and the last level. The last two examples
 remove the singleton level dimension from the result array.
-
-.. raw:: html
-
-   <figure class="highlight">
 
 ::
 
@@ -1739,10 +1627,6 @@ remove the singleton level dimension from the result array.
 
     f.close()
 
-.. raw:: html
-
-   </figure>
-
 
 
 Examples
@@ -1763,11 +1647,7 @@ Data is extracted from both datasets for January of the first input year
 through December of the second input year. For each time and level,
 three quantities are calculated: slope, variance, and correlation. The
 results are written to a netCDF file. For brevity, the functions
-``corrCoefSlope`` and ``removeSeasonalCycle`` are omitted.
-
-.. raw:: html
-
-   <figure class="highlight">
+`corrCoefSlope` and `removeSeasonalCycle` are omitted.
 
 ::
 
@@ -1826,9 +1706,6 @@ results are written to a netCDF file. For brevity, the functions
             # Process Jan80 through Dec81
             ccSlopeVarianceBySeasonFiltNet(pathTa,pathTas,'80-1','81-12')
 
-.. raw:: html
-
-   </figure>
 
 **Notes:**
 
@@ -1858,10 +1735,6 @@ calculated, for all times in a dataset. The name of the dataset and
 variable are entered, then the variance is calculated and plotted via
 the vcs module.
 
-.. raw:: html
-
-   <figure class="highlight">
-
 ::
 
             #!/usr/bin/env python
@@ -1878,7 +1751,7 @@ the vcs module.
             def pause():
                 print Hit return to continue: ,
                 line = sys.stdin.readline()
-
+::
     1.      # Calculate pointwise variance of variable over time
             # Returns the variance and the number of points
             # for which the data is defined, for each grid point
@@ -1941,18 +1814,9 @@ the vcs module.
                 pause()
                 w.clear()
 
-.. raw:: html
-
-   </figure>
-
 The result of running this script is as follows:
 
-.. raw:: html
-
-   <figure class="highlight">
-
 ::
-
     % calcVar.py
     Enter dataset path [/pcmdi/cdms/sample/obs/erbs_mo.xml]:
 
@@ -1973,10 +1837,6 @@ The result of running this script is as follows:
     Hit return to continue:
 
     <The number of points is plotted>
-
-.. raw:: html
-
-   </figure>
 
 **Notes:**
 

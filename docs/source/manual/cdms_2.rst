@@ -1434,12 +1434,14 @@ generally used to represent regions of space and time.
 The form for using a selector is
 
 ::
+
     result = v(s)
 
 
 where v is a variable and s is the selector. An equivalent form is
 
 ::
+
     result = f('varid', s)
 
 
@@ -1451,6 +1453,7 @@ selector
 
 
 ::
+
     time='1979-1-1', level=(1000.0,100.0)
 
 has two components: time=’1979-1-1’, and level=(1000.0,100.0). This
@@ -1458,6 +1461,7 @@ illustrates that selector components can be defined with keywords, using
 the form:
 
 ::
+
     keyword=value
 
 
@@ -1505,6 +1509,7 @@ component order corresponds to the axis order of a variable. For
 example:
 
 ::
+
     x9 = hus(('1979-1-1','1979-2-1'),1000.0)
 
 
@@ -1520,6 +1525,7 @@ are constructed using the cdms.selectors.Selector class. The constructor
 takes an argument list of selector components. For example:
 
 ::
+
     from cdms.selectors import Selector
     sel = Selector(time=('1979-1-1','1979-2-1'), level=1000.)
     x1 = v1(sel)
@@ -1531,12 +1537,14 @@ selectors time, level, latitude, longitude, and required are equivalent
 to their keyword counterparts. For example:
 
 ::
+
     from cdms import time, level
     x = hus(time('1979-1-1','1979-2-1'), level(1000.))
 
 and
 
 ::
+
     x = hus(time=('1979-1-1','1979-2-1'), level=1000.)
 
 are equivalent. Additionally, the predefined selectors
@@ -1544,12 +1552,14 @@ are equivalent. Additionally, the predefined selectors
 take arguments `(startindex, stopindex[, stride])`:
 
 ::
+
     from cdms import timeslice, levelslice
     x = v(timeslice(0,2), levelslice(16,17))
 
 Finally, a collection of selectors is defined in module cdutil.region:
 
 ::
+
     from cdutil.region import *
     NH=NorthernHemisphere=domain(latitude=(0.,90.)
     SH=SouthernHemisphere=domain(latitude=(-90.,0.))
@@ -1752,6 +1762,7 @@ the vcs module.
                 print Hit return to continue: ,
                 line = sys.stdin.readline()
 ::
+
     1.      # Calculate pointwise variance of variable over time
             # Returns the variance and the number of points
             # for which the data is defined, for each grid point
@@ -1817,6 +1828,7 @@ the vcs module.
 The result of running this script is as follows:
 
 ::
+
     % calcVar.py
     Enter dataset path [/pcmdi/cdms/sample/obs/erbs_mo.xml]:
 

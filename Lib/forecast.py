@@ -1,6 +1,7 @@
 # Forecast support, experimental coding
 # probably all this will be rewritten, put in a different directory, etc.
 
+from __future__ import print_function
 import numpy
 import cdtime
 import cdms2
@@ -260,7 +261,7 @@ class forecasts():
         # Create the variable from the data, with mask:
         v0 = vars[0]
         a = numpy.asarray([v.data for v in vars])
-        if v0._mask:
+        if type(v0._mask) == bool:
             m = numpy.asarray([v._mask for v in vars])
             v = cdms2.tvariable.TransientVariable(
                 a, mask=m, fill_value=v0._fill_value)
@@ -367,10 +368,10 @@ class forecasts():
         return var
 
     def __repr__(self):
-        l = len(self.fcs)
-        if l == 0:
+        nlength = len(self.fcs)
+        if nlength == 0:
             return "<forecasts - None>"
         else:
             return "<forecasts from %s,...,%s>" % (
-                self.fcs[0].fct, self.fcs[l - 1].fct)
+                self.fcs[0].fct, self.fcs[nlength - 1].fct)
     __str__ = __repr__

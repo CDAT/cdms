@@ -5,9 +5,19 @@ import numpy
 import os
 import sys
 import basetest
+import copy
 
 
 class TestCurvilinearGrids(basetest.CDMSBaseTest):
+
+    def testReadCurvGrid(self):
+        f = self.getDataFile('sampleCurveGrid4.nc')
+        data = f("sample")
+        attrs = copy.copy(data.attributes)
+        axes = list([x[0].clone() for x in data.getDomain()])
+        data2 = cdms2.createVariable(data, copy=0, attributes=attrs, axes=axes)
+        data3=data2(*(),squeeze=1)
+
     def testCurvilinear(self):
         datb = numpy.array(
             [[697., 698., 699., 700., 701., 702., ],

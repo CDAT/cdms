@@ -1,5 +1,6 @@
 
 """Classes to support easy selection of climate data"""
+from __future__ import print_function
 from .axis import axisMatches
 from .error import CDMSError
 from .grid import AbstractRectGrid, defaultRegion, setRegionSpecs, LongitudeType, LatitudeType, TimeType, VerticalType

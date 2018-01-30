@@ -20,10 +20,16 @@ before_install:
 script:
 #- conda install -c uvcdat/label/nightly -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8
 - conda create -n py3 python=3.6
+<<<<<<< HEAD
 - conda install -n py3 -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy libdrs_f pyopenssl nose requests flake8 myproxyclient
 - source activate py3
 - if [ "$TRAVIS_OS_NAME" = "linux" ]; then conda install -n py3 -c nesii/channel/dev-esmf -c conda-forge esmpy=7.1.0.dev34; fi
 - if [ "$TRAVIS_OS_NAME" = "osx" ]; then conda install -n py3 -c nadeau1 -c conda-forge esmf esmpy; fi
+=======
+- conda install -n py3 -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy libdrs_f pyopenssl=17.2.0 nose requests flake8 myproxyclient 
+- source activate py3
+- if [ "$TRAVIS_OS_NAME" = "linux" ]; then conda install -n py3 -c nesii/channel/dev-esmf -c conda-forge esmpy=7.1.0.dev34 ; fi
+>>>>>>> master
 - export UVCDAT_ANONYMOUS_LOG=False
 - echo $TRAVIS_BRANCH
 - export TRAVIS_PR_BRANCH=$TRAVIS_BRANCH
@@ -38,7 +44,11 @@ script:
 - conda create -n py2 python=2.7
 - source activate py2
 - which python
+<<<<<<< HEAD
 - conda install -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 
+=======
+- conda install -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8
+>>>>>>> master
 - export UVCDAT_ANONYMOUS_LOG=False
 - python setup.py install
 - python run_tests.py -v2 -s
@@ -50,6 +60,7 @@ env:
   - secure: q+VWTmcHAjnw2znCKyCjZ+QNYh13/Q11/zSgH46P2ecqHNXpk94jR/hneHDpy0sv1SiKHMWm+i2pi/B7toyC1GUW4LpInifxuMs3s3ohNSo4gplIP+2gw/LPoPdiPIYVaovOqUg6o1GSYOklxHKXVQ/XjGvhVw65YKXGfGGX1IhyLhJGqtVTPnjHsBMoXVD4HHUS8ET1OLfCCaT1983AejNnwYgYGth4iemdLjk73FeEIg17buuZo/UcVVCyBdKDUEEt3ILfZ6lqPzKvK8f4SX/JbSHQkGe1PDGDq4H+gJ0C53eQr1Ffj7W/vSWTW15JyIaIA9bkpwW3bg96Mg3Lp13WL/5T/A7ImJenVANOKfQMLF6HP9u9dcPMTyx/6+/NVV2oM8u5Z48XeJlvDbDIpaOjBt2yF85bWLLW35UqBRA9s8eW4rbKi6ktr1aDcrdy7yE4PSmNNV6989tm/LhlSWLrQVYlEgkvKF2TGOc5neBzawVrGRzGLSznbK7CYbJscKuGRYs0GIX7p1Ip6sypagozFBebSkjQPp8Ypm0eqLO6I+SsyYOcfgimY2uhWVKRx1nDTcFEMLKMU2VDxquQGZ0WGAQ1qy6rXjQUYqgRKRAIjMZs5cWUiKMLmrHBaWGkP56p1yqe6j1sxHH7ISPSoKY21OH8fuEit17MJyaj+hQ=
 
 after_success:
+<<<<<<< HEAD
 - if [ $TRAVIS_BRANCH != "master" -a $TRAVIS_PULL_REQUEST == "false" -a "$TRAVIS_OS_NAME"
   = "linux" ]; then docker run -v /home/travis:/travis_home -e CONDA_UPLOAD_TOKEN=${CONDA_UPLOAD_TOKEN}
   -a STDOUT -a STDERR cdat/conda:conda-forge-cdms2 /travis_home/ci-support/conda_upload.sh ; fi
@@ -57,3 +68,12 @@ after_success:
 - ls /home/travis/build/UV-CDAT
 - ls /home/travis/build/UV-CDAT/cdms
 - ls /home/travis/build/UV-CDAT/cdms/ci-support
+=======
+- if [ $TRAVIS_BRANCH == "master" -a $TRAVIS_PULL_REQUEST == "false" -a "$TRAVIS_OS_NAME"
+  == "linux" ]; then docker run -v `pwd`:/travis_home
+  -e CONDA_UPLOAD_TOKEN=${CONDA_UPLOAD_TOKEN}
+  -e ESGF_PWD=${ESGF_PWD}
+  -e ESGF_USER=${ESGF_USER}
+  -e TRAVIS_BRANCH=${TRAVIS_BRANCH}
+  -a STDOUT -a STDERR centos:6.8 /travis_home/ci-support/conda_upload.sh ; fi
+>>>>>>> master

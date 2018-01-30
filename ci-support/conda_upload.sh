@@ -2,6 +2,14 @@
 PKG_NAME=cdms2
 USER=uvcdat
 echo "Trying to upload conda"
+<<<<<<< HEAD
+if [ `uname` == "Linux" ]; then
+    OS=linux-64
+    echo "Linux OS"
+    export PATH="/travis_home/miniconda/bin:$PATH"
+    echo $PATH
+    which conda
+=======
 mkdir ${HOME}/conda-bld
 export CONDA_BLD_PATH=${HOME}/conda-bld
 export VERSION="2.12"
@@ -35,7 +43,12 @@ if [ `uname` == "Linux" ]; then
 # Python 2.7 environment
     echo "Creating python 2 env"
     conda create -n py2 python=2.7
+<<<<<<< HEAD
+    conda install -n py2 -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 numpy
+>>>>>>> master
+=======
     conda install -n py2 -c nesii/channel/dev-esmf -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 numpy
+>>>>>>> master
 #    conda update -y -q conda  # -R issue woraround
 else
     echo "Mac OS"
@@ -45,6 +58,15 @@ fi
 # Python 3 section
 echo "Building python 3"
 source activate py3
+<<<<<<< HEAD
+mkdir ${HOME}/conda-bld
+# pin conda so that conda-build does not update it
+echo "conda ==4.3.21" >> ~/miniconda/conda-meta/pinned  # Pin conda as workaround for conda/conda#6030
+conda install -n root -q anaconda-client conda-build
+conda config --set anaconda_upload no
+export CONDA_BLD_PATH=${HOME}/conda-bld
+export VERSION="2.12"
+=======
 which python
 conda install -n root -q anaconda-client conda-build
 # pin conda so that conda-build does not update it
@@ -52,6 +74,7 @@ if [ `uname` == "Darwin" ]; then
     echo "conda ==4.3.21" >> ~/miniconda/conda-meta/pinned  # Pin conda as workaround for conda/conda#6030
 fi
 conda config --set anaconda_upload no
+>>>>>>> master
 echo "Cloning recipes"
 cd ${HOME}
 git clone git://github.com/UV-CDAT/conda-recipes
@@ -61,14 +84,34 @@ rm -rf uvcdat
 python ./prep_for_build.py
 echo "Building now"
 echo "use nesii/label/dev-esmf for py3"
+<<<<<<< HEAD
+conda install -n root conda-build==3.2.2
+conda build $PKG_NAME -c nesii/label/dev-esmf  -c uvcdat/label/nightly -c conda-forge -c uvcdat 
+anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-$VERSION.`date +%Y`*_0.tar.bz2 --force
+=======
 conda install conda-build==3.2.2
 conda build $PKG_NAME -c nesii/label/dev-esmf -c nadeau1 -c uvcdat/label/nightly -c conda-forge -c uvcdat
 anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly ${CONDA_BLD_PATH}/$OS/$PKG_NAME-$VERSION.`date +%Y`*-py3*_0.tar.bz2 --force
+>>>>>>> master
 
 # Python 2 section
 echo "Building python 2"
 source activate py2
 which python
+<<<<<<< HEAD
+conda install -q anaconda-client conda-build
+conda config --set anaconda_upload no
+rm -rf ${HOME}/conda-bld
+mkdir ${HOME}/conda-bld
+export CONDA_BLD_PATH=${HOME}/conda-bld
+export VERSION="2.12"
+cd ${HOME}/conda-recipes
+python ./prep_for_build.py
+echo "Building now"
+conda install conda-build==3.2.2
+conda build $PKG_NAME -c nesii/label/dev-esmf -c uvcdat/label/nightly -c conda-forge -c uvcdat 
+anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-$VERSION.`date +%Y`*_0.tar.bz2 --force
+=======
 conda install -n root -q anaconda-client conda-build
 conda config --set anaconda_upload no
 cd ${HOME}/conda-recipes
@@ -77,4 +120,5 @@ conda install conda-build==3.2.2
 conda build $PKG_NAME -c uvcdat/label/nightly -c conda-forge -c uvcdat
 anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly ${CONDA_BLD_PATH}/$OS/$PKG_NAME-$VERSION.`date +%Y`*-py27*_0.tar.bz2 --force
 
+>>>>>>> master
 

@@ -12,11 +12,19 @@ echo $cmd
 $cmd
 
 # Create Python 3 environment
+<<<<<<< HEAD
+cmd="conda create -n py3 -c uvcdat/label/nightly -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy libdrs_f pyopenssl nose requests flake8 myproxyclient"
+echo $cmd
+$cmd
+
+cmd="conda install -n py3  -c nesii/label/dev-esmf esmf esmpy"
+=======
 cmd="conda create -n py3 -c uvcdat/label/nightly -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy libdrs_f pyopenssl nose requests flake8 myproxyclient netcdf-fortran=4.4.4=5"
 echo $cmd
 $cmd
 
 cmd="conda install -n py3 -c nadeau1 -c conda-forge esmf esmpy netcdf-fortran=4.4.4=5"
+>>>>>>> master
 echo $cmd
 $cmd
 
@@ -30,16 +38,28 @@ cmd="source activate py2"
 echo $cmd
 $cmd 
 
+<<<<<<< HEAD
+cmd="conda install -n py2  -c uvcdat/label/nightly -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient"
+=======
 cmd="conda install -n py2  -c uvcdat/label/nightly -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient netcdf-fortran=4.4.4=5"
+>>>>>>> master
 echo $cmd
 $cmd
 
 # add relative path to ncdump
+<<<<<<< HEAD
+cmd="install_name_tool -change /usr/lib/libcurl.4.dylib @rpath/libcurl.4.dylib /Users/distiller/miniconda/env/py2/bin/ncdump"
+echo $cmd
+$cmd 
+
+cmd="install_name_tool -change /usr/lib/libcurl.4.dylib @rpath/libcurl.4.dylib /Users/distiller/miniconda/env/py3/bin/ncdump"
+=======
 cmd="install_name_tool -change /usr/lib/libcurl.4.dylib @rpath/libcurl.4.dylib ${HOME}/miniconda/env/py2/bin/ncdump"
 echo $cmd
 $cmd 
 
 cmd="install_name_tool -change /usr/lib/libcurl.4.dylib @rpath/libcurl.4.dylib ${HOME}/miniconda/env/py3/bin/ncdump"
+>>>>>>> master
 echo $cmd
 $cmd 
 

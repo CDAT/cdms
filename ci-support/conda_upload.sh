@@ -33,8 +33,8 @@ rm -rf uvcdat
 python ./prep_for_build.py
 echo "Building now"
 echo "use nesii/label/dev-esmf for py3"
-conda install conda-build==3.2.2
-conda build $PKG_NAME -c nesii/label/dev-esmf -c nadeau1 -c uvcdat/label/nightly -c conda-forge -c uvcdat 
+conda install -n root conda-build==3.2.2
+conda build $PKG_NAME -c nesii/label/dev-esmf  -c uvcdat/label/nightly -c conda-forge -c uvcdat 
 anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-$VERSION.`date +%Y`*_0.tar.bz2 --force
 
 # Python 2 section
@@ -51,6 +51,6 @@ cd ${HOME}/conda-recipes
 python ./prep_for_build.py
 echo "Building now"
 conda install conda-build==3.2.2
-conda build $PKG_NAME -c uvcdat/label/nightly -c conda-forge -c uvcdat 
+conda build $PKG_NAME -c nesii/label/dev-esmf -c uvcdat/label/nightly -c conda-forge -c uvcdat 
 anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly $CONDA_BLD_PATH/$OS/$PKG_NAME-$VERSION.`date +%Y`*_0.tar.bz2 --force
 

@@ -22,7 +22,7 @@ script:
 - conda create -n py3 python=3.6
 - conda install -n py3 -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy libdrs_f pyopenssl=17.2.0 nose requests flake8 myproxyclient 
 - source activate py3
-- if [ "$TRAVIS_OS_NAME" = "linux" ]; then conda install -n py3 -c nesii/channel/dev-esmf -c conda-forge esmpy=7.1.0.dev34 ; fi
+- if [ "$TRAVIS_OS_NAME" = "linux" ]; then conda install -n py3 -c nesii/channel/dev-esmf -c conda-forge esmpy ; fi
 - export UVCDAT_ANONYMOUS_LOG=False
 - echo $TRAVIS_BRANCH
 - export TRAVIS_PR_BRANCH=$TRAVIS_BRANCH
@@ -37,7 +37,7 @@ script:
 - conda create -n py2 python=2.7
 - source activate py2
 - which python
-- conda install -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8
+- conda install -c nesii/channel/dev-esmf -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8
 - export UVCDAT_ANONYMOUS_LOG=False
 - python setup.py install
 - python run_tests.py -v2 -s

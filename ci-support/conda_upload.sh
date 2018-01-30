@@ -22,7 +22,7 @@ if [ `uname` == "Linux" ]; then
     echo "Creating python 3 env"
     conda create -n py3 python=3.6
     conda install -n py3 -c conda-forge -c uvcdat setuptools libcf distarray cdtime libcdms cdat_info numpy libdrs_f pyopenssl nose requests flake8 myproxyclient numpy
-    conda install -n py3 -c nesii/channel/dev-esmf -c conda-forge esmpy=7.1.0.dev34
+    conda install -n py3 -c nesii/channel/dev-esmf -c conda-forge esmpy
     echo "Creating certificate"
     source activate py3
     mkdir ${HOME}/.esg
@@ -35,7 +35,7 @@ if [ `uname` == "Linux" ]; then
 # Python 2.7 environment
     echo "Creating python 2 env"
     conda create -n py2 python=2.7
-    conda install -n py2 -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 numpy
+    conda install -n py2 -c nesii/channel/dev-esmf -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 numpy
 #    conda update -y -q conda  # -R issue woraround
 else
     echo "Mac OS"

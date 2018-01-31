@@ -32,7 +32,7 @@ class TestFormats(basetest.CDMSBaseTest):
         self.assertEqual(data.missing_value, 9.999e20)
 
     # test disabled due to OSX issue
-    def dtestESGF(self):
+    def testESGF(self):
         f = cdms2.open("https://aims3.llnl.gov/thredds/dodsC/cmip5_css01_data/cmip5/output1/BCC/bcc-csm1-1-m/1pctCO2/day/ocean/day/r1i1p1/v20120910/tos/tos_day_bcc-csm1-1-m_1pctCO2_r1i1p1_02800101-02891231.nc")
         self.assertIn('tos', f.listvariables())
         data=f['tos']

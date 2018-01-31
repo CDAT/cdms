@@ -61,8 +61,17 @@ echo "Building now"
 echo "use nesii/label/dev-esmf for esmf"
 conda build -V
 conda build $PKG_NAME -c nesii/label/dev-esmf  -c uvcdat/label/nightly -c conda-forge -c uvcdat 
-binstar config --set verify_ssl false
-binstar config --set ssl_verify false
+#
+# binstar config set 'false' instead of false (not quote) I have to do it manually
+# this is true for OSX.
+# binstar is changing verify_ssl to ssl_verify, but the later is not always working
+# 
+# binstar config --set verify_ssl false
+# binstar config --set ssl_verify false
+#
+mkdir -p ~/.continuum/anaconda-client/
+echo "ssl_verify: false" >> ~/.continuum/anaconda-client/config.yaml
+echo "verify_ssl: false" >> ~/.continuum/anaconda-client/config.yaml
 if [ `uname` == "Darwin" ]; then
     # fix conda and anaconda-client conflict
     conda install conda==4.2.16

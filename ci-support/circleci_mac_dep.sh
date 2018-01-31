@@ -40,9 +40,9 @@ echo $cmd
 $cmd
 
 # update openssl for myproxyclient
-+cmd="conda install -n py2 pyopenssl"
-+echo $cmd
-+$cmd
+cmd="conda install -n py2 pyopenssl"
+echo $cmd
+$cmd
 :
 
 # add relative path to ncdump

@@ -16,6 +16,11 @@ cmd="conda create -n py3 -c uvcdat/label/nightly -c conda-forge -c uvcdat libcf 
 echo $cmd
 $cmd
 
+# update openssl for myproxyclient
+cmd="conda install -n py3 pyopenssl"
+echo $cmd
+$cmd
+
 cmd="conda install -n py3 -c nesii/label/dev-esmf -c conda-forge esmf esmpy netcdf-fortran=4.4.4=5"
 echo $cmd
 $cmd
@@ -34,12 +39,18 @@ cmd="conda install -n py2 -c nesii/label/dev-esmf -c uvcdat/label/nightly -c con
 echo $cmd
 $cmd
 
+# update openssl for myproxyclient
++cmd="conda install -n py2 pyopenssl"
++echo $cmd
++$cmd
+:
+
 # add relative path to ncdump
-cmd="install_name_tool -change /usr/lib/libcurl.4.dylib @rpath/libcurl.4.dylib ${HOME}/miniconda/env/py2/bin/ncdump"
+cmd="install_name_tool -change /usr/lib/libcurl.4.dylib @rpath/libcurl.4.dylib ${HOME}/miniconda/envs/py2/bin/ncdump"
 echo $cmd
 $cmd 
 
-cmd="install_name_tool -change /usr/lib/libcurl.4.dylib @rpath/libcurl.4.dylib ${HOME}/miniconda/env/py3/bin/ncdump"
+cmd="install_name_tool -change /usr/lib/libcurl.4.dylib @rpath/libcurl.4.dylib ${HOME}/miniconda/envs/py3/bin/ncdump"
 echo $cmd
 $cmd 
 

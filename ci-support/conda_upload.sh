@@ -62,5 +62,9 @@ echo "use nesii/label/dev-esmf for esmf"
 conda build -V
 conda build $PKG_NAME -c nesii/label/dev-esmf  -c uvcdat/label/nightly -c conda-forge -c uvcdat 
 binstar config --set verify_ssl false
+if [ `uname` == "Darwin" ]; then
+    # fix conda and anaconda-client conflict
+    conda install conda==4.2.16
+fi
 anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l ${LABEL}  ${CONDA_BLD_PATH}/$OS/$PKG_NAME-$VERSION.`date +%Y`*_0.tar.bz2 --force
 

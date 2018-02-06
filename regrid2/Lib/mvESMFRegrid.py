@@ -268,7 +268,7 @@ staggerLoc = %s!""" % self.staggerLoc
                                      dst_mask_values=self.dstMaskValues,
                                      regrid_method=self.regridMethod,
                                      unmapped_action=self.unMappedAction,
-                                     ignore_degenerate=True)
+                                     ignore_degenerate=False)
 
     def apply(self, srcData, dstData, rootPe, globalIndexing=False, **args):
         """

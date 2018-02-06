@@ -1179,7 +1179,10 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
                             dstGridAreas=None,
                             **keywords)
             # now interpolate
-            return ro(self, **keywords)
+            interpolate = ro(self, **keywords)
+            if(regridTool == 'esmf'):
+                interpolate = cdms2.MV2.masked_where((interpolate == 0), interpolate)
+            return interpolate
 
     def pressureRegrid(self, newLevel, missing=None, order=None, method="log"):
         """Return the variable regridded to new pressure levels.

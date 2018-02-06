@@ -387,7 +387,7 @@ class CdmsRegrid:
                 for inds in dstBadCellIndices:
                     dstGridMask[inds] = 1  # True means invalid
 
-            for c, b in zip(srcBounds, srcCoords):
+            for b, c in zip(srcBounds, srcCoords):
                 if c.min() == b.min() or c.max() == b.max():
                     print("""
 WARNING: Edge bounds are the same. The results of conservative regridding will not conserve.
@@ -438,6 +438,8 @@ coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
 
         # initialize
         dstMask = None
+        import pdb
+        pdb.set_trace()
         missingValue = getattr(srcVar, 'missing_value', None)
 
         # shape of dst var
@@ -449,7 +451,7 @@ coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
                 re.search('conserv', self.regridMethod) is None:
             dstData *= missingValue
         else:
-            dstData *= 0.0
+            dstData *= 1e20
 
         # sometimes the masked values are not set to missing_values,
         # sorry for the extra copy

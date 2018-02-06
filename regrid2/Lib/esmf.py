@@ -604,7 +604,7 @@ class EsmfRegrid:
                constructor is to be used)
         @param dstField destination field (or None if dst field passed
                to constructor is to be used)
-        @param zero_region specify which region of the field indices will be zeroed (or None default to TOTAL Region)
+        @param zero_region specify which region of the field indices will be zeroed (or None default to SELECT Region)
         """
         if srcField is None:
             srcField = self.srcField
@@ -616,6 +616,8 @@ class EsmfRegrid:
 #        if self.regridMethod == CONSERVE:
 #            zeroregion = None # will initalize to zero
 
+        import pdb
+        pdb.set_trace()
         self.regridHandle(
             srcfield=srcField.field,
             dstfield=dstField.field,

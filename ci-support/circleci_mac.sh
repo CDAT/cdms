@@ -9,5 +9,7 @@ RESULT=$?
 source activate py3
 python run_tests.py -v2 -s
 RESULT=$(( $RESULT + $? ))
-if [ $RESULT -eq 0 -a $CIRCLE_BRANCH != "master" ]; then bash ./ci-support/conda_upload.sh ; fi
+echo "RESULT:"${RESULT}
+if [ $RESULT -eq 0 ]; then bash ./ci-support/conda_upload.sh ; fi
+#if [ $RESULT -eq 0 -a $CIRCLE_BRANCH == "master" ]; then bash ./ci-support/conda_upload.sh ; fi
 exit $RESULT

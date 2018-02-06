@@ -118,9 +118,9 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         numpy.ma.MaskedArray.__array_finalize__(self, obj)
         return
 
-    def __copy__(self):
-        return numpy.ma.MaskedArray.copy(self)
+    squeeze = AbstractVariable.squeeze
 
+    __copy__ = AbstractVariable.__copy__
     __mul__ = AbstractVariable.__mul__
     __rmul__ = AbstractVariable.__rmul__
     __imul__ = AbstractVariable.__imul__
@@ -135,6 +135,8 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
     __rsub__ = AbstractVariable.__rsub__
     __isub__ = AbstractVariable.__isub__
     __div__ = AbstractVariable.__div__
+    __truediv__ = AbstractVariable.__truediv__
+    __floordiv__ = AbstractVariable.__floordiv__
     __rdiv__ = AbstractVariable.__rdiv__
     __idiv__ = AbstractVariable.__idiv__
     __pow__ = AbstractVariable.__pow__

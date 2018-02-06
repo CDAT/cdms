@@ -9,36 +9,38 @@ Welcome to cdms2's documentation!
 Contents:
 
 .. toctree::
-   MV2 
-   tvariable
-   AbstractVariable
-   avariable
-   cdmsobj
-   axis
-   coord
-   grid
-   hgrid
-   sliceut
-   error
-   variable
-   fvariable
-   tvariable
-   dataset
-   database
-   cache
-   selectors
-   MV2
-   convention
-   bindex
-   auxcoord
-   gengrid
-   gsHost
-   gsStaticVariable
-   gsTimeVariable
-   mvBaseWriter
-   mvSphereMesh
-   mvVsWriter
-   mvCdmsRegrid
+   manual/cdms_1
+   manual/cdms_2
+   manual/cdms_3
+   manual/cdms_4
+   manual/cdms_5
+   manual/cdms_6
+   manual/cdms_7
+   manual/cdms_appendix
+
+#   AbstractAxis
+#   AbstractVariable
+#   avariable
+#   axis
+#   bindex
+#   cache
+#   cdmsfile
+#   cdmsobj
+#   database
+#   dataset
+#   fvariable
+#   gengrid
+#   grid
+#   gsHost
+#   gsStaticVariable
+#   gsTimeVariable
+#   hgrid
+#   MV2 
+#   mvSphereMesh
+#   mvCdmsRegrid
+#   selectors
+#   sliceut
+#   tvariable
 
 
 Indices and tables

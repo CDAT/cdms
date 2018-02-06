@@ -5,7 +5,7 @@
 import numpy
 from numpy import character, float, float32, float64  # noqa
 from numpy import int, int8, int16, int32, int64, byte  # noqa
-from numpy import  ubyte, uint8, uint16, uint32, uint64, long   # noqa
+from numpy import ubyte, uint8, uint16, uint32, uint64, long   # noqa
 from numpy.ma import allclose, allequal, common_fill_value  # noqa
 from numpy.ma import make_mask_none, dot, filled  # noqa
 from numpy.ma import getmask, getmaskarray, identity  # noqa
@@ -289,6 +289,8 @@ add = var_binary_operation(numpy.ma.add)
 subtract = var_binary_operation(numpy.ma.subtract)
 multiply = var_binary_operation(numpy.ma.multiply)
 divide = var_binary_operation(numpy.ma.divide)
+true_divide = var_binary_operation(numpy.ma.true_divide)
+floor_divide = var_binary_operation(numpy.ma.floor_divide)
 equal = var_binary_operation(numpy.ma.equal)
 less_equal = var_binary_operation(numpy.ma.less_equal)
 greater_equal = var_binary_operation(numpy.ma.greater_equal)
@@ -341,6 +343,15 @@ def _conv_axis_arg(axis):
     return axis
 
 
+def squeeze(x):
+    "call numpy.squeeze on ndarray and rebuild tvariable."
+    # ta = _makeMaskedArg(x)
+    maresult = numpy.squeeze(x._data)
+    axes, attributes, id, grid = _extractMetadata(x)
+    return TransientVariable(
+        maresult, axes=axes, attributes=attributes, grid=grid, id=id)
+
+
 def is_masked(x):
     "Is x a 0-D masked value?"
     return isMaskedArray(x) and x.size == 1 and x.ndim == 0 and x.mask.item()
@@ -390,6 +401,7 @@ alltrue = var_unary_operation_with_axis(numpy.ma.all)
 all = alltrue
 logical_not = var_unary_operation(numpy.ma.logical_not)
 divide.reduce = None
+true_divide.reduce = None
 remainder = var_binary_operation(numpy.ma.remainder)
 remainder.reduce = None
 fmod = var_binary_operation(numpy.ma.fmod)

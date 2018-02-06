@@ -1231,12 +1231,12 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
         nsupplied = len(specs)
         # numpy will broadcast if we have a new axis in specs
         # ---------------------------------------------------
-        if (numpy.newaxis in specs):
+        if [x for x in specs if numpy.array_equal(x, numpy.newaxis)] == [numpy.newaxis]:
             nnewaxis = 1
         else:
             nnewaxis = 0
 
-        if (Ellipsis in specs):
+        if [x for x in specs if numpy.array_equal(x, Ellipsis)] == [Ellipsis]:
             nellipses = 1
         else:
             nellipses = 0
@@ -1497,6 +1497,9 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
 
     # numpy.ma overrides
 
+    def squeeze(self):
+        return(MV.squeeze(self))
+
     def __getitem__(self, key):
         if isinstance(key, tuple):
             speclist = self._process_specs(key, {})
@@ -1505,6 +1508,9 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
                 raise IndexError("Index too large: %d" % key)
             speclist = self._process_specs([key], {})
 
+        if [x for x in speclist if (type(x) is numpy.ndarray or type(x) is list)] != []:
+            index = [x for x in speclist if (type(x) is numpy.ndarray or type(x) is list)]
+            return self.data.take(index)
         # Note: raw=0 ensures that a TransientVariable is returned
         return self.getSlice(numericSqueeze=1, raw=0, isitem=1, *speclist)
 
@@ -1525,6 +1531,9 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
     def __add__(self, other):
         return MV.add(self, other)
 
+    def __copy__(self):
+        return MV.array(self, copy=1)
+
     __radd__ = __add__
 
     def __lshift__(self, n):
@@ -1543,6 +1552,12 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
         return MV.multiply(self, other)
 
     __rmul__ = __mul__
+
+    def __floordiv__(self, other):
+        return MV.floor_divide(self, other)
+
+    def __truediv__(self, other):
+        return MV.true_divide(self, other)
 
     def __div__(self, other):
         return MV.divide(self, other)

@@ -3,6 +3,7 @@
 
 """CDMS HorizontalGrid objects"""
 
+from __future__ import print_function
 import numpy
 import cdms2
 import os
@@ -587,14 +588,16 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         k = 0
         i = j = -1
         for d in domainlist:
-            if d is iaxis:
-                inewaxis = newaxislist[k]
-                islice = slicelist[k]
-                i = k
-            if d is jaxis:
-                jnewaxis = newaxislist[k]
-                jslice = slicelist[k]
-                j = k
+            if d.shape == iaxis.shape:
+                if numpy.allclose(d[:], iaxis[:]) is True:
+                    inewaxis = newaxislist[k]
+                    islice = slicelist[k]
+                    i = k
+            if d.shape == jaxis.shape:
+                if numpy.allclose(d[:], jaxis[:]) is True:
+                    jnewaxis = newaxislist[k]
+                    jslice = slicelist[k]
+                    j = k
             k += 1
 
         if i == -1 or j == -1:
@@ -662,7 +665,7 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         return (self._lataxis_.getAxis(0), self._lataxis_.getAxis(1))
 
     def isClose(self, g):
-        """Return 1 iff g is a grid of the same type and shape. A real element-by-element
+        """Return 1 if g is a grid of the same type and shape. A real element-by-element
         comparison would be too expensive here."""
         if g is None:
             return 0
@@ -676,7 +679,8 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
     def checkAxes(self, axes):
         """Return 1 iff every element of self.getAxisList() is in the list 'axes'."""
         for item in self.getAxisList():
-            if item not in axes:
+            # if all [False, False, ....] result=0
+            if not any([allclose(item[:], axis[:]) for axis in axes]):
                 result = 0
                 break
         else:

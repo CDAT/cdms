@@ -148,14 +148,11 @@ conservative interpolator.
 
 In this example:
 
--  The input grid is defined in remap\_grid\_T42.nc.
--  The output grid is defined in remap\_grid\_POP43.nc.
--  The input data is variable src\_array in file sampleT42Grid.nc.
--  The file scrip\_in has contents:
+-  The input grid is defined in remap_grid_T42.nc.
+-  The output grid is defined in remap_grid_POP43.nc.
+-  The input data is variable src_array in file sampleT42Grid.nc.
+-  The file scrip_in has contents:
 
-.. raw:: html
-
-   <figure class="highlight">
 
 ::
 
@@ -176,9 +173,6 @@ In this example:
     luse_grid1_area = .false.
     luse_grid2_area = .false.
 
-.. raw:: html
-
-   </figure>
 
 ``num_maps`` specifies the number of mappings generated, either 1 or 2.
 For a single mapping, ``grid1_file`` and ``grid2_file`` are the source
@@ -190,9 +184,6 @@ in the SCRIP documentation.
 Once the grids and input file are defined, run the scrip executable to
 generate the remapping file ‘rmp\_T42\_to\_POP43\_conserv.nc’
 
-.. raw:: html
-
-   <figure class="highlight">
 
 ::
 
@@ -206,9 +197,6 @@ generate the remapping file ‘rmp\_T42\_to\_POP43\_conserv.nc’
       grid2 sweep
       Total number of links = 63112
 
-.. raw:: html
-
-   </figure>
 
 Next, run UV-CDAT and create the regridder:
 
@@ -311,14 +299,14 @@ makes the CDMS Regridder class available within a Python program. An
 instance of Regridder is a function which regrids data from rectangular
 input to output grids.
 
-Table 4.1 CDMS Regridder Constructor
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+CDMS Regridder Constructor
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. csv-table:: REgridder Constructure
    :header:  "Constructor", "Description"
    :widths:  50, 90
 
-   "regridFunction = Regridder(inputGrid, outputGrid)", "reate a regridder function which interpolates a data array from input to output grid. `Table 4.3 <#Table_4.3>`__ on page 131 describes the calling sequence of this function. ``inputGrid`` and ``outputGrid`` are CDMS grid objects. **Note:** To set the mask associated with inputGrid or outputGrid, use the grid setMask function."
+   "regridFunction = Regridder(inputGrid, outputGrid)", "reate a regridder function which interpolates a data array from input to output grid. `CDMS regridder functions`_ describes the calling sequence of this function. ``inputGrid`` and ``outputGrid`` are CDMS grid objects. **Note:** To set the mask associated with inputGrid or outputGrid, use the grid setMask function."
 
 SCRIP Regridder
 ^^^^^^^^^^^^^^^
@@ -326,8 +314,8 @@ SCRIP Regridder
 SCRIP regridder functions are created with the ``regrid.readRegridder``
 function:
 
-Table 4.2 SCRIP Regridder Constructor
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+SCRIP Regridder Constructor
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. csv-table:: 
    :header:  "Constructor", "Description"
@@ -355,8 +343,8 @@ convexity, and ‘repaired’ if necessary. Grid cells may appear to be
 nonconvex if they cross a ``0 / 2pi`` boundary. The repair consists of
 shifting the cell vertices to the same side modulo 360 degrees.
 
-CDMS regridder functions
-^^^^^^^^^^^^^^^^^^^^^^^^
+_`CDMS regridder functions`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 A CDMS regridder function is an instance of the CDMS ``Regridder``
 class. The function is associated with rectangular input and output
@@ -408,8 +396,8 @@ data value, or 1.0e20 if undefined. The result array or transient
 variable will have a mask value of 1 (invalid value) for those output
 grid cells which completely overlap input grid cells with missing values
 
-Table 4.3 CDMS Regridder function
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+CDMS Regridder function
+~~~~~~~~~~~~~~~~~~~~~~~
 
 .. csv-table:: 
    :header:  "Type", "Function", "Description"
@@ -468,28 +456,24 @@ following fields:
 In addition, a conservative regridder has the associated grid cell areas
 for source and target grids.
 
-Table 4.4 SCRIP Regridder functions
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+SCRIP Regridder functions
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
-+-------------------------------+--------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Return Type                   | Method                                                                                     | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-+===============================+============================================================================================+================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================+
-| Array or Transient-Variable   | [conservative, bilinear, and distance-weighted regridders] ``regridFunction(array)``       | Interpolate a gridded data array to a new grid. The return value is the regridded data variable. ``array`` is a Variable, MaskedArray, or Numpy array. The rank of the array may be greater than the rank of the input grid, in which case the input grid shape must match a trailing portion of the array shape. For example, if the input grid is curvilinear with shape (64,128), the last two dimensions of the array must match. Similarly, if the input grid is generic with shape (2560,), the last dimension of the array must have that length.                                                                                                                                                                                                                                                                     |
-+-------------------------------+--------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Array or Transient-Variable   | [bicubic regridders] ``regridFunction(array, gradientLat, gradientLon, gradientLatLon)``   | <p>Interpolate a gridded data array to a new grid, using a bicubic regridder. The return value is the regridded data variable.</p><p>\ ``array`` is a Variable, MaskedArray, or Numpy array. The rank of the array may be greater than the rank of the input grid, in which case the input grid shape must match a trailing portion of the array shape. For example, if the input grid is curvilinear with shape (64,128), the last two dimensions of the array must match. Simiarly, if the input grid is generic with shape (2560,), the last dimension of the array must have that length.</p><p>\ ``gradientLat``: df/di (see the SCRIP documentation). Same shape as ``array``.</p><p></code>gradientLon</code>: df/dj. Same shape as ``array``.</p><p>\ ``gradientLatLon``: d(df)/(di)(dj). Same shape as array.</p>   |
-+-------------------------------+--------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Numpy array                 | ``getDestinationArea()`` [conservative regridders only]                                    | Return the area of the destination (output) grid cell. The array is 1-D, with length equal to the number of cells in the output grid.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-+-------------------------------+--------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Numpy array                 | ``getDestinationFraction()``                                                               | Return the area fraction of the destination (output) grid cell that participates in the regridding. The array is 1-D, with length equal to the number of cells in the output grid.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-+-------------------------------+--------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| CurveGrid or Generic-Grid     | ``getInputGrid()``                                                                         | Return the input grid, or None if no input grid is associated with the regridder.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-+-------------------------------+--------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| CurveGrid or Generic-Grid     | ``getOutputGrid()``                                                                        | Return the output grid.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-+-------------------------------+--------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Numpy array                 | ``getSourceArea()`` [conservative regridders only]                                         | Return the area of the source (input) grid cell. The array is 1- D, with length equal to the number of cells in the input grid.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-+-------------------------------+--------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Numpy array                 | ``getSourceFraction()``                                                                    | Return the area fraction of the source (input) grid cell that participates in the regridding. The array is 1-D, with length equal to the number of cells in the input grid                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-+-------------------------------+--------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+.. csv-table::
+   :header:  "Return Type", "Method", "Description"
+   :widths:  40, 40, 80
+
+    "Array or Transient-Variable", "[conservative, bilinear, and distance-weighted regridders] ``regridFunction(array)``", "Interpolate a gridded data array to a new grid. The return value is the regridded data variable. ``array`` is a Variable, MaskedArray, or Numpy array. The rank of the array may be greater than the rank of the input grid, in which case the input grid shape must match a trailing portion of the array shape. For example, if the input grid is curvilinear with shape (64,128), the last two dimensions of the array must match. Similarly, if the input grid is generic with shape (2560,), the last dimension of the array must have that length."
+    "Array or Transient-Variable", "[bicubic regridders] ``regridFunction(array, gradientLat, gradientLon, gradientLatLon)``", "Interpolate a gridded data array to a new grid, using a bicubic regridder. The return value is the regridded data variable."
+    ,,"``array`` is a Variable, MaskedArray, or Numpy array. The rank of the array may be greater than the rank of the input grid, in which case the input grid shape must match a trailing portion of the array shape. For example, if the input grid is curvilinear with shape (64,128), the last two dimensions of the array must match. Simiarly, if the input grid is generic with shape (2560,), the last dimension of the array must have that length."
+    ,,"``gradientLat``: df/di (see the SCRIP documentation). Same shape as ``array``."
+    ,,"``gradientLon``: df/dj. Same shape as ``array``."
+    ,,"``gradientLatLon``: d(df)/(di)(dj). Same shape as array."
+    "Numpy array", "``getDestinationArea()`` [conservative regridders only]", "Return the area of the destination (output) grid cell. The array is 1-D, with length equal to the number of cells in the output grid."
+    "Numpy array", "``getDestinationFraction()``", "Return the area fraction of the destination (output) grid cell that participates in the regridding. The array is 1-D, with length equal to the number of cells in the output grid."
+    "CurveGrid or Generic-Grid", "``getInputGrid()``", "Return the input grid, or None if no input grid is associated with the regridder."
+    "CurveGrid or Generic-Grid", "``getOutputGrid()``", "Return the output grid."
+    "Numpy array", "``getSourceFraction()``", "Return the area fraction of the source (input) grid cell that participates in the regridding. The array is 1-D, with length equal to the number of cells in the input grid"
 
 4.4 Examples
 ^^^^^^^^^^^^

@@ -66,6 +66,11 @@ $cmd
 cmd="echo ${ESGF_PWD} | myproxyclient logon -s esgf-node.llnl.gov -p 7512 -t 12 -S -b -l ${ESGF_USER} -o /Users/distiller/.esg/esgf.cert "
 eval $cmd
 
+echo "Create .dods_cookies"
+cmd="curl -L  -v   -c /Users/distiller/.esg/.dods_cookies --cert /Users/distiller/.esg/esgf.cert  --key /Users/distiller/.esg/esgf.cert https://aims3.llnl.gov/thredds/dodsC/cmip5_css02_data/cmip5/output1/CMCC/CMCC-CM/decadal2005/mon/atmos/Amon/r1i1p1/cct/1/cct_Amon_CMCC-CM_decadal2005_r1i1p1_202601-203512.nc.dds"
+echo $cmd
+$cmd
+
 #cmd="openssl pkcs12 -export -inkey /Users/distiller/.esg/esgf.cert -in /Users/distiller/.esg/esgf.cert -name esgf  -out /Users/distiller/.esg/esgf.p12 -passout pass:esgf"
 #$cmd
 

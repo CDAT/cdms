@@ -52,7 +52,7 @@ class TestCDScan(basetest.CDMSBaseTest):
         '''
         retrieve value from cdscan 
         '''
-        argv = 'cdscan -x test_dap.xml https://dataserver.nccs.nasa.gov/thredds/dodsC/bypass/CREATE-IP/reanalysis/MERRA/mon/atmos/zg.ncml'.split()
+        argv = 'cdscan -x test_dap.xml https://dataserver.nccs.nasa.gov/thredds/dodsC/bypass/CREATE-IP/Reanalysis/NASA-GMAO/GEOS-5/MERRA/mon/atmos/zg.ncml'.split()
         pth = cdat_info.get_sampledata_path()
         os.chdir(pth)
         cdscan(argv)

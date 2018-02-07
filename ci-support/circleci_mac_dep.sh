@@ -21,6 +21,7 @@ cmd="conda install -n py3 pyopenssl"
 echo $cmd
 $cmd
 
+
 cmd="conda install -n py3 -c nesii/label/dev-esmf -c conda-forge esmf esmpy netcdf-fortran=4.4.4=5"
 echo $cmd
 $cmd

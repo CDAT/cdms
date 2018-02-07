@@ -18,8 +18,8 @@ class TestMV2(basetest.CDMSBaseTest):
         self.v_file = self.file["v"]
         self.v_transient = self.file('v')
         self.u_lat = self.u_file.getLatitude()
-        f = self.getDataFile("u_2000.nc")
-        self.other_u_file = f["u"]
+        self.f = self.getDataFile("u_2000.nc")
+        self.other_u_file = self.f["u"]
         self.ones = MV2.ones(
             self.other_u_file.shape,
             numpy.float32,
@@ -301,6 +301,21 @@ class TestMV2(basetest.CDMSBaseTest):
         xdiag = MV2.TransientVariable([[1, 2, 3], [4, 5, 6]])
         self.assertTrue(MV2.allclose(MV2.diagonal(xdiag, 1), [2, 6]))
 
+    def testCopy(self):
+        mycopy = self.f('u').copy()
+        self.assertEqual(
+            mycopy.getAxisIds(), [
+                'time', 'latitude', 'longitude'])
+
+    def testIndex(self):
+        u = self.f('u')
+        listindex = [3, 4, 5]
+        npindex = numpy.array([[0, 0, 0], [5, 4, 5], [5, 6, 7]])
+        self.assertTrue(numpy.array_equal(
+            u[listindex], numpy.array([[3., 4., 5.]])))
+        self.assertTrue(numpy.array_equal(u[npindex], numpy.array(
+            [[[0., 0., 0.], [5., 4., 5.], [5., 6., 7.]]])))
+
     def testBroadcasting(self):
         # Broadcast
         v_transient2 = self.v_transient[0]
@@ -317,18 +332,20 @@ class TestMV2(basetest.CDMSBaseTest):
         self.assertEqual(b, 1.0)
 
     def testCrosSectionRegrid(self):
-        fmod = self.getDataFile("20160520.A_WCYCL1850.ne30_oEC.edison.alpha6_01_ANN_climo_Q.nc")
+        fmod = self.getDataFile(
+            "20160520.A_WCYCL1850.ne30_oEC.edison.alpha6_01_ANN_climo_Q.nc")
         fobs = self.getDataFile("MERRA_ANN_climo_SHUM.nc")
-        var1=fmod('Q')
-        var2=fobs('SHUM')
+        var1 = fmod('Q')
+        var2 = fobs('SHUM')
 
-        mv1 = MV2.average(var1,axis=-1)
-        mv2 = MV2.average(var2,axis=-1)
-        mv1_reg = mv1 
+        mv1 = MV2.average(var1, axis=-1)
+        mv2 = MV2.average(var2, axis=-1)
+        mv1_reg = mv1
         lev_out = mv1.getLevel()
         lat_out = mv1.getLatitude()
         mv2_reg = mv2.crossSectionRegrid(lev_out, lat_out)
-        self.assertTrue(numpy.ma.is_masked(mv2_reg[:,:,-1].all()))
+        self.assertTrue(numpy.ma.is_masked(mv2_reg[:, :, -1].all()))
+
 
 if __name__ == "__main__":
     basetest.run()

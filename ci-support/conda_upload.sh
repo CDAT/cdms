@@ -22,7 +22,7 @@ if [ `uname` == "Linux" ]; then
     echo "Creating python 3 env"
     conda create -n py3 python=3.6
     conda install -n py3 -c conda-forge -c uvcdat setuptools libcf distarray cdtime libcdms cdat_info numpy libdrs_f pyopenssl nose requests flake8 myproxyclient numpy
-    conda install -n py3 -c nesii/channel/dev-esmf -c conda-forge esmpy=7.1.0.dev34
+    conda install -n py3 -c nesii/channel/dev-esmf -c conda-forge esmpy
     echo "Creating certificate"
     source activate py3
     mkdir ${HOME}/.esg
@@ -32,11 +32,6 @@ if [ `uname` == "Linux" ]; then
     ls
     cp tests/dodsrc ${HOME}.dodsrc
     source deactivate
-# Python 2.7 environment
-    echo "Creating python 2 env"
-    conda create -n py2 python=2.7
-    conda install -n py2 -c conda-forge -c uvcdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 numpy
-#    conda update -y -q conda  # -R issue woraround
 else
     echo "Mac OS"
     OS=osx-64
@@ -48,9 +43,9 @@ source activate py3
 which python
 conda install -n root -q anaconda-client conda-build
 # pin conda so that conda-build does not update it
-if [ `uname` == "Darwin" ]; then
-    echo "conda ==4.3.21" >> ~/miniconda/conda-meta/pinned  # Pin conda as workaround for conda/conda#6030
-fi
+#if [ `uname` == "Darwin" ]; then
+#    echo "conda ==4.3.21" >> ~/miniconda/conda-meta/pinned  # Pin conda as workaround for conda/conda#6030
+#fi
 conda config --set anaconda_upload no
 echo "Cloning recipes"
 cd ${HOME}
@@ -61,22 +56,12 @@ rm -rf uvcdat
 python ./prep_for_build.py
 echo "Building now"
 echo "use nesii/label/dev-esmf for py3"
-CONDA_PY=36 conda build $PKG_NAME -c nesii/label/dev-esmf -c nadeau1 -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.13
-CONDA_PY=36 conda build $PKG_NAME -c nesii/label/dev-esmf -c nadeau1 -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.12
-CONDA_PY=36 conda build $PKG_NAME -c nesii/label/dev-esmf -c nadeau1 -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.11
-anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly ${CONDA_BLD_PATH}/$OS/$PKG_NAME-$VERSION.`date +%Y`*-py3*_0.tar.bz2 --force
-
-# Python 2 section
-echo "Building python 2"
 source activate py2
 which python
 conda install -n root -q anaconda-client conda-build
 conda config --set anaconda_upload no
-cd ${HOME}/conda-recipes
 echo "Building now"
-CONDA_PY=27 conda build $PKG_NAME -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.13
-CONDA_PY=27 conda build $PKG_NAME -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.12 
-CONDA_PY=27 conda build $PKG_NAME -c uvcdat/label/nightly -c conda-forge -c uvcdat --numpy=1.11 
-anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly ${CONDA_BLD_PATH}/$OS/$PKG_NAME-$VERSION.`date +%Y`*-py27*_0.tar.bz2 --force
-
+echo "use nesii/label/dev-esmf for py3"
+conda build $PKG_NAME -c nesii/label/dev-esmf  -c uvcdat/label/nightly -c conda-forge -c uvcdat 
+anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l nightly ${CONDA_BLD_PATH}/$OS/$PKG_NAME-$VERSION.`date +%Y`*_0.tar.bz2 --force
 

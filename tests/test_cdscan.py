@@ -1,5 +1,6 @@
 
 import basetest
+import cdms2
 from cdms2.cdscan import main as cdscan
 import os
 import sys
@@ -47,6 +48,18 @@ class TestCDScan(basetest.CDMSBaseTest):
         self.assertIsNone(results)
         os.unlink("some_junk.xml")
 
+    def testopenFile(self):
+        '''
+        retrieve value from cdscan 
+        '''
+        argv = 'cdscan -x test_dap.xml https://dataserver.nccs.nasa.gov/thredds/dodsC/bypass/CREATE-IP/reanalysis/MERRA/mon/atmos/zg.ncml'.split()
+        pth = cdat_info.get_sampledata_path()
+        os.chdir(pth)
+        cdscan(argv)
+        f=cdms2.open("test_dap.xml")
+        s=f['zg']
+        self.assertAlmostEqual(s[0,0,0,0], -73.563,3)
+        os.unlink("test_dap.xml")
 
 if __name__ == "__main__":
     basetest.run()

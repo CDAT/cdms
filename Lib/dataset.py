@@ -426,7 +426,7 @@ file :: (cdms2.dataset.CdmsFile) (0) file to read from
     if dpath is None:
         direc = datanode.getExternalAttr('directory')
         head = os.path.dirname(path)
-        if direc and os.path.isabs(direc):
+        if direc and (os.path.isabs(direc) or urlparse(direc).scheme != ''):
             dpath = direc
         elif direc:
             dpath = os.path.join(head, direc)

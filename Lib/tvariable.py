@@ -222,7 +222,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         if id is not None:
             # convert unicode to string
             if sys.version_info < (3, 0, 0):
-                if isinstance(id, unicode): # noqa
+                if isinstance(id, unicode):  # noqa
                     id = str(id)
             if not isinstance(id, str):
                 raise CDMSError('id must be a string')
@@ -511,7 +511,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         d = self.getAxis(dim)
         if field == "name":
             if sys.version_info < (3, 0, 0):
-                if isinstance(value, unicode): # noqa
+                if isinstance(value, unicode):  # noqa
                     value = str(value)
             if not isinstance(value, str):
                 raise CDMSError("setdimattribute: name not a string")
@@ -527,7 +527,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
 
         elif field == "units":
             if sys.version_info < (3, 0, 0):
-                if isinstance(value, unicode): # noqa
+                if isinstance(value, unicode):  # noqa
                     value = str(value)
             if not isinstance(value, str):
                 raise CDMSError("setdimattribute: units not a string")

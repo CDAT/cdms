@@ -427,7 +427,9 @@ class Test(unittest.TestCase):
             dstDataMask = (dstData == so.missing_value)
             print('number of masked values = ', dstDataMask.sum())
             dstDataMin = dstData[:].min()
-            dstDataMax = dstData[:].max()
+            # dstDataMax = dstData[:].max()
+            # need to mask missing_value to find the real max.
+            dstDataMax = cdms2.MV2.array(dstData, mask=dstDataMask).max()
             print('min/max value of dstData: %f %f' % (dstDataMin, dstDataMax))
             self.assertLess(dstDataMax, so[0, 0, ...].max())
 

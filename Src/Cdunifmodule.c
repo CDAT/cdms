@@ -529,8 +529,10 @@ static int cdopen(const char* controlpath, int ncmode, CuFileType *filetype) {
 	cuseterropts(saveopts);
 
 	*filetype = CuGetFileType(controlpath);
-	if (*filetype == CuUnknown)
+	if (*filetype == CuUnknown) {
+        ncerr = NC_ENOTNC;
 		return -1;
+    }
 	if (*filetype == CuNetcdf) {
 		/* Take care for mode flag */
 		if ((cdms_classic == 0) || (cdms_shuffle != 0) || (cdms_deflate != 0)

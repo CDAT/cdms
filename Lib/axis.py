@@ -2541,7 +2541,7 @@ def axisMatches(axis, specification):
 
        3. an axis object; will match if it is the same object as axis.
     """
-    if isinstance(specification, str):
+    if isinstance(specification, ("".__class__, u"".__class__)):
         s = specification.lower()
         s = s.strip()
         while s[0] == '(':

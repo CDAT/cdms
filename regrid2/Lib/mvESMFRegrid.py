@@ -319,7 +319,6 @@ staggerLoc = %s!""" % self.staggerLoc
 
         self.regridObj(self.srcFld.field, self.dstFld.field, zero_region=ESMF.Region.SELECT)
 
-
         # fill in dstData
         if rootPe is None and globalIndexing:
             # only fill in the relevant portion of the data

@@ -15,6 +15,7 @@ import cdms2
 from cdms2.error import CDMSError
 from cdms2.gsStaticVariable import StaticFileVariable
 from cdms2.gsTimeVariable import TimeFileVariable
+from six import string_types
 
 LIBCF = 'libcf'
 try:
@@ -340,7 +341,7 @@ class Host:
         @return list of all variables, including static and time dependent, Default = None
         """
         isNone = gstype is None
-        isStr = isinstance(gstype, str)
+        isStr = isinstance(gstype, string_types)
 
         if isNone:
             variables = list(self.statVars.keys()) + list(self.timeVars.keys())

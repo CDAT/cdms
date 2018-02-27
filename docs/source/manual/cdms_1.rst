@@ -21,7 +21,7 @@ Variables
 The basic unit of computation in CDMS is the variable. A variable is
 essentially a multidimensional data array, augmented with a domain, a
 set of attributes, and optionally a spatial and/or temporal coordinate
-system (see `Coordinate Axes <#1.4>`__). As a data array, a variable can
+system (see `Coordinate Axes <#coordinate-axes>`__). As a data array, a variable can
 be sliced to obtain a portion of the data, and can be used in arithmetic
 computations. For example, if ``u`` and ``v`` are variables representing
 the eastward and northward components of wind speed, respectively, and
@@ -200,7 +200,7 @@ a domain is spatiotemporal:
    system.
 -  The latitude and/or longitude coordinate axes associated with a
    variable need not be elements of the domain. In particular this will
-   be true if the variable is defined on a non-rectangular grid (see `Grids <#1.9>`__).
+   be true if the variable is defined on a non-rectangular grid (see `Grids <#grids>`__).
 
 As previously noted, a spatial and/or temporal coordinate system may be
 associated with a variable. The methods getLatitude, getLongitude,

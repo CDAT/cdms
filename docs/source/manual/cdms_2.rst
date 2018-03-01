@@ -1,8 +1,9 @@
-CDMS Python Application Programming Interface
----------------------------------------------
+===============================================
+ CDMS Python Application Programming Interface
+===============================================
 
 Overview
-^^^^^^^^
+========
 
 .. highlight:: python
    :linenothreshold: 3
@@ -38,7 +39,8 @@ an application. This chapter documents the cdms, cdtime, and regrid
 modules.
 
 The chapter sections correspond to the CDMS classes. Each section
-contains tables base. If no parent, the datapath is absolute.describing
+contains table
+s base. If no parent, the datapath is absolute.describing
 the class internal (non-persistent) attributes, constructors (functions
 for creating an object), and class methods (functions). A method can
 return an instance of a CDMS class, or one of the Python types:
@@ -59,7 +61,7 @@ return an instance of a CDMS class, or one of the Python types:
    "Tuple", "An ordered sequence of objects, which need not be of the same type. Unlike lists, tuples elements cannot be inserted or appended. Tuples are denoted with parentheses, e.g., ``(1, 2.0, 'x', 'y')``"
 
 A first example
-^^^^^^^^^^^^^^^
+===============
 
 The following Python script reads January and July monthly temperature
 data from an input dataset, averages over time, and writes the results
@@ -107,7 +109,8 @@ latitude, longitude).
    "18", "Close the output file."
 
 
-2.3 cdms module
+Cdms module
+===========
 
 The cdms module is the Python interface to CDMS. The objects and methods
 in this chapter are made accessible with the command:
@@ -124,7 +127,10 @@ Rather, they are called as module functions, e.g.,
 
     file = cdms2.open('sample.nc')
 
-.. csv-table::  cdms module funtions
+Table Cdms module functions
+---------------------------
+
+.. csv-table::  Cdms module functions
    :header:  "Type", "Definition"
    :widths:  10, 80
 
@@ -185,7 +191,7 @@ Rather, they are called as module functions, e.g.,
                 , " * Return ``1`` if ``s`` is a variable, ``0`` otherwise. See also: ``asVariable``."
    "``Dataset``", "``open(url,mode='r')``: Open or create a ``Dataset`` or ``CdmsFile``." 
                 , " * ``url`` is a Uniform Resource Locator, referring to a cdunif or XML file. If the URL has the extension '.xml' or '.cdml', a ``Dataset`` is returned, otherwise a ``CdmsFile`` is returned." 
-                , "   * If the URL protocol is 'http', the file must be a '.xml' or '.cdml' file, and the mode must be 'r'. If the protocol is 'file' or is omitted, a local file or dataset is opened. ``mode`` is the open mode. See Table 2.24"
+                , "   * If the URL protocol is 'http', the file must be a '.xml' or '.cdml' file, and the mode must be 'r'. If the protocol is 'file' or is omitted, a local file or dataset is opened. ``mode`` is the open mode. (See `Open Modes <#id25>`__)"
                 , "   * **Example**: Open an existing dataset: ``f = cdms.open('sampleset.xml')``"
                 , "   * **Example**: Create a netCDF file: ``f = cdms.open('newfile.nc','w')``"
    "``List``", "``order2index (axes, orderstring)``:"
@@ -221,7 +227,7 @@ Table 2.3 Class Tags
 
 
 CdmsObj
-^^^^^^^
+=======
 
 A CdmsObj is the base class for all CDMS database objects. At the
 application level, CdmsObj objects are never created and used directly.
@@ -263,7 +269,7 @@ Table 2.5 Getting and setting attributes
 
 
 CoordinateAxis
-^^^^^^^^^^^^^^
+==============
 
 A CoordinateAxis is a variable that represents coordinate information.
 It may be contained in a file or dataset, or may be transient
@@ -318,7 +324,10 @@ Axis objects.
    , "* See Table 2.2 on page 18."
 
 
-.. csv-table::  CoordinateAxis Methods
+CoordinateAxis Methods
+----------------------
+
+.. csv-table::  Table: CoordinateAxis Methods
    :header:  "Type", "Method", "Definition"
    :widths:  20, 20, 80
 
@@ -419,7 +428,7 @@ equivalent to the two contiguous index intervals ``2 <= n < 0`` and
 
 
 CdmsFile
-^^^^^^^^
+========
 A ``CdmsFile`` is a physical file, accessible via the ``cdunif``
 interface. netCDF files are accessible in read-write mode. All other
 formats (DRS, HDF, GrADS/GRIB, POP, QL) are accessible read-only.
@@ -504,7 +513,7 @@ Cdms-Files. See “cu Module” on page 180.
 
 
 Database
-^^^^^^^^
+========
 A Database is a collection of datasets and other CDMS objects. It
 consists of a hierarchical collection of objects, with the database
 being at the root, or top of the hierarchy. A database is used to:
@@ -888,7 +897,7 @@ This defaults to the database defined in environment variable
 
 
 Dataset
-^^^^^^^
+=======
 A Dataset is a virtual file. It consists of a metafile, in CDML/XML
 representation, and one or more data files.
 
@@ -918,7 +927,7 @@ Table 2.23 Dataset Constructors
    :header:  "Constructor", "Description"
    :widths:  50, 80
 
-    "``datasetobj = cdms.open(String uri, String mode='r')``", "Open the dataset specified by the Universal Resource Indicator, a CDML file. Returns a Dataset object. mode is one of the indicators listed in Table 2.24 on page 70. ``openDataset`` is a synonym for ``open``"
+    "``datasetobj = cdms.open(String uri, String mode='r')``", "Open the dataset specified by the Universal Resource Indicator, a CDML file. Returns a Dataset object. mode is one of the indicators listed in Table `Open Modes <#id25>`__ . ``openDataset`` is a synonym for ``open``"
 
 
 Table 2.24 Open Modes
@@ -971,7 +980,7 @@ Table 2.25 Dataset Methods
 
 
 MV module
-^^^^^^^^^
+=========
 
 The fundamental CDMS data object is the variable. A variable is
 comprised of:
@@ -1085,7 +1094,7 @@ Table 2.27 MV functions
 
 
 HorizontalGrid
-^^^^^^^^^^^^^^
+==============
 
 A HorizontalGrid represents a latitude-longitude coordinate system. In
 addition, it optionally describes how lat-lon space is partitioned into
@@ -1207,7 +1216,7 @@ Table 2.32 RectGrid Methods, additional to HorizontalGrid Methods
 
 
 Variable
-^^^^^^^^
+========
 
 A Variable is a multidimensional data object, consisting of:
 
@@ -1249,7 +1258,7 @@ Table 2.33 Variable Internal Attributes
 
 Table 2.34 Variable Constructors
 
-.. csv-table::  Variable Constructgors
+.. csv-table::  Variable Constructors
    :header:  "Constructor", "Description"
    :widths:  30, 80
 
@@ -1354,7 +1363,7 @@ Table 2.35 Variable Methods
     ,,"String ``typecode()`` The Numpy datatype identifier."
 
 Example Get a region of data.
-*****************************
+-----------------------------
 
 Variable ta is a function of (time, latitude, longitude). Read data
 corresponding to all times, latitudes -45.0 up to but not
@@ -1644,11 +1653,11 @@ remove the singleton level dimension from the result array.
 
 
 Examples
-^^^^^^^^
+========
 
 
 Example 1
-*********
+---------
 
 In this example, two datasets are opened, containing surface air
 temperature (‘tas’) and upper-air temperature (‘ta’) respectively.
@@ -1742,7 +1751,7 @@ results are written to a netCDF file. For brevity, the functions
 
 
 Example 2
-*********
+---------
 
 In the next example, the pointwise variance of a variable over time is
 calculated, for all times in a dataset. The name of the dataset and

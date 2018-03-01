@@ -28,6 +28,7 @@ the eastward and northward components of wind speed, respectively, and
 both variables are functions of time, latitude, and longitude, then the
 velocity for time 0 (first index) can be calculated as
 
+
 .. highlight:: python
 
 .. doctest::

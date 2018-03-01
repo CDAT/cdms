@@ -191,7 +191,7 @@ Table Cdms module functions
                 , " * Return ``1`` if ``s`` is a variable, ``0`` otherwise. See also: ``asVariable``."
    "``Dataset``", "``open(url,mode='r')``: Open or create a ``Dataset`` or ``CdmsFile``." 
                 , " * ``url`` is a Uniform Resource Locator, referring to a cdunif or XML file. If the URL has the extension '.xml' or '.cdml', a ``Dataset`` is returned, otherwise a ``CdmsFile`` is returned." 
-                , "   * If the URL protocol is 'http', the file must be a '.xml' or '.cdml' file, and the mode must be 'r'. If the protocol is 'file' or is omitted, a local file or dataset is opened. ``mode`` is the open mode. (See `Open Modes <#id25>`__)"
+                , "   * If the URL protocol is 'http', the file must be a '.xml' or '.cdml' file, and the mode must be 'r'. If the protocol is 'file' or is omitted, a local file or dataset is opened. ``mode`` is the open mode.(See `Open Modes <#id25>`__"
                 , "   * **Example**: Open an existing dataset: ``f = cdms.open('sampleset.xml')``"
                 , "   * **Example**: Create a netCDF file: ``f = cdms.open('newfile.nc','w')``"
    "``List``", "``order2index (axes, orderstring)``:"
@@ -277,9 +277,9 @@ It may be contained in a file or dataset, or may be transient
 file, and referencing a file CoordinateAxis slice reads data from the
 file. Axis objects are also used to define the domain of a Variable.
 
-CDMS defines several different types of CoordinateAxis objects. Table
-2.9 on page 45 documents methods that are common to all CoordinateAxis
-types. Table 2.10 on page 48 specifies methods that are unique to 1D
+CDMS defines several different types of CoordinateAxis objects.  See `MV module <#mv-module>`_
+documents methods that are common to all CoordinateAxis
+types. See `HorizontalGrid <#horizontalgrid>`_ specifies methods that are unique to 1D
 Axis objects.
 
 
@@ -309,25 +309,25 @@ Axis objects.
    :header:  "Constructor", "Description"
    :widths:  20, 80
 
-   "``cdms.createAxis(data, bounds=None)``", "Create an axis which is not associated with a dataset or file. See Table 2.2 on page 33."
+   "``cdms.createAxis(data, bounds=None)``", "Create an axis which is not associated with a dataset or file. See `A First Example <#a-first-example>`_."
    "``Dataset.createAxis(name,ar)``", "Create an ``Axis`` in a ``Dataset``. (This function is not yet implemented.)"
    "``CdmsFile.createAxis(name,ar,unlimited=0)``", "Create an Axis in a ``CdmsFile``. ``name`` is the string ``name`` of the ``Axis``. ``ar`` is a 1-D data array which defines the ``Axis`` values. It may have the value ``None`` if an unlimited axis is being defined. At most one ``Axis`` in a ``CdmsFile`` may be designated as being unlimited, meaning that it may be extended in length. To define an axis as unlimited, either:"
    , "* A) set ``ar`` to ``None``, and leave ``unlimited`` undefined, or"
-   , "* B) set ``ar`` to the initial 1-D array, and set ``unlimited`` to ``cdms.Unlimited``"
+   , "* B) set ``ar`` to the initial 1-D array, and set ``unlimited`` to ``cdms.Unlitmited``"
    , "``cdms.createEqualAreaAxis(nlat)``"
-   , "* See Table 2.2 on page 33."
+   , "* See `A First Example`_."
    , "``cdms.createGaussianAxis(nlat)``"
-   , "* See Table 2.2 on page 18."
+   , "* See `A First Example`_."
    , "``cdms.createUniformLatitudeAxis(startlat, nlat, deltalat)``"
-   , "* See Table 2.2 on page 18."
+   , "* See `A First Example`_."
    , "``cdms.createUniformLongitudeAxis(startlon, nlon, deltalon)``"
-   , "* See Table 2.2 on page 18."
+   , "* See `A First Example`_ ."
 
 
 CoordinateAxis Methods
 ----------------------
 
-.. csv-table::  Table: CoordinateAxis Methods
+.. csv-table::  CoordinateAxis Methods
    :header:  "Type", "Method", "Definition"
    :widths:  20, 20, 80
 
@@ -455,7 +455,7 @@ Cdms-Files. See “cu Module” on page 180.
    :widths:  20, 80
 
    "Constructor", "Description"
-   "``fileobj = cdms.open(path, mode)``", "Open the file specified by path returning a CdmsFile object. ``path`` is the file pathname, a string. ``mode`` is the open mode indicator, as listed in Table 2.24 on page 70."
+   "``fileobj = cdms.open(path, mode)``", "Open the file specified by path returning a CdmsFile object. ``path`` is the file pathname, a string. ``mode`` is the open mode indicator, as listed in "See `Open Modes`_." 
    "``fileobj = cdms.createDataset(path)``", "Create the file specified by path, a string."
 
 
@@ -1136,7 +1136,7 @@ Table 2.30 RectGrid Constructors
    :header:  "Constructor", "Description"
    :widths:  30, 80
 
-    "``cdms.createRectGrid(lat, lon, order, type='generic', mask=None)``", "Create a grid not associated with a file or dataset. See Table 2.2"
+    "``cdms.createRectGrid(lat, lon, order, type='generic', mask=None)``", "Create a grid not associated with a file or dataset." "*See `A First Example`_)." 
     "``CdmsFile.createRectGrid(id, lat, lon, order, type='generic', mask=None)``", "Create a grid associated with a file. See Table 2.14"
     "``Dataset.createRectGrid(id, lat, lon, order, type='generic', mask=None)``", "Create a grid associated with a dataset. See Table 2.25"
     "``cdms.createGaussianGrid(nlats, xorigin=0.0, order='yx')``", "See Table 2.2"
@@ -1482,7 +1482,7 @@ selector can be used with any variable. If the corresponding axis is not
 found, the selector component is ignored. This is very useful for
 writing general purpose scripts. The required keyword overrides this
 behavior. These keywords take values that are coordinate ranges or index
-ranges as defined in Table 2.37 on page 102.
+ranges as defined in See `Index and Coordinate Intervals <#36>`_.
 
 The following keywords are available: Another form of selector
 components is the positional form, where the component order corresponds
@@ -1495,16 +1495,16 @@ to the axis order of a variable. For example:
    :header:  "Keyword", "Description", "Value"
    :widths:  30, 80, 80
 
-    "``axisid``", "Restrict the axis with ID axisid to a value or range of values.", " See Table 2.37 on page 102"
+    "``axisid``", "Restrict the axis with ID axisid to a value or range of values.",  See `Index and Coordinate Intervals <#36>`_
     "``grid``", "Regrid the result to the grid.", " Grid object"
-    "``latitude``", "Restrict latitude values to a value or range. Short form: lat", " See Table 2.37 on page 102"
-    "``level``", "Restrict vertical levels to a value or range. Short form: lev", " See Table 2.37 on page 102"
-    "``longitude``", "Restrict longitude values to a value or range. Short form: lon", " See Table 2.37 on page 102"
+    "``latitude``", "Restrict latitude values to a value or range. Short form: lat", See `Index and Coordinate Intervals <#36>`_
+    "``level``", "Restrict vertical levels to a value or range. Short form: lev",See `Index and Coordinate Intervals <#36>`_
+    "``longitude``", "Restrict longitude values to a value or range. Short form: lon", See `Index and Coordinate Intervals <#36>`_
     "``order``", "Reorder the result.", " Order string, e.g., 'tzyx'"
     "``raw``", "Return a masked array (MV2.array) rather than a transient variable.", "0: return a transient variable (default); =1: return a masked array."
     "``required``", "Require that the axis IDs be present.", " List of axis identifiers."
     "``squeeze``", "Remove singleton dimensions from the result.", " 0: leave singleton dimensions (default); 1: remove singleton dimensions."
-    "``time``", "Restrict time values to a value or range.", " See Table 2.37 on page 10"
+    "``time``", "Restrict time values to a value or range.", See `Index and Coordinate Intervals <#36>`_ 
 
 Another form of selector components is the positional form, where the
 component order corresponds to the axis order of a variable. For

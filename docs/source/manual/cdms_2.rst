@@ -191,7 +191,7 @@ Table Cdms module functions
                 , " * Return ``1`` if ``s`` is a variable, ``0`` otherwise. See also: ``asVariable``."
    "``Dataset``", "``open(url,mode='r')``: Open or create a ``Dataset`` or ``CdmsFile``." 
                 , " * ``url`` is a Uniform Resource Locator, referring to a cdunif or XML file. If the URL has the extension '.xml' or '.cdml', a ``Dataset`` is returned, otherwise a ``CdmsFile`` is returned." 
-                , "   * If the URL protocol is 'http', the file must be a '.xml' or '.cdml' file, and the mode must be 'r'. If the protocol is 'file' or is omitted, a local file or dataset is opened. ``mode`` is the open mode.(See `Open Modes <#id25>`__"
+                , "   * If the URL protocol is 'http', the file must be a '.xml' or '.cdml' file, and the mode must be 'r'. If the protocol is 'file' or is omitted, a local file or dataset is opened. ``mode`` is the open mode.  (See `Open Modes <#id25>`__"
                 , "   * **Example**: Open an existing dataset: ``f = cdms.open('sampleset.xml')``"
                 , "   * **Example**: Create a netCDF file: ``f = cdms.open('newfile.nc','w')``"
    "``List``", "``order2index (axes, orderstring)``:"
@@ -455,7 +455,7 @@ Cdms-Files. See “cu Module” on page 180.
    :widths:  20, 80
 
    "Constructor", "Description"
-   "``fileobj = cdms.open(path, mode)``", "Open the file specified by path returning a CdmsFile object. ``path`` is the file pathname, a string. ``mode`` is the open mode indicator, as listed in "See `Open Modes`_." 
+   "``fileobj = cdms.open(path, mode)``", "Open the file specified by path returning a CdmsFile object. ``path`` is the file pathname, a string. ``mode`` is the open mode indicator, as listed in 'See `Open Modes <#id25>`_.'" 
    "``fileobj = cdms.createDataset(path)``", "Create the file specified by path, a string."
 
 
@@ -1136,7 +1136,7 @@ Table 2.30 RectGrid Constructors
    :header:  "Constructor", "Description"
    :widths:  30, 80
 
-    "``cdms.createRectGrid(lat, lon, order, type='generic', mask=None)``", "Create a grid not associated with a file or dataset." "*See `A First Example`_)." 
+    "``cdms.createRectGrid(lat, lon, order, type='generic', mask=None)``", "Create a grid not associated with a file or dataset. *See `A First Example`_)*'" 
     "``CdmsFile.createRectGrid(id, lat, lon, order, type='generic', mask=None)``", "Create a grid associated with a file. See Table 2.14"
     "``Dataset.createRectGrid(id, lat, lon, order, type='generic', mask=None)``", "Create a grid associated with a dataset. See Table 2.25"
     "``cdms.createGaussianGrid(nlats, xorigin=0.0, order='yx')``", "See Table 2.2"

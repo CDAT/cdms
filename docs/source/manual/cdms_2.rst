@@ -304,7 +304,6 @@ Axis objects.
    "``Dataset``", "``parent``", "The dataset which contains the variable."
    "``Tuple``", "``shape``", "The length of each axis."
 
-
 .. csv-table::  Axis Constructors
    :header:  "Constructor", "Description"
    :widths:  20, 80
@@ -1130,21 +1129,29 @@ Table 2.29 HorizontalGrid Internal Attribute
     "Tuple", "``shape``", "The shape of the grid, a 2-tuple"
 
 
+.. _RectGrid_Constructors:
+
+
+sldjsalfa
+
+See :ref:`RectGrid_Constructors`
+
+
 Table 2.30 RectGrid Constructors
 
 .. csv-table::  RectGrid Constructors
    :header:  "Constructor", "Description"
    :widths:  30, 80
 
-    "``cdms.createRectGrid(lat, lon, order, type='generic', mask=None)``", "Create a grid not associated with a file or dataset. *See `A First Example`_)*'" 
+    "``cdms.createRectGrid(lat, lon, order, type='generic', mask=None)``", "Create a grid not associated with a file or dataset. See `A First Example`_" 
     "``CdmsFile.createRectGrid(id, lat, lon, order, type='generic', mask=None)``", "Create a grid associated with a file. See Table 2.14"
-    "``Dataset.createRectGrid(id, lat, lon, order, type='generic', mask=None)``", "Create a grid associated with a dataset. See Table 2.25"
-    "``cdms.createGaussianGrid(nlats, xorigin=0.0, order='yx')``", "See Table 2.2"
-    "``cdms.createGenericGrid(latArray, lonArray, latBounds=None, lonBounds=None, order='yx', mask=None)``", "See Table 2.2"
-    "``cdms.createGlobalMeanGrid(grid)``", "See Table 2.2."
-    "``cdms.createRectGrid(lat, lon, order, type='generic', mask=None)``", "See Table 2.2"
-    "``cdms.createUniformGrid(startLat, nlat, deltaLat, startLon, nlon, deltaLon, order='yx', mask=None)``", "See Table 2.2"
-    "``cdms.createZonalGrid(grid)``", " See Table 2.2"
+    "``Dataset.createRectGrid(id, lat, lon, order, type='generic', mask=None)``", "Create a grid associated with a dataset. See `Dataset Methods_<#id33>`_ 
+    "``cdms.createGaussianGrid(nlats, xorigin=0.0, order='yx')``", "See `A First Example`_ "
+    "``cdms.createGenericGrid(latArray, lonArray, latBounds=None, lonBounds=None, order='yx', mask=None)``", "See `A First Example`_"
+    "``cdms.createGlobalMeanGrid(grid)``", "See `A First Example`_"
+    "``cdms.createRectGrid(lat, lon, order, type='generic', mask=None)``", "See `A First Example`_"
+    "``cdms.createUniformGrid(startLat, nlat, deltaLat, startLon, nlon, deltaLon, order='yx', mask=None)``", "See `A First Example`_"
+    "``cdms.createZonalGrid(grid)``", "See `A First Example`_"
 
 
 Table 2.31 HorizontalGrid Methods

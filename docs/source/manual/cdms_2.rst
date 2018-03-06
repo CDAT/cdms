@@ -109,6 +109,9 @@ latitude, longitude).
    "18", "Close the output file."
 
 
+
+
+
 Cdms module
 ===========
 
@@ -126,6 +129,9 @@ Rather, they are called as module functions, e.g.,
 .. doctest::
 
     file = cdms2.open('sample.nc')
+:
+
+
 
 Table Cdms module functions
 ---------------------------
@@ -210,6 +216,9 @@ Table Cdms module functions
              , "Set the grid classification mode. This affects how grid type is determined, for the purpose of generating grid boundaries. If ``mode`` is ``'on'`` (the default), grid type is determined by a grid classification method, regardless of the value of ``grid.get-Type()``. If ``mode`` is ``'off'``, the value of ``grid.getType()`` determines the grid type." 
    "``None``", "``writeScripGrid(path, grid, gridTitle=None)``:"
              , "Write a grid to a SCRIP grid file.  ``path`` is a string, the path of the SCRIP file to be created.  ``grid`` is a CDMS grid object. It may be rectangular. ``gridTitle`` is a string ID for the grid."
+::
+
+
 
 
 Table 2.3 Class Tags
@@ -266,6 +275,8 @@ Table 2.5 Getting and setting attributes
             , "Get an internal or external attribute value. If the attribute is external, it is read from the database. If the attribute is not already in the database, it is created as an external attribute.  Internal attributes cannot be created, only referenced."
    "various", "``obj.attname = value``"
             , "Set an internal or external attribute value. If the attribute is external, it is written to the database."
+
+
 
 
 CoordinateAxis
@@ -330,7 +341,7 @@ CoordinateAxis Methods
    :header:  "Type", "Method", "Definition"
    :widths:  20, 20, 80
 
-   "``Array``", "``array = axis[i:j]``", "Read a slice of data from the external file or dataset. Data is returned in the physical ordering defined in the dataset. See Table 2.11 on page 51 for a description of slice operators."
+   "``Array``", "``array = axis[i:j]``", "Read a slice of data from the external file or dataset. Data is returned in the physical ordering defined in the dataset. See Table 2.11 for a description of slice operators."
    "``None``", "``axis[i:j] = array``", "Write a slice of data to the external file. Dataset axes are read-only."
    "``None``", "``assignValue(array)``", "Set the entire value of the axis. ``array`` is a Numpy array, of the same dimensionality as the axis."
    "``Axis``", "``clone(copyData=1)``", " Return a copy of the axis, as a transient axis. If copyData is 1 (the default) the data itself is copied."
@@ -433,7 +444,7 @@ interface. netCDF files are accessible in read-write mode. All other
 formats (DRS, HDF, GrADS/GRIB, POP, QL) are accessible read-only.
 
 As of CDMS V3, the legacy cuDataset interface is also supported by
-Cdms-Files. See “cu Module” on page 180.
+Cdms-Files. See “cu Module”.
 
 
 
@@ -463,7 +474,7 @@ Cdms-Files. See “cu Module” on page 180.
    :widths:  20, 20, 80
 
    "``Transient-Variable``", "``fileobj(varname, selector)``", "Calling a ``CdmsFile``"
-   ,, "object as a function reads the region of data specified by the ``selector``. The result is a transient variable, unless ``raw = 1`` is specified. See 'Selectors' on page 103."
+   ,, "object as a function reads the region of data specified by the ``selector``. The result is a transient variable, unless ``raw = 1`` is specified. See 'Selectors'."
    ,, " **Example:** The following reads data for variable 'prc', year 1980:"
    ,, " * >>> f = cdms.open('test.nc')"
    ,, " * >>> x = f('prc', time=('1980-1','1981-1'))"
@@ -700,7 +711,7 @@ Formally, search filters are strings defined as follows:
 
 
 Attribute names are defined in the chapter on “Climate Data Markup
-Language (CDML)” on page 149. In addition, some special attributes are
+Language (CDML)”. In addition, some special attributes are
 defined for convenience:
 
 -  ``category`` is either “experimental” or “observed”
@@ -901,7 +912,7 @@ A Dataset is a virtual file. It consists of a metafile, in CDML/XML
 representation, and one or more data files.
 
 As of CDMS V3, the legacy cuDataset interface is supported by Datasets.
-See “cu Module” on page 180.
+See “cu Module".
 
 
 Table 2.22 Dataset Internal Attributes
@@ -947,7 +958,7 @@ Table 2.25 Dataset Methods
    :header:  "Type", "Definition", "Description"
    :widths:  30, 30, 80
 
-    "Transient-Variable", "``datasetobj(varname, selector)``", "Calling a Dataset object as a function reads the region of data defined by the selector. The result is a transient variable, unless ``raw = 1`` is specified. See 'Selectors' on page 103."
+    "Transient-Variable", "``datasetobj(varname, selector)``", "Calling a Dataset object as a function reads the region of data defined by the selector. The result is a transient variable, unless ``raw = 1`` is specified. See 'Selectors'."
     ,, "**Example:** The following reads data for variable 'prc', year 1980:"
     ,, "   * f = cdms.open('test.  xml')"
     ,, "   * x = f('prc', time=('1980-1','1981-1'))"
@@ -1127,15 +1138,15 @@ Table 2.29 HorizontalGrid Internal Attribute
     "String", "``id``", "The grid identifier."
     "Dataset or CdmsFile", "``parent``", "The dataset or file which contains the grid."
     "Tuple", "``shape``", "The shape of the grid, a 2-tuple"
-
+::
 
 .. _RectGrid_Constructors:
 
-
-sldjsalfa
+::
 
 See :ref:`RectGrid_Constructors`
 
+     
 
 Table 2.30 RectGrid Constructors
 
@@ -1145,7 +1156,7 @@ Table 2.30 RectGrid Constructors
 
     "``cdms.createRectGrid(lat, lon, order, type='generic', mask=None)``", "Create a grid not associated with a file or dataset. See `A First Example`_" 
     "``CdmsFile.createRectGrid(id, lat, lon, order, type='generic', mask=None)``", "Create a grid associated with a file. See Table 2.14"
-    "``Dataset.createRectGrid(id, lat, lon, order, type='generic', mask=None)``", "Create a grid associated with a dataset. See `Dataset Methods_<#id33>`_ 
+    "``Dataset.createRectGrid(id, lat, lon, order, type='generic', mask=None)``", "Create a grid associated with a dataset. See Table 2.25" 
     "``cdms.createGaussianGrid(nlats, xorigin=0.0, order='yx')``", "See `A First Example`_ "
     "``cdms.createGenericGrid(latArray, lonArray, latBounds=None, lonBounds=None, order='yx', mask=None)``", "See `A First Example`_"
     "``cdms.createGlobalMeanGrid(grid)``", "See `A First Example`_"
@@ -1154,7 +1165,9 @@ Table 2.30 RectGrid Constructors
     "``cdms.createZonalGrid(grid)``", "See `A First Example`_"
 
 
+
 Table 2.31 HorizontalGrid Methods
+
 
 .. csv-table::  HorizontalGrid Methods
    :header:  "Type", "Method", "Description"
@@ -1283,7 +1296,7 @@ Table 2.35 Variable Methods
    :widths:  30, 30, 180
 
     "Variable", "``tvar = var[ i:j, m:n]``", "Read a slice of data from the file or dataset, resulting in a transient variable.  Singleton dimensions are 'squeezed' out. Data is returned in the physical ordering defined in the dataset. The forms of the slice operator are listed in Table 2.36"
-    "None", "``var[ i:j, m:n] = array``", "Write a slice of data to the external dataset.  The forms of the slice operator are listed in Table 2.21 on page 32.  (Variables in CdmsFiles only)"
+    "None", "``var[ i:j, m:n] = array``", "Write a slice of data to the external dataset.  The forms of the slice operator are listed in Table 2.21.  (Variables in CdmsFiles only)"
     "Variable", "``tvar = var(selector)``", "Calling a variable as a function reads the region of data defined by the selector. The result is a transient variable, unless raw=1 keyword is specified.  See 'Selectors'."
     "None", "``assignValue(Array ar)``", "Write the entire data array. Equivalent to ``var[:] = ar``.  (Variables in CdmsFiles only)."
     "Variable", "``astype(typecode)``", "Cast the variable to a new datatype. Typecodes are as for MV, MV2, and Numpy modules."
@@ -1351,7 +1364,7 @@ Table 2.35 Variable Methods
     "``None``", "``setAxisList(axislist)``", "Set all axes of the variable. axislist is a list of axis objects."
     "``None``", "``setMissing(value)``", "Set the missing value.  Integer ``size()`` Number of elements of the variable."
     "Variable", "``subRegion(* region, time=None, level=None, latitude=None, longitude=None, squeeze=0, raw=0)``", "Read a coordinate region of data, returning a transient variable. A region is a hyperrectangle in coordinate space."
-    ,,"``region`` is an argument list, each item of which specifies an interval of a coordinate axis. The intervals are listed in the order of the variable axes. If trailing dimensions are omitted, all values of those dimensions are retrieved. If an axis is circular (axis.isCircular() is true) or cycle is specified (see below), then data will be read with wraparound in that dimension. Only one axis may be read with wraparound. A coordinate interval has one of the forms listed in Table 2.37 on page 102. Also see ``axis.mapIntervalExt``."
+    ,,"``region`` is an argument list, each item of which specifies an interval of a coordinate axis. The intervals are listed in the order of the variable axes. If trailing dimensions are omitted, all values of those dimensions are retrieved. If an axis is circular (axis.isCircular() is true) or cycle is specified (see below), then data will be read with wraparound in that dimension. Only one axis may be read with wraparound. A coordinate interval has one of the forms listed in Table 2.37. Also see ``axis.mapIntervalExt``."
     ,,"The optional keyword arguments ``time``, ``level``, ``latitude``, and ``longitude`` may also be used to specify the dimension for which the interval applies.  This is particularly useful if the order of dimensions is not known in advance. An exception is raised if a keyword argument conflicts with a positional region argument."
     ,,"The optional keyword argument ``squeeze`` determines whether or not the shape of the returned array contains dimensions whose length is 1; by default this argument is 0, and such dimensions are not 'squeezed out'."
     ,,"The optional keyword argument ``raw`` specifies whether the return object is a variable or a masked array. By default, a transient variable is returned, having the axes and attributes corresponding to2,3 the region read. If raw=1, an MV2 masked array is returned, equivalent to the transient variable without the axis and attribute information."
@@ -1525,7 +1538,7 @@ example:
 
 reads data for the range (‘1979-1-1’,’1979-2-1’) of the first axis, and
 coordinate value 1000.0 of the second axis. Non-keyword arguments of the
-form(s) listed in Table 2.37 on page 102 are treated as positional. Such
+form(s) listed in Table 2.37 are treated as positional. Such
 selectors are more concise, but not as general or flexible as the other
 types described in this section.
 

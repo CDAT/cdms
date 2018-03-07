@@ -255,7 +255,7 @@ valid choices are: 'libcf', 'esmf'""" % regridTool
 
                     # set field values to zero where missing, we'll add the mask
                     # contribution later
-                    indata *= (1 - (srcDataMaskFloat == 1))
+#                    indata *= (1 - (srcDataMaskFloat == 1))
 
 #                    srcDataMaskFloatData = srcDataMaskFloat * numpy.random.rand(srcHorizShape[0],srcHorizShape[1])*100
                     # interpolate mask
@@ -277,6 +277,14 @@ valid choices are: 'libcf', 'esmf'""" % regridTool
                                 globalIndexing=True,
                                 srcDataMask=srcDataMaskFloat, **args)
 
+#                import vcs
+#                pp = vcs.init()
+#                pp.plot(indata)
+#                pp.interact()
+#                pp.clear()
+#                pp.plot(outdata)
+#                pp.interact()
+#                pp.clear()
                 # apply missing value contribution
                 if missingValue is not None:
                     # add mask contribution

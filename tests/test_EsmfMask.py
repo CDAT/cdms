@@ -1,6 +1,5 @@
 import unittest
 import cdms2
-import vcs
 import ESMF
 import cdat_info
 import os
@@ -61,16 +60,10 @@ class TestESMFMask(unittest.TestCase):
         data2 = cdms2.MV2.masked_where(cdms2.MV2.less(sft,50.),data)
 
         tGrid = cdms2.createUniformGrid(-88.875, 72, 2.5, 0, 144, 2.5)
-        x=vcs.init()
+
         for mthd in ["conservative", "linear"]:
             print("USING REGRID METHOD:",mthd)
             data3 = data2.regrid(tGrid, regridTool="esmf", regridMethod=mthd, mask=data2.mask)
-            print("pltting")
-            x.plot(data3)
-            print("pnging")
-            x.png("masked_{}".format(mthd))
-            print("clearing")
-            x.clear()
 
 
 

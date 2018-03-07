@@ -133,7 +133,7 @@ system(s) of the variable(s).
 
 Often in climate applications an axis is a one-dimensional variable
 whose values are floating-point and strictly monotonic. In some cases an
-axis can be multidimensional (see `Grids <#1.9>`__). If an axis is
+axis can be multidimensional (see `Grids <#grids>`__). If an axis is
 associated with one of the canonical types latitude, longitude, level,
 or time, then the axis is called temporal .
 

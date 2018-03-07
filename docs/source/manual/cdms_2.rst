@@ -129,7 +129,6 @@ Rather, they are called as module functions, e.g.,
 .. doctest::
 
     file = cdms2.open('sample.nc')
-:
 
 
 
@@ -311,7 +310,7 @@ Axis objects.
    :widths:  20, 20, 80
 
    "``Dictionary``", "``attributes``", "External attribute dictionary."
-   "``String``", "``id``", "CoordinateAxis identifer."
+   "``String``", "``id``", "CoordinateAxis identifier."
    "``Dataset``", "``parent``", "The dataset which contains the variable."
    "``Tuple``", "``shape``", "The length of each axis."
 
@@ -1139,10 +1138,19 @@ Table 2.29 HorizontalGrid Internal Attribute
     "Dataset or CdmsFile", "``parent``", "The dataset or file which contains the grid."
     "Tuple", "``shape``", "The shape of the grid, a 2-tuple"
 ::
+  
+  
+
+
 
 .. _RectGrid_Constructors:
 
 ::
+  
+  
+  
+  
+  
 
 See :ref:`RectGrid_Constructors`
 

@@ -475,11 +475,11 @@ SCRIP Regridder functions
     "CurveGrid or Generic-Grid", "``getOutputGrid()``", "Return the output grid."
     "Numpy array", "``getSourceFraction()``", "Return the area fraction of the source (input) grid cell that participates in the regridding. The array is 1-D, with length equal to the number of cells in the input grid"
 
-4.4 Examples
-^^^^^^^^^^^^
+Examples
+^^^^^^^^
 
-4.4.1 CDMS regridder
-~~~~~~~~~~~~~~~~~~~~
+CDMS regridder
+~~~~~~~~~~~~~~
 
 **Example:**
 

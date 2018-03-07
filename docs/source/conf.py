@@ -158,10 +158,10 @@ todo_include_todos = True
 #html_theme = 'alabaster'
 #html_theme = 'sphinxdoc'
 #html_theme = 'nature'
-#html_theme = 'agogo'
+html_theme = 'agogo'
 #html_theme = 'pyramid'
 #html_theme = 'epub'
-html_theme = 'haiku'
+#html_theme = 'haiku'
 #html_theme = "sphinx_rtd_theme"
 #html_theme = 'classic'
 

@@ -111,9 +111,9 @@ class TestESMPRegridderConserve(unittest.TestCase):
                                         ESMF.StaggerLoc.CENTER_VCENTER)
         srcField.setLocalData(srcData, ESMF.StaggerLoc.CENTER_VCENTER,
                               globalIndexing=True)
-        dstField.setLocalData(dstData * 0, ESMF.StaggerLoc.CENTER_VCENTER,
+        dstField.setLocalData(dstData * 1e20, ESMF.StaggerLoc.CENTER_VCENTER,
                               globalIndexing=True)
-        srcFldIn.setLocalData(srcData * 0, ESMF.StaggerLoc.CENTER_VCENTER,
+        srcFldIn.setLocalData(srcData * 1e20, ESMF.StaggerLoc.CENTER_VCENTER,
                               globalIndexing=True)
 
         # Regrid

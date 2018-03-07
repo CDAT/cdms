@@ -13,12 +13,12 @@ from numpy.ma import indices, innerproduct, masked, put, putmask, rank, ravel  #
 from numpy.ma import set_fill_value, shape, size, isMA, isMaskedArray, is_mask, isarray  # noqa
 from numpy.ma import make_mask, mask_or, nomask   # noqa
 from numpy import sctype2char, get_printoptions, set_printoptions
-from .avariable import AbstractVariable, getNumericCompatibility
-from .tvariable import TransientVariable, asVariable
-from .grid import AbstractRectGrid
-from .error import CDMSError
+from cdms2.avariable import AbstractVariable, getNumericCompatibility
+from cdms2.tvariable import TransientVariable, asVariable
+from cdms2.grid import AbstractRectGrid
+from cdms2.error import CDMSError
 # from numpy.ma import *
-from .axis import allclose as axisAllclose, TransientAxis, concatenate as axisConcatenate, take as axisTake
+from cdms2.axis import allclose as axisAllclose, TransientAxis, concatenate as axisConcatenate, take as axisTake
 
 
 create_mask = make_mask_none

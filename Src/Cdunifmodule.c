@@ -2527,8 +2527,8 @@ PyCdunifVariable_ReadAsArray(PyCdunifVariableObject *self,
 		array = (PyArrayObject *) PyArray_SimpleNew(d, dims, self->type);
     }
 
-	if (array != NULL && nitems > 0) {
-		if (self->nd == 0) {
+	if (nitems > 0) {
+		if ((self->nd == 0) && (array != NULL)) {
 			long zero = 0;
 			int ret;
 			Py_BEGIN_ALLOW_THREADS
@@ -2609,11 +2609,16 @@ PyCdunifVariable_ReadAsArray(PyCdunifVariableObject *self,
                     }
                     PyMem_Free(value);
                 } else {
-                    ret = cdvargets(self->file, self->id, start, count, stride,
-                            array->data);
+                    if(array != NULL) {
+                        ret = cdvargets(self->file,
+                                self->id, start,
+                                count, stride,
+                                array->data);
+                    } else {
+                        ret = -1;
+                    }
                 }
 				release_Cdunif_lock()
-
 				Py_END_ALLOW_THREADS
 				;
 				if (ret == -1) {

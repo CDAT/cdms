@@ -366,11 +366,15 @@ staggerLoc = %s!""" % self.staggerLoc
 #                self.maskPtr[:] = srcDataMask[:]
 #                self.computeWeights(**args)
 
-        self.srcFld.field.data[:] = srcData
-        self.dstFld.field.data[:] = dstData
+        zero_region = ESMF.Region.SELECT
+        if 'zero_region' in args.keys():
+            zero_region=args.get('zero_region')
+
+        self.srcFld.field.data[:] = srcData.T
+        self.dstFld.field.data[:] = dstData.T
         # regrid
 
-        self.regridObj(self.srcFld.field, self.dstFld.field, zero_region=ESMF.Region.SELECT)
+        self.regridObj(self.srcFld.field, self.dstFld.field, zero_region=zero_region)
 
         # fill in dstData
         if rootPe is None and globalIndexing:
@@ -378,7 +382,7 @@ staggerLoc = %s!""" % self.staggerLoc
             slab = self.dstGrid.getLocalSlab(staggerloc=self.staggerloc)
             dstData[slab] = self.dstFld.getData(rootPe=rootPe)
         else:
-            tmp = self.dstFld.field.data
+            tmp = self.dstFld.field.data.T
             if tmp is None:
                 dstData = None
             else:
@@ -615,7 +619,7 @@ Parameters
                 'srcAreas', 'dstAreas':
             if entry in diag:
                 diag[entry] = eval(
-                    'self.' + oldMethods[entry] + '(rootPe=rootPe)')
+                    'self.' + oldMethods[entry] + '(rootPe=rootPe)').T
         diag['regridTool'] = 'esmf'
         diag['regridMethod'] = self.regridMethodStr
         diag['periodicity'] = self.periodicity

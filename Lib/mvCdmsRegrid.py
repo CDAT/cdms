@@ -445,12 +445,7 @@ coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
 
         # establish the destination data. Initialize to missing values or 0.
         dstData = numpy.ones(dstShape, dtype=srcVar.dtype)
-        if missingValue is not None and \
-                re.search('conserv', self.regridMethod) is None:
-            dstData *= missingValue
-        else:
-            dstData *= 0.0
-
+        dstData *= missingValue
         # sometimes the masked values are not set to missing_values,
         # sorry for the extra copy
         srcData = numpy.array(
@@ -462,6 +457,19 @@ coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
                              rootPe=0,
                              missingValue=missingValue,
                              **args)
+
+        # regrid the mask if we have a mask
+        if numpy.array(srcVar.mask).any() is True:
+            dstMask = numpy.ones(dstData.shape)
+            dstMask[:] *= missingValue
+            self.regridObj.apply(srcVar.mask, dstMask,
+                                 rootPe=0,
+                                 missingValue=None,
+                                 **args)
+        elif numpy.any(dstData == missingValue):
+            # if the missing value is present in the destination data, set
+            # destination mask
+            dstMask = (dstData > srcVar.max())
 
         # fill in diagnostic data
         if 'diag' in args:
@@ -477,11 +485,6 @@ coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
             if isinstance(v, bytes):
                 attrs[a] = v
 
-        # if the missing value is present in the destination data, set
-        # destination mask
-        if numpy.any(dstData == missingValue):
-            dstMask = (dstData == missingValue)
-
         # create the transient variable. Note: it is unclear whether
         # we should create the variable on the supplied dstGrid or
         # the local grid.
@@ -492,5 +495,4 @@ coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
                                       grid=self.dstGrid,
                                       attributes=attrs,
                                       id=srcVar.id + '_CdmsRegrid')
-
         return dstVar

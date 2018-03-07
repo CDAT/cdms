@@ -20,7 +20,7 @@ class TestMIPS(basetest.CDMSBaseTest):
     def tearDown(self):
         super(TestMIPS, self).tearDown()
 
-    def testinput4MIPString(self):
+    def dtestinput4MIPString(self):
         f = cdms2.open(self.filename2)
         institution_id = f.institution_id
         latunits = f['lat'].units

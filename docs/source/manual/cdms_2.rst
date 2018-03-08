@@ -3,7 +3,7 @@
 ===============================================
 
 Overview
-========
+^^^^^^^^
 
 .. highlight:: python
    :linenothreshold: 3
@@ -61,7 +61,7 @@ return an instance of a CDMS class, or one of the Python types:
    "Tuple", "An ordered sequence of objects, which need not be of the same type. Unlike lists, tuples elements cannot be inserted or appended. Tuples are denoted with parentheses, e.g., ``(1, 2.0, 'x', 'y')``"
 
 A first example
-===============
+^^^^^^^^^^^^^^^
 
 The following Python script reads January and July monthly temperature
 data from an input dataset, averages over time, and writes the results
@@ -111,9 +111,8 @@ latitude, longitude).
 
 
 
-
 Cdms module
-===========
+^^^^^^^^^^^
 
 The cdms module is the Python interface to CDMS. The objects and methods
 in this chapter are made accessible with the command:
@@ -235,7 +234,7 @@ Table 2.3 Class Tags
 
 
 CdmsObj
-=======
+^^^^^^^
 
 A CdmsObj is the base class for all CDMS database objects. At the
 application level, CdmsObj objects are never created and used directly.
@@ -279,7 +278,7 @@ Table 2.5 Getting and setting attributes
 
 
 CoordinateAxis
-==============
+^^^^^^^^^^^^^^
 
 A CoordinateAxis is a variable that represents coordinate information.
 It may be contained in a file or dataset, or may be transient
@@ -437,7 +436,7 @@ equivalent to the two contiguous index intervals ``2 <= n < 0`` and
 
 
 CdmsFile
-========
+^^^^^^^^
 A ``CdmsFile`` is a physical file, accessible via the ``cdunif``
 interface. netCDF files are accessible in read-write mode. All other
 formats (DRS, HDF, GrADS/GRIB, POP, QL) are accessible read-only.
@@ -522,7 +521,7 @@ Cdms-Files. See “cu Module”.
 
 
 Database
-========
+^^^^^^^^
 A Database is a collection of datasets and other CDMS objects. It
 consists of a hierarchical collection of objects, with the database
 being at the root, or top of the hierarchy. A database is used to:
@@ -551,7 +550,8 @@ The figure below illustrates several important points:
 Figure 1
 
 
-2.7.1 Overview
+Overview
+--------------
 
 To access a database:
 
@@ -660,7 +660,8 @@ To access a database:
 .. highlight:: python
    :linenothreshold: 0
 
-2.7.2 Searching a database
+Searching a database
+--------------------------
 
 The ``searchFilter`` method is used to search a database. The result is
 called a search result, and consists of a sequence of result entries.
@@ -808,7 +809,8 @@ Table 2.21 ResultEntry Methods
     ,, "**Note:** For many search applications it is unnecessary to access the associated CDMS object. For best performance this function should be used only when necessary, for example, to retrieve data associated with a variable."
 
 
-2.7.3 Accessing data
+Accessing data
+--------------------
 
 To access data via CDMS:
 
@@ -826,7 +828,8 @@ In the next example, a portion of variable ‘ua’ is read from dataset
     data = ua[0,0]
 
 
-2.7.4 Examples of database searches
+Examples of database searches
+-----------------------------------
 
 In the following examples, db is the database opened with
 
@@ -906,7 +909,7 @@ This defaults to the database defined in environment variable
 
 
 Dataset
-=======
+^^^^^^^
 A Dataset is a virtual file. It consists of a metafile, in CDML/XML
 representation, and one or more data files.
 
@@ -989,7 +992,7 @@ Table 2.25 Dataset Methods
 
 
 MV module
-=========
+^^^^^^^^^
 
 The fundamental CDMS data object is the variable. A variable is
 comprised of:
@@ -1103,7 +1106,7 @@ Table 2.27 MV functions
 
 
 HorizontalGrid
-==============
+^^^^^^^^^^^^^^
 
 A HorizontalGrid represents a latitude-longitude coordinate system. In
 addition, it optionally describes how lat-lon space is partitioned into
@@ -1244,7 +1247,7 @@ Table 2.32 RectGrid Methods, additional to HorizontalGrid Methods
 
 
 Variable
-========
+^^^^^^^^
 
 A Variable is a multidimensional data object, consisting of:
 
@@ -1454,7 +1457,8 @@ Table 2.37 Index and Coordinate Intervals
 
 
 
-2.11.1 Selectors
+Selectors
+----------------
 
 A selector is a specification of a region of data to be selected from a
 variable. For example, the statement
@@ -1622,7 +1626,8 @@ the call:
 
 
 
-2.11.2 Selector examples
+Selector examples
+------------------------
 
 CDMS provides a variety of ways to select or slice data. In the
 following examples, variable hus is contained in file sample.nc, and is
@@ -1681,7 +1686,7 @@ remove the singleton level dimension from the result array.
 
 
 Examples
-========
+^^^^^^^^
 
 
 Example 1

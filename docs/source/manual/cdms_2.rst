@@ -195,7 +195,7 @@ Table Cdms module functions
                 , " * Return ``1`` if ``s`` is a variable, ``0`` otherwise. See also: ``asVariable``."
    "``Dataset``", "``open(url,mode='r')``: Open or create a ``Dataset`` or ``CdmsFile``." 
                 , " * ``url`` is a Uniform Resource Locator, referring to a cdunif or XML file. If the URL has the extension '.xml' or '.cdml', a ``Dataset`` is returned, otherwise a ``CdmsFile`` is returned." 
-                , "   * If the URL protocol is 'http', the file must be a '.xml' or '.cdml' file, and the mode must be 'r'. If the protocol is 'file' or is omitted, a local file or dataset is opened. ``mode`` is the open mode.  (See `Open Modes <#id25>`__"
+                , "   * If the URL protocol is 'http', the file must be a '.xml' or '.cdml' file, and the mode must be 'r'. If the protocol is 'file' or is omitted, a local file or dataset is opened. ``mode`` is the open mode.  See `Open Modes <#table-open-modes>`__"
                 , "   * **Example**: Open an existing dataset: ``f = cdms.open('sampleset.xml')``"
                 , "   * **Example**: Create a netCDF file: ``f = cdms.open('newfile.nc','w')``"
    "``List``", "``order2index (axes, orderstring)``:"
@@ -214,13 +214,13 @@ Table Cdms module functions
              , "Set the grid classification mode. This affects how grid type is determined, for the purpose of generating grid boundaries. If ``mode`` is ``'on'`` (the default), grid type is determined by a grid classification method, regardless of the value of ``grid.get-Type()``. If ``mode`` is ``'off'``, the value of ``grid.getType()`` determines the grid type." 
    "``None``", "``writeScripGrid(path, grid, gridTitle=None)``:"
              , "Write a grid to a SCRIP grid file.  ``path`` is a string, the path of the SCRIP file to be created.  ``grid`` is a CDMS grid object. It may be rectangular. ``gridTitle`` is a string ID for the grid."
-::
+:
 
 
 
 
-Table 2.3 Class Tags
-
+Table Class Tags
+--------------------
 .. csv-table::  Class Tags
    :header:  "Tag", "Class"
    :widths:  20, 20
@@ -263,8 +263,8 @@ external attributes are written, but not the internal attributes.
    "Dictionary", "attributes", "External attribute dictionary for this object."
 
 
-Table 2.5 Getting and setting attributes
-
+Table Getting and setting attributes
+------------------------------------
 .. csv-table::  Getting and setting attributes
    :header:  "Type", "Definition"
    :widths:  20, 80
@@ -286,12 +286,13 @@ It may be contained in a file or dataset, or may be transient
 file, and referencing a file CoordinateAxis slice reads data from the
 file. Axis objects are also used to define the domain of a Variable.
 
-CDMS defines several different types of CoordinateAxis objects.  See `MV module <#mv-module>`_
+CDMS defines several different types of CoordinateAxis objects. See `MV module <#id3>`_
 documents methods that are common to all CoordinateAxis
-types. See `HorizontalGrid <#horizontalgrid>`_ specifies methods that are unique to 1D
+types. See `HorizontalGrid <#id4>`_ specifies methods that are unique to 1D
 Axis objects.
 
-
+Table CoordinateAxis Types
+--------------------------
 
 .. csv-table::  CoordinateAxis types
    :header:  "Type", "Definition"
@@ -302,7 +303,8 @@ Axis objects.
    "``Axis2D``", "A two-dimensional coordinate axis, typically a latitude or longitude axis related to a ``CurvilinearGrid``. Has subtypes ``DatasetAxis2D``, ``FileAxis2D``, and ``TransientAxis2D``."
    "``AuxAxis1D``", "A one-dimensional coordinate axis whose values need not be monotonic. Typically a latitude or longitude axis associated with a ``GenericGrid``. Has subtypes ``DatasetAuxAxis1D``, ``FileAuxAxis1D``, and ``TransientAuxAxis1D``. An axis in a ``CdmsFile`` may be designated the unlimited axis, meaning that it can be extended in length after the initial definition. There can be at most one unlimited axis associated with a ``CdmsFile``."
 
-
+Table CoordinateAxis Internal Attributes
+----------------------------------------
 
 .. csv-table::  CoordinateAxis Internal Attributes
    :header:  "Type", "Name", "Definition"
@@ -312,6 +314,9 @@ Axis objects.
    "``String``", "``id``", "CoordinateAxis identifier."
    "``Dataset``", "``parent``", "The dataset which contains the variable."
    "``Tuple``", "``shape``", "The length of each axis."
+
+Table Axis Constructors
+-----------------------
 
 .. csv-table::  Axis Constructors
    :header:  "Constructor", "Description"
@@ -332,14 +337,14 @@ Axis objects.
    , "* See `A First Example`_ ."
 
 
-CoordinateAxis Methods
-----------------------
+Table CoordinateAxis Methods
+----------------------------
 
 .. csv-table::  CoordinateAxis Methods
    :header:  "Type", "Method", "Definition"
    :widths:  20, 20, 80
 
-   "``Array``", "``array = axis[i:j]``", "Read a slice of data from the external file or dataset. Data is returned in the physical ordering defined in the dataset. See Table 2.11 for a description of slice operators."
+   "``Array``", "``array = axis[i:j]``", "Read a slice of data from the external file or dataset. Data is returned in the physical ordering defined in the dataset. See `Variable Slice Operators <#table-variable-slice-operators>`_ for a description of slice operators."
    "``None``", "``axis[i:j] = array``", "Write a slice of data to the external file. Dataset axes are read-only."
    "``None``", "``assignValue(array)``", "Set the entire value of the axis. ``array`` is a Numpy array, of the same dimensionality as the axis."
    "``Axis``", "``clone(copyData=1)``", " Return a copy of the axis, as a transient axis. If copyData is 1 (the default) the data itself is copied."
@@ -445,6 +450,8 @@ As of CDMS V3, the legacy cuDataset interface is also supported by
 Cdms-Files. See “cu Module”.
 
 
+Table CdmsFile Internal Attributes
+----------------------------------
 
 .. csv-table::  CdmsFile Internal Attributes
    :header:  "Type", "Name", "Definition"
@@ -456,16 +463,19 @@ Cdms-Files. See “cu Module”.
    "``String``", "``id``", "File pathname."
    "``Dictionary``", "``variables``", "Variables contained in the file."
 
-
+Table CdmsFile Constructors
+---------------------------
 
 .. csv-table::  CdmsFile Constructors
    :header:  "Constructor", "Description"
    :widths:  20, 80
 
    "Constructor", "Description"
-   "``fileobj = cdms.open(path, mode)``", "Open the file specified by path returning a CdmsFile object. ``path`` is the file pathname, a string. ``mode`` is the open mode indicator, as listed in 'See `Open Modes <#id25>`_.'" 
+   "``fileobj = cdms.open(path, mode)``", "Open the file specified by path returning a CdmsFile object. ``path`` is the file pathname, a string. ``mode`` is the open mode indicator, as listed in See `Open Modes <#table-open-modes>`_." 
    "``fileobj = cdms.createDataset(path)``", "Create the file specified by path, a string."
 
+Table CdmsFile Methods
+----------------------
 
 .. csv-table::  CdmsFile Methods
    :header:  "Type", "Method", "Definition"
@@ -507,6 +517,9 @@ Cdms-Files. See “cu Module”.
     ,,"* ``fill_value`` is the missing value flag."
     ,,"* ``index`` is the extended dimension index to write to. The default index is determined by lookup relative to the existing extended dimension."
     ,," **Note:** data can also be written by setting a slice of a file variable, and attributes can be written by setting an attribute of a file variable."
+
+Table CDMS Datatypes
+--------------------
 
 .. csv-table::  CDMS Datatypes
    :header:  "CDMS Datatype", "Definition"
@@ -597,6 +610,9 @@ To access a database:
 
    ``db.close()``
 
+Table Database Internal Attributes
+----------------------------------
+
 
 .. csv-table::  Database Internal Attributes
    :header:  "Type", "Name", "Summary"
@@ -608,7 +624,9 @@ To access a database:
     "``String``", "``path``", "path name"
     "``String``", "``uri``", "Uniform Resource Identifier"
 
-------------
+
+Table Database Constructors
+---------------------------
 
 .. csv-table::  Database Constructors
    :header:  "Constructor", "Description"
@@ -618,7 +636,8 @@ To access a database:
     ,"For a Lightweight Directory Access Protocol (LDAP) database, the form is: ``ldap://host[:port]/dbname``."
     ,"For example, if the database is located on host dbhost.llnl.gov, and is named ``'database=CDMS,ou=PCMDI,o=LLNL,c=US'``, the URI is: ``ldap://dbhost.llnl.gov/database=CDMS,ou=PCMDI,o=LLNL,c=US``. If unspecified, the URI defaults to the value of environment variable CDMSROOT. ``user`` is the user ID. If unspecified, an anonymous connection is made. ``password`` is the user password. A password is not required for an anonymous connection"
 
-------------
+Table Database Methods
+----------------------
 
 .. csv-table::  Database Methods
    :header:  "Type", "Method", "Definition"
@@ -769,7 +788,8 @@ variables defined on a 94x192 grid:
 
 
 
-Table 2.19 SearchResult Methods
+Table SearchResult Methods
+--------------------------
 
 .. csv-table::  SearchResult Methods
    :header:  "Type", "Method", "Definition"
@@ -789,7 +809,8 @@ information defined for the associated CDMS object, which is retrieved
 with the ``getObject`` method.
 
 
-Table 2.20 ResultEntry Attributes
+Table ResultEntry Attributes
+----------------------------
 
 .. csv-table::  ResultEntry Attributes
    :header:  "Type", "Method", "Definition"
@@ -799,7 +820,8 @@ Table 2.20 ResultEntry Attributes
     "Dictionary", "``attributes``", "The attributes returned from the search. ``attributes[key]`` is a list of all string values associated with the key"
 
 
-Table 2.21 ResultEntry Methods
+Table ResultEntry Methods
+-------------------------
 
 .. csv-table::  ResultEntry Methods
    :header:  "Type", "Method", "Definition"
@@ -917,7 +939,8 @@ As of CDMS V3, the legacy cuDataset interface is supported by Datasets.
 See “cu Module".
 
 
-Table 2.22 Dataset Internal Attributes
+Table Dataset Internal Attributes
+---------------------------------
 
 .. csv-table::  Dataset Internal Attributes
    :header:  "Type", "Name", "Description"
@@ -933,16 +956,18 @@ Table 2.22 Dataset Internal Attributes
     "Dictionary", "``variables``", "Variables contained in the dataset."
     "Dictionary", "``xlinks``", "External links contained in the dataset."
 
-Table 2.23 Dataset Constructors
+Table Dataset Constructors
+--------------------------
 
 .. csv-table::  Dataset Internal Attributes
    :header:  "Constructor", "Description"
    :widths:  50, 80
 
-    "``datasetobj = cdms.open(String uri, String mode='r')``", "Open the dataset specified by the Universal Resource Indicator, a CDML file. Returns a Dataset object. mode is one of the indicators listed in Table `Open Modes <#id25>`__ . ``openDataset`` is a synonym for ``open``"
+    "``datasetobj = cdms.open(String uri, String mode='r')``", "Open the dataset specified by the Universal Resource Indicator, a CDML file. Returns a Dataset object. mode is one of the indicators listed in Table `Open Modes <#table-open-modes>`__ . ``openDataset`` is a synonym for ``open``"
 
 
-Table 2.24 Open Modes
+Table Open Modes
+----------------
 
 .. csv-table::  Open Modes
    :header:  "Mode", "Definition"
@@ -954,7 +979,8 @@ Table 2.24 Open Modes
    "‘w’", " Create a new file, read-write"
 
 
-Table 2.25 Dataset Methods
+Table Dataset Methods
+---------------------
 
 .. csv-table::  Dataset Methods
    :header:  "Type", "Definition", "Description"
@@ -1023,7 +1049,7 @@ The command
 
 allows use of MV commands without any prefix.
 
-Table 2.26 lists the constructors in MV. All functions return
+Table `Variable Constructors in module MV <#table-variable-constructors-in-module-mv>`_,  lists the constructors in MV. All functions return
 a transient variable. In most cases the keywords axes, attributes, and
 id are available. axes is a list of axis objects which specifies the
 domain of the variable. attributes is a dictionary. id is a special
@@ -1049,7 +1075,8 @@ corresponding MV2 function: ``allclose``, ``allequal``,
 http://numpy.sourceforge.net for a description of these functions.
 
 
-Table 2.26 Variable Constructors in module MV
+Table Variable Constructors in module MV
+----------------------------------------
 
 .. csv-table::  Variable Constructors in module MV
    :header:  "Constructor", "Description"
@@ -1070,7 +1097,8 @@ The following table describes the MV non-constructor functions. with the
 exception of argsort, all functions return a transient variable.
 
 
-Table 2.27 MV functions
+Table MV functions
+------------------
 
 .. csv-table::  MV functions
    :header:  "Function", "Description"
@@ -1120,7 +1148,8 @@ cells. Specifically, a HorizontalGrid:
 CDMS supports several types of HorizontalGrids:
 
 
-Table 2.28
+Table Grids
+-----------
 
 .. csv-table::  Grids
    :header:  "Grid Type", "Definition"
@@ -1130,7 +1159,8 @@ Table 2.28
     "``GenericGrid``", "Latitude and longitude are 1-D auxiliary coordinate axis (AuxAxis1D)"
 
 
-Table 2.29 HorizontalGrid Internal Attribute
+Table HorizontalGrid Internal Attribute
+---------------------------------------
 
 .. csv-table::  HorizontalGrid Internal Attribute
    :header:  "Type", "Name", "Definition"
@@ -1142,24 +1172,11 @@ Table 2.29 HorizontalGrid Internal Attribute
     "Tuple", "``shape``", "The shape of the grid, a 2-tuple"
 ::
   
-  
-
-
-
-.. _RectGrid_Constructors:
-
-::
-  
-  
-  
-  
-  
-
-See :ref:`RectGrid_Constructors`
 
      
 
-Table 2.30 RectGrid Constructors
+Table RectGrid Constructors
+---------------------------
 
 .. csv-table::  RectGrid Constructors
    :header:  "Constructor", "Description"
@@ -1177,7 +1194,8 @@ Table 2.30 RectGrid Constructors
 
 
 
-Table 2.31 HorizontalGrid Methods
+Table HorizontalGrid Methods
+----------------------------
 
 
 .. csv-table::  HorizontalGrid Methods
@@ -1216,7 +1234,8 @@ Table 2.31 HorizontalGrid Methods
     ,,"**Note:** This method does not apply to generic grids.  Transient-GenericGrid ``toGenericGrid(gridid=None)`` Convert to a generic grid. If the grid is already generic, a copy of the grid is returned.  ``gridid`` is the string identifier of the resulting curvilinear grid object. If unspecified, the grid ID is copied."
 
 
-Table 2.32 RectGrid Methods, additional to HorizontalGrid Methods
+Table RectGrid Methods, additional to HorizontalGrid Methods
+------------------------------------------------------------
 
 .. csv-table::  RectGrid Methods, additional to HorizontalGrid Methods
    :header:  "Type", "Method", "Description"
@@ -1274,7 +1293,8 @@ advantage of the attribute, domain, and mask information in a transient
 variable.
 
 
-Table 2.33 Variable Internal Attributes
+Table Variable Internal Attributes
+----------------------------------
 
 .. csv-table::  Variable Internal Attributes
    :header:  "Type", "Name", "Definition"
@@ -1287,7 +1307,8 @@ Table 2.33 Variable Internal Attributes
     "Tuple", "``shape``", "The length of each axis of the variable"
 
 
-Table 2.34 Variable Constructors
+Table Variable Constructors
+---------------------------
 
 .. csv-table::  Variable Constructors
    :header:  "Constructor", "Description"
@@ -1300,7 +1321,8 @@ Table 2.34 Variable Constructors
 
 
 
-Table 2.35 Variable Methods
+Table Variable Methods
+----------------------
 
 .. csv-table::  Variable Methods
    :header:  "Type", "Method", "Definition"
@@ -1419,7 +1441,8 @@ Read all data for March, 1980:
 
 
 
-Table 2.36 Variable Slice Operators
+Table Variable Slice Operators
+------------------------------
 
 .. csv-table::  Variable Slice Operators
    :header:  "Operator", "Description"
@@ -1437,7 +1460,8 @@ Table 2.36 Variable Slice Operators
 
 
 
-Table 2.37 Index and Coordinate Intervals
+Table Index and Coordinate Intervals
+------------------------------------
 
 .. csv-table::  Index and Coordinate Intervals
    :header:  "Interval Definition", "Example Interval Definition", "Example"
@@ -1458,7 +1482,7 @@ Table 2.37 Index and Coordinate Intervals
 
 
 Selectors
-----------------
+^^^^^^^^^
 
 A selector is a specification of a region of data to be selected from a
 variable. For example, the statement
@@ -1514,29 +1538,30 @@ selector can be used with any variable. If the corresponding axis is not
 found, the selector component is ignored. This is very useful for
 writing general purpose scripts. The required keyword overrides this
 behavior. These keywords take values that are coordinate ranges or index
-ranges as defined in See `Index and Coordinate Intervals <#36>`_.
+ranges as defined in See `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_.
 
 The following keywords are available: Another form of selector
 components is the positional form, where the component order corresponds
 to the axis order of a variable. For example:
 
 
-
+Table Selector keywords
+-----------------------
 
 .. csv-table::  Selector keywords
    :header:  "Keyword", "Description", "Value"
    :widths:  30, 80, 80
 
-    "``axisid``", "Restrict the axis with ID axisid to a value or range of values.",  See `Index and Coordinate Intervals <#36>`_
+    "``axisid``", "Restrict the axis with ID axisid to a value or range of values.",  See `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_
     "``grid``", "Regrid the result to the grid.", " Grid object"
-    "``latitude``", "Restrict latitude values to a value or range. Short form: lat", See `Index and Coordinate Intervals <#36>`_
-    "``level``", "Restrict vertical levels to a value or range. Short form: lev",See `Index and Coordinate Intervals <#36>`_
-    "``longitude``", "Restrict longitude values to a value or range. Short form: lon", See `Index and Coordinate Intervals <#36>`_
+    "``latitude``", "Restrict latitude values to a value or range. Short form: lat", See `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_
+    "``level``", "Restrict vertical levels to a value or range. Short form: lev",See `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_
+    "``longitude``", "Restrict longitude values to a value or range. Short form: lon", See `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_
     "``order``", "Reorder the result.", " Order string, e.g., 'tzyx'"
     "``raw``", "Return a masked array (MV2.array) rather than a transient variable.", "0: return a transient variable (default); =1: return a masked array."
     "``required``", "Require that the axis IDs be present.", " List of axis identifiers."
     "``squeeze``", "Remove singleton dimensions from the result.", " 0: leave singleton dimensions (default); 1: remove singleton dimensions."
-    "``time``", "Restrict time values to a value or range.", See `Index and Coordinate Intervals <#36>`_ 
+    "``time``", "Restrict time values to a value or range.", See `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_ 
 
 Another form of selector components is the positional form, where the
 component order corresponds to the axis order of a variable. For
@@ -1627,7 +1652,7 @@ the call:
 
 
 Selector examples
-------------------------
+-----------------
 
 CDMS provides a variety of ways to select or slice data. In the
 following examples, variable hus is contained in file sample.nc, and is

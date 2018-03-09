@@ -20,7 +20,7 @@ In the following examples, it is assumed that variable ``psl`` is
 dimensioned (time, latitude, longitude). ``psl`` is contained in the
 dataset named ``'sample.xml'``.
 
-plotting a gridded variable
+Plotting a Gridded Variable
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. highlight:: python
    :linenothreshold: 3
@@ -72,7 +72,7 @@ What if the units are not explicitly defined for ``clt``, or a different
 description is desired? ``plot`` has a number of other keywords which
 fill in the extra plot information.
 
-using aplot keywords.
+Using A Plot Keywords
 ^^^^^^^^^^^^^^^^^^^^^
 
 .. doctest::
@@ -89,7 +89,7 @@ using aplot keywords.
 
 **Note:** Keyword arguments can be listed in any order.
 
-plotting a time-latitude slice
+Plotting a Time-Latitude Slice
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Assuming that variable ``clt`` has domain ``(time,latitude,longitude)``,
@@ -112,7 +112,7 @@ this example selects and plots a time-latitude slice:
   "4", "``samp`` is a slice of ``clt``, at index ``0`` of the last dimension.  Since ``samp`` was obtained from the slice operator, it is a transient variable, which includes the latitude and time information."
   "6", "The ``name`` keyword defines the identifier, default is the name found in the file."
 
-plotting subsetted data
+Plotting Subsetted Data
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 Calling the variable ``clt`` as a function reads a subset of the
@@ -130,8 +130,8 @@ variable. The result variable ``samp`` can be plotted directly:
     >>> f.close()
 
 
-``plot`` method
-~~~~~~~~~~~~~~~
+Plot Method
+~~~~~~~~~~~
 
 The ``plot`` method is documented in the UV-CDAT Reference Manual. This
 section augments the documentation with a description of the optional
@@ -176,6 +176,8 @@ where:
 -  ``key=value``, ... are optional keyword/value pairs, listed in any
    order. These are defined in the table below.
 
+Table Plot Keywords
+^^^^^^^^^^^^^^^^^^^
 
 .. csv-table:: "plot keywords"
     :header: "Key", "Type", "Value"

@@ -56,7 +56,7 @@ Plotting a Gridded Variable
 
 **Notes:**
 
-.. csv-table::  LineNotes
+.. csv-table::  
    :header:  "Line", "Notes"
    :widths:  10, 90
 
@@ -105,7 +105,8 @@ this example selects and plots a time-latitude slice:
     >>> w.plot(samp, name='Total Cloudiness') 
     <vcs.displayplot.Dp object ...>
 
-.. csv-table:: LineNotes
+
+.. csv-table:: Line Notes
   :header:  "Line", "Notes"
   :widths:  10, 90
 
@@ -179,7 +180,7 @@ where:
 Table Plot Keywords
 ^^^^^^^^^^^^^^^^^^^
 
-.. csv-table:: "plot keywords"
+.. csv-table::
     :header: "Key", "Type", "Value"
     :widths: 20, 20, 80
 

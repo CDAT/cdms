@@ -1,7 +1,7 @@
 CDMS Utilities
 --------------
 
-cdscan: Importing datasets into CDMS
+CdScan: Importing datasets into CDMS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Overview
@@ -60,8 +60,8 @@ where
 Output is written to standard output by default. Use the -x option to
 specify an output filename.
 
-Table 7.1 cdscan command options
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                
+Table CDScan Command Options
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^                               
 
 .. csv-table::
    :header: "Option:, "Description"

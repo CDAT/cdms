@@ -45,8 +45,9 @@ the class internal (non-persistent) attributes, constructors (functions
 for creating an object), and class methods (functions). A method can
 return an instance of a CDMS class, or one of the Python types:
 
-
-.. csv-table:: Python types used in CDMS
+Table PythonTypes used in CDMS
+-------------------------------
+.. csv-table:: 
    :header:  "Type", "Description"
    :widths:  10, 80
 
@@ -60,7 +61,7 @@ return an instance of a CDMS class, or one of the Python types:
    "Reltime", "Relative time value, a time with representation (value, units since basetime). Defined in the cdtime module. cf. comptime"
    "Tuple", "An ordered sequence of objects, which need not be of the same type. Unlike lists, tuples elements cannot be inserted or appended. Tuples are denoted with parentheses, e.g., ``(1, 2.0, 'x', 'y')``"
 
-A first example
+A First Example
 ^^^^^^^^^^^^^^^
 
 The following Python script reads January and July monthly temperature
@@ -111,7 +112,7 @@ latitude, longitude).
 
 
 
-Cdms module
+Cdms Module
 ^^^^^^^^^^^
 
 The cdms module is the Python interface to CDMS. The objects and methods
@@ -131,10 +132,10 @@ Rather, they are called as module functions, e.g.,
 
 
 
-Table Cdms module functions
+Table Cdms Module Functions
 ---------------------------
 
-.. csv-table::  Cdms module functions
+.. csv-table::  
    :header:  "Type", "Definition"
    :widths:  10, 80
 
@@ -221,7 +222,7 @@ Table Cdms module functions
 
 Table Class Tags
 --------------------
-.. csv-table::  Class Tags
+.. csv-table::  
    :header:  "Tag", "Class"
    :widths:  20, 20
    
@@ -263,9 +264,9 @@ external attributes are written, but not the internal attributes.
    "Dictionary", "attributes", "External attribute dictionary for this object."
 
 
-Table Getting and setting attributes
+Table Getting and Setting Attributes
 ------------------------------------
-.. csv-table::  Getting and setting attributes
+.. csv-table::  
    :header:  "Type", "Definition"
    :widths:  20, 80
 
@@ -294,7 +295,7 @@ Axis objects.
 Table CoordinateAxis Types
 --------------------------
 
-.. csv-table::  CoordinateAxis types
+.. csv-table:: 
    :header:  "Type", "Definition"
    :widths:  20, 80
 
@@ -306,7 +307,7 @@ Table CoordinateAxis Types
 Table CoordinateAxis Internal Attributes
 ----------------------------------------
 
-.. csv-table::  CoordinateAxis Internal Attributes
+.. csv-table:: 
    :header:  "Type", "Name", "Definition"
    :widths:  20, 20, 80
 
@@ -318,7 +319,7 @@ Table CoordinateAxis Internal Attributes
 Table Axis Constructors
 -----------------------
 
-.. csv-table::  Axis Constructors
+.. csv-table:: 
    :header:  "Constructor", "Description"
    :widths:  20, 80
 
@@ -340,7 +341,7 @@ Table Axis Constructors
 Table CoordinateAxis Methods
 ----------------------------
 
-.. csv-table::  CoordinateAxis Methods
+.. csv-table:: 
    :header:  "Type", "Method", "Definition"
    :widths:  20, 20, 80
 
@@ -409,8 +410,10 @@ Table CoordinateAxis Methods
    ,,"* see also: ``mapinterval``, ``variable.subregion()``"
    "``transientaxis``", "``subaxis(i,j,k=1)``", "create an axis associated with the integer range ``[i:j:k]``. the stride ``k`` can be positive or negative. wraparound is supported for longitude dimensions or those with a modulus attribute." 
 
+Table Axis Slice Operators
+--------------------------
 
-.. csv-table::  axis slice operators
+.. csv-table::  
    :header:  "Slice", "Definition"
    :widths:  20, 80
 
@@ -453,7 +456,7 @@ Cdms-Files. See “cu Module”.
 Table CdmsFile Internal Attributes
 ----------------------------------
 
-.. csv-table::  CdmsFile Internal Attributes
+.. csv-table::  
    :header:  "Type", "Name", "Definition"
    :widths:  20, 20, 80
 
@@ -466,7 +469,7 @@ Table CdmsFile Internal Attributes
 Table CdmsFile Constructors
 ---------------------------
 
-.. csv-table::  CdmsFile Constructors
+.. csv-table::  
    :header:  "Constructor", "Description"
    :widths:  20, 80
 
@@ -477,7 +480,7 @@ Table CdmsFile Constructors
 Table CdmsFile Methods
 ----------------------
 
-.. csv-table::  CdmsFile Methods
+.. csv-table:: 
    :header:  "Type", "Method", "Definition"
    :widths:  20, 20, 80
 
@@ -521,7 +524,7 @@ Table CdmsFile Methods
 Table CDMS Datatypes
 --------------------
 
-.. csv-table::  CDMS Datatypes
+.. csv-table::  
    :header:  "CDMS Datatype", "Definition"
    :widths:  20, 30
 
@@ -614,7 +617,7 @@ Table Database Internal Attributes
 ----------------------------------
 
 
-.. csv-table::  Database Internal Attributes
+.. csv-table::  
    :header:  "Type", "Name", "Summary"
    :widths:  20, 20, 80
 
@@ -628,7 +631,7 @@ Table Database Internal Attributes
 Table Database Constructors
 ---------------------------
 
-.. csv-table::  Database Constructors
+.. csv-table::  
    :header:  "Constructor", "Description"
    :widths:  30, 80
 
@@ -639,7 +642,7 @@ Table Database Constructors
 Table Database Methods
 ----------------------
 
-.. csv-table::  Database Methods
+.. csv-table::  
    :header:  "Type", "Method", "Definition"
    :widths:  20, 30, 80
 
@@ -679,7 +682,7 @@ Table Database Methods
 .. highlight:: python
    :linenothreshold: 0
 
-Searching a database
+Searching a Database
 --------------------------
 
 The ``searchFilter`` method is used to search a database. The result is
@@ -791,7 +794,7 @@ variables defined on a 94x192 grid:
 Table SearchResult Methods
 --------------------------
 
-.. csv-table::  SearchResult Methods
+.. csv-table::  
    :header:  "Type", "Method", "Definition"
    :widths:  20, 30, 80
 
@@ -812,7 +815,7 @@ with the ``getObject`` method.
 Table ResultEntry Attributes
 ----------------------------
 
-.. csv-table::  ResultEntry Attributes
+.. csv-table::  
    :header:  "Type", "Method", "Definition"
    :widths:  20, 30, 80
 
@@ -823,7 +826,7 @@ Table ResultEntry Attributes
 Table ResultEntry Methods
 -------------------------
 
-.. csv-table::  ResultEntry Methods
+.. csv-table::  
    :header:  "Type", "Method", "Definition"
    :widths:  20, 30, 80
 
@@ -850,7 +853,7 @@ In the next example, a portion of variable ‘ua’ is read from dataset
     data = ua[0,0]
 
 
-Examples of database searches
+Examples of Database Searches
 -----------------------------------
 
 In the following examples, db is the database opened with
@@ -942,7 +945,7 @@ See “cu Module".
 Table Dataset Internal Attributes
 ---------------------------------
 
-.. csv-table::  Dataset Internal Attributes
+.. csv-table:: 
    :header:  "Type", "Name", "Description"
    :widths:  20, 30, 80
 
@@ -959,7 +962,7 @@ Table Dataset Internal Attributes
 Table Dataset Constructors
 --------------------------
 
-.. csv-table::  Dataset Internal Attributes
+.. csv-table::  
    :header:  "Constructor", "Description"
    :widths:  50, 80
 
@@ -969,7 +972,7 @@ Table Dataset Constructors
 Table Open Modes
 ----------------
 
-.. csv-table::  Open Modes
+.. csv-table:: 
    :header:  "Mode", "Definition"
    :widths:  50, 80
 
@@ -982,7 +985,7 @@ Table Open Modes
 Table Dataset Methods
 ---------------------
 
-.. csv-table::  Dataset Methods
+.. csv-table::  
    :header:  "Type", "Definition", "Description"
    :widths:  30, 30, 80
 
@@ -1017,7 +1020,7 @@ Table Dataset Methods
     "None", "``sync()``", "Write any pending changes to the dataset."
 
 
-MV module
+MV Module
 ^^^^^^^^^
 
 The fundamental CDMS data object is the variable. A variable is
@@ -1075,10 +1078,10 @@ corresponding MV2 function: ``allclose``, ``allequal``,
 http://numpy.sourceforge.net for a description of these functions.
 
 
-Table Variable Constructors in module MV
+Table Variable Constructors in Module MV
 ----------------------------------------
 
-.. csv-table::  Variable Constructors in module MV
+.. csv-table:: 
    :header:  "Constructor", "Description"
    :widths:  30,  80
 
@@ -1097,10 +1100,10 @@ The following table describes the MV non-constructor functions. with the
 exception of argsort, all functions return a transient variable.
 
 
-Table MV functions
+Table MV Functions
 ------------------
 
-.. csv-table::  MV functions
+.. csv-table::  
    :header:  "Function", "Description"
    :widths:  30,  80
 
@@ -1151,7 +1154,7 @@ CDMS supports several types of HorizontalGrids:
 Table Grids
 -----------
 
-.. csv-table::  Grids
+.. csv-table:: 
    :header:  "Grid Type", "Definition"
    :widths:  30,  80
 
@@ -1162,7 +1165,7 @@ Table Grids
 Table HorizontalGrid Internal Attribute
 ---------------------------------------
 
-.. csv-table::  HorizontalGrid Internal Attribute
+.. csv-table::  
    :header:  "Type", "Name", "Definition"
    :widths:  30, 30,  80
 
@@ -1178,14 +1181,14 @@ Table HorizontalGrid Internal Attribute
 Table RectGrid Constructors
 ---------------------------
 
-.. csv-table::  RectGrid Constructors
+.. csv-table:: 
    :header:  "Constructor", "Description"
    :widths:  30, 80
 
     "``cdms.createRectGrid(lat, lon, order, type='generic', mask=None)``", "Create a grid not associated with a file or dataset. See `A First Example`_" 
-    "``CdmsFile.createRectGrid(id, lat, lon, order, type='generic', mask=None)``", "Create a grid associated with a file. See Table 2.14"
-    "``Dataset.createRectGrid(id, lat, lon, order, type='generic', mask=None)``", "Create a grid associated with a dataset. See Table 2.25" 
-    "``cdms.createGaussianGrid(nlats, xorigin=0.0, order='yx')``", "See `A First Example`_ "
+    "``CdmsFile.createRectGrid(id, lat, lon, order, type='generic', mask=None)``", "Create a grid associated with a file." 
+    "``Dataset.createRectGrid(id, lat, lon, order, type='generic', mask=None)``", "Create a grid associated with a dataset." 
+    "``cdms.createGaussianGrid(nlats, xorigin=0.0, order='yx')``", "See `A First Example`_"
     "``cdms.createGenericGrid(latArray, lonArray, latBounds=None, lonBounds=None, order='yx', mask=None)``", "See `A First Example`_"
     "``cdms.createGlobalMeanGrid(grid)``", "See `A First Example`_"
     "``cdms.createRectGrid(lat, lon, order, type='generic', mask=None)``", "See `A First Example`_"
@@ -1198,7 +1201,7 @@ Table HorizontalGrid Methods
 ----------------------------
 
 
-.. csv-table::  HorizontalGrid Methods
+.. csv-table:: 
    :header:  "Type", "Method", "Description"
    :widths:  30, 30, 80
 
@@ -1234,10 +1237,10 @@ Table HorizontalGrid Methods
     ,,"**Note:** This method does not apply to generic grids.  Transient-GenericGrid ``toGenericGrid(gridid=None)`` Convert to a generic grid. If the grid is already generic, a copy of the grid is returned.  ``gridid`` is the string identifier of the resulting curvilinear grid object. If unspecified, the grid ID is copied."
 
 
-Table RectGrid Methods, additional to HorizontalGrid Methods
+Table RectGrid Methods, Additional to HorizontalGrid Methods
 ------------------------------------------------------------
 
-.. csv-table::  RectGrid Methods, additional to HorizontalGrid Methods
+.. csv-table::  
    :header:  "Type", "Method", "Description"
    :widths:  30, 30, 80
 
@@ -1296,7 +1299,7 @@ variable.
 Table Variable Internal Attributes
 ----------------------------------
 
-.. csv-table::  Variable Internal Attributes
+.. csv-table::  
    :header:  "Type", "Name", "Definition"
    :widths:  30, 30, 80
 
@@ -1310,7 +1313,7 @@ Table Variable Internal Attributes
 Table Variable Constructors
 ---------------------------
 
-.. csv-table::  Variable Constructors
+.. csv-table::  
    :header:  "Constructor", "Description"
    :widths:  30, 80
 
@@ -1324,7 +1327,7 @@ Table Variable Constructors
 Table Variable Methods
 ----------------------
 
-.. csv-table::  Variable Methods
+.. csv-table::  
    :header:  "Type", "Method", "Definition"
    :widths:  30, 30, 180
 
@@ -1415,7 +1418,7 @@ Table Variable Methods
     ,,"In ``(a)-(c)`` and (f), negative numbers are treated as offsets from the end of that dimension, as in normal Python indexing."
     ,,"String ``typecode()`` The Numpy datatype identifier."
 
-Example Get a region of data.
+Example Get a Region of Data.
 -----------------------------
 
 Variable ta is a function of (time, latitude, longitude). Read data
@@ -1444,7 +1447,7 @@ Read all data for March, 1980:
 Table Variable Slice Operators
 ------------------------------
 
-.. csv-table::  Variable Slice Operators
+.. csv-table::  
    :header:  "Operator", "Description"
    :widths:  30, 80
 
@@ -1463,7 +1466,7 @@ Table Variable Slice Operators
 Table Index and Coordinate Intervals
 ------------------------------------
 
-.. csv-table::  Index and Coordinate Intervals
+.. csv-table::  
    :header:  "Interval Definition", "Example Interval Definition", "Example"
    :widths:  30, 80, 80
 
@@ -1545,10 +1548,10 @@ components is the positional form, where the component order corresponds
 to the axis order of a variable. For example:
 
 
-Table Selector keywords
+Table Selector Keywords
 -----------------------
 
-.. csv-table::  Selector keywords
+.. csv-table::  
    :header:  "Keyword", "Description", "Value"
    :widths:  30, 80, 80
 
@@ -1651,7 +1654,7 @@ the call:
 
 
 
-Selector examples
+Selector Examples
 -----------------
 
 CDMS provides a variety of ways to select or slice data. In the

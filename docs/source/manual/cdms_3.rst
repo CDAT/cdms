@@ -81,7 +81,7 @@ The following table describes the methods for creating time types.
 Table Time Constructors
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-.. csv-table:: Table Time Constructors
+.. csv-table:: 
    :header:  "Type", "Constructor", "Defintion"
    :widths:  10, 40, 80
 
@@ -122,7 +122,7 @@ A component time type has six members, all of which are settable.
 
 Table Component Time
 ~~~~~~~~~~~~~~~~~~~~
-.. csv-table:: Table Component Time
+.. csv-table:: 
    :header: "Type", "Name", "Summary"
    :widths: 15, 15, 50
 
@@ -140,7 +140,7 @@ The following methods apply both to relative and component times.
 
 Table Time Methods
 ~~~~~~~~~~~~~~~~~~
-.. csv-table:: Table Time Methods
+.. csv-table:: 
    :header: "Type", "Method", "Definition"
    :widths: 20, 75, 80
 

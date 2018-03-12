@@ -302,7 +302,7 @@ input to output grids.
 Table CDMS Regridder Constructor
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. csv-table:: Regridder Constructure
+.. csv-table:: 
    :header:  "Constructor", "Description"
    :widths:  50, 90
 
@@ -317,7 +317,7 @@ function:
 Table SCRIP Regridder Constructor
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. csv-table:: SCRIP Regridder Constructor
+.. csv-table:: 
    :header:  "Constructor", "Description"
    :widths:  80, 90
 
@@ -396,10 +396,10 @@ data value, or 1.0e20 if undefined. The result array or transient
 variable will have a mask value of 1 (invalid value) for those output
 grid cells which completely overlap input grid cells with missing values
 
-Table  CDMS Regridder Function
-~~~~~~~~~~~~~~~~~~~~~~~
+Table CDMS Regridder Function
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. csv-table:: CDMS Regridder Function
+.. csv-table:: 
    :header:  "Type", "Function", "Description"
    :widths:  40, 40, 80
 
@@ -457,9 +457,9 @@ In addition, a conservative regridder has the associated grid cell areas
 for source and target grids.
 
 Table SCRIP Regridder Functions
-~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. csv-table:: SCRIP Regridder Functions
+.. csv-table:: 
    :header:  "Return Type", "Method", "Description"
    :widths:  40, 40, 80
 
@@ -501,7 +501,7 @@ Regrid data to a uniform output grid.
 Table Regridder Constructure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. csv-table:: Regridder Constructure
+.. csv-table::
    :header:  "Line", "Notes"
    :widths:  8, 90
 
@@ -672,4 +672,4 @@ comparison.
 
 
 
-a
+

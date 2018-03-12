@@ -189,11 +189,11 @@ in CDMS, and ``cuDataset``, corresponding to ``Dataset`` in CDMS.
 Slab
 ~~~~
 
-Table C.1 Slab Methods
+Table Slab Methods
 ^^^^^^^^^^^^^^^^^^^^^^
 
 
-.. csv-table:: Slab Methods
+.. csv-table:: 
    :header: "Type", "Method", "Definition"
    :widths: 20,50,80
 
@@ -210,10 +210,10 @@ Table C.1 Slab Methods
 cuDataset
 ~~~~~~~~~
 
-Table C.2 cuDataset Methods
+Table cuDataset Methods
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. csv-table:: cuDataset_Methods
+.. csv-table:: 
    :header: "Type", "Method", "Definition"
    :widths: 20, 50, 80
 

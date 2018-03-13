@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 PKG_NAME=cdms2
-USER=uvcdat
+USER=cdat
 echo "Trying to upload conda"
 mkdir ${HOME}/conda-bld
 export CONDA_BLD_PATH=${HOME}/conda-bld

@@ -36,6 +36,4 @@ class CDMSTestAxisMissing(unittest.TestCase):
         data = numpy.array(data, dtype=numpy.float)
         data = MV2.masked_less(data, -900)
         d2 = cdms2.createAxis(data)
-        self.assertTrue(numpy.ma.allclose(data.data,d2[:]))
-        d2 = cdms2.createAxis(data,copy=1)
-        self.assertTrue(numpy.ma.allclose(data.filled(),d2[:]))
+        self.assertTrue(numpy.ma.allclose(data,d2[:]))

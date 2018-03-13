@@ -1859,15 +1859,9 @@ class TransientAxis(AbstractAxis):
                 self._data_ = numpy.array(data[:])
         elif isinstance(data, numpy.ndarray):
             if copy == 0:
-                if isinstance(data, numpy.ma.MaskedArray):
-                    self._data_ = data.data
-                else:
-                    self._data_ = data
+                self._data_ = data
             else:
-                if isinstance(data, numpy.ma.MaskedArray):
-                    self._data_ = data.filled()
-                else:
-                    self._data_ = numpy.array(data)
+                self._data_ = numpy.array(data)
         elif isinstance(data, numpy.ma.MaskedArray):
             if numpy.ma.getmask(data) is not numpy.ma.nomask:
                 raise CDMSError(

@@ -315,6 +315,7 @@ rectilinear in topology,
 ``extra-attribute-element*`` **</rectGrid>**
 
 Table 6.5 RectGrid Attributes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                              
 
 .. raw:: html
@@ -332,11 +333,13 @@ Table 6.5 RectGrid Attributes
 ::
 
     <tr><td><code>id</code></td><td>Y</td><td>N</td><td>Grid identifier</td></tr>
-    <tr><td><code>type</code></td><td>Y</td><td>N</td><td><p>Grid classification</p><p>"gaussian" | "uniform" | "equalarea" |"generic"</p><p>Default: "generic"</p></td></tr>
+    <tr><td><code>type</code></td><td>Y</td><td>N</td><td><p>Grid classification</p><p>"gaussian" | "uniform" 
+    | "equalarea" |"generic"</p><p>Default: "generic"</p></td></tr>
     <tr><td><code>latitude</code></td><td>Y</td><td>N</td><td>Latitude axis name</td></tr>
     <tr><td><code>longitude</code></td><td>Y</td><td>N</td><td>Longitude axis name</td></tr>
     <tr><td><code>mask</code></td><td>N</td><td>N</td><td>Name of associated mask variable</td></tr>
-    <tr><td><code>order</code></td><td>Y</td><td>N</td><td><p>Grid ordering "yx" | "xy"</p><p>Default: “yx”, axis order is latitude, longitude</p></td></tr>
+    <tr><td><code>order</code></td><td>Y</td><td>N</td><td><p>Grid ordering "yx"
+     | "xy"</p><p>Default: “yx”, axis order is latitude, longitude</p></td></tr>
 
 .. raw:: html
 

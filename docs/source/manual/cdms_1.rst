@@ -298,7 +298,7 @@ with a corresponding mask value of one are set to the value of the
 variables ``missing_value`` attribute. The data and ``missing_value``
 attribute are then written to the file.
 
-Masking is covered in `Section 2.9 <cdms_2.html#2.9>`__. See also the
+Masking is covered in `Section 2.9 <cdms_2.html#id3>`__. See also the
 documentation of the Python Numpy and MA modules, on which ``cdms.MV``
 is based, at
 
@@ -541,7 +541,9 @@ grid. Note that:
 .. figure:: images/curvilinear_grid.jpg
    :alt: curvilinear grid
 
-   Figure1: Curvilinear Grid
+   Figure 1: Curvilinear Grid
+
+
 
 Example: a generic grid
 '''''''''''''''''''''''
@@ -848,4 +850,5 @@ Protocol (LDAP).
 ..   >>> f.variables.keys() # List the variables in the dataset.
 ..   ['ua', 'evs', 'cvvta', 'tauv', 'wap', 'cvwhusa', 'rss', 'rls', ... 'prc', 'ts', 'va']
 
-Databases are discussed further in `Section 2.7 <cdms_2.html#2.7>`__.
+
+Databases are discussed further in `Section 2.7 <cdms_2.html#database>`__.

@@ -512,7 +512,7 @@ Table CdmsFile Methods
    ,," **Note:** Unlike copyAxis, the actual data is not copied to the new variable."
    "``CurveGrid`` or ``Generic-Grid``", "``readScripGrid(self,whichGrid='destination',check-Grid=1)``", "Read a curvilinear or generic grid from a SCRIP netCDF file. The file can be a SCRIP grid file or remapping file.  If a mapping file, ``whichGrid`` chooses the grid to read, either ``'source'`` or ``'destination'``. If ``checkGrid`` is ``1`` (default), the grid cells are checked for convexity, and 'repaired' if necessary.  Grid cells may appear to be nonconvex if they cross a ``0 / 2pi`` boundary. The repair consists of shifting the cell vertices to the same side modulo 360 degrees."
     "``None``", "``sync()``", "Writes any pending changes to the file."
-    "``Variable``", "``write(var, attributes=None, axes=None, extbounds=None, id=None, extend=None, fill_value=None, index=None, typecode=None)``","Write a variable or array to the file. The return value is the associated file variable."
+    "``Variable``", "``write(var,attributes=None,axes=None, extbounds=None,id=None,extend=None, fill_value=None, index=None, typecode=None)``","Write a variable or array to the file. The return value is the associated file variable."
     ,,"If the variable does not exist in the file, it is first defined and all attributes written, then the data is written. By default, the time dimension of the variable is defined as the unlimited dimension of the file. If the data is already defined, then data is extended or overwritten depending on the value of keywords ``extend`` and ``index``, and the unlimited dimension values associated with ``var``."
     ,,"* ``var`` is a Variable, masked array, or Numpy array."
     ,,"* ``attributes`` is the attribute dictionary for the variable. The default is ``var.attributes``."
@@ -804,7 +804,7 @@ Table SearchResult Methods
 
     "ResultEntry", "``[i]``", "Return the i-th search result. Results can also be returned in a for loop: ``for entry in db.searchResult(tag='dataset'):``"
     "Integer", "``len()``", "Number of entries in the result."
-    "SearchResult", " ``searchPredicate(predicate, tag=None)``", "Refine a search result, with a predicate search. ``predicate`` is a function which takes a single CDMS object and returns true (1) if the object satisfies the predicate, 0 if not. ``tag`` restricts the search to objects of the class denoted by the tag." 
+    "SearchResult", "``searchPredicate(predicate, tag=None)``", "Refine a search result, with a predicate search. ``predicate`` is a function which takes a single CDMS object and returns true (1) if the object satisfies the predicate, 0 if not. ``tag`` restricts the search to objects of the class denoted by the tag." 
     ,,"**Note**: In the current implementation, ``searchPredicate`` is much less efficient than ``searchFilter``. For best performance, use ``searchFilter`` to narrow the scope of the search, then use ``searchPredicate`` for more general searches."
 
 A search result is a sequence of result entries. Each entry has a string
@@ -1005,7 +1005,7 @@ Table Dataset Methods
     ,, "**Example:**"
     ,, "``t = f['time']`` gets the axis named 'time', equivalent to ``t = f.axes['time']``"
     "``None``", "``close()``", "Close the dataset."
-    "``RectGrid``", "``createRectGrid(id, lat, lon, order, type='generic', mask=None)``", "Create a RectGrid in the dataset. This is not a persistent object: the order, type, and mask are not written to the dataset. However, the grid may be used for regridding operations."
+    "``RectGrid``", "``createRectGrid(id, lat, lon,order, type='generic', mask=None)``", "Create a RectGrid in the dataset. This is not a persistent object: the order, type, and mask are not written to the dataset. However, the grid may be used for regridding operations."
     ,,"``lat`` is a latitude axis in the dataset."
     ,,"``lon`` is a longitude axis in the dataset."
     ,,"``order`` is a string with value 'yx' (the first grid dimension is latitude) or 'xy' (the first grid dimension is longitude)."
@@ -1018,7 +1018,7 @@ Table Dataset Methods
     "List", "``getPaths()``", "Get a sorted list of pathnames of datafiles which comprise the dataset. This does not include the XML metafile path, which is stored in the .uri attribute."
     "Variable", "``getVariable(id)``", "Get a variable object from a file or dataset."
     ,,"``id`` is the string variable identifier."
-    "CurveGrid or GenericGrid", "``readScripGrid(self, whichGrid='destination', check-or Generic-Grid=1)``", "Read a curvilinear orgeneric grid from a SCRIP dataset. The dataset can be a SCRIP grid file or remappingfile."
+    "CurveGrid or GenericGrid", "``readScripGrid(self, whichGrid='destination', check-orGeneric-Grid=1)``", "Read a curvilinear orgeneric grid from a SCRIP dataset. The dataset can be a SCRIP grid file or remappingfile."
     ,, "If a mapping file, ``whichGrid`` chooses the grid to read, either ``'source'`` or ``'destination'``."
     ,, " If ``checkGrid`` is 1 (default), the grid cells are checked for convexity, and 'repaired' if necessary.  Grid cells may appear to be nonconvex if they cross a ``0 / 2pi`` boundary. The repair consists of shifting the cell vertices to the same side modulo 360 degrees."
     "None", "``sync()``", "Write any pending changes to the dataset."
@@ -1081,22 +1081,23 @@ corresponding MV2 function: ``allclose``, ``allequal``,
 ``set_print_limit``, ``shape``, ``size``. See the documentation at
 http://numpy.sourceforge.net for a description of these functions.
 
+  
 
-Table Variable Constructors in Module MV
-----------------------------------------
+Table Variable  Constructors in Module MV
+---------------------------
 
 .. csv-table:: 
    :header:  "Constructor", "Description"
-   :widths:  30,  80
+   :widths:  30, 80
 
-    "``arrayrange(start, stop=None, step=1, typecode=None, axis=None, attributes=None, id=None)``", "Just like ``MV2.arange()`` except it returns a variable whose type can be specfied by the keyword argument typecode. The axis, attribute dictionary, and string identifier of the result variable may be specified. **Synonym:** ``arange``"
-    "``masked_array(a, mask=None, fill_value=None, axes=None, attributes=None, id=None)``", "Same as MV2.masked_array but creates a variable instead. If no axes are specified, the result has default axes, otherwise axes is a list of axis objects matching a.shape."
-    "``masked_object(data, value, copy=1, savespace=0, axes=None, attributes=None, id=None)``", "Create variable masked where exactly data equal to value. Create the variable with the given list of axis objects, attribute dictionary, and string id."
-    "``masked_values(data, value, rtol=1e-05, atol=1e-08, copy=1, savespace=0, axes=None, attributes=None, id=None)``", "Constructs a variable with the given list of axes and attribute dictionary, whose mask is set at those places where ``abs(data - value) > atol + rtol * abs(data)``. This is a careful way of saying that those elements of the data that have value = value (to within a tolerance) are to be treated as invalid. If data is not of a floating point type, calls masked_object instead."
-    "``ones(shape, typecode='l', savespace=0, axes=none, attributes=none, id=none)``", "return an array of all ones of the given length or shape."
-    "``reshape(a, newshape, axes=none, attributes=none, id=none)``", "copy of a with a new shape."
-    "``resize(a, newshape, axes=none, attributes=none, id=none)``", "return a new array with the specified shape. the original arrays total size can be any size."
-    "``zeros(shape, typecode='l', savespace=0, axes=none, attributes=none, id=none)``", "an array of all zeros of the given length or shape"
+    "``arrayrange(start, stop=None, step=1,typecode=None, axis=None, attributes=None, id=None)``", "Just like ``MV2.arange()`` except it returns a variable whose type can be specfied by the keyword argument typecode. The axis, attribute dictionary, and string identifier of the result variable may be specified. **Synonym:** ``arange``"
+    "``masked_array(a,mask=None, fill_value=None, axes=None, attributes=None, id=None)``", "Same as MV2.masked_array but creates a variable instead. If no axes are specified, the result has default axes, otherwise axes is a list of axis objects matching a.shape."
+    "``masked_object(data,value, copy=1,savespace=0,axes=None, attributes=None, id=None)``", "Create variable masked where exactly data equal to value. Create the variable with the given list of axis objects, attribute dictionary, and string id."
+    "``masked_values(data,value, rtol=1e-05, atol=1e-08, copy=1, savespace=0, axes=None, attributes=None, id=None)``", "Constructs a variable with the given list of axes and attribute dictionary, whose mask is set at those places where ``abs(data - value) > atol + rtol * abs(data)``. This is a careful way of saying that those elements of the data that have value = value (to within a tolerance) are to be treated as invalid. If data is not of a floating point type, calls masked_object instead."
+    "``ones(shape, typecode='l',savespace=0,axes=none, attributes=none, id=none)``", "return an array of all ones of the given length or shape."
+    "``reshape(a,newshape, axes=none, attributes=none, id=none)``", "copy of a with a new shape."
+    "``resize(a,newshape, axes=none, attributes=none, id=none)``", "return a new array with the specified shape. the original arrays total size can be any size."
+    "``zeros(shape,typecode='l',savespace=0, axes=none, attributes=none, id=none)``", "an array of all zeros of the given length or shape"
 
 
 
@@ -1107,7 +1108,7 @@ exception of argsort, all functions return a transient variable.
 Table MV Functions
 ------------------
 
-.. csv-table::  
+.. csv-table::   
    :header:  "Function", "Description"
    :widths:  30,  80
 
@@ -1324,7 +1325,7 @@ Table Variable Constructors
     "``Dataset.createVariable(String id, String datatype, List axes)``", "Create a Variable in a Dataset. This function is not yet implemented."
     "``CdmsFile.createVariable(String id, String datatype, List axes or Grids)``", "Create a Variable in a CdmsFile."
     ,"``id`` is the name of the variable.  ``datatype`` is the MV2 or Numpy | typecode, for example, MV2.Float.  ``axesOrGrids`` is a list of Axis and/or Grid objects, on which the variable is defined. Specifying a rectilinear grid is equivalent to listing the grid latitude and longitude axes, in the order defined for the grid. \*\*Note:\*\* this argument can either be a list or a tuple. If the tuple form is used, and there is only one element, it must have a following comma, e.g.: ``(axisobj,)``."
-    "``cdms.createVariable(array, typecode=None, copy=0, savespace=0,mask=None, fill_value=None, grid=None, axes=None,attributes=None, id=None)``", " Create a transient variable, not associated with a file or dataset.  ``array`` is the data values: a Variable, masked array, or Numpy array. ``typecode`` is the MV2 typecode of the array. Defaults to the typecode of array. ``copy`` is an integer flag: if 1, the variable is created with a copy of the array, if 0 the variable data is shared with array. ``savespace`` is an integer flag: if set to 1, internal Numpy operations will attempt to avoid silent upcasting. ``mask`` is an array of integers with value 0 or 1, having the same shape as array.  array elements with a corresponding mask value of 1 are considered invalid, and are not used for subsequent Numpy operations. The default mask is obtained from array if present, otherwise is None.  ``fill_value`` is the missing value flag. The default is obtained from array if possible, otherwise is set to 1.0e20 for floating point variables, 0 for integer-valued variables. ``grid`` is a rectilinear grid object. ``axes`` is a tuple of axis objects. By default the axes are obtained from array if present.  Otherwise for a dimension of length n, the default axis has values [0., 1., ..., double(n)]. ``attributes`` is a dictionary of attribute values.  The dictionary keys must be strings.  By default the dictionary is obtained from array if present, otherwise is empty. ``id`` is the string identifier of the variable.  By default the id is obtained from array if possible, otherwise is set to 'variable\_n' for some integer."
+    "``cdms.createVariable(array, typecode=None, copy=0, savespace=0,mask=None, fill_value=None, grid=None, axes=None,attributes=None, id=None)``", "Create a transient variable, not associated with a file or dataset.  ``array`` is the data values: a Variable, masked array, or Numpy array. ``typecode`` is the MV2 typecode of the array. Defaults to the typecode of array. ``copy`` is an integer flag: if 1, the variable is created with a copy of the array, if 0 the variable data is shared with array. ``savespace`` is an integer flag: if set to 1, internal Numpy operations will attempt to avoid silent upcasting. ``mask`` is an array of integers with value 0 or 1, having the same shape as array.  array elements with a corresponding mask value of 1 are considered invalid, and are not used for subsequent Numpy operations. The default mask is obtained from array if present, otherwise is None.  ``fill_value`` is the missing value flag. The default is obtained from array if possible, otherwise is set to 1.0e20 for floating point variables, 0 for integer-valued variables. ``grid`` is a rectilinear grid object. ``axes`` is a tuple of axis objects. By default the axes are obtained from array if present.  Otherwise for a dimension of length n, the default axis has values [0., 1., ..., double(n)]. ``attributes`` is a dictionary of attribute values.  The dictionary keys must be strings.  By default the dictionary is obtained from array if present, otherwise is empty. ``id`` is the string identifier of the variable.  By default the id is obtained from array if possible, otherwise is set to 'variable\_n' for some integer."
 
 
 

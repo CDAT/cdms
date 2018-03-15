@@ -300,13 +300,14 @@ instance of Regridder is a function which regrids data from rectangular
 input to output grids.
 
 Table CDMS Regridder Constructor
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. csv-table:: 
    :header:  "Constructor", "Description"
    :widths:  50, 90
+   :align: left
 
-   "regridFunction = Regridder(inputGrid, outputGrid)", "reate a regridder function which interpolates a data array from input to output grid. `CDMS regridder functions`_ describes the calling sequence of this function. ``inputGrid`` and ``outputGrid`` are CDMS grid objects. **Note:** To set the mask associated with inputGrid or outputGrid, use the grid setMask function."
+   "``regridFunction = Regridder(inputGrid, outputGrid)``", "reate a regridder function which interpolates a data array from input to output grid. `CDMS regridder functions`_ describes the calling sequence of this function. ``inputGrid`` and ``outputGrid`` are CDMS grid objects. **Note:** To set the mask associated with inputGrid or outputGrid, use the grid setMask function."
 
 SCRIP Regridder
 ^^^^^^^^^^^^^^^
@@ -315,13 +316,14 @@ SCRIP regridder functions are created with the ``regrid.readRegridder``
 function:
 
 Table SCRIP Regridder Constructor
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. csv-table:: 
    :header:  "Constructor", "Description"
    :widths:  80, 90
+   :align: left
 
-   "regridFunction = regrid.readRegridder(fileobj, mapMethod=None, checkGrid=1)", "Read a regridder from an open CDMS file object."
+   "``regridFunction = regrid.readRegridder(fileobj, mapMethod=None, checkGrid=1)``", "Read a regridder from an open CDMS file object."
    "", "``fileobj`` is a CDMS file object, as returned from ``cdms.open``."
    "", "``mapMethod`` is one of:"
    "", "-  ``'conservative'``: conservative remapper, suitable where area-integrated fields such as water or heat fluxes must be conserved."
@@ -402,6 +404,7 @@ Table CDMS Regridder Function
 .. csv-table:: 
    :header:  "Type", "Function", "Description"
    :widths:  40, 40, 80
+   :align: left
 
    "Array or Transient-Variable", "``regridFunction(array, missing=None, order=None, mask=None)``", "Interpolate a gridded data array to a new grid. The interpolation preservesthe area-weighted mean on each horizontal slice. If array is a Variable, a TransientVariable of  the same rank as the inputarrayisreturned, otherwiseamaskedarray is returned."
    , , "``array`` is a Variable, masked array, or Numpy array of rank 2, 3, or 4."
@@ -462,6 +465,7 @@ Table SCRIP Regridder Functions
 .. csv-table:: 
    :header:  "Return Type", "Method", "Description"
    :widths:  40, 40, 80
+   :align: left
 
     "Array or Transient-Variable", "[conservative, bilinear, and distance-weighted regridders] ``regridFunction(array)``", "Interpolate a gridded data array to a new grid. The return value is the regridded data variable. ``array`` is a Variable, MaskedArray, or Numpy array. The rank of the array may be greater than the rank of the input grid, in which case the input grid shape must match a trailing portion of the array shape. For example, if the input grid is curvilinear with shape (64,128), the last two dimensions of the array must match. Similarly, if the input grid is generic with shape (2560,), the last dimension of the array must have that length."
     "Array or Transient-Variable", "[bicubic regridders] ``regridFunction(array, gradientLat, gradientLon, gradientLatLon)``", "Interpolate a gridded data array to a new grid, using a bicubic regridder. The return value is the regridded data variable."
@@ -557,13 +561,23 @@ Get a mask from a separate file, and set as the input grid mask.
 the input array sof are four-dimensional. This is the n-dimensional
 case.
 
+
 **Example:**
 
 Generate an array of zonal mean values.
 
-1 f = cdms.open(‘rls\_ccc\_per.nc’) 2 rlsf = f.variables[‘rls’] 3 ingrid
-= rlsf.getGrid() 4 outgrid = cdms.createZonalGrid(ingrid) 5 regridFunc =
-Regridder(ingrid,outgrid) 6 mean = regridFunc(rlsf) 7 f.close()
+
+.. doctest::
+
+   >>> f = cdms.open(‘rls_ccc_per.nc’)
+   >>> rlsf = f.variables[‘rls’]
+   >>> ingrid = rlsf.getGrid()
+   >>> outgrid = cdms.createZonalGrid(ingrid)
+   >>> regridFunc = Regridder(ingrid,outgrid)
+   >>> mean = regridFunc(rlsf)
+   >>> f.close()
+
+
 
 +--------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | Line   | Notes                                                                                                                                                                                             |

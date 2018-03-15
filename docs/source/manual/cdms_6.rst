@@ -241,7 +241,7 @@ Table Axis Elements
 
 .. csv-table::
    :header: "Attribute", "Required?", "CF", "GDT", "Notes"
-   :widths: 15,1,1,1,80
+   :widths: 18,1,1,1,80
 
      "``associate``", "N", "N", "Y", "IDs of variables containing alternative sets of coordinates."
      "``axis``", "N", "Y", "Y", "The spatial type of the axis:"
@@ -271,7 +271,7 @@ Table Axis Elements
      "``month_lengths``", "N", "Y", "N", "Length of each month in a non-leap year for a user-defined calendar."
      "``name_in_file``", "N", "N", "N", "Name of the axis in the underlying file(s). See id."
      "``partition``", "N", "N", "N", "How the axis is split across files."
-     "``partition_lengt h``", "N", "N", "N", "Number of axis points for which data is actually defined. If data is missing for some values, this will be smaller than the length."  
+     "``partition_length``", "N", "N", "N", "Number of axis points for which data is actually defined. If data is missing for some values, this will be smaller than the length."  
      "``positive``", "N", "Y", "Y", "Direction of positive for a vertical axis"
      "``standard_name``", "N", "Y", "N", "Reference to an entry in the standard name table."
      "``topology``", "N", "N", "Y", "- Axis topology."

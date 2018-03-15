@@ -50,6 +50,7 @@ Table PythonTypes used in CDMS
 .. csv-table:: 
    :header:  "Type", "Description"
    :widths:  10, 80
+   :align:  left
 
    "Array",  "Numpy or masked multidimensional data array. All elements of the array are of the same type. Defined in the Numpy and MV2 modules."
    "Comptime", "Absolute time value, a time with representation (year, month, day, hour, minute, second). Defined in the cdtime module. cf. reltime" 
@@ -138,6 +139,8 @@ Table Cdms Module Functions
 .. csv-table::  
    :header:  "Type", "Definition"
    :widths:  10, 80
+   :align: left
+
 
    "``Variable``", "``asVariable(s)``: Transform ``s`` into a transient variable. ``s`` is a masked array, Numpy array, or Variable. If ``s`` is already a transient variable, ``s`` is returned. See also: ``isVariable``."
    "``Axis``", "``createAxis(data, bounds=None)``:"
@@ -345,11 +348,13 @@ Table CoordinateAxis Methods
 .. csv-table:: 
    :header:  "Type", "Method", "Definition"
    :widths:  20, 20, 80
+   :align: left
+ 
 
    "``Array``", "``array = axis[i:j]``", "Read a slice of data from the external file or dataset. Data is returned in the physical ordering defined in the dataset. See `Variable Slice Operators <#table-variable-slice-operators>`_ for a description of slice operators."
    "``None``", "``axis[i:j] = array``", "Write a slice of data to the external file. Dataset axes are read-only."
    "``None``", "``assignValue(array)``", "Set the entire value of the axis. ``array`` is a Numpy array, of the same dimensionality as the axis."
-   "``Axis``", "``clone(copyData=1)``", " Return a copy of the axis, as a transient axis. If copyData is 1 (the default) the data itself is copied."
+   "``Axis``", "``clone(copyData=1)``", "Return a copy of the axis, as a transient axis. If copyData is 1 (the default) the data itself is copied."
    "``None``", "``designateLatitude(persistent=0)``", "Designate the axis to be a latitude axis. If persistent is true, the external file or dataset (if any) is modified. By default, the designation is temporary."
    "``None``", "``designateLevel(persistent=0)``", "Designate the axis to be a vertical level axis. If persistent is true, the external file or dataset (if any) is modified. By default, the designation is temporary."
    "``None``", "``designateLongitude(persistent=0, modulo=360.0)``", "Designate the axis to be a longitude axis. ``modulo`` is the modulus value. Any given axis value ``x`` is treated as equivalent to ``x + modulus``. If ``persistent`` is true, the external file or dataset (if any) is modified. By default, the designation is temporary."
@@ -382,6 +387,8 @@ Table Axis Methods, Additional to CoordinateAxis
 .. csv-table::  
    :header:  "Type", "Method", "Definition"
    :widths:  20, 20, 80
+   :align: left
+
 
    "``List`` of component times", "``asComponentTime(calendar=None)``", "``Array`` version of ``cdtime tocomp``. Returns a ``List`` of component times."
    "``List`` of relative times", "``asRelativeTime()``", "``Array`` version of ``cdtime torel``. Returns a ``List`` of relative times."
@@ -417,7 +424,7 @@ Table Axis Slice Operators
 
 .. csv-table::  
    :header:  "Slice", "Definition"
-   :widths:  20, 100
+   :widths:  50, 110
 
    "``[i]``", "the ``ith`` element, starting with index ``0``"
    "``[i:j]``", "the ``ith`` element through, but not including, element ``j``"
@@ -475,7 +482,8 @@ Table CdmsFile Constructors
 
 .. csv-table::  
    :header:  "Constructor", "Description"
-   :widths:  20, 80
+   :widths:  50, 80
+   :align: left
 
    "Constructor", "Description"
    "``fileobj = cdms.open(path, mode)``", "Open the file specified by path returning a CdmsFile object. ``path`` is the file pathname, a string. ``mode`` is the open mode indicator, as listed in See `Open Modes <#table-open-modes>`_." 
@@ -486,7 +494,9 @@ Table CdmsFile Methods
 
 .. csv-table:: 
    :header:  "Type", "Method", "Definition"
-   :widths:  20, 20, 80
+   :widths:  10, 30, 80
+   :align: left
+
 
    "``Transient-Variable``", "``fileobj(varname, selector)``", "Calling a ``CdmsFile``"
    ,, "object as a function reads the region of data specified by the ``selector``. The result is a transient variable, unless ``raw = 1`` is specified. See 'Selectors'."
@@ -653,7 +663,7 @@ Table Database Methods
     "None", "``close()``", "Close a database"
     "List", "``listDatasets()``", "Return a list of the dataset IDs in this database. A dataset ID can be passed to the ``open`` command."
     "Dataset", "``open(dsetid, mode='r')``", "Open a dataset."
-    , "* ``dsetid``"," is the string dataset identifier"
+    , "* ``dsetid``","is the string dataset identifier"
     , "* ``mode``","is the open mode, 'r' - read-only, 'r+' - read-write, 'w' - create."
     , "* ``openDataset``", "is a synonym for ``open``."
     "SearchResult","``searchFilter(filter=None, tag=None, relbase=None, scope=Subtree, attnames=None, timeout=None)``","Search a CDMS database."
@@ -969,6 +979,7 @@ Table Dataset Constructors
 .. csv-table::  
    :header:  "Constructor", "Description"
    :widths:  50, 80
+   :align: left
 
     "``datasetobj = cdms.open(String uri, String mode='r')``", "Open the dataset specified by the Universal Resource Indicator, a CDML file. Returns a Dataset object. mode is one of the indicators listed in `Open Modes <#table-open-modes>`__ . ``openDataset`` is a synonym for ``open``"
 
@@ -979,11 +990,12 @@ Table Open Modes
 .. csv-table:: 
    :header:  "Mode", "Definition"
    :widths:  50, 80
+   :align: left
 
-   "‘r’", " read-only"
+   "‘r’", "read-only"
    "‘r+’", "read-write"
    "‘a’", "read-write. Open the file if it exists, otherwise create a new file"
-   "‘w’", " Create a new file, read-write"
+   "‘w’", "Create a new file, read-write"
 
 
 Table Dataset Methods
@@ -1084,14 +1096,18 @@ http://numpy.sourceforge.net for a description of these functions.
   
 
 Table Variable  Constructors in Module MV
----------------------------
+-----------------------------------------
+
+.. tabularcolumns:: |l|r|
+
 
 .. csv-table:: 
    :header:  "Constructor", "Description"
-   :widths:  30, 80
+   :widths:  50, 80
+   :align: left
 
-    "``arrayrange(start, stop=None, step=1,typecode=None, axis=None, attributes=None, id=None)``", "Just like ``MV2.arange()`` except it returns a variable whose type can be specfied by the keyword argument typecode. The axis, attribute dictionary, and string identifier of the result variable may be specified. **Synonym:** ``arange``"
-    "``masked_array(a,mask=None, fill_value=None, axes=None, attributes=None, id=None)``", "Same as MV2.masked_array but creates a variable instead. If no axes are specified, the result has default axes, otherwise axes is a list of axis objects matching a.shape."
+    "``arrayrange(start, stop=None, step=1, typecode=None, axis=None, attributes=None, id=None)``", "Just like ``MV2.arange()`` except it returns a variable whose type can be specfied by the keyword argument typecode. The axis, attribute dictionary, and string identifier of the result variable may be specified. **Synonym:** ``arange``"
+    "``masked_array(a, mask=None, fill_value=None, axes=None, attributes=None, id=None)``", "Same as MV2.masked_array but creates a variable instead. If no axes are specified, the result has default axes, otherwise axes is a list of axis objects matching a.shape."
     "``masked_object(data,value, copy=1,savespace=0,axes=None, attributes=None, id=None)``", "Create variable masked where exactly data equal to value. Create the variable with the given list of axis objects, attribute dictionary, and string id."
     "``masked_values(data,value, rtol=1e-05, atol=1e-08, copy=1, savespace=0, axes=None, attributes=None, id=None)``", "Constructs a variable with the given list of axes and attribute dictionary, whose mask is set at those places where ``abs(data - value) > atol + rtol * abs(data)``. This is a careful way of saying that those elements of the data that have value = value (to within a tolerance) are to be treated as invalid. If data is not of a floating point type, calls masked_object instead."
     "``ones(shape, typecode='l',savespace=0,axes=none, attributes=none, id=none)``", "return an array of all ones of the given length or shape."
@@ -1107,10 +1123,10 @@ exception of argsort, all functions return a transient variable.
 
 Table MV Functions
 ------------------
-
 .. csv-table::   
    :header:  "Function", "Description"
-   :widths:  30,  80
+   :widths:  50,  80
+   :align: left
 
     "``argsort(x, axis=-1, fill_value=None)``", "Return a Numpy array of indices for sorting along a given axis."
     "``asarray(data, typecode=None)``", "Same as ``cdms.createVariable(data, typecode, copy=0)``. This is a short way of ensuring that something is an instance of a variable of a given type before proceeding, as in ``data = asarray(data)``. Also see the variable ``astype()`` function."
@@ -1161,7 +1177,8 @@ Table Grids
 
 .. csv-table:: 
    :header:  "Grid Type", "Definition"
-   :widths:  30,  80
+   :widths:  50,  80
+   :align: left
 
     "``RectGrid``", "Associated latitude an longitude are 1-D axes, with strictly monotonic values."
     "``GenericGrid``", "Latitude and longitude are 1-D auxiliary coordinate axis (AuxAxis1D)"

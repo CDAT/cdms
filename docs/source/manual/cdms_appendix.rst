@@ -196,6 +196,7 @@ Table Slab Methods
 .. csv-table:: 
    :header: "Type", "Method", "Definition"
    :widths: 20,50,80
+   :align: left
 
    "Various", "``getdimattribute(dim, field)``", "Get the value of a dimension attribute.  ``dim`` is the dimension number, an integer in the range 0..rank- 1.  ``field`` is a string, one of:  'name', 'values', 'length', 'units', 'weights', 'bounds'."
    "Various", "``getattribute(name)``", "Get the value of an attribute.``name`` is the string name of the attribute. The following special names can always be used:  'filename', 'comments', 'grid_name', 'grid_type', 'time_statistic', 'long_name', 'units'."
@@ -216,6 +217,7 @@ Table cuDataset Methods
 .. csv-table:: 
    :header: "Type", "Method", "Definition"
    :widths: 20, 50, 80
+   :align: left
 
    "None", "``cleardefault()``", "Clear the default variable name."
    "None", "``default_variable(vname``)", "Set the default variable name."

@@ -469,7 +469,7 @@ CDMS supports two types of nonrectangular grid:
    However, it is more difficult to determine adjacency relationships
    between grid points.
 
-Example: a curvilinear grid
+Example: A Curvilinear Grid
 '''''''''''''''''''''''''''
 
 In this example, variable sample is defined on a 128x192 curvilinear
@@ -545,7 +545,7 @@ grid. Note that:
 
 
 
-Example: a generic grid
+Example: A Generic Grid
 '''''''''''''''''''''''
 
 In this example variable zs is defined on a generic grid. Figure 2

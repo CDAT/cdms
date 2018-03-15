@@ -84,6 +84,7 @@ Table Time Constructors
 .. csv-table:: 
    :header:  "Type", "Constructor", "Defintion"
    :widths:  10, 40, 80
+   :align: left
 
    "Reltime", "``cdtime.reltime(value, relunits)``", "Create a relative time type."
    ,, "``value`` is an integer or floating point value."
@@ -143,6 +144,7 @@ Table Time Methods
 .. csv-table:: 
    :header: "Type", "Method", "Definition"
    :widths: 20, 75, 80
+   :align: left
 
    "Comptime or Reltime", "``t.add(value,intervalUnits, calendar=cdtime.Default-Calendar)``", "Add an interval of time to a time type t.  Returns the same type of time."
    ,, "``value`` is the   Float number of interval units."

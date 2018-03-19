@@ -585,9 +585,9 @@ Overview
 
 To access a database:
 
-#. Open a connection. The connect method opens a database connection.
-   connect takes a database URI and returns a database object:
-   ``db = cdms.connect("ldap://dbhost.llnl.gov/database=CDMS,ou=PCMDI,o=LLNL,c=US")``
+#. Open a connection. The connect method opens a database connection. Connect takes a database URI and returns a database object:
+   ``db=cdms.connect("ldap://dbhost.llnl.gov/database=CDMS,ou=PCMDI,o=LLNL,c=US")``
+
 #. Search the database, locating one or more datasets, variables, and/or
    other objects.
 
@@ -870,7 +870,7 @@ In the next example, a portion of variable ‘ua’ is read from dataset
 Examples of Database Searches
 -----------------------------------
 
-In the following examples, db is the database opened with
+In the following examples, db is the database opened with:
 
 ::
 
@@ -937,7 +937,7 @@ This defaults to the database defined in environment variable
     for entry in result.searchPredicate(lambda x: len(x.getTime())>1000, tag = "variable"):
       print entry.name, len(entry.getObject().getTime())
 
-**Example:** Find the total number of each type of object in the database
+**Example:** Find the total number of each type of object in the database:
 
 ::
 
@@ -1510,7 +1510,7 @@ Selectors
 ^^^^^^^^^
 
 A selector is a specification of a region of data to be selected from a
-variable. For example, the statement
+variable. For example, the statement:
 
 ::
 
@@ -1521,7 +1521,7 @@ means ‘select the values of variable v for time ‘1979-1-1’ and levels
 1000.0 to 100.0 inclusive, setting x to the result.’ Selectors are
 generally used to represent regions of space and time.
 
-The form for using a selector is
+The form for using a selector is:
 
 
 ::
@@ -1529,7 +1529,7 @@ The form for using a selector is
     result = v(s)
 
 
-where v is a variable and s is the selector. An equivalent form is
+where v is a variable and s is the selector. An equivalent form is:
 
 ::
 
@@ -1540,7 +1540,7 @@ where f is a file or dataset, and ‘varid’ is the string ID of a
 variable.
 
 A selector consists of a list of selector components. For example, the
-selector
+selector:
 
 
 ::

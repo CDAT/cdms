@@ -26,7 +26,7 @@ be sliced to obtain a portion of the data, and can be used in arithmetic
 computations. For example, if ``u`` and ``v`` are variables representing
 the eastward and northward components of wind speed, respectively, and
 both variables are functions of time, latitude, and longitude, then the
-velocity for time 0 (first index) can be calculated as
+velocity for time 0 (first index) can be calculated as:
 
 
 .. highlight:: python
@@ -549,7 +549,7 @@ Example: A Generic Grid
 '''''''''''''''''''''''
 
 In this example variable zs is defined on a generic grid. Figure 2
-illustrates the grid, in this case a geodesic grid.
+illustrates the grid, in this case a geodesic grid:
 
 .. doctest::
 

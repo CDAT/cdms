@@ -1,7 +1,7 @@
-Module: cdtime
+Module: CdTime
 --------------
 
-Time types
+Time Types
 ^^^^^^^^^^
 .. highlight:: python
    :linenothreshold: 3

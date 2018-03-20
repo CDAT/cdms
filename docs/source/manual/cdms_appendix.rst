@@ -62,7 +62,7 @@ Release 3.0 Overview
 CDMS version 3.0 is a significant enhancement of previous versions. The
 major changes were:
 
--  UV-CDAT/CDMS was integrated with the Numpyal Python masked array
+-  CDAT/CDMS was integrated with the Numpyal Python masked array
    class MV2.MaskedVariable. The MV submodule was added as a wrapper
    around MV.
 -  Methods that read data, such as subRegion, subSlice, and the slice
@@ -179,7 +179,7 @@ APPENDIX C
 Module `cu`
 ~~~~~~~~~~~
 
-The ``cu`` module is the original UV-CDAT I/O interface. As of version 3
+The ``cu`` module is the original CDAT I/O interface. As of version 3
 it is emulated in the ``cdms`` module. It is maintained for backward
 compatibility.
 

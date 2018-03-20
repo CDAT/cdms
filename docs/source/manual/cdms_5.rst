@@ -5,8 +5,8 @@ Overview
 ~~~~~~~~
 
 Data read via the CDMS Python interface can be plotted using the ``vcs``
-module. This module, part of the Ultrascale Visualization Climate Data
-Analysis Tool (UV-CDAT) is documented in the UV-CDAT reference manual.
+module. This module, part of the Climate Data
+Analysis Tool (CDAT) is documented in the CDAT reference manual.
 The ``vcs`` module provides access to the functionality of the VCS
 visualization program.
 
@@ -134,7 +134,7 @@ variable. The result variable ``samp`` can be plotted directly:
 Plot Method
 ~~~~~~~~~~~
 
-The ``plot`` method is documented in the UV-CDAT Reference Manual. This
+The ``plot`` method is documented in the CDAT Reference Manual. This
 section augments the documentation with a description of the optional
 keyword arguments. The general form of the plot command is:
 
@@ -171,7 +171,7 @@ where:
    ``graphics_name``: the name of the specific graphics method
    ('default')
 
-   See the UV-CDAT Reference Manual and VCS Reference Manual for a
+   See the CDAT Reference Manual and VCS Reference Manual for a
    detailed description of these arguments.
 
 -  ``key=value``, ... are optional keyword/value pairs, listed in any

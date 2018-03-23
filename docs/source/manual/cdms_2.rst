@@ -5,6 +5,7 @@
 Overview
 ^^^^^^^^
 
+
 .. highlight:: python
    :linenothreshold: 3
 
@@ -648,6 +649,8 @@ Table Database Constructors
 .. csv-table::  
    :header:  "Constructor", "Description"
    :widths:  30, 80
+   :align: left
+
 
     "``db = cdms.connect(uri=None, user='', password='')``", "Connect to the database. ``uri`` is the Universal Resource Indentifier of the database. The form of the URI depends on the implementation of the database."
     ,"For a Lightweight Directory Access Protocol (LDAP) database, the form is: ``ldap://host[:port]/dbname``."
@@ -989,7 +992,7 @@ Table Open Modes
 
 .. csv-table:: 
    :header:  "Mode", "Definition"
-   :widths:  50, 80
+   :widths:  50, 70
    :align: left
 
    "‘r’", "read-only"
@@ -1189,7 +1192,8 @@ Table HorizontalGrid Internal Attribute
 
 .. csv-table::  
    :header:  "Type", "Name", "Definition"
-   :widths:  30, 30,  80
+   :widths:  30, 30,  100
+   :align: left
 
     "Dictionary","``attributes``", "External attribute dictionary."
     "String", "``id``", "The grid identifier."
@@ -1206,6 +1210,8 @@ Table RectGrid Constructors
 .. csv-table:: 
    :header:  "Constructor", "Description"
    :widths:  30, 80
+   :align: left
+
 
     "``cdms.createRectGrid(lat, lon, order, type='generic', mask=None)``", "Create a grid not associated with a file or dataset. See `A First Example`_" 
     "``CdmsFile.createRectGrid(id, lat, lon, order, type='generic', mask=None)``", "Create a grid associated with a file. See `CdmsFile Constructors <#table-cdmsfile-constructors>`_"
@@ -1338,6 +1344,8 @@ Table Variable Constructors
 .. csv-table::  
    :header:  "Constructor", "Description"
    :widths:  30, 80
+   :align: left
+
 
     "``Dataset.createVariable(String id, String datatype, List axes)``", "Create a Variable in a Dataset. This function is not yet implemented."
     "``CdmsFile.createVariable(String id, String datatype, List axes or Grids)``", "Create a Variable in a CdmsFile."
@@ -1352,6 +1360,8 @@ Table Variable Methods
 .. csv-table::  
    :header:  "Type", "Method", "Definition"
    :widths:  30, 30, 180
+   :align: left
+
 
     "Variable", "``tvar = var[ i:j, m:n]``", "Read a slice of data from the file or dataset, resulting in a transient variable.  Singleton dimensions are 'squeezed' out. Data is returned in the physical ordering defined in the dataset. The forms of the slice operator are listed in `Variable Slice Operators <#table-variable-slice-operators>`_ "
     "None", "``var[ i:j, m:n] = array``", "Write a slice of data to the external dataset.  The forms of the slice operator are listed in `Result Entry Methods <#table-resultentry-methods>`_ .  (Variables in CdmsFiles only)"

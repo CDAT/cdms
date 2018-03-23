@@ -1,6 +1,7 @@
 Regridding Data
 ---------------
 
+
 Overview
 ^^^^^^^^
 
@@ -507,7 +508,7 @@ Table Regridder Constructure
 
 .. csv-table::
    :header:  "Line", "Notes"
-   :widths:  8, 90
+   :widths:  8, 45
 
    "3", "Open a netCDF file for input."
    "6", "Create a 4 x 5 degree output grid. Note that this grid is not associated with a file or dataset."

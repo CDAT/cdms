@@ -24,7 +24,7 @@ Time Types
 
 
 The ``cdtime`` module implements the CDMS time types, methods, and
-calendars. These are made available with the command
+calendars. These are made available with the command:
 
 .. doctest::
 

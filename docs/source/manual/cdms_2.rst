@@ -219,7 +219,6 @@ Table Cdms Module Functions
              , "Set the grid classification mode. This affects how grid type is determined, for the purpose of generating grid boundaries. If ``mode`` is ``'on'`` (the default), grid type is determined by a grid classification method, regardless of the value of ``grid.get-Type()``. If ``mode`` is ``'off'``, the value of ``grid.getType()`` determines the grid type." 
    "``None``", "``writeScripGrid(path, grid, gridTitle=None)``:"
              , "Write a grid to a SCRIP grid file.  ``path`` is a string, the path of the SCRIP file to be created.  ``grid`` is a CDMS grid object. It may be rectangular. ``gridTitle`` is a string ID for the grid."
-:
 
 
 
@@ -1199,8 +1198,6 @@ Table HorizontalGrid Internal Attribute
     "String", "``id``", "The grid identifier."
     "Dataset or CdmsFile", "``parent``", "The dataset or file which contains the grid."
     "Tuple", "``shape``", "The shape of the grid, a 2-tuple"
-::
-  
 
      
 

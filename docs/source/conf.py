@@ -182,7 +182,7 @@ html_theme = 'agogo'
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-html_logo = 'manual/images/uvcdat.png'
+html_logo = 'manual/images/cdms_logo2_nocube.png'
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32

@@ -681,27 +681,27 @@ The steps to regrid a variable are:
 Steps 1 and 2 need only be done once. The regridder can be used as often
 as necessary.
 
-#For example, suppose the source data on a T42 grid is to be mapped to a
-#POP curvilinear grid. Assume that SCRIP generated a remapping file named
-#rmp_T42_to_POP43_conserv.nc:
-#
-#.. doctest::
-#
-#   >>> # Import regrid package for regridder functions
-#   >>> import regrid2, cdms2
-#   
-#   >>> # Get the source variable
-#   >>> f = cdms2.open('sampleT42Grid.nc') 
-#   >>> dat = f('src_array') 
-#   >>> f.close()
-#   
-#   >>> # Read the regridder from the remapper file
-#   >>> remapf = cdms2.open('rmp_T42_to_POP43_conserv.nc') 
-#   >>> regridf = regrid2.readRegridder(remapf) 
-#   >>> remapf.close()
-#   
-#   >>> # Regrid the source variable
-#   >>> popdat = regridf(dat)
+For example, suppose the source data on a T42 grid is to be mapped to a
+POP curvilinear grid. Assume that SCRIP generated a remapping file named
+rmp_T42_to_POP43_conserv.nc:
+
+.. doctest::
+
+   >>> # Import regrid package for regridder functions
+   >>> import regrid2, cdms2
+   
+   >>> # Get the source variable
+   >>> f = cdms2.open('sampleT42Grid.nc') 
+   >>> dat = f('src_array') 
+   >>> f.close()
+   
+   >>> # Read the regridder from the remapper file
+   >>> remapf = cdms2.open('rmp_T42_to_POP43_conserv.nc') 
+   >>> regridf = regrid2.readRegridder(remapf) 
+   >>> remapf.close()
+   
+   >>> # Regrid the source variable
+   >>> popdat = regridf(dat)
 
 Regridding is discussed in `Chapter 4 <cdms_4.html>`__.
 

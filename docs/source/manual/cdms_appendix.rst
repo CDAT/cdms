@@ -56,7 +56,7 @@ VCS Quick Reference (Cheat Sheet)
    :scale: 25%
    :alt:  VCS Cheat Sheet
 
-
+:download:`vcs quick ref <docs/vcs_quick_ref.pdf>`
 
 Release Notes
 ~~~~~~~~~~~~~

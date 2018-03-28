@@ -14,7 +14,7 @@ Overview
    import requests
    fnames = [ 'clt.nc', 'geos-sample', 'xieArkin-T42.nc', 'remap_grid_POP43.nc', 'remap_grid_T42.nc', 'rmp_POP43_to_T42_conserv.n', 'rmp_T42_to_POP43_conserv.nc', 'ta_ncep_87-6-88-4.nc', 'rmp_T42_to_C02562_conserv.nc' ]
    for file in fnames:
-       url = 'http://uvcdat.llnl.gov/cdat/sample_data/'+file
+       url = 'http://cdat.llnl.gov/cdat/sample_data/'+file
        r = requests.get(url)
        open(file, 'wb').write(r.content)
 
@@ -531,7 +531,7 @@ Table CdmsFile Methods
     ,,"* ``extbounds`` is the unlimited dimension bounds. Defaults to ``var.getAxis(0).getBounds()``."
     ,,"* ``id`` is the variable name in the file.  Default is ``var.id``."
     ,,"* ``extend = 1`` causes the first dimension to be unlimited: iteratively writeable."  
-    ,,"  * The default is ``None``, in which case the first dimension is extensible if it is ``time.Set`` to ``0`` to turn off this behaviour."
+    ,,"* The default is ``None``, in which case the first dimension is extensible if it is ``time.Set`` to ``0`` to turn off this behaviour."
     ,,"* ``fill_value`` is the missing value flag."
     ,,"* ``index`` is the extended dimension index to write to. The default index is determined by lookup relative to the existing extended dimension."
     ,," **Note:** data can also be written by setting a slice of a file variable, and attributes can be written by setting an attribute of a file variable."
@@ -1593,7 +1593,7 @@ Table Selector Keywords
     "``level``", "Restrict vertical levels to a value or range. Short form: lev",See `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_
     "``longitude``", "Restrict longitude values to a value or range. Short form: lon", See `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_
     "``order``", "Reorder the result.", " Order string, e.g., 'tzyx'"
-    "``raw``", "Return a masked array (MV2.array) rather than a transient variable.", "0: return a transient variable (default); =1: return a masked array."
+    "``raw``", "Return a masked array (MV2.array) rather than a transient variable.", "0: return a transient variable (default);   =   1: return a masked array."
     "``required``", "Require that the axis IDs be present.", " List of axis identifiers."
     "``squeeze``", "Remove singleton dimensions from the result.", " 0: leave singleton dimensions (default); 1: remove singleton dimensions."
     "``time``", "Restrict time values to a value or range.", See `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_ 

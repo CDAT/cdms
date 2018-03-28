@@ -107,7 +107,7 @@ class Test(unittest.TestCase):
 
         # Native ESMP
         srcMaxIndex = numpy.array(so[0, 0, ...].shape[::-1], dtype=numpy.int32)
-        srcMaxIndex = numpy.array(so[0, 0, ...].shape, dtype=numpy.int32)
+#        srcMaxIndex = numpy.array(so[0, 0, ...].shape, dtype=numpy.int32)
         srcGrid = ESMF.Grid(
             srcMaxIndex,
             coord_sys=ESMF.CoordSys.SPH_DEG,
@@ -128,7 +128,7 @@ class Test(unittest.TestCase):
 #        srcYCenter = ESMP.ESMP_GridGetCoordPtr(srcGrid, 1,
 #                                               ESMF.StaggerLoc.CENTER)
         dstMaxIndex = numpy.array(clt.shape[::-1], dtype=numpy.int32)
-        dstMaxIndex = numpy.array(clt.shape, dtype=numpy.int32)
+#        dstMaxIndex = numpy.array(clt.shape, dtype=numpy.int32)
         dstGrid = ESMF.Grid(
             dstMaxIndex,
             coord_sys=ESMF.CoordSys.SPH_DEG,
@@ -176,24 +176,24 @@ class Test(unittest.TestCase):
             operator.mul, [
                 srcDimsCenter[1][i] - srcDimsCenter[0][i] for i in range(2)])
 
-        srcXCenter[:] = so.getGrid().getLongitude()[:]
-        srcYCenter[:] = so.getGrid().getLatitude()[:]
-        srcFldPtr[:] = so[0, 0, :]
+        srcXCenter[:] = so.getGrid().getLongitude()[:].T
+        srcYCenter[:] = so.getGrid().getLatitude()[:].T
+        srcFldPtr[:] = so[0, 0, :].T
         srcMask[:] = (srcFldPtr == so.missing_value)
 
         # clt grid is rectilinear, transform to curvilinear
         lons = clt.getGrid().getLongitude()
         lats = clt.getGrid().getLatitude()
-        ny, nx = dstDimsCenter[1][0] - \
-            dstDimsCenter[0][0], dstDimsCenter[1][1] - dstDimsCenter[0][1]
-        localLons = lons[dstDimsCenter[0][1]:dstDimsCenter[1][1]]
-        localLats = lats[dstDimsCenter[0][0]:dstDimsCenter[1][0]]
-        xx = numpy.outer(numpy.ones((ny,), dtype=numpy.float32), localLons)
-        yy = numpy.outer(localLats, numpy.ones((nx,), dtype=numpy.float32))
+        ny, nx = dstDimsCenter[1][1] - \
+            dstDimsCenter[0][1], dstDimsCenter[1][0] - dstDimsCenter[0][0]
+        localLons = lons[dstDimsCenter[0][0]:dstDimsCenter[1][0]]
+        localLats = lats[dstDimsCenter[0][1]:dstDimsCenter[1][1]]
+        xx = numpy.outer(localLons, numpy.ones((ny,), dtype=numpy.float32))
+        yy = numpy.outer(numpy.ones((nx,), dtype=numpy.float32), localLats)
 
         dstXCenter[:] = xx
         dstYCenter[:] = yy
-        dstFldPtr[:] = [so.missing_value]
+        dstFldPtr[:] = so.missing_value
 
         # regrid forward and backward
         maskVals = numpy.array([1], numpy.int32)  # values defining mask
@@ -207,10 +207,11 @@ class Test(unittest.TestCase):
 
         regrid1(srcFld, dstFld, zero_region=ESMF.Region.SELECT)
 
-        jbeg, jend = dstDimsCenter[0][1], dstDimsCenter[1][1]
-        ibeg, iend = dstDimsCenter[0][0], dstDimsCenter[1][0]
-        soInterpESMP = dstFldPtr
-
+        jbeg, jend = dstDimsCenter[0][0], dstDimsCenter[1][0]
+        ibeg, iend = dstDimsCenter[0][1], dstDimsCenter[1][1]
+        soInterpESMP = numpy.ma.masked_where((dstFldPtr == so.missing_value), dstFldPtr).T
+        soInterpEsmfInterface = numpy.ma.masked_where(soInterpEsmfInterface == so.missing_value,soInterpEsmfInterface)
+        soInterpEsmfInterfaceRoot = numpy.ma.masked_where(soInterpEsmfInterfaceRoot == so.missing_value,soInterpEsmfInterfaceRoot)
         # check local diffs
         ntot = reduce(operator.mul, soInterpESMP.shape)
         avgdiff = numpy.sum(soInterpEsmfInterface - soInterpESMP) / float(ntot)

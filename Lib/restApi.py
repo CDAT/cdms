@@ -8,6 +8,7 @@ try:
 except BaseException:
     pass
 import os
+from six import string_types
 
 
 class esgfConnectionException(Exception):
@@ -240,12 +241,12 @@ class esgfConnection(object):
         for k in list(params.keys()):
             if isinstance(params[k], list):
                 for v in params[k]:
-                    if isinstance(v, str):
+                    if isinstance(v, string_types):
                         v = v.strip()
                     search += "&%s=%s" % (k, v)
             else:
                 v = params[k]
-                if isinstance(v, str):
+                if isinstance(v, string_types):
                     v = v.strip()
                 search += "&%s=%s" % (k, v)
 
@@ -369,7 +370,7 @@ class esgfDataset(esgfConnection):
                 self.datasetids = None
         if isinstance(datasetids, genutil.StringConstructor):
             self.datasetids = datasetids
-        elif isinstance(datasetids, str):
+        elif isinstance(datasetids, string_types):
             self.datasetids = genutil.StringConstructor(datasetids)
         if fileids is not None:
             if isinstance(fileids, genutil.StringConstructor):
@@ -588,7 +589,7 @@ class esgfFiles(object):
             datasetids = parent.datasetids
         if isinstance(datasetids, genutil.StringConstructor):
             self.datasetids = datasetids
-        elif isinstance(datasetids, str):
+        elif isinstance(datasetids, string_types):
             self.datasetids = genutil.StringConstructor(datasetids)
         else:
             self.datasetids = None
@@ -616,7 +617,7 @@ class esgfFiles(object):
     def __getitem__(self, item):
         if isinstance(item, int):
             return self._files[item]
-        elif isinstance(item, str):
+        elif isinstance(item, string_types):
             for f in self._files:
                 if f["id"] == item:
                     return f
@@ -769,7 +770,7 @@ class esgfFile(object):
         # print "Keys:",self.keys()
         # print self["url"]
         S = self["url"]
-        if isinstance(S, str):
+        if isinstance(S, string_types):
             S = [S, ]
         for service in S:
             url, s2, s1 = service.split("|")

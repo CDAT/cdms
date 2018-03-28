@@ -18,6 +18,7 @@ from .axis import createAxis, AbstractAxis
 from .grid import createRectGrid, AbstractRectGrid
 from .hgrid import AbstractCurveGrid
 from .gengrid import AbstractGenericGrid
+from six import string_types
 
 # dist array support
 HAVE_MPI = False
@@ -224,7 +225,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             if sys.version_info < (3, 0, 0):
                 if isinstance(id, unicode):  # noqa
                     id = str(id)
-            if not isinstance(id, str):
+            if not isinstance(id, string_types):
                 raise CDMSError('id must be a string')
             self.id = id
         elif hasattr(data, 'id'):
@@ -513,7 +514,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             if sys.version_info < (3, 0, 0):
                 if isinstance(value, unicode):  # noqa
                     value = str(value)
-            if not isinstance(value, str):
+            if not isinstance(value, string_types):
                 raise CDMSError("setdimattribute: name not a string")
             d.id = value
 
@@ -529,7 +530,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             if sys.version_info < (3, 0, 0):
                 if isinstance(value, unicode):  # noqa
                     value = str(value)
-            if not isinstance(value, str):
+            if not isinstance(value, string_types):
                 raise CDMSError("setdimattribute: units not a string")
             d.units = value
 

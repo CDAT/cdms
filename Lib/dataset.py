@@ -29,6 +29,7 @@ from .cdmsNode import CdDatatypes
 from . import convention
 import warnings
 from collections import OrderedDict
+from six import string_types
 
 # Default is serial mode until setNetcdfUseParallelFlag(1) is called
 rk = 0
@@ -123,7 +124,7 @@ def setCompressionWarnings(value=None):
     global _showCompressWarnings
     if value is None:
         value = not _showCompressWarnings
-    if isinstance(value, str):
+    if isinstance(value, string_types):
         if not value.slower() in ['y', 'n', 'yes', 'no']:
             raise CDMSError(
                 "setCompressionWarnings flags must be yes/no or 1/0, or None to invert it")

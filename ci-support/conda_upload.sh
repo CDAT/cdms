@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 PKG_NAME=cdms2
-USER=uvcdat
+USER=cdat
 echo "Trying to upload conda"
 mkdir ${HOME}/conda-bld
 export CONDA_BLD_PATH=${HOME}/conda-bld
@@ -21,6 +21,7 @@ if [ `uname` == "Linux" ]; then
     conda install -n root gcc future
     which python
     export UVCDAT_ANONYMOUS_LOG=False
+    BRANCH=${TRAVIS_BRANCH}
 #    echo "Creating python 3 env"
 #    conda create -n py3 python=3.6
 #    conda install -n py3 -c conda-forge -c uvcdat setuptools libcf distarray cdtime libcdms cdat_info numpy libdrs_f pyopenssl nose requests flake8 myproxyclient numpy
@@ -37,6 +38,7 @@ if [ `uname` == "Linux" ]; then
 else
     echo "Mac OS"
     OS=osx-64
+    BRANCH=${CIRCLE_BRANCH}
 fi
 
 which python
@@ -56,7 +58,7 @@ git clone git://github.com/UV-CDAT/conda-recipes
 cd conda-recipes
 # uvcdat creates issues for build -c uvcdat confises package and channel
 rm -rf uvcdat
-python ./prep_for_build.py
+python ./prep_for_build.py -b ${BRANCH}
 echo "Building now"
 echo "use nesii/label/dev-esmf for esmf"
 conda build -V

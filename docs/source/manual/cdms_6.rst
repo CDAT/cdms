@@ -1,8 +1,8 @@
-CHAPTER 6 Climate Data Markup Language (CDML)
----------------------------------------------
+Climate Data Markup Language (CDML)
+-----------------------------------
 
-6.1 Introduction
-~~~~~~~~~~~~~~~~
+Introduction
+~~~~~~~~~~~~
 
 The Climate Data Markup Language (CDML) is the markup language used to
 represent metadata in CDMS. CDML is based on the W3C XML standard
@@ -21,8 +21,8 @@ future.
 
 CDML files have the file extension .xml or .cdml.
 
-6.2 Elements
-~~~~~~~~~~~~
+Elements
+~~~~~~~~
 
 A CDML document consists of a nested collection of elements. An element
 is a description of the metadata associated with a CDMS object. The form
@@ -50,8 +50,8 @@ where
 
 The CDML elements are:
 
-Table 6.1 CDML Tags
-                   
+Table CDML Tags
+^^^^^^^^^^^^^^^^^^^                   
 
 +------------+---------------------------------------+
 | Tag        | Description                           |
@@ -71,13 +71,14 @@ Table 6.1 CDML Tags
 | variable   | Variable                              |
 +------------+---------------------------------------+
 
-6.3 Special Characters
-~~~~~~~~~~~~~~~~~~~~~~
+Special Characters
+~~~~~~~~~~~~~~~~~~
 
 XML reserves certain characters for markup. If they appear as content,
 they must be encoded to avoid confusion with markup:
 
-Table 6.2 Special Character Encodings
+Table Special Character Encodings
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                                      
 
 +-------------+------------+
@@ -102,8 +103,8 @@ would appear in an attribute string as:
 
 **comment = "Certain &quot;special characters&quot;, such as &lt;, &gt;, and &apos;, must be encoded."**
 
-6.4 Identifiers
-~~~~~~~~~~~~~~~
+Identifiers
+~~~~~~~~~~~
 
 In CDMS, all objects in a dataset have a unique string identifier. The
 id attribute holds the value of this identifier. If the variable, axis,
@@ -118,16 +119,16 @@ case), an underscore (_), or a colon (:). Characters after the first
 must be alphanumeric, an underscore, or colon. There is no restriction
 on the length of an identifier.
 
-6.5 CF Metadata Standard
-~~~~~~~~~~~~~~~~~~~~~~~~
+CF Metadata Standard
+~~~~~~~~~~~~~~~~~~~~
 
 `The CF metadata standard <http://cfconventions.org/>`__ defines a set
 of conventions for usage of netCDF. This standard is supported by CDML.
 The document defines names and usage for metadata attributes. CF
 supersedes the GDT 1.3 standard.
 
-6.6 CDML Syntax
-~~~~~~~~~~~~~~~
+CDML Syntax
+~~~~~~~~~~~
 
 The following notation is used in this section:
 
@@ -150,8 +151,8 @@ Version 1.0.
 
 ``prolog ::= <?xml version="1.0"?> <!DOCTYPE dataset SYSTEM "http://www-pcmdi.llnl.gov/~drach/cdms/cdml.dtd">``
 
-6.6.1 Dataset Element
-^^^^^^^^^^^^^^^^^^^^^
+Dataset Element
+^^^^^^^^^^^^^^^
 
 A dataset element describes a single dataset. The content is a list of
 elements corresponding to the axes, grids, and variables contained in
@@ -163,7 +164,7 @@ defined.
 
 ``dataset-content ::= (axis-element | grid-element | variable-element)* extra-attribute-element+``
 
-Table 6.3 Dataset Attributes
+Dataset Attributes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. csv-table::                            
    :header: "Attribute", "Required", "CF", "GDT", "Notes"
@@ -219,8 +220,8 @@ into files. The format is:
 The pathname is appended to the value of the directory attribute, to
 obtain an absolute pathname.
 
-6.6.2 Axis Element
-^^^^^^^^^^^^^^^^^^
+Axis Element
+^^^^^^^^^^^^
 
 An axis element describes a single coordinate axis. The content can be a
 blank-separated list of axis values or a linear element. A linear
@@ -235,12 +236,12 @@ length).
 
 ``linear-element ::=`` **<linear delta=** ``"value”`` **length=** ``“Integer“`` **start=** ``“value“`` **> </linear>**
 
-Table 6.4
-^^^^^^^^^
+Table Axis Elements
+^^^^^^^^^^^^^^^^^^^
 
 .. csv-table::
    :header: "Attribute", "Required?", "CF", "GDT", "Notes"
-   :widths: 15,1,1,1,80
+   :widths: 18,1,1,1,80
 
      "``associate``", "N", "N", "Y", "IDs of variables containing alternative sets of coordinates."
      "``axis``", "N", "Y", "Y", "The spatial type of the axis:"
@@ -270,7 +271,7 @@ Table 6.4
      "``month_lengths``", "N", "Y", "N", "Length of each month in a non-leap year for a user-defined calendar."
      "``name_in_file``", "N", "N", "N", "Name of the axis in the underlying file(s). See id."
      "``partition``", "N", "N", "N", "How the axis is split across files."
-     "``partition_lengt h``", "N", "N", "N", "Number of axis points for which data is actually defined. If data is missing for some values, this will be smaller than the length."  
+     "``partition_length``", "N", "N", "N", "Number of axis points for which data is actually defined. If data is missing for some values, this will be smaller than the length."  
      "``positive``", "N", "Y", "Y", "Direction of positive for a vertical axis"
      "``standard_name``", "N", "Y", "N", "Reference to an entry in the standard name table."
      "``topology``", "N", "N", "Y", "- Axis topology."
@@ -278,8 +279,8 @@ Table 6.4
      "``units``", "Y", "Y", "Y", "Units of a physical quantity"
      "``weights``", "N", "N", "N", "Name of the weights array" 
 
-6.6.3 partition attribute
-^^^^^^^^^^^^^^^^^^^^^^^^^
+Partition attribute
+^^^^^^^^^^^^^^^^^^^
 
 
 For an axis in a dataset, the .partition attribute describes how an axis
@@ -304,8 +305,8 @@ Note that the end index of the second interval is strictly less than the
 start index of the following interval. This indicates that data for that
 period is missing.
 
-6.6.4 Grid Element
-^^^^^^^^^^^^^^^^^^
+Grid Element
+^^^^^^^^^^^^
 
 A grid element describes a horizontal, latitude-longitude grid which is
 rectilinear in topology,
@@ -314,6 +315,7 @@ rectilinear in topology,
 ``extra-attribute-element*`` **</rectGrid>**
 
 Table 6.5 RectGrid Attributes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                              
 
 .. raw:: html
@@ -331,18 +333,20 @@ Table 6.5 RectGrid Attributes
 ::
 
     <tr><td><code>id</code></td><td>Y</td><td>N</td><td>Grid identifier</td></tr>
-    <tr><td><code>type</code></td><td>Y</td><td>N</td><td><p>Grid classification</p><p>"gaussian" | "uniform" | "equalarea" |"generic"</p><p>Default: "generic"</p></td></tr>
+    <tr><td><code>type</code></td><td>Y</td><td>N</td><td><p>Grid classification</p><p>"gaussian" | "uniform" 
+    | "equalarea" |"generic"</p><p>Default: "generic"</p></td></tr>
     <tr><td><code>latitude</code></td><td>Y</td><td>N</td><td>Latitude axis name</td></tr>
     <tr><td><code>longitude</code></td><td>Y</td><td>N</td><td>Longitude axis name</td></tr>
     <tr><td><code>mask</code></td><td>N</td><td>N</td><td>Name of associated mask variable</td></tr>
-    <tr><td><code>order</code></td><td>Y</td><td>N</td><td><p>Grid ordering "yx" | "xy"</p><p>Default: “yx”, axis order is latitude, longitude</p></td></tr>
+    <tr><td><code>order</code></td><td>Y</td><td>N</td><td><p>Grid ordering "yx"
+     | "xy"</p><p>Default: “yx”, axis order is latitude, longitude</p></td></tr>
 
 .. raw:: html
 
    </table>
 
-6.6.5 Variable Element
-^^^^^^^^^^^^^^^^^^^^^^
+Variable Element
+^^^^^^^^^^^^^^^^
 
 A variable element describes a data variable. The domain of the variable
 is an ordered list of domain elements naming the axes on which the
@@ -365,1326 +369,40 @@ the length.
 start=\ **"``Integer``" **\ length=\ **"``Integer``"
 **\ partition\_length=\ **"``Integer``"**/>\*\*
 
-Table 6.6 Variable Attributes
-                             
 
-.. raw:: html
-
-   <table class="table">
-
-.. raw:: html
-
-   <tr>
-
-.. raw:: html
-
-   <th>
-
-Attribute
-
-.. raw:: html
-
-   </th>
-
-.. raw:: html
-
-   <th>
-
-Required?
-
-.. raw:: html
-
-   </th>
-
-.. raw:: html
-
-   <th>
-
-CF
-
-.. raw:: html
-
-   </th>
-
-.. raw:: html
-
-   <th>
-
-GDT
-
-.. raw:: html
-
-   </th>
-
-.. raw:: html
-
-   <th>
-
-Notes
-
-.. raw:: html
-
-   </th>
-
-.. raw:: html
-
-   </tr>
-
-.. raw:: html
-
-   <tr>
-
-.. raw:: html
-
-   <td>
-
-id
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Y
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Variable identifier. Also, the name of the variable in the underlying
-file(s), if name\_in\_file is undefined.
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   </tr>
-
-.. raw:: html
-
-   <tr>
-
-.. raw:: html
-
-   <td>
-
-add\_offset
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Y
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Y
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Additive offset for packing data. See scale\_factor.
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   </tr>
-
-.. raw:: html
-
-   <tr>
-
-.. raw:: html
-
-   <td>
-
-associate
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Y
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-IDs of variables containing alternative sets of coordinates
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   </tr>
-
-.. raw:: html
-
-   <tr>
-
-.. raw:: html
-
-   <td>
-
-axis
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Y
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-.. raw:: html
-
-   <p>
-
-Spatio-temporal dimensions.
-
-.. raw:: html
-
-   </p>
-
-.. raw:: html
-
-   <p>
-
-Example: "TYX" for a variable with domain (time, latitude, longitude)
-
-.. raw:: html
-
-   </p>
-
-.. raw:: html
-
-   <p>
-
-Note: for CF, applies to axes only.
-
-.. raw:: html
-
-   </p>
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   </tr>
-
-.. raw:: html
-
-   <tr>
-
-.. raw:: html
-
-   <td>
-
-cell\_methods
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Y
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-The method used to derive data that represents cell values, e.g.,
-"maximum", "mean", "variance", etc.
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   </tr>
-
-.. raw:: html
-
-   <tr>
-
-.. raw:: html
-
-   <td>
-
-comments
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Comment string
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   </tr>
-
-.. raw:: html
-
-   <tr>
-
-.. raw:: html
-
-   <td>
-
-coordinates
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Y
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-IDs of variables containing coordinate data.
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   </tr>
-
-.. raw:: html
-
-   <tr>
-
-.. raw:: html
-
-   <td>
-
-datatype
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Y
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Char, Short, Long, Float, Double, or String
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   </tr>
-
-.. raw:: html
-
-   <tr>
-
-.. raw:: html
-
-   <td>
-
-grid\_name
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Id of the grid
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   </tr>
-
-.. raw:: html
-
-   <tr>
-
-.. raw:: html
-
-   <td>
-
-grid\_type
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-"gaussian" \| "uniform" \| "equalarea" \| "generic"
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   </tr>
-
-.. raw:: html
-
-   <tr>
-
-.. raw:: html
-
-   <td>
-
-long\_name
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Y
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Y
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Long description of a physical quantity.
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   </tr>
-
-.. raw:: html
-
-   <tr>
-
-.. raw:: html
-
-   <td>
-
-missing\_value
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Y
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Y
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Value used for data that are unknown or missint.
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   </tr>
-
-.. raw:: html
-
-   <tr>
-
-.. raw:: html
-
-   <td>
-
-name\_in\_file
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Name of the variable in the underlying file(s). See id.
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   </tr>
-
-.. raw:: html
-
-   <tr>
-
-.. raw:: html
-
-   <td>
-
-scale\_factor
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Y
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Y
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Multiplicative factor for packing data. See add\_offset.
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   </tr>
-
-.. raw:: html
-
-   <tr>
-
-.. raw:: html
-
-   <td>
-
-standard\_name
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Y
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Reference to an entry in the standard name table.
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   </tr>
-
-.. raw:: html
-
-   <tr>
-
-.. raw:: html
-
-   <td>
-
-subgrid
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Y
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Records how data values represent subgrid variation.
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   </tr>
-
-.. raw:: html
-
-   <tr>
-
-.. raw:: html
-
-   <td>
-
-template
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Name of the file template to use for this variable. Overrides the
-dataset value.
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   </tr>
-
-.. raw:: html
-
-   <tr>
-
-.. raw:: html
-
-   <td>
-
-units
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Y
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Y
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Units of a physical quantity.
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   </tr>
-
-.. raw:: html
-
-   <tr>
-
-.. raw:: html
-
-   <td>
-
-valid\_max
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Y
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Y
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Largest valid value of a variable
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   </tr>
-
-.. raw:: html
-
-   <tr>
-
-.. raw:: html
-
-   <td>
-
-valid\_min
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Y
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Y
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Smallest valid value of a variable
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   </tr>
-
-.. raw:: html
-
-   <tr>
-
-.. raw:: html
-
-   <td>
-
-valid\_range
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-N
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Y
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Y
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   <td>
-
-Largest and smallest valid values of a variable
-
-.. raw:: html
-
-   </td>
-
-.. raw:: html
-
-   </tr>
-
-.. raw:: html
-
-   </table>
-
-6.6.6 Attribute Element
-^^^^^^^^^^^^^^^^^^^^^^^
+Table Variable Attributes
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+.. csv-table::
+   :header: "Attribute", "Required?", "CF", "GDT", "Notes"
+   :widths: 15,1,1,1,80
+
+     "``id``", "Y", "N", "N", "Variable identifier. Also, the name of the variable in the underlying file(s), if name_in_file is undefined."
+     "``ad_offset``", "N", "Y", "Y", "Additive offset for packing data. See scale_factor."
+     "``associate``", "N", "N", "Y", "IDs of variables containing alternative sets of coordinates Spatio-temporal dimensions."
+     "``axis``", "N", "N", "Y", "Example: TYX for a variable with domain (time, latitude, longitude) Note: for CF, applies to axes only."
+     "``cell_methods``", "N", "Y", "N", "The method used to derive data that represents cell values, e.g., maximum,mean,variance, etc."
+     "``comments``", "N", "N", "N", "Comment string"
+     "``coordinates``", "N", "Y", "N", "IDs of variables containing coordinate data."
+     "``datatype``", "Y", "N", "N", "Char, Short, Long, Float, Double, or String"
+     "``grid_name``", "N", "N", "N", "Id of the grid."
+     "``grid_type``", "N", "N", "N", "gaussian, uniform, equalarea, generic"
+     "``long_name``", "N", "Y", "Y", "Long description of a physical quantity."
+     "``missing_value``", "N", "Y", "Y", "Value used for data that are unknown or missing."  
+     "``name_in_file``", "N", "N", "N", "Name of the variable in the underlying file(s). See id."
+     "``scale_factor``", "N", "Y", "Y", "Multiplicative factor for packing data. See add_offset."
+     "``standard_name``", "N", "Y", "N", "Reference to an entry in the standard name table."
+     "``subgrid``", "N", "N", "Y", "Records how data values represent subgrid variation."
+     "``template``", "N", "N", "N", "Name of the file template to use for this variable. Overrides the dataset value."
+     "``units``", "N", "Y", "Y", "Units of a physical quantity."
+     "``valid_max``", "N", "Y", "Y", "Largest valid value of a variable."
+     "``valid_min``", "N", "Y", "Y", "Smallest valid value of a variable."
+     "``valid_range``", "N", "Y", "Y", "Largest and smallest valid values of a variable."
+
+
+Attribute Element
+^^^^^^^^^^^^^^^^^
 
 Attributes which are not explicitly defined by the GDT convention are
 represented as extra attribute elements. Any dataset, axis, grid, or
@@ -1700,8 +418,8 @@ The datatype is one of: **Char**, **Short**, **Long**, **Float**,
 **datatype=**"``attribute-datatype``"**>** ``attribute-value``
 **</attr>**
 
-6.7 A Sample CDML Document
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+A Sample CDML Document
+~~~~~~~~~~~~~~~~~~~~~~
 
 Dataset "sample" has two variables, and six axes.
 
@@ -1790,4 +508,5 @@ Dataset "sample" has two variables, and six axes.
 
 
 
- c
+
+ 

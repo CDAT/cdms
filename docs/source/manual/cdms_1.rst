@@ -31,8 +31,10 @@ velocity for time 0 (first index) can be calculated as:
 
 .. highlight:: python
 
-.. doctest::
 
+
+.. doctest::
+  
    >>> # wget "http://cdat.llnl.gov/cdat/sample_data/clt.nc"
    >>> f1=cdms2.open("clt.nc")
    >>> u = f1('u')
@@ -103,7 +105,7 @@ Data can be read by index or by world coordinate values. The following
 reads the n-th timepoint of u (the syntax slice(i,j) refers to indices k
 such that i <= k < j):
 
-.. doctest:: 
+.. doctest::
 
    >>> n = 0
    >>> u0 = f('u',time=slice(n,n+1))
@@ -116,11 +118,11 @@ To read ``u`` at time 1.:
 
 A variable can be written to a file with the write function:
 
-.. doctest::
+..
 
    >>> g = cdms2.open('sample2.nc','w')
    >>> g.write(u) # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
-   <cdms2.fvariable.FileVariable object at ...
+   >>> <cdms2.fvariable.FileVariable object at ...
    >>> g.close()
 
 Coordinate Axes
@@ -144,52 +146,52 @@ latitude, longitude). This indicates the order of the dimensions, with
 the slowest-varying dimension listed first (time). The domain may be
 accessed with the ``getAxisList()`` method:
 
-.. doctest::
+..
 
    >>> u.getAxisList() # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
-   [   id: time1
-   Designated a time axis.
-   units:  months since 1978-12
-   Length: 1
-   First:  1.0
-   Last:   1.0
-   Other axis attributes:
-      calendar: gregorian
-      axis: T
-   Python id:  ...
-   ,    id: plev
-   Designated a level axis.
-   units:  hPa
-   Length: 2
-   First:  200.0
-   Last:   850.0
-   Other axis attributes:
-      axis: Z
-      realtopology: linear
-   Python id:  ...
-   ,    id: latitude1
-   Designated a latitude axis.
-   units:  degrees_north
-   Length: 80
-   First:  -88.2884
-   Last:   88.2884
-   Other axis attributes:
-      axis: Y
-      realtopology: linear
-   Python id:  ...
-   ,    id: longitude1
-   Designated a longitude axis.
-   units:  degrees_east
-   Length: 97
-   First:  -180.0
-   Last:   180.0
-   Other axis attributes:
-      axis: X
-      topology: circular
-      modulo: 360.0
-      realtopology: linear
-   Python id:  ...
-   ]
+   >>> [   id: time1
+   >>> Designated a time axis.
+   >>> units:  months since 1978-12
+   >>> Length: 1
+   >>> First:  1.0
+   >>> Last:   1.0
+   >>> Other axis attributes:
+   >>>    calendar: gregorian
+   >>>    axis: T
+   >>> Python id:  ...
+   >>> ,    id: plev
+   >>> Designated a level axis.
+   >>> units:  hPa
+   >>> Length: 2
+   >>> First:  200.0
+   >>> Last:   850.0
+   >>> Other axis attributes:
+   >>>    axis: Z
+   >>>    realtopology: linear
+   >>> Python id:  ...
+   >>> ,    id: latitude1
+   >>> Designated a latitude axis.
+   >>> units:  degrees_north
+   >>> Length: 80
+   >>> First:  -88.2884
+   >>> Last:   88.2884
+   >>> Other axis attributes:
+   >>>    axis: Y
+   >>>    realtopology: linear
+   >>> Python id:  ...
+   >>> ,    id: longitude1
+   >>> Designated a longitude axis.
+   >>> units:  degrees_east
+   >>> Length: 97
+   >>> First:  -180.0
+   >>> Last:   180.0
+   >>> Other axis attributes:
+   >>>    axis: X
+   >>>    topology: circular
+   >>>    modulo: 360.0
+   >>>    realtopology: linear
+   >>> Python id:  ...
+   >>> ]
 
 
 In the above example, the domain elements are axes that are also
@@ -208,13 +210,13 @@ associated with a variable. The methods getLatitude, getLongitude,
 getLevel, and getTime return the associated coordinate axes. For
 example:
 
-.. doctest::
+..
 
    >>> t = u.getTime()
    >>> print t[:]
-   [ 1.]
+   >>> [ 1.]
    >>> print t.units
-   months since 1978-12
+   >>> months since 1978-12
 
 Attributes
 ^^^^^^^^^^
@@ -223,11 +225,10 @@ As mentioned above, variables can have associated attributes ,
 name-value pairs. In fact, nearly all CDMS objects can have associated
 attributes, which are accessed using the Python dot notation:
 
-.. doctest::
-
-   >>> u.units='m/s'
-   >>> print u.units 
-   m/s
+..
+  >>> u.units='m/s'
+  >>> print u.units 
+  >>> m/s
 
 Attribute values can be strings, scalars, or 1-D Numpy arrays.
 
@@ -239,17 +240,17 @@ written to an output file along with the variable. By default, when an
 attribute is set, it is treated as external. Every variable has a field
 attributes, a Python dictionary that defines the external attributes:
 
-.. doctest::
+..
 
    >>> print u.attributes.keys()
-   ['name', 'title', 'tileIndex', 'date', 'source', 'time', 'units', 'type']
+   >>> ['name', 'title', 'tileIndex', 'date', 'source', 'time', 'units', 'type']
 
 The Python dir command lists the internal attribute names:
 
-.. doctest::
+..
 
    >>> dir(u)
-   ['T', '_FillValue', '_TransientVariable__domain', ..., 'view']
+   >>> ['T', '_FillValue', '_TransientVariable__domain', ..., 'view']
 
 In general internal attributes should not be modified directly. One
 exception is the id attribute, the name of the variable. It is used in
@@ -266,25 +267,24 @@ corresponding data array element is missing or invalid.
 Arithmetic operations in CDMS take missing data into account. The same
 is true of the functions defined in the cdms2.MV2 module. For example:
 
-.. doctest::
+..
 
    >>> a = MV2.array([1,2,3]) # Create array a, with no mask
    >>> b = MV2.array([4,5,6]) # Same for b  
    >>> a+b # variable_... array([5,7,9,]) # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
-   variable_...
-   masked_array(data = [5 7 9],
-             mask = False,
-       fill_value = 999999)
-       
-       
+   >>> variable_...
+   >>> masked_array(data = [5 7 9],
+   >>>    mask = False,
+   >>> fill_value = 999999)   
+   >>> 
    >>> a[1]=MV2.masked # Mask the second value of a a.mask()
    >>> a.mask
-   array([False,  True, False], dtype=bool)
+   >>> array([False,  True, False], dtype=bool)
    >>> a+b # The sum is masked also # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
-   variable_...
-   masked_array(data = [5 -- 9],
-             mask = [False  True False],
-       fill_value = 999999)
+   >>> variable_...
+   >>> masked_array(data = [5 -- 9],
+   >>>    mask = [False  True False],
+   >>> fill_value = 999999)
        
        
    
@@ -327,11 +327,11 @@ passing the name of the variable, or by calling the getVariable
 function. Note that obtaining a file variable does not actually read the
 data array:
 
-.. doctest:: 
+..
 
    >>> u = f.getVariable('u') # or u=f['u']
    >>> u.shape 
-   (1, 2, 80, 97)
+   >>> (1, 2, 80, 97)
 
 File variables are also useful for fine-grained I/O. They behave like
 transient variables, but operations on them also affect the associated
@@ -344,21 +344,21 @@ file. Specifically:
 -  and calling a file variable like a function reads data associated
    with the variable:
 
-.. doctest::
-
+..
+  
    >>> import os
    >>> os.system("cp clt.nc /tmp")
-   0
+   >>> 0
    >>> f = cdms2.open('/tmp/clt.nc','a') # Open read/write
    >>> uvar = f['u'] # Note square brackets
    >>> uvar.shape
-   (1, 2, 80, 97)
+   >>>(1, 2, 80, 97)
    >>> u0 = uvar[0] # Reads data from sample.nc 
    >>> u0.shape
-   (2, 80, 97)
+   >>> (2, 80, 97)
    >>> uvar[1]=u0 # Writes data to sample.nc
    >>> uvar.units # Reads the attribute 'm/s'
-   'm/s'
+   >>> 'm/s'
    >>> u24 = uvar(time=1.0) # Calling  a variable like a function reads data
    >>> f.close() # Save changes to clt.nc (I/O may be buffered)
 
@@ -367,40 +367,42 @@ For transient variables, the data is printed only if the size of the array is le
 than the print limit . This value can be set with the function
 MV.set_print_limit to force the data to be printed:
 
-.. doctest::
+..
+
 
    >>> MV2.get_print_limit() # Current limit 1000
-   1000
+   >>> 1000
    >>> smallvar  # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
-    small variable
-    masked_array(data =
-     [[  0.   1.   2.   3.   4.]
-     [  5.   6.   7.   8.   9.]
-     [ 10.  11.  12.  13.  14.]
-     [ 15.  16.  17.  18.  19.]],
-                 mask =
-     False,
-           fill_value = 999999.0)
+   >>> small variable
+   >>> masked_array(data =
+   >>>   [[  0.   1.   2.   3.   4.]
+   >>>   [  5.   6.   7.   8.   9.]
+   >>>   [ 10.  11.  12.  13.  14.]
+   >>>   [ 15.  16.  17.  18.  19.]],
+   >>> mask =
+   >>>   False,
+   >>>         fill_value = 999999.0)
    >>> MV2.set_print_limit(100) 
    >>> largevar   # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
-   large variable  
-   masked_array(data =
-   [[   0.    1.    2. ...,   17.   18.   19.]
-   [  20.   21.   22. ...,   37.   38.   39.]
-   [  40.   41.   42. ...,   57.   58.   59.]
-   ...,
-   [ 340.  341.  342. ...,  357.  358.  359.]
-   [ 360.  361.  362. ...,  377.  378.  379.]
-   [ 380.  381.  382. ...,  397.  398.  399.]],
-   mask = False,
-   fill_value = 999999.0)
+   >>> large variable  
+   >>> masked_array(data =
+   >>> [[   0.    1.    2. ...,   17.   18.   19.]
+   >>> [  20.   21.   22. ...,   37.   38.   39.]
+   >>> [  40.   41.   42. ...,   57.   58.   59.]
+   >>> ...,
+   >>> [ 340.  341.  342. ...,  357.  358.  359.]
+   >>> [ 360.  361.  362. ...,  377.  378.  379.]
+   >>> [ 380.  381.  382. ...,  397.  398.  399.]],
+   >>> mask = False,
+   >>> fill_value = 999999.0)
 
 The datatype of the variable is determined with the typecode function:
 
-.. doctest::
+..
 
-   >>> u.typecode() 
-   'f'
+
+  >>> u.typecode() 
+  >>>  'f'
 
 Dataset Variables
 ^^^^^^^^^^^^^^^^^
@@ -428,15 +430,15 @@ A metafile can be generated with the command:
 
 The metafile **cdsample.xml** is then used like an ordinary data file:
 
-.. doctest::
+..
 
    >>> import os
    >>> os.system("cdscan -x cdsample.xml [uv]*.nc")
-   0
+   >>> 0
    >>> f = cdms2.open('cdsample.xml')
    >>> u = f('u')
    >>> u.shape
-   (3, 16, 32)
+   >>> (3, 16, 32)
 
 Grids
 ^^^^^^^^
@@ -481,64 +483,64 @@ grid. Note that:
    lon ), each a two-dimensional coordinate axis.
 -  lat and lon each have domain ( y , x )
 
-.. doctest::
+..
 
    >>> f = cdms2.open('sampleCurveGrid4.nc')
-
-
+   >>> 
    >>> # lat and lon are coordinate axes, but are grouped with data variables
    >>> f.variables.keys() 
-   ['lat', 'sample', 'bounds_lon', 'lon', 'bounds_lat']
-
+   >>> ['lat', 'sample', 'bounds_lon', 'lon', 'bounds_lat']
+   >>> 
    >>> # y and x are index coordinate axes
    >>> f.axes.keys() 
-   ['nvert', 'x', 'y'] 
-   
+   >>> ['nvert', 'x', 'y'] 
+   >>> 
    >>> # Read data for variable sample
    >>> sample = f('sample')
-   
+   >>> 
    >>> # The associated grid g is curvilinear
    >>> g = sample.getGrid()
-   
+   >>> 
    >>> # The domain of the variable consfigists of index axes
    >>> sample.getAxisIds() 
-   ['y', 'x']
-   
+   >>> ['y', 'x']
+   >>> 
    >>> # Get the coordinate axes associated with the grid
    >>> lat = g.getLatitude() # or sample.getLatitude()
    >>> lon = g.getLongitude() # or sample.getLongitude()
-   
+   >>> 
    >>> # lat and lon have the same domain, a subset of the domain of 'sample'
    >>> lat.getAxisIds() 
-   ['y', 'x']
-   
+   >>> ['y', 'x']
+   >>> 
    >>> # lat and lon are variables ...
    >>> lat.shape 
-   (32, 48) 
-   
+   >>> (32, 48) 
+   >>> 
    >>> lat  # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
-       lat
-    masked_array(data =
-     [[-76.08465554 -76.08465554 -76.08465554 ..., -76.08465554 -76.08465554
-      -76.08465554]
-     [-73.92641847 -73.92641847 -73.92641847 ..., -73.92641847 -73.92641847
-      -73.92641847]
-     [-71.44420823 -71.44420823 -71.44420823 ..., -71.44420823 -71.44420823
-      -71.44420823]
-     ..., 
-     [ 42.32854943  42.6582209   43.31990211 ...,  43.3199019   42.65822088
-       42.32854943]
-     [ 42.70106429  43.05731498  43.76927818 ...,  43.76927796  43.05731495
-       42.70106429]
-     [ 43.0307341   43.41264383  44.17234165 ...,  44.17234141  43.41264379
-       43.0307341 ]],
-                 mask =
-     False,
-           fill_value = 1e+20)
-
+   >>> lat
+   >>>  masked_array(data =
+   >>>   [[-76.08465554 -76.08465554 -76.08465554 ..., -76.08465554 -76.08465554
+   >>>    -76.08465554]
+   >>>   [-73.92641847 -73.92641847 -73.92641847 ..., -73.92641847 -73.92641847
+   >>>    -73.92641847]
+   >>>   [-71.44420823 -71.44420823 -71.44420823 ..., -71.44420823 -71.44420823
+   >>>    -71.44420823]
+   >>>   ..., 
+   >>>   [ 42.32854943  42.6582209   43.31990211 ...,  43.3199019   42.65822088
+   >>>     42.32854943]
+   >>>   [ 42.70106429  43.05731498  43.76927818 ...,  43.76927796  43.05731495
+   >>>     42.70106429]
+   >>>   [ 43.0307341   43.41264383  44.17234165 ...,  44.17234141  43.41264379
+   >>>     43.0307341 ]],
+   >>>               mask =
+   >>>   False,
+   >>>         fill_value = 1e+20)
+   >>> 
    >>> lat_in_radians = lat*MV2.pi/180.0
 
-.. figure:: images/curvilinear_grid.jpg
+
+  .. figure:: images/curvilinear_grid.jpg
    :alt: curvilinear grid
 
    Figure 1: Curvilinear Grid
@@ -551,38 +553,42 @@ Example: A Generic Grid
 In this example variable zs is defined on a generic grid. Figure 2
 illustrates the grid, in this case a geodesic grid:
 
-.. doctest::
+..
 
    >>> f.variables.keys()
-   ['lat', 'sample', 'bounds_lon', 'lon', 'bounds_lat']
+   >>> ['lat', 'sample', 'bounds_lon', 'lon', 'bounds_lat']
    >>> f.axes.keys() 
-   ['nvert', 'x', 'y']
+   >>> ['nvert', 'x', 'y']
    >>> zs = f('sample')
    >>> g = zs.getGrid()
    >>> g
-   <TransientCurveGrid, id: ..., shape: (32, 48)>
+   >>> <TransientCurveGrid, id: ..., shape: (32, 48)>
    >>> lat = g.getLatitude()
    >>> lon = g.getLongitude()
    >>> lat.shape 
-   (32, 48)
+   >>> (32, 48)
    >>> lon.shape # variable zs is defined in terms of a single index coordinate
-   (32, 48) 
+   >>> (32, 48) 
    >>> # axis, 'cell'
    >>> zs.shape 
-   (32, 48) 
+   >>> (32, 48) 
    >>> zs.getAxisIds() 
-   ['y', 'x']
-   
+   >>> ['y', 'x']
+   >>> 
    >>> # lat and lon are also defined in terms of the cell axis
    >>> lat.getAxisIds() 
-   ['y', 'x']
-   
+   >>> ['y', 'x']
+   >>> 
    >>> # lat and lon are one-dimensional, 'auxiliary' coordinate 
    >>> # axes: values are not monotonic
    >>> lat.__class__
-   <class 'cdms2.coord.TransientAxis2D'>
+   
+
+ <class 'cdms2.coord.TransientAxis2D'>
+
    
    
+
 .. figure:: images/generic_grid.jpg
    :alt: generic grid
 
@@ -594,18 +600,20 @@ representation. Similarly, a rectangular grid can be represented as
 curvilinear. The method toCurveGrid is used to convert a non-generic
 grid to curvilinear representation:
 
-.. doctest:: *
+..
 
    >>> f = cdms2.open(cdat_info.get_sampledata_path()+'/clt.nc')
    >>> clt = f('clt')
    >>> rectgrid = clt.getGrid()
    >>> rectgrid.shape
-   (46, 72)
+   >>>   (46, 72)
    >>> curvegrid = rectgrid.toCurveGrid()
    >>> curvegrid
-   <TransientCurveGrid, id: ..., shape: (46, 72)>
+   >>> <TransientCurveGrid, id: ..., shape: (46, 72)>
    >>> genericgrid = curvegrid.toGenericGrid()
    >>> genericgrid
+
+
    <TransientGenericGrid, id: ..., shape: (3312,)>
 
 Regridding
@@ -634,27 +642,27 @@ a rectangular grid) to a 96x192 rectangular Gaussian grid:
    >>> f = cdms2.open('clt.nc')
    >>> u = f('u')
    >>> u.shape
-   (1, 2, 80, 97)
+   >>> (1, 2, 80, 97)
    >>> t63_grid = cdms2.createGaussianGrid(96)
    >>> u63 = u.regrid(t63_grid)
    >>> u63.shape
-   (1, 2, 96, 192)
+   >>> (1, 2, 96, 192)
 
 To regrid a variable ``uold`` to the same grid as variable ``vnew``:
 
-.. doctest::
+.. doctest::  
 
    >>> f = cdms2.open('clt.nc')
    >>> uold = f('u')
    >>> unew = f2('uwnd')
    >>> uold.shape
-   (1, 2, 80, 97)
+   >>> (1, 2, 80, 97)
    >>> unew.shape
-   (1, 14, 181, 360)
+   >>> (1, 14, 181, 360)
    >>> t63_grid = unew.getGrid() # Obtain the grid for vnew
    >>> u63 = u.regrid(t63_grid)
    >>> u63.shape
-   (1, 2, 181, 360)
+   >>> (1, 2, 181, 360)
 
 SCRIP Regridder
 '''''''''''''''
@@ -684,24 +692,25 @@ as necessary.
 #For example, suppose the source data on a T42 grid is to be mapped to a
 #POP curvilinear grid. Assume that SCRIP generated a remapping file named
 #rmp_T42_to_POP43_conserv.nc:
-#
-#.. doctest::
-#
-#   >>> # Import regrid package for regridder functions
-#   >>> import regrid2, cdms2
-#   
-#   >>> # Get the source variable
-#   >>> f = cdms2.open('sampleT42Grid.nc') 
-#   >>> dat = f('src_array') 
-#   >>> f.close()
-#   
-#   >>> # Read the regridder from the remapper file
-#   >>> remapf = cdms2.open('rmp_T42_to_POP43_conserv.nc') 
-#   >>> regridf = regrid2.readRegridder(remapf) 
-#   >>> remapf.close()
-#   
-#   >>> # Regrid the source variable
-#   >>> popdat = regridf(dat)
+
+
+.. doctest::
+
+   >>> # Import regrid package for regridder functions
+   >>> import regrid2, cdms2
+   >>> 
+   >>> # Get the source variable
+   >>> f = cdms2.open('sampleT42Grid.nc') 
+   >>> dat = f('src_array') 
+   >>> f.close()
+   >>> 
+   >>> # Read the regridder from the remapper file
+   >>> remapf = cdms2.open('rmp_T42_to_POP43_conserv.nc') 
+   >>> regridf = regrid2.readRegridder(remapf) 
+   >>> remapf.close()
+   >>> 
+   >>> # Regrid the source variable
+   >>> popdat = regridf(dat)
 
 Regridding is discussed in `Chapter 4 <cdms_4.html>`__.
 

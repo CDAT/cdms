@@ -33,9 +33,8 @@ as identical.
    :alt: 
 
 FIGURE 1. CDMS Classes
-                      
-
-
+                       
+  
 
 APPENDIX B
 ----------
@@ -48,6 +47,7 @@ Quick Start (Cheat Sheet)
 
 :download:`cdms quick start <docs/cdms_quick_start.pdf>`
 
+  
 
 VCS Quick Reference (Cheat Sheet)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

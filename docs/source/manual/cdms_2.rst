@@ -72,7 +72,7 @@ to an output file. The input temperature data is ordered (time,
 latitude, longitude).
 
 ..
-
+   
    >>> import cdms2, cdat_info
    >>> from cdms2 import MV
    >>> jones = cdms2.open(cdat_info.get_sampledata_path()+'/tas_mo.nc')
@@ -87,9 +87,9 @@ latitude, longitude).
    >>> julyavg.long_name = "mean July surface temperature"
    >>> out = cdms2.open('janjuly.nc','w')
    >>> out.write(janavg)
-   >>> <cdms2.fvariable.FileVariable object...
+   <cdms2.fvariable.FileVariable object...
    >>> out.write(julyavg)
-   >>> <cdms2.fvariable.FileVariable object...
+   <cdms2.fvariable.FileVariable object...
    >>> out.comment = "Average January/July from Jones dataset"
    >>> jones.close()
    >>> out.close()
@@ -128,7 +128,7 @@ in this chapter are made accessible with the command:
 The functions described in this section are not associated with a class.
 Rather, they are called as module functions, e.g.,
 
-..
+.,
 
     >>> fle = cdms2.open('sample.nc')
 
@@ -449,9 +449,9 @@ Example 1
 ..
 
     >>> axis.isCircular()
-    >>> 1
+     1
     >>> axis.mapIntervalExt((-5.0,5.0,'co'))
-    >>> (-2,3,1)
+    (-2,3,1)
 
 
 
@@ -775,8 +775,8 @@ several ways:
 -  The search can be restricted to the result of a previous search.
 -  A search result is accessed sequentially within a for loop:
 
-::
-
+::   
+   
     >>> result = db.searchFilter('(&(category=obs*)(id=ncep*))')
     >>> for entry in result:
     >>>    print entry.name
@@ -789,22 +789,22 @@ variables defined on a 94x192 grid:
 
     >>> result = db.searchFilter('parentid=ncep*',tag="variable")
     >>> len(result)
-    >>> 65
+    65
     >>> result2 = result.searchPredicate(lambda x: 
     >>> 
-    >>> x.getGrid().shape==(94,192))
+    x.getGrid().shape==(94,192))
     >>> len(result2)
-    >>> 3
+    3
     >>> for entry in result2: print entry.name
-    >>> variable=rluscs,dataset=ncep_reanalysis_mo,database=CDMS,ou=PCMDI,
+    variable=rluscs,dataset=ncep_reanalysis_mo,database=CDMS,ou=PCMDI,
     >>> 
-    >>>       o=LLNL, c=US
-    >>> variable=rlds,dataset=ncep_reanalysis_mo,database=CDMS,ou=PCMDI,
+          o=LLNL, c=US
+    variable=rlds,dataset=ncep_reanalysis_mo,database=CDMS,ou=PCMDI,
     >>> 
-    >>>       o=LLNL, c=US
-    >>> variable=rlus,dataset=ncep_reanalysis_mo,database=CDMS,ou=PCMDI,
+          o=LLNL, c=US
+    variable=rlus,dataset=ncep_reanalysis_mo,database=CDMS,ou=PCMDI,
     >>> 
-    >>>       o=LLNL, c=US
+          o=LLNL, c=US
 
 
 
@@ -885,7 +885,6 @@ This defaults to the database defined in environment variable
 **Example:** List all variables in dataset ‘ncep\_reanalysis\_mo’:
 
 ::
-
    >>> for entry in db.searchFilter(filter = "parentid=ncep_reanalysis_mo", tag = "variable"):
    >>>    print entry.name
 
@@ -893,7 +892,6 @@ This defaults to the database defined in environment variable
 **Example:** Find all axes with bounds defined:
 
 ::
-
    >>> for entry in db.searchFilter(filter="bounds=*",tag="axis"):
    >>>    print entry.name
 
@@ -908,11 +906,10 @@ This defaults to the database defined in environment variable
 **Example:** Find all variables with missing time values, in observed datasets:
 
 ::
-
    >>> def missingTime(obj):
    >>>    time = obj.getTime()
    >>>    return time.length != time.partition_length
-
+   >>>   
    >>> result = db.searchFilter(filter="category=observed")
    >>> for entry in result.searchPredicate(missingTime):
    >>>    print entry.name
@@ -920,7 +917,6 @@ This defaults to the database defined in environment variable
 **Example:** Find all CMIP2 datasets having a variable with id “hfss”:
 
 ::
-
    >>> for entry in db.searchFilter(filter = "(&(project=CMIP2)(id=hfss))", tag = "variable"):
    >>>    print entry.getObject().parent.id
 
@@ -1621,7 +1617,7 @@ takes an argument list of selector components. For example:
 
 
 ::
-
+  
    >>> from cdms.selectors import Selector
    >>> sel = Selector(time=('1979-1-1','1979-2-1'), level=1000.)
    >>> x1 = v1(sel)
@@ -1642,8 +1638,8 @@ to their keyword counterparts. For example:
 
 and
 
-
 ::
+
 
    >>> x = hus(time=('1979-1-1','1979-2-1'), level=1000.)
 
@@ -1802,11 +1798,11 @@ results are written to a netCDF file. For brevity, the functions
    >>>      # from upper air temperature, and calculate statistics
    >>>      for ilev in range(len(levs)):
    >>> 
-   >>>      ta = taObj(time=(month1,month2,'cc'), \
-   >>>      level=slice(ilev, ilev+1), squeeze=1)
-   >>>      ta = removeSeasonalCycle(ta)   
-   >>>      cc[ilev], b[ilev] = corrCoefSlope(tas ,ta)
-   >>>      v[ilev] = MV.sum( ta**2 )/(1.0*ta.shape[0])
+   >>>          ta = taObj(time=(month1,month2,'cc'), \
+   >>>                     level=slice(ilev, ilev+1), squeeze=1)
+   >>>          ta = removeSeasonalCycle(ta)   
+   >>>          cc[ilev], b[ilev] = corrCoefSlope(tas ,ta)
+   >>>          v[ilev] = MV.sum( ta**2 )/(1.0*ta.shape[0])
    >>> 
    >>>      # Write slope, correlation, and variance variables
    >>>      f = cdms.open('CC_B_V_ALL.nc','w')
@@ -1816,7 +1812,7 @@ results are written to a netCDF file. For brevity, the functions
    >>>      f.write(v)
    >>>      f.close()
    >>> 
-   >>>      if __name__=='__main__':
+   >>> if __name__=='__main__':
    >>>      pathTa = '/pcmdi/cdms/sample/ccmSample_ta.xml'
    >>>      pathTas = '/pcmdi/cdms/sample/ccmSample_tas.xml'  
    >>>      # Process Jan80 through Dec81

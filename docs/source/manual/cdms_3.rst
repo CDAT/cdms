@@ -164,7 +164,7 @@ Table Time Methods
 
 Examples
 ^^^^^^^^
-.. doctest:: 
+.. 
 
    >>> from cdtime import *
    >>> c = comptime(1996,2,28)
@@ -177,7 +177,7 @@ Examples
 
 **Note:** When adding or subtracting intervals of months or years, only the month and year of the result are significant.   The reason is that intervals in months/years are not commensurate with intervals in days or fractional days. This leads to results that may be surprising.
 
-.. doctest::
+.. 
 
    >>> c = comptime(1979,8,31)      
    >>> c.add(1,Month)               
@@ -186,7 +186,7 @@ Examples
 
 In other words, the day component of c was ignored in the addition, and the day/hour/minute components of the results are just the defaults.  If the interval is in years, the interval is converted internally to months:            
                     
-.. doctest::                    
+..                     
 
    >>> c = comptime(1979,8,31)      
    >>> c.add(2,Years)               
@@ -194,7 +194,7 @@ In other words, the day component of c was ignored in the addition, and the day/
 
 Compare time values.
                     
-.. doctest::
+.. 
 
    >>> from cdtime import *         
    >>> r = cdtime.reltime(28,"days since 1996-1-1")   
@@ -209,7 +209,7 @@ Compare time values.
                     
 Subtract an interval of time.
 
-.. doctest::
+.. 
 
    >>> from cdtime import *         
    >>> r = cdtime.reltime(28,"days since 1996-1-1")   
@@ -224,7 +224,7 @@ For intervals of years or months, see the **note** under add() in the example ab
 
 Convert to component time.
 
-.. doctest::
+.. 
 
    >>> r = cdtime.reltime(28,"days since 1996-1-1")   
    >>> r.tocomp()
@@ -233,7 +233,7 @@ Convert to component time.
 
 Convert to relative time.
 
-.. doctest::
+.. 
                     
    >>> c = comptime(1996,2,28)      
    >>> print c.torel("days since 1996-1-1")           

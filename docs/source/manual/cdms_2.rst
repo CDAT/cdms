@@ -486,7 +486,7 @@ Table CdmsFile Constructors
    :widths:  50, 80
    :align: left
 
-   "Constructor", "Description"
+  
    "``fileobj = cdms.open(path, mode)``", "Open the file specified by path returning a CdmsFile object. ``path`` is the file pathname, a string. ``mode`` is the open mode indicator, as listed in See `Open Modes <#table-open-modes>`_." 
    "``fileobj = cdms.createDataset(path)``", "Create the file specified by path, a string."
 
@@ -884,28 +884,30 @@ This defaults to the database defined in environment variable
 
 **Example:** List all variables in dataset ‘ncep\_reanalysis\_mo’:
 
-::
+
+
    >>> for entry in db.searchFilter(filter = "parentid=ncep_reanalysis_mo", tag = "variable"):
    >>>    print entry.name
 
 
 **Example:** Find all axes with bounds defined:
 
-::
+
+
    >>> for entry in db.searchFilter(filter="bounds=*",tag="axis"):
    >>>    print entry.name
 
 
 **Example:** Locate all GDT datasets:
 
-::
+
 
    >>> for entry in db.searchFilter(filter="Conventions=GDT*",tag="dataset"):
    >>>    print entry.name
 
 **Example:** Find all variables with missing time values, in observed datasets:
 
-::
+
    >>> def missingTime(obj):
    >>>    time = obj.getTime()
    >>>    return time.length != time.partition_length
@@ -916,13 +918,13 @@ This defaults to the database defined in environment variable
 
 **Example:** Find all CMIP2 datasets having a variable with id “hfss”:
 
-::
+
+
    >>> for entry in db.searchFilter(filter = "(&(project=CMIP2)(id=hfss))", tag = "variable"):
    >>>    print entry.getObject().parent.id
 
 **Example:** Find all observed variables on 73x144 grids:
 
-::
 
    >>> result = db.searchFilter(category='obs*')
    >>> for entry in result.searchPredicate(lambda x: x.getGrid().shape==(73,144),tag="variable"):

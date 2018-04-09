@@ -51,25 +51,20 @@ where
 The CDML elements are:
 
 Table CDML Tags
-^^^^^^^^^^^^^^^^^^^                   
+^^^^^^^^^^^^^^^^^^^   
+.. csv-table::
+   :header:  "Tag", "Description"
+   :widths:  8, 35                
 
-+------------+---------------------------------------+
-| Tag        | Description                           |
-+============+=======================================+
-| attr       | Extra attribute                       |
-+------------+---------------------------------------+
-| axis       | Coordinate axis                       |
-+------------+---------------------------------------+
-| domain     | Axes on which a variable is defined   |
-+------------+---------------------------------------+
-| domElem    | Element of a variable domain          |
-+------------+---------------------------------------+
-| linear     | Linearly-spaced axis values           |
-+------------+---------------------------------------+
-| rectGrid   | Rectilinear Grid                      |
-+------------+---------------------------------------+
-| variable   | Variable                              |
-+------------+---------------------------------------+
+   "attr", "Extra attribute"
+   "axis", "Coordinate axis"
+   "domain", "Axes on which a variable is defined"
+   "domElem", "Element of a variable domain"
+   "linear", "Linearly-spaced axis values"
+   "rectGrid", "Rectilinear Grid"
+   "variable", "Variable"
+
+
 
 Special Characters
 ~~~~~~~~~~~~~~~~~~
@@ -79,21 +74,17 @@ they must be encoded to avoid confusion with markup:
 
 Table Special Character Encodings
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                                     
+.. csv-table::
+   :header:  "Character", "Encoding"
+   :widths:  8, 15                                       
 
-+-------------+------------+
-| Character   | Encoding   |
-+=============+============+
-| <           | &lt;       |
-+-------------+------------+
-| >           | &gt;       |
-+-------------+------------+
-| &           | &amp;      |
-+-------------+------------+
-| “           | &quot;     |
-+-------------+------------+
-| ‘           | &apos;     |
-+-------------+------------+
+   "<", "&lt;"
+   ">", "&gt;"
+   "&", "&amp;"
+   "“", "&quot;"
+   "‘", "&apos;"
+ 
+
 
 For example, the comment
 

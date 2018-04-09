@@ -106,7 +106,7 @@ this example selects and plots a time-latitude slice:
     <vcs.displayplot.Dp object ...>
 
 
-.. csv-table:: Line Notes
+.. csv-table:: 
   :header:  "Line", "Notes"
   :widths:  10, 90
 

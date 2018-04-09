@@ -543,20 +543,16 @@ Get a mask from a separate file, and set as the input grid mask.
     >>> f.close()
     >>> g.close()
 
+.. csv-table::
+   :header:  "Line", "Notes"
+   :widths:  8, 45
 
-+--------+-------------------------------------------------------------------------------------------------------------------+
-| Line   | Notes                                                                                                             |
-+========+===================================================================================================================+
-| 7      | Get the input grid.                                                                                               |
-+--------+-------------------------------------------------------------------------------------------------------------------+
-| 10     | Get the output grid                                                                                               |
-+--------+-------------------------------------------------------------------------------------------------------------------+
-| 11     | Create the regridder function.                                                                                    |
-+--------+-------------------------------------------------------------------------------------------------------------------+
-| 14     | Get the mask.                                                                                                     |
-+--------+-------------------------------------------------------------------------------------------------------------------+
-| 15     | Regrid with a user mask. The subslice call returns a transient variable corresponding to variable sof at time 0   |
-+--------+-------------------------------------------------------------------------------------------------------------------+
+   "7", "Get the input grid."
+   "10", "Get the output grid."
+   "11", "Create the regridder function."
+   "14", "Get the mask."
+   "15", "Regrid with a user mask. The subslice call returns a transient variable corresponding to variable sof at time 0."
+
 
 **Note:** Although it cannot be determined from the code, both mask and
 the input array sof are four-dimensional. This is the n-dimensional
@@ -578,19 +574,15 @@ Generate an array of zonal mean values.
    >>> mean = regridFunc(rlsf)
    >>> f.close()
 
+.. csv-table::
+   :header:  "Line", "Notes"
+   :widths:  8, 45
 
+   "3", "Get the input grid. Return the area fraction of the source (input) grid cell that participates in the regridding. The array is 1-D, with length equal to the number of cells in the input grid."
+   "4", "Create a zonal grid. outgrid has the same latitudes as ingrid, and a singleton longitude dimension. createGlobalMeanGrid could be used here to generate a global mean array."
+   "5", "Generate the regridder function."
+   "6", "Generate the zonal mean array."
 
-+--------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Line   | Notes                                                                                                                                                                                             |
-+========+===================================================================================================================================================================================================+
-| 3      | Get the input grid. Return the area fraction of the source (input) grid cell that participates in the regridding. The array is 1-D, with length equal to the number of cells in the input grid.   |
-+--------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| 4      | Create a zonal grid. outgrid has the same latitudes as ingrid, and a singleton longitude dimension. createGlobalMeanGrid could be used here to generate a global mean array.                      |
-+--------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| 5      | Generate the regridder function.                                                                                                                                                                  |
-+--------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| 6      | Generate the zonal mean array                                                                                                                                                                     |
-+--------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 **Example:**
 
@@ -617,32 +609,23 @@ of the result.
    >>> outsample, outmask = regridFunc(sample, mask=inmask, returnTuple=1)
    >>> outmean = add.reduce(ravel(outmask*outweights*outsample)) / add.reduce(ravel(outmask*outweights))
 
+.. csv-table::
+   :header:  "Line", "Notes"
+   :widths:  8, 45
+   
+   "2", "Create a uniform target grid."
+   "3", "Get the latitude and longitude weights."
+   "4", "Generate a 2-D weights array."
+   "5", "Get the input grid. ``var`` is a 4-D variable."
+   "6", "Get the first horizontal slice from ``var``."
+   "7-8", "Get the input weights, and generate a 2-D weights array."
+   "9", "Set the 2-D input mask."
+   "10", "Calculate the input array area-weighted mean."
+   "11", "Create the regridder function."
+   "12", "Regrid. Because returnTuple is set to 1, the result is a tuple (dataArray, maskArray)."
+   "13", "Calculate the area-weighted mean of the regridded data. mean and outmean should be approximately equal."
+   
 
-+--------+----------------------------------------------------------------------------------------------------------+
-| Line   | Notes                                                                                                    |
-+========+==========================================================================================================+
-| 2      | Create a uniform target grid.                                                                            |
-+--------+----------------------------------------------------------------------------------------------------------+
-| 3      | Get the latitude and longitude weights.                                                                  |
-+--------+----------------------------------------------------------------------------------------------------------+
-| 4      | Generate a 2-D weights array.                                                                            |
-+--------+----------------------------------------------------------------------------------------------------------+
-| 5      | Get the input grid. ``var`` is a 4-D variable.                                                           |
-+--------+----------------------------------------------------------------------------------------------------------+
-| 6      | Get the first horizontal slice from ``var``.                                                             |
-+--------+----------------------------------------------------------------------------------------------------------+
-| 7-8    | Get the input weights, and generate a 2-D weights array.                                                 |
-+--------+----------------------------------------------------------------------------------------------------------+
-| 9      | Set the 2-D input mask.                                                                                  |
-+--------+----------------------------------------------------------------------------------------------------------+
-| 10     | Calculate the input array area-weighted mean.                                                            |
-+--------+----------------------------------------------------------------------------------------------------------+
-| 11     | Create the regridder function.                                                                           |
-+--------+----------------------------------------------------------------------------------------------------------+
-| 12     | Regrid. Because returnTuple is set to 1, the result is a tuple (dataArray, maskArray).                   |
-+--------+----------------------------------------------------------------------------------------------------------+
-| 13     | Calculate the area-weighted mean of the regridded data. mean and outmean should be approximately equal   |
-+--------+----------------------------------------------------------------------------------------------------------+
 
 SCRIP Regridder
 ~~~~~~~~~~~~~~~

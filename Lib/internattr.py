@@ -80,7 +80,12 @@ class AttributeDict:
 
 class InternalAttributesClass (_PCLASS):
     def _getattributes(self, name):
-        """Return a dictionary-like object of the non-internal attributes."""
+        """
+
+        Returns
+        -------
+      
+            a dictionary-like object of the non-internal attributes."""
         return AttributeDict(self)
 
     def is_internal_attribute(self, name):

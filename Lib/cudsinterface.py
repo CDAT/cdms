@@ -114,8 +114,14 @@ class cuDataset():
         return list(v.attributes.keys())
 
     def listdimension(self, vname=None):
-        """Return a list of the dimension names associated with a variable.
+        """
+
+        Returns
+        -------
+
+           a list of the dimension names associated with a variable.
            If no argument, return the file.axes.keys()
+
         :::
         Options:::
         vname :: (str/None) (None) variable name
@@ -129,13 +135,23 @@ class cuDataset():
         return [getattr(n, 'id') for n in x]
 
     def listglobal(self):
-        """Returns a list of the global attributes in the file.
+        """
+
+        Returns
+        -------
+
+           a list of the global attributes in the file.
         :::
         """
         return list(self.attributes.keys())
 
     def listvariable(self):
-        """Return a list of the variables in the file.
+        """
+
+        Returns
+        -------
+
+           a list of the variables in the file.
         :::
         """
         return list(self.variables.keys())

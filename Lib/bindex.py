@@ -49,7 +49,7 @@ def intersectHorizontalGrid(latspecs, lonspecs, latlin, lonlin, index):
 
     Returns
     -------
-    an array of indices, in latlin/lonlin, of the points in the intersection.
+       an array of indices, in latlin/lonlin, of the points in the intersection.
     """
     points = numpy.zeros(len(latlin), dtype='l')
     if latspecs is None:

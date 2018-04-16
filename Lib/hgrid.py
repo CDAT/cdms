@@ -88,8 +88,13 @@ class AbstractHorizontalGrid(AbstractGrid):
         raise CDMSError(MethodNotImplemented)
 
     def getWeightsArray(self):
-        """Return normalized area weights, as an array of the same
-        shape as the grid.
+        """
+
+        Returns
+        -------
+
+             normalized area weights, as an array of the same
+             shape as the grid.
         """
         raise CDMSError(MethodNotImplemented)
 
@@ -284,8 +289,13 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
 
     def writeScrip(self, cufile, gridTitle=None):
         """Write a grid to a SCRIP file.
-        cufile is a Cdunif file, NOT a CDMS file.
-        gridtitle is a string identifying the grid.
+
+        Parameter
+        ---------
+
+             cufile is a Cdunif file, NOT a CDMS file.
+
+             gridtitle is a string identifying the grid.
         """
 
         lat = numpy.ma.filled(self._lataxis_[:])
@@ -570,16 +580,26 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
     def getGridSlices(self, domainlist, newaxislist, slicelist):
         """Determine which slices in slicelist correspond to the lat/lon elements
         of the grid.
-        domainlist is a list of axes of a variable.
-        newaxislist is a list of result axes after the slicelist is applied to domainlist.
-        slicelist is a list of slices.
+
+        Parameters
+        ----------
+
+             domainlist is a list of axes of a variable.
+
+             newaxislist is a list of result axes after the slicelist is applied to domainlist.
+
+             slicelist is a list of slices.
 
         All lists are of equal length.
 
-        Return value is (newslicelist, gridaxislist) where
-        newslicelist is the elements of slicelist that correspond to the grid, in the
+        Returns
+        -------
+
+            value is (newslicelist, gridaxislist) where
+            newslicelist is the elements of slicelist that correspond to the grid, in the
           preferred order of the grid.
-        gridaxislist is the elements of newaxislist that correspond to the grid, in the
+
+             gridaxislist is the elements of newaxislist that correspond to the grid, in the
           preferred order of the grid.
         """
 
@@ -625,12 +645,18 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
     def intersect(self, spec):
         """Intersect with the region specification.
 
-        'spec' is a region specification of the form defined in the grid module.
+       Parameters
+       ----------
+ 
+            'spec' is a region specification of the form defined in the grid module.
 
-        Returns (mask, indexspecs) where
-        'mask' is the mask of the result grid AFTER self and region spec are interested.
-        'indexspecs' is a list of index specifications suitable for slicing a
-          variable with the given grid.
+       Returns
+       -------
+
+            (mask, indexspecs) where
+            'mask' is the mask of the result grid AFTER self and region spec are interested.
+            'indexspecs' is a list of index specifications suitable for slicing a
+             variable with the given grid.
         """
         ni, nj = self.shape
         index = self.getIndex()
@@ -665,8 +691,13 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         return (self._lataxis_.getAxis(0), self._lataxis_.getAxis(1))
 
     def isClose(self, g):
-        """Return 1 if g is a grid of the same type and shape. A real element-by-element
-        comparison would be too expensive here."""
+        """
+
+        Returns
+        -------
+
+            1 if g is a grid of the same type and shape. A real element-by-element
+            comparison would be too expensive here."""
         if g is None:
             return 0
         elif self.shape != g.shape:
@@ -677,7 +708,12 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
             return 1
 
     def checkAxes(self, axes):
-        """Return 1 iff every element of self.getAxisList() is in the list 'axes'."""
+        """
+
+        Returns
+        -------
+
+             1 iff every element of self.getAxisList() is in the list 'axes'."""
         for item in self.getAxisList():
             # if all [False, False, ....] result=0
             if not any([allclose(item[:], axis[:]) for axis in axes]):
@@ -689,9 +725,14 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         return result
 
     def reconcile(self, axes):
-        """Return a grid that is consistent with the axes, or None.
-        For curvilinear grids this means that the grid-related axes are
-        contained in the 'axes' list.
+        """
+
+        Returns
+        -------
+       
+             a grid that is consistent with the axes, or None.
+             For curvilinear grids this means that the grid-related axes are
+             contained in the 'axes' list.
         """
         result = self
         selfaxes = self.getAxisList()
@@ -720,9 +761,14 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         return result
 
     def flatAxes(self):
-        """Return (flatlat, flatlon) where flatlat is a 1D NumPy array
-        having the same length as the number of cells in the grid, similarly
-        for flatlon."""
+        """
+
+        Returns
+        -------
+
+            (flatlat, flatlon) where flatlat is a 1D NumPy array
+            having the same length as the number of cells in the grid, similarly
+            for flatlon."""
         if self._flataxes_ is None:
             from . import MV2 as MV
             alat = MV.filled(self.getLatitude())
@@ -796,10 +842,17 @@ class TransientCurveGrid(AbstractCurveGrid):
 
 def readScripCurveGrid(fileobj, dims, whichType, whichGrid):
     """Read a 'native' SCRIP grid file, returning a transient curvilinear grid.
-    fileobj is an open CDMS dataset or file object.
-    dims is the grid shape.
-    whichType is the type of file, either "grid" or "mapping"
-    if whichType is "mapping", whichGrid is the choice of grid, either "source" or "destination"
+   
+    Parameters
+    ----------
+
+         fileobj is an open CDMS dataset or file object.
+
+         dims is the grid shape.
+      
+         whichType is the type of file, either "grid" or "mapping"
+
+         if whichType is "mapping", whichGrid is the choice of grid, either "source" or "destination"
     """
     import string
     from .coord import TransientAxis2D

@@ -556,12 +556,17 @@ sort.__doc__ = numpy.ma.sort.__doc__ + \
 
 
 def choose(myindices, t):
-    """Returns an array shaped like indices containing elements chosen
-      from t.
-      If an element of t is the special element masked, any element
-      of the result that "chooses" that element is masked.
+    """
 
-      The result has only the default axes.
+    Returns
+    -------
+
+         an array shaped like indices containing elements chosen
+         from t.
+         If an element of t is the special element masked, any element
+         of the result that "chooses" that element is masked.
+
+         The result has only the default axes.
     """
     maresult = numpy.ma.choose(myindices, list(map(_makeMaskedArg, t)))
     F = getattr(t, "fill_value", 1.e20)
@@ -580,8 +585,13 @@ def where(condition, x, y):
 
 
 def masked_where(condition, x, copy=1):
-    """Return x as an array masked where condition is true.
-       Also masked where x or condition masked.
+    """
+
+    Returns
+    -------
+
+         x as an array masked where condition is true.
+         Also masked where x or condition masked.
     """
     tx = _makeMaskedArg(x)
     tcondition = _makeMaskedArg(condition)
@@ -886,8 +896,13 @@ maximum = _maximum_operation()
 
 def asarray(data, typecode=None, dtype=None):
     """asarray(data, typecode=None, dtype=None) is equivalent to array(data, dtype=None, copy=0)
-       Returns data if dtype is None or data is a MaskedArray of the same dtype.
-       typecode arg is for backward compatibility.
+      
+
+     Returns
+     -------
+
+          data if dtype is None or data is a MaskedArray of the same dtype.
+          typecode arg is for backward compatibility.
     """
     dtype = _convdtype(dtype, typecode)
     if isinstance(data, AbstractVariable) and (

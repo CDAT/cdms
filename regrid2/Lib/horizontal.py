@@ -32,8 +32,13 @@ class Horizontal:
     def __init__(self, ingrid, outgrid):
         """
         Constructor for regridding class
-        @param ingrid cdms2, ndarray variable
-        @param outgrid cdms2, ndarray variable
+
+        Parameters
+        ----------
+
+             ingrid cdms2, ndarray variable
+
+             outgrid cdms2, ndarray variable
         """
 
         inlat = ingrid.getLatitude()

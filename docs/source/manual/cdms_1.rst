@@ -355,7 +355,7 @@ file. Specifically:
    >>> f = cdms2.open('/tmp/clt.nc','a') # Open read/write
    >>> uvar = f['u'] # Note square brackets
    >>> uvar.shape
-   1, 2, 80, 97)
+   (1, 2, 80, 97)
    >>> u0 = uvar[0] # Reads data from sample.nc 
    >>> u0.shape
    (2, 80, 97)

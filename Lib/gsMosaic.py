@@ -34,9 +34,15 @@ libCF = libCFConfig
 def open(uri, mode='r'):
     """
     Open mosaic file
-    @param mosaicfile mosaic file
-    @param mode valid cdms2 open file mode
-    @param inCdmsFile Mosaic file cdms2 object
+
+    Parameters
+    ----------
+
+         mosaicfile mosaic file
+
+         mode valid cdms2 open file mode
+
+         inCdmsFile Mosaic file cdms2 object
     """
 
     outMosaicFile = Mosaic(uri, mode)
@@ -46,8 +52,17 @@ def open(uri, mode='r'):
 def getSlab(strg):
     """
     From a string return a tuple of slice objects
-    @param strg input string in the format "1:2 7:-1" for instance
-    @return slice tuple, eg (slice(1, 2, 1), slice(7, -1, -1))
+
+    Parameters
+    ----------
+
+         strg input string in the format "1:2 7:-1" for instance
+
+
+    Returns
+    -------
+
+         slice tuple, eg (slice(1, 2, 1), slice(7, -1, -1))
     """
     res = []
     # remove extra spaces
@@ -76,8 +91,13 @@ class Mosaic:
     def __init__(self, uri, mode='r'):
         """
         Constructor
-        @param uri Filename with path
-        @param mode read/write. Currently only read is supported
+
+        Parameters
+        ----------
+
+             uri Filename with path
+   
+             mode read/write. Currently only read is supported
         """
 
         self.id = uri
@@ -180,9 +200,18 @@ class Mosaic:
     def getCellCenteredSlab(self, slab1, slab2):
         """
         Adjust Slab from node based to cell based
-        @slab1 Slab from tile 1
-        @slab2 Slab from tile 2
-        @return tuple of adjusted slab 1 and slab 2
+
+        Parameters
+        ----------
+
+             slab1 Slab from tile 1
+
+             slab2 Slab from tile 2
+
+        Returns
+        -------
+
+            tuple of adjusted slab 1 and slab 2
         """
         newslabs = []
         for slab in slab1, slab2:
@@ -200,8 +229,16 @@ class Mosaic:
     def getSeamGrids(self, coordData):
         """
         Retrieve the seem grids between two cell centered tiles
-        @coordData Coordinate data
-        @return transient variable grid
+
+        Parameters
+        ----------
+       
+             coordData Coordinate data
+
+        Returns
+        -------
+
+             transient variable grid
         """
         result = []
         for tn1 in list(self.tile_contacts.keys()):
@@ -281,10 +318,20 @@ class Mosaic:
     def getCornerData(self, tileName1, tileName2, tileName3):
         """
         Retrieve the data for the corner piece between three grids (tiles)
-        @tileName1 Tile name of first grid (tile)
-        @tileName2 Tile name of second grid (tile)
-        @tileName3 Tile name of third grid (tile)
-        @return tuple of data marking the corners of the corner grid
+
+        Parameters
+        ----------
+
+             tileName1 Tile name of first grid (tile)
+
+             tileName2 Tile name of second grid (tile)
+
+             tileName3 Tile name of third grid (tile)
+
+        Returns
+        -------
+
+             tuple of data marking the corners of the corner grid
         """
 
         # Get the slabs and account for cell centers
@@ -319,9 +366,18 @@ class Mosaic:
     def getContactCornerIndex(self, slab1, slab2):
         """
         Get the joining index for two grid from their slab
-        @slab1 First grid (tile)
-        @slab2 Second grid (tile)
-        @return tuple of corner indices
+
+        Parameters
+        ----------
+ 
+             slab1 First grid (tile)
+
+             slab2 Second grid (tile)
+
+        Returns
+        -------
+
+             tuple of corner indices
         """
         c1 = -1
         c2 = -1
@@ -335,18 +391,36 @@ class Mosaic:
     def createCornerGrid(self, x, y, attrs):
         """
         Return the coordinate data associated with variable.
-        @param x longitude coordinate
-        @param y latitude coordinate
-        @return attrs Attributes for eash plus the gridid
+
+        Parameters
+        ----------
+
+             x longitude coordinate
+
+             y latitude coordinate
+
+        Returns
+        -------
+
+             attrs Attributes for eash plus the gridid
         """
         pass
 
     def createSeamGrid(self, x, y, attrs):
         """
         Return the coordinate data associated with variable.
-        @param x longitude coordinate
-        @param y latitude coordinate
-        @return attrs Attributes for eash plus the gridid
+
+        Parameters
+        ----------
+
+             x longitude coordinate
+
+             y latitude coordinate
+
+        Returns
+        -------
+
+             attrs Attributes for eash plus the gridid
         """
         LONSTR = 'lon'
         LATSTR = 'lat'
@@ -389,11 +463,20 @@ class Mosaic:
 
     def getSeamData(self, tileName, otherTileName, inputData):
         """
-        @param tileName Name for the first tile
-        @param otherTileName Name for the other tile
-        @param inputData Dictionary containing lon-lat names and their flat
+        Parameters
+        ----------
+   
+             tileName Name for the first tile
+
+             otherTileName Name for the other tile
+
+             inputData Dictionary containing lon-lat names and their flat
                           coordinate data values
-        @return newData Grid of data on slice
+
+        Returns
+        -------
+
+             newData Grid of data on slice
         """
 
         slab1, slab2 = self.tile_contacts[tileName][otherTileName]
@@ -450,7 +533,11 @@ class Mosaic:
     def getCoordinateNames(self):
         """
         Get the coordinate names for a mosaic
-        @return coordinate_names
+
+        Returns
+        -------
+
+             coordinate_names
         """
         return self.coordinate_names
 

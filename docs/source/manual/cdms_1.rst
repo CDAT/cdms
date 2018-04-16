@@ -11,9 +11,9 @@ in climate analysis and simulation.
 CDMS is implemented as part of the Climate Data
 Analysis Tool (CDAT), which uses the Python language. The examples in
 this chapter assume some familiarity with the language and the Python
-Numpy module (http://www.numpy.org). A number of excellent tutorials
+Numpy module (https://www.numpy.org). A number of excellent tutorials
 on Python are available in books or on the Internet. For example, see
-the `Python Foundation's homepage <http://python.org>`__.
+the `Python Foundation's homepage <https://python.org>`__.
 
 Variables
 ^^^^^^^^^
@@ -36,7 +36,7 @@ velocity for time 0 (first index) can be calculated as:
 ..
 
 
-   >>> # wget "http://cdat.llnl.gov/cdat/sample_data/clt.nc"
+   >>> # wget "https://cdat.llnl.gov/cdat/sample_data/clt.nc"
    >>> f1=cdms2.open("clt.nc")
    >>> u = f1('u')
    >>> v = f1('v')
@@ -85,7 +85,7 @@ from file sample.nc into variable u:
    largevar=MV2.reshape(MV2.arange(400),(20,20),id="large variable").astype(MV2.float32)
    fnames = [ 'clt.nc', 'geos-sample', 'xieArkin-T42.nc', 'remap_grid_POP43.nc', 'remap_grid_T42.nc', 'rmp_POP43_to_T42_conserv.n', 'rmp_T42_to_POP43_conserv.nc', 'ta_ncep_87-6-88-4.nc', 'rmp_T42_to_C02562_conserv.nc' ]
    for file in fnames:
-       url = 'http://cdat.llnl.gov/cdat/sample_data/'+file
+       url = 'https://cdat.llnl.gov/cdat/sample_data/'+file
        r = requests.get(url)
        open(file, 'wb').write(r.content)
 
@@ -99,7 +99,7 @@ from file sample.nc into variable u:
 
 ..
 
-   >>> # wget "http://cdat.llnl.gov/cdat/sample_data/clt.nc" 
+   >>> # wget "https://cdat.llnl.gov/cdat/sample_data/clt.nc" 
    >>> f = cdms2.open('clt.nc')
    >>> u = f('u')
 
@@ -305,7 +305,7 @@ Masking is covered in `Section 2.9 <cdms_2.html#id3>`__. See also the
 documentation of the Python Numpy and MA modules, on which ``cdms.MV``
 is based, at
 
-`http://www.numpy.org/ <http://www.numpy.org/>`__.
+`https://www.numpy.org/ <https://www.numpy.org/>`__.
 
 File Variables
 ^^^^^^^^^^^^^^
@@ -669,7 +669,7 @@ SCRIP Regridder
 
 To interpolate between any lat-lon grid types, the SCRIP regridder may
 be used. The SCRIP package was developed at [Los Alamos National
-Laboratory] (http://oceans11.lanl.gov/drupal/Models/OtherSoftware).
+Laboratory] (https://oceans11.lanl.gov/drupal/Models/OtherSoftware).
 SCRIP is written in Fortran 90, and must be built and installed
 separately from the CDAT/CDMS installation.
 

@@ -14,7 +14,7 @@ Overview
    import requests
    fnames = [ 'clt.nc', 'geos-sample', 'xieArkin-T42.nc', 'remap_grid_POP43.nc', 'remap_grid_T42.nc', 'rmp_POP43_to_T42_conserv.n', 'rmp_T42_to_POP43_conserv.nc', 'ta_ncep_87-6-88-4.nc', 'rmp_T42_to_C02562_conserv.nc' ]
    for file in fnames:
-       url = 'http://cdat.llnl.gov/cdat/sample_data/'+file
+       url = 'https://cdat.llnl.gov/cdat/sample_data/'+file
        r = requests.get(url)
        open(file, 'wb').write(r.content)
 
@@ -200,7 +200,7 @@ Table Cdms Module Functions
                 , " * Return ``1`` if ``s`` is a variable, ``0`` otherwise. See also: ``asVariable``."
    "``Dataset``", "``open(url,mode='r')``: Open or create a ``Dataset`` or ``CdmsFile``." 
                 , " * ``url`` is a Uniform Resource Locator, referring to a cdunif or XML file. If the URL has the extension '.xml' or '.cdml', a ``Dataset`` is returned, otherwise a ``CdmsFile`` is returned." 
-                , "   * If the URL protocol is 'http', the file must be a '.xml' or '.cdml' file, and the mode must be 'r'. If the protocol is 'file' or is omitted, a local file or dataset is opened. ``mode`` is the open mode.  See `Open Modes <#table-open-modes>`__"
+                , "   * If the URL protocol is 'https', the file must be a '.xml' or '.cdml' file, and the mode must be 'r'. If the protocol is 'file' or is omitted, a local file or dataset is opened. ``mode`` is the open mode.  See `Open Modes <#table-open-modes>`__"
                 , "   * **Example**: Open an existing dataset: ``f = cdms.open('sampleset.xml')``"
                 , "   * **Example**: Create a netCDF file: ``f = cdms.open('newfile.nc','w')``"
    "``List``", "``order2index (axes, orderstring)``:"
@@ -1052,7 +1052,7 @@ carries along the domain and attribute information where appropriate. MV
 provides the same set of functions as MV2. However, MV functions generate
 transient variables as results. Often this simplifies scripts that
 perform computation. MV2 is part of the Python Numpy package,
-documented at http://www.numpy.org.
+documented at https://www.numpy.org.
 
 MV can be imported with the command:
 
@@ -1092,7 +1092,7 @@ corresponding MV2 function: ``allclose``, ``allequal``,
 ``make_mask_none``, ``mask_or``, ``masked``, ``pi``, ``put``,
 ``putmask``, ``rank``, ``ravel``, ``set_fill_value``,
 ``set_print_limit``, ``shape``, ``size``. See the documentation at
-http://numpy.sourceforge.net for a description of these functions.
+https://numpy.sourceforge.net for a description of these functions.
 
   
 

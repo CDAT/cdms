@@ -34,6 +34,7 @@ for mod_name in MOCK_MODULES:
 if os.path.isdir('../../regrid2/Lib'):
 	os.rename('../../regrid2/Lib', '../../regrid2/Libregrid')
 
+print os.getcwd()
 open("../../Lib/git.py", 'wb').close()
 open("../../regrid2/Libregrid/git.py", 'wb').close()
 

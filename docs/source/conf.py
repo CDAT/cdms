@@ -29,10 +29,7 @@ for mod_name in MOCK_MODULES:
     m = mock.Mock()
     m.return_value=3
     m.side_effect = side_effect
-    print mod_name
     sys.modules[mod_name] = m
-
-print os.getcwd()
 
 if os.path.isdir('../../regrid2/Lib'):
 	os.rename('../../regrid2/Lib', '../../regrid2/Libregrid')

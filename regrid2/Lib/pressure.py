@@ -1,7 +1,8 @@
 # Automatically adapted for numpy.oldnumeric Aug 02, 2007 by
 import cdms2
 import numpy
-from . import _regrid
+#from . import _regrid
+import regrid2._regrid as _regrid
 from .error import RegridError
 import copy
 

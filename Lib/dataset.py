@@ -4,7 +4,8 @@
 """ CDMS dataset and file objects"""
 from __future__ import print_function
 from .error import CDMSError
-from . import Cdunif
+#from . import Cdunif
+import Cdunif
 import numpy
 from . import cdmsNode
 import os
@@ -1179,11 +1180,11 @@ class Dataset(CdmsObj, cuDataset):
         return dn
 
     def getVariable(self, id):
-        "Get the variable object with the given id.
+        """Get the variable object with the given id.
 
          Returns
          -------
-            None if not found."
+            None if not found."""
         return self.variables.get(id)
 
     def getVariables(self, spatial=0):
@@ -1200,19 +1201,19 @@ class Dataset(CdmsObj, cuDataset):
         return retval
 
     def getAxis(self, id):
-        "Get the axis object with the given id. 
+        """Get the axis object with the given id. 
 
          Returns
          -------
-            None if not found."
+            None if not found."""
         return self.axes.get(id)
 
     def getGrid(self, id):
-        "Get the grid object with the given id.
+        """Get the grid object with the given id.
 
          Returns
          -------
-            None if not found."
+            None if not found."""
         return self.grids.get(id)
 
     def __repr__(self):

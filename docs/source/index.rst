@@ -23,8 +23,7 @@ CDMS documentation
    manual/cdms_7
    manual/cdms_appendix
    manual/sample_data
-   avariable
-   axis
+   API
 
 #   AbstractAxis
 #   AbstractVariable

@@ -101,12 +101,15 @@ def createGaussianGrid(nlats, xorigin=0.0, order="yx"):
 
     Parameters
     ----------
-         'nlats'
+         nlats:
               is the number of latitudes.
-         'xorigin'
-              is the origin of the longitude axis.
-          'order'
-              is either "yx" or "xy" """
+
+         xorigin:
+              is the origin of the longitude axis
+
+         order:
+              is either "yx" or "xy"
+    """
     lat = createGaussianAxis(nlats)
     nlons = 2 * nlats
     lon = createUniformLongitudeAxis(xorigin, nlons, 360.0 / float(nlons))
@@ -140,31 +143,28 @@ def setRegionSpecs(grid, coordSpec, coordType, resultSpec):
     Parameters
     ----------
 
-       'grid'
+        grid:
             is the grid object to be associated with the region.
-       'coordSpec'
+        coordSpec:
             is a coordinate specification, having one of the forms:
 
-        x
-        (x,y)
-        (x,y,'co')
-        (x,y,'co',cycle)
-        ':'
-        None
+                    x
+                   (x,y)
+                   (x,y,'co')
+                   (x,y,'co',cycle)
+                   ':'
+                   None
 
-         'coordType'
-              is one of CoordinateTypes
-         'resultSpec'
-              is a list of 4-tuples of the form (x,y,'co',cycle), or None
-              if no spec for the corresponding dimension type.
-              The function sets the appropriate coordinate in resultSpec,
-              in the canonical form (x,y,'co',cycle). A CDMSError exception
-              is raised if the entry in resultSpec is not None.
+        coordType:
+            is one of CoordinateTypes
+        resultSpec:
+            is a list of 4-tuples of the form (x,y,'co',cycle), or None
+            if no spec for the corresponding dimension type.
+            The function sets the appropriate coordinate in resultSpec,
+            in the canonical form (x,y,'co',cycle). A CDMSError exception
+            is raised if the entry in resultSpec is not None.
 
-     Note
-     ----
-
-          that time coordinate types are not permitted.
+    Note:   that time coordinate types are not permitted.
     """
 
     if (coordSpec is None) or (coordSpec == ':'):
@@ -298,8 +298,12 @@ class AbstractRectGrid(AbstractGrid):
     Parameters
     ----------
 
-       AbstractRectGrid defines the interface for rectilinear grids:
-       grids which can be decomposed into 1-D latitude and longitude axes
+       AbstractRectGrid:
+              defines the interface for rectilinear grids
+
+       grids:
+              which can be decomposed into 1-D latitude and longitude axes
+
     """
     gridtypes = ['gaussian', 'uniform', 'equalarea', 'generic']
 
@@ -663,25 +667,32 @@ class AbstractRectGrid(AbstractGrid):
         return ny * nx
 
     def writeScrip(self, cufile, gridTitle=None):
-        """Write a grid to a SCRIP file.
+        """
+        Write a grid to a SCRIP file.
       
         Parameters
         ----------
+             cufile:
+                 is a Cdunif file, NOT a CDMS file.
 
-             cufile is a Cdunif file, NOT a CDMS file.
+             gridtitle:
+                 is a string identifying the grid.
 
-             gridtitle is a string identifying the grid.
         """
         cgrid = self.toCurveGrid()
         cgrid.writeScrip(cufile, gridTitle)
 
     def toCurveGrid(self, gridid=None):
-        """Convert to a curvilinear grid.
-
+        """
+        Convert to a curvilinear grid.
+        
         Parameters
-        ----------
+        ----------  
+              gridid: 
+                 is the string identifier of the resulting curvilinear grid object.
 
-        'gridid' is the string identifier of the resulting curvilinear grid object.
+              _: None
+
         """
 
         from .coord import TransientVirtualAxis, TransientAxis2D
@@ -924,25 +935,34 @@ def isGrid(grid):
     """
     Is grid a grid?
 
-    Parameter
-    --------
+    Parameters
+    ----------
 
-         @param grid cdms2 contruct to be examined
+         grid cdms2: 
+            contruct to be examined
+
+         _: None
+
     """
     return isinstance(grid, AbstractGrid)
 
 
 def writeScripGrid(path, grid, gridTitle=None):
-    """Write a grid to a SCRIP grid file.
+    """
+    Write a grid to a SCRIP grid file.
 
-    Parameter
-    ---------
+    Parameters
+    ----------
 
-         path is the path of the SCRIP file to be created.
+           path:
+              is the path of the SCRIP file to be created.
 
-         grid is a CDMS grid object.
+           grid: 
+              is a CDMS grid object.
 
-         gridTitle is a string ID for the grid.
+           gridTitle: 
+              is a string ID for the grid.
+
     """
 
     import Cdunif

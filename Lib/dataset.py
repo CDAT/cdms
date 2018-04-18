@@ -117,6 +117,8 @@ def setCompressionWarnings(value=None):
       value:
           *  0/1 False/True 'no'/'yes' or None (which sets it to the opposite
 
+      _: None
+
     Returns
     -------
          Return set value.
@@ -149,10 +151,15 @@ def setCompressionWarnings(value=None):
 
 def setNetcdfUseNCSwitchModeFlag(value):
     """Tells cdms2 to switch constantly between netcdf define/write modes.
+
        Parameters
        ----------
+
           value:
               0/1, False/True.
+
+          _: None
+
 
        Returns
        -------
@@ -175,6 +182,8 @@ def setNetcdfUseParallelFlag(value):
        ----------
           value:
               0/1, False/True.
+
+          _: None
 
        Returns
        -------
@@ -229,6 +238,8 @@ def setNetcdf4Flag(value):
           value:
               0/1, False/True.
 
+          _: None
+
        Returns
        -------
            No return value.
@@ -249,6 +260,8 @@ def setNetcdfClassicFlag(value):
           value:
               0/1, False/True.
 
+          _: None
+
        Returns
        -------
            No return value.
@@ -268,6 +281,8 @@ def setNetcdfShuffleFlag(value):
        ----------
           value:
               0/1, False/True.
+
+          _: None
        Returns
        -------
            No return value.
@@ -287,6 +302,9 @@ def setNetcdfDeflateFlag(value):
        ----------
           value:
               0/1, False/True.
+
+          _: None
+
        Returns
        -------
            No return value.
@@ -306,6 +324,8 @@ def setNetcdfDeflateLevelFlag(value):
        ----------
           value:
               Deflation Level 1-9.
+
+          _: None
 
        Returns
        -------
@@ -334,6 +354,9 @@ def getNetcdfUseParallelFlag():
        ----------
           value:
               0/1, False/True.
+
+          _: None
+
        Returns
        -------
            No return value.
@@ -431,6 +454,7 @@ def createDataset(path, template=None):
        ----------
            path:
                is the XML file name, or netCDF filename for simple file creation.
+
            template:
                is a string template for the datafile(s), for dataset creation.
 
@@ -575,6 +599,7 @@ def parselist(text, f):
                Input String.
            f:
                function which parses A and returns (A, nconsumed).
+
        Returns
        -------
            Parser results.
@@ -614,6 +639,9 @@ def parseIndexList(text):
             text:
               i,j,k,l,... are indices or '-', and path is a filename.
               Coerce the indices to integers.
+
+            _: None
+
        Returns
        -------
             Parser results.
@@ -2301,6 +2329,9 @@ class CdmsFile(CdmsObj, cuDataset):
            ----------
               obj:
                  object containing `writeg`, `writeToFile` or `write` method.
+
+              _: None
+
            Returns
            -------
               Nothing is returned. """
@@ -2321,6 +2352,8 @@ class CdmsFile(CdmsObj, cuDataset):
         ----------
              id: str
                  id of the variable to get
+          
+             _: None
 
         Returns
         -------
@@ -2331,12 +2364,15 @@ class CdmsFile(CdmsObj, cuDataset):
         return self.variables.get(id)
 
     def getVariables(self, spatial=0):
-        """Get a list of variable objects.
+        """
+        Get a list of variable objects.
+
         Parameters
         ----------
-            spatial:
-                If spatial=1 or True, only return those axes defined on latitude
-                or longitude, excluding weights and bounds
+            spatial: If spatial=1 or True, only return those axes defined on latitude
+                     or longitude, excluding weights and bounds
+
+            _: None
 
         Returns
         -------
@@ -2359,6 +2395,9 @@ class CdmsFile(CdmsObj, cuDataset):
         ----------
             id:
                 id of the axis to get
+
+            _: None
+
         Returns
         --------
             file axis
@@ -2374,6 +2413,8 @@ class CdmsFile(CdmsObj, cuDataset):
             id:
                 id of the grid to get
 
+            _: None
+
         Returns
         -------
             file axis
@@ -2387,6 +2428,8 @@ class CdmsFile(CdmsObj, cuDataset):
         ----------
             n:
                bound id (bound_%d)
+
+            _: None
 
         Returns
         -------

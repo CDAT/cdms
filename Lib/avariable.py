@@ -43,6 +43,8 @@ def getMinHorizontalMask(var):
        var
            CDMS variable with a mask
 
+       -: None
+
     Return
     ------
         mask array or None if order 'x' and 'y' were not found
@@ -421,14 +423,22 @@ class AbstractVariable(CdmsObj, Slab):
 # A child class may want to override this
     def getAxis(self, n):
         """Get the n-th axis.
+
         Parameters
         ----------
-            n:
-               Axis number
+             n:  
+                 Axis number
+
+             _:  None
+             
+
+
         Returns
         -------
+
             if n < 0: n = n + self.rank()
-            self.getDomain()[n][0]"""
+            self.getDomain()[n][0]
+        """
         if n < 0:
             n = n + self.rank()
         return self.getDomain()[n][0]
@@ -439,6 +449,8 @@ class AbstractVariable(CdmsObj, Slab):
         Parameters
         ----------
             axis_spec:
+
+            _: None
 
         Returns
         -------
@@ -507,14 +519,18 @@ class AbstractVariable(CdmsObj, Slab):
 
     def getMissing(self, asarray=0):
         """
-           Parameters
-           ----------
-               asarray :
-                   '0' : scalar
-                   '1' : numpy array
-           Return
-           ------
-               the missing value as a scalar, or as a numpy array if asarray==1"""
+        Parameters
+        ----------
+
+            asarray:
+
+            '0': scalar
+
+            '1': numpy array
+
+        Return
+        ------
+            the missing value as a scalar, or as a numpy array if asarray==1"""
 
         if hasattr(self, 'missing_value'):
             try:
@@ -550,6 +566,8 @@ class AbstractVariable(CdmsObj, Slab):
         ----------
             value
                 scalar, a single-valued numpy array, or None.
+
+            _: None
 
         Note
         ----
@@ -684,8 +702,12 @@ class AbstractVariable(CdmsObj, Slab):
         """
         Parameters
         ----------
-             id:
+
+              id:
                  0 or 1
+          
+              _: None
+
         Returns
         -------
             the order string, such as t, z, y, x (time, level, lat, lon).
@@ -816,7 +838,7 @@ class AbstractVariable(CdmsObj, Slab):
         """getSlice takes arguments of the following forms and produces
            a return array.
 
-           Parameter
+           Parameters
            ---------
               raw:
                   if set to 1, return numpy.ma only
@@ -872,23 +894,28 @@ class AbstractVariable(CdmsObj, Slab):
         raise CDMSError(NotImplemented + 'expertSlice')
 
     def getRegion(self, *specs, **keys):
-        """ Read a region of data. A region is an n-dimensional rectangular region specified in coordinate space.
-
+        """
+        Read a region of data. A region is an n-dimensional rectangular region specified in coordinate space.
+                            
         Parameters
         ----------
-           slice
-               is an argument list, each item of which has one of the following forms:
-                   * x, where x is a scalar
+
+              Slice:   is an argument list, each item of which has one of the following forms
+
+                       * x, where x is a scalar
                        * Map the scalar to the index of the closest coordinate value.
-                   * (x, y)
+                       * (x, y)
                        * Map the half-open coordinate interval [x,y) to index interval.
-                   * (x, y, 'cc')
+                       * (x, y, 'cc')
                        * Map the closed interval [x,y] to index interval. Other options
                          are 'oo' (open), 'oc' (open on the left), and 'co'
                          (open on the right, the default).
-                   * (x, y, 'co', cycle)
+                       * (x, y, 'co', cycle)
                        * Map the coordinate interval with wraparound. If no cycle is
                          specified, wraparound will occur iff axis.isCircular() is true.
+              _:       None
+
+
         Ellipsis
                  Represents the full range of all dimensions bracketed by non-Ellipsis items.
         None, colon
@@ -1179,6 +1206,8 @@ class AbstractVariable(CdmsObj, Slab):
         ----------
              order: string
                  can be "tzyx" with all possible axes permutation.
+
+             _: None
 
         Returns
         -------
@@ -1657,7 +1686,11 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
 
          Parameter
          ---------
-             ar is a masked array, scalar, or numpy.ma.masked."""
+            
+             ar is a masked array, scalar, or numpy.ma.masked.
+             _: None
+
+        """
 
         resulttype = self._decodedType()
         if hasattr(self, 'scale_factor'):

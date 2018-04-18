@@ -701,7 +701,11 @@ def allclose(ax1, ax2, rtol=1.e-5, atol=1.e-8):
     """
     Parameters
     ----------
-       ax1, ax2:  array_like
+       ax1, ax2: 
+          
+           array_like
+
+       _:  None
 
     Returns
     -------
@@ -2707,6 +2711,9 @@ def take(ax, indices):
     Returns
     -------
        axis: TransientAxis
+
+       _: None
+
            The return array has the same type of ax.
     """
 

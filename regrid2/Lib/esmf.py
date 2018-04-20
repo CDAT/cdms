@@ -91,7 +91,7 @@ class EsmfUnstructGrid:
         Note
         ----
 
-        ``
+        
                      3                          4 ---------- 3
                     / \                         |            |
                    /   \                        |            |
@@ -99,7 +99,7 @@ class EsmfUnstructGrid:
                  /       \                      |            |
                 /         \                     |            |
                1 --------- 2                    1 ---------- 2
-       ``
+       
                  3                               8---------------7
                 /|\                             /|              /|
                / | \                           / |             / |
@@ -114,7 +114,7 @@ class EsmfUnstructGrid:
                 \|/                         |/              |/
                  1                          1---------------2
 
-       ESMF_MESHELEMTYPE_TETRA             ESMF.MESHELEMTYPE_HEX ``
+       ESMF_MESHELEMTYPE_TETRA             ESMF.MESHELEMTYPE_HEX 
 
         """
         n = len(cellIndices)
@@ -155,7 +155,9 @@ class EsmfUnstructGrid:
         Parameters
         ----------
 
-             filename VTK file name
+            filename VTK file name
+            _: None
+
         """
         self.grid.write(filename)
 
@@ -252,6 +254,9 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
         ----------
 
              staggerloc (e.g. ESMF.StaggerLoc.CENTER)
+
+             _: None
+
         Returns
         -------
 
@@ -271,6 +276,8 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
 
              staggerloc e.g. ESMF.StaggerLoc.CENTER
 
+             _: None
+
         Returns
         -------
 
@@ -288,6 +295,8 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
         ----------
 
              staggerloc (e.g. ESMF.StaggerLoc.CENTER)
+
+             _: None
 
         Returns
         -------
@@ -354,6 +363,9 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
         ---------
 
              areas numpy array
+
+             _: None
+
         """
         self.grid.add_item(item=ESMF.GridItem.Area)
         areaPtr = self.grid.get_item(
@@ -403,6 +415,8 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
 
              mask numpy array. 1 is invalid by default. This array exists
                     on all procs
+
+             _: None
         """
         self.grid.add_item(item=ESMF.GridItem.MASK, staggerloc=staggerloc)
         maskPtr = self.grid.get_item(
@@ -501,6 +515,8 @@ class EsmfStructField:
              rootPe if None then local data will be fetched, otherwise
                       gather the data on processor "rootPe" (all other
                       procs will return None).
+
+             _: None
 
         Returns
         -------
@@ -683,6 +699,8 @@ class EsmfRegrid:
              rootPe None is local areas are returned, otherwise
                       provide rootPe and the data will be gathered
 
+             _: None
+
         Returns
         -------
 
@@ -701,6 +719,8 @@ class EsmfRegrid:
 
              rootPe None is local areas are returned, otherwise
                       provide rootPe and the data will be gathered
+
+             _: None
 
         Returns
         -------
@@ -721,6 +741,8 @@ class EsmfRegrid:
              rootPe None is local areas are returned, otherwise
                       provide rootPe and the data will be gathered
 
+             _: None       
+
         Returns
         -------
 
@@ -740,6 +762,8 @@ class EsmfRegrid:
 
              rootPe None is local areas are returned, otherwise
                       provide rootPe and the data will be gathered
+
+             _: None
 
         Returns
         -------

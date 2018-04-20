@@ -141,6 +141,8 @@ class cuDataset():
         -------
 
            a list of the global attributes in the file.
+           _None_
+
         :::
         """
         return list(self.attributes.keys())
@@ -152,6 +154,9 @@ class cuDataset():
         -------
 
            a list of the variables in the file.
+
+           _None_
+
         :::
         """
         return list(self.variables.keys())

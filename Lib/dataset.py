@@ -2008,17 +2008,16 @@ class CdmsFile(CdmsObj, cuDataset):
                  The list of axis objects. Default is var.getAxisList()
              extbounds:
                  Bounds of the (portion of) the extended dimension being written.
-             id or newname:
+             id:
+             newname:
                  String identifier of the new variable.
              extend:
                  * 1 define the first dimension as the unlimited dimension.
-                 * 0 do not define an unlimited dimension. The default is the define
-                the first dimension as unlimited only if it is a time dimension.
+                 * 0 do not define an unlimited dimension. The default is the define the first dimension as unlimited only if it is a time dimension.
              fill_value:
                  The missing value flag.
              index:
-                 The extended dimension index for writting. The default index is determined
-            by lookup relative to the existing extended dimension.
+                 The extended dimension index for writting. The default index is determined by lookup relative to the existing extended dimension.
              grid:
                  The variable grid.  `none` the value of var.getGrid() will used.
 

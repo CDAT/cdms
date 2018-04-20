@@ -294,9 +294,11 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         Parameter
         ---------
 
-             cufile is a Cdunif file, NOT a CDMS file.
+             cufile 
+                is a Cdunif file, NOT a CDMS file.
 
-             gridtitle is a string identifying the grid.
+             gridtitle
+                is a string identifying the grid.
         """
 
         lat = numpy.ma.filled(self._lataxis_[:])
@@ -585,22 +587,29 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         Parameters
         ----------
 
-             domainlist is a list of axes of a variable.
+             domainlist
+                 is a list of axes of a variable.
 
-             newaxislist is a list of result axes after the slicelist is applied to domainlist.
+             newaxislist 
+                 is a list of result axes after the slicelist is applied to domainlist.
 
-             slicelist is a list of slices.
+             slicelist 
+                 is a list of slices.
 
         All lists are of equal length.
 
         Returns
         -------
 
-            value is (newslicelist, gridaxislist) where
-            newslicelist is the elements of slicelist that correspond to the grid, in the
+            value 
+               is (newslicelist, gridaxislist) where
+            newslicelist 
+
+               is the elements of slicelist that correspond to the grid, in the
           preferred order of the grid.
 
-             gridaxislist is the elements of newaxislist that correspond to the grid, in the
+             gridaxislist
+               is the elements of newaxislist that correspond to the grid, in the
           preferred order of the grid.
         """
 
@@ -649,14 +658,19 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
        Parameters
        ----------
  
-            'spec' is a region specification of the form defined in the grid module.
+            'spec' 
+                is a region specification of the form defined in the grid module.
 
        Returns
        -------
 
             (mask, indexspecs) where
-            'mask' is the mask of the result grid AFTER self and region spec are interested.
-            'indexspecs' is a list of index specifications suitable for slicing a
+            'mask'
+                is the mask of the result grid AFTER self and region spec are interested.
+
+            'indexspecs'
+                is a list of index specifications suitable for slicing a
+
              variable with the given grid.
         """
         ni, nj = self.shape
@@ -697,7 +711,8 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         Returns
         -------
 
-            1 if g is a grid of the same type and shape. A real element-by-element
+            1 if g
+                is a grid of the same type and shape. A real element-by-element
             comparison would be too expensive here."""
         if g is None:
             return 0
@@ -714,7 +729,8 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         Returns
         -------
 
-             1 iff every element of self.getAxisList() is in the list 'axes'."""
+             1 iff every element of self.getAxisList()
+                  is in the list 'axes'."""
         for item in self.getAxisList():
             # if all [False, False, ....] result=0
             if not any([allclose(item[:], axis[:]) for axis in axes]):
@@ -727,11 +743,12 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
 
     def reconcile(self, axes):
         """
-
         Returns
         -------
        
-             a grid that is consistent with the axes, or None.
+             a grid that 
+                  is consistent with the axes, or None.
+
              For curvilinear grids this means that the grid-related axes are
              contained in the 'axes' list.
         """
@@ -763,13 +780,15 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
 
     def flatAxes(self):
         """
-
         Returns
         -------
 
-            (flatlat, flatlon) where flatlat is a 1D NumPy array
+            (flatlat, flatlon) where flatlat
+                 is a 1D NumPy array
+
             having the same length as the number of cells in the grid, similarly
-            for flatlon."""
+            for flatlon.
+        """
         if self._flataxes_ is None:
             from . import MV2 as MV
             alat = MV.filled(self.getLatitude())
@@ -847,13 +866,17 @@ def readScripCurveGrid(fileobj, dims, whichType, whichGrid):
     Parameters
     ----------
 
-         fileobj is an open CDMS dataset or file object.
+         fileobj
+             is an open CDMS dataset or file object.
 
-         dims is the grid shape.
+         dims
+             is the grid shape.
       
-         whichType is the type of file, either "grid" or "mapping"
+         whichType
+             is the type of file, either "grid" or "mapping"
 
-         if whichType is "mapping", whichGrid is the choice of grid, either "source" or "destination"
+         if whichType
+             is "mapping", whichGrid is the choice of grid, either "source" or "destination"
     """
     import string
     from .coord import TransientAxis2D

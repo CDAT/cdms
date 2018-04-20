@@ -193,16 +193,19 @@ def createUniformLongitudeAxis(startLon, nlon, deltaLon):
 def mapLinearIntersection(xind, yind, iind,
                           aMinusEps, aPlusEps, bPlusEps, bMinusEps,
                           boundLeft, nodeSubI, boundRight):
-    """
-    Parameters
-    ----------
+    """  Parameters
+         ----------
+
        xind:
           'c' if (a,b) is closed on the left, 'o' if open,
+
        yind:
-           same for right endpoint
-j
-    Returns
-    -------
+           same for right endpoint j
+
+  
+ Returns
+ -------
+
        True if the coordinate interval (a,b) intersects the node nodeSubI or cell
        bounds [boundLeft,boundRight], where the interval (a,b) is defined by:
 

@@ -1,6 +1,10 @@
 # Forecast support, experimental coding
 # probably all this will be rewritten, put in a different directory, etc.
 
+"""CDMS Forecast"""
+
+
+
 from __future__ import print_function
 import numpy
 import cdtime
@@ -72,7 +76,6 @@ class forecast():
 
     def __init__(self, tau0time, dataset_list, path="."):
         """
-
         Parameters
         ----------
 

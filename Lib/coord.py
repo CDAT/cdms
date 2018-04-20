@@ -379,9 +379,11 @@ class TransientAxis2D(AbstractAxis2D, TransientVariable):
         Parameters
         ----------
 
-           'bounds' is the bounds array, having shape (m,n,nvert) where data.shape is (m,n) and
+           'bounds'
+               is the bounds array, having shape (m,n,nvert) where data.shape is (m,n) and
          
-            nvert is the max number of vertices per cell.
+            nvert 
+               is the max number of vertices per cell.
         """
         AbstractAxis2D.__init__(self, None, None, bounds=bounds)
         TransientVariable.__init__(self, data, typecode=typecode, copy=copy, savespace=savespace,

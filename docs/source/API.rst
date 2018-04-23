@@ -60,6 +60,26 @@ Regridder
 .. autosummary:: 
    horizontal
    esmf
+   crossSection
+   gsRegrid
+   mvESMFRegrid
+   mvGenericRegrid
+   pressure
+   scrip
+   mvLibCFRegrid
+   gs_horizontal
+
+
+
+
+
+
+
+
+   
+
+
+
    
 
 

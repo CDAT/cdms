@@ -4,15 +4,19 @@
 """ CDMS dataset and file objects"""
 from __future__ import print_function
 from .error import CDMSError
-from . import Cdunif
+import sys
+#from . import Cdunif
+import Cdunif
 import numpy
-from . import cdmsNode
+#from . import cdmsNode
+import cdmsNode
 import os
 import sys
 import string
 import urllib
 from urllib.parse import urlparse, urlunparse
-from . import cdmsobj
+#from . import cdmsobj
+import cdmsobj
 import re
 from .CDMLParser import CDMLParser
 from .cdmsobj import CdmsObj

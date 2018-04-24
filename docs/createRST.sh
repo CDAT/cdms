@@ -3,10 +3,10 @@ a=('cdmsobj'  'axis'  'coord'  'grid'  'hgrid'  'avariable'  'sliceut'  'error' 
 
 for i in "${a[@]}"; do
 echo "creating "$i".rst"
-echo "cdms $i
+echo "$i
 ========
 
-.. automodule:: cdms2.$i
+.. automodule:: Lib.$i
    :members:
 " >$i.rst
 

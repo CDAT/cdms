@@ -58,7 +58,6 @@ def fromJSON(jsn):
     V.set_fill_value(D["_fill_value"])
     return V
 
-
 class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
     "An in-memory variable."
     variable_count = 0

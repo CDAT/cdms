@@ -14,7 +14,8 @@ from .grid import AbstractGrid, LongitudeType, LatitudeType, CoordTypeToLoc
 from .axis import TransientVirtualAxis
 from .axis import getAutoBounds, allclose
 from . import bindex
-from . import _bindex
+#from . import _bindex
+import _bindex
 from functools import reduce
 import copy
 

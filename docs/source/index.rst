@@ -19,10 +19,15 @@
    manual/cdms_appendix
    manual/sample_data
 
+.. autosummary::
+   :toctree: 
+
+   avariable
+   axis.FileVirtuaAxis
+   axis.TransientVirtualAxis
+
 #   AbstractAxis
 #   AbstractVariable
-#   avariable
-#   axis
 #   bindex
 #   cache
 #   cdmsfile

@@ -1,6 +1,6 @@
 """ metadata conventions """
-
 from __future__ import print_function
+import os
 from .error import CDMSError
 from collections import UserList
 
@@ -9,19 +9,34 @@ WITH_GRIDSPEC_SUPPORT = True
 
 MethodNotImplemented = "Method not yet implemented"
 
+ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
-class AliasList (UserList):
-    def __init__(self, alist):
-        UserList.__init__(self, alist)
+if not ON_RTD:
+    class AliasList (UserList):
+        def __init__(self, alist):
+            UserList.__init__(self, alist)
 
-    def __setitem__(self, i, value):
-        self.data[i] = value.lower()
+        def __setitem__(self, i, value):
+            self.data[i] = value.lower()
 
-    def __setslice(self, i, j, values):
-        self.data[i:j] = [x.lower() for x in values]
+        def __setslice(self, i, j, values):
+            self.data[i:j] = [x.lower() for x in values]
 
-    def append(self, value):
-        self.data.append(value.lower())
+        def append(self, value):
+            self.data.append(value.lower())
+
+        def extend(self, values):
+            self.data.extend(list(map(str.lower, values)))
+else:
+    class MockObject(object):
+        def __init__(self, *args, **kwargs):
+            super(MockObject, self).__init__()
+
+        def __call__(self, *args, **kwargs):
+            return None
+
+    class AliasList(MockObject):
+        pass
 
 
 level_aliases = AliasList(['plev'])

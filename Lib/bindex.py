@@ -3,7 +3,8 @@
 
 """Bin index for non-rectilinear grids"""
 
-from . import _bindex
+#from . import _bindex
+import _bindex
 import numpy
 
 

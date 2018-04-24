@@ -524,6 +524,7 @@ static int cdopen(const char* controlpath, int ncmode, CuFileType *filetype) {
 	/* Check the filetype */
 	int saveopts;
 
+
 	saveopts = cuErrOpts;
 	cuseterropts(0);
 	cuseterropts(saveopts);

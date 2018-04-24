@@ -13,7 +13,8 @@
 # serve to show the default.
 from future.standard_library import install_aliases
 install_aliases()
-import sys,os
+import sys
+import os
 sys.path.append(os.path.abspath('../../regrid2'))
 sys.path.append(os.path.abspath('../..'))
 import mock
@@ -42,12 +43,6 @@ print "***"
 print glob.glob("../../regrid2/*")
 
 print os.getcwd()
-f=open("../../Lib/git.py", 'wb')
-f.write("closest_tag = '3.0'")
-f.close()
-f=open("../../regrid2/Libregrid/git.py", 'wb')
-f.write("closest_tag = '3.0'")
-f.close()
 
 
 import sys

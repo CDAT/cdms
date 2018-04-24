@@ -1,6 +1,6 @@
 formats:
   - epub
-  - pdb
+  - pdf
 
 requirements_file: docs/requirements.txt:wq
 

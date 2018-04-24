@@ -2,7 +2,8 @@
 
 import numpy
 import copy
-from . import _regrid
+#from . import _regrid
+import regrid2._regrid as _regrid
 from .error import RegridError
 import warnings
 import cdms2
@@ -32,8 +33,13 @@ class Horizontal:
     def __init__(self, ingrid, outgrid):
         """
         Constructor for regridding class
-        @param ingrid cdms2, ndarray variable
-        @param outgrid cdms2, ndarray variable
+
+        Parameters
+        ----------
+
+             ingrid cdms2, ndarray variable
+
+             outgrid cdms2, ndarray variable
         """
 
         inlat = ingrid.getLatitude()

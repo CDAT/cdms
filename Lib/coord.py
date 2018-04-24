@@ -282,8 +282,14 @@ class AbstractAxis2D(AbstractCoordinateAxis):
 
     def clone(self, copyData=1):
         """clone (self, copyData=1)
-        Return a copy of self as a transient axis.
-        If copyData is 1, make a separate copy of the data."""
+        
+        Returns
+        -------
+            a copy of self as a transient axis.
+
+        Note
+        ----
+            If copyData is 1, make a separate copy of the data."""
         result = TransientAxis2D(
             self[:],
             copy=copyData,
@@ -367,9 +373,17 @@ class TransientAxis2D(AbstractAxis2D, TransientVariable):
     def __init__(self, data, typecode=None, copy=0, savespace=0, mask=None, fill_value=None,
                  axes=None, attributes=None, id=None, copyaxes=1, bounds=None):
         """Create a transient 2D axis.
+
         All arguments are as for TransientVariable.
-        'bounds' is the bounds array, having shape (m,n,nvert) where data.shape is (m,n) and
-          nvert is the max number of vertices per cell.
+        
+        Parameters
+        ----------
+
+           'bounds'
+               is the bounds array, having shape (m,n,nvert) where data.shape is (m,n) and
+         
+            nvert 
+               is the max number of vertices per cell.
         """
         AbstractAxis2D.__init__(self, None, None, bounds=bounds)
         TransientVariable.__init__(self, data, typecode=typecode, copy=copy, savespace=savespace,

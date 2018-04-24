@@ -11,7 +11,7 @@ Time Types
    import requests
    fnames = [ 'clt.nc', 'geos-sample', 'xieArkin-T42.nc', 'remap_grid_POP43.nc', 'remap_grid_T42.nc', 'rmp_POP43_to_T42_conserv.n', 'rmp_T42_to_POP43_conserv.nc', 'ta_ncep_87-6-88-4.nc', 'rmp_T42_to_C02562_conserv.nc' ]
    for file in fnames:
-       url = 'http://uvcdat.llnl.gov/cdat/sample_data/'+file
+       url = 'https://cdat.llnl.gov/cdat/sample_data/'+file
        r = requests.get(url)
        open(file, 'wb').write(r.content)
 
@@ -164,7 +164,7 @@ Table Time Methods
 
 Examples
 ^^^^^^^^
-.. doctest:: 
+.. 
 
    >>> from cdtime import *
    >>> c = comptime(1996,2,28)
@@ -177,7 +177,7 @@ Examples
 
 **Note:** When adding or subtracting intervals of months or years, only the month and year of the result are significant.   The reason is that intervals in months/years are not commensurate with intervals in days or fractional days. This leads to results that may be surprising.
 
-.. doctest::
+.. 
 
    >>> c = comptime(1979,8,31)      
    >>> c.add(1,Month)               
@@ -186,7 +186,7 @@ Examples
 
 In other words, the day component of c was ignored in the addition, and the day/hour/minute components of the results are just the defaults.  If the interval is in years, the interval is converted internally to months:            
                     
-.. doctest::                    
+..                     
 
    >>> c = comptime(1979,8,31)      
    >>> c.add(2,Years)               
@@ -194,7 +194,7 @@ In other words, the day component of c was ignored in the addition, and the day/
 
 Compare time values.
                     
-.. doctest::
+.. 
 
    >>> from cdtime import *         
    >>> r = cdtime.reltime(28,"days since 1996-1-1")   
@@ -209,7 +209,7 @@ Compare time values.
                     
 Subtract an interval of time.
 
-.. doctest::
+.. 
 
    >>> from cdtime import *         
    >>> r = cdtime.reltime(28,"days since 1996-1-1")   
@@ -224,7 +224,7 @@ For intervals of years or months, see the **note** under add() in the example ab
 
 Convert to component time.
 
-.. doctest::
+.. 
 
    >>> r = cdtime.reltime(28,"days since 1996-1-1")   
    >>> r.tocomp()
@@ -233,7 +233,7 @@ Convert to component time.
 
 Convert to relative time.
 
-.. doctest::
+.. 
                     
    >>> c = comptime(1996,2,28)      
    >>> print c.torel("days since 1996-1-1")           

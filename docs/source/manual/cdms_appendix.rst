@@ -30,12 +30,12 @@ applications to treat the behavior of, say a dataset axis and file axis,
 as identical.
 
 .. figure:: /images/cdms_classes.jpg
+   :scale: 95% 
    :alt: 
 
 FIGURE 1. CDMS Classes
-                      
-
-
+                       
+  
 
 APPENDIX B
 ----------
@@ -48,15 +48,16 @@ Quick Start (Cheat Sheet)
 
 :download:`cdms quick start <docs/cdms_quick_start.pdf>`
 
+  
 
 VCS Quick Reference (Cheat Sheet)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. figure:: /manual/images/vcs_quick_ref.jpg
-   :scale: 25%
+   :scale: 35%
    :alt:  VCS Cheat Sheet
 
-
+:download:`vcs quick ref <docs/vcs_quick_ref.pdf>`
 
 Release Notes
 ~~~~~~~~~~~~~

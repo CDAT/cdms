@@ -17,8 +17,13 @@ class SphereMesh:
     def __init__(self, var, sphereThickness=0.1):
         """
         Constructor
-        @param var cdms2 variable
-        @param sphereThickness thickness of the shell in normalized
+
+        Parameters
+        ----------
+
+             var cdms2 variable
+
+             sphereThickness thickness of the shell in normalized
                                sphere radius
         """
 
@@ -93,8 +98,16 @@ class SphereMesh:
     def getXYZCoords(self, sphereRadius=1.0):
         """
         Get the curvilinear cartesian coordinates
-        @param sphereRadius radius of sphere
-        @return mesh
+
+        Parameters
+        ----------
+
+             sphereRadius radius of sphere
+
+        Returns
+        -------
+
+             mesh
         """
         sz = reduce(lambda x, y: x * y, self.shape)
         rr = sphereRadius * (1.0 + self.elvs)

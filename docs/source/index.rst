@@ -18,6 +18,7 @@
    manual/cdms_7
    manual/cdms_appendix
    manual/sample_data
+   API
 
 .. autosummary::
    :toctree: 

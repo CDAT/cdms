@@ -1,6 +1,10 @@
 # Forecast support, experimental coding
 # probably all this will be rewritten, put in a different directory, etc.
 
+"""CDMS Forecast"""
+
+
+
 from __future__ import print_function
 import numpy
 import cdtime
@@ -11,10 +15,17 @@ from six import string_types
 
 
 def two_times_from_one(t):
-    """Input is a time representation, either as the long int used in the cdscan
-    script, or a string in the format "2010-08-25 15:26:00", or as a cdtime comptime
-    (component time) object.
-    Output is the same time, both as a long _and_ as a comptime."""
+    """
+    Parameters
+    ----------
+
+         Input 
+             is a time representation, either as the long int used in the cdscan
+             script, or a string in the format "2010-08-25 15:26:00", or as a cdtime comptime
+             (component time) object.
+
+         Output
+              is the same time, both as a long _and_ as a comptime."""
     if t == 0:
         t = 0
     if isinstance(t, string_types):
@@ -48,10 +59,15 @@ def two_times_from_one(t):
 
 
 def comptime(t):
-    """Input is a time representation, either as the long int used in the cdscan
-    script, or a string in the format "2010-08-25 15:26:00", or as a cdtime comptime
-    (component time) object.
-    Output is the same time a cdtime.comptime (component time)."""
+    """
+    Parameters
+    ---------
+         Input
+              is a time representation, either as the long int used in the cdscan
+              script, or a string in the format "2010-08-25 15:26:00", or as a cdtime comptime
+              (component time) object.
+         Output
+              is the same time a cdtime.comptime (component time)."""
     tl, tc = two_times_from_one(t)
     return tc
 
@@ -60,15 +76,28 @@ class forecast():
     """represents a forecast starting at a single time"""
 
     def __init__(self, tau0time, dataset_list, path="."):
-        """tau0time is the first time of the forecast, i.e. the time at which tau=0.
-        dataset_list is used to get the forecast file from the forecast time.
-        Each list item should look like this example:
-        [None, None, None, None, 2006022200000L, 'file2006-02-22-00000.nc']
-        Normally dataset_list = fm[i][1] where fm is the output of
-        cdms2.dataset.parseFileMap and fm[i][0] matches the variables of interest.
+        """
+        Parameters
+        ----------
 
-        N.B.  This is like a CdmsFile.  Creating a forecast means opening a file,
-        so later on you should call forecast.close() to close it.
+             tau0time 
+                  is the first time of the forecast, i.e. the time at which tau=0.
+             dataset_list 
+                  is used to get the forecast file from the forecast time.
+       
+        Example
+        -------
+
+             Each list item should look like this example:
+             [None, None, None, None, 2006022200000L, 'file2006-02-22-00000.nc']
+             Normally dataset_list = fm[i][1] where fm is the output of
+             cdms2.dataset.parseFileMap and fm[i][0] matches the variables of interest.
+
+        Note
+        ----
+
+             N.B.  This is like a CdmsFile.  Creating a forecast means opening a file,
+             so later on you should call forecast.close() to close it.
         """
         self.fctl, self.fct = two_times_from_one(tau0time)
 
@@ -97,12 +126,19 @@ class forecast():
 
 
 def available_forecasts(dataset_file, path="."):
-    """Returns a list of forecasts (as their generating times) which are
-    available through the specified cdscan-generated dataset xml file.
-    The forecasts are given in 64-bit integer format, but can be converted
-    to component times with the function two_times_from_one.
-    This function may help in choosing the right arguments for initializing
-    a "forecasts" (forecast set) object.
+    """
+
+    Returns
+    -------
+          a list of forecasts (as their generating times) which are
+          available through the specified cdscan-generated dataset xml file.
+   
+    Note
+    ----
+         The forecasts are given in 64-bit integer format, but can be converted
+         to component times with the function two_times_from_one.
+         This function may help in choosing the right arguments for initializing
+         a "forecasts" (forecast set) object.
     """
     dataset = cdms2.openDataset(dataset_file, dpath=path)
     fm = cdms2.dataset.parseFileMap(dataset.cdms_filemap)
@@ -115,42 +151,46 @@ class forecasts():
     """represents a set of forecasts"""
 
     def __init__(self, dataset_file, forecast_times, path="."):
-        """Creates a set of forecasts.  Normally you do it by something like
-        f = forecasts( 'file.xml', (min_time, max_time) )
-        or
-        f = forecasts( 'file.xml', (min_time, max_time), '/home/me/data/' )
-        or
-        f = forecasts( 'file.xml', [ time1, time2, time3, time4, time5 ] )
+        """
+        Example
+        -------
 
-        where the two or three arguments are::
+             Creates a set of forecasts.  Normally you do it by something like
+             f = forecasts( 'file.xml', (min_time, max_time) )
+             or
+             f = forecasts( 'file.xml', (min_time, max_time), '/home/me/data/' )
+             or
+             f = forecasts( 'file.xml', [ time1, time2, time3, time4, time5 ] )
 
-        1. the name of a dataset xml file generated by "cdscan --forecast ..."
+             where the two or three arguments are::
 
-        2. Times here are the times when the forecasts began (tau=0, aka reference time).
-        (i) If you use a 2-item tuple, forecasts will be chosen which start at a time
-        t between the min and max times, e.g. min_time <= t < max_time .
-        (ii) If you use a list, it will be the exact start (tau=0) times for the
-        forecasts to be included.
-        (iii) If you use a 3-item tuple, the first items are (min_time,max_time)
-        as in a 2-item tuple.  The third component of the tuple is the
-        open-closed string.  This determines whether endpoints are included
-        The first character should be 'o' or 'c' depending on whether you want t with
-        min_time<t or min_time<=t.  Similarly the second character should be 'o' or c'
-        for t<max_time or t<=max_time .  Any other characters will be ignored.
-        Thus ( min_time, max_time, 'co' ) is equivalent to ( min_time, max_time ).
-        (iv) The string 'All' means to use all available forecasts.
+                1. the name of a dataset xml file generated by "cdscan --forecast ..."
 
-        Times can be specified either as 13-digit long integers, e.g.
-        2006012300000 for the first second of January 23, 2006, or as
-        component times (comptime) in the cdtime module, or as
-        a string in the format "2010-08-25 15:26:00".
+                2. Times here are the times when the forecasts began (tau=0, aka reference time).
+                       (i) If you use a 2-item tuple, forecasts will be chosen which start at a time
+                       t between the min and max times, e.g. min_time <= t < max_time .
+                       (ii) If you use a list, it will be the exact start (tau=0) times for the
+                       forecasts to be included.
+                       (iii) If you use a 3-item tuple, the first items are (min_time,max_time)
+                       as in a 2-item tuple.  The third component of the tuple is the
+                       open-closed string.  This determines whether endpoints are included
+                       The first character should be 'o' or 'c' depending on whether you want t with
+                       min_time<t or min_time<=t.  Similarly the second character should be 'o' or c'
+                       for t<max_time or t<=max_time .  Any other characters will be ignored.
+                       Thus ( min_time, max_time, 'co' ) is equivalent to ( min_time, max_time ).
+                       (iv) The string 'All' means to use all available forecasts.
 
-        3. An optional path for the data files; use this if the xml file
-        contains filenames without complete paths.
+                   Times can be specified either as 13-digit long integers, e.g.
+                   2006012300000 for the first second of January 23, 2006, or as
+                   component times (comptime) in the cdtime module, or as
+                   a string in the format "2010-08-25 15:26:00".
 
-        As for the forecast class, this opens files when initiated, so when you
-        are finished with the forecasts, you should close the files by calling
-        forecasts.close() .
+                3. An optional path for the data files; use this if the xml file
+                   contains filenames without complete paths.
+
+             As for the forecast class, this opens files when initiated, so when you
+             are finished with the forecasts, you should close the files by calling
+             forecasts.close() .
         """
 
         # Create dataset_list to get a forecast file from each forecast time.
@@ -205,23 +245,27 @@ class forecasts():
         return mytimesl
 
     def reduce_inplace(self, min_time, max_time, openclosed='co'):
-        """ For a forecasts object f, f( min_time, max_time ) will reduce the
-        scope of f, to forecasts whose start time t has min_time<=t<max_time.
-        This is done in place, i.e. any other forecasts in f will be discarded.
-        If slice notation were possible for forecasts (it's not because we need
-        too many bits to represent time), this function would do the same as
-        f = f[min_time : max_time ]
+        """
+        Example
+        -------
+       
+             For a forecasts object f, f( min_time, max_time ) will reduce the
+             scope of f, to forecasts whose start time t has min_time<=t<max_time.
+             This is done in place, i.e. any other forecasts in f will be discarded.
+             If slice notation were possible for forecasts (it's not because we need
+             too many bits to represent time), this function would do the same as
+             f = f[min_time : max_time ]
 
-        The optional openclosed argument lets you specify the treatment of
-        the endpoints min_time, max_time.  The first character should be 'c' if you want
-        to include min_time in the new scope of f, or 'o' to exclude it.  Similarly,
-        the second character should be 'c' to include max_time or 'o' to exclude it.  Thus
-        'co' yields the default min_time<=t<max_time and 'oo' yields min_time<t<max_time.
+             The optional openclosed argument lets you specify the treatment of
+             the endpoints min_time, max_time.  The first character should be 'c' if you want
+             to include min_time in the new scope of f, or 'o' to exclude it.  Similarly,
+             the second character should be 'c' to include max_time or 'o' to exclude it.  Thus
+             'co' yields the default min_time<=t<max_time and 'oo' yields min_time<t<max_time.
 
-        If you don't want to change the original "forecasts" object, just do
-        copy.copy(forecasts) first.
+             If you don't want to change the original "forecasts" object, just do
+             copy.copy(forecasts) first.
 
-        Times can be the usual long integers, strings, or cdtime component times.
+             Times can be the usual long integers, strings, or cdtime component times.
         """
         mytimesl = self.time_interval_to_list(min_time, max_time, openclosed)
         self.fcs = [f for f in self.fcs if (f.fctl in mytimesl)]
@@ -232,13 +276,17 @@ class forecasts():
             fc.close()
 
     def __call__(self, varname, forecast_times='All'):
-        """Reads the specified variable for all the specified forecasts.
-        Creates and returns a new variable which is dimensioned by forecast
-        as well as the original variable's dimensions.
-        Normally all the forecasts in the 'forecasts' object will be read.
-        But you can read only the forecasts generated at particular times
-        by providing a "forecast_times" argument, the same as the "forecast_times"
-        argument in the forecasts.__init__ method.
+        """
+
+        Example
+        -------
+             Reads the specified variable for all the specified forecasts.
+             Creates and returns a new variable which is dimensioned by forecast
+             as well as the original variable's dimensions.
+             Normally all the forecasts in the 'forecasts' object will be read.
+             But you can read only the forecasts generated at particular times
+             by providing a "forecast_times" argument, the same as the "forecast_times"
+             argument in the forecasts.__init__ method.
         """
         # Assumptions include: For two forecasts, f1('var') and f2('var') are
         # the same variable in all but values - same names, same domain,
@@ -302,9 +350,16 @@ class forecasts():
         return v
 
     def forecast_axis(self, varname, fcss=None):
-        """returns a tuple (axis,start,length,true_length) where axis is in the
-        forecast direction.  If a list of forecasts be specified, the axis' data will
-        be limited to them."""
+        """
+        Returns
+        -------      
+ 
+             a tuple (axis,start,length,true_length) where axis is in the
+             forecast direction. 
+
+        Note
+        -----
+             If a list of forecasts be specified, the axis' data will be limited to them."""
         if fcss is None:
             fcss = self.fcs
         axis = None
@@ -346,9 +401,19 @@ class forecasts():
         return (axis, domitem1, domitem2, domitem3)
 
     def __getitem__(self, varname, fccs=None):
-        """returns whatever the forecast set has that matches the given
-        attribute, normally a DatasetVariable.  The optional argument fccs
-        is a list of forecasts to be passed on to forecast_axis().
+        """
+
+        Returns
+        -------
+
+             whatever the forecast set has that matches the given
+             attribute, normally a DatasetVariable. 
+
+
+        Note
+        -----       
+    
+             The optional argument fccs is a list of forecasts to be passed on to forecast_axis().
         """
         if not isinstance(varname, string_types):
             raise CDMSError("bad argument to forecasts[]")

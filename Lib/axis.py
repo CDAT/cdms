@@ -207,25 +207,28 @@ def createUniformLongitudeAxis(startLon, nlon, deltaLon):
 def mapLinearIntersection(xind, yind, iind,
                           aMinusEps, aPlusEps, bPlusEps, bMinusEps,
                           boundLeft, nodeSubI, boundRight):
-    """
-    Parameters
-    ----------
-    xind:
-       'c' if (a,b) is closed on the left, 'o' if open,
-    yind:
-        same for right endpoint
-j
-    Returns
-    -------
-    True if the coordinate interval (a,b) intersects the node nodeSubI or cell
-    bounds [boundLeft,boundRight], where the interval (a,b) is defined by:
+    """  Parameters
+         ----------
 
-      * aMinusEps,aPlusEps = a +/- epsilon
-      * bPlusEps,bMinusEps = b +/- epsilon
+       xind:
+          'c' if (a,b) is closed on the left, 'o' if open,
 
-    and the intersection option iind = 'n','b','e','s' specifies whether
-    the intersection is with respect to the node value nodeSubI ('n' or 'e')
-    or the cell bounds [boundLeft,boundRight].
+       yind:
+           same for right endpoint j
+
+  
+ Returns
+ -------
+
+       True if the coordinate interval (a,b) intersects the node nodeSubI or cell
+       bounds [boundLeft,boundRight], where the interval (a,b) is defined by:
+
+         * aMinusEps,aPlusEps = a +/- epsilon
+         * bPlusEps,bMinusEps = b +/- epsilon
+
+       and the intersection option iind = 'n','b','e','s' specifies whether
+       the intersection is with respect to the node value nodeSubI ('n' or 'e')
+       or the cell bounds [boundLeft,boundRight].
 
     See Also
     --------
@@ -278,8 +281,8 @@ def mapLinearExt(axis, bounds, interval, indicator='ccn',
 
     Returns
     -------
-    The corresponding index interval (i,j), where i<j, indicating the
-    half-open index interval [i,j), or None if the intersection is empty.
+       The corresponding index interval (i,j), where i<j, indicating the
+       half-open index interval [i,j), or None if the intersection is empty.
     """
 
     indicator = indicator.lower()
@@ -621,10 +624,10 @@ def lookupArray(ar, value):
 
     Parameters
     ----------
-    ar:
-        Input array
-    value:
-        Value to search
+       ar:
+          Input array
+       value:
+          Value to search
     Returns
     -------
         index:
@@ -682,19 +685,19 @@ def isOverlapVector(vec1, vec2, atol=1.e-8):
     """
     Parameters
     ----------
-    vec1:
-        Input arrays to compare
-    vec2:
-        Input arrays to compare
-    atol: float, optional
-        Absolute tolerance, The absolute differenc is equal to **atol** Default is 1e-8
+       vec1:
+           Input arrays to compare
+       vec2:
+           Input arrays to compare
+       atol: float, optional
+           Absolute tolerance, The absolute differenc is equal to **atol** Default is 1e-8
 
     Returns
     -------
-    (isoverlap, index) :
-        where isoverlap is true if a leading portion of vec1 is a subset of vec2;
-            * index is the index such that vec1[0] <= vec2[index]
-            * If indexl == len(vec2), then vec1[0] > vec2[len(vec2) - 1]
+       (isoverlap, index) :
+           where isoverlap is true if a leading portion of vec1 is a subset of vec2;
+               * index is the index such that vec1[0] <= vec2[index]
+               * If indexl == len(vec2), then vec1[0] > vec2[len(vec2) - 1]
     """
     index = lookupArray(vec2, vec1[0])
     if index == 0 and abs(vec1[0] - vec2[0]):
@@ -715,28 +718,32 @@ def allclose(ax1, ax2, rtol=1.e-5, atol=1.e-8):
     """
     Parameters
     ----------
-    ax1, ax2:  array_like
+       ax1, ax2: 
+          
+           array_like
+
+       _:  None
 
     Returns
     -------
-    bool
-        True if all elements of axes ax1 and ax2 are close,
-        in the sense of numpy.ma.allclose.
+       bool
+           True if all elements of axes ax1 and ax2 are close,
+           in the sense of numpy.ma.allclose.
 
     See Also
     --------
-    all, any
+       all, any
 
     Examples
     --------
-    >>> a = ma.array([1e10, 1e-7, 42.0], mask=[0, 0, 1])
-    >>> a
-    masked_array(data = [10000000000.0 1e-07 --],
+       >>> a = ma.array([1e10, 1e-7, 42.0], mask=[0, 0, 1])
+       >>> a
+       masked_array(data = [10000000000.0 1e-07 --],
                  mask = [False False True],
            fill_value = 1e+20)
-    >>> b = ma.array([1e10, 1e-8, 42.0], mask=[0, 0, 1])
-    >>> ma.allclose(a, b)
-    False
+       >>> b = ma.array([1e10, 1e-8, 42.0], mask=[0, 0, 1])
+       >>> ma.allclose(a, b)
+       False
     """
     return ((ax1 is ax2) or numpy.ma.allclose(
         ax1[:], ax2[:], rtol=rtol, atol=atol))
@@ -2451,29 +2458,29 @@ def axisMatchAxis(axes, specifications=None, omit=None, order=None):
 
      Parameters
      ----------
-     specifications:
-         *  is None, include all axes less the omitted ones.
+        specifications:
+            *  is None, include all axes less the omitted ones.
 
-         *  Individual specifications must be integer indices into axes or
-            matching criteria as detailed in axisMatches.
+            *  Individual specifications must be integer indices into axes or
+               matching criteria as detailed in axisMatches.
 
-     omit:
-         *  is None, do not omit any axis.
+        omit:
+            *  is None, do not omit any axis.
 
-         *  Individual specifications must be integer indices into axes or
-            matching criteria as detailed in axisMatches.
+            *  Individual specifications must be integer indices into axes or
+               matching criteria as detailed in axisMatches.
 
-     order:
-         *  A string containing the symbols `t,x,y,z` or `-`.  If a `-` is
-            given, any elements of the result not chosen otherwise are filled
-            in from left to right with remaining candidates.
+        order:
+            *  A string containing the symbols `t,x,y,z` or `-`.  If a `-` is
+               given, any elements of the result not chosen otherwise are filled
+               in from left to right with remaining candidates.
 
-     Return
-     ------
-     A list of axes that match the specification omitting any axes that matches
-     an omit specification.
+     Returns
+     -------
+        A list of axes that match the specification omitting any axes that matches
+        an omit specification.
 
-     Axes are returned in the order they occur in the axes argument unless order is given.
+        Axes are returned in the order they occur in the axes argument unless order is given.
     """
     return [axes[i] for i in
             axisMatchIndex(axes, specifications, omit, order)]
@@ -2486,28 +2493,28 @@ def axisMatchIndex(axes, specifications=None, omit=None, order=None):
 
      Parameters
      ----------
-     specifications:
-         *  is None, include all axes less the omitted ones.
+        specifications:
+            *  is None, include all axes less the omitted ones.
 
-         *  Individual specifications must be integer indices into axes or
-            matching criteria as detailed in axisMatches.
+            *  Individual specifications must be integer indices into axes or
+               matching criteria as detailed in axisMatches.
 
-     omit:
-         *  is None, do not omit any axis.
+        omit:
+            *  is None, do not omit any axis.
 
-         *  Individual specifications must be integer indices into axes or
-            matching criteria as detailed in axisMatches.
+            *  Individual specifications must be integer indices into axes or
+               matching criteria as detailed in axisMatches.
 
-     order:
-         *  A string containing the symbols `t,x,y,z` or `-`.  If a `-` is
-            given, any elements of the result not chosen otherwise are filled
-            in from left to right with remaining candidates.
+        order:
+            *  A string containing the symbols `t,x,y,z` or `-`.  If a `-` is
+               given, any elements of the result not chosen otherwise are filled
+               in from left to right with remaining candidates.
 
-     Return
-     ------
-     A list of axis' indices which match the specification omitting any axes that matches an omit specification.
+     Returns
+     -------
+        A list of axis' indices which match the specification omitting any axes that matches an omit specification.
 
-     Axes are returned in the order they occur in the axes argument unless order is given.
+        Axes are returned in the order they occur in the axes argument unless order is given.
 
     """
     if specifications is None:
@@ -2622,14 +2629,14 @@ def axisMatches(axis, specification):
     """
        Parameters
        ----------
-       axis:
-           See note below
-       specifications:
-           See note below
+          axis:
+              See note below
+          specifications:
+              See note below
 
        Returns
        -------
-       1 or 0 depending on whether axis matches the specification.
+          1 or 0 depending on whether axis matches the specification.
 
        Note
        ----
@@ -2720,8 +2727,11 @@ def take(ax, indices):
             The indices of the values to extract.
     Returns
     -------
-    axis: TransientAxis
-        The return array has the same type of ax.
+       axis: TransientAxis
+
+       _: None
+
+           The return array has the same type of ax.
     """
 
     # Bug in ma compatibility module

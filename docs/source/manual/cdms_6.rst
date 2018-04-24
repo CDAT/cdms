@@ -6,7 +6,7 @@ Introduction
 
 The Climate Data Markup Language (CDML) is the markup language used to
 represent metadata in CDMS. CDML is based on the W3C XML standard
-(http://www.w3.org). This chapter defines the syntax of CDML. Read this
+(https://www.w3.org). This chapter defines the syntax of CDML. Read this
 section if you will be building or maintaining a CDMS database.
 
 XML, the eXtensible Markup Language, makes it possible to define
@@ -51,25 +51,20 @@ where
 The CDML elements are:
 
 Table CDML Tags
-^^^^^^^^^^^^^^^^^^^                   
+^^^^^^^^^^^^^^^^^^^   
+.. csv-table::
+   :header:  "Tag", "Description"
+   :widths:  8, 35                
 
-+------------+---------------------------------------+
-| Tag        | Description                           |
-+============+=======================================+
-| attr       | Extra attribute                       |
-+------------+---------------------------------------+
-| axis       | Coordinate axis                       |
-+------------+---------------------------------------+
-| domain     | Axes on which a variable is defined   |
-+------------+---------------------------------------+
-| domElem    | Element of a variable domain          |
-+------------+---------------------------------------+
-| linear     | Linearly-spaced axis values           |
-+------------+---------------------------------------+
-| rectGrid   | Rectilinear Grid                      |
-+------------+---------------------------------------+
-| variable   | Variable                              |
-+------------+---------------------------------------+
+   "attr", "Extra attribute"
+   "axis", "Coordinate axis"
+   "domain", "Axes on which a variable is defined"
+   "domElem", "Element of a variable domain"
+   "linear", "Linearly-spaced axis values"
+   "rectGrid", "Rectilinear Grid"
+   "variable", "Variable"
+
+
 
 Special Characters
 ~~~~~~~~~~~~~~~~~~
@@ -79,21 +74,17 @@ they must be encoded to avoid confusion with markup:
 
 Table Special Character Encodings
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                                     
+.. csv-table::
+   :header:  "Character", "Encoding"
+   :widths:  8, 15                                       
 
-+-------------+------------+
-| Character   | Encoding   |
-+=============+============+
-| <           | &lt;       |
-+-------------+------------+
-| >           | &gt;       |
-+-------------+------------+
-| &           | &amp;      |
-+-------------+------------+
-| “           | &quot;     |
-+-------------+------------+
-| ‘           | &apos;     |
-+-------------+------------+
+   "<", "&lt;"
+   ">", "&gt;"
+   "&", "&amp;"
+   "“", "&quot;"
+   "‘", "&apos;"
+ 
+
 
 For example, the comment
 
@@ -122,7 +113,7 @@ on the length of an identifier.
 CF Metadata Standard
 ~~~~~~~~~~~~~~~~~~~~
 
-`The CF metadata standard <http://cfconventions.org/>`__ defines a set
+`The CF metadata standard <https://cfconventions.org/>`__ defines a set
 of conventions for usage of netCDF. This standard is supported by CDML.
 The document defines names and usage for metadata attributes. CF
 supersedes the GDT 1.3 standard.
@@ -145,11 +136,11 @@ element.
 
 The prolog defines the XML version, and the Document Type Definition
 (DTD), a formal specification of the document syntax. 
-See http://www.w3.org/TR/1998/REC-xml-19980210 for a formal definition of XML
+See https://www.w3.org/TR/1998/REC-xml-19980210 for a formal definition of XML
 
 Version 1.0.
 
-``prolog ::= <?xml version="1.0"?> <!DOCTYPE dataset SYSTEM "http://www-pcmdi.llnl.gov/~drach/cdms/cdml.dtd">``
+``prolog ::= <?xml version="1.0"?> <!DOCTYPE dataset SYSTEM "https://www-pcmdi.llnl.gov/~drach/cdms/cdml.dtd">``
 
 Dataset Element
 ^^^^^^^^^^^^^^^
@@ -443,7 +434,7 @@ Dataset "sample" has two variables, and six axes.
 
 .. raw:: html
 
-   <!DOCTYPE dataset SYSTEM "http://www-pcmdi.llnl.gov/software/cdms/cdml.dtd">
+   <!DOCTYPE dataset SYSTEM "https://www-pcmdi.llnl.gov/software/cdms/cdml.dtd">
 
  [-90. -78. -66. -54. -42. -30. -18. -6. 6. 18. 30. 42. 54. 66. 78. 90.]
 

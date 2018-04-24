@@ -3,7 +3,8 @@
 import cdms2
 import numpy
 import copy
-from . import _regrid
+#from . import _regrid
+import regrid2._regrid as _regrid
 from .error import RegridError
 
 

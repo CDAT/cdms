@@ -18,7 +18,11 @@ class VTKSGWriter(mvBaseWriter.BaseWriter):
     def write(self, filename):
         """
         Write file
-        @param filename file name
+
+        Parameters
+        ----------
+
+             filename file name
         """
         f = open(filename, 'w')
         print('# vtk DataFile Version 2.0', file=f)

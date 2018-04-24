@@ -55,8 +55,13 @@ for mod_name in MOCK_MODULES:
     m.side_effect = side_effect
     sys.modules[mod_name] = m
 
+import glob
+print "***"
+print glob.glob("../../regrid2")
 if os.path.isdir('../../regrid2/Lib'):
 	os.rename('../../regrid2/Lib', '../../regrid2/Libregrid')
+print "***"
+print glob.glob("../../regrid2")
 
 print os.getcwd()
 open("../../Lib/git.py", 'wb').close()

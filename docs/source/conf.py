@@ -39,8 +39,12 @@ print "***"
 print glob.glob("../../regrid2/*")
 
 print os.getcwd()
-open("../../Lib/git.py", 'wb').close()
-open("../../regrid2/Libregrid/git.py", 'wb').close()
+f=open("../../Lib/git.py", 'wb')
+f.write("closest_tag = '3.0'")
+f.close()
+f=open("../../regrid2/Libregrid/git.py", 'wb')
+f.write("closest_tag = '3.0'")
+f.close()
 
 
 import sys

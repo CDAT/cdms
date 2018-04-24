@@ -57,11 +57,11 @@ for mod_name in MOCK_MODULES:
 
 import glob
 print "***"
-print glob.glob("../../regrid2")
+print glob.glob("../../regrid2/*")
 if os.path.isdir('../../regrid2/Lib'):
 	os.rename('../../regrid2/Lib', '../../regrid2/Libregrid')
 print "***"
-print glob.glob("../../regrid2")
+print glob.glob("../../regrid2/*")
 
 print os.getcwd()
 open("../../Lib/git.py", 'wb').close()

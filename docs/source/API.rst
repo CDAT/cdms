@@ -1,6 +1,6 @@
 API
 ===
-.. currentmodule:: Lib
+.. currentmodule:: cdms2
 
 Classes
 -------

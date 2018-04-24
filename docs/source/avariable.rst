@@ -1,7 +1,7 @@
 avariable
 =========
 
-.. automodule:: Lib.avariable
+.. automodule:: cdms2.avariable
       :members:
 
 

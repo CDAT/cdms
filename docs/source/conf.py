@@ -19,7 +19,10 @@ sys.path.append(os.path.abspath('../..'))
 import mock
 os.environ['READTHEDOCS']="True"
 #MOCK_MODULES = ['collections', 'numpy', 'Cdunif', 'numpy.core.multiarray', 'cdat_info', 'cdtime', 'future', 'cdms2']
-MOCK_MODULES =[ 'Cdunif', 'axis', 'OpenSSL', 'cdat_info',  'cdtime', 'cdms2', 'future',  'myproxy_logon',  'collections.UserList', 'UserList', 'regrid2', 'regrid2.mvGenericRegrid', 'bindex', '_bindex', 'cdms2.avariable', 'cdms2.tvariable', 'cdms2.grid', 'cdms2.error', 'cdms2.axis',  'cdms2.Cdunif','regrid2._regrid', 'regrid2._scrip','distarray']
+MOCK_MODULES =[ 'Cdunif', 'axis', 'OpenSSL', 'cdat_info',  'cdtime', 'cdms2', 'future',  'myproxy_logon',  'collections.UserList', 'UserList', 'regrid2', 'regrid2.mvGenericRegrid', 'bindex', '_bindex', 'cdms2.avariable', 'cdms2.tvariable', 'cdms2.grid', 'cdms2.error', 'cdms2.axis',  'cdms2.Cdunif','regrid2._regrid', 'regrid2._scrip']
+#,'distarray','collections']
+#'urllib.parse','urllib.request','urllib.error','ESMF']
+
 
 def side_effect(*args, **kwargs):
     return mock.DEFAULT

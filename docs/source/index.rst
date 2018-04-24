@@ -20,12 +20,6 @@
    manual/sample_data
    API
 
-.. autosummary::
-   :toctree: 
-
-   avariable
-   axis.FileVirtuaAxis
-   axis.TransientVirtualAxis
 
 #   AbstractAxis
 #   AbstractVariable

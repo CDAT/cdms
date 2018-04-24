@@ -33,7 +33,7 @@ for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = m
 
 
-open('../Lib/git.py','a').close()
+open('../../Lib/git.py','a').close()
 
 
 import sys

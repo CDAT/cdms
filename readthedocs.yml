@@ -1,0 +1,12 @@
+formats:
+  - epub
+  - pdb
+
+requirements_file: docs/requirements.txt:wq
+
+conda:
+  - file: docs/environment.yml
+
+python:
+  - setup_py_install: true
+

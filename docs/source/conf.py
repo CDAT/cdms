@@ -30,6 +30,8 @@ html_theme_path = [easydev.get_path_sphinx_themes()]
 sys.path.insert(0,os.path.join(sys.prefix,"lib","python2.7","site-packages"))
 sys.path.insert(0,os.path.join(sys.prefix,"lib","python2.7","site-packages","cdms2"))
 print os.path.join(sys.prefix,"lib","python2.7","site-packages")
+os.environ['UVCDAT_ANONYMOUS_LOG']="False"
+
 
 
 # -- General configuration ------------------------------------------------

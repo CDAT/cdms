@@ -21,8 +21,6 @@ try:
 except BaseException:
     pass
 
-from . import git  # noqa
-
 ESMF_HAS_BEEN_INITIALIZED = False
 if not ESMF_HAS_BEEN_INITIALIZED:
     try:

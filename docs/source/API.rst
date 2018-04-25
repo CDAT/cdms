@@ -5,7 +5,7 @@ API
 Classes
 -------
 .. autosummary:: 
-   cdms2.avariable
+   avariable
    axis
    fvariable
    bindex 

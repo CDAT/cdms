@@ -4,6 +4,7 @@ CDMS module-level API
 
 import cdat_info
 cdat_info.pingPCMDIdb("cdat", "cdms2")  # noqa
+
 from . import myproxy_logon  # noqa
 
 __all__ = ["cdmsobj", "axis", "coord", "grid", "hgrid", "avariable",

@@ -13,65 +13,14 @@
 # serve to show the default.
 from future.standard_library import install_aliases
 install_aliases()
-import sys,os
-sys.path.append(os.path.abspath('..'))
-sys.path.append(os.path.abspath('../..'))
-print sys.path
-import mock
-os.environ['READTHEDOCS']="True"
-#MOCK_MODULES = ['collections', 'numpy', 'Cdunif', 'numpy.core.multiarray', 'cdat_info', 'cdtime', 'future', 'cdms2']
-MOCK_MODULES =[ 'Cdunif', 'axis', 'OpenSSL', 'cdat_info',  'cdtime', 'cdms2', 'future',  'myproxy_logon',  'collections.UserList', 'UserList', 'regrid2', 'regrid2.mvGenericRegrid', 'bindex', '_bindex', 'cdms2.avariable', 'cdms2.tvariable', 'cdms2.grid', 'cdms2.error', 'cdms2.axis',  'cdms2.Cdunif']
-
-def side_effect(*args, **kwargs):
-    return mock.DEFAULT
-
-for mod_name in MOCK_MODULES:
-    m = mock.Mock()
-    m.return_value=3
-    m.side_effect = side_effect
-    print mod_name
-    sys.modules[mod_name] = m
-
-
-open('../../Lib/git.py','a').close()
-
-
-from future.standard_library import install_aliases
-install_aliases()
-import sys,os
-sys.path.append(os.path.abspath('../../regrid2'))
-sys.path.append(os.path.abspath('../..'))
-import mock
-os.environ['READTHEDOCS']="True"
-#MOCK_MODULES = ['collections', 'numpy', 'Cdunif', 'numpy.core.multiarray', 'cdat_info', 'cdtime', 'future', 'cdms2']
-MOCK_MODULES =[ 'Cdunif', 'axis', 'OpenSSL', 'cdat_info',  'cdtime', 'cdms2', 'future',  'myproxy_logon',  'collections.UserList', 'UserList', 'regrid2', 'regrid2.mvGenericRegrid', 'bindex', '_bindex', 'cdms2.avariable', 'cdms2.tvariable', 'cdms2.grid', 'cdms2.error', 'cdms2.axis',  'cdms2.Cdunif','regrid2._regrid', 'regrid2._scrip']
-
-def side_effect(*args, **kwargs):
-    return mock.DEFAULT
-
-for mod_name in MOCK_MODULES:
-    m = mock.Mock()
-    m.return_value=3
-    m.side_effect = side_effect
-    sys.modules[mod_name] = m
-
-import glob
-print "***"
-print glob.glob("../../regrid2/*")
-if os.path.isdir('../../regrid2/Lib'):
-	os.rename('../../regrid2/Lib', '../../regrid2/Libregrid')
-print "***"
-print glob.glob("../../regrid2/*")
-
-print os.getcwd()
-open("../../Lib/git.py", 'wb').close()
-open("../../regrid2/Libregrid/git.py", 'wb').close()
-
+import sys
+import os
 
 import sys
 import os
 import shlex
 import easydev
+import glob
 
 html_theme_path = [easydev.get_path_sphinx_themes()]
 
@@ -79,10 +28,14 @@ html_theme_path = [easydev.get_path_sphinx_themes()]
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, os.path.abspath('.'))
-#sys.path.insert(0,os.path.join(sys.prefix,"lib","python2.7","site-packages"))
-#sys.path.insert(0,os.path.join(sys.prefix,"lib","python2.7","site-packages","cdms2"))
-sys.path.insert(0,"..")
+sys.path.insert(0,os.path.join(sys.prefix,"lib","python2.7","site-packages"))
+sys.path.insert(0,os.path.join(sys.prefix,"lib","python2.7","site-packages","cdms2"))
 print os.path.join(sys.prefix,"lib","python2.7","site-packages")
+os.environ['UVCDAT_ANONYMOUS_LOG']="False"
+print glob.glob(os.path.join(sys.prefix,"lib","python2.7","site-packages")+"/regrid2/gi*")
+print glob.glob(os.path.join(sys.prefix,"lib","python2.7","site-packages")+"/cdms2/gi*")
+
+
 
 
 # -- General configuration ------------------------------------------------

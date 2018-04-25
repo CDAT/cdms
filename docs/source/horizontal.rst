@@ -1,7 +1,7 @@
 regrid2-horizontal
 ==================
 
-.. automodule:: Libregrid.horizontal
+.. automodule:: regrid2.horizontal
       :members:
 
 

@@ -40,7 +40,7 @@ Classes
 Regridder
 ---------
 .. autosummary:: 
-   horizontal
+   regrid2.horizontal
    esmf
    crossSection
    gsRegrid

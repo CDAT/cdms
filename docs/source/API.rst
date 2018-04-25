@@ -37,24 +37,6 @@ Classes
    slabinterface
    
 
-
-
-   
-
-
-
-
-
-
-
-
-
-
-
-    
-
-.. currentmodule:: regrid2
-
 Regridder
 ---------
 .. autosummary:: 

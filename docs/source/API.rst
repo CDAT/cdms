@@ -53,7 +53,7 @@ Classes
 
     
 
-.. currentmodule:: Libregrid
+.. currentmodule:: regrid2
 
 Regridder
 ---------

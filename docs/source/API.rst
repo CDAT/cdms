@@ -1,5 +1,6 @@
 API
 ===
+
 .. currentmodule:: cdms2
 
 Classes

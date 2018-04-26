@@ -188,9 +188,8 @@ def urldefrag(url):
     Returns
     -------
 
-       a tuple of the defragmented URL and the fragment.  If
-       the URL contained no fragments, the second element is the
-       empty string.
+       a tuple of the defragmented URL and the fragment. 
+       If the URL contained no fragments, the second element is the empty string.
     """
     s, n, p, a, q, frag = urlparse(url)
     defrag = urlunparse((s, n, p, a, q, ''))

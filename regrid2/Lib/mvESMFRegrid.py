@@ -53,34 +53,24 @@ class ESMFRegrid(GenericRegrid):
 
             srcGridShape 
                 tuple source grid shape
-
             dstGridShape
                 tuple destination grid shape
-
             dtype
                 a valid numpy data type for the src/dst data
-
            regridMethod
                'linear', 'conserve', or 'patch'
-
            staggerLoc
                the staggering of the field, 'center' or 'corner'
-
            periodicity
                0 (no periodicity),
                    1 (last coordinate is periodic,
                    2 (both coordinates are periodic)
-
            coordSys
                'deg', 'cart', or 'rad'
-
            hasSrcBounds
                tuple source bounds shape
-
            hasDstBounds
                tuple destination bounds shape
-
-
            ignoreDegenerate Ignore degenerate celss when checking inputs
         """
 
@@ -219,18 +209,30 @@ dimensions. len(srcGridshape) = %d != len(dstGridshape) = %d""" % \
                   globalIndexing=False, **args):
         """
         Populator of grids, bounds and masks
-        @param srcGrid list [[z], y, x] of source grid arrays
-        @param dstGrid list [[z], y, x] of dstination grid arrays
-        @param srcGridMask list [[z], y, x] of arrays
-        @param srcBounds list [[z], y, x] of arrays
-        @param srcGridAreas list [[z], y, x] of arrays
-        @param dstGridMask list [[z], y, x] of arrays
-        @param dstBounds list [[z], y, x] of arrays
-        @param dstGridAreas list [[z], y, x] of arrays
-        @param globalIndexing if True array was allocated over global index
-                              space, otherwise array was allocated over
-                              local index space on this processor. This
-                              is only relevant if rootPe is None
+
+        Parameters
+        ----------
+
+            srcGrid
+                list [[z], y, x] of source grid arrays
+            dstGrid
+                list [[z], y, x] of dstination grid arrays
+            srcGridMask
+                list [[z], y, x] of arrays
+            srcBounds
+                list [[z], y, x] of arrays
+            srcGridAreas
+                list [[z], y, x] of arrays
+            dstGridMask
+                list [[z], y, x] of arrays
+            dstBounds
+                list [[z], y, x] of arrays
+            dstGridAreas
+                list [[z], y, x] of arrays
+            globalIndexing 
+                if True array was allocated over global index space, 
+                otherwise array was allocated over local index space on 
+                this processor. This is only relevant if rootPe is None
         """
 
         # create esmf source Grid
@@ -283,7 +285,13 @@ staggerLoc = %s!""" % self.staggerLoc
     def computeWeights(self, **args):
         """
         Compute interpolation weights
-        @param **args (not used)
+
+        Parameters
+        ----------
+
+            **args (not used)
+
+            _: None
         """
         self.regridObj = ESMF.Regrid(srcfield=self.srcFld.field,
                                      dstfield=self.dstFld.field,
@@ -309,17 +317,19 @@ staggerLoc = %s!""" % self.staggerLoc
 
             . By default, only the data are masked, but not the grid.
 
-        @param srcData array source data, shape should
-                       cover entire global index space
-        @param dstData array destination data, shape should
-                       cover entire global index space
-        @param rootPe if other than None, then data will be MPI gathered
-                      on the specified rootPe processor
-        @param globalIndexing if True array was allocated over global index
-                              space, otherwise array was allocated over
-                              local index space on this processor. This
-                              is only relevant if rootPe is None
-        @param **args
+        Parameters
+        ----------
+
+           srcData
+               array source data, shape should cover entire global index space
+           dstData
+               array destination data, shape should cover entire global index space
+           rootPe
+               if other than None, then data will be MPI gathered on the specified rootPe processor
+           globalIndexing
+               if True array was allocated over global index space, otherwise array was allocated
+               over local index space on this processor. This is only relevant if rootPe is None
+            **args
         """
 
 #        if args.has_key('srcDataMask'):
@@ -357,7 +367,10 @@ staggerLoc = %s!""" % self.staggerLoc
     def getDstGrid(self):
         """
         Get the destination grid on this processor
-        @return grid
+     
+        Returns
+        -------
+            grid
         """
         return [self.dstGrid.getCoords(i, staggerloc=self.staggerloc)
                 for i in range(self.ndims)]
@@ -365,9 +378,20 @@ staggerLoc = %s!""" % self.staggerLoc
     def getSrcAreas(self, rootPe):
         """
         Get the source grid cell areas
-        @param rootPe root processor where data should be gathered (or
-                      None if local areas are to be returned)
-        @return areas or None if non-conservative interpolation
+
+        Parameters
+        ----------
+            rootPe
+               root processor where data should be gathered (or None if local areas 
+               are to be returned)
+
+            _: None
+
+       Returns
+       -------
+
+           areas
+               or None if non-conservative interpolation
         """
         if self.regridMethod == CONSERVE:
             #            self.srcAreaField.field.get_area()
@@ -378,9 +402,21 @@ staggerLoc = %s!""" % self.staggerLoc
     def getDstAreas(self, rootPe):
         """
         Get the destination grid cell areas
-        @param rootPe root processor where data should be gathered (or
-                      None if local areas are to be returned)
-        @return areas or None if non-conservative interpolation
+
+        Parameters
+        ----------
+
+            rootPe
+                root processor where data should be gathered (or None
+                if local areas are to be returned)
+
+            _: None
+
+     
+        Returns
+        -------
+
+            areas or None if non-conservative interpolation
         """
         if self.regridMethod == CONSERVE:
             #            self.dstAreaField.field.get_area()
@@ -390,10 +426,22 @@ staggerLoc = %s!""" % self.staggerLoc
 
     def getSrcAreaFractions(self, rootPe):
         """
-        Get the source grid area fractions
-        @param rootPe root processor where data should be gathered (or
-                      None if local areas are to be returned)
-        @return fractional areas or None (if non-conservative)
+        Get the source grid area fractions   
+      
+        Parameters
+        ----------
+
+            rootPe
+               root processor where data should be gathered (or None if local
+               areas are to be returned)
+
+            _: None
+       
+
+       Returns
+       -------
+
+           fractional areas or None (if non-conservative)
         """
         if self.regridMethod == CONSERVE:
             return self.srcFracField.field.data
@@ -403,9 +451,21 @@ staggerLoc = %s!""" % self.staggerLoc
     def getDstAreaFractions(self, rootPe):
         """
         Get the destination grid area fractions
-        @param rootPe root processor where data should be gathered (or
-                      None if local areas are to be returned)
-        @return fractional areas or None (if non-conservative)
+
+        Parameters
+        ----------
+
+            rootPe
+                root processor where data should be gathered (or None if local
+                areas are to be returned)
+
+            _: None
+
+        Returns
+        -------
+
+            fractional areas
+                or None (if non-conservative)
         """
         if self.regridMethod == CONSERVE:
             return self.dstFracField.field.data
@@ -414,10 +474,20 @@ staggerLoc = %s!""" % self.staggerLoc
 
     def getSrcLocalShape(self, staggerLoc):
         """
-        Get the local source coordinate/data shape
-        (may be different on each processor)
-        @param staggerLoc (e.g. 'center' or 'corner')
-        @return tuple
+        Get the local source coordinate/data shape (may be different on each processor)
+
+        Parameters
+        ----------
+
+            staggerLoc
+                (e.g. 'center' or 'corner')
+
+            _: None
+
+        Returns
+        -------
+
+            tuple
         """
         stgloc = CENTER
         if re.match('corner', staggerLoc, re.I) or \
@@ -430,10 +500,20 @@ staggerLoc = %s!""" % self.staggerLoc
 
     def getDstLocalShape(self, staggerLoc):
         """
-        Get the local destination coordinate/data shape
-        (may be different on each processor)
-        @param staggerLoc (e.g. 'center' or 'corner')
-        @return tuple
+        Get the local destination coordinate/data shape (may be different on each processor)
+
+        Parameters
+        ----------
+
+            staggerLoc
+                (e.g. 'center' or 'corner')
+
+            _: None
+
+        Returns
+        -------
+
+            tuple
         """
         stgloc = CENTER
         if re.match('corner', staggerLoc, re.I) or \
@@ -446,10 +526,21 @@ staggerLoc = %s!""" % self.staggerLoc
 
     def getSrcLocalSlab(self, staggerLoc):
         """
-        Get the destination local slab (ellipsis). You can use
-        this to grab the data local to this processor
-        @param staggerLoc (e.g. 'center'):
-        @return tuple of slices
+        Get the destination local slab (ellipsis). You can use this to grab the data 
+        local to this processor
+
+        Parameters
+        ----------
+
+            staggerLoc
+                (e.g. 'center'):
+
+            _: None
+
+        Returns
+        -------
+
+           tuple of slices
         """
         stgloc = CENTER
         if re.match('corner', staggerLoc, re.I) or \
@@ -462,10 +553,21 @@ staggerLoc = %s!""" % self.staggerLoc
 
     def getDstLocalSlab(self, staggerLoc):
         """
-        Get the destination local slab (ellipsis). You can use
-        this to grab the data local to this processor
-        @param staggerLoc (e.g. 'center')
-        @return tuple of slices
+        Get the destination local slab (ellipsis). You can use this to grab the data local to this
+        processor
+
+        Parameters
+        ----------
+
+            staggerLoc
+                (e.g. 'center')
+
+            _: None
+
+        Returns
+        -------
+         
+           tuple of slices
         """
         stgloc = CENTER
         if re.match('corner', staggerLoc, re.I) or \
@@ -479,11 +581,17 @@ staggerLoc = %s!""" % self.staggerLoc
     def fillInDiagnosticData(self, diag, rootPe):
         """
         Fill in diagnostic data
-        @param diag a dictionary whose entries, if present, will be filled
-                    valid entries are: 'srcAreaFractions', 'dstAreaFractions',
-                                       'srcAreas', 'dstAreas'
-        @param rootPe root processor where data should be gathered (or
-                      None if local areas are to be returned)
+
+        Parameters
+        ----------
+
+            diag
+                a dictionary whose entries, if present, will be filled valid entries
+                are: 'srcAreaFractions', 'dstAreaFractions', srcAreas', 'dstAreas'
+            
+            rootPe
+                root processor where data should be gathered (or None if local areas are
+                to be returned)
         """
         oldMethods = {}
         oldMethods['srcAreaFractions'] = 'getSrcAreaFractions'

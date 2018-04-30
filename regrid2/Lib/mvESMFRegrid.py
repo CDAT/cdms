@@ -47,18 +47,41 @@ class ESMFRegrid(GenericRegrid):
                  **args):
         """
         Constructor
-        @param srcGridShape tuple source grid shape
-        @param dstGridShape tuple destination grid shape
-        @param dtype a valid numpy data type for the src/dst data
-        @param regridMethod 'linear', 'conserve', or 'patch'
-        @param staggerLoc the staggering of the field, 'center' or 'corner'
-        @param periodicity 0 (no periodicity),
-                           1 (last coordinate is periodic,
-                           2 (both coordinates are periodic)
-        @param coordSys 'deg', 'cart', or 'rad'
-        @param hasSrcBounds tuple source bounds shape
-        @param hasDstBounds tuple destination bounds shape
-        @param ignoreDegenerate Ignore degenerate celss when checking inputs
+
+        Parameters
+        ----------
+
+            srcGridShape 
+                tuple source grid shape
+
+            dstGridShape
+                tuple destination grid shape
+
+            dtype
+                a valid numpy data type for the src/dst data
+
+           regridMethod
+               'linear', 'conserve', or 'patch'
+
+           staggerLoc
+               the staggering of the field, 'center' or 'corner'
+
+           periodicity
+               0 (no periodicity),
+                   1 (last coordinate is periodic,
+                   2 (both coordinates are periodic)
+
+           coordSys
+               'deg', 'cart', or 'rad'
+
+           hasSrcBounds
+               tuple source bounds shape
+
+           hasDstBounds
+               tuple destination bounds shape
+
+
+           ignoreDegenerate Ignore degenerate celss when checking inputs
         """
 
         # esmf grid objects (tobe constructed)

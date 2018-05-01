@@ -836,7 +836,7 @@ Parameters
         # default is keep the masked values intact
         zeroregion = ESMF.Region.SELECT
         if self.regridMethod == CONSERVE:
-            zeroregion = None # will initalize to zero
+            zeroregion = None  # will initalize to zero
 
         self.regridHandle(
             srcfield=srcField.field,

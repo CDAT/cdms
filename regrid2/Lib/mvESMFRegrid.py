@@ -315,7 +315,7 @@ staggerLoc = %s!""" % self.staggerLoc
 
         zero_region = ESMF.Region.SELECT
         if 'zero_region' in args.keys():
-            zero_region=args.get('zero_region')
+            zero_region = args.get('zero_region')
 
         self.srcFld.field.data[:] = srcData.T
         self.dstFld.field.data[:] = dstData.T

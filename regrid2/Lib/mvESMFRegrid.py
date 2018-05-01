@@ -47,15 +47,15 @@ class ESMFRegrid(GenericRegrid):
                  **args):
         """
         Constructor
-
+       
         Parameters
         ----------
 
-            srcGridShape 
+           srcGridShape 
                 tuple source grid shape
-            dstGridShape
+           dstGridShape
                 tuple destination grid shape
-            dtype
+           dtype
                 a valid numpy data type for the src/dst data
            regridMethod
                'linear', 'conserve', or 'patch'
@@ -426,8 +426,8 @@ staggerLoc = %s!""" % self.staggerLoc
 
     def getSrcAreaFractions(self, rootPe):
         """
-        Get the source grid area fractions   
-      
+        Get the source grid area fractions 
+
         Parameters
         ----------
 
@@ -454,10 +454,10 @@ staggerLoc = %s!""" % self.staggerLoc
 
         Parameters
         ----------
-
+     
             rootPe
-                root processor where data should be gathered (or None if local
-                areas are to be returned)
+               root processor where data should be gathered (or None if local
+               areas are to be returned)
 
             _: None
 

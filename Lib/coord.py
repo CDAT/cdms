@@ -372,7 +372,8 @@ class TransientAxis2D(AbstractAxis2D, TransientVariable):
 
     def __init__(self, data, typecode=None, copy=0, savespace=0, mask=None, fill_value=None,
                  axes=None, attributes=None, id=None, copyaxes=1, bounds=None):
-        """Create a transient 2D axis.
+        """
+        Create a transient 2D axis.
 
         All arguments are as for TransientVariable.
         

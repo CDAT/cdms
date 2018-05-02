@@ -180,7 +180,8 @@ def _buildBounds(bounds):
     Parameters
     ----------
 
-         bounds CdmsVar.getBounds()
+         bounds
+             CdmsVar.getBounds()
 
     Returns
     -------
@@ -210,14 +211,17 @@ def getBoundList(coordList, mask=None,
     Parameters
     ----------
 
-         coordList coordinate list, should have getBounds()
+         coordList
+             coordinate list, should have getBounds()
 
-         mask avoid checking areas where mask is one
+         mask
+             avoid checking areas where mask is one
 
-         removeBadCells set to True if you want to the code to remove
-                bad cells, ie zero cells, butterfly cells, ...
+         removeBadCells
+             set to True if you want to the code to remove bad cells, ie zero cells, butterfly cells, ...
 
-         maskCellIndices list of bad cell indices to mask out (output)
+         maskCellIndices
+             list of bad cell indices to mask out (output)
 
     Returns
     -------
@@ -283,9 +287,11 @@ def _getDstDataShape(srcVar, dstGrid):
     Parameters
     ----------
 
-         srcVar the variable from which all axes other than lat/lon
-                  will be taken from
-         dstGrid target, horizontal grid
+         srcVar
+             the variable from which all axes other than lat/lon will be taken from
+
+         dstGrid
+             target, horizontal grid
 
     Returns
     -------
@@ -327,15 +333,16 @@ def _getAxisList(srcVar, dstGrid):
     Parameters
     ----------
 
-         srcVar the variable from which all axes other than lat/lon
-            will be taken from
-         dstGrid target, horizontal grid
+         srcVar
+             the variable from which all axes other than lat/lon will be taken from
+
+         dstGrid
+             target, horizontal grid
 
     Returns
     -------
 
-         variable with non-horizontal axes from srcVar and horizontal axes
-            from dstGrid
+         variable with non-horizontal axes from srcVar and horizontal axes from dstGrid
     """
 
     shp = srcVar.shape
@@ -384,33 +391,38 @@ class CdmsRegrid:
         Parameters
         ----------
 
-             srcGrid CDMS source grid
+             srcGrid
+                 CDMS source grid
 
-             dstGrid CDMS destination grid
+             dstGrid
+                 CDMS destination grid
 
-             dtype numpy data type for src and dst data
+             dtype
+                 numpy data type for src and dst data
  
-             regridMethod linear (all tools - bi, tri),
-                            conserve (ESMF Only)
-                            patch (ESMF Only)
+             regridMethod
+                 linear (all tools - bi, tri),
+                     conserve (ESMF Only)    
+                     patch (ESMF Only)
 
-             regridTool LibCF, ESMF, ...
+             regridTool
+                 LibCF, ESMF, ...
 
-             srcGridMask array source mask, interpolation
-                           coefficients will not be computed for masked
-                           points/cells.
+             srcGridMask
+                 array source mask, interpolation coefficients will not be computed for masked
+                 points/cells.
 
-             srcGridAreas array destination cell areas, only needed for
-                            conservative regridding
+             srcGridAreas
+                 array destination cell areas, only needed for conservative regridding
 
-             dstGridMask array destination mask, interpolation
-                           coefficients will not be computed for masked
-                           points/cells.
+             dstGridMask
+                 array destination mask, interpolation coefficients will not be computed for masked points/cells.
 
-             dstGridAreas array destination cell areas, only needed for
-                            conservative regridding
+             dstGridAreas
+                 array destination cell areas, only needed for conservative regridding
 
-             **args additional, tool dependent arguments
+             **args
+                   additional, tool dependent arguments
         """
 
         srcBounds = None
@@ -503,9 +515,11 @@ coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
         Parameters
         ----------
 
-             srcVar CDMS variable
+             srcVar
+                 CDMS variable
 
-             **args Tool dependent arguments
+             **args
+                 Tool dependent arguments
 
         Returns
         -------

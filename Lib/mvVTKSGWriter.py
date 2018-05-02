@@ -22,7 +22,8 @@ class VTKSGWriter(mvBaseWriter.BaseWriter):
         Parameters
         ----------
 
-             filename file name
+             filename
+                 file name
         """
         f = open(filename, 'w')
         print('# vtk DataFile Version 2.0', file=f)

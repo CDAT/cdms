@@ -129,8 +129,7 @@ def available_forecasts(dataset_file, path="."):
 
     Returns
     -------
-          a list of forecasts (as their generating times) which are
-          available through the specified cdscan-generated dataset xml file.
+          a list of forecasts (as their generating times) which are available through the specified cdscan-generated dataset xml file.
    
     Note
     ----
@@ -353,8 +352,7 @@ class forecasts():
         Returns
         -------      
  
-             a tuple (axis,start,length,true_length) where axis is in the
-             forecast direction. 
+             a tuple (axis,start,length,true_length) where axis is in the forecast direction. 
 
         Note
         -----
@@ -405,8 +403,7 @@ class forecasts():
         Returns
         -------
 
-             whatever the forecast set has that matches the given
-             attribute, normally a DatasetVariable. 
+             whatever the forecast set has that matches the given attribute, normally a DatasetVariable. 
 
 
         Note

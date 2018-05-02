@@ -1741,14 +1741,18 @@ class CdmsFile(CdmsObj, cuDataset):
 
         Parameters
         ----------
-            newname: (str/None)
-                new name for grid (default None)
+            newname:
+                (str/None)
+                    new name for grid (default None)
+
             grid:
-                file grid (cdms2.grid.FileRectGrid/cdms2.hgrid.FileCurveGrid/cdms2.gengrid.FileGenericGrid)
+                file grid 
+                    (cdms2.grid.FileRectGrid/cdms2.hgrid.FileCurveGrid/cdms2.gengrid.FileGenericGrid)
 
         Returns
         -------
-            file grid (cdms2.grid.FileRectGrid/cdms2.hgrid.FileCurveGrid/cdms2.gengrid.FileGenericGrid)
+            file grid
+                (cdms2.grid.FileRectGrid/cdms2.hgrid.FileCurveGrid/cdms2.gengrid.FileGenericGrid)
 
         """
         if newname is None:

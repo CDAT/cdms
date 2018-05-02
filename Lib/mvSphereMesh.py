@@ -21,10 +21,11 @@ class SphereMesh:
         Parameters
         ----------
 
-             var cdms2 variable
+             var
+                 cdms2 variable
 
-             sphereThickness thickness of the shell in normalized
-                               sphere radius
+             sphereThickness
+                 thickness of the shell in normalized sphere radius
         """
 
         self.isRectilinear = True
@@ -102,7 +103,8 @@ class SphereMesh:
         Parameters
         ----------
 
-             sphereRadius radius of sphere
+             sphereRadius
+                 radius of sphere
 
         Returns
         -------

@@ -133,6 +133,7 @@ class AbstractVariable(CdmsObj, Slab):
 
     def __init__(self, parent=None, variableNode=None):
         """Not to be called by users.
+  
 
            Parameters
            ----------
@@ -170,7 +171,7 @@ class AbstractVariable(CdmsObj, Slab):
     def __call__(self, *args, **kwargs):
         """
         Selection of a subregion using selectors.
-
+       
         Parameters
         ----------
            raw:

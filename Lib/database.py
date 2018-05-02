@@ -106,10 +106,15 @@ def connect(uri=None, user="", password=""):
 
 
 def loadString(text, uri, parent=None, datapath=None):
-    """ Create a dataset from a text string. <text> is the string in CDML format.
-        <uri> is the URL of the dataset in a catalog or file.
-        <parent> is the containing database object, if any.
-        <datapath> is the location of data files relative to the parent database URL.
+    """ Create a dataset from a text string.
+
+            <text> is the string in CDML format.
+
+            <uri> is the URL of the dataset in a catalog or file.
+
+            <parent> is the containing database object, if any.
+
+            <datapath> is the location of data files relative to the parent database URL.
     """
     p = CDMLParser()
     p.feed(text)
@@ -329,7 +334,8 @@ class LDAPDatabase(AbstractDatabase):
         """
         Method
          
-          searchFilter(filter=None, tag=None, relbase=None, scope=Subtree, attnames=None, timeout=None)
+          searchFilter
+              (filter=None, tag=None, relbase=None, scope=Subtree, attnames=None, timeout=None)
 
         Description
        

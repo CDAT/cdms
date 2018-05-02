@@ -217,12 +217,18 @@ class DatasetVariable(AbstractVariable):
     def genMatch(self, axis, interval, matchnames):
         """Helper function for expertPaths.
         axis is a partitioned axis, either time or vertical level or forecast.
-        interval is an index interval (istart, iend).
-        matchnames is a partially filled list [id, timestart, timeend, levstart, levend, fc]
-          If a filemap is used, matchnames has indices, otherwise has coordinates.
 
-        Function modifies matchnames based on axis and interval,
-        returns the modified matchnames tuple.
+        Parameters
+        ----------
+
+            interval
+                is an index interval (istart, iend).
+
+            matchnames
+                is a partially filled list [id, timestart, timeend, levstart, levend, fc] If a filemap is used, matchnames has indices, otherwise has coordinates.
+
+            Function
+                modifies matchnames based on axis and interval, returns the modified matchnames tuple.
         """
         if axis.isTime():
             if hasattr(self.parent, 'cdms_filemap'):
@@ -290,25 +296,38 @@ class DatasetVariable(AbstractVariable):
 
     def expertPaths(self, slist):
         """ expertPaths(self, slicelist)
+
         takes a list of slices,
-        returns a 3-tuple: (npart, dimensionlist, partitionSlices) where:
-        npart is the number of partitioned dimensions: 0, 1, or 2;
-        dimensionlist is a tuple of length npart, having the dimension
-          numbers of the partitioned dimensions;
-        partitionSlices is the list of file-specific (filename, slice)
-          corresponding to the paths and slices within the files to be read.
+
+        returns a 3-tuple: 
+           (npart, dimensionlist, partitionSlices)
+
+        where:
+            npart is the number of partitioned dimensions: 0, 1, or 2;
+
+        dimensionlist
+            is a tuple of length npart, having the dimension
+            numbers of the partitioned dimensions;
+
+        partitionSlices
+            is the list of file-specific (filename, slice)
+            corresponding to the paths and slices within the files to be read.
+
           The exact form of partitionSlices depends on the value of npart:
-          npart     partitionSlices
-          0         (filename,slicelist)
-          1         [(filename,slicelist),...,(filename,slicelist)]
-          2         [[(filename,slicelist),...,(filename,slicelist)]
-                     [(filename,slicelist),...,(filename,slicelist)]
-                     ...
-                     [(filename,slicelist),...,(filename,slicelist)]]
+
+              npart          partitionSlices
+
+                  0         (filename,slicelist)
+
+                  1         [(filename,slicelist),...,(filename,slicelist)]
+
+                  2         [[(filename,slicelist),...,(filename,slicelist)]
+                            [(filename,slicelist),...,(filename,slicelist)]
+                            ...
+                            [(filename,slicelist),...,(filename,slicelist)]]
 
         Note:
-          - A filename of None indicates that no file was found with data
-        corresponding to the slicelist.
+          - A filename of None indicates that no file was found with data corresponding to the slicelist.
           - If partitionSlices is None, the slicelist does not intersect the domain.
           - An empty partitionSlices [] means that the variable is zero-dimensional.
         """

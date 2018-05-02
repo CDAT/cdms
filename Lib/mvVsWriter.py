@@ -17,7 +17,12 @@ class VsWriter(mvBaseWriter.BaseWriter):
     def write(self, filename):
         """
         Write file
-        @param filename file name
+
+        Parameters
+        ----------
+
+            filename
+                file name
         """
         try:
             import tables

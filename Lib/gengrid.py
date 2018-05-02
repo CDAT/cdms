@@ -38,6 +38,7 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
 
     def getMesh(self, transpose=None):
         """Generate a mesh array for the meshfill graphics method.
+          
            Parameters
            ----------
 

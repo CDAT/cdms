@@ -193,8 +193,8 @@ def createUniformLongitudeAxis(startLon, nlon, deltaLon):
 def mapLinearIntersection(xind, yind, iind,
                           aMinusEps, aPlusEps, bPlusEps, bMinusEps,
                           boundLeft, nodeSubI, boundRight):
-    """  Parameters
-         ----------
+    """Parameters
+       ----------
 
        xind:
           'c' if (a,b) is closed on the left, 'o' if open,
@@ -206,19 +206,14 @@ def mapLinearIntersection(xind, yind, iind,
  Returns
  -------
 
-       True if the coordinate interval (a,b) intersects the node nodeSubI or cell
-       bounds [boundLeft,boundRight], where the interval (a,b) is defined by:
+       True if the coordinate interval (a,b) intersects the node nodeSubI or cell bounds [boundLeft,boundRight], where the interval (a,b) is defined by:
 
          * aMinusEps,aPlusEps = a +/- epsilon
          * bPlusEps,bMinusEps = b +/- epsilon
 
-       and the intersection option iind = 'n','b','e','s' specifies whether
-       the intersection is with respect to the node value nodeSubI ('n' or 'e')
-       or the cell bounds [boundLeft,boundRight].
+       and the intersection option iind = 'n','b','e','s' specifies whether the intersection is with respect to the node value nodeSubI ('n' or 'e') or the cell bounds [boundLeft,boundRight].
 
-    See Also
-    --------
-    mapLinearExt
+    See Also mapLinearExt
 
     """
 
@@ -260,15 +255,17 @@ def mapLinearExt(axis, bounds, interval, indicator='ccn',
     meaning for the right-hand point. The third character indicates
     how the intersection of the interval and axis is treated:
 
-    'n' - the node is in the interval
-    'b' - the interval intersects the cell bounds
-    's' - the cell bounds are a subset of the interval
-    'e' - same as 'n', plus an extra node on either side.
+        'n' - the node is in the interval
+
+        'b' - the interval intersects the cell bounds
+
+        's' - the cell bounds are a subset of the interval
+
+        'e' - same as 'n', plus an extra node on either side.
 
     Returns
     -------
-       The corresponding index interval (i,j), where i<j, indicating the
-       half-open index interval [i,j), or None if the intersection is empty.
+       The corresponding index interval (i,j), where i<j, indicating the half-open index interval [i,j), or None if the intersection is empty.
     """
 
     indicator = indicator.lower()
@@ -1245,8 +1242,7 @@ class AbstractAxis(CdmsObj):
         return(self.getModuloCycle())
 
     def mapInterval(self, interval, indicator='ccn', cycle=None):
-        """
-        Map coordinate interval to index interval. interval has one of the forms
+        """Map coordinate interval to index interval. interval has one of the forms
 
           * `(x,y)`
           * `(x,y,indicator)`: indicator overrides keywork argument

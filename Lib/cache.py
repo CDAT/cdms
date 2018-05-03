@@ -27,14 +27,14 @@ def lock(filename):
     """
     Acquire a file-based lock with the given name.
 
-        Usage: lock(filename)
+        Usage:
+            lock(filename)
    
         If the function returns, the lock was acquired successfully.
 
 
-
     Note: This function is UNIX-specific.
-
+   
     Note: It is important to delete the lock via unlock() if the process
       is interrupted, otherwise subsequent locks will fail.
     """
@@ -87,7 +87,8 @@ def unlock(filename):
     """
     Delete a file-based lock with the given name.
 
-        Usage:unlock(filename)
+        Usage:
+            unlock(filename)
 
         If the function returns, the lock was successfully deleted.
 
@@ -105,7 +106,9 @@ def lockpath(filename):
     """
     Generate the pathname of a lock. Creates the directory containing the lock
     if necessary.
-    Usage: lockpath(filename)
+
+        Usage:
+            lockpath(filename)
     """
     global _cache_tempdir
 
@@ -393,30 +396,34 @@ class Cache:
 
     def getFile(self, fromURL, filekey, naptime=5, maxtries=60,
                 lcpath=None, userid=None, useReplica=None):
-        """
-        Get the file with <fileURL>.
+        """Get the file with <fileURL>.
 
             If the file is in the cache, read it.
    
             If another process is transferring it into the cache, wait for the
         transfer to complete.
 
-            <naptime> is the number of seconds between
-        retries,
+            <naptime>
+                is the number of seconds between retries,
 
-            <maxtries> is the maximum number of retries. Otherwise, copy it from the remote file.
+            <maxtries>
+                is the maximum number of retries. Otherwise, copy it from the remote file.
 
-            <filekey> is the cache index key. A good choice is (datasetDN, filename)
+            <filekey>
+                is the cache index key. A good choice is (datasetDN, filename)
         where datasetDN is the distinguished name of the dataset, and filename
         is the name of the file within the dataset.
 
             For request manager transfers,
 
-                <lcpath> is the logical collection path,
+                <lcpath>
+                    is the logical collection path,
 
-                <userid> is the user string ID,
+                <userid> 
+                    is the user string ID,
 
-                <useReplica> is true iff the request manager should search the replica catalog for the actual file to transfer.
+                <useReplica>
+                    is true iff the request manager should search the replica catalog for the actual file to transfer.
 
         Returns the path of a file in the cache.
 

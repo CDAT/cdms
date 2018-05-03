@@ -1996,7 +1996,7 @@ class CdmsFile(CdmsObj, cuDataset):
 
     def createVariableCopy(self, var, id=None, attributes=None, axes=None, extbounds=None,
                            extend=0, fill_value=None, index=None, newname=None, grid=None):
-        """Define a new variable, with the same axes and attributes as in <var>.
+        """Define a new variable, with the same axes and attributes as in "var".
 
         Note
         ----

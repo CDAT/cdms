@@ -148,17 +148,20 @@ class AbstractHorizontalGrid(AbstractGrid):
         return badcells
 
     def fixCutCells(self, nonConvexCells, threshold=270.0):
-        """For any mapping from a spherical to a planar surface, there is a linear cut.
-        Grid cells that span the cut may appear to be nonconvex, which causes
-        problems with meshfill graphics. This routine attempts to 'repair' the cut cell
-        boundaries so that meshfill recognizes they are convex.
+        """
 
-        nonConvexCells: 1D numpy array of indices of nonconvex cells, as returned from
-          checkConvex.
-        threshold: positive floating-point value in degrees.
-          If the difference in longitude values of
-          consecutive boundaries nodes exceeds the threshold, the cell is considered
-          a cut cell.
+        For any mapping from a spherical to a planar surface, there is a linear cut.  Grid cells that span the cut may appear to be nonconvex, which causes problems with meshfill graphics. This routine attempts to 'repair' the cut cell boundaries so that meshfill recognizes they are convex.
+        
+        Parameters
+        ----------
+
+        nonConvexCells: 
+                     1D numpy array of indices of nonconvex cells, as returned from checkConvex.
+        threshold: 
+                  positive floating-point value in degrees.
+        
+
+          If the difference in longitude values of consecutive boundaries nodes exceeds the threshold, the cell is considered a cut cell.
 
         On return, the grid boundaries are modified.
         Return value is a 1D array of indices of cells that cannot be repaired.
@@ -877,6 +880,10 @@ def readScripCurveGrid(fileobj, dims, whichType, whichGrid):
 
          if whichType
              is "mapping", whichGrid is the choice of grid, either "source" or "destination"
+
+    Returns
+    -------
+
     """
     import string
     from .coord import TransientAxis2D

@@ -1191,6 +1191,7 @@ class AbstractVariable(CdmsObj, Slab):
 
     def getValue(self, squeeze=1):
         """Get the entire set of values.
+
         Returns
         -------
             All values and elimite the 1-D dimension.
@@ -1684,11 +1685,11 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
 
     def decode(self, ar):
         """Decode compressed data.
+           Parameter
+           ---------
+              ar
+                 is a masked array, scalar, or numpy.ma.masked.
 
-         Parameter
-         ---------
-            
-             ar is a masked array, scalar, or numpy.ma.masked.
              _: None
 
         """
@@ -1719,8 +1720,9 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
             return ar
 
     def getGridIndices(self):
-        """Return
-           ------
+        """
+        Returns
+        -------
               a tuple of indices corresponding to the variable grid."""
         grid = self.getGrid()
         result = []

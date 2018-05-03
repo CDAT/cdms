@@ -41,9 +41,15 @@ def timeindex(value, units, basetime, delta, delunits, calendar):
 class DatasetVariable(AbstractVariable):
 
     def __init__(self, parent, id, variableNode=None):
-        """ "Variable (parent, variableNode=None)"
-           variableNode is the variable tree node, if any.
-           parent is the containing dataset instance.
+        """"Variable (parent, variableNode=None)"
+
+        Parameters
+        ----------
+             variableNode
+                 is the variable tree node, if any.
+
+             parent
+                is the containing dataset instance.
         """
         AbstractVariable.__init__(self, parent, variableNode)
         val = self.__cdms_internals__ + ['domain', 'name_in_file']
@@ -279,9 +285,17 @@ class DatasetVariable(AbstractVariable):
 
     def getPartition(self, axis):
         """Get the partition attribute for this variable, axis.
-        axis is either a time or level axis. If cdms_filemap is being used,
+
+        Parameters
+        ----------
+
+           axis:
+                is either a time or level axis. If cdms_filemap is being used,
         get the partition from the _varpart_ attribute, otherwise (for templating) use
         axis.partition.
+
+            _: None
+
         """
         if hasattr(self.parent, 'cdms_filemap'):
             if axis.isTime():

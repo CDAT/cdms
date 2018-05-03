@@ -266,6 +266,7 @@ def mapLinearExt(axis, bounds, interval, indicator='ccn',
     Returns
     -------
        The corresponding index interval (i,j), where i<j, indicating the half-open index interval [i,j), or None if the intersection is empty.
+
     """
 
     indicator = indicator.lower()
@@ -711,11 +712,9 @@ def allclose(ax1, ax2, rtol=1.e-5, atol=1.e-8):
     -------
        bool
            True if all elements of axes ax1 and ax2 are close,
-           in the sense of numpy.ma.allclose.
+           in the sense of numpy.ma.allclose. 
 
-    See Also
-    --------
-       all, any
+       See Also all, any
 
     Examples
     --------

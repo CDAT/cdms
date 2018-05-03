@@ -109,11 +109,13 @@ class var_unary_operation_with_axis:
 
 def commonDomain(a, b, omit=None):
     """commonDomain(a,b) tests that the domains of variables/arrays a and b are equal,
-    and returns the common domain if equal, or None if not equal. The domains may
-    differ in that one domain may have leading axes not common
-    to the other; the result domain will contain those axes.
-    If <omit> is specified, as an integer i, skip comparison of the ith dimension
-    and return None for the ith (common) dimension.
+    and returns the common domain if equal, or None if not equal. 
+
+       The domains may differ in that one domain may have leading axes not common
+       to the other; the result domain will contain those axes.
+
+       If <omit> is specified, as an integer i, skip comparison of the ith dimension
+       and return None for the ith (common) dimension.
     """
 
     if isinstance(b, AbstractVariable):
@@ -183,11 +185,9 @@ def commonGrid(a, b, axes):
     and consistent with the list of axes. If so, the common grid is returned, else None
     is returned. a and b can be numpy arrays, in which case the result is None.
 
-    The common grid is 'consistent' with axes if the grid axes (e.g., the axes of latitude and
-    longitude coordinate variables) are members of the list 'axes'.
+        The common grid is 'consistent' with axes if the grid axes (e.g., the axes of latitude and longitude coordinate variables) are members of the list 'axes'.
 
-    If the grid(s) of a, b are rectilinear, the result is None, as the grids are implicitly
-    defined by the axes.
+        If the grid(s) of a, b are rectilinear, the result is None, as the grids are implicitly defined by the axes.
     """
     if isinstance(b, AbstractVariable):
         gb = b.getGrid()

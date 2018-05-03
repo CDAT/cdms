@@ -148,15 +148,21 @@ def setRegionSpecs(grid, coordSpec, coordType, resultSpec):
         coordSpec:
             is a coordinate specification, having one of the forms:
 
-                    x
-                   (x,y)
-                   (x,y,'co')
-                   (x,y,'co',cycle)
-                   ':'
-                   None
+            x
+
+           (x,y)
+
+           (x,y,'co')
+                  
+           (x,y,'co',cycle)
+           
+           ':'
+
+           None
 
         coordType:
             is one of CoordinateTypes
+
         resultSpec:
             is a list of 4-tuples of the form (x,y,'co',cycle), or None
             if no spec for the corresponding dimension type.

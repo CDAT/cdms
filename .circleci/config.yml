@@ -81,7 +81,7 @@ jobs:
 
 workflows:
   version: 2
-  nightly:
+  cdms_test:
     jobs:
       - macos_cdtime
 

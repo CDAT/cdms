@@ -25,8 +25,8 @@ aliases:
        conda create -n py3 -c cdat/label/nightly -c conda-forge numpy cdat_info libcdms libdrs_f flake8 nose "python>3"
        conda create -n py2 -c cdat/label/nightly -c conda-forge cdat_info libcdms libdrs_f nose flake8 numpy "python<3"
 
-  - &setup_cdtime
-    name: setup_cdtime
+  - &setup_cdms
+    name: setup_cdms
     command: |
        export PATH=$WORKDIR/miniconda/bin:$PATH
        export UVCDAT_ANONYMOUS_LOG=False
@@ -36,8 +36,8 @@ aliases:
        rm -rf build
        python setup.py install
 
-  - &run_cdtime_tests
-    name: run_cdtime_tests
+  - &run_cdms_tests
+    name: run_cdms_tests
     command: |
        export PATH=$WORKDIR/miniconda/bin:$PATH
        export UVCDAT_ANONYMOUS_LOG=False
@@ -60,17 +60,17 @@ aliases:
        fi
 
 jobs:
-  macos_cdtime:
+  macos_cdms:
     macos:
       xcode: "9.2.0"
     environment:
-      WORKDIR: "workspace/test_macos_cdtime"
+      WORKDIR: "workspace/test_macos_cdms"
     steps:
       - checkout
       - run: *setup_miniconda
       - run: *create_conda_env
-      - run: *setup_cdtime
-      - run: *run_cdtime_tests
+      - run: *setup_cdms
+      - run: *run_cdms_tests
       - store_artifacts:
           path: tests_html
           destination: tests_html
@@ -83,6 +83,6 @@ workflows:
   version: 2
   cdms_test:
     jobs:
-      - macos_cdtime
+      - macos_cdms
 
        

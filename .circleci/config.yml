@@ -18,7 +18,7 @@ aliases:
   - &create_conda_env
     name: create_conda_env
     command: |
-       export PATH=$WORKDIR/miniconda/bin:$PATH
+       export PATH=$HOME/project/$WORKDIR/miniconda/bin:$PATH
        conda config --set always_yes yes --set changeps1 no
        conda update -y -q conda
        conda config --set anaconda_upload no
@@ -28,7 +28,7 @@ aliases:
   - &setup_cdms
     name: setup_cdms
     command: |
-       export PATH=$WORKDIR/miniconda/bin:$PATH
+       export PATH=$HOME/project/$WORKDIR/miniconda/bin:$PATH
        export UVCDAT_ANONYMOUS_LOG=False
        source activate py3
        mkdir /Users/distiller/.esg
@@ -45,7 +45,7 @@ aliases:
   - &run_cdms_tests
     name: run_cdms_tests
     command: |
-       export PATH=$WORKDIR/miniconda/bin:$PATH
+       export PATH=$HOME/project/$WORKDIR/miniconda/bin:$PATH
        export UVCDAT_ANONYMOUS_LOG=False
        set -e
        source activate py2
@@ -56,10 +56,11 @@ aliases:
        python run_tests.py -v2 
        PY3_RESULT=$?
        echo "*** py3 test result: "${PY3_RESULT}
+       export LABEL="nightly";
        if [ $PY2_RESULT -eq 0 -a $PY3_RESULT -eq 0 -a $CIRCLE_BRANCH == "master" ]; then bash ./ci-support/conda_upload.sh ; fi
        if [ $PY2_RESULT -eq 0 -a $PY3_RESULT -eq 0 -a $CIRCLE_BRANCH != "master" ]; then 
-          export LABEL="unstable"
-          bash ./ci-support/conda_upload.sh ; fi
+          export LABEL="unstable";
+          bash ./ci-support/conda_upload.sh; 
        fi
        if [ $PY2_RESULT	-ne 0 -o $PY3_RESULT -ne 0]; then
          exit 1

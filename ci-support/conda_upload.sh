@@ -4,7 +4,7 @@ USER=cdat
 echo "Trying to upload conda"
 mkdir ${HOME}/conda-bld
 export CONDA_BLD_PATH=${HOME}/conda-bld
-export VERSION="2.12"
+export VERSION="3.0"
 if [ `uname` == "Linux" ]; then
     OS=linux-64
     echo "Linux OS"

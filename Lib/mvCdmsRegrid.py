@@ -387,10 +387,9 @@ class CdmsRegrid:
         """
         Establish which regridding method to use, handle CDMS variables before
         handing off to regridder. See specific tool for more information.
-        
+       
         Parameters
         ----------
-
              srcGrid
                  CDMS source grid
 

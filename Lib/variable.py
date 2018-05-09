@@ -41,7 +41,7 @@ def timeindex(value, units, basetime, delta, delunits, calendar):
 class DatasetVariable(AbstractVariable):
 
     def __init__(self, parent, id, variableNode=None):
-        """"Variable (parent, variableNode=None)"
+        """Variable (parent, variableNode=None)"
 
         Parameters
         ----------
@@ -222,10 +222,12 @@ class DatasetVariable(AbstractVariable):
 
     def genMatch(self, axis, interval, matchnames):
         """Helper function for expertPaths.
-        axis is a partitioned axis, either time or vertical level or forecast.
-
+      
         Parameters
         ----------
+
+            axis
+                is a partitioned axis, either time or vertical level or forecast.
 
             interval
                 is an index interval (istart, iend).
@@ -290,9 +292,7 @@ class DatasetVariable(AbstractVariable):
         ----------
 
            axis:
-                is either a time or level axis. If cdms_filemap is being used,
-        get the partition from the _varpart_ attribute, otherwise (for templating) use
-        axis.partition.
+                is either a time or level axis. If cdms_filemap is being used, get the partition from the _varpart_ attribute, otherwise (for templating) use axis.partition.
 
             _: None
 
@@ -309,27 +309,26 @@ class DatasetVariable(AbstractVariable):
         return partition
 
     def expertPaths(self, slist):
-        """ expertPaths(self, slicelist)
+        """ 
 
-        takes a list of slices,
+        expertPaths(self, slicelist)
+            takes a list of slices,
 
         returns a 3-tuple: 
-           (npart, dimensionlist, partitionSlices)
+            (npart, dimensionlist, partitionSlices)
 
         where:
             npart is the number of partitioned dimensions: 0, 1, or 2;
 
         dimensionlist
-            is a tuple of length npart, having the dimension
-            numbers of the partitioned dimensions;
+            is a tuple of length npart, having the dimension numbers of the partitioned dimensions;
 
         partitionSlices
-            is the list of file-specific (filename, slice)
-            corresponding to the paths and slices within the files to be read.
+             is the list of file-specific (filename, slice) corresponding to the paths and slices within the files to be read.
 
-          The exact form of partitionSlices depends on the value of npart:
+        The exact form of partitionSlices depends on the value of npart:
 
-              npart          partitionSlices
+            npart           partitionSlices
 
                   0         (filename,slicelist)
 

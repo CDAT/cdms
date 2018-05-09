@@ -74,21 +74,22 @@ class EsmfUnstructGrid:
     def setCells(self, cellIndices, cellTypes, connectivity,
                  cellMask=None, cellAreas=None):
         """
-        Set Cell connectivity
+          Set Cell connectivity
+
         Parameters
-        ----------   
-            
-            cell indices
+        ----------
+
+             cell indices:
+       
                (0-based)
  
-            cellTypes
+            cellTypes:
                 one of ESMF_MESHELEMTYPE_{TRI,QUAD,TETRA,HEX}
         
-            connectivity node
+            connectivity node:
                 connectivity array, see below for node ordering
         
-            cellMask
-
+            cellMask:
                 cellAreas area (volume) of each cell
 
         Note
@@ -337,18 +338,13 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
         ----------
      
              coords  
-                The curvilinear coordinates of the grid.
-                        List of numpy arrays. Must exist on all procs.
+                The curvilinear coordinates of the grid. List of numpy arrays. Must exist on all procs.
 
              staggerloc 
-                 The stagger location
-                        ESMF.StaggerLoc.CENTER (default)
-                        ESMF.StaggerLoc.CORNER
+                 The stagger location ESMF.StaggerLoc.CENTER (default) ESMF.StaggerLoc.CORNER
 
              globalIndexing
-                 if True array was allocated over global index space, 
-                 otherwise array was allocated over local index space
-                 on this processor. This is only relevant if rootPe is None
+                 if True array was allocated over global index space, otherwise array was allocated over local index space on this processor. This is only relevant if rootPe is None
 
         Note: coord dims in cdms2 are ordered in y, x, but ESMF expects x, y,
         hence the dimensions are reversed here.
@@ -440,8 +436,7 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
         ----------
 
              mask numpy array.
-                 1 is invalid by default. This array exists
-                 on all procs
+                 1 is invalid by default. This array exists on all procs
 
              _: None
         """
@@ -544,9 +539,7 @@ class EsmfStructField:
         ----------
 
              rootPe
-                 if None then local data will be fetched, otherwise
-                 gather the data on processor "rootPe" (all other
-                 procs will return None).
+                 if None then local data will be fetched, otherwise gather the data on processor "rootPe" (all other procs will return None).
 
              _: None
 
@@ -602,16 +595,13 @@ class EsmfStructField:
         ----------
 
              data
-                 full numpy array,
-                 this method will take care of setting a
-                 the subset of the data that reside on the local processor
+                 full numpy array, this method will take care of setting a the subset of the data that reside on the local processor
 
              staggerloc
                  stagger location of the data
 
              globalIndexing
-                 if True array was allocated over global index space,
-                 array was allocated over local index space (on this processor)
+                 if True array was allocated over global index space, array was allocated over local index space (on this processor)
         """
         ptr = self.field.data
         if globalIndexing:
@@ -740,8 +730,7 @@ class EsmfRegrid:
         ----------
 
              rootPe
-                 None is local areas are returned, otherwise
-                 provide rootPe and the data will be gathered
+                 None is local areas are returned, otherwise provide rootPe and the data will be gathered
 
              _: None
 
@@ -762,8 +751,7 @@ class EsmfRegrid:
         ----------
 
              rootPe
-                 None is local areas are returned, otherwise
-                 provide rootPe and the data will be gathered
+                 None is local areas are returned, otherwise provide rootPe and the data will be gathered
 
              _: None
 
@@ -784,8 +772,7 @@ class EsmfRegrid:
         ----------
 
              rootPe
-                 None is local areas are returned, otherwise
-                 provide rootPe and the data will be gathered
+                 None is local areas are returned, otherwise provide rootPe and the data will be gathered
 
              _: None       
 
@@ -807,8 +794,7 @@ class EsmfRegrid:
         ----------
 
              rootPe
-                 None is local areas are returned, otherwise
-                 provide rootPe and the data will be gathered
+                 None is local areas are returned, otherwise provide rootPe and the data will be gathered
 
              _: None
 
@@ -830,16 +816,13 @@ class EsmfRegrid:
         ----------
 
              srcField
-                 source field (or None if src field passed to
-                 constructor is to be used)
+                 source field (or None if src field passed to constructor is to be used)
 
              dstField
-                 destination field (or None if dst field passed
-                 to constructor is to be used)
+                 destination field (or None if dst field passed to constructor is to be used)
 
              zero_region
-                 specify which region of the field indices will be zeroed
-                 (or None default to TOTAL Region)
+                 specify which region of the field indices will be zeroed (or None default to TOTAL Region)
         """
         if srcField is None:
             srcField = self.srcField

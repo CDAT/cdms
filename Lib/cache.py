@@ -182,9 +182,8 @@ def copyFile(fromURL, toURL, callback=None,
 
         For request manager transfers, <lcpath> is the logical collection distinguished name,
 
-
              <userid>
-                is the string user ID, <useReplica> is true iff the request manager should search the replica catalog for the actual file to transfer.
+                is the string user ID, <useReplica> is true if the request manager should search the replica catalog for the actual file to transfer.
     """
     if callback is None:
         if _useWindow:

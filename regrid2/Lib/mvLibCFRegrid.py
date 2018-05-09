@@ -25,12 +25,14 @@ class LibCFRegrid(GenericRegrid):
 
             srcGrid
                 array
+
             dstGrid
                 array
+
             srcBounds
                 cell boundaries
-            **args keyword arguments, eg mkCyclic, handleCut, ...
-                      to be passed to gsRegrid
+
+            **args keyword arguments, eg mkCyclic, handleCut, ...to be passed to gsRegrid
         """
         self.regridMethodStr = 'linear'
         self.mkCyclic = args.get('mkCyclic', False)
@@ -58,8 +60,7 @@ class LibCFRegrid(GenericRegrid):
         Parameters
         ----------
 
-             **args arguments to be passed to gsRegrid, e.g.
-                      nitermax, tolpos, ...
+             **args arguments to be passed to gsRegrid, e.g. nitermax, tolpos, ...
         """
         nitermax = args.get('nitermax', 20)
         # make tolpos relative to the min cell size
@@ -75,20 +76,19 @@ class LibCFRegrid(GenericRegrid):
 
             srcData 
                 array (input)
+
             dstData 
                array (output)
+
             missingValue
-                value that should be set for points falling outside
-                the src domain, pass None if these should not be touched.
+                value that should be set for points falling outside the src domain, pass None if these should not be touched.
         """
 
         self.regridObj.apply(srcData, dstData, missingValue)
 
     def getSrcGrid(self):
         """
-        Get the grid of the src data (maybe larger than the
-        dst grid passed to the constructor due to column/row
-        padding)
+        Get the grid of the src data (maybe larger than the dst grid passed to the constructor due to column/row padding)
 
         Returns
         -------
@@ -115,8 +115,7 @@ class LibCFRegrid(GenericRegrid):
         ----------
 
             diag 
-                a dictionary whose entries, if present, will be filled
-                valid entries are: 'numDstPoints' and 'numValid'
+                a dictionary whose entries, if present, will be filled valid entries are: 'numDstPoints' and 'numValid'
             rootPe
                 not used
         """

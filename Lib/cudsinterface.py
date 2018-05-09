@@ -315,13 +315,13 @@ class cuDataset():
             vname
                 (str/None) (None) variable name
         
-            Input
-                dname
-                   (str) (0) dimension name
+        Input
+            dname
+               (str) (0) dimension name
        
-            Output
-                axisvalues
-                   (numpy.ndarray) (0) array with values of axis whose id is vname
+        Output
+            axisvalues
+               (numpy.ndarray) (0) array with values of axis whose id is vname
        """
         return self.dimensionobject(dname, vname).getValue()
 

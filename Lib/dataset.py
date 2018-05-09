@@ -1751,8 +1751,8 @@ class CdmsFile(CdmsObj, cuDataset):
 
         Returns
         -------
-            file grid
-                (cdms2.grid.FileRectGrid/cdms2.hgrid.FileCurveGrid/cdms2.gengrid.FileGenericGrid)
+                file grid
+                    (cdms2.grid.FileRectGrid/cdms2.hgrid.FileCurveGrid/cdms2.gengrid.FileGenericGrid)
 
         """
         if newname is None:

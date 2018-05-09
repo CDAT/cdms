@@ -389,14 +389,21 @@ class LDAPDatabase(AbstractDatabase):
 
         Returns
         -------
-          SearchResult instance. Entries can be accessed sequentially. For each entry, entry.name is the
-          name of the entry, entry.attributes is a dictionary of the attributes returned by the search,
-          entry.getObject() returns the CDMS object associated with the entry:
+          SearchResult instance.
 
-          for entry in result:
-              print entry.name, entry.attributes["id"]
+              Entries can be accessed sequentially. 
 
-          Entries can be refined with searchPredicate().
+                  For each entry,
+
+                      entry.name is the name of the entry, 
+ 
+                      entry.attributes is a dictionary of the attributes returned by the search,
+
+                      entry.getObject() returns the CDMS object associated with the entry:
+
+                      for entry in result: print entry.name, entry.attributes["id"]
+
+              Entries can be refined with searchPredicate().
 
         Example
         ------- 

@@ -53,25 +53,35 @@ class ESMFRegrid(GenericRegrid):
 
            srcGridShape 
                 tuple source grid shape
+
            dstGridShape
                 tuple destination grid shape
+
            dtype
                 a valid numpy data type for the src/dst data
+
            regridMethod
                'linear', 'conserve', or 'patch'
+
            staggerLoc
                the staggering of the field, 'center' or 'corner'
+
            periodicity
                0 (no periodicity),
                    1 (last coordinate is periodic,
                    2 (both coordinates are periodic)
+
            coordSys
                'deg', 'cart', or 'rad'
+
            hasSrcBounds
                tuple source bounds shape
+
            hasDstBounds
                tuple destination bounds shape
-           ignoreDegenerate Ignore degenerate celss when checking inputs
+
+           ignoreDegenerate
+               Ignore degenerate celss when checking inputs
         """
 
         # esmf grid objects (tobe constructed)
@@ -215,24 +225,30 @@ dimensions. len(srcGridshape) = %d != len(dstGridshape) = %d""" % \
 
             srcGrid
                 list [[z], y, x] of source grid arrays
+
             dstGrid
                 list [[z], y, x] of dstination grid arrays
+
             srcGridMask
                 list [[z], y, x] of arrays
+
             srcBounds
                 list [[z], y, x] of arrays
+
             srcGridAreas
                 list [[z], y, x] of arrays
+
             dstGridMask
                 list [[z], y, x] of arrays
+
             dstBounds
                 list [[z], y, x] of arrays
+
             dstGridAreas
                 list [[z], y, x] of arrays
+
             globalIndexing 
-                if True array was allocated over global index space, 
-                otherwise array was allocated over local index space on 
-                this processor. This is only relevant if rootPe is None
+                if True array was allocated over global index space, otherwise array was allocated over local index space on this processor. This is only relevant if rootPe is None
         """
 
         # create esmf source Grid
@@ -308,12 +324,10 @@ staggerLoc = %s!""" % self.staggerLoc
         the dstData returns None.
 
         Source data mask:
+       
+            . If you provide srcDataMask in args the source grid will be masked and weights will be recomputed.
 
-            . If you provide srcDataMask in args the source grid will
-              be masked and weights will be recomputed.
-
-            . Subsequently, if you do not provide a srcDataMask the last
-              weights will be used to regrid the source data array.
+            . Subsequently, if you do not provide a srcDataMask the last weights will be used to regrid the source data array.
 
             . By default, only the data are masked, but not the grid.
 
@@ -322,13 +336,16 @@ staggerLoc = %s!""" % self.staggerLoc
 
            srcData
                array source data, shape should cover entire global index space
+
            dstData
                array destination data, shape should cover entire global index space
+
            rootPe
                if other than None, then data will be MPI gathered on the specified rootPe processor
+
            globalIndexing
-               if True array was allocated over global index space, otherwise array was allocated
-               over local index space on this processor. This is only relevant if rootPe is None
+               if True array was allocated over global index space, otherwise array was allocated over local index space on this processor. This is only relevant if rootPe is None
+
             **args
         """
 
@@ -407,8 +424,7 @@ staggerLoc = %s!""" % self.staggerLoc
         ----------
 
             rootPe
-                root processor where data should be gathered (or None
-                if local areas are to be returned)
+                root processor where data should be gathered (or None if local areas are to be returned)
 
             _: None
 
@@ -432,8 +448,7 @@ staggerLoc = %s!""" % self.staggerLoc
         ----------
 
             rootPe
-               root processor where data should be gathered (or None if local
-               areas are to be returned)
+               root processor where data should be gathered (or None if local areas are to be returned)
 
             _: None
        
@@ -456,8 +471,7 @@ staggerLoc = %s!""" % self.staggerLoc
         ----------
      
             rootPe
-               root processor where data should be gathered (or None if local
-               areas are to be returned)
+               root processor where data should be gathered (or None if local areas are to be returned)
 
             _: None
 
@@ -586,12 +600,10 @@ staggerLoc = %s!""" % self.staggerLoc
         ----------
 
             diag
-                a dictionary whose entries, if present, will be filled valid entries
-                are: 'srcAreaFractions', 'dstAreaFractions', srcAreas', 'dstAreas'
+                a dictionary whose entries, if present, will be filled valid entries are: 'srcAreaFractions', 'dstAreaFractions', srcAreas', 'dstAreas'
             
             rootPe
-                root processor where data should be gathered (or None if local areas are
-                to be returned)
+                root processor where data should be gathered (or None if local areas are to be returned)
         """
         oldMethods = {}
         oldMethods['srcAreaFractions'] = 'getSrcAreaFractions'

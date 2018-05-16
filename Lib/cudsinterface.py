@@ -381,7 +381,10 @@ class cuDataset():
         return getattr(v, attribute)
 
     def getslab(self, vname, *args, **keys):
-        """getslab('name', arg1, arg2, ....)
+        """
+       
+       
+          getslab ('name', arg1, arg2, ....)
 
            returns a cdms variable containing the data.
 
@@ -467,23 +470,22 @@ class cuDataset():
     def readScripGrid(self, whichGrid="destination", checkGrid=1):
         """Read a SCRIP curvilinear or generic grid from the dataset.
         
-              The dataset can be a SCRIP grid file or mapping file. If a mapping file,
-              'whichGrid' chooses the grid to read, either "source" or "destination".
+              The dataset can be a SCRIP grid file or mapping file. If a mapping file, 'whichGrid' chooses the grid to read, either "source" or "destination".
        
               If 'checkGrid' is 1 (default), the grid cells are checked for convexity, and 'repaired' if necessary.
 
               Returns the grid object.
         
-        Options
+                  Options
 
-            whichGrid
-                (str) ('destination') grid to read
+                      whichGrid
+                         (str) ('destination') grid to read
 
-            checkGrid
-                (int) (1) if 1 the grid cells are checked for convexity
+                     checkGrid
+                         (int) (1) if 1 the grid cells are checked for convexity
         
-            Output grid
-                    (cdms2.hgrid.TransientCurveGrid/cdms2.gengrid.TransientGenericGrid) (0) variable requested
+                     Output grid
+                        (cdms2.hgrid.TransientCurveGrid/cdms2.gengrid.TransientGenericGrid) (0) variable requested
        
         """
 

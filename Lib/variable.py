@@ -41,15 +41,15 @@ def timeindex(value, units, basetime, delta, delunits, calendar):
 class DatasetVariable(AbstractVariable):
 
     def __init__(self, parent, id, variableNode=None):
-        """Variable (parent, variableNode=None)"
-
+        """Variable (parent, variableNode=None)
+        
         Parameters
         ----------
-             variableNode
-                 is the variable tree node, if any.
+           variableNode
+              is the variable tree node, if any.
 
-             parent
-                is the containing dataset instance.
+           parent
+              is the containing dataset instance.
         """
         AbstractVariable.__init__(self, parent, variableNode)
         val = self.__cdms_internals__ + ['domain', 'name_in_file']
@@ -290,11 +290,10 @@ class DatasetVariable(AbstractVariable):
 
         Parameters
         ----------
-
            axis:
-                is either a time or level axis. If cdms_filemap is being used, get the partition from the _varpart_ attribute, otherwise (for templating) use axis.partition.
+               is either a time or level axis. If cdms_filemap is being used, get the partition from the _varpart_ attribute, otherwise (for templating) use axis.partition.
 
-            _: None
+           _: None
 
         """
         if hasattr(self.parent, 'cdms_filemap'):
@@ -310,23 +309,32 @@ class DatasetVariable(AbstractVariable):
 
     def expertPaths(self, slist):
         """ 
+       
+        Parameters
+        ----------
+            expertPaths
+               (self, slicelist) takes a list of slices,
+           
+            _: None
 
-        expertPaths(self, slicelist)
-            takes a list of slices,
+        Returns
+        -------
+            a 3-tuple 
+               (npart, dimensionlist, partitionSlices)
 
-        returns a 3-tuple: 
-            (npart, dimensionlist, partitionSlices)
+        Where:
 
-        where:
-            npart is the number of partitioned dimensions: 0, 1, or 2;
+          npart
+             is the number of partitioned dimensions: 0, 1, or 2;
 
-        dimensionlist
-            is a tuple of length npart, having the dimension numbers of the partitioned dimensions;
+          dimensionlist
+             is a tuple of length npart, having the dimension numbers of the partitioned dimensions;
 
-        partitionSlices
+          partitionSlices
              is the list of file-specific (filename, slice) corresponding to the paths and slices within the files to be read.
 
         The exact form of partitionSlices depends on the value of npart:
+
 
             npart           partitionSlices
 

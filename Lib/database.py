@@ -39,27 +39,24 @@ _Att = re.compile('([a-zA-Z_:][-a-zA-Z0-9._:]*)=(.*)', re.DOTALL)
 
 def connect(uri=None, user="", password=""):
     """
-    Method
-    ------
-      connect(uri=None, user="", password="")
+    
+    Method:  connect(uri=None, user="", password="")
 
-    Description
-    -----------
-      Open a CDMS database connection.
+    Description:  Open a CDMS database connection.
 
     Arguments
     ---------
-      uri: Universal Resource Identifier. If unspecified, defaults to the environment variable CDMSROOT.
-      user: user id
-      password: password
+       uri: Universal Resource Identifier. If unspecified, defaults to the environment variable CDMSROOT.
+       user: user id
+       password: password
 
     Returns
     -------
-      Database instance.
+       Database instance.
 
     Example
     -------
-      db = cdms.connect("ldap://dbhost.llnl.gov/database=CDMS,ou=PCMDI,o=LLNL,c=US")
+       db = cdms.connect("ldap://dbhost.llnl.gov/database=CDMS,ou=PCMDI,o=LLNL,c=US")
     """
     if uri is None:
         try:
@@ -338,19 +335,17 @@ class LDAPDatabase(AbstractDatabase):
         """
         Method
          
-          searchFilter
+           searchFilter
               (filter=None, tag=None, relbase=None, scope=Subtree, attnames=None, timeout=None)
 
         Description
        
-          Search a CDMS database.
+           Search a CDMS database.
 
         Arguments        -
         
-            filter: string search filter
-            Simple filters have the form "tag = value". Simple filters can be combined using
-            logical operators '&', '|', '!' in prefix notation. For example,
-            the filter '(&(objectclass=variable)(id=cli))' finds all variables named cli.
+           filter: string search filter
+           Simple filters have the form "tag = value". Simple filters can be combined using logical operators '&', '|', '!' in prefix notation. For example, the filter '(&(objectclass=variable)(id=cli))' finds all variables named cli.
 
             More formally
            
@@ -381,27 +376,27 @@ class LDAPDatabase(AbstractDatabase):
               Onelevel searches the base object and its immediate descendants. Base searches the base object alone.
             Default is Subtree.
 
-            attnames:
-                list of attribute names. Restricts the attributes returned.
+                attnames:
+                    list of attribute names. Restricts the attributes returned.
 
-            timeout:
-                integer number of seconds before timeout.
+                timeout:
+                    integer number of seconds before timeout.
 
         Returns
         -------
-          SearchResult instance.
+           SearchResult instance.
 
               Entries can be accessed sequentially. 
 
-                  For each entry,
+                 For each entry,
 
-                      entry.name is the name of the entry, 
- 
-                      entry.attributes is a dictionary of the attributes returned by the search,
+                     entry.name is the name of the entry, 
 
-                      entry.getObject() returns the CDMS object associated with the entry:
+                     entry.attributes is a dictionary of the attributes returned by the search,
 
-                      for entry in result: print entry.name, entry.attributes["id"]
+                     entry.getObject() returns the CDMS object associated with the entry:
+
+                     for entry in result: print entry.name, entry.attributes["id"]
 
               Entries can be refined with searchPredicate().
 

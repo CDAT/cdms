@@ -128,22 +128,20 @@ def getNumericCompatibility():
 
 
 class AbstractVariable(CdmsObj, Slab):
+    """Not to be called by users.
+  
+    Parameters
+    ----------
+          variableNode
+                    is the variable tree node, if any.
+          parent 
+                    is the containing dataset instance.
+    """
     def info(self, flag=None, device=None):
         Slab.info(self, flag, device)
 
     def __init__(self, parent=None, variableNode=None):
-        """Not to be called by users.
-  
 
-           Parameters
-           ----------
-
-              variableNode
-                        is the variable tree node, if any.
-              parent 
-                        is the containing dataset instance.
-
-        """
         if variableNode is not None and variableNode.tag != 'variable':
             raise CDMSError('Node is not a variable node')
         CdmsObj.__init__(self, variableNode)

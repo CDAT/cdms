@@ -1,15 +1,16 @@
 #!/usr/bin/env python
 
-"""
-Copyright (c) 2008-2012, Tech-X Corporation
-All rights reserved.
+#
+# Copyright (c) 2008-2012, Tech-X Corporation
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the conditions
+# specified in the license file 'license.txt' are met.
+#
+# Authors: David Kindig and Alex Pletzer
+#
 
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the conditions
-specified in the license file 'license.txt' are met.
-
-Authors: David Kindig and Alex Pletzer
-"""
 import re
 import time
 import numpy
@@ -36,20 +37,22 @@ ERROR = ESMF.UnmappedAction.ERROR
 
 class EsmfUnstructGrid:
     """
-    Unstructured grid
+    
+
+    Parameters
+    ----------
+        
+        numTopoDims 
+           number of topological dimensions
+
+        numSpaceDims 
+           number of space dimensions
     """
 
     def __init__(self, numTopoDims, numSpaceDims):
         """Constructor
 
-        Parameters
-        ----------
-
-             numTopoDims 
-                 number of topological dimensions
-
-             numSpaceDims 
-                 number of space dimensions
+        
         """
         # handle to the grid object
         self.grid = None

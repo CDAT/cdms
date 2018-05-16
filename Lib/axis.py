@@ -204,8 +204,8 @@ Parameters
            same for right endpoint j
 
   
- Returns
- -------
+Returns
+-------
 
        True if the coordinate interval (a,b) intersects the node nodeSubI or cell bounds [boundLeft,boundRight], where the interval (a,b) is defined by:
 
@@ -703,11 +703,10 @@ def allclose(ax1, ax2, rtol=1.e-5, atol=1.e-8):
     """
     Parameters
     ----------
-       ax1, ax2: 
-          
+       ax1
            array_like
-
-       _:  None
+       ax2 
+           array_like
 
     Returns
     -------
@@ -1242,20 +1241,22 @@ class AbstractAxis(CdmsObj):
         return(self.getModuloCycle())
 
     def mapInterval(self, interval, indicator='ccn', cycle=None):
-        """Map coordinate interval to index interval. interval has one of the forms
+        """Map coordinate interval to index interval. interval has one of the forms:
 
-          * `(x,y)`
-          * `(x,y,indicator)`: indicator overrides keywork argument
-          * `(x,y,indicator,cycle)`: indicator, cycle override keyword arguments
-          * `None`: indicates the full interval
+               * `(x,y)`
+               * `(x,y,indicator)`: indicator overrides keywork argument
+               * `(x,y,indicator,cycle)`: indicator, cycle override keyword arguments
+               * `None`: indicates the full interval
 
-        where `x` and `y` are the endpoints in coordinate space. indicator is a
+        Note: Where `x` and `y` are the endpoints in coordinate space. indicator is a
         two-character string, where the first character is `c` if the interval
         is closed on the left, `o` if open, and the second character has the
         same meaning for the right-hand point. Set cycle to a nonzero value
         to force wraparound.
 
-        Returns the corresponding index interval (i,j), where i<j, indicating
+        Returns
+        -------
+            The corresponding index interval (i,j), where i<j, indicating
         the half-open index interval [i,j), or None if the intersection is empty.
 
         For an axis which is circular (self.topology == 'circular'), [i,j)
@@ -2701,6 +2702,7 @@ def concatenate(axes, id=None, attributes=None):
 
 def take(ax, indices):
     """Take elements form an array along an axis
+
     Parameters
     ----------
         ax:

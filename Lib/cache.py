@@ -35,8 +35,7 @@ def lock(filename):
 
     Note: This function is UNIX-specific.
    
-    Note: It is important to delete the lock via unlock() if the process
-      is interrupted, otherwise subsequent locks will fail.
+    Note: It is important to delete the lock via unlock() if the process is interrupted, otherwise subsequent locks will fail.
     """
 
     path = lockpath(filename)
@@ -395,7 +394,8 @@ class Cache:
 
     def getFile(self, fromURL, filekey, naptime=5, maxtries=60,
                 lcpath=None, userid=None, useReplica=None):
-        """Get the file with <fileURL>.
+        """
+        Get the file with <fileURL>.
 
             If the file is in the cache, read it.
    

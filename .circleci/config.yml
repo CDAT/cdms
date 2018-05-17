@@ -22,8 +22,8 @@ aliases:
        conda config --set always_yes yes --set changeps1 no
        conda update -y -q conda
        conda config --set anaconda_upload no
-       conda create -n py3 -c conda-forge -c cdat libcf distarray cdtime libcdms cdat_info numpy libdrs_f pyopenssl nose requests flake8 myproxyclient "python>3"
-       conda create -n py2 -c conda-forge -c cdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 "python<3"
+       conda create -n py3 -c cdat/label/unstable -c cdat/label/nightly -c conda-forge -c cdat libcf distarray cdtime libcdms cdat_info numpy libdrs_f pyopenssl nose requests flake8 myproxyclient "python>3"
+       conda create -n py2 -c cdat/label/unstable -c cdat/label/nightly -c conda-forge -c cdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 "python<3"
 
   - &setup_cdms
     name: setup_cdms

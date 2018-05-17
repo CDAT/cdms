@@ -39,7 +39,7 @@ echo "Cloning recipes"
 cd ${HOME}
 git clone git://github.com/UV-CDAT/conda-recipes
 cd conda-recipes
-# uvcdat creates issues for build -c uvcdat confises package and channel
+# cdat creates issues for build -c cdat confises package and channel
 rm -rf uvcdat
 if [ `uname` == "Linux" ]; then
     sed -i  's/last_stable = .*/last_stable="${VERSION}"/g' ./prep_for_build.py
@@ -50,7 +50,7 @@ python ./prep_for_build.py -v ${VERSION} -b ${BRANCH}
 echo "Building now"
 echo "use nesii/label/dev-esmf for esmf"
 conda build -V
-conda build $PKG_NAME -c nesii/label/dev-esmf  -c uvcdat/label/nightly -c conda-forge -c uvcdat 
+conda build $PKG_NAME -c cdat/label/unstable   -c cdat/label/nightly -c conda-forge -c cdat 
 #
 # binstar config set 'false' instead of false (not quote) I have to do it manually
 # this is true for OSX.

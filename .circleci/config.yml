@@ -85,11 +85,30 @@ jobs:
           path: tests_png
           destination: tests_png
 
+  linux_cdms:
+    machine:
+      image: circleci/classic:latest
+    environment:
+      WORKDIR: "workspace/test_linux_cdms"
+    steps:
+      - checkout
+      - run: *setup_miniconda
+      - run: *create_conda_env
+      - run: *setup_cdms
+      - run: *run_cdms_tests
+      - store_artifacts:
+          path: tests_html
+          destination: tests_html
+      - store_artifacts:
+          path: tests_png
+          destination: tests_png
+
 
 workflows:
   version: 2
   cdms_test:
     jobs:
       - macos_cdms
+      - linux_cdms
 
        

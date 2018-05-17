@@ -22,19 +22,6 @@ if [ `uname` == "Linux" ]; then
     which python
     export UVCDAT_ANONYMOUS_LOG=False
     BRANCH=${TRAVIS_BRANCH}
-#    echo "Creating python 3 env"
-#    conda create -n py3 python=3.6
-#    conda install -n py3 -c conda-forge -c uvcdat setuptools libcf distarray cdtime libcdms cdat_info numpy libdrs_f pyopenssl nose requests flake8 myproxyclient numpy
-#    conda install -n py3 -c nesii/channel/dev-esmf -c conda-forge esmpy
-#    echo "Creating certificate"
-#    source activate py3
-#    mkdir ${HOME}/.esg
-#    echo ${ESGF_PWD} | myproxyclient logon -s esgf-node.llnl.gov -p 7512 -t 12 -S -b -l ${ESGF_USER} -o ${HOME}/.esg/esgf.cert
-#    ls ${HOME}/.esg
-#    cd travis_home
-#    ls
-#    cp tests/dodsrc ${HOME}.dodsrc
-#    source deactivate
 else
     echo "Mac OS"
     OS=osx-64
@@ -47,10 +34,6 @@ if [ `uname` == "Linux" ]; then
 else
     conda install -n root -q anaconda-client conda-build
 fi
-# pin conda so that conda-build does not update it
-#if [ `uname` == "Darwin" ]; then
-#    echo "conda ==4.3.21" >> ~/miniconda/conda-meta/pinned  # Pin conda as workaround for conda/conda#6030
-#fi
 conda config --set anaconda_upload no
 echo "Cloning recipes"
 cd ${HOME}

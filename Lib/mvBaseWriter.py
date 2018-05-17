@@ -1,18 +1,18 @@
 #!/usr/bin/env python
+#This code is provided with the hope that it will be useful.
+#No guarantee is provided whatsoever. Use at your own risk.
 
+#Alex Pletzer, Tech-X Corp. (2011)
 """
 Abstract class for writing data into file
 
-This code is provided with the hope that it will be useful.
-No guarantee is provided whatsoever. Use at your own risk.
-
-Alex Pletzer, Tech-X Corp. (2011)
 """
 
 from . import mvSphereMesh
 
 
 class BaseWriter:
+
 
     def __init__(self, var, sphereRadius=1.0, maxElev=0.1):
         """

@@ -76,22 +76,16 @@ class EsmfUnstructGrid:
 
     def setCells(self, cellIndices, cellTypes, connectivity,
                  cellMask=None, cellAreas=None):
-        """
-          Set Cell connectivity
+        """Set Cell connectivity
 
         Parameters
         ----------
-
-             cell indices:
-       
-               (0-based)
- 
+            cell indices:
+                 0-based)
             cellTypes:
-                one of ESMF_MESHELEMTYPE_{TRI,QUAD,TETRA,HEX}
-        
+                 one of ESMF_MESHELEMTYPE_{TRI,QUAD,TETRA,HEX}
             connectivity node:
-                connectivity array, see below for node ordering
-        
+                 connectivity array, see below for node ordering
             cellMask:
                 cellAreas area (volume) of each cell
 

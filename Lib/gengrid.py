@@ -38,13 +38,12 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
 
     def getMesh(self, transpose=None):
         """Generate a mesh array for the meshfill graphics method.
-          
+
            Parameters
            ----------
-
-          'transpose'
-
-                 is for compatibility with other grid types, is ignored."""
+              'transpose'
+                  is for compatibility with other grid types, is ignored.
+        """
 
         from . import MV2 as MV
         if self._mesh_ is None:

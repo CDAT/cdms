@@ -1,9 +1,10 @@
+#David Kindig and Alex Pletzer, Tech-X Corp. (2012)
+#This code is provided with the hope that it will be useful.
+#No guarantee is provided whatsoever. Use at your own risk.
 """
 Cdms2 interface to multiple regridders
 
-David Kindig and Alex Pletzer, Tech-X Corp. (2012)
-This code is provided with the hope that it will be useful.
-No guarantee is provided whatsoever. Use at your own risk.
+
 """
 from __future__ import print_function
 import operator
@@ -377,6 +378,43 @@ class CdmsRegrid:
     Regridding switchboard, handles CDMS variables before handing off to
     regridder. If a multidimensional variable is passed in, the apply step
     loops over the axes above the Lat (Y) -- Lon (X) coordinates
+
+  Establish which regridding method to use, handle CDMS variables before
+        handing off to regridder. See specific tool for more information.
+       
+     Parameters
+     ----------
+         srcGrid
+             CDMS source grid
+
+         dstGrid
+             CDMS destination grid
+
+         dtype
+             numpy data type for src and dst data
+ 
+         regridMethod
+             linear (all tools - bi, tri),
+             conserve (ESMF Only)    
+             patch (ESMF Only)
+
+         regridTool
+             LibCF, ESMF, ...
+
+         srcGridMask
+             array source mask, interpolation coefficients will not be computed for masked
+             points/cells.
+
+         srcGridAreas
+             array destination cell areas, only needed for conservative regridding
+
+         dstGridMask
+             array destination mask, interpolation coefficients will not be computed for masked points/cells.
+
+         dstGridAreas
+             array destination cell areas, only needed for conservative regridding
+         **args
+             additional, tool dependent arguments
     """
 
     def __init__(self, srcGrid, dstGrid, dtype,
@@ -385,43 +423,7 @@ class CdmsRegrid:
                  dstGridMask=None, dstGridAreas=None,
                  **args):
         """
-        Establish which regridding method to use, handle CDMS variables before
-        handing off to regridder. See specific tool for more information.
        
-        Parameters
-        ----------
-             srcGrid
-                 CDMS source grid
-
-             dstGrid
-                 CDMS destination grid
-
-             dtype
-                 numpy data type for src and dst data
- 
-             regridMethod
-                 linear (all tools - bi, tri),
-                     conserve (ESMF Only)    
-                     patch (ESMF Only)
-
-             regridTool
-                 LibCF, ESMF, ...
-
-             srcGridMask
-                 array source mask, interpolation coefficients will not be computed for masked
-                 points/cells.
-
-             srcGridAreas
-                 array destination cell areas, only needed for conservative regridding
-
-             dstGridMask
-                 array destination mask, interpolation coefficients will not be computed for masked points/cells.
-
-             dstGridAreas
-                 array destination cell areas, only needed for conservative regridding
-
-             **args
-                   additional, tool dependent arguments
         """
 
         srcBounds = None

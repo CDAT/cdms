@@ -561,12 +561,7 @@ def choose(myindices, t):
     Returns
     -------
 
-         an array shaped like indices containing elements chosen
-         from t.
-         If an element of t is the special element masked, any element
-         of the result that "chooses" that element is masked.
-
-         The result has only the default axes.
+         an array shaped like indices containing elements chosen from t. If an element of t is the special element masked, any element of the result that "chooses" that element is masked. The result has only the default axes.
     """
     maresult = numpy.ma.choose(myindices, list(map(_makeMaskedArg, t)))
     F = getattr(t, "fill_value", 1.e20)
@@ -590,8 +585,7 @@ def masked_where(condition, x, copy=1):
     Returns
     -------
 
-         x as an array masked where condition is true.
-         Also masked where x or condition masked.
+         x as an array masked where condition is true. Also masked where x or condition masked.
     """
     tx = _makeMaskedArg(x)
     tcondition = _makeMaskedArg(condition)
@@ -901,7 +895,7 @@ def asarray(data, typecode=None, dtype=None):
      Returns
      -------
 
-          data if dtype is None or data is a MaskedArray of the same dtype.
+          data if dtype is None or data is a MaskedArray of the same dtype. 
           typecode arg is for backward compatibility.
     """
     dtype = _convdtype(dtype, typecode)

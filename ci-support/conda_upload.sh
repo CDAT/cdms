@@ -4,7 +4,7 @@ USER=cdat
 echo "Trying to upload conda"
 mkdir ${HOME}/conda-bld
 export CONDA_BLD_PATH=${HOME}/conda-bld
-export VERSION="2.12"
+export VERSION="3.0"
 if [ `uname` == "Linux" ]; then
     OS=linux-64
     echo "Linux OS"
@@ -58,7 +58,12 @@ git clone git://github.com/UV-CDAT/conda-recipes
 cd conda-recipes
 # uvcdat creates issues for build -c uvcdat confises package and channel
 rm -rf uvcdat
-python ./prep_for_build.py -b ${BRANCH}
+if [ `uname` == "Linux" ]; then
+    sed -i  's/last_stable = .*/last_stable="${VERSION}"/g' ./prep_for_build.py
+else
+    sed -i ''   's/last_stable = .*/last_stable="${VERSION}"/g' ./prep_for_build.py
+fi
+python ./prep_for_build.py -v ${VERSION} -b ${BRANCH}
 echo "Building now"
 echo "use nesii/label/dev-esmf for esmf"
 conda build -V

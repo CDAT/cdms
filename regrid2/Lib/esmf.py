@@ -78,16 +78,16 @@ class EsmfUnstructGrid:
                  cellMask=None, cellAreas=None):
         """Set Cell connectivity
 
-        Parameters
-        ----------
-            cell indices:
-                 0-based)
+Parameters
+----------
+            cellIndices:
+               0-based)
             cellTypes:
-                 one of ESMF_MESHELEMTYPE_{TRI,QUAD,TETRA,HEX}
-            connectivity node:
-                 connectivity array, see below for node ordering
+               one of ESMF_MESHELEMTYPE_{TRI,QUAD,TETRA,HEX}
+            connectivityNode:
+               connectivity array, see below for node ordering
             cellMask:
-                cellAreas area (volume) of each cell
+               cellAreas area (volume) of each cell
 
         Note
         ----
@@ -182,16 +182,11 @@ class EsmfUnstructGrid:
 class EsmfStructGrid:
     """
     Structured grid
-    """
 
-    def __init__(self, shape, coordSys=ESMF.CoordSys.SPH_DEG,
-                 periodicity=0, staggerloc=ESMF.StaggerLoc.CENTER,
-                 hasBounds=False):
-        """
-        Constructor
-    
-        Parameters
-        ----------
+    Constructor
+
+Parameters
+----------
 
              shape
                  Tuple of cell sizes along each axis
@@ -214,6 +209,13 @@ class EsmfStructGrid:
 
              hasBounds
                  If the grid has bounds, Run AddCoords for the bounds
+    """
+
+    def __init__(self, shape, coordSys=ESMF.CoordSys.SPH_DEG,
+                 periodicity=0, staggerloc=ESMF.StaggerLoc.CENTER,
+                 hasBounds=False):
+        """
+       
         """
         # ESMF grid object
         self.grid = None
@@ -286,8 +288,7 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
 
     def getLoHiBounds(self, staggerloc):
         """
-        Get the local lo/hi index values for the coordinates (per processor)
-                         (hi is not inclusive, lo <= index < hi)
+        Get the local lo/hi index values for the coordinates (per processor) (hi is not inclusive, lo <= index < hi)
 
         Parameters
         ----------
@@ -453,14 +454,11 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
 class EsmfStructField:
     """
     Structured field.
-    """
 
-    def __init__(self, esmfGrid, name, datatype, staggerloc=CENTER):
-        """
-        Creator for structured ESMF Field
+    Creator for structured ESMF Field
 
-        Parameters
-        ----------
+Parameters
+----------
 
              esmfGrid 
                  instance of an ESMF
@@ -475,6 +473,11 @@ class EsmfStructField:
              staggerloc
                   ESMF.StaggerLoc.CENTER
                   ESMF.StaggerLoc.CORNER
+    """
+
+    def __init__(self, esmfGrid, name, datatype, staggerloc=CENTER):
+        """
+      
         """
         # field object
         self.field = None
@@ -613,21 +616,11 @@ class EsmfStructField:
 class EsmfRegrid:
     """
     Regrid source grid data to destination grid data
-    """
 
-    def __init__(self, srcField, dstField,
-                 srcFrac=None,
-                 dstFrac=None,
-                 srcMaskValues=None,
-                 dstMaskValues=None,
-                 regridMethod=BILINEAR,
-                 ignoreDegenerate=False,
-                 unMappedAction=IGNORE):
-        """
-        Constuct regrid object
+    Constuct regrid object
 
-        Parameters
-        ----------
+Parameters
+----------
 
              srcField 
                  the source field object of type EsmfStructField
@@ -655,6 +648,18 @@ class EsmfRegrid:
 
              ignoreDegenerate
                  Ignore degenerate cells when checking inputs
+    """
+
+    def __init__(self, srcField, dstField,
+                 srcFrac=None,
+                 dstFrac=None,
+                 srcMaskValues=None,
+                 dstMaskValues=None,
+                 regridMethod=BILINEAR,
+                 ignoreDegenerate=False,
+                 unMappedAction=IGNORE):
+        """
+       
         """
         self.srcField = srcField
         self.dstField = dstField

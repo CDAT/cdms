@@ -225,9 +225,17 @@ class BicubicRegridder(ScripRegridder):
             destFrac=destFrac)
 
     def __call__(self, input, gradLat, gradLon, gradLatlon):
-        """gradLat = df/di
-        gradLon = df/dj
-        gradLatlon = d(df)/(di)(dj)
+        """
+        Parameters
+        ----------
+            gradLat: 
+                df/di
+
+            gradLon:
+                df/dj
+
+            gradLatlon:
+                d(df)/(di)(dj)
         """
 
         import numpy.ma

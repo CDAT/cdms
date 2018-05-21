@@ -1,10 +1,10 @@
+#This code is provided with the hope that it will be useful.
+#No guarantee is provided whatsoever. Use at your own risk.
+#
+#David Kindig and Alex Pletzer, Tech-X Corp. (2012)
+
 """
 Generic interface to multiple regrid classes. No dependence on cdms2 variables.
-
-This code is provided with the hope that it will be useful.
-No guarantee is provided whatsoever. Use at your own risk.
-
-David Kindig and Alex Pletzer, Tech-X Corp. (2012)
 """
 import operator
 import numpy
@@ -56,25 +56,17 @@ def guessPeriodicity(srcBounds):
 class GenericRegrid:
     """
     Generic Regrid class.
-    """
+    Constructor
 
-    def __init__(self, srcGrid, dstGrid,
-                 dtype,
-                 regridMethod,
-                 regridTool,
-                 srcGridMask=None, srcBounds=None, srcGridAreas=None,
-                 dstGridMask=None, dstBounds=None, dstGridAreas=None,
-                 **args):
-        """
-        Constructor
 
+Parameters
+----------
        
             srcGrid
                 list of numpy arrays, source horizontal coordinates
 
             dstGrid
                 list of numpy arrays, destination horizontal coordinate
-
             dtype
                 numpy data type for src/dst data
 
@@ -106,6 +98,17 @@ class GenericRegrid:
                   additional arguments to be passed to the specific tool
                       libcf': mkCyclic={True, False}, handleCut={True,False}
                       'esmf': periodicity={0,1}, coordSys={'deg', 'cart'}, ...
+    """
+
+    def __init__(self, srcGrid, dstGrid,
+                 dtype,
+                 regridMethod,
+                 regridTool,
+                 srcGridMask=None, srcBounds=None, srcGridAreas=None,
+                 dstGridMask=None, dstBounds=None, dstGridAreas=None,
+                 **args):
+        """
+       
         """
 
         self.nGridDims = len(srcGrid)
@@ -199,8 +202,8 @@ valid choices are: 'libcf', 'esmf'""" % regridTool
         """
         Regrid source to destination
 
-            Parameters
-            ----------
+Parameters
+----------
 
                 srcData
                     array (input)

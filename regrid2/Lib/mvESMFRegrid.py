@@ -1,10 +1,11 @@
+#This code is provided with the hope that it will be useful.
+#No guarantee is provided whatsoever. Use at your own risk.
+#
+#David Kindig and Alex Pletzer, Tech-X Corp. (2012)
+
+
 """
 ESMF regridding class
-
-This code is provided with the hope that it will be useful.
-No guarantee is provided whatsoever. Use at your own risk.
-
-David Kindig and Alex Pletzer, Tech-X Corp. (2012)
 """
 import re
 import numpy
@@ -37,19 +38,10 @@ ERROR = ESMF.UnmappedAction.ERROR
 class ESMFRegrid(GenericRegrid):
     """
     Regrid class for ESMF
-    """
-
-    def __init__(self, srcGridshape, dstGridshape, dtype,
-                 regridMethod, staggerLoc, periodicity, coordSys,
-                 srcGridMask=None, hasSrcBounds=False, srcGridAreas=None,
-                 dstGridMask=None, hasDstBounds=False, dstGridAreas=None,
-                 ignoreDegenerate=False,
-                 **args):
-        """
-        Constructor
+     Constructor
        
-        Parameters
-        ----------
+ Parameters
+ ----------
 
            srcGridShape 
                 tuple source grid shape
@@ -68,8 +60,8 @@ class ESMFRegrid(GenericRegrid):
 
            periodicity
                0 (no periodicity),
-                   1 (last coordinate is periodic,
-                   2 (both coordinates are periodic)
+               1 (last coordinate is periodic,
+               2 (both coordinates are periodic)
 
            coordSys
                'deg', 'cart', or 'rad'
@@ -82,6 +74,16 @@ class ESMFRegrid(GenericRegrid):
 
            ignoreDegenerate
                Ignore degenerate celss when checking inputs
+    """
+
+    def __init__(self, srcGridshape, dstGridshape, dtype,
+                 regridMethod, staggerLoc, periodicity, coordSys,
+                 srcGridMask=None, hasSrcBounds=False, srcGridAreas=None,
+                 dstGridMask=None, hasDstBounds=False, dstGridAreas=None,
+                 ignoreDegenerate=False,
+                 **args):
+        """
+       
         """
 
         # esmf grid objects (tobe constructed)
@@ -305,7 +307,8 @@ staggerLoc = %s!""" % self.staggerLoc
         Parameters
         ----------
 
-            **args (not used)
+            **args
+                (not used)
 
             _: None
         """
@@ -396,17 +399,15 @@ staggerLoc = %s!""" % self.staggerLoc
         """
         Get the source grid cell areas
 
-        Parameters
-        ----------
+Parameters
+----------
             rootPe
-               root processor where data should be gathered (or None if local areas 
-               are to be returned)
+                root processor where data should be gathered (or None if local areas are to be returned)
 
             _: None
 
        Returns
        -------
-
            areas
                or None if non-conservative interpolation
         """
@@ -444,8 +445,8 @@ staggerLoc = %s!""" % self.staggerLoc
         """
         Get the source grid area fractions 
 
-        Parameters
-        ----------
+Parameters
+----------
 
             rootPe
                root processor where data should be gathered (or None if local areas are to be returned)

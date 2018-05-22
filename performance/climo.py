@@ -4,7 +4,7 @@ import numpy as np
 import numpy.ma as ma
 import cdms2, cdutil, cdtime, genutil
 
-infile = '/global/cscratch1/sd/golaz/ACME_simulations/20180302.DECKv1b_H3.ne30_oEC.edison/post/atm/fv129x256/ts/monthly/15yr/TREFHT_200001_201412.nc'
+infile = 'performance/TREFHT_200001_201412.nc'
 varname = 'TREFHT'
 
 ## Make sure the axes' bounds will be generated automatically, if they

@@ -148,15 +148,21 @@ def setRegionSpecs(grid, coordSpec, coordType, resultSpec):
         coordSpec:
             is a coordinate specification, having one of the forms:
 
-                    x
-                   (x,y)
-                   (x,y,'co')
-                   (x,y,'co',cycle)
-                   ':'
-                   None
+            x
+
+           (x,y)
+
+           (x,y,'co')
+                  
+           (x,y,'co',cycle)
+           
+           ':'
+
+           None
 
         coordType:
             is one of CoordinateTypes
+
         resultSpec:
             is a list of 4-tuples of the form (x,y,'co',cycle), or None
             if no spec for the corresponding dimension type.
@@ -233,11 +239,11 @@ class AbstractGrid (CdmsObj):
 
     def hasCoordType(self, coordType):
         """
-
         Returns
         -------
 
-             1 iff self has the coordinate type."""
+            1 iff self has the coordinate type.
+        """
         return 0
 
     def getAxisList(self):
@@ -649,10 +655,7 @@ class AbstractRectGrid(AbstractGrid):
         """
         Returns
         -------
-
-             (flatlat, flatlon) where flatlat is a 1D NumPy array
-             having the same length as the number of cells in the grid, similarly
-             for flatlon."""
+            (flatlat, flatlon) where flatlat is a 1D NumPy array having the same length as the number of cells in the grid, similarly for flatlon."""
 
         if self._flataxes_ is None:
             alat = self.getLatitude()[:]

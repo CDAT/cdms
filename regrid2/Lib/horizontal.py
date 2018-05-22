@@ -37,9 +37,11 @@ class Horizontal:
         Parameters
         ----------
 
-             ingrid cdms2, ndarray variable
+             ingrid cdms2,
+                 ndarray variable
 
-             outgrid cdms2, ndarray variable
+             outgrid cdms2,
+                 ndarray variable
         """
 
         inlat = ingrid.getLatitude()
@@ -90,14 +92,24 @@ class Horizontal:
                  mask=None, returnTuple=0, **args):
         """
         Call the regridder function.
-        @param ar is the input array.
-        @param order is of the form "tzyx", "tyx", etc.
-        @param missing is the missing data value, if any.
-        @param mask is either 2-D or the same shape as ar.
-        @param returnTuple If true, return the tuple (outArray, outWeights) where
-                    outWeights is the fraction of each zone of the output grid
-                    which overlaps non-missing zones of the input grid; it has
-                    the same shape as the output array.
+
+        Parameters
+        ----------
+
+            ar
+                is the input array.
+
+            order
+                is of the form "tzyx", "tyx", etc.
+
+            missing
+               is the missing data value, if any.
+ 
+            mask
+               is either 2-D or the same shape as ar.
+
+           returnTuple
+               If true, return the tuple (outArray, outWeights) where outWeights is the fraction of each zone of the output grid which overlaps non-missing zones of the input grid; it has the same shape as the output array.
         """
 
         from cdms2.avariable import AbstractVariable

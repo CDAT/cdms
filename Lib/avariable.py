@@ -129,21 +129,20 @@ def getNumericCompatibility():
 
 
 class AbstractVariable(CdmsObj, Slab):
+    """Not to be called by users.
+  
+    Parameters
+    ----------
+          variableNode
+                    is the variable tree node, if any.
+          parent 
+                    is the containing dataset instance.
+    """
     def info(self, flag=None, device=None):
         Slab.info(self, flag, device)
 
     def __init__(self, parent=None, variableNode=None):
-        """Not to be called by users.
 
-           Parameters
-           ----------
-
-              variableNode
-                        is the variable tree node, if any.
-              parent 
-                        is the containing dataset instance.
-
-        """
         if variableNode is not None and variableNode.tag != 'variable':
             raise CDMSError('Node is not a variable node')
         CdmsObj.__init__(self, variableNode)
@@ -171,7 +170,7 @@ class AbstractVariable(CdmsObj, Slab):
     def __call__(self, *args, **kwargs):
         """
         Selection of a subregion using selectors.
-
+       
         Parameters
         ----------
            raw:
@@ -1191,6 +1190,7 @@ class AbstractVariable(CdmsObj, Slab):
 
     def getValue(self, squeeze=1):
         """Get the entire set of values.
+
         Returns
         -------
             All values and elimite the 1-D dimension.
@@ -1684,11 +1684,11 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
 
     def decode(self, ar):
         """Decode compressed data.
+           Parameter
+           ---------
+              ar
+                 is a masked array, scalar, or numpy.ma.masked.
 
-         Parameter
-         ---------
-            
-             ar is a masked array, scalar, or numpy.ma.masked.
              _: None
 
         """
@@ -1719,8 +1719,9 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
             return ar
 
     def getGridIndices(self):
-        """Return
-           ------
+        """
+        Returns
+        -------
               a tuple of indices corresponding to the variable grid."""
         grid = self.getGrid()
         result = []

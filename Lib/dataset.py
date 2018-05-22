@@ -1745,14 +1745,18 @@ class CdmsFile(CdmsObj, cuDataset):
 
         Parameters
         ----------
-            newname: (str/None)
-                new name for grid (default None)
+            newname:
+                (str/None)
+                    new name for grid (default None)
+
             grid:
-                file grid (cdms2.grid.FileRectGrid/cdms2.hgrid.FileCurveGrid/cdms2.gengrid.FileGenericGrid)
+                file grid 
+                    (cdms2.grid.FileRectGrid/cdms2.hgrid.FileCurveGrid/cdms2.gengrid.FileGenericGrid)
 
         Returns
         -------
-            file grid (cdms2.grid.FileRectGrid/cdms2.hgrid.FileCurveGrid/cdms2.gengrid.FileGenericGrid)
+           file grid:
+               (cdms2.grid.FileRectGrid/cdms2.hgrid.FileCurveGrid/cdms2.gengrid.FileGenericGrid)
 
         """
         if newname is None:
@@ -1996,7 +2000,7 @@ class CdmsFile(CdmsObj, cuDataset):
 
     def createVariableCopy(self, var, id=None, attributes=None, axes=None, extbounds=None,
                            extend=0, fill_value=None, index=None, newname=None, grid=None):
-        """Define a new variable, with the same axes and attributes as in <var>.
+        """Define a new variable, with the same axes and attributes as in "var".
 
         Note
         ----
@@ -2353,15 +2357,14 @@ class CdmsFile(CdmsObj, cuDataset):
 
         Parameters
         ----------
-             id: str
-                 id of the variable to get
+           id:
+             str id of the variable to get
           
-             _: None
+           _: None
 
         Returns
         -------
-             variable  (cdms2.fvariable.FileVariable/None)
-                 file variable
+           variable  (cdms2.fvariable.FileVariable/None) file variable
 
         """
         return self.variables.get(id)

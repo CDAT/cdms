@@ -1,15 +1,16 @@
 #!/usr/bin/env python
 
-"""
-Copyright (c) 2008-2012, Tech-X Corporation
-All rights reserved.
+#
+# Copyright (c) 2008-2012, Tech-X Corporation
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the conditions
+# specified in the license file 'license.txt' are met.
+#
+# Authors: David Kindig and Alex Pletzer
+#
 
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the conditions
-specified in the license file 'license.txt' are met.
-
-Authors: David Kindig and Alex Pletzer
-"""
 import re
 import time
 import numpy
@@ -36,20 +37,22 @@ ERROR = ESMF.UnmappedAction.ERROR
 
 class EsmfUnstructGrid:
     """
-    Unstructured grid
+    
+
+    Parameters
+    ----------
+        
+        numTopoDims 
+           number of topological dimensions
+
+        numSpaceDims 
+           number of space dimensions
     """
 
     def __init__(self, numTopoDims, numSpaceDims):
         """Constructor
 
-        Parameters
-        ----------
-
-             numTopoDims 
-                 number of topological dimensions
-
-             numSpaceDims 
-                 number of space dimensions
+        
         """
         # handle to the grid object
         self.grid = None
@@ -73,44 +76,37 @@ class EsmfUnstructGrid:
 
     def setCells(self, cellIndices, cellTypes, connectivity,
                  cellMask=None, cellAreas=None):
-        """
-        Set Cell connectivity
+        """Set Cell connectivity
 
-        Parameters
-        ----------
-
-             cell indices (0-based)
- 
-             cellTypes one of ESMF_MESHELEMTYPE_{TRI,QUAD,TETRA,HEX}
-        
-             connectivity node connectivity array, see below for node ordering
-        
-             cellMask
-
-             cellAreas area (volume) of each cell
+Parameters
+----------
+            cellIndices:
+               0-based)
+            cellTypes:
+               one of ESMF_MESHELEMTYPE_{TRI,QUAD,TETRA,HEX}
+            connectivityNode:
+               connectivity array, see below for node ordering
+            cellMask:
+               cellAreas area (volume) of each cell
 
         Note
         ----
-
-                     3                          
-                    / \                                     
-                   /   \                                    
-                  /     \                                 
-                 /       \                                  
-                /         \                                
-               1 --------- 2    
-
+.. figure:: /images/ESMF.jpg
+   :scale: 95% 
+   :alt: 
+                    3                       4-------------3    
+                    /\                      |             |                    
+                   /  \                     |             |                     
+                  /    \                    |             |                    
+                 /      \                   |             |                        
+                /        \                  |             |                         
+               /          \                 |             |
+              1------------2                1-------------2
+     
 
 
                
-               4------------3
-               |            |
-               |            |
-               |            |
-               |            |
-               |            |
-               1 ---------- 2 
-       
+                    
 
 
                  3                               8---------------7
@@ -146,11 +142,14 @@ class EsmfUnstructGrid:
         Parameters
         ----------
 
-             indices Ids of the nodes (0-based)
+             indices
+                 Ids of the nodes (0-based)
 
-             coords nodal coordinates
+             coords
+                 nodal coordinates
 
-             peOwners processor ranks where the coordinates reside (0-based)
+             peOwners
+                 processor ranks where the coordinates reside (0-based)
         """
         n = len(indices)
         if not self.nodesAdded:
@@ -168,7 +167,9 @@ class EsmfUnstructGrid:
         Parameters
         ----------
 
-            filename VTK file name
+            filename
+                VTK file name
+
             _: None
 
         """
@@ -183,33 +184,40 @@ class EsmfUnstructGrid:
 class EsmfStructGrid:
     """
     Structured grid
+
+    Constructor
+
+Parameters
+----------
+
+             shape
+                 Tuple of cell sizes along each axis
+ 
+             coordSys
+                 coordinate system
+                    ESMF.CoordSys.CART Cartesian
+                    ESMF.CoordSys.SPH_DEG (default) Degrees
+                    ESMF.CoordSys.SPH_RAD Radians
+
+             periodicity
+                 Does the grid have a periodic coordinate
+                    0 No periodicity
+                    1 Periodic in x (1st) axis
+                    2 Periodic in x, y axes
+
+             staggerloc 
+                 ESMF stagger location. ESMF.StaggerLoc.XXXX
+                 The stagger constants are listed at the top
+
+             hasBounds
+                 If the grid has bounds, Run AddCoords for the bounds
     """
 
     def __init__(self, shape, coordSys=ESMF.CoordSys.SPH_DEG,
                  periodicity=0, staggerloc=ESMF.StaggerLoc.CENTER,
                  hasBounds=False):
         """
-        Constructor
-    
-        Parameters
-        ----------
-
-             shape  Tuple of cell sizes along each axis
- 
-             coordSys    coordinate system
-                           ESMF.CoordSys.CART              Cartesian
-                           ESMF.CoordSys.SPH_DEG (default) Degrees
-                           ESMF.CoordSys.SPH_RAD           Radians
-
-             periodicity Does the grid have a periodic coordinate
-                           0 No periodicity
-                           1 Periodic in x (1st) axis
-                           2 Periodic in x, y axes
-
-             staggerloc ESMF stagger location. ESMF.StaggerLoc.XXXX
-                          The stagger constants are listed at the top
-
-             hasBounds If the grid has bounds, Run AddCoords for the bounds
+       
         """
         # ESMF grid object
         self.grid = None
@@ -283,8 +291,7 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
 
     def getLoHiBounds(self, staggerloc):
         """
-        Get the local lo/hi index values for the coordinates (per processor)
-                         (hi is not inclusive, lo <= index < hi)
+        Get the local lo/hi index values for the coordinates (per processor) (hi is not inclusive, lo <= index < hi)
 
         Parameters
         ----------
@@ -332,19 +339,13 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
         ----------
      
              coords  
-                The curvilinear coordinates of the grid.
-                        List of numpy arrays. Must exist on all procs.
+                The curvilinear coordinates of the grid. List of numpy arrays. Must exist on all procs.
 
              staggerloc 
-                 The stagger location
-                           ESMF.StaggerLoc.CENTER (default)
-                           ESMF.StaggerLoc.CORNER
+                 The stagger location ESMF.StaggerLoc.CENTER (default) ESMF.StaggerLoc.CORNER
 
              globalIndexing
-                 if True array was allocated over global index
-                              space, otherwise array was allocated over
-                              local index space on this processor. This
-                              is only relevant if rootPe is None
+                 if True array was allocated over global index space, otherwise array was allocated over local index space on this processor. This is only relevant if rootPe is None
 
         Note: coord dims in cdms2 are ordered in y, x, but ESMF expects x, y,
         hence the dimensions are reversed here.
@@ -366,9 +367,11 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
         Parameters
         ---------   
 
-             dim desired dimension (zero based indexing)
+             dim
+                 desired dimension (zero based indexing)
 
-             staggerloc Stagger location
+             staggerloc
+                 Stagger location
         """
         gridPtr = self.grid.get_coords(coord_dim=dim, staggerloc=staggerloc)
         shp = self.getCoordShape(staggerloc)[::-1]
@@ -432,8 +435,8 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
         Parameters
         ----------
 
-             mask numpy array. 1 is invalid by default. This array exists
-                    on all procs
+             mask numpy array.
+                 1 is invalid by default. This array exists on all procs
 
              _: None
         """
@@ -453,14 +456,11 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
 class EsmfStructField:
     """
     Structured field.
-    """
 
-    def __init__(self, esmfGrid, name, datatype, staggerloc=CENTER):
-        """
-        Creator for structured ESMF Field
+    Creator for structured ESMF Field
 
-        Parameters
-        ----------
+Parameters
+----------
 
              esmfGrid 
                  instance of an ESMF
@@ -470,11 +470,16 @@ class EsmfStructField:
 
              datatype
                   data type, one of 'float64', 'float32', 'int64', or 'int32'
-                        (or equivalent numpy dtype)
+                  (or equivalent numpy dtype)
 
              staggerloc
                   ESMF.StaggerLoc.CENTER
-                      ESMF.StaggerLoc.CORNER
+                  ESMF.StaggerLoc.CORNER
+    """
+
+    def __init__(self, esmfGrid, name, datatype, staggerloc=CENTER):
+        """
+      
         """
         # field object
         self.field = None
@@ -535,9 +540,8 @@ class EsmfStructField:
         Parameters
         ----------
 
-             rootPe if None then local data will be fetched, otherwise
-                      gather the data on processor "rootPe" (all other
-                      procs will return None).
+             rootPe
+                 if None then local data will be fetched, otherwise gather the data on processor "rootPe" (all other procs will return None).
 
              _: None
 
@@ -592,15 +596,14 @@ class EsmfStructField:
         Parameters
         ----------
 
-             data full numpy array, this method will take care of setting a
-                    the subset of the data that reside on the local processor
+             data
+                 full numpy array, this method will take care of setting a the subset of the data that reside on the local processor
 
-             staggerloc stagger location of the data
+             staggerloc
+                 stagger location of the data
 
-
-             globalIndexing if True array was allocated over global index
-                              space, array was allocated over local index
-                              space (on this processor)
+             globalIndexing
+                 if True array was allocated over global index space, array was allocated over local index space (on this processor)
         """
         ptr = self.field.data
         if globalIndexing:
@@ -615,21 +618,11 @@ class EsmfStructField:
 class EsmfRegrid:
     """
     Regrid source grid data to destination grid data
-    """
 
-    def __init__(self, srcField, dstField,
-                 srcFrac=None,
-                 dstFrac=None,
-                 srcMaskValues=None,
-                 dstMaskValues=None,
-                 regridMethod=BILINEAR,
-                 ignoreDegenerate=False,
-                 unMappedAction=IGNORE):
-        """
-        Constuct regrid object
+    Constuct regrid object
 
-        Parameters
-        ----------
+Parameters
+----------
 
              srcField 
                  the source field object of type EsmfStructField
@@ -657,6 +650,18 @@ class EsmfRegrid:
 
              ignoreDegenerate
                  Ignore degenerate cells when checking inputs
+    """
+
+    def __init__(self, srcField, dstField,
+                 srcFrac=None,
+                 dstFrac=None,
+                 srcMaskValues=None,
+                 dstMaskValues=None,
+                 regridMethod=BILINEAR,
+                 ignoreDegenerate=False,
+                 unMappedAction=IGNORE):
+        """
+       
         """
         self.srcField = srcField
         self.dstField = dstField
@@ -728,8 +733,8 @@ class EsmfRegrid:
         Parameters
         ----------
 
-             rootPe None is local areas are returned, otherwise
-                      provide rootPe and the data will be gathered
+             rootPe
+                 None is local areas are returned, otherwise provide rootPe and the data will be gathered
 
              _: None
 
@@ -749,8 +754,8 @@ class EsmfRegrid:
         Parameters
         ----------
 
-             rootPe None is local areas are returned, otherwise
-                      provide rootPe and the data will be gathered
+             rootPe
+                 None is local areas are returned, otherwise provide rootPe and the data will be gathered
 
              _: None
 
@@ -770,8 +775,8 @@ class EsmfRegrid:
         Parameters
         ----------
 
-             rootPe None is local areas are returned, otherwise
-                      provide rootPe and the data will be gathered
+             rootPe
+                 None is local areas are returned, otherwise provide rootPe and the data will be gathered
 
              _: None       
 
@@ -792,8 +797,8 @@ class EsmfRegrid:
         Parameters
         ----------
 
-             rootPe None is local areas are returned, otherwise
-                      provide rootPe and the data will be gathered
+             rootPe
+                 None is local areas are returned, otherwise provide rootPe and the data will be gathered
 
              _: None
 
@@ -814,13 +819,14 @@ class EsmfRegrid:
         Parameters
         ----------
 
-             srcField source field (or None if src field passed to
-               constructor is to be used)
+             srcField
+                 source field (or None if src field passed to constructor is to be used)
 
-             dstField destination field (or None if dst field passed
-               to constructor is to be used)
+             dstField
+                 destination field (or None if dst field passed to constructor is to be used)
 
-             zero_region specify which region of the field indices will be zeroed (or None default to TOTAL Region)
+             zero_region
+                 specify which region of the field indices will be zeroed (or None default to TOTAL Region)
         """
         if srcField is None:
             srcField = self.srcField

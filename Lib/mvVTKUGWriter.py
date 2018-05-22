@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-
+#Alex Pletzer, Tech-X Corp. (2011)
+#This code is provided with the hope that it will be useful.
+#No guarantee is provided whatsoever. Use at your own risk.
 """
 Write data to VTK file format using the unstructured grid format
-Alex Pletzer, Tech-X Corp. (2011)
-This code is provided with the hope that it will be useful.
-No guarantee is provided whatsoever. Use at your own risk.
+
 """
 
 from __future__ import print_function
@@ -22,7 +22,10 @@ class VTKUGWriter(mvBaseWriter.BaseWriter):
         Parameters
         ----------
 
-             filename file name
+           filename
+               file name
+
+           _:None
         """
         f = open(filename, 'w')
         print('# vtk DataFile Version 2.0', file=f)

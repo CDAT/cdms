@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-
+#Alex Pletzer, Tech-X Corp. (2011)
+#This code is provided with the hope that it will be useful.
+#No guarantee is provided whatsoever. Use at your own risk.
 """
 Class for representing grids on the sphere
-Alex Pletzer, Tech-X Corp. (2011)
-This code is provided with the hope that it will be useful.
-No guarantee is provided whatsoever. Use at your own risk.
+
 """
 
 from __future__ import print_function
@@ -21,10 +21,11 @@ class SphereMesh:
         Parameters
         ----------
 
-             var cdms2 variable
+             var
+                 cdms2 variable
 
-             sphereThickness thickness of the shell in normalized
-                               sphere radius
+             sphereThickness
+                 thickness of the shell in normalized sphere radius
         """
 
         self.isRectilinear = True
@@ -102,7 +103,8 @@ class SphereMesh:
         Parameters
         ----------
 
-             sphereRadius radius of sphere
+             sphereRadius
+                 radius of sphere
 
         Returns
         -------

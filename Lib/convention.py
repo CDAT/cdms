@@ -242,7 +242,7 @@ class CFConvention(COARDSConvention):
             return AbstractConvention.axisIsLongitude(self, axis)
 
     def getVariableBounds(self, dset, var):
-        """Get the bounds variable for the variable, from a dataset or file."""
+        "Get the bounds variable for the variable, from a dataset or file."
         if hasattr(var, 'bounds'):
             boundsid = var.bounds
             if boundsid in dset.variables:

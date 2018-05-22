@@ -1,10 +1,10 @@
+#This code is provided with the hope that it will be useful.
+#No guarantee is provided whatsoever. Use at your own risk.
+#
+#David Kindig and Alex Pletzer, Tech-X Corp. (2012)
+
 """
 Generic interface to multiple regrid classes. No dependence on cdms2 variables.
-
-This code is provided with the hope that it will be useful.
-No guarantee is provided whatsoever. Use at your own risk.
-
-David Kindig and Alex Pletzer, Tech-X Corp. (2012)
 """
 import operator
 import numpy
@@ -21,8 +21,22 @@ EPS = 10 * 1.19209e-07
 def guessPeriodicity(srcBounds):
     """
     Guess if a src grid is periodic
-    @param srcBounds the nodal src set of coordinates
-    @return 1 if periodic, warp around, 0 otherwise
+
+    Parameters
+    ----------
+
+
+        srcBounds
+            the nodal src set of coordinates
+
+        _: None
+        
+
+    Returns
+    -------
+
+
+        1 if periodic, warp around, 0 otherwise
     """
     res = 0
     if srcBounds is not None:
@@ -42,6 +56,48 @@ def guessPeriodicity(srcBounds):
 class GenericRegrid:
     """
     Generic Regrid class.
+    Constructor
+
+
+Parameters
+----------
+       
+            srcGrid
+                list of numpy arrays, source horizontal coordinates
+
+            dstGrid
+                list of numpy arrays, destination horizontal coordinate
+            dtype
+                numpy data type for src/dst data
+
+            regridMethod
+                linear (bi, tri,...) default or conservative
+
+            regridTool
+                currently either 'libcf' or 'esmf'
+
+            srcGridMask
+                array of same shape as srcGrid
+
+            srcBounds
+                list of numpy arrays of same shape as srcGrid
+
+            srcGridAreas
+                array of same shape as srcGrid
+
+            dstGridMask
+                array of same shape as dstGrid
+
+            dstBounds
+                list of numpy arrays of same shape as dstGrid
+
+            dstGridAreas
+                array of same shape as dstGrid
+
+            **args
+                  additional arguments to be passed to the specific tool
+                      libcf': mkCyclic={True, False}, handleCut={True,False}
+                      'esmf': periodicity={0,1}, coordSys={'deg', 'cart'}, ...
     """
 
     def __init__(self, srcGrid, dstGrid,
@@ -52,22 +108,7 @@ class GenericRegrid:
                  dstGridMask=None, dstBounds=None, dstGridAreas=None,
                  **args):
         """
-        Constructor.
-        @param srcGrid list of numpy arrays, source horizontal coordinates
-        @param dstGrid list of numpy arrays, destination horizontal coordinate
-        @param dtype numpy data type for src/dst data
-        @param regridMethod linear (bi, tri,...) default or conservative
-        @param regridTool currently either 'libcf' or 'esmf'
-        @param srcGridMask array of same shape as srcGrid
-        @param srcBounds list of numpy arrays of same shape as srcGrid
-        @param srcGridAreas array of same shape as srcGrid
-        @param dstGridMask array of same shape as dstGrid
-        @param dstBounds list of numpy arrays of same shape as dstGrid
-        @param dstGridAreas array of same shape as dstGrid
-        @param **args additional arguments to be passed to the
-                      specific tool
-                      'libcf': mkCyclic={True, False}, handleCut={True,False}
-                      'esmf': periodicity={0,1}, coordSys={'deg', 'cart'}, ...
+       
         """
 
         self.nGridDims = len(srcGrid)
@@ -160,12 +201,22 @@ valid choices are: 'libcf', 'esmf'""" % regridTool
               **args):
         """
         Regrid source to destination
-        @param srcData array (input)
-        @param dstData array (output)
-        @param rootPe if other than None, then results will be MPI
-                      gathered
-        @param missingValue if not None, then data mask will be interpolated
-                            and data value set to missingValue when masked
+
+Parameters
+----------
+
+                srcData
+                    array (input)
+
+                dstData
+                    array (output)
+
+                rootPe
+                    if other than None, then results will be MPI gathered
+
+                missingValue
+                    if not None, then data mask will be interpolated
+                    and data value set to missingValue when masked
         """
 
         # assuming the axes are the slowly varying indices
@@ -298,16 +349,25 @@ valid choices are: 'libcf', 'esmf'""" % regridTool
         """
         Return the destination grid, may be different from the dst grid provided
         to the constructor due to domain decomposition
-        @return local grid on this processor
+
+        Returns
+        -------
+
+            local grid on this processor
         """
         return self.tool.getDstGrid()
 
     def fillInDiagnosticData(self, diag, rootPe=None):
         """
         Fill in diagnostic data
-        @param diag a dictionary whose entries, if present, will be filled
-                    entries are tool dependent
-        @param rootPe root processor where data should be gathered (or
-                      None if local areas are to be returned)
+
+        Parameters
+        ----------
+
+            diag 
+                a dictionary whose entries, if present, will be filled entries are tool dependent
+
+            rootPe
+                root processor where data should be gathered (or None if local areas are to be returned)
         """
         self.tool.fillInDiagnosticData(diag, rootPe=rootPe)

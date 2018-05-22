@@ -207,8 +207,9 @@ def createUniformLongitudeAxis(startLon, nlon, deltaLon):
 def mapLinearIntersection(xind, yind, iind,
                           aMinusEps, aPlusEps, bPlusEps, bMinusEps,
                           boundLeft, nodeSubI, boundRight):
-    """  Parameters
-         ----------
+    """
+Parameters
+----------
 
        xind:
           'c' if (a,b) is closed on the left, 'o' if open,
@@ -217,22 +218,17 @@ def mapLinearIntersection(xind, yind, iind,
            same for right endpoint j
 
   
- Returns
- -------
+Returns
+-------
 
-       True if the coordinate interval (a,b) intersects the node nodeSubI or cell
-       bounds [boundLeft,boundRight], where the interval (a,b) is defined by:
+       True if the coordinate interval (a,b) intersects the node nodeSubI or cell bounds [boundLeft,boundRight], where the interval (a,b) is defined by:
 
          * aMinusEps,aPlusEps = a +/- epsilon
          * bPlusEps,bMinusEps = b +/- epsilon
 
-       and the intersection option iind = 'n','b','e','s' specifies whether
-       the intersection is with respect to the node value nodeSubI ('n' or 'e')
-       or the cell bounds [boundLeft,boundRight].
+       and the intersection option iind = 'n','b','e','s' specifies whether the intersection is with respect to the node value nodeSubI ('n' or 'e') or the cell bounds [boundLeft,boundRight].
 
-    See Also
-    --------
-    mapLinearExt
+    See Also mapLinearExt
 
     """
 
@@ -274,15 +270,18 @@ def mapLinearExt(axis, bounds, interval, indicator='ccn',
     meaning for the right-hand point. The third character indicates
     how the intersection of the interval and axis is treated:
 
-    'n' - the node is in the interval
-    'b' - the interval intersects the cell bounds
-    's' - the cell bounds are a subset of the interval
-    'e' - same as 'n', plus an extra node on either side.
+        'n' - the node is in the interval
+
+        'b' - the interval intersects the cell bounds
+
+        's' - the cell bounds are a subset of the interval
+
+        'e' - same as 'n', plus an extra node on either side.
 
     Returns
     -------
-       The corresponding index interval (i,j), where i<j, indicating the
-       half-open index interval [i,j), or None if the intersection is empty.
+       The corresponding index interval (i,j), where i<j, indicating the half-open index interval [i,j), or None if the intersection is empty.
+
     """
 
     indicator = indicator.lower()
@@ -718,21 +717,18 @@ def allclose(ax1, ax2, rtol=1.e-5, atol=1.e-8):
     """
     Parameters
     ----------
-       ax1, ax2: 
-          
+       ax1
            array_like
-
-       _:  None
+       ax2 
+           array_like
 
     Returns
     -------
        bool
            True if all elements of axes ax1 and ax2 are close,
-           in the sense of numpy.ma.allclose.
+           in the sense of numpy.ma.allclose. 
 
-    See Also
-    --------
-       all, any
+       See Also all, any
 
     Examples
     --------
@@ -1259,21 +1255,22 @@ class AbstractAxis(CdmsObj):
         return(self.getModuloCycle())
 
     def mapInterval(self, interval, indicator='ccn', cycle=None):
-        """
-        Map coordinate interval to index interval. interval has one of the forms
+        """Map coordinate interval to index interval. interval has one of the forms:
 
-          * `(x,y)`
-          * `(x,y,indicator)`: indicator overrides keywork argument
-          * `(x,y,indicator,cycle)`: indicator, cycle override keyword arguments
-          * `None`: indicates the full interval
+               * `(x,y)`
+               * `(x,y,indicator)`: indicator overrides keywork argument
+               * `(x,y,indicator,cycle)`: indicator, cycle override keyword arguments
+               * `None`: indicates the full interval
 
-        where `x` and `y` are the endpoints in coordinate space. indicator is a
+        Note: Where `x` and `y` are the endpoints in coordinate space. indicator is a
         two-character string, where the first character is `c` if the interval
         is closed on the left, `o` if open, and the second character has the
         same meaning for the right-hand point. Set cycle to a nonzero value
         to force wraparound.
 
-        Returns the corresponding index interval (i,j), where i<j, indicating
+        Returns
+        -------
+            The corresponding index interval (i,j), where i<j, indicating
         the half-open index interval [i,j), or None if the intersection is empty.
 
         For an axis which is circular (self.topology == 'circular'), [i,j)
@@ -2719,6 +2716,7 @@ def concatenate(axes, id=None, attributes=None):
 
 def take(ax, indices):
     """Take elements form an array along an axis
+
     Parameters
     ----------
         ax:

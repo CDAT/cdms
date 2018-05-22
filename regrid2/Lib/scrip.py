@@ -107,14 +107,29 @@ class ScripRegridder:
 
 
 class ConservativeRegridder(ScripRegridder):
-    """First-order conservative regrid. By default, the normalize option ="fracarea", and array 'normal'
-    is not specified. If 'normal' is specified, it should be a one-dimensional array of the same length
-    as the output grid size, with values:
-      1.0 for normalize="fracarea",
-      grid_frac for normalize="destarea", or
-      grid_frac*grid_area for normalize="none".
-    sourceArea is the area of the source grid cells
-    destArea is the area of the destination grid cells
+    """First-order conservative regrid.
+
+           By default, the normalize option ="fracarea", and array 'normal' is not specified.
+
+               If 'normal' is specified, it should be a one-dimensional array of the same length
+               as the output grid size, with values:
+     
+                   1.0 for normalize="fracarea",
+
+                   grid_frac for normalize="destarea", or
+
+                   grid_frac*grid_area for normalize="none".
+
+       Parameters
+       ----------
+
+          sourceArea
+
+              is the area of the source grid cells
+
+          destArea
+
+              is the area of the destination grid cells
     """
 
     def __init__(self, outputGrid, remapMatrix, sourceAddress, destAddress, inputGrid=None,
@@ -210,9 +225,17 @@ class BicubicRegridder(ScripRegridder):
             destFrac=destFrac)
 
     def __call__(self, input, gradLat, gradLon, gradLatlon):
-        """gradLat = df/di
-        gradLon = df/dj
-        gradLatlon = d(df)/(di)(dj)
+        """
+        Parameters
+        ----------
+            gradLat: 
+                df/di
+
+            gradLon:
+                df/dj
+
+            gradLatlon:
+                d(df)/(di)(dj)
         """
 
         import numpy.ma
@@ -344,10 +367,20 @@ class DistwgtRegridder(ScripRegridder):
 
 def readRegridder(fileobj, mapMethod=None, checkGrid=1):
     """Read a regridder from an open fileobj.
-    mapMethod is one of "conservative", "bilinear", "bicubic", or "distwgt". If unspecified, it defaults to the method
-    defined in the file.
-    If 'checkGrid' is 1 (default), the grid cells are checked for convexity,
-    and 'repaired' if necessary.
+
+       Parameters
+       ----------
+
+           mapMethod
+
+               is one of "conservative", "bilinear", "bicubic", or "distwgt".
+
+                   If unspecified, it defaults to the method defined in the file.
+  
+                   If 'checkGrid' is 1 (default), the grid cells are checked for convexity,
+                   and 'repaired' if necessary.
+
+           _: None
     """
 
     if isinstance(fileobj, str):

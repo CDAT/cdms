@@ -109,11 +109,13 @@ class var_unary_operation_with_axis:
 
 def commonDomain(a, b, omit=None):
     """commonDomain(a,b) tests that the domains of variables/arrays a and b are equal,
-    and returns the common domain if equal, or None if not equal. The domains may
-    differ in that one domain may have leading axes not common
-    to the other; the result domain will contain those axes.
-    If <omit> is specified, as an integer i, skip comparison of the ith dimension
-    and return None for the ith (common) dimension.
+    and returns the common domain if equal, or None if not equal. 
+
+       The domains may differ in that one domain may have leading axes not common
+       to the other; the result domain will contain those axes.
+
+       If <omit> is specified, as an integer i, skip comparison of the ith dimension
+       and return None for the ith (common) dimension.
     """
 
     if isinstance(b, AbstractVariable):
@@ -183,11 +185,9 @@ def commonGrid(a, b, axes):
     and consistent with the list of axes. If so, the common grid is returned, else None
     is returned. a and b can be numpy arrays, in which case the result is None.
 
-    The common grid is 'consistent' with axes if the grid axes (e.g., the axes of latitude and
-    longitude coordinate variables) are members of the list 'axes'.
+        The common grid is 'consistent' with axes if the grid axes (e.g., the axes of latitude and longitude coordinate variables) are members of the list 'axes'.
 
-    If the grid(s) of a, b are rectilinear, the result is None, as the grids are implicitly
-    defined by the axes.
+        If the grid(s) of a, b are rectilinear, the result is None, as the grids are implicitly defined by the axes.
     """
     if isinstance(b, AbstractVariable):
         gb = b.getGrid()
@@ -561,12 +561,7 @@ def choose(myindices, t):
     Returns
     -------
 
-         an array shaped like indices containing elements chosen
-         from t.
-         If an element of t is the special element masked, any element
-         of the result that "chooses" that element is masked.
-
-         The result has only the default axes.
+         an array shaped like indices containing elements chosen from t. If an element of t is the special element masked, any element of the result that "chooses" that element is masked. The result has only the default axes.
     """
     maresult = numpy.ma.choose(myindices, list(map(_makeMaskedArg, t)))
     F = getattr(t, "fill_value", 1.e20)
@@ -590,8 +585,7 @@ def masked_where(condition, x, copy=1):
     Returns
     -------
 
-         x as an array masked where condition is true.
-         Also masked where x or condition masked.
+         x as an array masked where condition is true. Also masked where x or condition masked.
     """
     tx = _makeMaskedArg(x)
     tcondition = _makeMaskedArg(condition)
@@ -901,7 +895,7 @@ def asarray(data, typecode=None, dtype=None):
      Returns
      -------
 
-          data if dtype is None or data is a MaskedArray of the same dtype.
+          data if dtype is None or data is a MaskedArray of the same dtype. 
           typecode arg is for backward compatibility.
     """
     dtype = _convdtype(dtype, typecode)

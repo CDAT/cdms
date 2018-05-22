@@ -73,11 +73,9 @@ def comptime(t):
 
 
 class forecast():
-    """represents a forecast starting at a single time"""
+    """represents a forecast starting at a single time
 
-    def __init__(self, tau0time, dataset_list, path="."):
-        """
-        Parameters
+       Parameters
         ----------
 
              tau0time 
@@ -98,6 +96,11 @@ class forecast():
 
              N.B.  This is like a CdmsFile.  Creating a forecast means opening a file,
              so later on you should call forecast.close() to close it.
+    """
+
+    def __init__(self, tau0time, dataset_list, path="."):
+        """
+       
         """
         self.fctl, self.fct = two_times_from_one(tau0time)
 
@@ -130,8 +133,7 @@ def available_forecasts(dataset_file, path="."):
 
     Returns
     -------
-          a list of forecasts (as their generating times) which are
-          available through the specified cdscan-generated dataset xml file.
+          a list of forecasts (as their generating times) which are available through the specified cdscan-generated dataset xml file.
    
     Note
     ----
@@ -148,12 +150,11 @@ def available_forecasts(dataset_file, path="."):
 
 
 class forecasts():
-    """represents a set of forecasts"""
+    """represents a set of forecasts
 
-    def __init__(self, dataset_file, forecast_times, path="."):
-        """
-        Example
-        -------
+
+       Example
+       -------
 
              Creates a set of forecasts.  Normally you do it by something like
              f = forecasts( 'file.xml', (min_time, max_time) )
@@ -191,6 +192,11 @@ class forecasts():
              As for the forecast class, this opens files when initiated, so when you
              are finished with the forecasts, you should close the files by calling
              forecasts.close() .
+        """
+
+    def __init__(self, dataset_file, forecast_times, path="."):
+        """
+       
         """
 
         # Create dataset_list to get a forecast file from each forecast time.
@@ -354,8 +360,7 @@ class forecasts():
         Returns
         -------      
  
-             a tuple (axis,start,length,true_length) where axis is in the
-             forecast direction. 
+             a tuple (axis,start,length,true_length) where axis is in the forecast direction. 
 
         Note
         -----
@@ -406,8 +411,7 @@ class forecasts():
         Returns
         -------
 
-             whatever the forecast set has that matches the given
-             attribute, normally a DatasetVariable. 
+             whatever the forecast set has that matches the given attribute, normally a DatasetVariable. 
 
 
         Note

@@ -1,9 +1,10 @@
+#David Kindig and Alex Pletzer, Tech-X Corp. (2012)
+#This code is provided with the hope that it will be useful.
+#No guarantee is provided whatsoever. Use at your own risk.
 """
 Cdms2 interface to multiple regridders
 
-David Kindig and Alex Pletzer, Tech-X Corp. (2012)
-This code is provided with the hope that it will be useful.
-No guarantee is provided whatsoever. Use at your own risk.
+
 """
 from __future__ import print_function
 import operator
@@ -180,7 +181,8 @@ def _buildBounds(bounds):
     Parameters
     ----------
 
-         bounds CdmsVar.getBounds()
+         bounds
+             CdmsVar.getBounds()
 
     Returns
     -------
@@ -210,14 +212,17 @@ def getBoundList(coordList, mask=None,
     Parameters
     ----------
 
-         coordList coordinate list, should have getBounds()
+         coordList
+             coordinate list, should have getBounds()
 
-         mask avoid checking areas where mask is one
+         mask
+             avoid checking areas where mask is one
 
-         removeBadCells set to True if you want to the code to remove
-                bad cells, ie zero cells, butterfly cells, ...
+         removeBadCells
+             set to True if you want to the code to remove bad cells, ie zero cells, butterfly cells, ...
 
-         maskCellIndices list of bad cell indices to mask out (output)
+         maskCellIndices
+             list of bad cell indices to mask out (output)
 
     Returns
     -------
@@ -283,9 +288,11 @@ def _getDstDataShape(srcVar, dstGrid):
     Parameters
     ----------
 
-         srcVar the variable from which all axes other than lat/lon
-                  will be taken from
-         dstGrid target, horizontal grid
+         srcVar
+             the variable from which all axes other than lat/lon will be taken from
+
+         dstGrid
+             target, horizontal grid
 
     Returns
     -------
@@ -327,15 +334,16 @@ def _getAxisList(srcVar, dstGrid):
     Parameters
     ----------
 
-         srcVar the variable from which all axes other than lat/lon
-            will be taken from
-         dstGrid target, horizontal grid
+         srcVar
+             the variable from which all axes other than lat/lon will be taken from
+
+         dstGrid
+             target, horizontal grid
 
     Returns
     -------
 
-         variable with non-horizontal axes from srcVar and horizontal axes
-            from dstGrid
+         variable with non-horizontal axes from srcVar and horizontal axes from dstGrid
     """
 
     shp = srcVar.shape
@@ -370,6 +378,43 @@ class CdmsRegrid:
     Regridding switchboard, handles CDMS variables before handing off to
     regridder. If a multidimensional variable is passed in, the apply step
     loops over the axes above the Lat (Y) -- Lon (X) coordinates
+
+  Establish which regridding method to use, handle CDMS variables before
+        handing off to regridder. See specific tool for more information.
+       
+     Parameters
+     ----------
+         srcGrid
+             CDMS source grid
+
+         dstGrid
+             CDMS destination grid
+
+         dtype
+             numpy data type for src and dst data
+ 
+         regridMethod
+             linear (all tools - bi, tri),
+             conserve (ESMF Only)    
+             patch (ESMF Only)
+
+         regridTool
+             LibCF, ESMF, ...
+
+         srcGridMask
+             array source mask, interpolation coefficients will not be computed for masked
+             points/cells.
+
+         srcGridAreas
+             array destination cell areas, only needed for conservative regridding
+
+         dstGridMask
+             array destination mask, interpolation coefficients will not be computed for masked points/cells.
+
+         dstGridAreas
+             array destination cell areas, only needed for conservative regridding
+         **args
+             additional, tool dependent arguments
     """
 
     def __init__(self, srcGrid, dstGrid, dtype,
@@ -378,39 +423,7 @@ class CdmsRegrid:
                  dstGridMask=None, dstGridAreas=None,
                  **args):
         """
-        Establish which regridding method to use, handle CDMS variables before
-        handing off to regridder. See specific tool for more information.
-        
-        Parameters
-        ----------
-
-             srcGrid CDMS source grid
-
-             dstGrid CDMS destination grid
-
-             dtype numpy data type for src and dst data
- 
-             regridMethod linear (all tools - bi, tri),
-                            conserve (ESMF Only)
-                            patch (ESMF Only)
-
-             regridTool LibCF, ESMF, ...
-
-             srcGridMask array source mask, interpolation
-                           coefficients will not be computed for masked
-                           points/cells.
-
-             srcGridAreas array destination cell areas, only needed for
-                            conservative regridding
-
-             dstGridMask array destination mask, interpolation
-                           coefficients will not be computed for masked
-                           points/cells.
-
-             dstGridAreas array destination cell areas, only needed for
-                            conservative regridding
-
-             **args additional, tool dependent arguments
+       
         """
 
         srcBounds = None
@@ -503,9 +516,11 @@ coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
         Parameters
         ----------
 
-             srcVar CDMS variable
+             srcVar
+                 CDMS variable
 
-             **args Tool dependent arguments
+             **args
+                 Tool dependent arguments
 
         Returns
         -------

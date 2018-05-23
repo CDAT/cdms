@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-
+#Alex Pletzer and Dave Kindig, Tech-X (2011)
+#This code is provided with the hope that it will be useful.
+#No guarantee is provided whatsoever. Use at your own risk.
 """
 Regridding of curvilinear structured grids
-Alex Pletzer and Dave Kindig, Tech-X (2011)
-This code is provided with the hope that it will be useful.
-No guarantee is provided whatsoever. Use at your own risk.
+
 """
 # standard python includes
 # from re import search, sub

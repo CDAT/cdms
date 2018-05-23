@@ -133,10 +133,10 @@ class AbstractVariable(CdmsObj, Slab):
   
     Parameters
     ----------
-          variableNode
-                    is the variable tree node, if any.
-          parent 
-                    is the containing dataset instance.
+        variableNode
+            is the variable tree node, if any.
+        parent 
+            is the containing dataset instance.
     """
     def info(self, flag=None, device=None):
         Slab.info(self, flag, device)
@@ -1437,8 +1437,8 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
           method : Optional
               either "log" to interpolate in the log of pressure (default),
               or "linear" for linear interpolation.
-          missing and order:
-               are as for regrid.CrossSectionRegridder.
+          missing-and-order:
+              are as for regrid.CrossSectionRegridder.
 
         """
         from regrid2 import CrossSectionRegridder
@@ -1689,12 +1689,13 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
 
     def decode(self, ar):
         """Decode compressed data.
-           Parameter
-           ---------
-              ar
-                 is a masked array, scalar, or numpy.ma.masked.
+       
+Parameters
+----------
+            ar
+                is a masked array, scalar, or numpy.ma.masked.
 
-             _: None
+            _: None
 
         """
 

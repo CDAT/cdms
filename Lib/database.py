@@ -45,7 +45,7 @@ def connect(uri=None, user="", password=""):
     Description:  Open a CDMS database connection.
 
     Arguments
-    ---------
+   
        uri: Universal Resource Identifier. If unspecified, defaults to the environment variable CDMSROOT.
        user: user id
        password: password
@@ -465,7 +465,7 @@ class AbstractSearchResult:
 
 
 class LDAPSearchResult(AbstractSearchResult):
-
+   
     def __init__(self, db, LDAPresult):
         self.db = db
         self.result = LDAPresult

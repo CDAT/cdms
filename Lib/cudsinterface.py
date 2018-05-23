@@ -125,7 +125,7 @@ class cuDataset():
         Returns
         -------
 
-           a list of the dimension names associated with a variable.
+           a list of the dimension names associated with a variable. 
            If no argument, return the file.axes.keys()
 
        

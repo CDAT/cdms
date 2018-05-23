@@ -39,9 +39,7 @@ def timeindex(value, units, basetime, delta, delunits, calendar):
 
 
 class DatasetVariable(AbstractVariable):
-
-    def __init__(self, parent, id, variableNode=None):
-        """Variable (parent, variableNode=None)
+    """Variable (parent, variableNode=None)
         
         Parameters
         ----------
@@ -50,6 +48,10 @@ class DatasetVariable(AbstractVariable):
 
            parent
               is the containing dataset instance.
+
+    """
+    def __init__(self, parent, id, variableNode=None):
+        """
         """
         AbstractVariable.__init__(self, parent, variableNode)
         val = self.__cdms_internals__ + ['domain', 'name_in_file']
@@ -322,30 +324,30 @@ class DatasetVariable(AbstractVariable):
             a 3-tuple 
                (npart, dimensionlist, partitionSlices)
 
-        Where:
+          Where:
 
-          npart
-             is the number of partitioned dimensions: 0, 1, or 2;
+              npart
+                    is the number of partitioned dimensions: 0, 1, or 2;
 
-          dimensionlist
-             is a tuple of length npart, having the dimension numbers of the partitioned dimensions;
+               dimensionlist
+                   is a tuple of length npart, having the dimension numbers of the partitioned dimensions;
 
-          partitionSlices
-             is the list of file-specific (filename, slice) corresponding to the paths and slices within the files to be read.
+               partitionSlices
+                   is the list of file-specific (filename, slice) corresponding to the paths and slices within the files to be read.
 
-        The exact form of partitionSlices depends on the value of npart:
+            The exact form of partitionSlices depends on the value of npart:
 
 
-            npart           partitionSlices
+                 npart           partitionSlices
 
-                  0         (filename,slicelist)
+                      0             (filename,slicelist)
 
-                  1         [(filename,slicelist),...,(filename,slicelist)]
+                      1             [(filename,slicelist),...,(filename,slicelist)]
 
-                  2         [[(filename,slicelist),...,(filename,slicelist)]
-                            [(filename,slicelist),...,(filename,slicelist)]
-                            ...
-                            [(filename,slicelist),...,(filename,slicelist)]]
+                      2             [[(filename,slicelist),...,(filename,slicelist)]
+                                    [(filename,slicelist),...,(filename,slicelist)]
+                                    ...
+                                    [(filename,slicelist),...,(filename,slicelist)]]
 
         Note:
           - A filename of None indicates that no file was found with data corresponding to the slicelist.

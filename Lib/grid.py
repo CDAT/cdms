@@ -941,7 +941,7 @@ def isGrid(grid):
     Parameters
     ----------
 
-         grid cdms2: 
+         grid-cdms2: 
             contruct to be examined
 
          _: None

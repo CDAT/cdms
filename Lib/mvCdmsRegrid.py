@@ -379,11 +379,10 @@ class CdmsRegrid:
     regridder. If a multidimensional variable is passed in, the apply step
     loops over the axes above the Lat (Y) -- Lon (X) coordinates
 
-  Establish which regridding method to use, handle CDMS variables before
-        handing off to regridder. See specific tool for more information.
+  Establish which regridding method to use, handle CDMS variables before handing off to regridder. See specific tool for more information.
        
-     Parameters
-     ----------
+Parameters
+----------
          srcGrid
              CDMS source grid
 

@@ -16,14 +16,14 @@ class SelectorError (CDMSError):
 
 
 class Selector:
-    """Selector class"""
+    """Selector class
+
+       Positional args are SelectorComponents or Selectors Keyword args and their value are passed to kwselect to create selectors. All the selector components are put into the components list of this Selector, along with all the componentsof any Selector arguments.
+
+    """
 
     def __init__(self, *args, **kwargs):
-        """Positional args are SelectorComponents or Selectors
-         Keyword args and their value are passed to kwselect to create
-         selectors. All the selector components are put into the
-         components list of this Selector, along with all the components
-         of any Selector arguments.
+        """
         """
         self.__components = []
         self.refine(*args, **kwargs)
@@ -96,6 +96,7 @@ class Selector:
            Options modify the result of the selection. The options and
            their default values are:
                -- raw = 0: if 1, return an numpy.ma only
+
                -- squeeze = 0:  If 1, eliminate any dimensions of length 1
                                 from the result.
                -- order = None: If given, is a string such as

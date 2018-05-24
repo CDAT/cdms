@@ -770,6 +770,7 @@ def transpose(a, axes=None):
 
 
 class _minimum_operation:
+           
     "Object to calculate minima"
 
     def __init__(self):

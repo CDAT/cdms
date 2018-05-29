@@ -1,9 +1,9 @@
 hgrid 
 =====
 
-.. automodule:: Lib.hgrid 
+.. automodule:: cdms2.hgrid 
       :members:
 
 
-.. automodule:: Lib.hgrid.AbstractHorizontalGrid
+.. automodule:: cdms2.hgrid.AbstractHorizontalGrid
       :members:

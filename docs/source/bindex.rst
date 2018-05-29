@@ -1,7 +1,7 @@
 bindex
 ======
 
-.. automodule:: Lib.bindex
+.. automodule:: cdms2.bindex
       :members:
 
 

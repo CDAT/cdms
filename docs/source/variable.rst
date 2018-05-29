@@ -1,7 +1,7 @@
 variable
 ========
 
-.. automodule:: Lib.variable
+.. automodule:: cdms2.variable
       :members:
 
 

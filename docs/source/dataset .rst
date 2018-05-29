@@ -1,7 +1,7 @@
 dataset 
 =======
 
-.. automodule:: Lib.dataset 
+.. automodule:: cdms2.dataset 
       :members:
 
 

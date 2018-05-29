@@ -1,7 +1,7 @@
-regrid2-mvLibCFRegrid
+regrid2-mvcdms2.FRegrid
 =====================
 
-.. automodule:: Libregrid.mvLibCFRegrid
+.. automodule:: regrid2.mvLibCFRegrid
       :members:
 
 

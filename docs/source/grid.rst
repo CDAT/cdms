@@ -1,7 +1,7 @@
 grid 
 ====
 
-.. automodule:: Lib.grid 
+.. automodule:: cdms2.grid 
       :members:
 
 

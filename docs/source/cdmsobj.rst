@@ -1,7 +1,7 @@
 cdmsobj
 =======
 
-.. automodule:: Lib.cdmsobj
+.. automodule:: cdms2.cdmsobj
       :members:
 
 

@@ -1,7 +1,7 @@
 database
 ========
 
-.. automodule:: Lib.database
+.. automodule:: cdms2.database
       :members:
 
 

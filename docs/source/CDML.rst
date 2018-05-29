@@ -1,7 +1,7 @@
 CDML
 ====
 
-.. automodule:: Lib.CDML
+.. automodule:: cdms2.CDML
       :members:
 
 

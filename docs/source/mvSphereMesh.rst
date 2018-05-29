@@ -1,6 +1,6 @@
 mvSphereMesh
 ============
 
-.. automodule:: Lib.mvSphereMesh
+.. automodule:: cdms2.mvSphereMesh
       :members:
 

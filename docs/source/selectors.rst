@@ -1,5 +1,5 @@
 selectors
 =========
 
-.. automodule:: Lib.selectors
+.. automodule:: cdms2.selectors
       :members:

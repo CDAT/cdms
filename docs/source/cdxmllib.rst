@@ -1,7 +1,7 @@
 cdxmllib
 ========
 
-.. automodule:: Lib.cdxmllib
+.. automodule:: cdms2.cdxmllib
       :members:
 
 

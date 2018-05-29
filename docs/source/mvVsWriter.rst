@@ -1,7 +1,7 @@
 mvVsWriter
 ==========
 
-.. automodule:: Lib.mvVsWriter
+.. automodule:: cdms2.mvVsWriter
       :members:
 
 

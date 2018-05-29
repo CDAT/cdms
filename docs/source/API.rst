@@ -6,6 +6,8 @@ API
 Classes
 -------
 .. autosummary:: 
+   :toctree: generated/
+
    avariable
    axis
    fvariable
@@ -42,14 +44,14 @@ Regridder
 ---------
 .. autosummary:: 
    regrid2.horizontal
-   esmf
-   crossSection
-   gsRegrid
-   mvESMFRegrid
-   mvGenericRegrid
-   pressure
-   scrip
-   mvLibCFRegrid
+   regrid2.esmf
+   regrid2.crossSection
+   regrid2.gsRegrid
+   regrid2.mvESMFRegrid
+   regrid2.mvGenericRegrid
+   regrid2.pressure
+   regrid2.scrip
+   regrid2.mvcdms2.FRegrid
    
 
  

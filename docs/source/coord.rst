@@ -1,7 +1,7 @@
 coord
 =====
 
-.. automodule:: Lib.coord
+.. automodule:: cdms2.coord
       :members:
 
 

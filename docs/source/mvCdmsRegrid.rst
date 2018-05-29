@@ -1,5 +1,5 @@
 mvCdmsRegrid
 ============
 
-.. automodule:: Lib.mvCdmsRegrid
+.. automodule:: cdms2.mvCdmsRegrid
       :members:

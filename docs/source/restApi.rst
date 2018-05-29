@@ -1,7 +1,7 @@
 restApi
 =======
 
-.. automodule:: Lib.restApi
+.. automodule:: cdms2.restApi
       :members:
 
 

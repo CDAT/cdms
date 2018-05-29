@@ -1,7 +1,7 @@
 gengrid 
 =======
 
-.. automodule:: Lib.gengrid 
+.. automodule:: cdms2.gengrid 
       :members:
 
 

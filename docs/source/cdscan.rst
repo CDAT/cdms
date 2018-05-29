@@ -1,7 +1,7 @@
 cdscan
 ======
 
-.. automodule:: Lib.cdscan
+.. automodule:: cdms2.cdscan
       :members:
 
 

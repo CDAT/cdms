@@ -1,7 +1,7 @@
 mvVTKUGWriter
 =============
 
-.. automodule:: Lib.mvVTKUGWriter
+.. automodule:: cdms2.mvVTKUGWriter
       :members:
 
 

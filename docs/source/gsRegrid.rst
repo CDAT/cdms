@@ -1,7 +1,7 @@
 regrid2-gsRegrid
 ================
 
-.. automodule:: Libregrid.gsRegrid
+.. automodule:: regrid2.gsRegrid
       :members:
 
 

@@ -1,5 +1,5 @@
 tvariable
 =========
 
-.. automodule:: Lib.tvariable
+.. automodule:: cdms2.tvariable
       :members:

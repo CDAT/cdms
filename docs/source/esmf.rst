@@ -1,7 +1,8 @@
 regrid2- esmf
 =============
 
-.. automodule:: Libregrid.esmf
+
+.. automodule:: regrid2.esmf
       :members:
 
 

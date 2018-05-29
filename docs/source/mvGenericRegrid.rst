@@ -1,7 +1,7 @@
 regrid2-mvGenericRegrid
 =======================
 
-.. automodule:: Libregrid.mvGenericRegrid
+.. automodule:: regrid2.mvGenericRegrid
       :members:
 
 

@@ -1,7 +1,7 @@
 regrid2-scrip
 =============
 
-.. automodule:: Libregrid.scrip
+.. automodule:: regrid2.scrip
       :members:
 
 

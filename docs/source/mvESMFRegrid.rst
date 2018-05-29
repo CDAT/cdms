@@ -1,7 +1,7 @@
 regrid2-mvESMFRegrid
 ====================
 
-.. automodule:: Libregrid.mvESMFRegrid
+.. automodule:: regrid2.mvESMFRegrid
       :members:
 
 

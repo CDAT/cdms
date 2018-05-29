@@ -1,7 +1,7 @@
 cache
 =====
 
-.. automodule:: Lib.cache
+.. automodule:: cdms2.cache
       :members:
 
 

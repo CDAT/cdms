@@ -1,7 +1,7 @@
 cudsinterface
 =============
 
-.. automodule:: Lib.cudsinterface
+.. automodule:: cdms2.cudsinterface
       :members:
 
 

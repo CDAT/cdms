@@ -1,6 +1,6 @@
 mvBaseWriter
 ============
 
-.. automodule:: Lib.mvBaseWriter
+.. automodule:: cdms2.mvBaseWriter
       :members:
 

@@ -1,7 +1,7 @@
 regrid2- crossSection
 =====================
 
-.. automodule:: Libregrid.crossSection
+.. automodule:: regrid2.crossSection
       :members:
 
 

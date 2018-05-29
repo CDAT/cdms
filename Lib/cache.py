@@ -181,8 +181,14 @@ def copyFile(fromURL, toURL, callback=None,
 
         For request manager transfers, <lcpath> is the logical collection distinguished name,
 
-             <userid>
-                is the string user ID, <useReplica> is true if the request manager should search the replica catalog for the actual file to transfer.
+    Parameters
+    ----------
+      
+       <userid>
+          is the string user ID,
+
+       <useReplica> 
+          is true if the request manager should search the replica catalog for the actual file to transfer.
     """
     if callback is None:
         if _useWindow:
@@ -349,15 +355,17 @@ class Cache:
         """
         Copy the file <fromURL> into the cache. Return the result path.
 
-            For request manager transfers, lcpath is the logical collection path,
+           For request manager transfers, lcpath is the logical collection path,
+
+Parameters
+----------
+
+           <userid> 
+               is the string user ID,
 
 
-            <userid> 
-                is the string user ID,
-
-
-            <useReplica> 
-                is true iff the request manager should search the replica catalog for the actual file to transfer.
+           <useReplica> 
+               is true iff the request manager should search the replica catalog for the actual file to transfer.
         """
 
         # Put a notification into the cache, that this file is being read.
@@ -397,32 +405,35 @@ class Cache:
         """
         Get the file with <fileURL>.
 
-            If the file is in the cache, read it.
+           If the file is in the cache, read it.
    
-            If another process is transferring it into the cache, wait for the
+           If another process is transferring it into the cache, wait for the
         transfer to complete.
 
+         
+        Parameters
+        ---------
             <naptime>
-                is the number of seconds between retries,
+               is the number of seconds between retries,
 
             <maxtries>
-                is the maximum number of retries. Otherwise, copy it from the remote file.
+               is the maximum number of retries. Otherwise, copy it from the remote file.
 
             <filekey>
-                is the cache index key. A good choice is (datasetDN, filename)
+               is the cache index key. A good choice is (datasetDN, filename)
         where datasetDN is the distinguished name of the dataset, and filename
         is the name of the file within the dataset.
 
             For request manager transfers,
 
-                <lcpath>
-                    is the logical collection path,
+            <lcpath>
+               is the logical collection path,
 
-                <userid> 
-                    is the user string ID,
+            <userid> 
+               is the user string ID,
 
-                <useReplica>
-                    is true iff the request manager should search the replica catalog for the actual file to transfer.
+             <useReplica>
+               is true iff the request manager should search the replica catalog for the actual file to transfer.
 
         Returns the path of a file in the cache.
 

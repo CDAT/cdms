@@ -13,16 +13,20 @@ import re
 
 
 class VsWriter(mvBaseWriter.BaseWriter):
-  
+    """
+    Write file
+
+       Parameters
+       ----------
+
+           filename
+               file name
+
+           _: None
+    """  
     def write(self, filename):
         """
-        Write file
-
-        Parameters
-        ----------
-
-            filename
-                file name
+       
         """
         try:
             import tables

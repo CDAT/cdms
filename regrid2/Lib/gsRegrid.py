@@ -48,19 +48,19 @@ def getTensorProduct(axis, dim, dims):
     Parameters
     ----------
 
-         axis 
-             1D array of coordinates
+       axis 
+          1D array of coordinates
 
-         dim
-             dimensional index of the above coordinate
+       dim
+          dimensional index of the above coordinate
 
-         dims
-             sizes of all coordinates
+       dims
+          sizes of all coordinates
 
     Returns
     -------
 
-         coordinate values obtained by tensor product
+       coordinate values obtained by tensor product
     """
     return numpy.outer(numpy.outer(numpy.ones(dims[:dim], axis.dtype), axis),
                        numpy.ones(dims[dim + 1:], axis.dtype)).reshape(dims)
@@ -74,14 +74,14 @@ def makeCurvilinear(coords):
     Parameters
     ----------
 
-         coords
-             list of coordinates
-         _: None
+       coords
+          list of coordinates
+       _: None
 
     Returns
     -------
 
-         new list of coordinates and associated dimensions
+       new list of coordinates and associated dimensions
     """
     rank = len(coords)
 
@@ -126,16 +126,16 @@ def makeCoordsCyclic(coords, dims):
     Parameters
     ----------
 
-         coords
-             input coordinates
+       coords
+          input coordinates
 
-         dims
-             input dimensions
+       dims
+          input dimensions
 
     Returns
     -------
 
-         new, extended coordinates such that the longitudes cover the sphere and new dimensions
+       new, extended coordinates such that the longitudes cover the sphere and new dimensions
     """
     # assume lon is the last coordinate!!
 
@@ -192,17 +192,17 @@ def checkForCoordCut(coords, dims):
     Parameters
     ----------
 
-         coords
-             input coordinates
+       coords
+          input coordinates
 
-         dims
-             input dimensions
+       dims
+          input dimensions
 
     Returns
     -------
 
-         True for cut found
-            False for no cut
+       True for cut found
+       False for no cut
     """
 
     # Assume latitude is next to last coordinate and longitude is last
@@ -300,19 +300,19 @@ def handleCoordsCut(coords, dims, bounds):
     Parameters
     ----------
 
-         coords
-             input coordinates list of rank
+       coords
+          input coordinates list of rank
 
-         dims
-             input dimensions
+       dims
+          input dimensions
 
-         bounds
-             boundaries for each coordinate
+       bounds
+          boundaries for each coordinate
 
     Returns
     -------
 
-         extended coordinates such that there is an extra row containing connectivity information across the cut
+        extended coordinates such that there is an extra row containing connectivity information across the cut
     """
 
     # Assume latitude is next to last coordinate and longitude is
@@ -329,19 +329,19 @@ def handleCoordsCut(coords, dims, bounds):
         Parameters
         ----------
 
-             array
-                 Array of booleans
+            array
+               Array of booleans
 
-             nlon
-                 number of longitudes
+            nlon
+               number of longitudes
 
-             newI
-                index row with connectivity to be updated
+            newI
+               index row with connectivity to be updated
 
         Returns
         -------
 
-             new coordinates, new dimensions, index row
+            new coordinates, new dimensions, index row
         """
         for i in range(len(array)):
             # An edge
@@ -371,32 +371,35 @@ def handleCoordsCut(coords, dims, bounds):
 
 class Regrid:
 
+    """
+    Constructor
+
+    Parameters
+    ----------
+       src_grid
+          source grid, a list of [x, y, ...] coordinates or a cdms2.grid.Transient
+
+       dst_grid
+          destination grid, a list of [x, y, ...] coordinates
+
+       src_bounds
+          list of cell bounding coordinates (to be used when handling a cut in coordinates)
+
+       mkCyclic
+          Add a column to the right side of the grid to complete a cyclic grid
+
+       handleCut
+          Add a row to the top of grid to handle a cut for grids such as the tri-polar grid verbose print diagnostic messages
+
+
+       Note: the grid coordinates can either be axes (rectilinear grid) or n-dimensional for curvilinear grids. Rectilinear grids will be converted to curvilinear grids.
+    """
     def __init__(self, src_grid, dst_grid, src_bounds=None, mkCyclic=False,
                  handleCut=False, verbose=False):
         """
         Constructor
 
-        Parameters
-        ----------
-
-             src_grid
-                 source grid, a list of [x, y, ...] coordinates or a cdms2.grid.Transient
-
-             dst_grid
-                 destination grid, a list of [x, y, ...] coordinates
-
-             src_bounds
-                 list of cell bounding coordinates (to be used when handling a cut in coordinates)
-
-             mkCyclic
-                 Add a column to the right side of the grid to complete a cyclic grid
-
-             handleCut
-                 Add a row to the top of grid to handle a cut for grids such as the tri-polar grid
-             verbose print diagnostic messages
-
-
-        Note: the grid coordinates can either be axes (rectilinear grid) or n-dimensional for curvilinear grids. Rectilinear grids will be converted to curvilinear grids.
+        
         """
         self.regridid = c_int(-1)
         self.src_gridid = c_int(-1)
@@ -568,7 +571,7 @@ class Regrid:
         Returns
         -------
 
-             numpy array, values inf indicate no periodicity
+           numpy array, values inf indicate no periodicity
         """
         coord_periodicity = numpy.zeros((self.rank,), numpy.float64)
         status = self.lib.nccf_inq_grid_periodicity(self.src_gridid,
@@ -612,11 +615,11 @@ class Regrid:
         Parameters
         ----------
 
-             inMask
-                 flat numpy array of type numpy.int32 or a valid cdms2 variable with its mask set.
-                    0 - invalid, 1 - valid data
+           inMask
+              flat numpy array of type numpy.int32 or a valid cdms2 variable with its mask set.
+                 0 - invalid, 1 - valid data
 
-             _: None
+            _: None
 
         Note:  This must be invoked before computing the weights, the mask is a property of the grid (not the data).
         """
@@ -641,11 +644,12 @@ class Regrid:
         Parameters
         ----------
 
-             inDataOrMask cdms2 array or flat mask array,
-                                0 - valid data
-                                1 - invalid data
+           inDataOrMask 
+              cdms2 array or flat mask array,
+                 0 - valid data
+                 1 - invalid data
 
-             _: None
+           _: None
 
         Note:  this definition is compatible with the numpy masked arrays
         
@@ -672,12 +676,11 @@ class Regrid:
         Parameters
         ----------
 
-             nitermax
-                 max number of iterations
+           nitermax
+              max number of iterations
 
-             tolpos
-                 max tolerance when locating destination positions in
-               index space
+           tolpos
+              max tolerance when locating destination positions in index space
         """
         status = self.lib.nccf_compute_regrid_weights(self.regridid,
                                                       nitermax,
@@ -692,14 +695,14 @@ class Regrid:
         Parameters
         ----------
 
-             src_data
-                 data on source grid
+           src_data
+               data on source grid
 
-             dst_data
-                 data on destination grid
+           dst_data
+               data on destination grid
 
-             missingValue
-                 value that should be set for points falling outside the src domain, pass None if these should not be touched.
+           missingValue
+               value that should be set for points falling outside the src domain, pass None if these should not be touched.
         """
         if not self.weightsComputed:
             raise RegridError('Weights must be set before applying the regrid')
@@ -813,14 +816,14 @@ class Regrid:
         Parameters
         ----------
 
-             src_data
-                 data on source grid
+            src_data
+               data on source grid
 
-             dst_data
-                 data on destination grid
+            dst_data
+               data on destination grid
 
-             missingValue
-                 value that should be set for points falling outside the src domain, pass None if these should not be touched.
+            missingValue
+               value that should be set for points falling outside the src domain, pass None if these should not be touched.
         """
         self.apply(src_data, dst_data, missingValue)
 
@@ -886,15 +889,15 @@ class Regrid:
         Parameters
         ----------
 
-             dst_indices
-                 index set on the target grid
+           dst_indices
+               index set on the target grid
 
-             _: None
+           _: None
 
         Returns
         -------
 
-             [index sets on original grid, weights]
+           [index sets on original grid, weights]
         """
         dinds = numpy.array(dst_indices)
         sinds = (c_int * 2**self.rank)()
@@ -924,10 +927,10 @@ class Regrid:
         Parameters
         ----------
 
-             src_data
-                 input source data
+            src_data
+                input source data
 
-             _: None
+            _: None
 
         Returns
         -------
@@ -969,17 +972,17 @@ class Regrid:
         Parameters
         ----------
 
-             targetPos
-                 numpy array of target positions
+           targetPos
+               numpy array of target positions
    
-             nitermax
-                 max number of iterations
+           nitermax
+               max number of iterations
 
-             tolpos
-                 max toelrance in positions
+           tolpos
+               max toelrance in positions
 
-             dindicesGuess
-                 guess for the floating point indices
+           dindicesGuess
+               guess for the floating point indices
 
         Returns
         -------

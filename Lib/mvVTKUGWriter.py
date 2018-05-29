@@ -14,18 +14,21 @@ from . import mvBaseWriter
 
 
 class VTKUGWriter(mvBaseWriter.BaseWriter):
+    """
+    Write file
 
-    def write(self, filename):
-        """
-        Write file
-
-        Parameters
-        ----------
+       Parameters
+       ----------
 
            filename
                file name
 
            _:None
+
+    """
+    def write(self, filename):
+        """
+   
         """
         f = open(filename, 'w')
         print('# vtk DataFile Version 2.0', file=f)

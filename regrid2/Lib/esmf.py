@@ -37,7 +37,7 @@ ERROR = ESMF.UnmappedAction.ERROR
 
 class EsmfUnstructGrid:
     """
-    
+    Constructor
 
     Parameters
     ----------
@@ -50,7 +50,7 @@ class EsmfUnstructGrid:
     """
 
     def __init__(self, numTopoDims, numSpaceDims):
-        """Constructor
+        """
 
         
         """
@@ -92,7 +92,7 @@ Parameters
         Note
         ----
 .. figure:: /images/ESMF.jpg
-   :scale: 95% 
+   :scale: 55% 
    :alt: 
                     3                       4-------------3    
                     /\                      |             |                    
@@ -819,14 +819,14 @@ Parameters
         Parameters
         ----------
 
-             srcField
-                 source field (or None if src field passed to constructor is to be used)
+           srcField
+               source field (or None if src field passed to constructor is to be used)
 
-             dstField
-                 destination field (or None if dst field passed to constructor is to be used)
+           dstField
+               destination field (or None if dst field passed to constructor is to be used)
 
-             zero_region
-                 specify which region of the field indices will be zeroed (or None default to TOTAL Region)
+           zero_region
+               specify which region of the field indices will be zeroed (or None default to TOTAL Region)
         """
         if srcField is None:
             srcField = self.srcField

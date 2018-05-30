@@ -22,9 +22,11 @@ def _areCellsOk(cornerCoords, mask=None):
     Parameters
     ----------
 
-         cornerCoords
+        cornerCoords
 
-         mask checks will not be performed where mask is 1 (True)
+           mask checks will not be performed where mask is 1 (True)
+
+        _: None
 
     Returns
     -------
@@ -56,7 +58,8 @@ def _areCellsOk(cornerCoords, mask=None):
 
         Returns
         -------
-              x, y, z coordinates in Cartesian space"""
+              x, y, z coordinates in Cartesian space
+       """
         ct = numpy.cos(the)
         return ct * numpy.cos(lam), ct * numpy.sin(lam), numpy.sin(the)
 
@@ -181,13 +184,15 @@ def _buildBounds(bounds):
     Parameters
     ----------
 
-         bounds
-             CdmsVar.getBounds()
+       bounds
+          CdmsVar.getBounds()
+
+       _:None
 
     Returns
     -------
  
-         ndarrray of corners
+       ndarrray of corners
     """
 
     bndShape = [s + 1 for s in bounds.shape[:-1]]
@@ -212,22 +217,22 @@ def getBoundList(coordList, mask=None,
     Parameters
     ----------
 
-         coordList
-             coordinate list, should have getBounds()
+       coordList
+          coordinate list, should have getBounds()
 
-         mask
-             avoid checking areas where mask is one
+       mask
+          avoid checking areas where mask is one
 
-         removeBadCells
-             set to True if you want to the code to remove bad cells, ie zero cells, butterfly cells, ...
+       removeBadCells
+          set to True if you want to the code to remove bad cells, ie zero cells, butterfly cells, ...
 
-         maskCellIndices
-             list of bad cell indices to mask out (output)
+       maskCellIndices
+          list of bad cell indices to mask out (output)
 
     Returns
     -------
 
-         [latBounds, lonBounds]
+       [latBounds, lonBounds]
     """
     cornerCoords = []
     for c in coordList:
@@ -262,7 +267,7 @@ def _getCoordList(grid):
     Returns
     -------
 
-         lats, lons
+       lats, lons
     """
 
     lats = grid.getLatitude()
@@ -288,16 +293,16 @@ def _getDstDataShape(srcVar, dstGrid):
     Parameters
     ----------
 
-         srcVar
-             the variable from which all axes other than lat/lon will be taken from
+       srcVar
+          the variable from which all axes other than lat/lon will be taken from
 
-         dstGrid
-             target, horizontal grid
+       dstGrid
+          target, horizontal grid
 
     Returns
     -------
 
-         list
+       list
     """
 
     shp = srcVar.shape
@@ -334,16 +339,16 @@ def _getAxisList(srcVar, dstGrid):
     Parameters
     ----------
 
-         srcVar
-             the variable from which all axes other than lat/lon will be taken from
+       srcVar
+          the variable from which all axes other than lat/lon will be taken from
 
-         dstGrid
-             target, horizontal grid
+       dstGrid
+          target, horizontal grid
 
     Returns
     -------
 
-         variable with non-horizontal axes from srcVar and horizontal axes from dstGrid
+       variable with non-horizontal axes from srcVar and horizontal axes from dstGrid
     """
 
     shp = srcVar.shape

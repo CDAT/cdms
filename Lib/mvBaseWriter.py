@@ -12,9 +12,22 @@ from . import mvSphereMesh
 
 
 class BaseWriter:
+    """
+    Constructor
 
+    Parameters
+    ----------
 
-    def __init__(self, var, sphereRadius=1.0, maxElev=0.1):
+      var
+          a cdms2 variable
+
+      sphereRadius 
+          radius of the sphere upon which the grid will be projected
+
+      maxElev
+          max elevation/depth normalized to the sphere radius
+    """
+   def __init__(self, var, sphereRadius=1.0, maxElev=0.1):
         """
         Constructor
 

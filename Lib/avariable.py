@@ -867,8 +867,9 @@ class AbstractVariable(CdmsObj, Slab):
            #. an instance of the slice class
            #. a tuple, which will be used as arguments to create a slice
            #. `None` or `:`, which means a slice covering that entire dimension
-           #. Ellipsis (...), which means to fill the slice list with `:`
-             leaving only enough room at the end for the remaining positional arguments
+           #. Ellipsis (...), which means to fill the slice list with `:` 
+
+            leaving only enough room at the end for the remaining positional arguments
 
            There can be keyword arguments of the form key = value, where
            key can be one of the names `time`, `level`, `latitude`, or

@@ -17,6 +17,7 @@ install_aliases()
 import sys,os
 sys.path.append(os.path.abspath('../../regrid2'))
 sys.path.append(os.path.abspath('../..'))
+sys.path.append(os.path.abspath('..'))
 import mock
 os.environ['READTHEDOCS']="True"
 #MOCK_MODULES = ['collections', 'numpy', 'Cdunif', 'numpy.core.multiarray', 'cdat_info', 'cdtime', 'future', 'cdms2']

@@ -29,5 +29,6 @@ rm -rf uvcdat
 export BRANCH=${CIRCLE_BRANCH}
 python ./prep_for_build.py  -b ${BRANCH}
 
-conda build ${PKG_NAME} -c cdat/label/unstable -c conda-forge 
+conda build ${PKG_NAME} -c cdat/label/unstable -c conda-forge  --python 3.6
+conda build ${PKG_NAME} -c cdat/label/unstable -c conda-forge  --python 2.7
 anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l $LABEL $CONDA_BLD_PATH/$OS/${PKG_NAME}-$VERSION.`date +%Y*`0.tar.bz2 --force

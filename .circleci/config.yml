@@ -56,6 +56,29 @@ aliases:
        python run_tests.py -v2 
        PY3_RESULT=$?
        echo "*** py3 test result: "${PY3_RESULT}
+
+  - &upload_cdms
+    name: upload_cdms
+    command: |
+       export PATH=$HOME/project/$WORKDIR/miniconda/bin:$PATH
+       export LABEL="nightly";
+       # Retrieve results
+       PY2_RESULT=$(cat $HOME/project/$WORKDIR/py2_result.txt)
+       PY3_RESULT=$(cat $HOME/project/$WORKDIR/py3_result.txt)
+       echo "*** CIRCLE BRANCH: "${CIRCLE_BRANCH}
+       echo "*** PY2_RESULT: "${PY2_RESULT}
+       echo "*** PY3_RESULT: "${PY3_RESULT}
+       if [ $PY2_RESULT -eq 0 -a $PY3_RESULT -eq 0 -a $CIRCLE_BRANCH == "master" ]; then bash ./ci-support/conda_upload.sh ; fi
+       if [ $PY2_RESULT -eq 0 -a $PY3_RESULT -eq 0 -a $CIRCLE_BRANCH == "master" ]; then conda install -n root conda-build anaconda-client ; fi
+       if [ $PY2_RESULT -eq 0 -a $PY3_RESULT -eq 0 -a $CIRCLE_BRANCH != "master" ]; then
+           export LABEL="unstable";
+           echo "NOTE: upload LABEL="${LABEL}
+           conda install -n root conda-build anaconda-client;
+           bash ./ci-support/conda_upload.sh;
+       fi
+
+
+   - &upload
        export LABEL="nightly";
        if [ $PY2_RESULT -eq 0 -a $PY3_RESULT -eq 0 -a $CIRCLE_BRANCH == "master" ]; then bash ./ci-support/conda_upload.sh ; fi
        if [ $PY2_RESULT -eq 0 -a $PY3_RESULT -eq 0 -a $CIRCLE_BRANCH != "master" ]; then 

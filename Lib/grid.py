@@ -268,6 +268,9 @@ class AbstractGrid (CdmsObj):
         return 0
 
     def getAxisList(self):
+        """
+        Not documented
+        """
         axes = []
         for i in range(len(self._order_)):
             axes.append(self.getAxis(i))
@@ -690,6 +693,9 @@ class AbstractRectGrid(AbstractGrid):
         return (latbnds, lonbnds)
 
     def writeToFile(self, file):
+        """
+        Not documented
+        """
         return None
 
     def getMesh(self):
@@ -1005,6 +1011,9 @@ class TransientRectGrid(AbstractRectGrid):
         self.setMask(maskarray)        # numpy mask array
 
     def getMask(self):
+        """
+        Not documented
+        """
         if self._maskArray_ is None:
             # return numpy.ones(self.shape)
             return None
@@ -1014,6 +1023,9 @@ class TransientRectGrid(AbstractRectGrid):
     # Set the mask. The persistent argument is provided for compatibility
     # with persistent versions, is ignored.
     def setMask(self, mask, persistent=0):
+        """
+        Not documented
+        """
         if mask is not None:
             if not isinstance(mask, numpy.ndarray):
                 raise CDMSError('Mask must be a numpy array')
@@ -1022,6 +1034,9 @@ class TransientRectGrid(AbstractRectGrid):
         self._maskArray_ = copy.copy(mask)
 
     def setBounds(self, latBounds, lonBounds):
+        """
+        Not documented
+        """
         self._lataxis_.setBounds(latBounds)
         self._lonaxis_.setBounds(lonBounds)
 

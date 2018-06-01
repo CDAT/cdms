@@ -48,10 +48,16 @@ class AbstractHorizontalGrid(AbstractGrid):
 
     # Generate default bounds
     def genBounds(self):
+        """
+        Not documented
+        """
         raise CDMSError(MethodNotImplemented)
 
     # Get the n-th axis. naxis is 0 or 1.
     def getAxis(self, naxis):
+        """
+        Not documented
+        """
         raise CDMSError(MethodNotImplemented)
 
     def getBounds(self):
@@ -99,14 +105,23 @@ class AbstractHorizontalGrid(AbstractGrid):
         raise CDMSError(MethodNotImplemented)
 
     def listall(self, all=None):
+        """
+        Not documented
+        """
         result = []
         result.append('Grid has Python id %s.' % hex(id(self)))
         return result
 
     def setMask(self, mask, permanent=0):
+        """
+        Not documented
+        """
         self._maskVar_ = mask
 
     def subGridRegion(self, latRegion, lonRegion):
+        """
+        Not documented
+        """
         raise CDMSError(MethodNotImplemented)
 
     def hasCoordType(self, coordType):

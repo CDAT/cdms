@@ -46,8 +46,8 @@ the class internal (non-persistent) attributes, constructors (functions
 for creating an object), and class methods (functions). A method can
 return an instance of a CDMS class, or one of the Python types:
 
-Table PythonTypes used in CDMS
--------------------------------
+PythonTypes used in CDMS
+------------------------
 .. csv-table:: 
    :header:  "Type", "Description"
    :widths:  10, 80
@@ -134,8 +134,8 @@ Rather, they are called as module functions, e.g.,
 
 
 
-Table Cdms Module Functions
----------------------------
+Cdms Module Functions
+---------------------
 
 .. csv-table::  
    :header:  "Type", "Definition"
@@ -224,8 +224,8 @@ Table Cdms Module Functions
 
 
 
-Table Class Tags
---------------------
+Class Tags
+----------
 .. csv-table::  
    :header:  "Tag", "Class"
    :widths:  20, 20
@@ -259,8 +259,8 @@ external attributes are written, but not the internal attributes.
 
     >>> extatts = obj.attributes.keys()
 
-Table Attributes Common to All CDMS Objects
--------------------------------------------
+Attributes Common to All CDMS Objects
+-------------------------------------
 
 .. csv-table:: Attributes common to all CDMS objects
    :header:  "Type", "Name", "Definition"
@@ -269,8 +269,8 @@ Table Attributes Common to All CDMS Objects
    "Dictionary", "attributes", "External attribute dictionary for this object."
 
 
-Table Getting and Setting Attributes
-------------------------------------
+Getting and Setting Attributes
+------------------------------
 .. csv-table::  
    :header:  "Type", "Definition"
    :widths:  20, 80
@@ -297,8 +297,8 @@ documents methods that are common to all CoordinateAxis
 types. See `HorizontalGrid <#id4>`_ specifies methods that are unique to 1D
 Axis objects.
 
-Table CoordinateAxis Types
---------------------------
+CoordinateAxis Types
+--------------------
 
 .. csv-table:: 
    :header:  "Type", "Definition"
@@ -309,8 +309,8 @@ Table CoordinateAxis Types
    "``Axis2D``", "A two-dimensional coordinate axis, typically a latitude or longitude axis related to a ``CurvilinearGrid``. Has subtypes ``DatasetAxis2D``, ``FileAxis2D``, and ``TransientAxis2D``."
    "``AuxAxis1D``", "A one-dimensional coordinate axis whose values need not be monotonic. Typically a latitude or longitude axis associated with a ``GenericGrid``. Has subtypes ``DatasetAuxAxis1D``, ``FileAuxAxis1D``, and ``TransientAuxAxis1D``. An axis in a ``CdmsFile`` may be designated the unlimited axis, meaning that it can be extended in length after the initial definition. There can be at most one unlimited axis associated with a ``CdmsFile``."
 
-Table CoordinateAxis Internal Attributes
-----------------------------------------
+CoordinateAxis Internal Attributes
+----------------------------------
 
 .. csv-table:: 
    :header:  "Type", "Name", "Definition"
@@ -321,8 +321,8 @@ Table CoordinateAxis Internal Attributes
    "``Dataset``", "``parent``", "The dataset which contains the variable."
    "``Tuple``", "``shape``", "The length of each axis."
 
-Table Axis Constructors
------------------------
+CoordinateAxis Constructors
+---------------------------
 
 .. csv-table:: 
    :header:  "Constructor", "Description"
@@ -343,8 +343,8 @@ Table Axis Constructors
    , "* See `A First Example`_ ."
 
 
-Table CoordinateAxis Methods
-----------------------------
+CoordinateAxis Methods
+----------------------
 
 .. csv-table:: 
    :header:  "Type", "Method", "Definition"
@@ -382,8 +382,8 @@ Table CoordinateAxis Methods
    "``Integer``", "``size()``", "The number of elements in the axis."
    "``String``", "``typecode()``", "The ``Numpy`` datatype identifier."
 
-Table Axis Methods, Additional to CoordinateAxis
-------------------------------------------------
+CoordinateAxis Methods, Additional to CoordinateAxis
+----------------------------------------------------
 
 .. csv-table::  
    :header:  "Type", "Method", "Definition"
@@ -420,8 +420,8 @@ Table Axis Methods, Additional to CoordinateAxis
    ,,"* see also: ``mapinterval``, ``variable.subregion()``"
    "``transientaxis``", "``subaxis(i,j,k=1)``", "create an axis associated with the integer range ``[i:j:k]``. the stride ``k`` can be positive or negative. wraparound is supported for longitude dimensions or those with a modulus attribute." 
 
-Table Axis Slice Operators
---------------------------
+CoordinateAxis Slice Operators
+------------------------------
 
 .. csv-table::  
    :header:  "Slice", "Definition"
@@ -464,9 +464,8 @@ formats (DRS, HDF, GrADS/GRIB, POP, QL) are accessible read-only.
 As of CDMS V3, the legacy cuDataset interface is also supported by
 Cdms-Files. See “cu Module”.
 
-
-Table CdmsFile Internal Attributes
-----------------------------------
+CdmsFile Internal Attributes
+----------------------------
 
 .. csv-table::  
    :header:  "Type", "Name", "Definition"
@@ -478,8 +477,8 @@ Table CdmsFile Internal Attributes
    "``String``", "``id``", "File pathname."
    "``Dictionary``", "``variables``", "Variables contained in the file."
 
-Table CdmsFile Constructors
----------------------------
+CdmsFile Constructors
+---------------------
 
 .. csv-table::  
    :header:  "Constructor", "Description"
@@ -490,8 +489,8 @@ Table CdmsFile Constructors
    "``fileobj = cdms.open(path, mode)``", "Open the file specified by path returning a CdmsFile object. ``path`` is the file pathname, a string. ``mode`` is the open mode indicator, as listed in See `Open Modes <#table-open-modes>`_." 
    "``fileobj = cdms.createDataset(path)``", "Create the file specified by path, a string."
 
-Table CdmsFile Methods
-----------------------
+CdmsFile Methods Object Name  Transient Variable
+------------------------------------------------
 
 .. csv-table:: 
    :header:  "Type", "Method", "Definition"
@@ -504,6 +503,15 @@ Table CdmsFile Methods
    ,, " **Example:** The following reads data for variable 'prc', year 1980:"
    ,, " * >>> f = cdms.open('test.nc')"
    ,, " * >>> x = f('prc', time=('1980-1','1981-1'))"
+
+CdmsFile Methods Object Identifier Variable, Axis or Grid
+---------------------------------------------------------
+
+.. csv-table:: 
+   :header:  "Type", "Method", "Definition"
+   :widths:  10, 30, 80
+   :align: left
+
    "``Variable``, ``Axis``, or ``Grid``", "``fileobj['id']``", "Get the persistent variable, axis or grid object having the string identifier. This does not read the data for a variable."
    ,, " **Example:** The following gets the persistent variable"
    ,, "   * ``v``, equivalent to"
@@ -514,16 +522,55 @@ Table CdmsFile Methods
    ,, "   * ``t = f.axes['time']``."
    ,, "   * ``t = f['time']``"
    "``None``", "``close()``", "Close the file."
+
+CdmsFile Methods Copy Axis, Grid
+--------------------------------
+
+.. csv-table:: 
+   :header:  "Type", "Method", "Definition"
+   :widths:  10, 30, 80
+   :align: left
+
    "``Axis``", "``copyAxis(axis, newname=None)``", "Copy ``axis`` values and attributes to a new axis in the file. The returned object is persistent: it can be used to write axis data to or read axis data from the file. If an axis already exists in the file, having the same name and coordinate values, it is returned.  It is an error if an axis of the same name exists, but with different coordinate values. ``axis`` is the axis object to be copied. ``newname``, if specified, is the string identifier of the new axis object. If not specified, the identifier of the input axis is used."
    "``Grid``", "``copyGrid(grid, newname=None)``", "Copy grid values and attributes to a new grid in the file. The returned grid is persistent. If a grid already exists in the file, having the same name and axes, it is returned. An error is raised if a grid of the same name exists, having different axes. ``grid`` is the grid object to be copied. ``newname``, if specified is the string identifier of the new grid object. If unspecified, the identifier of the input grid is used."
+ 
+CdmsFile Methods Create Axis, RectGrid and Variable
+----------------------------------------------------
+
+.. csv-table:: 
+   :header:  "Type", "Method", "Definition"
+   :widths:  10, 30, 80
+   :align: left
+
    "``Axis``", "``createAxis(id,ar, unlimited=0)``", "Create a new ``Axis``.  This is a persistent object which can be used to read or write axis data to the file. ``id`` is an alphanumeric string identifier, containing no blanks.  ``ar`` is the one-dimensional axis array. Set ``unlimited`` to ``cdms.Unlimited`` to indicate that the axis is extensible."
    "``RectGrid``", "``createRectGrid(id,lat, lon,order,type='generic', mask=None)``", "Create a ``RectGrid`` in the file. This is not a persistent object: the order, type, and mask are not written to the file. However, the grid may be used for regridding operations.  ``lat`` is a latitude axis in the file.  ``lon`` is a longitude axis in the file.  ``order`` is a string with value ``'yx'`` (the latitude) or ``'xy'`` (the first grid dimension is longitude).  ``type`` is one of ``'gaussian'``,\ ``'unif orm'``,\ ``'equalarea'`` , or ``'generic'``. If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
    "``Variable``", "``createVariable(Stringid,String datatype,Listaxes,fill_value=None)``", "Create a new Variable.  This is a persistent object which can be used to read or write variable data to the file. ``id`` is a String name which is unique with respect to all other objects in the file. ``datatype`` is an ``MV2`` typecode, e.g., ``MV2.Float``, ``MV2.Int``. ``axes`` is a list of Axis and/or Grid objects.  ``fill_value`` is the missing value (optional)."
    "``Variable``", "``createVariableCopy(var, newname=None)``", "Create a new ``Variable``, with the   same name, axes, and attributes as the input variable. An error is raised if a variable of the same name exists in the file. ``var`` is the ``Variable`` to be copied. ``newname``, if specified is the name of the new variable. If unspecified, the returned variable has the same name as ``var``."
    ,," **Note:** Unlike copyAxis, the actual data is not copied to the new variable."
+
+
+CdmsFile Methods Read CurveGrid, Generic-Grid
+---------------------------------------------
+
+.. csv-table:: 
+   :header:  "Type", "Method", "Definition"
+   :widths:  10, 30, 80
+   :align: left
+
    "``CurveGrid`` or ``Generic-Grid``", "``readScripGrid(self,whichGrid='destination',check-Grid=1)``", "Read a curvilinear or generic grid from a SCRIP netCDF file. The file can be a SCRIP grid file or remapping file.  If a mapping file, ``whichGrid`` chooses the grid to read, either ``'source'`` or ``'destination'``. If ``checkGrid`` is ``1`` (default), the grid cells are checked for convexity, and 'repaired' if necessary.  Grid cells may appear to be nonconvex if they cross a ``0 / 2pi`` boundary. The repair consists of shifting the cell vertices to the same side modulo 360 degrees."
     "``None``", "``sync()``", "Writes any pending changes to the file."
-    "``Variable``", "``write(var,attributes=None,axes=None, extbounds=None,id=None,extend=None, fill_value=None, index=None, typecode=None)``","Write a variable or array to the file. The return value is the associated file variable."
+
+
+CdmsFile Methods Write Variable
+-------------------------------
+
+.. csv-table:: 
+   :header:  "Type", "Method", "Definition"
+   :widths:  10, 30, 80
+   :align: left
+
+
+   "``Variable``", "``write(var,attributes=None,axes=None, extbounds=None,id=None,extend=None, fill_value=None, index=None, typecode=None)``","Write a variable or array to the file. The return value is the associated file variable."
     ,,"If the variable does not exist in the file, it is first defined and all attributes written, then the data is written. By default, the time dimension of the variable is defined as the unlimited dimension of the file. If the data is already defined, then data is extended or overwritten depending on the value of keywords ``extend`` and ``index``, and the unlimited dimension values associated with ``var``."
     ,,"* ``var`` is a Variable, masked array, or Numpy array."
     ,,"* ``attributes`` is the attribute dictionary for the variable. The default is ``var.attributes``."
@@ -536,8 +583,8 @@ Table CdmsFile Methods
     ,,"* ``index`` is the extended dimension index to write to. The default index is determined by lookup relative to the existing extended dimension."
     ,," **Note:** data can also be written by setting a slice of a file variable, and attributes can be written by setting an attribute of a file variable."
 
-Table CDMS Datatypes
---------------------
+CDMS Datatypes
+--------------
 
 .. csv-table::  
    :header:  "CDMS Datatype", "Definition"
@@ -628,8 +675,8 @@ To access a database:
 
    ``db.close()``
 
-Table Database Internal Attributes
-----------------------------------
+Database Internal Attributes
+----------------------------
 
 
 .. csv-table::  
@@ -643,8 +690,8 @@ Table Database Internal Attributes
     "``String``", "``uri``", "Uniform Resource Identifier"
 
 
-Table Database Constructors
----------------------------
+Database Constructors
+---------------------
 
 .. csv-table::  
    :header:  "Constructor", "Description"
@@ -656,8 +703,8 @@ Table Database Constructors
     ,"For a Lightweight Directory Access Protocol (LDAP) database, the form is: ``ldap://host[:port]/dbname``."
     ,"For example, if the database is located on host dbhost.llnl.gov, and is named ``'database=CDMS,ou=PCMDI,o=LLNL,c=US'``, the URI is: ``ldap://dbhost.llnl.gov/database=CDMS,ou=PCMDI,o=LLNL,c=US``. If unspecified, the URI defaults to the value of environment variable CDMSROOT. ``user`` is the user ID. If unspecified, an anonymous connection is made. ``password`` is the user password. A password is not required for an anonymous connection"
 
-Table Database Methods
-----------------------
+Database Methods
+----------------
 
 .. csv-table::  
    :header:  "Type", "Method", "Definition"
@@ -808,8 +855,8 @@ variables defined on a 94x192 grid:
 
 
 
-Table SearchResult Methods
---------------------------
+SearchResult Methods
+--------------------
 
 .. csv-table::  
    :header:  "Type", "Method", "Definition"
@@ -829,8 +876,8 @@ information defined for the associated CDMS object, which is retrieved
 with the ``getObject`` method.
 
 
-Table ResultEntry Attributes
-----------------------------
+ResultEntry Attributes
+----------------------
 
 .. csv-table::  
    :header:  "Type", "Method", "Definition"
@@ -840,8 +887,8 @@ Table ResultEntry Attributes
     "Dictionary", "``attributes``", "The attributes returned from the search. ``attributes[key]`` is a list of all string values associated with the key"
 
 
-Table ResultEntry Methods
--------------------------
+ResultEntry Methods
+-------------------
 
 .. csv-table::  
    :header:  "Type", "Method", "Definition"
@@ -852,7 +899,7 @@ Table ResultEntry Methods
 
 
 Accessing data
---------------------
+--------------
 
 To access data via CDMS:
 
@@ -871,7 +918,7 @@ In the next example, a portion of variable ‘ua’ is read from dataset
 
 
 Examples of Database Searches
------------------------------------
+-----------------------------
 
 In the following examples, db is the database opened with:
 
@@ -957,8 +1004,8 @@ As of CDMS V3, the legacy cuDataset interface is supported by Datasets.
 See “cu Module".
 
 
-Table Dataset Internal Attributes
----------------------------------
+Dataset Internal Attributes
+---------------------------
 
 .. csv-table:: 
    :header:  "Type", "Name", "Description"
@@ -974,8 +1021,8 @@ Table Dataset Internal Attributes
     "Dictionary", "``variables``", "Variables contained in the dataset."
     "Dictionary", "``xlinks``", "External links contained in the dataset."
 
-Table Dataset Constructors
---------------------------
+Dataset Constructors
+--------------------
 
 .. csv-table::  
    :header:  "Constructor", "Description"
@@ -985,12 +1032,12 @@ Table Dataset Constructors
     "``datasetobj = cdms.open(String uri, String mode='r')``", "Open the dataset specified by the Universal Resource Indicator, a CDML file. Returns a Dataset object. mode is one of the indicators listed in `Open Modes <#table-open-modes>`__ . ``openDataset`` is a synonym for ``open``"
 
 
-Table Open Modes
-----------------
+Open Modes
+----------
 
 .. csv-table:: 
    :header:  "Mode", "Definition"
-   :widths:  50, 70
+   :widths:  10, 70
    :align: left
 
    "‘r’", "read-only"
@@ -999,8 +1046,8 @@ Table Open Modes
    "‘w’", "Create a new file, read-write"
 
 
-Table Dataset Methods
----------------------
+Dataset Methods
+---------------
 
 .. csv-table::  
    :header:  "Type", "Definition", "Description"
@@ -1010,13 +1057,20 @@ Table Dataset Methods
     ,, "**Example:** The following reads data for variable 'prc', year 1980:"
     ,, "   * f = cdms.open('test.  xml')"
     ,, "   * x = f('prc', time=('1980-1','1981-1'))"
-    "Variable, Axis, or Grid", "``datasetobj['id']``", "The square bracket operator applied to a dataset gets the persistent variable, axis or grid object having the string identifier. This does not read the data for a variable. Returns ``None`` if not found."
-    ,, "**Example:**"
-    ,, "   * f = cdms.open('sampl e.xml')"
-    ,, "   * v = f['prc']"
-    ,, "   * gets the persistent variable v, equivalent to ``v =f.variab les['prc']``."
-    ,, "**Example:**"
-    ,, "``t = f['time']`` gets the axis named 'time', equivalent to ``t = f.axes['time']``"
+    "Variable, Axis, or Grid", "``datasetobj['id']``", "The square bracket operator applied to a dataset gets the persistent variable, axis or grid object having the string identifier. This does not read the data for a variable. Returns ``None`` if not found.
+
+   **Example:**
+
+   * f = cdms.open('sampl e.xml')
+   * v = f['prc']
+
+     * gets the persistent variable v equivalent to ``v=f.variables['prc']``.
+
+   **Example:**
+
+   * t = f['time'] 
+
+     * gets the axis named time, equivalent to ``t=f.axes['time']``"
     "``None``", "``close()``", "Close the dataset."
     "``RectGrid``", "``createRectGrid(id, lat, lon,order, type='generic', mask=None)``", "Create a RectGrid in the dataset. This is not a persistent object: the order, type, and mask are not written to the dataset. However, the grid may be used for regridding operations."
     ,,"``lat`` is a latitude axis in the dataset."
@@ -1096,8 +1150,8 @@ https://numpy.sourceforge.net for a description of these functions.
 
   
 
-Table Variable  Constructors in Module MV
------------------------------------------
+Variable  Constructors in Module MV
+-----------------------------------
 
 .. tabularcolumns:: |l|r|
 
@@ -1122,8 +1176,8 @@ The following table describes the MV non-constructor functions. with the
 exception of argsort, all functions return a transient variable.
 
 
-Table MV Functions
-------------------
+MV Functions
+------------
 .. csv-table::   
    :header:  "Function", "Description"
    :widths:  50,  80
@@ -1173,8 +1227,8 @@ cells. Specifically, a HorizontalGrid:
 CDMS supports several types of HorizontalGrids:
 
 
-Table Grids
------------
+Grids
+-----
 
 .. csv-table:: 
    :header:  "Grid Type", "Definition"
@@ -1185,8 +1239,8 @@ Table Grids
     "``GenericGrid``", "Latitude and longitude are 1-D auxiliary coordinate axis (AuxAxis1D)"
 
 
-Table HorizontalGrid Internal Attribute
----------------------------------------
+HorizontalGrid Internal Attribute
+---------------------------------
 
 .. csv-table::  
    :header:  "Type", "Name", "Definition"
@@ -1202,8 +1256,8 @@ Table HorizontalGrid Internal Attribute
 
      
 
-Table RectGrid Constructors
----------------------------
+RectGrid Constructors
+---------------------
 
 .. csv-table:: 
    :header:  "Constructor", "Description"
@@ -1223,8 +1277,8 @@ Table RectGrid Constructors
 
 
 
-Table HorizontalGrid Methods
-----------------------------
+HorizontalGrid Methods
+----------------------
 
 
 .. csv-table:: 
@@ -1263,8 +1317,8 @@ Table HorizontalGrid Methods
     ,,"**Note:** This method does not apply to generic grids.  Transient-GenericGrid ``toGenericGrid(gridid=None)`` Convert to a generic grid. If the grid is already generic, a copy of the grid is returned.  ``gridid`` is the string identifier of the resulting curvilinear grid object. If unspecified, the grid ID is copied."
 
 
-Table RectGrid Methods, Additional to HorizontalGrid Methods
-------------------------------------------------------------
+RectGrid Methods, Additional to HorizontalGrid Methods
+------------------------------------------------------
 
 .. csv-table::  
    :header:  "Type", "Method", "Description"
@@ -1322,8 +1376,8 @@ advantage of the attribute, domain, and mask information in a transient
 variable.
 
 
-Table Variable Internal Attributes
-----------------------------------
+Variable Internal Attributes
+----------------------------
 
 .. csv-table::  
    :header:  "Type", "Name", "Definition"
@@ -1336,8 +1390,8 @@ Table Variable Internal Attributes
     "Tuple", "``shape``", "The length of each axis of the variable"
 
 
-Table Variable Constructors
----------------------------
+Variable Constructors
+---------------------
 
 .. csv-table::  
    :header:  "Constructor", "Description"
@@ -1352,8 +1406,8 @@ Table Variable Constructors
 
 
 
-Table Variable Methods
-----------------------
+Variable Methods
+----------------
 
 .. csv-table::  
    :header:  "Type", "Method", "Definition"
@@ -1474,8 +1528,8 @@ Read all data for March, 1980:
 
 
 
-Table Variable Slice Operators
-------------------------------
+Variable Slice Operators
+------------------------
 
 .. csv-table::  
    :header:  "Operator", "Description"
@@ -1493,8 +1547,8 @@ Table Variable Slice Operators
 
 
 
-Table Index and Coordinate Intervals
-------------------------------------
+Index and Coordinate Intervals
+------------------------------
 
 .. csv-table::  
    :header:  "Interval Definition", "Example Interval Definition", "Example"
@@ -1578,8 +1632,8 @@ components is the positional form, where the component order corresponds
 to the axis order of a variable. For example:
 
 
-Table Selector Keywords
------------------------
+Selector Keywords
+-----------------
 
 .. csv-table::  
    :header:  "Keyword", "Description", "Value"

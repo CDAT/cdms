@@ -43,7 +43,7 @@ aliases:
        echo ${ESGF_PWD} | myproxyclient logon -s esgf-node.llnl.gov -p 7512 -t 12 -S -b -l ${ESGF_USER} -o $HOME/.esg/esgf.cert
        cp tests/dodsrc $HOME/.dodsrc
        echo "Create .dods_cookies"
-       curl -L  -v   -c $HOME/.esg/.dods_cookies --cert $HOME/.esg/esgf.cert  --key $HOME/.esg/esgf.cert "https://aims3.llnl.gov/thredds/dodsC/cmip5_css02_data/cmip5/output1/CMCC/CMCC-CM/decadal2005/mon/atmos/Amon/r1i1p1/cct/1/cct_Amon_CMCC-CM_decadal2005_r1i1p1_202601-203512.nc.dds"
+       # curl -L  -v   -c $HOME/.esg/.dods_cookies --cert $HOME/.esg/esgf.cert  --key $HOME/.esg/esgf.cert "https://aims3.llnl.gov/thredds/dodsC/cmip5_css02_data/cmip5/output1/CMCC/CMCC-CM/decadal2005/mon/atmos/Amon/r1i1p1/cct/1/cct_Amon_CMCC-CM_decadal2005_r1i1p1_202601-203512.nc.dds"
        if [ $(uname) == "Linux" ];then
          export LDSHARED="$CC -shared -pthread"
          LDSHARED="$CC -shared -pthread" python setup.py install
@@ -73,6 +73,8 @@ aliases:
        python run_tests.py -v2 
        PY3_RESULT=$?
        echo "*** py3 test result: "${PY3_RESULT}
+       echo  $PY2_RESULT > $HOME/project/$WORKDIR/py2_result.txt
+       echo  $PY3_RESULT > $HOME/project/$WORKDIR/py3_result.txt
 
   - &upload_cdms
     name: upload_cdms
@@ -87,7 +89,8 @@ aliases:
        echo "*** PY3_RESULT: "${PY3_RESULT}
        if [ $PY2_RESULT -eq 0 -a $PY3_RESULT -eq 0 -a $CIRCLE_BRANCH == "master" ]; then bash ./ci-support/conda_upload.sh ; fi
        if [ $PY2_RESULT -eq 0 -a $PY3_RESULT -eq 0 -a $CIRCLE_BRANCH == "master" ]; then conda install -n root conda-build anaconda-client ; fi
-       if [ $PY2_RESULT -eq 0 -a $PY3_RESULT -eq 0 -a $CIRCLE_BRANCH != "master" ]; then
+       #if [ $PY2_RESULT -eq 0 -a $PY3_RESULT -eq 0 -a $CIRCLE_BRANCH != "master" ]; then
+       if [ $CIRCLE_BRANCH != "master" ]; then
            export LABEL="unstable";
            echo "NOTE: upload LABEL="${LABEL}
            conda install -n root conda-build anaconda-client;

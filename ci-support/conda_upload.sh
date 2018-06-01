@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-PKG_NAME=cdms
+PKG_NAME=cdms2
 USER=cdat
 export VERSION="3.0"
 echo "Trying to upload to conda"

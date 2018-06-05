@@ -32,23 +32,32 @@ aliases:
            conda install -n py2 -c cdat/label/unstable -c cdat/label/nightly -c conda-forge gcc
        fi
 
-
   - &setup_cdms
     name: setup_cdms
     command: |
        export PATH=$HOME/project/$WORKDIR/miniconda/bin:$PATH
        export UVCDAT_ANONYMOUS_LOG=False
        source activate py3
-       mkdir /Users/distiller/.esg
+       mkdir $HOME/.esg
        echo "Get ESGF certificates"
-       echo ${ESGF_PWD} | myproxyclient logon -s esgf-node.llnl.gov -p 7512 -t 12 -S -b -l ${ESGF_USER} -o /Users/distiller/.esg/esgf.cert
-       cp tests/dodsrc /Users/distiller/.dodsrc
+       echo ${ESGF_PWD} | myproxyclient logon -s esgf-node.llnl.gov -p 7512 -t 12 -S -b -l ${ESGF_USER} -o $HOME/.esg/esgf.cert
+       cp tests/dodsrc $HOME/.dodsrc
        echo "Create .dods_cookies"
-       curl -L  -v   -c /Users/distiller/.esg/.dods_cookies --cert /Users/distiller/.esg/esgf.cert  --key /Users/distiller/.esg/esgf.cert "https://aims3.llnl.gov/thredds/dodsC/cmip5_css02_data/cmip5/output1/CMCC/CMCC-CM/decadal2005/mon/atmos/Amon/r1i1p1/cct/1/cct_Amon_CMCC-CM_decadal2005_r1i1p1_202601-203512.nc.dds"
-       python setup.py install
+       # curl -L  -v   -c $HOME/.esg/.dods_cookies --cert $HOME/.esg/esgf.cert  --key $HOME/.esg/esgf.cert "https://aims3.llnl.gov/thredds/dodsC/cmip5_css02_data/cmip5/output1/CMCC/CMCC-CM/decadal2005/mon/atmos/Amon/r1i1p1/cct/1/cct_Amon_CMCC-CM_decadal2005_r1i1p1_202601-203512.nc.dds"
+       if [ $(uname) == "Linux" ];then
+         export LDSHARED="$CC -shared -pthread"
+         LDSHARED="$CC -shared -pthread" python setup.py install
+       else
+         python setup.py install
+       fi
        source activate py2
        rm -rf build
-       python setup.py install
+       if [ $(uname) == "Linux" ];then
+         export LDSHARED="$CC -shared -pthread"
+         LDSHARED="$CC -shared -pthread" python setup.py install
+       else
+         python setup.py install
+       fi
 
   - &run_cdms_tests
     name: run_cdms_tests
@@ -64,6 +73,8 @@ aliases:
        python run_tests.py -v2 
        PY3_RESULT=$?
        echo "*** py3 test result: "${PY3_RESULT}
+       echo  $PY2_RESULT > $HOME/project/$WORKDIR/py2_result.txt
+       echo  $PY3_RESULT > $HOME/project/$WORKDIR/py3_result.txt
 
   - &upload_cdms
     name: upload_cdms
@@ -78,7 +89,8 @@ aliases:
        echo "*** PY3_RESULT: "${PY3_RESULT}
        if [ $PY2_RESULT -eq 0 -a $PY3_RESULT -eq 0 -a $CIRCLE_BRANCH == "master" ]; then bash ./ci-support/conda_upload.sh ; fi
        if [ $PY2_RESULT -eq 0 -a $PY3_RESULT -eq 0 -a $CIRCLE_BRANCH == "master" ]; then conda install -n root conda-build anaconda-client ; fi
-       if [ $PY2_RESULT -eq 0 -a $PY3_RESULT -eq 0 -a $CIRCLE_BRANCH != "master" ]; then
+       #if [ $PY2_RESULT -eq 0 -a $PY3_RESULT -eq 0 -a $CIRCLE_BRANCH != "master" ]; then
+       if [ $CIRCLE_BRANCH != "master" ]; then
            export LABEL="unstable";
            echo "NOTE: upload LABEL="${LABEL}
            conda install -n root conda-build anaconda-client;

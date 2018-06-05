@@ -24,6 +24,14 @@ aliases:
        conda config --set anaconda_upload no
        conda create -n py3 -c cdat/label/unstable -c cdat/label/nightly -c conda-forge -c cdat libcf distarray cdtime libcdms cdat_info numpy libdrs_f pyopenssl nose requests flake8 myproxyclient "python>3"
        conda create -n py2 -c cdat/label/unstable -c cdat/label/nightly -c conda-forge -c cdat libcf distarray cdtime libcdms cdat_info numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 "python<3"
+       if [ $(uname) == "Linux" ]; then
+           conda install -n py3 -c cdat/label/unstable -c cdat/label/nightly -c conda-forge gcc_linux-64
+           conda install -n py2 -c cdat/label/unstable -c cdat/label/nightly -c conda-forge gcc_linux-64
+       else
+           conda install -n py3 -c cdat/label/unstable -c cdat/label/nightly -c conda-forge gcc
+           conda install -n py2 -c cdat/label/unstable -c cdat/label/nightly -c conda-forge gcc
+       fi
+
 
   - &setup_cdms
     name: setup_cdms

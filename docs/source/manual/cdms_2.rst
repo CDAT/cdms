@@ -161,11 +161,9 @@ Cdms Module Functions
                   * ``latBounds`` is a NumPy array having shape ``(len(latArray),2)``, of latitude boundaries. 
                   * ``lonBounds`` is a NumPy array having shape ``(len(lonArray),2)``, of longitude boundaries. 
                   * ``order`` is a ``string`` specifying the order of the axes, either 'yx' for (latitude, longitude), or 'xy' for the reverse.
-                  * ``mask`` (optional) is an ``integer``-valued NumPy mask array, having the same shape and ordering as the grid."
-                 
+                  * ``mask`` (optional) is an ``integer``-valued NumPy mask array, having the same shape and ordering as the grid."               
    "``RectGrid``", "``createGlobalMeanGrid(grid)``:"
                  , "Generate a grid for calculating the global mean via a regridding operation. The return grid is a single zone covering the range of he input grid. ``grid`` is a RectGrid."
-
    "``RectGrid``", "``createRectGrid(lat, lon, order, type='generic', mask=None)``:"
                  , "Create a rectilinear grid, not associated with a file or dataset.  This might be used as the target grid for a regridding operation. 
                   * ``lat`` is a latitude axis, created by ``cdms.createAxis``. 
@@ -186,7 +184,8 @@ Cdms Module Functions
               * ``startLat`` is the starting latitude value.
               * ``nlat`` is the number of latitudes.
               * ``deltaLat`` is the increment between latitudes."
-   "``RectGrid``"," ``createZonalGrid(grid)``: Create a zonal grid. The output grid has the same latitude as the input grid, and a single longitude. This may be used to calculate zonal averages via a regridding operation. ``grid`` is a RectGrid."
+   "``RectGrid``","``createZonalGrid(grid)``:"
+                ,"Create a zonal grid. The output grid has the same latitude as the input grid, and a single longitude. This may be used to calculate zonal averages via a regridding operation. ``grid`` is a RectGrid."
    "``Axis``", "``createUniformLongitudeAxis(startLon, nlon, delta-Lon)``:" 
              , "Create a uniform longitude axis. The axis boundaries are at the midpoints of the axis values. The axis is designated as a circular longitude axis. 
               * ``startLon`` is the starting longitude value.
@@ -200,7 +199,9 @@ Cdms Module Functions
    "``Dataset``", "``open(url,mode='r')``: Open or create a ``Dataset`` or ``CdmsFile``." 
                 , " * ``url`` is a Uniform Resource Locator, referring to a cdunif or XML file. If the URL has the extension '.xml' or '.cdml', a ``Dataset`` is returned, otherwise a ``CdmsFile`` is returned. 
                     * If the URL protocol is 'https', the file must be a '.xml' or '.cdml' file, and the mode must be 'r'. If the protocol is 'file' or is omitted, a local file or dataset is opened. ``mode`` is the open mode.  See `Open Modes <#table-open-modes>`__
+
                     * **Example**: Open an existing dataset: ``f = cdms.open('sampleset.xml')``
+
                     * **Example**: Create a netCDF file: ``f = cdms.open('newfile.nc','w')``"
    "``List``", "``order2index (axes, orderstring)``:"
              , "Find the index permutation of axes to match order. Return a list of indices. ``axes`` is a list of axis objects. ``orderstring`` is defined as in ``orderparse``."
@@ -212,11 +213,19 @@ Cdms Module Functions
               * The ellipsis ... meaning fill these positions with any remaining axes.
               * (name) meaning an axis whose id is name"
    "``None``", "``setAutoBounds(mode)``:" 
-             , "Set autobounds mode. In some circumstances CDMS can generate boundaries for 1-D axes and rectilinear grids, when the bounds are not explicitly defined. The autobounds mode determines how this is done: If ``mode`` is ``'grid'`` or ``2`` (the default), the ``getBounds`` method will automatically generate boundary information for an axis or grid if the axis is designated as a latitude or longitude axis, and the boundaries are not explicitly defined. If ``mode`` is ``'on'`` or ``1``, the ``getBounds`` method will automatically generate boundary information for an axis or grid, if the boundaries are not explicitly defined. If ``mode`` is ``'off'`` or ``0``, and no boundary data is explicitly defined, the bounds will NOT be generated; the ``getBounds`` method will return ``None`` for the boundaries. Note: In versions of CDMS prior to V4.0, the default ``mode`` was ``'on'``."
+             , "Set autobounds mode. In some circumstances CDMS can generate boundaries for 1-D axes and rectilinear grids, when the bounds are not explicitly defined. The autobounds mode determines how this is done:
+              * If ``mode`` is ``'grid'`` or ``2`` (the default), the ``getBounds`` method will automatically generate boundary information for an axis or grid if the axis is designated as a latitude or longitude axis, and the boundaries are not explicitly defined.
+              * If ``mode`` is ``'on'`` or ``1``, the ``getBounds`` method will automatically generate boundary information for an axis or grid, if the boundaries are not explicitly defined. 
+              * If ``mode`` is ``'off'`` or ``0``, and no boundary data is explicitly defined, the bounds will NOT be generated; the ``getBounds`` method will return ``None`` for the boundaries. Note: In versions of CDMS prior to V4.0, the default ``mode`` was ``'on'``."
    "``None``", "``setClassifyGrids(mode)``:"
-             , "Set the grid classification mode. This affects how grid type is determined, for the purpose of generating grid boundaries. If ``mode`` is ``'on'`` (the default), grid type is determined by a grid classification method, regardless of the value of ``grid.get-Type()``. If ``mode`` is ``'off'``, the value of ``grid.getType()`` determines the grid type." 
+             , "Set the grid classification mode. This affects how grid type is determined, for the purpose of generating grid boundaries.
+              * If ``mode`` is ``'on'`` (the default), grid type is determined by a grid classification method, regardless of the value of ``grid.get-Type()``. 
+              * If ``mode`` is ``'off'``, the value of ``grid.getType()`` determines the grid type." 
    "``None``", "``writeScripGrid(path, grid, gridTitle=None)``:"
-             , "Write a grid to a SCRIP grid file.  ``path`` is a string, the path of the SCRIP file to be created.  ``grid`` is a CDMS grid object. It may be rectangular. ``gridTitle`` is a string ID for the grid."
+             , "Write a grid to a SCRIP grid file.  
+        * ``path`` is a string, the path of the SCRIP file to be created.  
+        * ``grid`` is a CDMS grid object. It may be rectangular. 
+        * ``gridTitle`` is a string ID for the grid."
 :
 
 
@@ -488,7 +497,9 @@ CdmsFile Constructors
    :align: left
 
   
-   "``fileobj = cdms.open(path, mode)``", "Open the file specified by path returning a CdmsFile object. ``path`` is the file pathname, a string. ``mode`` is the open mode indicator, as listed in See `Open Modes <#table-open-modes>`_." 
+   "``fileobj = cdms.open(path, mode)``", "Open the file specified by path returning a CdmsFile object. 
+        * ``path`` is the file pathname, a string. 
+        * ``mode`` is the open mode indicator, as listed in See `Open Modes <#table-open-modes>`_." 
    "``fileobj = cdms.createDataset(path)``", "Create the file specified by path, a string."
 
 CdmsFile Methods Object Name  Transient Variable
@@ -539,8 +550,14 @@ CdmsFile Methods Copy Axis, Grid
    :widths:  10, 30, 80
    :align: left
 
-   "``Axis``", "``copyAxis(axis, newname=None)``", "Copy ``axis`` values and attributes to a new axis in the file. The returned object is persistent: it can be used to write axis data to or read axis data from the file. If an axis already exists in the file, having the same name and coordinate values, it is returned.  It is an error if an axis of the same name exists, but with different coordinate values. ``axis`` is the axis object to be copied. ``newname``, if specified, is the string identifier of the new axis object. If not specified, the identifier of the input axis is used."
-   "``Grid``", "``copyGrid(grid, newname=None)``", "Copy grid values and attributes to a new grid in the file. The returned grid is persistent. If a grid already exists in the file, having the same name and axes, it is returned. An error is raised if a grid of the same name exists, having different axes. ``grid`` is the grid object to be copied. ``newname``, if specified is the string identifier of the new grid object. If unspecified, the identifier of the input grid is used."
+   "``Axis``", "``copyAxis(axis, newname=None)``", "Copy ``axis`` values and attributes to a new axis in the file. The returned object is persistent: it can be used to write axis data to or read axis data from the file.
+        *  If an axis already exists in the file, having the same name and coordinate values, it is returned.  It is an error if an axis of the same name exists, but with different coordinate values. 
+        * ``axis`` is the axis object to be copied. 
+        * ``newname``, if specified, is the string identifier of the new axis object. If not specified, the identifier of the input axis is used."
+   "``Grid``", "``copyGrid(grid, newname=None)``", "Copy grid values and attributes to a new grid in the file. The returned grid is persistent. 
+        * If a grid already exists in the file, having the same name and axes, it is returned. An error is raised if a grid of the same name exists, having different axes. 
+        * ``grid`` is the grid object to be copied.
+        *  ``newname``, if specified is the string identifier of the new grid object. If unspecified, the identifier of the input grid is used."
  
 CdmsFile Methods Create Axis, RectGrid and Variable
 ----------------------------------------------------
@@ -550,10 +567,23 @@ CdmsFile Methods Create Axis, RectGrid and Variable
    :widths:  10, 30, 80
    :align: left
 
-   "``Axis``", "``createAxis(id,ar, unlimited=0)``", "Create a new ``Axis``.  This is a persistent object which can be used to read or write axis data to the file. ``id`` is an alphanumeric string identifier, containing no blanks.  ``ar`` is the one-dimensional axis array. Set ``unlimited`` to ``cdms.Unlimited`` to indicate that the axis is extensible."
-   "``RectGrid``", "``createRectGrid(id,lat, lon,order,type='generic', mask=None)``", "Create a ``RectGrid`` in the file. This is not a persistent object: the order, type, and mask are not written to the file. However, the grid may be used for regridding operations.  ``lat`` is a latitude axis in the file.  ``lon`` is a longitude axis in the file.  ``order`` is a string with value ``'yx'`` (the latitude) or ``'xy'`` (the first grid dimension is longitude).  ``type`` is one of ``'gaussian'``,\ ``'unif orm'``,\ ``'equalarea'`` , or ``'generic'``. If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
-   "``Variable``", "``createVariable(Stringid,String datatype,Listaxes,fill_value=None)``", "Create a new Variable.  This is a persistent object which can be used to read or write variable data to the file. ``id`` is a String name which is unique with respect to all other objects in the file. ``datatype`` is an ``MV2`` typecode, e.g., ``MV2.Float``, ``MV2.Int``. ``axes`` is a list of Axis and/or Grid objects.  ``fill_value`` is the missing value (optional)."
-   "``Variable``", "``createVariableCopy(var, newname=None)``", "Create a new ``Variable``, with the   same name, axes, and attributes as the input variable. An error is raised if a variable of the same name exists in the file. ``var`` is the ``Variable`` to be copied. ``newname``, if specified is the name of the new variable. If unspecified, the returned variable has the same name as ``var``.
+   "``Axis``", "``createAxis(id,ar, unlimited=0)``", "Create a new ``Axis``.  This is a persistent object which can be used to read or write axis data to the file.
+        *  ``id`` is an alphanumeric string identifier, containing no blanks.  
+        *  ``ar`` is the one-dimensional axis array. 
+        *   Set ``unlimited`` to ``cdms.Unlimited`` to indicate that the axis is extensible."
+   "``RectGrid``", "``createRectGrid(id,lat, lon,order,type='generic', mask=None)``", "Create a ``RectGrid`` in the file. This is not a persistent object: the order, type, and mask are not written to the file. However, the grid may be used for regridding operations.  ``lat`` is a latitude axis in the file. 
+        * ``lon`` is a longitude axis in the file. 
+        * ``order`` is a string with value ``'yx'`` (the latitude) or ``'xy'`` (the first grid dimension is longitude).  
+        * ``type`` is one of ``'gaussian'``,\ ``'unif orm'``,\ ``'equalarea'`` , or ``'generic'``.
+        *  If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
+   "``Variable``", "``createVariable(Stringid,String datatype,Listaxes,fill_value=None)``", "Create a new Variable.  This is a persistent object which can be used to read or write variable data to the file. 
+        * ``id`` is a String name which is unique with respect to all other objects in the file.
+        * ``datatype`` is an ``MV2`` typecode, e.g., ``MV2.Float``, ``MV2.Int``.
+        * ``axes`` is a list of Axis and/or Grid objects.  
+        * ``fill_value`` is the missing value (optional)."
+   "``Variable``", "``createVariableCopy(var, newname=None)``", "Create a new ``Variable``, with the   same name, axes, and attributes as the input variable. An error is raised if a variable of the same name exists in the file. 
+        * ``var`` is the ``Variable`` to be copied. 
+        * ``newname``, if specified is the name of the new variable. If unspecified, the returned variable has the same name as ``var``.
 
     **Note:** Unlike copyAxis, the actual data is not copied to the new variable."
 
@@ -566,7 +596,10 @@ CdmsFile Methods Read CurveGrid, Generic-Grid
    :widths:  10, 30, 80
    :align: left
 
-   "``CurveGrid`` or ``Generic-Grid``", "``readScripGrid(self,whichGrid='destination',check-Grid=1)``", "Read a curvilinear or generic grid from a SCRIP netCDF file. The file can be a SCRIP grid file or remapping file.  If a mapping file, ``whichGrid`` chooses the grid to read, either ``'source'`` or ``'destination'``. If ``checkGrid`` is ``1`` (default), the grid cells are checked for convexity, and 'repaired' if necessary.  Grid cells may appear to be nonconvex if they cross a ``0 / 2pi`` boundary. The repair consists of shifting the cell vertices to the same side modulo 360 degrees."
+   "``CurveGrid`` or ``Generic-Grid``", "``readScripGrid(self,whichGrid='destination',  check-Grid=1)``", "Read a curvilinear or generic grid from a SCRIP netCDF file. The file can be a SCRIP grid file or remapping file. 
+        *  If a mapping file, ``whichGrid`` chooses the grid to read, either ``'source'`` or ``'destination'``.
+        *  If ``checkGrid`` is ``1`` (default), the grid cells are checked for convexity, and 'repaired' if necessary.  Grid cells may appear to be nonconvex if they cross a ``0 / 2pi`` boundary. 
+       * The repair consists of shifting the cell vertices to the same side modulo 360 degrees."
     "``None``", "``sync()``", "Writes any pending changes to the file."
 
 
@@ -579,8 +612,9 @@ CdmsFile Methods Write Variable
    :align: left
 
 
-   "``Variable``", "``write(var,attributes=None,axes=None, extbounds=None,id=None,extend=None, fill_value=None, index=None, typecode=None)``","Write a variable or array to the file. The return value is the associated file variable."
-    ,,"If the variable does not exist in the file, it is first defined and all attributes written, then the data is written. By default, the time dimension of the variable is defined as the unlimited dimension of the file. If the data is already defined, then data is extended or overwritten depending on the value of keywords ``extend`` and ``index``, and the unlimited dimension values associated with ``var``.
+   "``Variable``", "``write(var,attributes=None,axes=None, extbounds=None,id=None,extend=None, fill_value=None, index=None, typecode=None)``","Write a variable or array to the file. The return value is the associated file variable.
+    * If the variable does not exist in the file, it is first defined and all attributes written, then the data is written. By default, the time dimension of the variable is defined as the unlimited dimension of the file.
+    * If the data is already defined, then data is extended or overwritten depending on the value of keywords ``extend`` and ``index``, and the unlimited dimension values associated with ``var``.
 
     * ``var`` is a Variable, masked array, or Numpy array.
     * ``attributes`` is the attribute dictionary for the variable. The default is ``var.attributes``.
@@ -709,9 +743,11 @@ Database Constructors
    :align: left
 
 
-    "``db = cdms.connect(uri=None, user='', password='')``", "Connect to the database. ``uri`` is the Universal Resource Indentifier of the database. The form of the URI depends on the implementation of the database."
-    ,"For a Lightweight Directory Access Protocol (LDAP) database, the form is: ``ldap://host[:port]/dbname``."
-    ,"For example, if the database is located on host dbhost.llnl.gov, and is named ``'database=CDMS,ou=PCMDI,o=LLNL,c=US'``, the URI is: ``ldap://dbhost.llnl.gov/database=CDMS,ou=PCMDI,o=LLNL,c=US``. If unspecified, the URI defaults to the value of environment variable CDMSROOT. ``user`` is the user ID. If unspecified, an anonymous connection is made. ``password`` is the user password. A password is not required for an anonymous connection"
+    "``db = cdms.connect(uri=None, user='', password='')``", "Connect to the database. ``uri`` is the Universal Resource Indentifier of the database. The form of the URI depends on the implementation of the database.
+    * For a Lightweight Directory Access Protocol (LDAP) database, the form is: ``ldap://host[:port]/dbname``.
+    * For example, if the database is located on host dbhost.llnl.gov, and is named ``'database=CDMS,ou=PCMDI,o=LLNL,c=US'``, the URI is: ``ldap://dbhost.llnl.gov/database=CDMS,ou=PCMDI,o=LLNL,c=US``. 
+    * If unspecified, the URI defaults to the value of environment variable CDMSROOT. ``user`` is the user ID. 
+    * If unspecified, an anonymous connection is made. ``password`` is the user password. A password is not required for an anonymous connection"
 
 Database Methods
 ----------------
@@ -729,8 +765,8 @@ Database Methods
     * ``mode``, is the open mode, 'r' - read-only, 'r+' - read-write, 'w' - create.
 
     * ``openDataset``, is a synonym for ``open``."
-    "SearchResult","``searchFilter(filter=None, tag=None, relbase=None, scope=Subtree, attnames=None, timeout=None)``","Search a CDMS database."
-    ,, "``filter`` is the string search filter. Simple filters have the form 'tag = value'. Simple filters can be combined using logical operators '&', '\|', '!' in prefix notation.    
+    "SearchResult","``searchFilter(filter=None, tag=None, relbase=None, scope=Subtree, attnames=None, timeout=None)``","Search a CDMS database.
+    * ``filter`` is the string search filter. Simple filters have the form 'tag = value'. Simple filters can be combined using logical operators '&', '\|', '!' in prefix notation.    
      **Example:**
 
      * The filter ``'(&(objec)(id=cli))'`` finds all variables named 'cli'.
@@ -878,8 +914,10 @@ SearchResult Methods
 
     "ResultEntry", "``[i]``", "Return the i-th search result. Results can also be returned in a for loop: ``for entry in db.searchResult(tag='dataset'):``"
     "Integer", "``len()``", "Number of entries in the result."
-    "SearchResult", "``searchPredicate(predicate, tag=None)``", "Refine a search result, with a predicate search. ``predicate`` is a function which takes a single CDMS object and returns true (1) if the object satisfies the predicate, 0 if not. ``tag`` restricts the search to objects of the class denoted by the tag." 
-    ,,"**Note**: In the current implementation, ``searchPredicate`` is much less efficient than ``searchFilter``. For best performance, use ``searchFilter`` to narrow the scope of the search, then use ``searchPredicate`` for more general searches."
+    "SearchResult", "``searchPredicate(predicate, tag=None)``", "Refine a search result, with a predicate search.
+        * ``predicate`` is a function which takes a single CDMS object and returns true (1) if the object satisfies the predicate, 0 if not. 
+        * ``tag`` restricts the search to objects of the class denoted by the tag. 
+    **Note**: In the current implementation, ``searchPredicate`` is much less efficient than ``searchFilter``. For best performance, use ``searchFilter`` to narrow the scope of the search, then use ``searchPredicate`` for more general searches."
 
 A search result is a sequence of result entries. Each entry has a string
 name, the name of the object in the database hierarchy, and an attribute

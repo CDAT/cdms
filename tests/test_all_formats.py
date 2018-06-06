@@ -3,6 +3,8 @@ import os
 import sys
 import cdat_info
 import basetest
+import platform
+from shutil import copyfile
 
 
 class TestFormats(basetest.CDMSBaseTest):
@@ -32,7 +34,11 @@ class TestFormats(basetest.CDMSBaseTest):
         self.assertEqual(data.missing_value, 9.999e20)
 
     # test disabled due to OSX issue
-    def dtestESGF(self):
+    def testESGF(self):
+        if platform.system()=="Darwin":
+	    copyfile("tests/dodsrccircleciDarwin", os.environ['HOME']+'/.dodsrc')
+        else:
+	    copyfile("tests/dodsrccircleciLinux", os.environ['HOME']+'/.dodsrc')
         f = cdms2.open("https://aims3.llnl.gov/thredds/dodsC/cmip5_css01_data/cmip5/output1/BCC/bcc-csm1-1-m/1pctCO2/day/ocean/day/r1i1p1/v20120910/tos/tos_day_bcc-csm1-1-m_1pctCO2_r1i1p1_02800101-02891231.nc")
         self.assertIn('tos', f.listvariables())
         data=f['tos']

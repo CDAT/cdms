@@ -1,5 +1,8 @@
-
 import basetest
+try:
+    os.unlink(os.environ['HOME']+'/.dodsrc')
+except:
+    pass
 import cdms2
 from cdms2.cdscan import main as cdscan
 import os
@@ -52,10 +55,6 @@ class TestCDScan(basetest.CDMSBaseTest):
         '''
         retrieve value from cdscan 
         '''
-        try:
-            os.unlink(os.environ['HOME']+'/.dodsrc')
-        except:
-            pass
         argv = 'cdscan -x test_dap.xml https://dataserver.nccs.nasa.gov/thredds/dodsC/bypass/CREATE-IP/Reanalysis/NASA-GMAO/GEOS-5/MERRA/mon/atmos/zg.ncml'.split()
         pth = cdat_info.get_sampledata_path()
 

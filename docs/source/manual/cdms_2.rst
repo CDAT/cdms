@@ -157,9 +157,12 @@ Cdms Module Functions
               * Also see: ``CdmsFile.createAxis``"
    "``Axis``", "``createEqualAreaAxis(nlat)``:" 
              , "Create an equal-area latitude axis.  The latitude values range from north to south, and for all axis values ``x[i]``, ``sin(x[i])sin(x[i+1])`` is constant. 
-              * ``nlat`` is the axis length. The axis is not associated with a file or dataset."
+              * ``nlat`` is the axis length. 
+              **Note:** The axis is not associated with a file or dataset."
    "``Axis``", "``createGaussianAxis(nlat)``:" 
-             , "Create a Gaussian latitude axis. Axis values range from north to south.  ``nlat`` is the axis length. The axis is not associated with a file or dataset."
+             , "Create a Gaussian latitude axis. Axis values range from north to south.  
+              * ``nlat`` is the axis length. 
+              **Note:** The axis is not associated with a file or dataset."
    "``RectGrid``", "``createGaussianGrid(nlats, xorigin=0.0, order='yx')``:"
                  , "Create a Gaussian grid, with shape ``(nlats, 2*nlats)``. 
               * ``nlats`` is the number of latitudes. 
@@ -214,7 +217,7 @@ Cdms Module Functions
                     * ``url`` is a Uniform Resource Locator, referring to a cdunif or XML file. 
                     * If the URL has the extension '.xml' or '.cdml', a ``Dataset`` is returned, otherwise a ``CdmsFile`` is returned. 
                     * If the URL protocol is 'https', the file must be a '.xml' or '.cdml' file, and the mode must be 'r'. If the protocol is 'file' or is omitted, a local file or dataset is opened.
-                    * ``mode`` is the open mode.  See `Open Modes <#table-open-modes>`__
+                    * ``mode`` is the open mode.  See `Open Modes <#id3>`__
 
                     * **Example**: Open an existing dataset: ``f = cdms.open('sampleset.xml')``
 
@@ -319,9 +322,9 @@ It may be contained in a file or dataset, or may be transient
 file, and referencing a file CoordinateAxis slice reads data from the
 file. Axis objects are also used to define the domain of a Variable.
 
-CDMS defines several different types of CoordinateAxis objects. See `MV module <#id3>`_
+CDMS defines several different types of CoordinateAxis objects. See `MV module <#id5>`_
 documents methods that are common to all CoordinateAxis
-types. See `HorizontalGrid <#id4>`_ specifies methods that are unique to 1D
+types. See `HorizontalGrid <#id7>`_ specifies methods that are unique to 1D
 Axis objects.
 
 CoordinateAxis Types
@@ -381,7 +384,7 @@ CoordinateAxis Methods
    :align: left
  
 
-   "``Array``", "``array = axis[i:j]``", "Read a slice of data from the external file or dataset. Data is returned in the physical ordering defined in the dataset. See `Variable Slice Operators <#table-variable-slice-operators>`_ for a description of slice operators."
+   "``Array``", "``array = axis[i:j]``", "Read a slice of data from the external file or dataset. Data is returned in the physical ordering defined in the dataset. See `Variable Slice Operators <#id15>`_ for a description of slice operators."
    "``None``", "``axis[i:j] = array``", "Write a slice of data to the external file. Dataset axes are read-only."
    "``None``", "``assignValue(array)``", "Set the entire value of the axis. ``array`` is a Numpy array, of the same dimensionality as the axis."
    "``Axis``", "``clone(copyData=1)``", "Return a copy of the axis, as a transient axis. If copyData is 1 (the default) the data itself is copied."
@@ -425,7 +428,9 @@ CoordinateAxis Methods, Additional to CoordinateAxis
 
    "``List`` of component times", "``asComponentTime(calendar=None)``", "``Array`` version of ``cdtime tocomp``. Returns a ``List`` of component times."
    "``List`` of relative times", "``asRelativeTime()``", "``Array`` version of ``cdtime torel``. Returns a ``List`` of relative times."
-   "``None``", "``designateCircular(modulo, persistent=0)``", "Designate the axis to be circular. ``modulo`` is the modulus value. Any given axis value ``x`` is treated as equivalent to ``x + modulus``. If ``persistent`` is ``True``, the external file or dataset (if any) is modified. By default, the designation is temporary."
+   "``None``", "``designateCircular(modulo, persistent=0)``", "Designate the axis to be circular. 
+           * ``modulo`` is the modulus value. Any given axis value ``x`` is treated as equivalent to ``x + modulus``.
+           **Note:** If ``persistent`` is ``True``, the external file or dataset (if any) is modified. By default, the designation is temporary."
    "``Integer``", "``isCircular()``", "Returns ``True`` if the axis has circular topology. An axis is defined as circular if:
 
     * ``axis.topology == 'circular'``, or
@@ -523,7 +528,7 @@ CdmsFile Constructors
   
    "``fileobj = cdms.open(path, mode)``", "Open the file specified by path returning a CdmsFile object. 
         * ``path`` is the file pathname, a string. 
-        * ``mode`` is the open mode indicator, as listed in See `Open Modes <#table-open-modes>`_." 
+        * ``mode`` is the open mode indicator, as listed in `Open Modes <#id3>`_." 
    "``fileobj = cdms.createDataset(path)``", "Create the file specified by path, a string."
 
 CdmsFile Methods Object Name  Transient Variable
@@ -536,7 +541,7 @@ CdmsFile Methods Object Name  Transient Variable
 
 
    "``Transient-Variable``", "``fileobj(varname, selector)``", "Calling a ``CdmsFile``"
-   ,, "object as a function reads the region of data specified by the ``selector``. The result is a transient variable, unless ``raw = 1`` is specified. See 'Selectors'.
+   ,, "object as a function reads the region of data specified by the Selectors. The result is a transient variable, unless ``raw = 1`` is specified. See `Selectors <#id12>`_ .
 
     **Example:** The following reads data for variable 'prc', year 1980:
 
@@ -1106,7 +1111,7 @@ Dataset Constructors
    :widths:  50, 80
    :align: left
 
-    "``datasetobj = cdms.open(String uri, String mode='r')``", "Open the dataset specified by the Universal Resource Indicator, a CDML file. Returns a Dataset object. mode is one of the indicators listed in `Open Modes <#table-open-modes>`__ . ``openDataset`` is a synonym for ``open``"
+    "``datasetobj = cdms.open(String uri, String mode='r')``", "Open the dataset specified by the Universal Resource Indicator, a CDML file. Returns a Dataset object. mode is one of the indicators listed in `Open Modes <#id3>`__ . ``openDataset`` is a synonym for ``open``"
 
 
 Open Modes
@@ -1130,7 +1135,7 @@ Dataset Methods
    :header:  "Type", "Definition", "Description"
    :widths:  30, 30, 80
 
-    "Transient-Variable", "``datasetobj(varname, selector)``", "Calling a Dataset object as a function reads the region of data defined by the selector. The result is a transient variable, unless ``raw = 1`` is specified. See 'Selectors'.
+    "Transient-Variable", "``datasetobj(varname, selector)``", "Calling a Dataset object as a function reads the region of data defined by the selector. The result is a transient variable, unless ``raw = 1`` is specified. See `Selectors <#id12>`_.
 
     **Example:** The following reads data for variable 'prc', year 1980:
 
@@ -1206,7 +1211,7 @@ The command
 
 allows use of MV commands without any prefix.
 
-Table `Variable Constructors in module MV <#table-variable-constructors-in-module-mv>`_,  lists the constructors in MV. All functions return
+Table `Variable Constructors in module MV <#id5>`_,  lists the constructors in MV. All functions return
 a transient variable. In most cases the keywords axes, attributes, and
 id are available. axes is a list of axis objects which specifies the
 domain of the variable. attributes is a dictionary. id is a special
@@ -1527,7 +1532,7 @@ Variable Methods
    :align: left
 
 
-    "Variable", "``tvar = var[ i:j, m:n]``", "Read a slice of data from the file or dataset, resulting in a transient variable.  Singleton dimensions are 'squeezed' out. Data is returned in the physical ordering defined in the dataset. The forms of the slice operator are listed in `Variable Slice Operators <#table-variable-slice-operators>`_ "
+    "Variable", "``tvar = var[ i:j, m:n]``", "Read a slice of data from the file or dataset, resulting in a transient variable.  Singleton dimensions are 'squeezed' out. Data is returned in the physical ordering defined in the dataset. The forms of the slice operator are listed in `Variable Slice Operators <#id11>`_ "
     "None", "``var[ i:j, m:n] = array``", "Write a slice of data to the external dataset.  The forms of the slice operator are listed in `Result Entry Methods <#table-resultentry-methods>`_ .  (Variables in CdmsFiles only)"
     "Variable", "``tvar = var(selector)``", "Calling a variable as a function reads the region of data defined by the selector. The result is a transient variable, unless raw=1 keyword is specified.  See 'Selectors'."
     "None", "``assignValue(Array ar)``", "Write the entire data array. Equivalent to ``var[:] = ar``.  (Variables in CdmsFiles only)."
@@ -1598,7 +1603,7 @@ Variable Methods
     "``None``", "``setAxisList(axislist)``", "Set all axes of the variable. axislist is a list of axis objects."
     "``None``", "``setMissing(value)``", "Set the missing value.  Integer ``size()`` Number of elements of the variable."
     "Variable", "``subRegion(* region, time=None, level=None, latitude=None, longitude=None, squeeze=0, raw=0)``", "Read a coordinate region of data, returning a transient variable. A region is a hyperrectangle in coordinate space.
-    * ``region`` is an argument list, each item of which specifies an interval of a coordinate axis. The intervals are listed in the order of the variable axes. If trailing dimensions are omitted, all values of those dimensions are retrieved. If an axis is circular (axis.isCircular() is true) or cycle is specified (see below), then data will be read with wraparound in that dimension. Only one axis may be read with wraparound. A coordinate interval has one of the forms listed in `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_ . Also see ``axis.mapIntervalExt``.
+    * ``region`` is an argument list, each item of which specifies an interval of a coordinate axis. The intervals are listed in the order of the variable axes. If trailing dimensions are omitted, all values of those dimensions are retrieved. If an axis is circular (axis.isCircular() is true) or cycle is specified (see below), then data will be read with wraparound in that dimension. Only one axis may be read with wraparound. A coordinate interval has one of the forms listed in `Index and Coordinate Intervals <#id11>`_ . Also see ``axis.mapIntervalExt``.
     * The optional keyword arguments ``time``, ``level``, ``latitude``, and ``longitude`` may also be used to specify the dimension for which the interval applies.  This is particularly useful if the order of dimensions is not known in advance. An exception is raised if a keyword argument conflicts with a positional region argument.
     * The optional keyword argument ``squeeze`` determines whether or not the shape of the returned array contains dimensions whose length is 1; by default this argument is 0, and such dimensions are not 'squeezed out'.
     * The optional keyword argument ``raw`` specifies whether the return object is a variable or a masked array. By default, a transient variable is returned, having the axes and attributes corresponding to2,3 the region read. If raw=1, an MV2 masked array is returned, equivalent to the transient variable without the axis and attribute information."
@@ -1739,7 +1744,7 @@ selector can be used with any variable. If the corresponding axis is not
 found, the selector component is ignored. This is very useful for
 writing general purpose scripts. The required keyword overrides this
 behavior. These keywords take values that are coordinate ranges or index
-ranges as defined in See `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_.
+ranges as defined in See `Index and Coordinate Intervals <#id11>`_.
 
 The following keywords are available: Another form of selector
 components is the positional form, where the component order corresponds
@@ -1753,16 +1758,16 @@ Selector Keywords
    :header:  "Keyword", "Description", "Value"
    :widths:  30, 80, 80
 
-    "``axisid``", "Restrict the axis with ID axisid to a value or range of values.",  See `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_
+    "``axisid``", "Restrict the axis with ID axisid to a value or range of values.",  See `Index and Coordinate Intervals <#id11>`_
     "``grid``", "Regrid the result to the grid.", " Grid object"
-    "``latitude``", "Restrict latitude values to a value or range. Short form: lat", See `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_
-    "``level``", "Restrict vertical levels to a value or range. Short form: lev",See `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_
-    "``longitude``", "Restrict longitude values to a value or range. Short form: lon", See `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_
+    "``latitude``", "Restrict latitude values to a value or range. Short form: lat", See `Index and Coordinate Intervals <#id11>`_
+    "``level``", "Restrict vertical levels to a value or range. Short form: lev",See `Index and Coordinate Intervals <#id11>`_
+    "``longitude``", "Restrict longitude values to a value or range. Short form: lon", See `Index and Coordinate Intervals <#id11>`_
     "``order``", "Reorder the result.", " Order string, e.g., 'tzyx'"
     "``raw``", "Return a masked array (MV2.array) rather than a transient variable.", "0: return a transient variable (default);   =   1: return a masked array."
     "``required``", "Require that the axis IDs be present.", " List of axis identifiers."
     "``squeeze``", "Remove singleton dimensions from the result.", " 0: leave singleton dimensions (default); 1: remove singleton dimensions."
-    "``time``", "Restrict time values to a value or range.", See `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_ 
+    "``time``", "Restrict time values to a value or range.", See `Index and Coordinate Intervals <#id11>`_ 
 
 Another form of selector components is the positional form, where the
 component order corresponds to the axis order of a variable. For
@@ -1776,7 +1781,7 @@ example:
 
 reads data for the range (‘1979-1-1’,’1979-2-1’) of the first axis, and
 coordinate value 1000.0 of the second axis. Non-keyword arguments of the
-form(s) listed in `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_ are treated as positional. Such
+form(s) listed in `Index and Coordinate Intervals <#id11>`_ are treated as positional. Such
 selectors are more concise, but not as general or flexible as the other
 types described in this section.
 

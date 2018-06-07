@@ -89,8 +89,7 @@ aliases:
        echo "*** PY3_RESULT: "${PY3_RESULT}
        if [ $PY2_RESULT -eq 0 -a $PY3_RESULT -eq 0 -a $CIRCLE_BRANCH == "master" ]; then bash ./ci-support/conda_upload.sh ; fi
        if [ $PY2_RESULT -eq 0 -a $PY3_RESULT -eq 0 -a $CIRCLE_BRANCH == "master" ]; then conda install -n root conda-build anaconda-client ; fi
-       #if [ $PY2_RESULT -eq 0 -a $PY3_RESULT -eq 0 -a $CIRCLE_BRANCH != "master" ]; then
-       if [ $CIRCLE_BRANCH != "master" ]; then
+       if [ $PY2_RESULT -eq 0 -a $PY3_RESULT -eq 0 -a $CIRCLE_BRANCH != "master" ]; then
            export LABEL="unstable";
            echo "NOTE: upload LABEL="${LABEL}
            conda install -n root conda-build anaconda-client;

@@ -235,12 +235,12 @@ Table Axis Elements
    :widths: 18,1,1,1,80
 
      "``associate``", "N", "N", "Y", "IDs of variables containing alternative sets of coordinates."
-     "``axis``", "N", "Y", "Y", "The spatial type of the axis:"
-     ,,,,"- 'T' - time"
-     ,,,,"- 'X' - longitude"
-     ,,,,"- 'Y' - latitude"
-     ,,,,"- 'Z' - vertical level"
-     ,,,,"- '-' - not spatiotemporal"
+     "``axis``", "N", "Y", "Y", "The spatial type of the axis:
+         * 'T' - time
+         * 'X' - longitude
+         * 'Y' - latitude
+         * 'Z' - vertical level
+         * '-' - not spatiotemporal"
      "``bounds``", "N", "Y", "Y", "ID of the boundary variable"
      "``calendar``", "N", "Y", "N", "See dataset.calendar"
      "``climatology``", "N", "Y", "N", "Range of dates to which climatological statistics apply."
@@ -251,9 +251,9 @@ Table Axis Elements
      "``expand``", "N", "N", "Y", "Coordinates prior to contraction"
      "``formula_terms``", "N", "Y", "N", "Variables that correspond to the terms in a formula."
      "``id``", "Y", "N", "N", "Axis identifier. Also the name of the axis in the underlying file(s), if name_in_file is undefined."  
-     "``isvar``", "N", "N", "N", "* 'true' | 'false'"
-     ,,,,"- 'false' if the axis does not have coordinate values explicitly defined in the underlying file(s)."
-     ,,,,"- Default: 'true'"
+     "``isvar``", "N", "N", "N", "'true' | 'false'
+         * 'false' if the axis does not have coordinate values explicitly defined in the underlying file(s).
+         * Default: 'true'"
      "``leap_month``", "N", "Y", "N", "For a user-defined calendar, the month which is lengthened by a day in leap years."
      "``leap_year``", "N", "Y", "N", "An example of a leap year for a user-defined calendar. All years that differ from this year by a multiple of four are leap years."
      "``length``", "N", "N", "N", "Number of axis values, including values for which no data is defined. Cf.  partition_length."
@@ -265,8 +265,8 @@ Table Axis Elements
      "``partition_length``", "N", "N", "N", "Number of axis points for which data is actually defined. If data is missing for some values, this will be smaller than the length."  
      "``positive``", "N", "Y", "Y", "Direction of positive for a vertical axis"
      "``standard_name``", "N", "Y", "N", "Reference to an entry in the standard name table."
-     "``topology``", "N", "N", "Y", "- Axis topology."
-     ,,,,"- 'circular' | 'linear'"
+     "``topology``", "N", "N", "Y", "Axis topology.
+         * 'circular' | 'linear'"
      "``units``", "Y", "Y", "Y", "Units of a physical quantity"
      "``weights``", "N", "N", "N", "Name of the weights array" 
 

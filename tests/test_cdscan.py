@@ -1,4 +1,5 @@
 import basetest
+import os
 try:
     os.unlink(os.environ['HOME']+'/.dodsrc')
 except:

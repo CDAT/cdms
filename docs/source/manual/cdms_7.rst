@@ -67,40 +67,55 @@ Table CDScan Command Options
    :header: "Option:, "Description"
    :widths: 20, 80
 
-   "``-a alias_file``", "Change variable names to the aliases defined in an alias file.  Each line of the alias file consists of two blank separated fields: ``variable_id alias``. ``variable_id`` is the ID of the variable in the file, and ``alias`` is the name that will be substituted for it in the output dataset. Only variables with entries in the ``alias_file`` are renamed."
-   "``-c calendar``", "Specify the dataset calendar attribute. One of:"
-   , "- gregorian (default)"
-   , "- julian"
-   , "- noleap"
-   , "- proleptic_gregorian"
-   , "- standard" 
-   , "- 360_day"
+   "``-a alias_file``", "Change variable names to the aliases defined in an alias file.  Each line of the alias file consists of two blank separated fields: ``variable_id alias``. 
+      * ``variable_id`` is the ID of the variable in the file, and
+      * ``alias`` is the name that will be substituted for it in the output dataset. 
+      * Only variables with entries in the ``alias_file`` are renamed."
+   "``-c calendar``", "Specify the dataset calendar attribute. One of:
+      * gregorian (default)
+      * julian
+      * noleap
+      * proleptic_gregorian
+      * standard 
+      * 360_day"
    "``-d dataset_id``", "String identifier of the dataset. Should not contain blanks or non-printing characters. Default: 'None'"
-   "``-e newattr``", "Add or modify attributes of a file, variable, or axis."
-   ,"- The form of ``newattr`` is either:"
-   ,"  - ``var.attr = value`` to modify a variable or attribute, or"
-   ,"  - ``.attr = value`` to modify a global (file) attribute. In either case, value may be quoted to preserve spaces or force the attribute to be treated as a string. If value is not quoted and the first character is a digit, it is converted to integer or floating-point. This option does not modify the input datafiles. See notes and examples below."
+   "``-e newattr``", "Add or modify attributes of a file, variable, or axis. The form of ``newattr`` is either:
+      * ``var.attr = value`` to modify a variable or attribute, or
+      * ``.attr = value`` to modify a global (file) attribute.
+      * In either case, value may be quoted to preserve spaces or force the attribute to be treated as a string.
+      * If value is not quoted and the first character is a digit, it is converted to integer or floating-point. This option does not modify the input datafiles. See notes and examples below."
    "``--exclude var,var,...``", "Exclude specified variables. The argument is a comma-separated list of variables containing no blanks. Also see ``--include``."
    "``-f file_list``", "File containing a list of absolute data file names, one per line."
    "``-h``", "Print a help message."
-   "``-i time_delta``", "Causes the time dimension to be represented as linear, producing a more compact representation. This is useful if the time dimension is very long.  ``time_delta`` is a float or integer. For example, if the time delta is 6 hours, and the reference units are ``hours since xxxx`` , set the time delta to 6.  See the ``-r`` option. See Note 2."
+   "``-i time_delta``", "Causes the time dimension to be represented as linear, producing a more compact representation. This is useful if the time dimension is very long. 
+      * ``time_delta`` is a float or integer. 
+      * For example, if the time delta is 6 hours, and the reference units are ``hours since xxxx`` , set the time delta to 6.  See the ``-r`` option. See Note 2."
    "``--include var,var,...``", "Only include specified variables in the output. The argument is a comma-separated list of variables containing no blanks. Also see ``--exclude``."
-   "``-j``", "Scan time as a vector dimension. Time values are listed individually."
-   ,"- **Note:** Turns off the -i option."
-   "``-l levels``", "Specify that the files are partitioned by vertical level. That is, data for different vertical levels may appear in different files. ``levels`` is a comma-separated list of levels containing no blanks. See Note 3."
+   "``-j``", "Scan time as a vector dimension. Time values are listed individually.
+      **Note:** Turns off the -i option."
+   "``-l levels``", "Specify that the files are partitioned by vertical level. That is, data for different vertical levels may appear in different files. 
+      * ``levels`` is a comma-separated list of levels containing no blanks. See Note 3."
    "``-m levelid``", "Name of the vertical level dimension. The default is the vertical dimension as determined by CDMS. See Note 3."
-   "``-p template``", "Add a file template string, for compatibility with pre-V3.0 datasets.  ``cdimport -h`` describes template strings."
+   "``-p template``", "Add a file template string, for compatibility with pre-V3.0 datasets.  
+      * ``cdimport -h`` describes template strings."
    "``-q``", "Quiet mode."
-   "``-r time_units``", "Time units of the form ``units since yyyy-mm-dd hh:mi:ss``, where ``units`` is one of 'year', 'month', 'day', 'hour', 'minute', 'second'."
-   "``-s suffix_file``", "Append a suffix to variable names, depending on the directory containing the data file. This can be used to distinguish variables having the same name but generated by different models or ensemble runs. ``suffix_file`` is the name of a file describing a mapping between directories and suffixes. Each line consists of two blank-separated fields: ``directory suffix``. Each file path is compared to the directories in the suffix file. If the file path is in that directory or a subdirectory, the corresponding suffix is appended to the variable IDs in the file. If more than one such directory is found, the first directory found is used. If no match is made, the variable ids are not altered. Regular expressions can be used: see the example in the Notes section."
+   "``-r time_units``", "Time units of the form ``units since yyyy-mm-dd hh:mi:ss``, where
+      * ``units`` is one of 'year', 'month', 'day', 'hour', 'minute', 'second'."
+   "``-s suffix_file``", "Append a suffix to variable names, depending on the directory containing the data file. This can be used to distinguish variables having the same name but generated by different models or ensemble runs.
+     * ``suffix_file`` is the name of a file describing a mapping between directories and suffixes. 
+     * Each line consists of two blank-separated fields: ``directory suffix``. 
+     * Each file path is compared to the directories in the suffix file. 
+     * If the file path is in that directory or a subdirectory, the corresponding suffix is appended to the variable IDs in the file.
+     * If more than one such directory is found, the first directory found is used.
+     * If no match is made, the variable ids are not altered. Regular expressions can be used: see the example in the Notes section."
    "``-t timeid``", "ID of the partitioned time dimension. The default is the name of the time dimension as determined by CDMS. See Note 1."
-   "``--time-linear tzero,delta,units[,calendar]``", "Override the time dimensions(s) with a linear time dimension. The arguments are comma-separated list:"
-   , "- zero is the initial time point, a floating-point value."
-   , "- delta is the time delta, floating-point."
-   , "- units are time units as specified in the [-r] option."
-   , "- calendar is optional, and is specified as in the [-c] option."
-   , "If omitted, it defaults to the value specified by [-c], otherwise as specified in the file."
-   , "**Example:** ``--time-linear '0,1,months since 1980,noleap'``"
+   "``--time-linear tzero,delta,units[,calendar]``", "Override the time dimensions(s) with a linear time dimension. The arguments are comma-separated list:
+     * zero is the initial time point, a floating-point value.
+     * delta is the time delta, floating-point.
+     * units are time units as specified in the [-r] option.
+     * calendar is optional, and is specified as in the [-c] option.
+     * If omitted, it defaults to the value specified by [-c], otherwise as specified in the file.
+     **Example:** ``--time-linear '0,1,months since 1980,noleap'``"
    "``-x xmlfile``", "Output file name. By default, output is written to standard output."
 
 **Notes:**

@@ -143,77 +143,78 @@ Cdms Module Functions
    :align: left
 
 
-   "``Variable``", "``asVariable(s)``: Transform ``s`` into a transient variable.
+   "``Variable``", "``asVariable(s)``: 
+            Transform ``s`` into a transient variable.
              *  ``s`` is a masked array, Numpy array, or Variable. 
              * If ``s`` is already a transient variable, ``s`` is returned. 
              * See also: ``isVariable``."
-   "``Axis``", "``createAxis(data, bounds=None)``:"
-             , "Create a one-dimensional coordinate Axis, which is not associated with a file or dataset. This is useful for creating a grid which is not contained in a file or dataset.
+   "``Axis``", "``createAxis(data, bounds=None)``:
+             Create a one-dimensional coordinate Axis, which is not associated with a file or dataset. This is useful for creating a grid which is not contained in a file or dataset.
               * ``data`` is a one-dimensional, monotonic Numpy array.
               * ``bounds`` is an array of shape ``(len(data),2)``, such that for all ``i``, 
               * ``data[i]`` is in the range ``[bounds[i,0],bounds[i,1] ]``.
               *  If ``bounds`` is not specified, the default boundaries are generated at the midpoints between the consecutive data values, provided that the autobounds mode is 'on' (the default).           
               * See ``setAutoBounds``. 
               * Also see: ``CdmsFile.createAxis``"
-   "``Axis``", "``createEqualAreaAxis(nlat)``:" 
-             , "Create an equal-area latitude axis.  The latitude values range from north to south, and for all axis values ``x[i]``, ``sin(x[i])sin(x[i+1])`` is constant. 
+   "``Axis``", "``createEqualAreaAxis(nlat)``: 
+             Create an equal-area latitude axis.  The latitude values range from north to south, and for all axis values ``x[i]``, ``sin(x[i])sin(x[i+1])`` is constant. 
               * ``nlat`` is the axis length. 
               **Note:** The axis is not associated with a file or dataset."
-   "``Axis``", "``createGaussianAxis(nlat)``:" 
-             , "Create a Gaussian latitude axis. Axis values range from north to south.  
+   "``Axis``", "``createGaussianAxis(nlat)``: 
+             Create a Gaussian latitude axis. Axis values range from north to south.  
               * ``nlat`` is the axis length. 
               **Note:** The axis is not associated with a file or dataset."
-   "``RectGrid``", "``createGaussianGrid(nlats, xorigin=0.0, order='yx')``:"
-                 , "Create a Gaussian grid, with shape ``(nlats, 2*nlats)``. 
+   "``RectGrid``", "``createGaussianGrid(nlats, xorigin=0.0, order='yx')``:
+             Create a Gaussian grid, with shape ``(nlats, 2*nlats)``. 
               * ``nlats`` is the number of latitudes. 
               * ``xorigin`` is the origin of the longitude axis. 
               *  ``order`` is either 'yx' (lat-lon, default) or 'xy' (lon-lat)"
-   "``RectGrid``", "``createGenericGrid(latArray, lonArray, latBounds=None, lonBounds=None, order='yx', mask=None)``:"
-                 , "Create a generic grid, that is, a grid which is not typed as Gaussian, uniform, or equal-area. The grid is not associated with a file or dataset. 
+   "``RectGrid``", "``createGenericGrid(latArray, lonArray, latBounds=None, lonBounds=None, order='yx', mask=None)``:
+             Create a generic grid, that is, a grid which is not typed as Gaussian, uniform, or equal-area. The grid is not associated with a file or dataset. 
                   * ``latArray`` is a NumPy array of latitude values.
                   * ``lonArray`` is a NumPy array of longitude values. 
                   * ``latBounds`` is a NumPy array having shape ``(len(latArray),2)``, of latitude boundaries. 
                   * ``lonBounds`` is a NumPy array having shape ``(len(lonArray),2)``, of longitude boundaries. 
                   * ``order`` is a ``string`` specifying the order of the axes, either 'yx' for (latitude, longitude), or 'xy' for the reverse.
                   * ``mask`` (optional) is an ``integer``-valued NumPy mask array, having the same shape and ordering as the grid."               
-   "``RectGrid``", "``createGlobalMeanGrid(grid)``:"
-                 , "Generate a grid for calculating the global mean via a regridding operation. The return grid is a single zone covering the range of he input grid.
+   "``RectGrid``", "``createGlobalMeanGrid(grid)``:
+             Generate a grid for calculating the global mean via a regridding operation. The return grid is a single zone covering the range of he input grid.
                   *  ``grid`` is a RectGrid."
-   "``RectGrid``", "``createRectGrid(lat, lon, order, type='generic', mask=None)``:"
-                 , "Create a rectilinear grid, not associated with a file or dataset.  This might be used as the target grid for a regridding operation. 
+   "``RectGrid``", "``createRectGrid(lat, lon, order, type='generic', mask=None)``:
+             Create a rectilinear grid, not associated with a file or dataset.  This might be used as the target grid for a regridding operation. 
                   * ``lat`` is a latitude axis, created by ``cdms.createAxis``. 
                   * ``lon`` is a longitude axis, created by ``cdms.createAxis``. 
                   * ``order`` is a string with value 'yx' (the first grid dimension is latitude) or 'xy' (the first grid dimension is longitude). 
                   * ``type`` is one of 'gaussian','uniform','equalarea',or 'generic'. 
                   * If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
-   "``RectGrid``", "``createUniformGrid(startLat, nlat, deltaLat, start-Lon, nlon, deltaLon, order='yx', mask=None)``:"
-                 , "Create a uniform rectilinear grid.  The grid is not associated with a file or dataset. The grid boundaries are at the midpoints of the axis values. 
+   "``RectGrid``", "``createUniformGrid(startLat, nlat, deltaLat, start-Lon, nlon, deltaLon, order='yx', mask=None)``:
+             Create a uniform rectilinear grid.  The grid is not associated with a file or dataset. The grid boundaries are at the midpoints of the axis values. 
                   * ``startLat`` is the starting latitude value. 
                   * ``nlat`` is the number of latitudes. If ``nlat`` is 1, the grid latitude boundaries will be ``startLat`` +/- ``deltaLat/2``.
                   * ``deltaLat`` is the increment between latitudes. ``startLon`` is the starting longitude value.
                   * ``nlon`` is the number of longitudes. If ``nlon`` is 1, the grid longitude boundaries will be ``startLon`` +/- ``deltaLon/2``.
                   * ``deltaLon`` is the increment between longitudes. ``order`` is a string with value 'yx. (the first grid dimension is latitude) or .xy. (the first grid dimension is longitude).
                   * If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
-   "``Axis``", "``createUniformLatitudeAxis(startLat , nlat, deltaLat)``:"
-             , "Create a uniform latitude axis. The axis boundaries are at the midpoints of the axis values. The axis is designated as a circular latitude axis. 
+   "``Axis``", "``createUniformLatitudeAxis(startLat , nlat, deltaLat)``:
+           Create a uniform latitude axis. The axis boundaries are at the midpoints of the axis values. The axis is designated as a circular latitude axis. 
               * ``startLat`` is the starting latitude value.
               * ``nlat`` is the number of latitudes.
               * ``deltaLat`` is the increment between latitudes."
-   "``RectGrid``","``createZonalGrid(grid)``:"
-                ,"Create a zonal grid. The output grid has the same latitude as the input grid, and a single longitude. This may be used to calculate zonal averages via a regridding operation. 
+   "``RectGrid``","``createZonalGrid(grid)``:
+           Create a zonal grid. The output grid has the same latitude as the input grid, and a single longitude. This may be used to calculate zonal averages via a regridding operation. 
     * ``grid`` is a RectGrid."
-   "``Axis``", "``createUniformLongitudeAxis(startLon, nlon, delta-Lon)``:" 
-             , "Create a uniform longitude axis. The axis boundaries are at the midpoints of the axis values. The axis is designated as a circular longitude axis. 
+   "``Axis``", "``createUniformLongitudeAxis(startLon, nlon, delta-Lon)``:  
+          Create a uniform longitude axis. The axis boundaries are at the midpoints of the axis values. The axis is designated as a circular longitude axis. 
               * ``startLon`` is the starting longitude value.
               * ``nlon`` is the number of longitudes
               * ``deltaLon`` is the increment between longitudes."
    "``Variable``", "``createVariable(array, typecode=None, copy=0, savespace=0, mask=None, fill_value=None, grid=None, axes=None , attributes=None, id=None)``:"
-   "``Integer``", "``getAutoBounds()``: Get the current autobounds mode. Returns 0, 1, or 2."
-                , " * See ``setAutoBounds``."
-   "``Integer``", "``isVariable(s)``: "
-                , " * Return ``1`` if ``s`` is a variable, ``0`` otherwise. See also: ``asVariable``."
-   "``Dataset``", "``open(url,mode='r')``:"
-              , "Open or create a ``Dataset`` or ``CdmsFile``. 
+   "``Integer``", "``getAutoBounds()``: Get the current autobounds mode. Returns 0, 1, or 2.
+                * See ``setAutoBounds``."
+   "``Integer``", "``isVariable(s)``: 
+                * Return ``1`` if ``s`` is a variable, ``0`` otherwise. See also: ``asVariable``."
+   "``Dataset``", "``open(url,mode='r')``:
+          Open or create a ``Dataset`` or ``CdmsFile``. 
                     * ``url`` is a Uniform Resource Locator, referring to a cdunif or XML file. 
                     * If the URL has the extension '.xml' or '.cdml', a ``Dataset`` is returned, otherwise a ``CdmsFile`` is returned. 
                     * If the URL protocol is 'https', the file must be a '.xml' or '.cdml' file, and the mode must be 'r'. If the protocol is 'file' or is omitted, a local file or dataset is opened.
@@ -222,30 +223,30 @@ Cdms Module Functions
                     * **Example**: Open an existing dataset: ``f = cdms.open('sampleset.xml')``
 
                     * **Example**: Create a netCDF file: ``f = cdms.open('newfile.nc','w')``"
-   "``List``", "``order2index (axes, orderstring)``:"
-             , "Find the index permutation of axes to match order. Return a list of indices.
+   "``List``", "``order2index (axes, orderstring)``:
+           Find the index permutation of axes to match order. Return a list of indices.
                     *  ``axes`` is a list of axis objects.
                     *  ``orderstring`` is defined as in ``orderparse``."
-   "``List``", "``orderparse(orderstring)``:" 
-             , "Parse an order string. Returns a list of axes specifiers. ``orderstring`` consists of:
+   "``List``", "``orderparse(orderstring)``:
+          Parse an order string. Returns a list of axes specifiers. ``orderstring`` consists of:
               * Letters t, x, y, z meaning time, longitude, latitude, level
               * Numbers 0-9 representing position in axes
               * Dash (-) meaning insert the next available axis here.
               * The ellipsis ... meaning fill these positions with any remaining axes.
               * (name) meaning an axis whose id is name"
-   "``None``", "``setAutoBounds(mode)``:" 
-             , "Set autobounds mode. In some circumstances CDMS can generate boundaries for 1-D axes and rectilinear grids, when the bounds are not explicitly defined. The autobounds mode determines how this is done:
+   "``None``", "``setAutoBounds(mode)``:  
+          Set autobounds mode. In some circumstances CDMS can generate boundaries for 1-D axes and rectilinear grids, when the bounds are not explicitly defined. The autobounds mode determines how this is done:
               * If ``mode`` is ``'grid'`` or ``2`` (the default), the ``getBounds`` method will automatically generate boundary information for an axis or grid if the axis is designated as a latitude or longitude axis, and the boundaries are not explicitly defined.
               * If ``mode`` is ``'on'`` or ``1``, the ``getBounds`` method will automatically generate boundary information for an axis or grid, if the boundaries are not explicitly defined. 
               * If ``mode`` is ``'off'`` or ``0``, and no boundary data is explicitly defined, the bounds will NOT be generated; the ``getBounds`` method will return ``None`` for the boundaries.
 
               **Note:** In versions of CDMS prior to V4.0, the default ``mode`` was ``'on'``."
-   "``None``", "``setClassifyGrids(mode)``:"
-             , "Set the grid classification mode. This affects how grid type is determined, for the purpose of generating grid boundaries.
+   "``None``", "``setClassifyGrids(mode)``:
+          Set the grid classification mode. This affects how grid type is determined, for the purpose of generating grid boundaries.
               * If ``mode`` is ``'on'`` (the default), grid type is determined by a grid classification method, regardless of the value of ``grid.get-Type()``. 
               * If ``mode`` is ``'off'``, the value of ``grid.getType()`` determines the grid type." 
-   "``None``", "``writeScripGrid(path, grid, gridTitle=None)``:"
-             , "Write a grid to a SCRIP grid file.  
+   "``None``", "``writeScripGrid(path, grid, gridTitle=None)``:
+         Write a grid to a SCRIP grid file.  
         * ``path`` is a string, the path of the SCRIP file to be created.  
         * ``grid`` is a CDMS grid object. It may be rectangular. 
         * ``gridTitle`` is a string ID for the grid."
@@ -305,10 +306,14 @@ Getting and Setting Attributes
    :header:  "Type", "Definition"
    :widths:  20, 80
 
-   "various", "``value = obj.attname``"
-            , "Get an internal or external attribute value. If the attribute is external, it is read from the database. If the attribute is not already in the database, it is created as an external attribute.  Internal attributes cannot be created, only referenced."
-   "various", "``obj.attname = value``"
-            , "Set an internal or external attribute value. If the attribute is external, it is written to the database."
+   "various", "``value = obj.attname``
+         Get an internal or external attribute value. 
+              * If the attribute is external, it is read from the database.
+              * If the attribute is not already in the database, it is created as an external attribute. 
+              * Internal attributes cannot be created, only referenced."
+   "various", "``obj.attname = value``
+         St an internal or external attribute value.
+              * If the attribute is external, it is written to the database."
 
 
 
@@ -540,8 +545,7 @@ CdmsFile Methods Object Name  Transient Variable
    :align: left
 
 
-   "``Transient-Variable``", "``fileobj(varname, selector)``", "Calling a ``CdmsFile``"
-   ,, "object as a function reads the region of data specified by the Selectors. The result is a transient variable, unless ``raw = 1`` is specified. See `Selectors <#id12>`_ .
+   "``Transient-Variable``", "``fileobj(varname, selector)``", "Calling a ``CdmsFile`` object as a function reads the region of data specified by the Selectors. The result is a transient variable, unless ``raw = 1`` is specified. See `Selectors <#id12>`_ .
 
     **Example:** The following reads data for variable 'prc', year 1980:
 
@@ -966,7 +970,8 @@ ResultEntry Attributes
    :widths:  20, 30, 80
 
     "String", "``name``", "The name of this entry in the database."
-    "Dictionary", "``attributes``", "The attributes returned from the search. ``attributes[key]`` is a list of all string values associated with the key"
+    "Dictionary", "``attributes``", "The attributes returned from the search.
+          *  ``attributes[key]`` is a list of all string values associated with the key"
 
 
 ResultEntry Methods
@@ -976,8 +981,8 @@ ResultEntry Methods
    :header:  "Type", "Method", "Definition"
    :widths:  20, 30, 80
 
-    "``CdmsObj``", "``getObject()``", "Return the CDMS object associated with this entry."
-    ,, "**Note:** For many search applications it is unnecessary to access the associated CDMS object. For best performance this function should be used only when necessary, for example, to retrieve data associated with a variable."
+    "``CdmsObj``", "``getObject()``", "Return the CDMS object associated with this entry.
+    **Note:** For many search applications it is unnecessary to access the associated CDMS object. For best performance this function should be used only when necessary, for example, to retrieve data associated with a variable."
 
 
 Accessing data
@@ -1375,8 +1380,8 @@ HorizontalGrid Methods
 
     "Horizontal-Grid", "``clone()``", "Return a transient copy of the grid."
     "Axis", "``getAxis(Integer n)``", "Get the n-th axis.n is either 0 or 1."
-    "Tuple", "``getBounds()``", "Get the grid boundary arrays."
-    ,,"Returns a tuple ``(latitudeArray, longitudeArray)``, where latitudeArray is a Numpy array of latitude bounds, and similarly for longitudeArray.The shape of latitudeArray and longitudeArray depend on the type of grid:
+    "Tuple", "``getBounds()``", "Get the grid boundary arrays.
+        * Returns a tuple ``(latitudeArray, longitudeArray)``, where latitudeArray is a Numpy array of latitude bounds, and similarly for longitudeArray.The shape of latitudeArray and longitudeArray depend on the type of grid:
 
     *  For rectangular grids with shape (nlat, nlon), the boundary arrays have shape (nlat,2) and (nlon,2).
     *  For curvilinear grids with shape (nx, ny), the boundary arrays each have shape (nx, ny, 4).
@@ -1434,10 +1439,9 @@ RectGrid Methods, Additional to HorizontalGrid Methods
 
     * Generate the 2-D weights array, such that ``weights[i.j]`` is the fractional area of grid zone ``[i,j]``.
     * from cdms import MV
-    * latwts, lonwts = gri d.getWeights()
-    * weights = MV.outerproduct(latwts, lonwts)
+    * ``latwts``, ``lonwts`` = ``grid.getWeights()``
+    * weights = MV.outerproduct(``latwts``, ``lonwts``)
     * Also see the function ``area_weights`` in module ``pcmdi.weighting``."
-    ,," "
     "None", "``setType(gridtype)``", "Set the grid type.  ``gridtype`` is one of 'gaussian', 'uniform', 'equalarea', or 'generic'."
     "RectGrid", "``subGrid((latStart,latStop),(lonStart,lonStop))``", "Create a new grid, with latitude index range ``latStart : latStop]`` and longitude index range ``[lonStart : lonStop]``.  Either index range can also be specified as None, indicating that the entire range of the latitude or longitude is used.
    
@@ -1534,7 +1538,7 @@ Variable Methods
 
     "Variable", "``tvar = var[ i:j, m:n]``", "Read a slice of data from the file or dataset, resulting in a transient variable.  Singleton dimensions are 'squeezed' out. Data is returned in the physical ordering defined in the dataset. The forms of the slice operator are listed in `Variable Slice Operators <#id11>`_ "
     "None", "``var[ i:j, m:n] = array``", "Write a slice of data to the external dataset.  The forms of the slice operator are listed in `Result Entry Methods <#table-resultentry-methods>`_ .  (Variables in CdmsFiles only)"
-    "Variable", "``tvar = var(selector)``", "Calling a variable as a function reads the region of data defined by the selector. The result is a transient variable, unless raw=1 keyword is specified.  See 'Selectors'."
+    "Variable", "``tvar = var(selector)``", "Calling a variable as a function reads the region of data defined by the selector. The result is a transient variable, unless raw=1 keyword is specified.  See `Selectors <#id14>`_."
     "None", "``assignValue(Array ar)``", "Write the entire data array. Equivalent to ``var[:] = ar``.  (Variables in CdmsFiles only)."
     "Variable", "``astype(typecode)``", "Cast the variable to a new datatype. Typecodes are as for MV, MV2, and Numpy modules."
     "Variable", "``clone(copyData=1)``", "Return a copy of a transient variable.

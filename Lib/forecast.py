@@ -11,6 +11,7 @@ import cdtime
 import cdms2
 import copy
 from cdms2 import CDMSError
+from six import string_types
 
 
 def two_times_from_one(t):
@@ -27,7 +28,7 @@ def two_times_from_one(t):
               is the same time, both as a long _and_ as a comptime."""
     if t == 0:
         t = 0
-    if isinstance(t, str):
+    if isinstance(t, string_types):
         t = cdtime.s2c(t)
     if (isinstance(t, int) or isinstance(t, int)) and t > 1000000000:
         tl = t
@@ -418,7 +419,7 @@ class forecasts():
     
              The optional argument fccs is a list of forecasts to be passed on to forecast_axis().
         """
-        if not isinstance(varname, str):
+        if not isinstance(varname, string_types):
             raise CDMSError("bad argument to forecasts[]")
 
         var = self.dataset[varname]

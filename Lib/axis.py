@@ -19,6 +19,7 @@ from .sliceut import reverseSlice, splitSlice, splitSliceExt
 from .error import CDMSError
 from . import forecast
 import warnings
+from six import string_types
 standard_library.install_aliases()
 from collections import UserList  # noqa
 _debug = 0
@@ -1211,7 +1212,7 @@ class AbstractAxis(CdmsObj):
         if self.isTime():
             if type(value) in CdtimeTypes:
                 value = value.torel(self.units, self.getCalendar()).value
-            elif isinstance(value, str) and value not in [':', unspecified]:
+            elif isinstance(value, string_types) and value not in [':', unspecified]:
                 cal = self.getCalendar()
                 value = cdtime.s2c(value, cal).torel(self.units, cal).value
         return value
@@ -1223,7 +1224,7 @@ class AbstractAxis(CdmsObj):
             #
             # mf 20010419 test if attribute is a string (non CF), set to 360.0
             #
-            if(isinstance(cycle, str)):
+            if(isinstance(cycle, string_types)):
                 cycle = 360.0
         else:
             cycle = 360.0
@@ -2531,7 +2532,7 @@ def axisMatchIndex(axes, specifications=None, omit=None, order=None):
 
     if omit is None:
         omitlist = []
-    elif isinstance(omit, str):
+    elif isinstance(omit, string_types):
         omitlist = [omit]
     elif isinstance(omit, list):
         omitlist = omit
@@ -2639,7 +2640,7 @@ def axisMatches(axis, specification):
 
        #. an axis object; will match if it is the same object as axis.
     """
-    if isinstance(specification, str):
+    if isinstance(specification, string_types):
         s = specification.lower()
         s = s.strip()
         while s[0] == '(':

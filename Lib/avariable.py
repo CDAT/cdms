@@ -21,6 +21,7 @@ from regrid2.mvGenericRegrid import guessPeriodicity
 from .convention import CF1
 from .grid import AbstractRectGrid
 # import internattr
+from six import string_types
 
 InvalidRegion = "Invalid region: "
 OutOfRange = "Coordinate interval is out of range or intersection has no data: "
@@ -156,7 +157,7 @@ class AbstractVariable(CdmsObj, Slab):
         else:
             if isinstance(self.missing_value, bytes):
                 self.missing_value = None
-            elif isinstance(self.missing_value, str):
+            elif isinstance(self.missing_value, string_types):
                 self.missing_value = None
             elif numpy.isnan(self.missing_value):
                 self.missing_value = None
@@ -542,7 +543,7 @@ class AbstractVariable(CdmsObj, Slab):
 
         if asarray == 0 and isinstance(mv, numpy.ndarray):
             mv = mv[0]
-        if isinstance(mv, str) and self.dtype.char not in ['?', 'c', 'O', 'S']:
+        if isinstance(mv, string_types) and self.dtype.char not in ['?', 'c', 'O', 'S']:
             try:
                 mv = float(mv)
             except BaseException:
@@ -1643,7 +1644,7 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
                     isinstance(item, numpy.integer) or \
                     isinstance(item, int) or \
                     isinstance(item, int) or \
-                    isinstance(item, str) or \
+                    isinstance(item, string_types) or \
                     type(item) in CdtimeTypes:
                 axis = self.getAxis(i)
                 #
@@ -1874,7 +1875,7 @@ def orderparse(order):
           * The ellipsis ... meaning fill these positions with any remaining axes.
           * (name) meaning an axis whose id is name
     """
-    if not isinstance(order, str):
+    if not isinstance(order, string_types):
         raise CDMSError('order arguments must be strings.')
     pos = 0
     result = []
@@ -1912,7 +1913,7 @@ def order2index(axes, order):
           * The ellipsis ... meaning fill these positions with any remaining axes.
           * (name) meaning an axis whose id is name.
     """
-    if isinstance(order, str):
+    if isinstance(order, string_types):
         result = orderparse(order)
     elif isinstance(order, list):
         result = order
@@ -1925,7 +1926,7 @@ def order2index(axes, order):
     pos = 0
     while j < len(result):
         item = result[j]
-        if isinstance(item, str):
+        if isinstance(item, string_types):
             if item == 't':
                 spec = 'time'
             elif item == 'x':

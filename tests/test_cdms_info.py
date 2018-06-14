@@ -9,3 +9,9 @@ class CDMSInfo(unittest.TestCase):
         s=f("clt")
         s.info()
 
+    def testUnicode(self):
+        
+        f = cdms2.open(cdat_info.get_sampledata_path()+"/clt.nc")
+        kargs = {u"latitude":(-20,20)}
+        s=f("clt")
+        s2 =s.subRegion(**kargs)

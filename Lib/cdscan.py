@@ -17,7 +17,7 @@ import re
 from functools import reduce
 from cdms2.error import CDMSError
 from collections import OrderedDict
-
+from six import string_types
 usage = """Usage:
     cdscan [options] <files>
 
@@ -472,7 +472,7 @@ def comparedomains(domain1, domain2):
         item2 = domain2[i]
         if not isinstance(item1, type(item2)):
             return 1
-        if isinstance(item1, str):
+        if isinstance(item1, string_types):
             return item1 != item2
         elif compareaxes(item1, item2):
             return 1
@@ -1601,7 +1601,7 @@ def main(argv):
             domain, attributes, tcode = vardict[varname]
             for i in range(len(domain)):
                 item = domain[i]
-                if isinstance(item, str) and item == name:
+                if isinstance(item, string_types) and item == name:
                     domain[i] = axisobj
 
         # Add bounds variables to vardict, varindex
@@ -1621,7 +1621,7 @@ def main(argv):
                         if reprVar in varids:
                             varids.append(boundsname)
                     tmpdom = boundsinfo[0]
-                    if isinstance(tmpdom[1], str):
+                    if isinstance(tmpdom[1], string_types):
                         bndsobj = tmpdom[0]
                         boundsdomain = (bndsobj, axisobj)
                     else:

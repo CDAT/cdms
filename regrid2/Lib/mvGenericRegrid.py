@@ -258,6 +258,8 @@ Parameters
                 else:
                     dstMask = numpy.array((dstDataMaskFloat > 0), numpy.int32)
 
+                # Initialize output to missin_value
+                dstData[:] = missingValue
                 # interpolate the data
                 self.tool.apply(indata, dstData, rootPe=rootPe,
                                 globalIndexing=True, **args)

@@ -9,6 +9,7 @@
 from __future__ import print_function
 import socket
 from OpenSSL import crypto, SSL
+from six import string_types
 
 
 class GetException(Exception):
@@ -200,7 +201,7 @@ def myproxy_logon_py(hostname, username, passphrase,
     # - rest of cert chain
     if debuglevel(1):
         print("debug: write proxy and certs to", outfile)
-    if isinstance(outfile, str):
+    if isinstance(outfile, string_types):
         f = open(outfile, 'w')
     else:
         f = outfile
@@ -208,7 +209,7 @@ def myproxy_logon_py(hostname, username, passphrase,
     f.write(privatekey)
     for c in pem_certs[1:]:
         f.write(c)
-    if isinstance(outfile, str):
+    if isinstance(outfile, string_types):
         f.close()
 
 

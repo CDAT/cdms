@@ -1,3 +1,5 @@
+.. _mvCdmsRegrid:
+
 mvCdmsRegrid
 ============
 

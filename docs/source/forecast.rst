@@ -1,3 +1,5 @@
+.. _forecast:
+
 forecast 
 ========
 

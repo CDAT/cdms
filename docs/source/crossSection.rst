@@ -1,3 +1,5 @@
+.. _regrid2:
+
 regrid2- crossSection
 =====================
 

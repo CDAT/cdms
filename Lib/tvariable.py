@@ -85,6 +85,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
     ascontiguous = ascontiguousarray
 
     def asma(self):
+        "Convert a Transient Variable into a numpy masked array."
         return numpy.ma.array(self._data, mask=self._mask)
 
     def _update_from(self, obj):

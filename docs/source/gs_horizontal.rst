@@ -1,3 +1,5 @@
+.. _regrid2.gs_horizontal:
+
 regrid2-gs_horizontal
 =====================
 

@@ -1,3 +1,5 @@
+.. _regrid2.mvESMFRegrid:
+
 regrid2-mvESMFRegrid
 ====================
 

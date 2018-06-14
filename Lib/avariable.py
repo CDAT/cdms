@@ -476,16 +476,21 @@ class AbstractVariable(CdmsObj, Slab):
         return False
 
     def getAxisListIndex(self, axes=None, omit=None, order=None):
-        """Return a list of indices of axis objects;
+        """
 
-           Note
-           ----
+        Parameters
+        ----------
+        axes
            If axes is **not** `None`, include only certain axes.
            less the ones specified in omit.
 
            If axes is `None`, use all axes of this variable.
 
            Other specificiations are as for axisMatchIndex.
+
+        Returns 
+        -------
+           a list of indices of axis objects;
         """
         return axisMatchIndex(self.getAxisList(), axes, omit, order)
 

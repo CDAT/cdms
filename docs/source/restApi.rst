@@ -1,3 +1,5 @@
+.. _restApi:
+
 restApi
 =======
 

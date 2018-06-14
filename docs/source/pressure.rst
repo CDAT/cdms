@@ -1,3 +1,5 @@
+.. _regrid2.pressure:
+
 regrid2-pressure
 ================
 

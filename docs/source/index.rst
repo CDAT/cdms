@@ -21,29 +21,6 @@
    API
 
 
-#   AbstractAxis
-#   AbstractVariable
-#   bindex
-#   cache
-#   cdmsfile
-#   cdmsobj
-#   database
-#   dataset
-#   fvariable
-#   gengrid
-#   grid
-#   gsHost
-#   gsStaticVariable
-#   gsTimeVariable
-#   hgrid
-#   MV2 
-#   mvSphereMesh
-#   mvCdmsRegrid
-#   selectors
-#   sliceut
-#   tvariable
-
-
 Indices and tables
 ==================
 

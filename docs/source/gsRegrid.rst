@@ -1,3 +1,5 @@
+.. _regrid2-gsRegrid:
+
 regrid2-gsRegrid
 ================
 

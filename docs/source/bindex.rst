@@ -1,7 +1,13 @@
+.. _bindex:
+
 bindex
 ======
 
-.. automodule:: cdms2.bindex
-      :members:
+.. currentmodule:: cdms2.bindex
 
+.. autosummary:: 
+   :toctree: ./generated
 
+    bindexHorizontalGrid
+    intersectHorizontalGrid
+   

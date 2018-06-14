@@ -1,3 +1,5 @@
+.. _regrid2.mvGenericRegrid:
+
 regrid2-mvGenericRegrid
 =======================
 

@@ -1,3 +1,5 @@
+.. _regrid2.scrip:
+
 regrid2-scrip
 =============
 

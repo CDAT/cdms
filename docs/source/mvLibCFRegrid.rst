@@ -1,3 +1,5 @@
+.. _regrid2.mvcdms2.FRegrid:
+
 regrid2-mvcdms2.FRegrid
 =====================
 

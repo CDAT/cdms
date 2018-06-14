@@ -1,34 +1,85 @@
+.. _avariable:
+
 avariable
 =========
 
-#.. automodule:: cdms2.avariable
-#      :members:
+.. currentmodule:: cdms2.avariable
 
-.. currentmodule:: cdms2
-
-.. autosummary::
+.. autosummary:: 
    :toctree: generated/
 
-    avariable.splitSlice
-    avariable.splitSliceExt
-    avariable.setNumericCompatibility
-    avariable.orderparse
-    avariable.order2index
-    avariable.guessPeriodicity
-    avariable.getNumericCompatibility
-    avariable.getMinHorizontalMask
-    avariable._getCoordList
-    avariable.getBoundList
-    avariable.axisMatchIndex
-    avariable.axisMatches
-    avariable.axisMatchAxis
-    avariable.TransientVariable
-    avariable.Slab
-    avariable.CdmsRegrid
-    avariable.CdmsObj
-    avariable.CDMSError
-    avariable.AbstractVariable
-    avariable.AbstractRectGrid
-    avariable.AbstractAxis
-
+  AbstractVariable.assignValue
+  AbstractVariable.astype
+  AbstractVariable.__call__
+  AbstractVariable.createattribute
+  AbstractVariable.crossSectionRegrid
+  AbstractVariable.decode
+  AbstractVariable.deleteattribute
+  AbstractVariable.dump
+  AbstractVariable.expertSlice
+  AbstractVariable.generateGridkey
+  AbstractVariable.generateRectGridkey
+  AbstractVariable.getattribute
+  AbstractVariable.getAxisIds
+  AbstractVariable.getAxisIndex
+  AbstractVariable.getAxisListIndex
+  AbstractVariable.getAxisList
+  AbstractVariable.getAxis
+  AbstractVariable.getConvention
+  AbstractVariable.getdimattribute
+  AbstractVariable.getDomain
+  AbstractVariable.getForecast
+  AbstractVariable.getForecastTime
+  AbstractVariable.getGridIndices
+  AbstractVariable.getGrid
+  AbstractVariable.getLatitude
+  AbstractVariable.getLevel
+  AbstractVariable.getLongitude
+  AbstractVariable.getMissing
+  AbstractVariable.getOrder
+  AbstractVariable.getRegion
+  AbstractVariable.getSlice
+  AbstractVariable.getTime
+  AbstractVariable.getValue
+  AbstractVariable.hasCellData
+  AbstractVariable.info
+  AbstractVariable.isAbstractCoordinate
+  AbstractVariable.isEncoded
+  AbstractVariable.listall
+  AbstractVariable.listattributes
+  AbstractVariable.listdimattributes
+  AbstractVariable.listdimnames
+  AbstractVariable.matchone
+  AbstractVariable.matchPattern
+  AbstractVariable.pressureRegrid
+  AbstractVariable._process_specs
+  AbstractVariable.rank
+  AbstractVariable.regrid
+  AbstractVariable.reg_specs2slices
+  AbstractVariable.reorder
+  AbstractVariable.searchone
+  AbstractVariable.searchPattern
+  AbstractVariable.searchPredicate
+  AbstractVariable.select
+  AbstractVariable.setattribute
+  AbstractVariable.setGrid
+  AbstractVariable.setMissing
+  AbstractVariable.showdim
+  AbstractVariable.specs2slices
+  AbstractVariable.squeeze
+  AbstractVariable.subRegion
+  AbstractVariable.subSlice
+  AbstractVariable.typecode
+  axisMatchAxis
+  axisMatches
+  axisMatchIndex
+  getBoundList
+  getMinHorizontalMask
+  getNumericCompatibility
+  guessPeriodicity
+  order2index
+  orderparse
+  setNumericCompatibility
+  splitSliceExt
+  splitSlice
 

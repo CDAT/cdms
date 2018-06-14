@@ -1,3 +1,5 @@
+.. _regrid2.esmf:
+
 regrid2- esmf
 =============
 

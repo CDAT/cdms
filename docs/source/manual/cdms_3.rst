@@ -91,7 +91,7 @@ Table Time Constructors
        *  relunits`` is a string of the form 'unit(s) [since basetime]' where ``unit = [second | minute | hour | day | week | month | season | year ]``
        * ``basetime`` has the form ``yyyy-mm-dd hh:mi:ss``. 
        *  The default basetime is 1979-1-1, if no ``since`` clause is specified. 
-       **Example:**  ``r = cdtime.reltime(28, 'days since 1996-1-1')``"
+        **Example:**  ``r = cdtime.reltime(28, 'days since 1996-1-1')``"
 
    "Comptime", "``cdtime.comptime(year, month=1, day=1, hour=0, minute=0, second=0.0)``", "Create a component time type.
        * ``year`` is an integer.
@@ -99,7 +99,9 @@ Table Time Constructors
        * ``day`` is an integer in the range 1 .. 31
        * ``hour`` is an integer in the range 0 .. 23
        * ``minute`` is an integer in the range 0 .. 59
-       * ``second`` is a floating point number in the range 0.0 ,, 60.0. **Example:** ``c = cdtime.comptime(1996, 2, 28)``"
+       * ``second`` is a floating point number in the range 0.0 ,, 60.0.
+
+        **Example:** ``c = cdtime.comptime(1996, 2, 28)``"
 
 
 Relative Time

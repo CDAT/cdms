@@ -120,12 +120,12 @@ Table CDScan Command Options
 
 **Notes:**
 
-- Files can be in netCDF, GrADS/GRIB, HDF, or DRS format, and can be listed in any order. Most commonly, the files are the result of a single experiment, and the 'partitioned' dimension is time. The time dimension of a variable is the coordinate variable having a name that starts with 'time' or having an attribute axis='T'. If this is not the case, specify the time dimension with the -t option. The time dimension should be in the form supported by cdtime. If this is not the case (or to override them) use the -r option.
+#. Files can be in netCDF, GrADS/GRIB, HDF, or DRS format, and can be listed in any order. Most commonly, the files are the result of a single experiment, and the 'partitioned' dimension is time. The time dimension of a variable is the coordinate variable having a name that starts with 'time' or having an attribute axis='T'. If this is not the case, specify the time dimension with the -t option. The time dimension should be in the form supported by cdtime. If this is not the case (or to override them) use the -r option.
 
 
-- By default, the time values are listed explicitly in the output XML.  This can cause a problem if the time dimension is very long, say for 6-hourly data. To handle this the form cdscan -i delta <files> may be used. This generates a compact time representation of the form <start, length, delta>. An exception is raised if the time dimension for a given file is not linear.
+#.  By default, the time values are listed explicitly in the output XML.  This can cause a problem if the time dimension is very long, say for 6-hourly data. To handle this the form cdscan -i delta <files> may be used. This generates a compact time representation of the form <start, length, delta>. An exception is raised if the time dimension for a given file is not linear.
 
-- Another form of the command is cdscan -l lev1,lev2,..,levn <files>. This asserts that the dataset is partitioned in both time and vertical level dimensions. The level dimension of a variable is the dimension having a name that starts with "lev", or having an attribute "axis=Z". If this is not the case, set the level name with the -m option.
+#.  Another form of the command is cdscan -l lev1,lev2,..,levn <files>. This asserts that the dataset is partitioned in both time and vertical level dimensions. The level dimension of a variable is the dimension having a name that starts with "lev", or having an attribute "axis=Z". If this is not the case, set the level name with the -m option.
 
 - Adding or modifying attributes with the -e option:
     - time.units = "days since 1979-1-1"

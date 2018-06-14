@@ -258,7 +258,9 @@ Table cuDataset Methods
        * ``dname`` is the string axis name.
        * ``vname`` is the string variable name. 
        * The default is the variable name set by ``default_variable.``"
-   "Axis", "``dimensionobject(dname, vname=None)``", "Get an axis. ``dname`` is the string name of an axis. ``vname`` is a string variable name. The default is the variable name set by ``default_variable.``"
+   "Axis", "``dimensionobject(dname, vname=None)``", "Get an axis.
+       * ``dname`` is the string name of an axis. ``vname`` is a string variable name. 
+       * The default is the variable name set by ``default_variable.``"
    "Various", "``getattribute (vname, attribute``)", "Get an attribute value. ``vname`` is a string variable name. attribute is the string attribute name."
    "String", "``getdimensionunits (dname,vname=None``)", "Get the units for the given dimension.
        * ``dname`` is the string name of an axis.

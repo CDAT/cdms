@@ -213,7 +213,8 @@ Cdms Module Functions
          Get the current autobounds mode. Returns 0, 1, or 2.
               * See ``setAutoBounds``."
    "``Integer``", "``isVariable(s)``: 
-              * Return ``1`` if ``s`` is a variable, ``0`` otherwise. See also: ``asVariable``."
+              * Return ``1`` if ``s`` is a variable, ``0`` otherwise.
+              * See also: ``asVariable``."
    "``Dataset``", "``open(url,mode='r')``:
           Open or create a ``Dataset`` or ``CdmsFile``. 
                     * ``url`` is a Uniform Resource Locator, referring to a cdunif or XML file. 
@@ -399,7 +400,7 @@ CoordinateAxis Methods
    "``None``", "``assignValue(array)``", "Set the entire value of the axis.
         * ``array`` is a Numpy array, of the same dimensionality as the axis."
    "``Axis``", "``clone(copyData=1)``", "Return a copy of the axis, as a transient axis.
-        * If copyData is 1 (the default) the data itself is copied."
+        * If ``copyData`` is 1 (the default) the data itself is copied."
    "``None``", "``designateLatitude(persistent=0)``", "Designate the axis to be a latitude axis.
         * If persistent is true, the external file or dataset (if any) is modified. By default, the designation is temporary."
    "``None``", "``designateLevel(persistent=0)``", "Designate the axis to be a vertical level axis.
@@ -428,10 +429,10 @@ CoordinateAxis Methods
      **Note**  If the axis is not a time axis, the global, file-related calendar is returned."
 
    "``Array``", "``getValue()``", "Get the entire axis vector."
-   "``Integer``", "``isLatitude()``", "Returns true iff the axis is a latitude axis."
-   "``Integer``", "``isLevel()``", "Returns true iff the axis is a level axis."
-   "``Integer``", "``isLongitude()``", "Returns true iff the axis is a longitude axis."
-   "``Integer``", "``isTime()``", "Returns true iff the axis is a time axis."
+   "``Integer``", "``isLatitude()``", "Returns true if the axis is a latitude axis."
+   "``Integer``", "``isLevel()``", "Returns true if the axis is a level axis."
+   "``Integer``", "``isLongitude()``", "Returns true if the axis is a longitude axis."
+   "``Integer``", "``isTime()``", "Returns true if the axis is a time axis."
    "``Integer``", "``len(axis)``", "The length of the axis if one-dimensional. If multidimensional, the length of the first dimension."
    "``Integer``", "``size()``", "The number of elements in the axis."
    "``String``", "``typecode()``", "The ``Numpy`` datatype identifier."
@@ -580,8 +581,8 @@ CdmsFile Methods Object Identifier Variable, Axis or Grid
 
         * ``v``, equivalent to
         * ``v = f.variables['prc']``.
-        * f = cdms.open('sample.nc')
-        * v = f['prc']
+        * ``f = cdms.open('sample.nc')``
+        * ``v = f['prc']``
 
     **Example:** The following gets the axis named time, equivalent to
 
@@ -644,7 +645,7 @@ CdmsFile Methods Read CurveGrid, Generic-Grid
    :widths:  10, 30, 80
    :align: left
 
-   "``CurveGrid`` or ``Generic-Grid``", "``readScripGrid(self,whichGrid='destination',  check-Grid=1)``", "Read a curvilinear or generic grid from a SCRIP netCDF file. The file can be a SCRIP grid file or remapping file. 
+   "``CurveGrid`` or ``Generic-Grid``", "``readScripGrid  (self,whichGrid='destination',  check-Grid=1)``", "Read a curvilinear or generic grid from a SCRIP netCDF file. The file can be a SCRIP grid file or remapping file. 
         *  If a mapping file, ``whichGrid`` chooses the grid to read, either ``'source'`` or ``'destination'``.
         *  If ``checkGrid`` is ``1`` (default), the grid cells are checked for convexity, and 'repaired' if necessary.  Grid cells may appear to be nonconvex if they cross a ``0 / 2pi`` boundary. 
         * The repair consists of shifting the cell vertices to the same side modulo 360 degrees."
@@ -1400,7 +1401,7 @@ HorizontalGrid Methods
        *  For curvilinear grids with shape (nx, ny), the boundary arrays each have shape (nx, ny, 4).
        *  For generic grids with shape (ncell,), the boundary arrays each have shape (ncell, nvert) where nvert is the maximum number of vertices per cell.
        * For rectilinear grids: If no boundary arrays are explicitly defined (in the file or dataset), the result depends on the auto- Bounds mode (see ``cdms.setAutoBounds``) and the grid classification mode (see ``cdms.setClassifyGrids``).
-       * By default, autoBounds mode is enabled, in which case the boundary arrays are generated based on the type of grid. If disabled, the return value is (None,None).For rectilinear grids: The grid classification mode specifies how the grid type is to be determined. By default, the grid type (Gaussian, uniform, etc.) is determined by calling grid.classifyInFamily.  If the mode is 'off' grid.getType is used instead."
+       * By default, autoBounds mode is enabled, in which case the boundary arrays are generated based on the type of grid. If disabled, the return value is (None,None). For rectilinear grids: The grid classification mode specifies how the grid type is to be determined. By default, the grid type (Gaussian, uniform, etc.) is determined by calling grid.classifyInFamily.  If the mode is 'off' grid.getType is used instead."
     "Axis", "``getLatitude()``", "Get the latitude axis of this grid."
     "Axis", "``getLongitude()``", "Get the latitude axis of this grid."
     "Axis", "``getMask()``", "Get the mask array of this grid, if any.Returns a 2-D Numpy array, having the same shape as the grid. If the mask is not explicitly defined, the return value is ``None``."
@@ -1631,12 +1632,12 @@ Variable Methods
     "Transient", "``regrid (togrid, missing=None, order=None, Variable mask=None)``","Return the variable regridded to the horizontal grid togrid.
     * ``missing`` is a Float specifying the missing data value. The default is 1.0e20.
     * ``order`` is a string indicating the order of dimensions of the array.  It has the form returned from ``variable.getOrder()``.  
-        * For example, the string 'tzyx' indicates that the dimension order of array is (time, level, latitude, longitude). If unspecified, the function assumes that the last two dimensions of array match the input grid.
+    * For example, the string 'tzyx' indicates that the dimension order of array is (time, level, latitude, longitude). If unspecified, the function assumes that the last two dimensions of array match the input grid.
     * ``mask`` is a Numpy array, of datatype Integer or Float, consisting of ones and zeros. A value of 0 or 0.0 indicates that the corresponding data value is to be ignored for purposes of regridding. 
-        * If mask is two-dimensional of the same shape as the input grid, it overrides the mask of the input grid.  
-        * If the mask has more than two dimensions, it must have the same shape as array. In this case, the missing data value is also ignored. Such an n-dimensional mask is useful if the pattern of missing data varies with level (e.g., ocean data) or time.
-        **Note:** If neither missing or mask is set, the default mask is obtained from the mask of the array if any.
-       * See also: ``crossSectionRegrid``, ``pressureRegrid``."
+    * If mask is two-dimensional of the same shape as the input grid, it overrides the mask of the input grid.  
+    * If the mask has more than two dimensions, it must have the same shape as array. In this case, the missing data value is also ignored. Such an n-dimensional mask is useful if the pattern of missing data varies with level (e.g., ocean data) or time.
+    **Note:** If neither missing or mask is set, the default mask is obtained from the mask of the array if any.
+    * See also: ``crossSectionRegrid``, ``pressureRegrid``."
     "``None``", "``setAxis(n, axis)``", "Set the n-th axis (0-origin index) of to a copy of axis."
     "``None``", "``setAxisList(axislist)``", "Set all axes of the variable. axislist is a list of axis objects."
     "``None``", "``setMissing(value)``", "Set the missing value.  Integer ``size()`` Number of elements of the variable."

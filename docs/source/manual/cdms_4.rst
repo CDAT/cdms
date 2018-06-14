@@ -308,7 +308,7 @@ Table CDMS Regridder Constructor
    :widths:  50, 90
    :align: left
 
-   "``regridFunction = Regridder(inputGrid, outputGrid)``", "reate a regridder function which interpolates a data array from input to output grid. `CDMS regridder functions`_ describes the calling sequence of this function. ``inputGrid`` and ``outputGrid`` are CDMS grid objects. **Note:** To set the mask associated with inputGrid or outputGrid, use the grid setMask function."
+   "``regridFunction = Regridder(inputGrid, outputGrid)``", "Create a regridder function which interpolates a data array from input to output grid. `CDMS regridder functions`_ describes the calling sequence of this function. ``inputGrid`` and ``outputGrid`` are CDMS grid objects. **Note:** To set the mask associated with inputGrid or outputGrid, use the grid setMask function."
 
 SCRIP Regridder
 ^^^^^^^^^^^^^^^
@@ -412,7 +412,7 @@ Table CDMS Regridder Function
        * ``missing`` is a Float specifying the missing data value. The default is 1.0e20.
        * ``order`` is a string indicating the order of dimensions of the array.  It has the form returned from ``variable.getOrder().``
        * ``mask`` is a Numpy array, of datatype Integer or Float, consisting of a fractional number between 0 and 1. A value of 1 or 1.0 indicates that the corresponding data value is to be ignored for purposes of regridding. A value of 0 or 0.0 indicates that the corresponding data value is valid. This is consistent with the convention for masks used by the MV2 module. A fractional value between 0.0 and 1.0 indicates the fraction of the data value (e.g., the corresponding cell) to be ignored when regridding. This is useful if a variable is regridded first to grid A and then to another grid B; the mask when regridding from A to B would be (1.0 - f) where f is the maskArray returned from the initial grid operation using the ``returnTuple`` argument.
-      * If ``mask`` is two-dimensional of the same shape as the input grid, it overrides the mask of the input grid.  If the mask has more than two dimensions, it must have the same shape as ``array``. In this case, the ``missing`` data value is also ignored. Such an ndimensional mask is useful if the pattern of missing data varies with level (e.g., ocean data) or time. Note: If neither ``missing`` or ``mask`` is set, the default mask is obtained from the mask of the array if any."
+       * If ``mask`` is two-dimensional of the same shape as the input grid, it overrides the mask of the input grid.  If the mask has more than two dimensions, it must have the same shape as ``array``. In this case, the ``missing`` data value is also ignored. Such an ndimensional mask is useful if the pattern of missing data varies with level (e.g., ocean data) or time. Note: If neither ``missing`` or ``mask`` is set, the default mask is obtained from the mask of the array if any."
    "Array, Array",  "``regridFunction(ar, missing=None, order=None, mask=None, returnTuple=1)``", "If called with the optional ``returnTuple`` argument equal to 1, the function returns a tuple ``dataArray``, ``maskArray``).
        * ``dataArray`` is the result data array.
        * ``maskArray`` is a Float32 array of the same shape as ``dataArray``, such that ``maskArray[i,j]`` is fraction of the output grid cell [i,j] overlapping a non-missing cell of the grid."

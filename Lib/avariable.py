@@ -514,7 +514,10 @@ class AbstractVariable(CdmsObj, Slab):
 
         Returns
         -------
-        array list of axis ids"""
+
+           array list of axis ids
+
+        """
 
         return [x[0].id for x in self.getDomain()]
 
@@ -1691,12 +1694,13 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
     def decode(self, ar):
         """Decode compressed data.
        
-Parameters
-----------
-            ar
-                is a masked array, scalar, or numpy.ma.masked.
+        Parameters
+        ----------
 
-            _: None
+           ar
+              is a masked array, scalar, or numpy.ma.masked.
+
+           _: None
 
         """
 

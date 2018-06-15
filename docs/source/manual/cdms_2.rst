@@ -494,15 +494,16 @@ CoordinateAxis Slice Operators
    "``[i:j:k]``", "every ``kth`` element, starting at ``i``, through but not including ``j``"
    "``[-i]``", "the ``ith`` element from the end. ``-1`` is the last element.
 
-     *  **Example:** a longitude axis has value
-     * ``[0.0, 2.0, ..., 358.0]``
-     *   of length ``180``
-     *    map the coordinate interval:    
-     * ``-5.0 <= x < 5.0``  to index interval(s), with wraparound. the result index interval  
-     * ``-2 <= n < 3`` wraps around, since     
-     * ``-2 < 0``,  and has a stride of ``1`` 
-     * this is equivalent to the two contiguous index intervals      
-     *  ``2 <= n < 0`` and ``0 <= n < 3``"
+     **Example:** a longitude axis has value
+
+       * ``[0.0, 2.0, ..., 358.0]``
+       *   of length ``180``
+       *    map the coordinate interval:    
+       * ``-5.0 <= x < 5.0``  to index interval(s), with wraparound. the result index interval  
+       * ``-2 <= n < 3`` wraps around, since     
+       * ``-2 < 0``,  and has a stride of ``1`` 
+       * this is equivalent to the two contiguous index intervals      
+       *  ``2 <= n < 0`` and ``0 <= n < 3``"
 
 Example 1
 '''''''''''
@@ -1401,7 +1402,9 @@ HorizontalGrid Methods
        *  For curvilinear grids with shape (nx, ny), the boundary arrays each have shape (nx, ny, 4).
        *  For generic grids with shape (ncell,), the boundary arrays each have shape (ncell, nvert) where nvert is the maximum number of vertices per cell.
        * For rectilinear grids: If no boundary arrays are explicitly defined (in the file or dataset), the result depends on the auto- Bounds mode (see ``cdms.setAutoBounds``) and the grid classification mode (see ``cdms.setClassifyGrids``).
-       * By default, autoBounds mode is enabled, in which case the boundary arrays are generated based on the type of grid. If disabled, the return value is (None,None). For rectilinear grids: The grid classification mode specifies how the grid type is to be determined. By default, the grid type (Gaussian, uniform, etc.) is determined by calling grid.classifyInFamily.  If the mode is 'off' grid.getType is used instead."
+       * By default, autoBounds mode is enabled, in which case the boundary arrays are generated based on the type of grid. If disabled, the return value is (None,None). 
+       * For rectilinear grids: The grid classification mode specifies how the grid type is to be determined.
+       * By default, the grid type (Gaussian, uniform, etc.) is determined by calling grid.classifyInFamily.  If the mode is 'off' grid.getType is used instead."
     "Axis", "``getLatitude()``", "Get the latitude axis of this grid."
     "Axis", "``getLongitude()``", "Get the latitude axis of this grid."
     "Axis", "``getMask()``", "Get the mask array of this grid, if any.Returns a 2-D Numpy array, having the same shape as the grid. If the mask is not explicitly defined, the return value is ``None``."
@@ -1714,15 +1717,16 @@ Index and Coordinate Intervals
    :header:  "Interval Definition", "Example Interval Definition", "Example"
    :widths:  30, 80, 80
 
-    "``x``", "single point, such that axis[i]==x In general x is a scalar. If the axis is a time axis, x may also be a cdtime relative time type, component time type, or string of the form ‘yyyy-mm-dd hh:mi:ss’ (where trailing fields of the string may be omitted.", "``180.0``"
-    ,,"``cdtime.reltime(48,'hour s since 1980-1')``"
-    ,,"``'1980-1-3'``"
+    "``x``", "single point, such that axis[i]==x In general x is a scalar. If the axis is a time axis, x may also be a cdtime relative time type, component time type, or string of the form ‘yyyy-mm-dd hh:mi:ss’ (where trailing fields of the string may be omitted.", "``180.0``
+     ``cdtime.reltime(48,'hour s since 1980-1')``
+
+     ``'1980-1-3'``"
     "``(x,y)``", "indices i such that x ≤ axis[i] ≤ y", "``(-180,180)``"
     "``(x,y,'co')``", "``x ≤ axis[i] < y``. The third item is defined as in mapInterval.", "``(-90,90,'cc')``"
     "``(x,y,'co',cycle)``", "``x ≤ axis[i]< y``, with wraparound", "``( 180, 180, 'co', 360.0)``"
     "","**Note:** It is not necesary to specify the cycle of a circular longitude axis, that is, for which ``axis.isCircular()`` is true.",
-    "``slice(i,j,k)``", " slice object, equivalent to i:j:k in a slice operator. Refers to the indices i, i+k, i+2k, … up to but not including index j. If i is not specified or is None it defaults to 0. If j is not specified or is None it defaults to the length of the axis. The stride k defaults to 1. k may be negative.","``slice(1,10)``"
-    ,,"``slice(,,-1)`` reverses the direction of the axis."
+    "``slice(i,j,k)``", " slice object, equivalent to i:j:k in a slice operator. Refers to the indices i, i+k, i+2k, … up to but not including index j. If i is not specified or is None it defaults to 0. If j is not specified or is None it defaults to the length of the axis. The stride k defaults to 1. k may be negative.","``slice(1,10)``
+    ``slice(,,-1)`` reverses the direction of the axis."
     "``':'``", "all axis values of one dimension",
     "``Ellipsis``", "all values of all intermediate axes",
 

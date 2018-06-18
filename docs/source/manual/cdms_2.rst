@@ -408,7 +408,7 @@ CoordinateAxis Methods
    "``None``", "``designateLongitude(persistent=0, modulo=360.0)``", "Designate the axis to be a longitude axis.
         * ``modulo`` is the modulus value. Any given axis value
         * ``x`` is treated as equivalent to ``x + modulus``. 
-        *If ``persistent`` is true, the external file or dataset (if any) is modified. By default, the designation is temporary."
+        * If ``persistent`` is true, the external file or dataset (if any) is modified. By default, the designation is temporary."
    "``None``", "``designateTime(persistent=0, calendar = cdtime.MixedCalendar)``", "Designate the axis to be a time axis.
         * If ``persistent`` is true, the external file or dataset (if any) is modified. By default, the designation is temporary.
         * ``calendar`` is defined as in ``getCalendar()``."
@@ -561,7 +561,7 @@ CdmsFile Methods Object Name  Transient Variable
    :align: left
 
 
-   "``Transient-Variable``", "``fileobj(varname, selector)``", "Calling a ``CdmsFile`` object as a function reads the region of data specified by the Selectors. The result is a transient variable, unless ``raw = 1`` is specified. See `Selectors <#id12>`_ .
+   "``Transient-Variable``", "``fileobj(varname, selector)``", "Calling a ``CdmsFile`` object as a function reads the region of data specified by the Selectors. The result is a transient variable, unless ``raw = 1`` is specified. See `Selectors <#id14>`_ .
 
     **Example:** The following reads data for variable 'prc', year 1980:
 
@@ -1156,7 +1156,7 @@ Dataset Methods
    :header:  "Type", "Definition", "Description"
    :widths:  30, 30, 80
 
-    "Transient-Variable", "``datasetobj(varname, selector)``", "Calling a Dataset object as a function reads the region of data defined by the selector. The result is a transient variable, unless ``raw = 1`` is specified. See `Selectors <#id12>`_.
+    "Transient-Variable", "``datasetobj(varname, selector)``", "Calling a Dataset object as a function reads the region of data defined by the selector. The result is a transient variable, unless ``raw = 1`` is specified. See `Selectors <#id14>`_.
 
      **Example:** The following reads data for variable 'prc', year 1980:
 
@@ -1565,13 +1565,14 @@ Variable Methods
    :align: left
 
 
-    "Variable", "``tvar = var[ i:j, m:n]``", "Read a slice of data from the file or dataset, resulting in a transient variable.  Singleton dimensions are 'squeezed' out. Data is returned in the physical ordering defined in the dataset. The forms of the slice operator are listed in `Variable Slice Operators <#id11>`_ "
+    "Variable", "``tvar = var[ i:j, m:n]``", "Read a slice of data from the file or dataset, resulting in a transient variable.  Singleton dimensions are 'squeezed' out. Data is returned in the physical ordering defined in the dataset. The forms of the slice operator are listed in `Variable Slice Operators <#id12>`_ "
     "None", "``var[ i:j, m:n] = array``", "Write a slice of data to the external dataset.  The forms of the slice operator are listed in `Result Entry Methods <#table-resultentry-methods>`_ .  (Variables in CdmsFiles only)"
     "Variable", "``tvar = var(selector)``", "Calling a variable as a function reads the region of data defined by the selector. The result is a transient variable, unless raw=1 keyword is specified.  See `Selectors <#id14>`_."
     "None", "``assignValue(Array ar)``", "Write the entire data array. Equivalent to ``var[:] = ar``.  (Variables in CdmsFiles only)."
     "Variable", "``astype(typecode)``", "Cast the variable to a new datatype. Typecodes are as for MV, MV2, and Numpy modules."
     "Variable", "``clone(copyData=1)``", "Return a copy of a transient variable.
-    * If copyData is 1 (the default) the variable data is copied as well.  If copyData is 0, the result transient variable shares the original transient variables data array."
+    * If copyData is 1 (the default) the variable data is copied as well. 
+    * If copyData is 0, the result transient variable shares the original transient variables data array."
     "Transient Variable", "``crossSectionRegrid(newLevel, newLatitude, method='log', missing=None, order=None)``", "Return a lat/level vertical cross-section regridded to a new set of latitudes newLatitude and levels newLevel. The variable should be a function of latitude, level, and (optionally) time.
      * ``newLevel`` is an axis of the result pressure levels.
      * ``newLatitude`` is an axis of the result latitudes.
@@ -1647,7 +1648,7 @@ Variable Methods
     "Variable", "``subRegion(* region, time=None, level=None, latitude=None, longitude=None, squeeze=0, raw=0)``", "Read a coordinate region of data, returning a transient variable. A region is a hyperrectangle in coordinate space.
     * ``region`` is an argument list, each item of which specifies an interval of a coordinate axis. The intervals are listed in the order of the variable axes.
     * If trailing dimensions are omitted, all values of those dimensions are retrieved. 
-    * If an axis is circular (axis.isCircular() is true) or cycle is specified (see below), then data will be read with wraparound in that dimension. Only one axis may be read with wraparound. A coordinate interval has one of the forms listed in `Index and Coordinate Intervals <#id11>`_ . Also see ``axis.mapIntervalExt``.
+    * If an axis is circular (axis.isCircular() is true) or cycle is specified (see below), then data will be read with wraparound in that dimension. Only one axis may be read with wraparound. A coordinate interval has one of the forms listed in `Index and Coordinate Intervals <#id13>`_ . Also see ``axis.mapIntervalExt``.
     * The optional keyword arguments ``time``, ``level``, ``latitude``, and ``longitude`` may also be used to specify the dimension for which the interval applies.  This is particularly useful if the order of dimensions is not known in advance. An exception is raised if a keyword argument conflicts with a positional region argument.
     * The optional keyword argument ``squeeze`` determines whether or not the shape of the returned array contains dimensions whose length is 1; by default this argument is 0, and such dimensions are not 'squeezed out'.
     * The optional keyword argument ``raw`` specifies whether the return object is a variable or a masked array. By default, a transient variable is returned, having the axes and attributes corresponding to2,3 the region read. If raw=1, an MV2 masked array is returned, equivalent to the transient variable without the axis and attribute information."
@@ -1789,7 +1790,7 @@ selector can be used with any variable. If the corresponding axis is not
 found, the selector component is ignored. This is very useful for
 writing general purpose scripts. The required keyword overrides this
 behavior. These keywords take values that are coordinate ranges or index
-ranges as defined in See `Index and Coordinate Intervals <#id11>`_.
+ranges as defined in See `Index and Coordinate Intervals <#id13>`_.
 
 The following keywords are available: Another form of selector
 components is the positional form, where the component order corresponds
@@ -1803,16 +1804,16 @@ Selector Keywords
    :header:  "Keyword", "Description", "Value"
    :widths:  30, 80, 80
 
-    "``axisid``", "Restrict the axis with ID axisid to a value or range of values.",  See `Index and Coordinate Intervals <#id11>`_
+    "``axisid``", "Restrict the axis with ID axisid to a value or range of values.",  See `Index and Coordinate Intervals <#id13>`_
     "``grid``", "Regrid the result to the grid.", " Grid object"
-    "``latitude``", "Restrict latitude values to a value or range. Short form: lat", See `Index and Coordinate Intervals <#id11>`_
-    "``level``", "Restrict vertical levels to a value or range. Short form: lev",See `Index and Coordinate Intervals <#id11>`_
-    "``longitude``", "Restrict longitude values to a value or range. Short form: lon", See `Index and Coordinate Intervals <#id11>`_
+    "``latitude``", "Restrict latitude values to a value or range. Short form: lat", See `Index and Coordinate Intervals <#id13>`_
+    "``level``", "Restrict vertical levels to a value or range. Short form: lev",See `Index and Coordinate Intervals <#id13>`_
+    "``longitude``", "Restrict longitude values to a value or range. Short form: lon", See `Index and Coordinate Intervals <#id13>`_
     "``order``", "Reorder the result.", " Order string, e.g., 'tzyx'"
-    "``raw``", "Return a masked array (MV2.array) rather than a transient variable.", "0: return a transient variable (default);   =   1: return a masked array."
+    "``raw``", "Return a masked array (MV2.array) rather than a transient variable.", " 0: return a transient variable (default);   =   1: return a masked array."
     "``required``", "Require that the axis IDs be present.", " List of axis identifiers."
     "``squeeze``", "Remove singleton dimensions from the result.", " 0: leave singleton dimensions (default); 1: remove singleton dimensions."
-    "``time``", "Restrict time values to a value or range.", See `Index and Coordinate Intervals <#id11>`_ 
+    "``time``", "Restrict time values to a value or range.", See `Index and Coordinate Intervals <#id13>`_ 
 
 Another form of selector components is the positional form, where the
 component order corresponds to the axis order of a variable. For
@@ -1826,7 +1827,7 @@ example:
 
 reads data for the range (‘1979-1-1’,’1979-2-1’) of the first axis, and
 coordinate value 1000.0 of the second axis. Non-keyword arguments of the
-form(s) listed in `Index and Coordinate Intervals <#id11>`_ are treated as positional. Such
+form(s) listed in `Index and Coordinate Intervals <#id13>`_ are treated as positional. Such
 selectors are more concise, but not as general or flexible as the other
 types described in this section.
 

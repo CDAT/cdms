@@ -223,9 +223,9 @@ Cdms Module Functions
                     * If the protocol is 'file' or is omitted, a local file or dataset is opened.
                     * ``mode`` is the open mode.  See `Open Modes <#id3>`__
 
-                    * **Example**: Open an existing dataset: ``f = cdms.open('sampleset.xml')``
+                    **Example**: Open an existing dataset: ``f = cdms.open('sampleset.xml')``
 
-                    * **Example**: Create a netCDF file: ``f = cdms.open('newfile.nc','w')``"
+                    **Example**: Create a netCDF file: ``f = cdms.open('newfile.nc','w')``"
    "``List``", "``order2index (axes, orderstring)``:
            Find the index permutation of axes to match order. Return a list of indices.
                     *  ``axes`` is a list of axis objects.
@@ -624,7 +624,7 @@ CdmsFile Methods Create Axis, RectGrid and Variable
          * ``lat`` is a latitude axis in the file. 
          * ``lon`` is a longitude axis in the file. 
          * ``order`` is a string with value ``'yx'`` (the latitude) or ``'xy'`` (the first grid dimension is longitude).  
-         * ``type`` is one of ``'gaussian'``,\ ``'unif orm'``,\ ``'equalarea'`` , or ``'generic'``.
+         * ``type`` is one of ``'gaussian'``,\ ``'uniform'``,\ ``'equalarea'`` , or ``'generic'``.
          *  If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
    "``Variable``", "``createVariable(Stringid,String datatype,Listaxes,fill_value=None)``", "Create a new Variable.  This is a persistent object which can be used to read or write variable data to the file. 
         * ``id`` is a String name which is unique with respect to all other objects in the file.

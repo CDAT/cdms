@@ -301,7 +301,7 @@ with a corresponding mask value of one are set to the value of the
 variables ``missing_value`` attribute. The data and ``missing_value``
 attribute are then written to the file.
 
-Masking is covered in `Section 2.9 <cdms_2.html#id3>`__. See also the
+Masking is covered in `Section 2.9 <cdms_2.html#id5>`__. See also the
 documentation of the Python Numpy and MA modules, on which ``cdms.MV``
 is based, at
 

@@ -50,8 +50,8 @@ where
 
 The CDML elements are:
 
-Table CDML Tags
-^^^^^^^^^^^^^^^^^^^   
+CDML Tags
+^^^^^^^^^   
 .. csv-table::
    :header:  "Tag", "Description"
    :widths:  8, 35                
@@ -72,8 +72,8 @@ Special Characters
 XML reserves certain characters for markup. If they appear as content,
 they must be encoded to avoid confusion with markup:
 
-Table Special Character Encodings
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Special Character Encodings
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. csv-table::
    :header:  "Character", "Encoding"
    :widths:  8, 15                                       
@@ -211,8 +211,8 @@ into files. The format is:
 The pathname is appended to the value of the directory attribute, to
 obtain an absolute pathname.
 
-Axis Element
-^^^^^^^^^^^^
+Axis Elements
+^^^^^^^^^^^^^
 
 An axis element describes a single coordinate axis. The content can be a
 blank-separated list of axis values or a linear element. A linear
@@ -227,8 +227,8 @@ length).
 
 ``linear-element ::=`` **<linear delta=** ``"value”`` **length=** ``“Integer“`` **start=** ``“value“`` **> </linear>**
 
-Table Axis Elements
-^^^^^^^^^^^^^^^^^^^
+Axis Element Attributes
+^^^^^^^^^^^^^^^^^^^^^^^
 
 .. csv-table::
    :header: "Attribute", "Required?", "CF", "GDT", "Notes"
@@ -305,8 +305,8 @@ rectilinear in topology,
 ``grid-element ::=`` **<rectGrid** ``grid-attributes``\ **>**
 ``extra-attribute-element*`` **</rectGrid>**
 
-Table 6.5 RectGrid Attributes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RectGrid Attributes
+^^^^^^^^^^^^^^^^^^^
                              
 
 .. raw:: html
@@ -361,8 +361,8 @@ start=\ **"``Integer``" **\ length=\ **"``Integer``"
 **\ partition\_length=\ **"``Integer``"**/>\*\*
 
 
-Table Variable Attributes
-^^^^^^^^^^^^^^^^^^^^^^^^^
+Variable Attributes
+^^^^^^^^^^^^^^^^^^^
 
 
 .. csv-table::

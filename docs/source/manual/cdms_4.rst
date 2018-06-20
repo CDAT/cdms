@@ -300,8 +300,8 @@ makes the CDMS Regridder class available within a Python program. An
 instance of Regridder is a function which regrids data from rectangular
 input to output grids.
 
-Table CDMS Regridder Constructor
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+CDMS Regridder Constructor
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. csv-table:: 
    :header:  "Constructor", "Description"
@@ -316,8 +316,8 @@ SCRIP Regridder
 SCRIP regridder functions are created with the ``regrid.readRegridder``
 function:
 
-Table SCRIP Regridder Constructor
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+SCRIP Regridder Constructor
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 .. csv-table:: 
@@ -399,7 +399,7 @@ data value, or 1.0e20 if undefined. The result array or transient
 variable will have a mask value of 1 (invalid value) for those output
 grid cells which completely overlap input grid cells with missing values
 
-Table CDMS Regridder Function
+CDMS Regridder Function Types
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. csv-table:: 
@@ -458,7 +458,7 @@ following fields:
 In addition, a conservative regridder has the associated grid cell areas
 for source and target grids.
 
-Table SCRIP Regridder Functions
+SCRIP Regridder Function Types
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. csv-table:: 
@@ -503,8 +503,8 @@ Regrid data to a uniform output grid.
     >>> newrls = regridFunc(cltf)
     >>> f.close()
 
-Table Regridder Constructure
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Regridder Constructures
+~~~~~~~~~~~~~~~~~~~~~~~
 
 .. csv-table::
    :header:  "Line", "Notes"

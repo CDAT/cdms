@@ -177,8 +177,8 @@ where:
 -  ``key=value``, ... are optional keyword/value pairs, listed in any
    order. These are defined in the table below.
 
-Table Plot Keywords
-^^^^^^^^^^^^^^^^^^^
+Plot Keywords
+^^^^^^^^^^^^^
 
 .. csv-table::
     :header: "Key", "Type", "Value"

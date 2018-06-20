@@ -78,7 +78,7 @@ Time Constructors
 
 The following table describes the methods for creating time types.
  
-Table Time Constructors
+Time Constructors Types
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 .. csv-table:: 
@@ -92,7 +92,6 @@ Table Time Constructors
        * ``basetime`` has the form ``yyyy-mm-dd hh:mi:ss``. 
        *  The default basetime is 1979-1-1, if no ``since`` clause is specified. 
         **Example:**  ``r = cdtime.reltime(28, 'days since 1996-1-1')``"
-
    "Comptime", "``cdtime.comptime(year, month=1, day=1, hour=0, minute=0, second=0.0)``", "Create a component time type.
        * ``year`` is an integer.
        * ``month`` is an integer in the range 1 .. 12
@@ -109,23 +108,23 @@ Relative Time
 
 A relative time type has two members, value and units. Both can be set.
 
-Table Relative Time Members
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Relative Time Member Types
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. csv-table:: 
+   :header: "Type", "Name", "Summary"
+   :widths: 15, 15, 50
 
-+----------+---------+-------------------------------------------------------+
-| Type     | Name    | Summary                                               |
-+==========+=========+=======================================================+
-| Float    | value   | Number of units                                       |
-+----------+---------+-------------------------------------------------------+
-| String   | units   | Relative units, of the form “unit(s) since basetime   |
-+----------+---------+-------------------------------------------------------+
+
+   "Float", "value", "Number of units"                                       
+   "String", "units", "Relative units, of the form “unit(s) since basetime"
+
 
 Component Time
 ^^^^^^^^^^^^^^
 
 A component time type has six members, all of which are settable.
 
-Table Component Time
+Component Time Types
 ~~~~~~~~~~~~~~~~~~~~
 .. csv-table:: 
    :header: "Type", "Name", "Summary"
@@ -143,7 +142,7 @@ Time Methods
 
 The following methods apply both to relative and component times.
 
-Table Time Methods
+Time Methods Types
 ~~~~~~~~~~~~~~~~~~
 .. csv-table:: 
    :header: "Type", "Method", "Definition"

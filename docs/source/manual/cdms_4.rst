@@ -13,7 +13,7 @@ CDMS provides several methods for interpolating gridded data:
 -  from one vertical (lat/level) cross-section to another vertical
    cross-section.
 
-CDMS Horizontal Regrider
+CDMS Horizontal Regridder
 ^^^^^^^^^^^^^^^^^^^^^^^^
 .. highlight:: python
    :linenothreshold: 3
@@ -308,7 +308,10 @@ CDMS Regridder Constructor
    :widths:  50, 90
    :align: left
 
-   "``regridFunction = Regridder(inputGrid, outputGrid)``", "Create a regridder function which interpolates a data array from input to output grid. `CDMS regridder functions`_ describes the calling sequence of this function. ``inputGrid`` and ``outputGrid`` are CDMS grid objects. **Note:** To set the mask associated with inputGrid or outputGrid, use the grid setMask function."
+   "``regridFunction = Regridder(inputGrid, outputGrid)``", "Create a regridder function which interpolates a data array from input to output grid.
+    *  `CDMS regridder functions`_ describes the calling sequence of this function.
+    *  ``inputGrid`` and ``outputGrid`` are CDMS grid objects.
+    **Note:** To set the mask associated with inputGrid or outputGrid, use the grid setMask function."
 
 SCRIP Regridder
 ^^^^^^^^^^^^^^^
@@ -407,7 +410,8 @@ CDMS Regridder Function Types
    :widths:  40, 40, 80
    :align: left
 
-   "Array or Transient-Variable", "``regridFunction(array, missing=None, order=None, mask=None)``", "Interpolate a gridded data array to a new grid. The interpolation preservesthe area-weighted mean on each horizontal slice. If array is a Variable, a TransientVariable of  the same rank as the inputarrayisreturned, otherwiseamaskedarray is returned.
+   "Array or Transient-Variable", "``regridFunction(array, missing=None, order=None, mask=None)``", "Interpolate a gridded data array to a new grid. The interpolation preserves the area-weighted mean on each horizontal slice.
+       * If array is a Variable, a TransientVariable of  the same rank as the inputarrayisreturned, otherwiseamaskedarray is returned.
        * ``array`` is a Variable, masked array, or Numpy array of rank 2, 3, or 4.                     *  For example, the string 'tzyx' indicates that the dimension order of ``array`` is (time, level, latitude, longitude). If unspecified, the function assumes that the last two dimensions of ``array`` match the input grid.
        * ``missing`` is a Float specifying the missing data value. The default is 1.0e20.
        * ``order`` is a string indicating the order of dimensions of the array.  It has the form returned from ``variable.getOrder().``
@@ -470,7 +474,8 @@ SCRIP Regridder Function Types
         *  ``array`` is a Variable, MaskedArray, or Numpy array. The rank of the array may be greater than the rank of the input grid, in which case the input grid shape must match a trailing portion of the array shape. 
         * For example, if the input grid is curvilinear with shape (64,128), the last two dimensions of the array must match. Similarly, if the input grid is generic with shape (2560,), the last dimension of the array must have that length."
     "Array or Transient-Variable", "[bicubic regridders] ``regridFunction(array, gradientLat, gradientLon, gradientLatLon)``", "Interpolate a gridded data array to a new grid, using a bicubic regridder. The return value is the regridded data variable.
-        * ``array`` is a Variable, MaskedArray, or Numpy array. The rank of the array may be greater than the rank of the input grid, in which case the input grid shape must match a trailing portion of the array shape. For example, if the input grid is curvilinear with shape (64,128), the last two dimensions of the array must match. Simiarly, if the input grid is generic with shape (2560,), the last dimension of the array must have that length.
+        * ``array`` is a Variable, MaskedArray, or Numpy array. The rank of the array may be greater than the rank of the input grid, in which case the input grid shape must match a trailing portion of the array shape.
+        * For example, if the input grid is curvilinear with shape (64,128), the last two dimensions of the array must match. Simiarly, if the input grid is generic with shape (2560,), the last dimension of the array must have that length.
         * ``gradientLat``: df/di (see the SCRIP documentation). Same shape as ``array``.
         * ``gradientLon``: df/dj. Same shape as ``array``.
         * ``gradientLatLon``: d(df)/(di)(dj). Same shape as array."

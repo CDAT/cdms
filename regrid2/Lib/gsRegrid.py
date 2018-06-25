@@ -652,7 +652,7 @@ class Regrid:
            _: None
 
         Note:  this definition is compatible with the numpy masked arrays
-        
+ 
         Note:  note see setValidMask for the opposite definition
 
         Note:  should be called before computing the weights

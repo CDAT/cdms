@@ -59,6 +59,7 @@ def fromJSON(jsn):
     V.set_fill_value(D["_fill_value"])
     return V
 
+
 class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
     "An in-memory variable."
     variable_count = 0
@@ -570,7 +571,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
 
             clone
                (self, copyData=1)
-       
+
             _: None
 
         Returns
@@ -794,14 +795,14 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
 
         Parameters
         ----------
-       
-           side: 
+
+           side:
                 a tuple of zeros and one +1 or -1.  To access the "north" side for instance, set side=(1, 0), (-1, 0) to access the south side, (0, 1) the east side, etc. This does not involve any communication.
 
            _:None
 
         Returns
-        ------- 
+        -------
             none if halo was not exposed (see exposeHalo)
         """
         if HAVE_MPI and side in self.__mpiWindows:
@@ -815,7 +816,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
 
         Parameters
         ----------
- 
+
            pe:
                 processor owning the halo data. This is a no operation when pe is None.
 
@@ -854,7 +855,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         """
         Parameters
         ----------
- 
+
             Get slab:
                 A slab is a multi-dimensional slice extending in all directions except along dim where slce applies
 

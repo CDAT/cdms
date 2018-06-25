@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-#Alex Pletzer, Tech-X Corp. (2011)
-#This code is provided with the hope that it will be useful.
-#No guarantee is provided whatsoever. Use at your own risk.
+# Alex Pletzer, Tech-X Corp. (2011)
+# This code is provided with the hope that it will be useful.
+# No guarantee is provided whatsoever. Use at your own risk.
 """
 Write data to VTK file format using the structured grid format
 
@@ -24,10 +24,11 @@ class VTKSGWriter(mvBaseWriter.BaseWriter):
               file name
 
           _: None
-    """ 
+    """
+
     def write(self, filename):
         """
-        
+
         """
         f = open(filename, 'w')
         print('# vtk DataFile Version 2.0', file=f)

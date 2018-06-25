@@ -40,7 +40,7 @@ def timeindex(value, units, basetime, delta, delunits, calendar):
 
 class DatasetVariable(AbstractVariable):
     """Variable (parent, variableNode=None)
-        
+
         Parameters
         ----------
            variableNode
@@ -50,6 +50,7 @@ class DatasetVariable(AbstractVariable):
               is the containing dataset instance.
 
     """
+
     def __init__(self, parent, id, variableNode=None):
         """
         """
@@ -224,7 +225,7 @@ class DatasetVariable(AbstractVariable):
 
     def genMatch(self, axis, interval, matchnames):
         """Helper function for expertPaths.
-      
+
         Parameters
         ----------
 
@@ -310,18 +311,18 @@ class DatasetVariable(AbstractVariable):
         return partition
 
     def expertPaths(self, slist):
-        """ 
-       
+        """
+
         Parameters
         ----------
             expertPaths
                (self, slicelist) takes a list of slices,
-           
+
             _: None
 
         Returns
         -------
-            a 3-tuple 
+            a 3-tuple
                (npart, dimensionlist, partitionSlices)
 
           Where:

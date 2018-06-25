@@ -130,14 +130,15 @@ def getNumericCompatibility():
 
 class AbstractVariable(CdmsObj, Slab):
     """Not to be called by users.
-  
+
     Parameters
     ----------
         variableNode
             is the variable tree node, if any.
-        parent 
+        parent
             is the containing dataset instance.
     """
+
     def info(self, flag=None, device=None):
         Slab.info(self, flag, device)
 
@@ -170,7 +171,7 @@ class AbstractVariable(CdmsObj, Slab):
     def __call__(self, *args, **kwargs):
         """
         Selection of a subregion using selectors.
-       
+
         Parameters
         ----------
            raw:
@@ -277,9 +278,10 @@ class AbstractVariable(CdmsObj, Slab):
 
         Parameters
         ----------
-            convention:
+           convention:
                 Metadata convention class
-            vardict:
+
+           vardict:
                 Variable metedata
 
         Returns
@@ -426,11 +428,11 @@ class AbstractVariable(CdmsObj, Slab):
 
         Parameters
         ----------
-             n:  
+             n:
                  Axis number
 
              _:  None
-             
+
 
 
         Returns
@@ -488,7 +490,7 @@ class AbstractVariable(CdmsObj, Slab):
 
            Other specificiations are as for axisMatchIndex.
 
-        Returns 
+        Returns
         -------
            a list of indices of axis objects;
         """
@@ -551,7 +553,8 @@ class AbstractVariable(CdmsObj, Slab):
 
         if asarray == 0 and isinstance(mv, numpy.ndarray):
             mv = mv[0]
-        if isinstance(mv, string_types) and self.dtype.char not in ['?', 'c', 'O', 'S']:
+        if isinstance(mv, string_types) and self.dtype.char not in [
+                '?', 'c', 'O', 'S']:
             try:
                 mv = float(mv)
             except BaseException:
@@ -713,7 +716,7 @@ class AbstractVariable(CdmsObj, Slab):
 
               id:
                  0 or 1
-          
+
               _: None
 
         Returns
@@ -870,7 +873,7 @@ class AbstractVariable(CdmsObj, Slab):
            #. an instance of the slice class
            #. a tuple, which will be used as arguments to create a slice
            #. `None` or `:`, which means a slice covering that entire dimension
-           #. Ellipsis (...), which means to fill the slice list with `:` 
+           #. Ellipsis (...), which means to fill the slice list with `:`
 
             leaving only enough room at the end for the remaining positional arguments
 
@@ -905,7 +908,7 @@ class AbstractVariable(CdmsObj, Slab):
     def getRegion(self, *specs, **keys):
         """
         Read a region of data. A region is an n-dimensional rectangular region specified in coordinate space.
-                            
+
         Parameters
         ----------
 
@@ -1471,7 +1474,8 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
         nsupplied = len(specs)
         # numpy will broadcast if we have a new axis in specs
         # ---------------------------------------------------
-        if [x for x in specs if numpy.array_equal(x, numpy.newaxis)] == [numpy.newaxis]:
+        if [x for x in specs if numpy.array_equal(x, numpy.newaxis)] == [
+                numpy.newaxis]:
             nnewaxis = 1
         else:
             nnewaxis = 0
@@ -1693,7 +1697,7 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
 
     def decode(self, ar):
         """Decode compressed data.
-       
+
         Parameters
         ----------
 
@@ -1765,8 +1769,13 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
                 raise IndexError("Index too large: %d" % key)
             speclist = self._process_specs([key], {})
 
-        if [x for x in speclist if (type(x) is numpy.ndarray or type(x) is list)] != []:
-            index = [x for x in speclist if (type(x) is numpy.ndarray or type(x) is list)]
+        if [x for x in speclist if (isinstance(
+                x, numpy.ndarray) or isinstance(x, list))] != []:
+            index = [
+                x for x in speclist if (
+                    isinstance(
+                        x, numpy.ndarray) or isinstance(
+                        x, list))]
             return self.data.take(index)
         # Note: raw=0 ensures that a TransientVariable is returned
         return self.getSlice(numericSqueeze=1, raw=0, isitem=1, *speclist)

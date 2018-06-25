@@ -4,7 +4,6 @@
 """CDMS Forecast"""
 
 
-
 from __future__ import print_function
 import numpy
 import cdtime
@@ -19,7 +18,7 @@ def two_times_from_one(t):
     Parameters
     ----------
 
-         Input 
+         Input
              is a time representation, either as the long int used in the cdscan
              script, or a string in the format "2010-08-25 15:26:00", or as a cdtime comptime
              (component time) object.
@@ -78,15 +77,15 @@ class forecast():
     Parameters
     ----------
 
-       tau0time 
+       tau0time
            is the first time of the forecast, i.e. the time at which tau=0.
 
-       dataset_list 
+       dataset_list
            is used to get the forecast file from the forecast time.
-       
+
    Example
    -------
- 
+
           Each list item should look like this example:
        [None, None, None, None, 2006022200000L, 'file2006-02-22-00000.nc']
        Normally dataset_list = fm[i][1] where fm is the output of
@@ -101,7 +100,7 @@ class forecast():
 
     def __init__(self, tau0time, dataset_list, path="."):
         """
-       
+
         """
         self.fctl, self.fct = two_times_from_one(tau0time)
 
@@ -135,7 +134,7 @@ def available_forecasts(dataset_file, path="."):
     Returns
     -------
           a list of forecasts (as their generating times) which are available through the specified cdscan-generated dataset xml file.
-   
+
     Note
     ----
          The forecasts are given in 64-bit integer format, but can be converted
@@ -197,7 +196,7 @@ class forecasts():
 
     def __init__(self, dataset_file, forecast_times, path="."):
         """
-       
+
         """
 
         # Create dataset_list to get a forecast file from each forecast time.
@@ -255,7 +254,7 @@ class forecasts():
         """
         Example
         -------
-       
+
              For a forecasts object f, f( min_time, max_time ) will reduce the
              scope of f, to forecasts whose start time t has min_time<=t<max_time.
              This is done in place, i.e. any other forecasts in f will be discarded.
@@ -317,7 +316,7 @@ class forecasts():
         # Create the variable from the data, with mask:
         v0 = vars[0]
         a = numpy.asarray([v.data for v in vars])
-        if (type(v0._mask) == numpy.ndarray):
+        if (isinstance(v0._mask, numpy.ndarray)):
             m = numpy.asarray([v._mask for v in vars])
             v = cdms2.tvariable.TransientVariable(
                 a, mask=m, fill_value=v0._fill_value)
@@ -359,9 +358,9 @@ class forecasts():
     def forecast_axis(self, varname, fcss=None):
         """
         Returns
-        -------      
- 
-             a tuple (axis,start,length,true_length) where axis is in the forecast direction. 
+        -------
+
+             a tuple (axis,start,length,true_length) where axis is in the forecast direction.
 
         Note
         -----
@@ -412,12 +411,12 @@ class forecasts():
         Returns
         -------
 
-             whatever the forecast set has that matches the given attribute, normally a DatasetVariable. 
+             whatever the forecast set has that matches the given attribute, normally a DatasetVariable.
 
 
         Note
-        -----       
-    
+        -----
+
              The optional argument fccs is a list of forecasts to be passed on to forecast_axis().
         """
         if not isinstance(varname, string_types):

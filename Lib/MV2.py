@@ -109,7 +109,7 @@ class var_unary_operation_with_axis:
 
 def commonDomain(a, b, omit=None):
     """commonDomain(a,b) tests that the domains of variables/arrays a and b are equal,
-    and returns the common domain if equal, or None if not equal. 
+    and returns the common domain if equal, or None if not equal.
 
        The domains may differ in that one domain may have leading axes not common
        to the other; the result domain will contain those axes.
@@ -770,7 +770,7 @@ def transpose(a, axes=None):
 
 
 class _minimum_operation:
-           
+
     "Object to calculate minima"
 
     def __init__(self):
@@ -891,12 +891,12 @@ maximum = _maximum_operation()
 
 def asarray(data, typecode=None, dtype=None):
     """asarray(data, typecode=None, dtype=None) is equivalent to array(data, dtype=None, copy=0)
-      
+
 
      Returns
      -------
 
-          data if dtype is None or data is a MaskedArray of the same dtype. 
+          data if dtype is None or data is a MaskedArray of the same dtype.
           typecode arg is for backward compatibility.
     """
     dtype = _convdtype(dtype, typecode)

@@ -74,7 +74,7 @@ class AbstractCoordinateAxis(CdmsObj):
     Returns
     -------
         a copy of self as a transient axis. If copyData is 1, make a separate copy of the data.
-    
+
     """
     axis_count = 0                      # Transient axis count
 
@@ -87,7 +87,7 @@ class AbstractCoordinateAxis(CdmsObj):
 
     def clone(self, copyData=1):
         """
-        
+
         """
         raise CDMSError(MethodNotImplemented)
 
@@ -297,7 +297,7 @@ class AbstractAxis2D(AbstractCoordinateAxis):
 
         _:None
 
-        
+
     Returns
     -------
         a copy of self as a transient axis.
@@ -306,6 +306,7 @@ class AbstractAxis2D(AbstractCoordinateAxis):
     ----
         If copyData is 1, make a separate copy of the data.
     """
+
     def __init__(self, parent=None, variableNode=None, bounds=None):
         AbstractCoordinateAxis.__init__(
             self, parent, variableNode, bounds=bounds)
@@ -396,18 +397,19 @@ class TransientAxis2D(AbstractAxis2D, TransientVariable):
     Create a transient 2D axis.
 
         All arguments are as for TransientVariable.
-        
+
     Parameters
     ----------
        bounds:
-           is the bounds array, having shape (m,n,nvert) where data.shape is (m,n) and  
-       nvert: 
+           is the bounds array, having shape (m,n,nvert) where data.shape is (m,n) and
+       nvert:
            is the max number of vertices per cell.
     """
+
     def __init__(self, data, typecode=None, copy=0, savespace=0, mask=None, fill_value=None,
                  axes=None, attributes=None, id=None, copyaxes=1, bounds=None):
         """
-        
+
         """
         AbstractAxis2D.__init__(self, None, None, bounds=bounds)
         TransientVariable.__init__(self, data, typecode=typecode, copy=copy, savespace=savespace,

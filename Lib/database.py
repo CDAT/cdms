@@ -39,13 +39,13 @@ _Att = re.compile('([a-zA-Z_:][-a-zA-Z0-9._:]*)=(.*)', re.DOTALL)
 
 def connect(uri=None, user="", password=""):
     """
-    
+
     Method:  connect(uri=None, user="", password="")
 
     Description:  Open a CDMS database connection.
 
     Arguments
-   
+
        uri: Universal Resource Identifier. If unspecified, defaults to the environment variable CDMSROOT.
        user: user id
        password: password
@@ -201,11 +201,11 @@ class LDAPDatabase(AbstractDatabase):
     def close(self):
         """
         Method
-       
+
             close()
 
         Description
-       
+
 
             Close a database connection.
 
@@ -282,15 +282,15 @@ class LDAPDatabase(AbstractDatabase):
     def openDataset(self, dsetid, mode='r'):
         """
         Method
-        
+
           openDataset(dsetid, mode='r')
 
         Description
-        
+
           Open a dataset.
 
         Arguments
-        
+
           dsetid: string dataset identifier
           mode: open mode ('r' - read-only, 'r+' - read-write, 'w' - create)
 
@@ -334,21 +334,21 @@ class LDAPDatabase(AbstractDatabase):
                      scope=Subtree, attnames=None, timeout=None):
         """
         Method
-         
+
            searchFilter
               (filter=None, tag=None, relbase=None, scope=Subtree, attnames=None, timeout=None)
 
         Description
-       
+
            Search a CDMS database.
 
         Arguments        -
-        
+
            filter: string search filter
            Simple filters have the form "tag = value". Simple filters can be combined using logical operators '&', '|', '!' in prefix notation. For example, the filter '(&(objectclass=variable)(id=cli))' finds all variables named cli.
 
             More formally
-           
+
               filter        = "(" filtercomp ")"
 
               filtercomp    = "&" filterlist | # and
@@ -386,11 +386,11 @@ class LDAPDatabase(AbstractDatabase):
         -------
            SearchResult instance.
 
-              Entries can be accessed sequentially. 
+              Entries can be accessed sequentially.
 
                  For each entry,
 
-                     entry.name is the name of the entry, 
+                     entry.name is the name of the entry,
 
                      entry.attributes is a dictionary of the attributes returned by the search,
 
@@ -401,7 +401,7 @@ class LDAPDatabase(AbstractDatabase):
               Entries can be refined with searchPredicate().
 
         Example
-        ------- 
+        -------
         (1) Find all variables named "cli":
 
           result = db.searchFilter(filter="id=cli",tag="variable")
@@ -465,7 +465,7 @@ class AbstractSearchResult:
 
 
 class LDAPSearchResult(AbstractSearchResult):
-   
+
     def __init__(self, db, LDAPresult):
         self.db = db
         self.result = LDAPresult
@@ -489,15 +489,15 @@ class LDAPSearchResult(AbstractSearchResult):
     def searchPredicate(self, predicate, tag=None):
         """
         Method
-       
+
             searchPredicate(predicate, tag=None)
 
         Description
-        
+
             Refine a search result, with a predicate search.
 
         Arguments
-       
+
             predicate: Function name or lambda function. The function takes a single CDMS object,
             and returns true (1) if the object satisfies the predicate, 0 if not.
             tag: Restrict the search to objects in one class.

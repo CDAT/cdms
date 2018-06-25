@@ -345,7 +345,9 @@ class LDAPDatabase(AbstractDatabase):
         Arguments        -
 
            filter: string search filter
-           Simple filters have the form "tag = value". Simple filters can be combined using logical operators '&', '|', '!' in prefix notation. For example, the filter '(&(objectclass=variable)(id=cli))' finds all variables named cli.
+           Simple filters have the form "tag = value". Simple filters can be combined
+           using logical operators '&', '|', '!' in prefix notation. For example,
+           the filter '(&(objectclass=variable)(id=cli))' finds all variables named cli.
 
             More formally
 

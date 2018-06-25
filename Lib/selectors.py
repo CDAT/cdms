@@ -18,7 +18,10 @@ class SelectorError (CDMSError):
 class Selector:
     """Selector class
 
-       Positional args are SelectorComponents or Selectors Keyword args and their value are passed to kwselect to create selectors. All the selector components are put into the components list of this Selector, along with all the componentsof any Selector arguments.
+       Positional args are SelectorComponents or Selectors Keyword args and
+       their value are passed to kwselect to create selectors. All the selector
+       components are put into the components list of this Selector, along with
+       all the componentsof any Selector arguments.
 
     """
 

@@ -133,7 +133,8 @@ def available_forecasts(dataset_file, path="."):
 
     Returns
     -------
-          a list of forecasts (as their generating times) which are available through the specified cdscan-generated dataset xml file.
+          a list of forecasts (as their generating times) which are available
+          through the specified cdscan-generated dataset xml file.
 
     Note
     ----

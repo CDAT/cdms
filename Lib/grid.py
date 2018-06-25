@@ -731,7 +731,8 @@ class AbstractRectGrid(AbstractGrid):
         """
         Returns
         -------
-            (flatlat, flatlon) where flatlat is a 1D NumPy array having the same length as the number of cells in the grid, similarly for flatlon."""
+            (flatlat, flatlon) where flatlat is a 1D NumPy array having the same
+            length as the number of cells in the grid, similarly for flatlon."""
 
         if self._flataxes_ is None:
             alat = self.getLatitude()[:]

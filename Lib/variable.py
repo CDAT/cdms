@@ -236,7 +236,8 @@ class DatasetVariable(AbstractVariable):
                 is an index interval (istart, iend).
 
             matchnames
-                is a partially filled list [id, timestart, timeend, levstart, levend, fc] If a filemap is used, matchnames has indices, otherwise has coordinates.
+                is a partially filled list [id, timestart, timeend, levstart, levend, fc] If a filemap
+                is used, matchnames has indices, otherwise has coordinates.
 
             Function
                 modifies matchnames based on axis and interval, returns the modified matchnames tuple.
@@ -294,7 +295,9 @@ class DatasetVariable(AbstractVariable):
         Parameters
         ----------
            axis:
-               is either a time or level axis. If cdms_filemap is being used, get the partition from the _varpart_ attribute, otherwise (for templating) use axis.partition.
+              is either a time or level axis. If cdms_filemap is being used, get the
+              partition from the _varpart_ attribute, otherwise (for templating) use
+              axis.partition.
 
            _: None
 
@@ -334,7 +337,8 @@ class DatasetVariable(AbstractVariable):
                    is a tuple of length npart, having the dimension numbers of the partitioned dimensions;
 
                partitionSlices
-                   is the list of file-specific (filename, slice) corresponding to the paths and slices within the files to be read.
+                   is the list of file-specific (filename, slice) corresponding to the paths and slices
+                   within the files to be read.
 
             The exact form of partitionSlices depends on the value of npart:
 

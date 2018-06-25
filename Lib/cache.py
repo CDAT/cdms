@@ -35,7 +35,8 @@ def lock(filename):
 
     Note: This function is UNIX-specific.
 
-    Note: It is important to delete the lock via unlock() if the process is interrupted, otherwise subsequent locks will fail.
+    Note: It is important to delete the lock via unlock() if the process is
+    interrupted, otherwise subsequent locks will fail.
     """
 
     path = lockpath(filename)
@@ -177,7 +178,8 @@ def copyFile(fromURL, toURL, callback=None,
     """
     Copy file <fromURL> to local file <toURL>.
 
-        For FTP transfers, if cache._useWindow is true, display a progress dialog, otherwise just print progress messages.
+        For FTP transfers, if cache._useWindow is true, display a progress dialog,
+        otherwise just print progress messages.
 
         For request manager transfers, <lcpath> is the logical collection distinguished name,
 
@@ -188,7 +190,8 @@ def copyFile(fromURL, toURL, callback=None,
           is the string user ID,
 
        <useReplica>
-          is true if the request manager should search the replica catalog for the actual file to transfer.
+          is true if the request manager should search the replica catalog for the actual
+          file to transfer.
     """
     if callback is None:
         if _useWindow:

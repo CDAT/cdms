@@ -21,8 +21,9 @@ class Slab:
        _:None
 
     Note: This is an abstract class to inherit in AbstractVariable About axes:
-           weight and bounds attributes always set but may be None if bounds are None, getdimattribute returns result of querying the axis.
-    """
+          weight and bounds attributes always set but may be None if bounds
+          are None, getdimattribute returns result of querying the axis. """
+
     std_slab_atts = ['filename',
                      'missing_value',
                      'comments',

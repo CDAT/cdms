@@ -185,9 +185,11 @@ def commonGrid(a, b, axes):
     and consistent with the list of axes. If so, the common grid is returned, else None
     is returned. a and b can be numpy arrays, in which case the result is None.
 
-        The common grid is 'consistent' with axes if the grid axes (e.g., the axes of latitude and longitude coordinate variables) are members of the list 'axes'.
+        The common grid is 'consistent' with axes if the grid axes (e.g., the axes of
+        latitude and longitude coordinate variables) are members of the list 'axes'.
 
-        If the grid(s) of a, b are rectilinear, the result is None, as the grids are implicitly defined by the axes.
+        If the grid(s) of a, b are rectilinear, the result is None, as the grids
+        are implicitly defined by the axes.
     """
     if isinstance(b, AbstractVariable):
         gb = b.getGrid()
@@ -561,7 +563,10 @@ def choose(myindices, t):
     Returns
     -------
 
-         an array shaped like indices containing elements chosen from t. If an element of t is the special element masked, any element of the result that "chooses" that element is masked. The result has only the default axes.
+        an array shaped like indices containing elements chosen from t.
+        If an element of t is the special element masked, any element of
+        the result that "chooses" that element is masked. The result has
+        only the default axes.
     """
     maresult = numpy.ma.choose(myindices, list(map(_makeMaskedArg, t)))
     F = getattr(t, "fill_value", 1.e20)

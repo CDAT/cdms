@@ -13,8 +13,8 @@ from .error import CDMSError
 from .grid import AbstractGrid, LongitudeType, LatitudeType, CoordTypeToLoc
 from .axis import TransientVirtualAxis
 from .axis import getAutoBounds, allclose
-import _bindex
-#from . import _bindex
+from cdms2 import bindex
+from cdms2 import _bindex
 from functools import reduce
 import copy
 

@@ -94,6 +94,8 @@ Parameters
 .. figure:: /images/ESMF.jpg
    :scale: 55% 
    :alt: 
+
+   ::
                     3                       4-------------3    
                     /\                      |             |                    
                    /  \                     |             |                     

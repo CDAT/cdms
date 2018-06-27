@@ -152,8 +152,8 @@ where:
     - For example, if array is three-dimensional, the axes are
       (z,y,x), and if array is four-dimensional, the axes are (t,z,y,x).
    
-    - (Note that the t dimension need have no connection with time; any 
-      spatial axis can be mapped to any plot dimension.)
+        **Note:** that the t dimension need have no connection with time; any 
+        spatial axis can be mapped to any plot dimension.)
 
     - For a graphics method which is two-dimensional, such as boxfill,
       the y-axis is plotted on the horizontal, and the x-axis on the vertical.
@@ -163,7 +163,7 @@ where:
 
     - If it is non-rectangular, the meshfill graphics method is used.
 
-   -  Note that some plot keywords apply only to rectangular grids only.
+        **Note:** that some plot keywords apply only to rectangular grids only.
 
 -  args are optional positional arguments:
 

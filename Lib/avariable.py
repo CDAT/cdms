@@ -731,28 +731,6 @@ class AbstractVariable(CdmsObj, Slab):
           corresponding axes, and to orderparse for dividing up into
           components.
         """
-        parameters
-        ----------
-             id:
-                 0 or 1
-        returns
-        -------
-            the order string, such as t, z, y, x (time, level, lat, lon).
-
-        Note
-        ----
-        * if ids == 0 (the default) for an axis that is not t,z,x,y
-          the order string will contain a (-) character in that location.
-          The result string will be of the same length as the number
-          of axes. This makes it easy to loop over the dimensions.
-
-        * if ids == 1 those axes will be represented in the order
-          string as (id) where id is that axis' id. The result will
-          be suitable for passing to order2index to get the
-          corresponding axes, and to orderparse for dividing up into
-          components.
->>>>>>> f6c041d9b547372b3875cdbfe7cad805a03b382a
-        """
         order = ""
         for k in range(self.rank()):
             axis = self.getAxis(k)

@@ -7,7 +7,8 @@ echo ""
 echo "Activating base env"
 source activate base
 echo "Making sure conda-build is installed"
-conda install "conda-build<3.10"
+#conda install "conda-build<3.10"
+conda install "conda-build"
 echo "Updating conda"
 conda update -y -q conda
 if [ `uname` == "Linux" ]; then

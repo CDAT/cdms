@@ -13,8 +13,8 @@ from .error import CDMSError
 from .grid import AbstractGrid, LongitudeType, LatitudeType, CoordTypeToLoc
 from .axis import TransientVirtualAxis
 from .axis import getAutoBounds, allclose
-import _bindex
-#from . import _bindex
+from cdms2 import bindex
+from cdms2 import _bindex
 from functools import reduce
 import copy
 
@@ -164,18 +164,23 @@ class AbstractHorizontalGrid(AbstractGrid):
     def fixCutCells(self, nonConvexCells, threshold=270.0):
         """
 
-        For any mapping from a spherical to a planar surface, there is a linear cut.  Grid cells that span the cut may appear to be nonconvex, which causes problems with meshfill graphics. This routine attempts to 'repair' the cut cell boundaries so that meshfill recognizes they are convex.
-        
+        For any mapping from a spherical to a planar surface, there is a linear cut.
+        Grid cells that span the cut may appear to be nonconvex, which causes problems
+        with meshfill graphics. This routine attempts to 'repair' the cut cell boundaries
+        so that meshfill recognizes they are convex.
+
         Parameters
         ----------
 
-        nonConvexCells: 
-                     1D numpy array of indices of nonconvex cells, as returned from checkConvex.
-        threshold: 
+        nonConvexCells:
+                  1D numpy array of indices of nonconvex cells, as returned from
+                  checkConvex.
+        threshold:
                   positive floating-point value in degrees.
-        
 
-          If the difference in longitude values of consecutive boundaries nodes exceeds the threshold, the cell is considered a cut cell.
+
+        If the difference in longitude values of consecutive boundaries nodes exceeds the
+        threshold, the cell is considered a cut cell.
 
         On return, the grid boundaries are modified.
         Return value is a 1D array of indices of cells that cannot be repaired.
@@ -311,7 +316,7 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         Parameter
         ---------
 
-             cufile 
+             cufile
                 is a Cdunif file, NOT a CDMS file.
 
              gridtitle
@@ -607,10 +612,10 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
              domainlist
                  is a list of axes of a variable.
 
-             newaxislist 
+             newaxislist
                  is a list of result axes after the slicelist is applied to domainlist.
 
-             slicelist 
+             slicelist
                  is a list of slices.
 
         All lists are of equal length.
@@ -618,9 +623,9 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         Returns
         -------
 
-            value 
+            value
                is (newslicelist, gridaxislist) where
-            newslicelist 
+            newslicelist
 
                is the elements of slicelist that correspond to the grid, in the
           preferred order of the grid.
@@ -674,8 +679,8 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
 
        Parameters
        ----------
- 
-            'spec' 
+
+            'spec'
                 is a region specification of the form defined in the grid module.
 
        Returns
@@ -762,8 +767,8 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         """
         Returns
         -------
-       
-             a grid that 
+
+             a grid that
                   is consistent with the axes, or None.
 
              For curvilinear grids this means that the grid-related axes are
@@ -879,7 +884,7 @@ class TransientCurveGrid(AbstractCurveGrid):
 
 def readScripCurveGrid(fileobj, dims, whichType, whichGrid):
     """Read a 'native' SCRIP grid file, returning a transient curvilinear grid.
-   
+
     Parameters
     ----------
 
@@ -888,7 +893,7 @@ def readScripCurveGrid(fileobj, dims, whichType, whichGrid):
 
          dims
              is the grid shape.
-      
+
          whichType
              is the type of file, either "grid" or "mapping"
 

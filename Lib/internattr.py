@@ -84,7 +84,7 @@ class InternalAttributesClass (_PCLASS):
 
         Returns
         -------
-      
+
             a dictionary-like object of the non-internal attributes."""
         return AttributeDict(self)
 

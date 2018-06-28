@@ -500,7 +500,8 @@ class VariableNode(CdmsNode):
     # Create a variable.
     # If validate is true, validate immediately
     def __init__(self, id, datatype, domain):
-        assert isinstance(datatype, string_types), 'Invalid datatype: ' + repr(datatype)
+        assert isinstance(
+            datatype, string_types), 'Invalid datatype: ' + repr(datatype)
         assert datatype in CdDatatypes, 'Invalid datatype: ' + repr(datatype)
         assert datatype in CdDatatypes, 'Invalid datatype: ' + repr(datatype)
         CdmsNode.__init__(self, "variable", id)
@@ -534,7 +535,8 @@ class AxisNode(CdmsNode):
     # data is a numpy array, if specified
     def __init__(self, id, length, datatype=CdLong, data=None):
         assert isinstance(length, int), 'Invalid length: ' + repr(length)
-        assert isinstance(datatype, string_types), 'Invalid datatype: ' + repr(datatype)
+        assert isinstance(
+            datatype, string_types), 'Invalid datatype: ' + repr(datatype)
         assert datatype in CdDatatypes, 'Invalid datatype: ' + repr(datatype)
         if data is not None:
             assert isinstance(

@@ -6,6 +6,7 @@ Overview
 ^^^^^^^^
 
 
+
 .. highlight:: python
    :linenothreshold: 3
 
@@ -191,9 +192,11 @@ Cdms Module Functions
              Create a uniform rectilinear grid.  The grid is not associated with a file or dataset. The grid boundaries are at the midpoints of the axis values. 
                   * ``startLat`` is the starting latitude value. 
                   * ``nlat`` is the number of latitudes. If ``nlat`` is 1, the grid latitude boundaries will be ``startLat`` +/- ``deltaLat/2``.
-                  * ``deltaLat`` is the increment between latitudes. ``startLon`` is the starting longitude value.
+                  * ``deltaLat`` is the increment between latitudes.
+                  *  ``startLon`` is the starting longitude value.
                   * ``nlon`` is the number of longitudes. If ``nlon`` is 1, the grid longitude boundaries will be ``startLon`` +/- ``deltaLon/2``.
-                  * ``deltaLon`` is the increment between longitudes. ``order`` is a string with value 'yx. (the first grid dimension is latitude) or .xy. (the first grid dimension is longitude).
+                  * ``deltaLon`` is the increment between longitudes.
+                  * ``order`` is a string with value 'yx. (the first grid dimension is latitude) or .xy. (the first grid dimension is longitude).
                   * If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
    "``Axis``", "``createUniformLatitudeAxis(startLat , nlat, deltaLat)``:
            Create a uniform latitude axis. The axis boundaries are at the midpoints of the axis values. The axis is designated as a circular latitude axis. 
@@ -342,10 +345,18 @@ CoordinateAxis Types
    :header:  "Type", "Definition"
    :widths:  20, 80
 
-   "``CoordinateAxis``", "A variable that represents coordinate information. Has subtypes ``Axis2D`` and ``AuxAxis1D``."
-   "``Axis``", "A one-dimensional coordinate axis whose values are strictly monotonic. Has subtypes ``DatasetAxis``, ``FileAxis``, and ``TransientAxis``. May be an index axis, mapping a range of integers to the equivalent floating point value. If a latitude or longitude axis, may be associated with a ``RectGrid``."
-   "``Axis2D``", "A two-dimensional coordinate axis, typically a latitude or longitude axis related to a ``CurvilinearGrid``. Has subtypes ``DatasetAxis2D``, ``FileAxis2D``, and ``TransientAxis2D``."
-   "``AuxAxis1D``", "A one-dimensional coordinate axis whose values need not be monotonic. Typically a latitude or longitude axis associated with a ``GenericGrid``. Has subtypes ``DatasetAuxAxis1D``, ``FileAuxAxis1D``, and ``TransientAuxAxis1D``. An axis in a ``CdmsFile`` may be designated the unlimited axis, meaning that it can be extended in length after the initial definition. There can be at most one unlimited axis associated with a ``CdmsFile``."
+   "``CoordinateAxis``", "A variable that represents coordinate information.
+          * Has subtypes ``Axis2D`` and ``AuxAxis1D``."
+   "``Axis``", "A one-dimensional coordinate axis whose values are strictly monotonic. 
+          * Has subtypes ``DatasetAxis``, ``FileAxis``, and ``TransientAxis``.
+          * May be an index axis, mapping a range of integers to the equivalent floating point value.
+          * If a latitude or longitude axis, may be associated with a ``RectGrid``."
+   "``Axis2D``", "A two-dimensional coordinate axis, typically a latitude or longitude axis related to a ``CurvilinearGrid``. 
+          * Has subtypes ``DatasetAxis2D``, ``FileAxis2D``, and ``TransientAxis2D``."
+   "``AuxAxis1D``", "A one-dimensional coordinate axis whose values need not be monotonic. Typically a latitude or longitude axis associated with a ``GenericGrid``.
+          * Has subtypes ``DatasetAuxAxis1D``, ``FileAuxAxis1D``, and ``TransientAuxAxis1D``. 
+          * An axis in a ``CdmsFile`` may be designated the unlimited axis, meaning that it can be extended in length after the initial definition.
+          * There can be at most one unlimited axis associated with a ``CdmsFile``."
 
 CoordinateAxis Internal Attributes
 ----------------------------------

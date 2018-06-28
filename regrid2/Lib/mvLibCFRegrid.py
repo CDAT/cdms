@@ -1,7 +1,7 @@
-#This code is provided with the hope that it will be useful.
-#No guarantee is provided whatsoever. Use at your own risk.
+# This code is provided with the hope that it will be useful.
+# No guarantee is provided whatsoever. Use at your own risk.
 #
-#David Kindig and Alex Pletzer, Tech-X Corp. (2012)
+# David Kindig and Alex Pletzer, Tech-X Corp. (2012)
 
 
 """

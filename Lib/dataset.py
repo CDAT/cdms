@@ -5,17 +5,16 @@
 from __future__ import print_function
 from .error import CDMSError
 import sys
-#from . import Cdunif
+# from . import Cdunif
 import Cdunif
 import numpy
-#from . import cdmsNode
+# from . import cdmsNode
 import cdmsNode
 import os
-import sys
 import string
 import urllib
 from urllib.parse import urlparse, urlunparse
-#from . import cdmsobj
+# from . import cdmsobj
 import cdmsobj
 import re
 from .CDMLParser import CDMLParser
@@ -1197,7 +1196,7 @@ class Dataset(CdmsObj, cuDataset):
 
     def getLogicalCollectionDN(self, base=None):
         """Return the logical collection distinguished name of this dataset.
-          
+
 
            Note
            ----
@@ -1233,7 +1232,7 @@ class Dataset(CdmsObj, cuDataset):
         return retval
 
     def getAxis(self, id):
-        """Get the axis object with the given id. 
+        """Get the axis object with the given id.
 
          Returns
          -------
@@ -1750,7 +1749,7 @@ class CdmsFile(CdmsObj, cuDataset):
                     new name for grid (default None)
 
             grid:
-                file grid 
+                file grid
                     (cdms2.grid.FileRectGrid/cdms2.hgrid.FileCurveGrid/cdms2.gengrid.FileGenericGrid)
 
         Returns
@@ -2021,11 +2020,13 @@ class CdmsFile(CdmsObj, cuDataset):
                  String identifier of the new variable.
              extend:
                  * 1 define the first dimension as the unlimited dimension.
-                 * 0 do not define an unlimited dimension. The default is the define the first dimension as unlimited only if it is a time dimension.
+                 * 0 do not define an unlimited dimension. The default is the define the first
+                    dimension as unlimited only if it is a time dimension.
              fill_value:
                  The missing value flag.
              index:
-                 The extended dimension index for writting. The default index is determined by lookup relative to the existing extended dimension.
+                 The extended dimension index for writting. The default index is determined by
+                 lookup relative to the existing extended dimension.
              grid:
                  The variable grid.  `none` the value of var.getGrid() will used.
 
@@ -2359,7 +2360,7 @@ class CdmsFile(CdmsObj, cuDataset):
         ----------
            id:
              str id of the variable to get
-          
+
            _: None
 
         Returns

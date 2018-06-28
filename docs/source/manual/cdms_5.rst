@@ -147,18 +147,23 @@ where:
 -  array is a variable, masked array, or Numpy array having between
    two and five dimensions. The last dimensions of the array is termed
    the 'x' dimension, the next-to-last the 'y' dimension, then 'z', 't',
-   and 'w'. For example, if array is three-dimensional, the axes are
-   (z,y,x), and if array is four-dimensional, the axes are (t,z,y,x).
-   (Note that the t dimension need have no connection with time; any
-   spatial axis can be mapped to any plot dimension. For a graphics
-   method which is two-dimensional, such as boxfill, the y-axis is
-   plotted on the horizontal, and the x-axis on the vertical.
+   and 'w'.
+  
+    - For example, if array is three-dimensional, the axes are
+      (z,y,x), and if array is four-dimensional, the axes are (t,z,y,x).
+   
+        **Note:** that the t dimension need have no connection with time; any 
+        spatial axis can be mapped to any plot dimension.)
 
-   If array is a gridded variable on a rectangular grid, the plot
-   function uses a box-fill graphics method. If it is non-rectangular,
-   the meshfill graphics method is used.
+    - For a graphics method which is two-dimensional, such as boxfill,
+      the y-axis is plotted on the horizontal, and the x-axis on the vertical.
 
-   Note that some plot keywords apply only to rectangular grids only.
+    - If array is a gridded variable on a rectangular grid, the plot
+      function uses a box-fill graphics method.
+
+    - If it is non-rectangular, the meshfill graphics method is used.
+
+        **Note:** that some plot keywords apply only to rectangular grids only.
 
 -  args are optional positional arguments:
 
@@ -201,16 +206,27 @@ Plot Keywords
          ``cdtime.reltime(30.0, 'days since 1978-1-1').``"
     "``units``", "string",  "Data units. Defaults to ``variable.units``"
     "``variable``", "CDMS variable object", "Variable associated with the data. The variable grid must have the same shape as the data array."
-    "``xarray`` (``[y|z|t|w]array``)", "1-D Numpy array", "*Rectangular grids only*. Array of coordinate values, having the same length as the corresponding dimension. Defaults to ``xaxis[:\] (y|z|t|waxis[:])``"
-    "``xaxis`` (``[y|z|t|w]axis``)", "CDMS axis object", "*Rectangular grids only*. Axis object.  
+    "``xarray`` (``[y|z|t|w]array``)", "1-D Numpy array", "*Rectangular grids only*.
+       * Array of coordinate values, having the same length as the corresponding dimension.
+       * Defaults to ``xaxis[:\] (y|z|t|waxis[:])``"
+    "``xaxis`` (``[y|z|t|w]axis``)", "CDMS axis object", "*Rectangular grids only*.
+       * Axis object.  
        * ``xaxis`` defaults to ``grid.getAxis(0)`` 
        * ``yaxis`` defaults to ``grid.getAxis(1)``"
-    "``xbounds`` (``ybounds``)", "2-D Numpy array",  "*Rectangular grids only*. Boundary array of shape ``(n,2)`` where ``n`` is the axis length. Defaults to ``xaxis.getBounds()``, or ``xaxis.genGenericBounds()`` if ``None``, similarly for ``ybounds``."
-    "``xname`` (``[y|z|t|w]name``)", "string", "*Rectangular grids only*. Axis name. Defaults to ``xaxis.id`` (``[y|z|t|w]axis.id``)"
-    "``xrev`` (``yrev``)", "0 or 1", "If ``xrev`` (``yrev``) is 1, reverse the direction of the ``x-axis (y-axis)``. Defaults to 0, with the following exceptions:
+    "``xbounds`` (``ybounds``)", "2-D Numpy array",  "*Rectangular grids only*.
+       * Boundary array of shape ``(n,2)`` where ``n`` is the axis length.
+       * Defaults to ``xaxis.getBounds()``, or ``xaxis.genGenericBounds()``
+       * if ``None``, similarly for ``ybounds``."
+    "``xname`` (``[y|z|t|w]name``)", "string", "*Rectangular grids only*. 
+       * Axis name.
+       * Defaults to ``xaxis.id`` (``[y|z|t|w]axis.id``)"
+    "``xrev`` (``yrev``)", "0 or 1", "If ``xrev`` (``yrev``) is 1, reverse the direction of the ``x-axis (y-axis)``. 
+        * Defaults to 0, with the following exceptions:
         * If the ``y-axis`` is latitude, and has decreasing values, ``yrev`` defaults to 1
         * If the ``y-axis`` is a vertical level, and has increasing pressure levels, ``yrev`` defaults to 1."
-    "``xunits`` (``[y|z|t|w]units``)", "string", "*Rectangular grids only*. Axis units. Defaults to ``xaxis.units`` (``[y|z|t|w]axis.units``)."
+    "``xunits`` (``[y|z|t|w]units``)", "string", "*Rectangular grids only*.
+        * Axis units.
+        * Defaults to ``xaxis.units`` (``[y|z|t|w]axis.units``)."
 
 
 

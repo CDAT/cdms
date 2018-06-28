@@ -159,7 +159,7 @@ def defaultRegion():
 def setRegionSpecs(grid, coordSpec, coordType, resultSpec):
     """Modify a list of coordinate specifications, given a coordinate type and
     a specification for that coordinate.
-  
+
     Parameters
     ----------
 
@@ -173,9 +173,9 @@ def setRegionSpecs(grid, coordSpec, coordType, resultSpec):
            (x,y)
 
            (x,y,'co')
-                  
+
            (x,y,'co',cycle)
-           
+
            ':'
 
            None
@@ -353,7 +353,7 @@ class AbstractRectGrid(AbstractGrid):
         return result
 
     def _getshape(self):
-       
+
         if self._order_ == "yx":
             return (len(self._lataxis_), len(self._lonaxis_))
         else:
@@ -731,7 +731,8 @@ class AbstractRectGrid(AbstractGrid):
         """
         Returns
         -------
-            (flatlat, flatlon) where flatlat is a 1D NumPy array having the same length as the number of cells in the grid, similarly for flatlon."""
+            (flatlat, flatlon) where flatlat is a 1D NumPy array having the same
+            length as the number of cells in the grid, similarly for flatlon."""
 
         if self._flataxes_ is None:
             alat = self.getLatitude()[:]
@@ -748,7 +749,7 @@ class AbstractRectGrid(AbstractGrid):
     def writeScrip(self, cufile, gridTitle=None):
         """
         Write a grid to a SCRIP file.
-      
+
         Parameters
         ----------
              cufile:
@@ -764,10 +765,10 @@ class AbstractRectGrid(AbstractGrid):
     def toCurveGrid(self, gridid=None):
         """
         Convert to a curvilinear grid.
-        
+
         Parameters
-        ----------  
-              gridid: 
+        ----------
+              gridid:
                  is the string identifier of the resulting curvilinear grid object.
 
               _: None
@@ -1050,7 +1051,7 @@ def isGrid(grid):
     Parameters
     ----------
 
-         grid-cdms2: 
+         grid-cdms2:
             contruct to be examined
 
          _: None
@@ -1069,10 +1070,10 @@ def writeScripGrid(path, grid, gridTitle=None):
            path:
               is the path of the SCRIP file to be created.
 
-           grid: 
+           grid:
               is a CDMS grid object.
 
-           gridTitle: 
+           gridTitle:
               is a string ID for the grid.
 
     """

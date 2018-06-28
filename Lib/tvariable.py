@@ -59,6 +59,7 @@ def fromJSON(jsn):
     V.set_fill_value(D["_fill_value"])
     return V
 
+
 class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
     "An in-memory variable."
     variable_count = 0
@@ -159,7 +160,9 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         ----------
 
             createVariable
-                (self, data, typecode=None, copy=0, savespace=0, mask=None, fill_value=None, grid=None, axes=None, attributes=None, id=None, dtype=None, order='C') The savespace argument is ignored, for backward compatibility only.
+                (self, data, typecode=None, copy=0, savespace=0, mask=None, fill_value=None, grid=None,
+                axes=None, attributes=None, id=None, dtype=None, order='C') The savespace argument is ignored,
+                for backward compatibility only.
         """
         try:
             if data.fill_value is not None:
@@ -266,7 +269,9 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         ----------
 
             createVariable
-               (self, data, typecode=None, copy=0, savespace=0, mask=None, fill_value=None, grid=None, axes=None, attributes=None, id=None, dtype=None, order='C') The savespace argument is ignored, for backward compatibility only.
+               (self, data, typecode=None, copy=0, savespace=0, mask=None, fill_value=None,
+               grid=None, axes=None, attributes=None, id=None, dtype=None, order='C') The savespace
+               argument is ignored, for backward compatibility only.
         """
         # Compatibility: assuming old typecode, map to new
         if dtype is None and typecode is not None:
@@ -570,7 +575,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
 
             clone
                (self, copyData=1)
-       
+
             _: None
 
         Returns
@@ -794,14 +799,15 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
 
         Parameters
         ----------
-       
-           side: 
-                a tuple of zeros and one +1 or -1.  To access the "north" side for instance, set side=(1, 0), (-1, 0) to access the south side, (0, 1) the east side, etc. This does not involve any communication.
+
+           side:
+                a tuple of zeros and one +1 or -1.  To access the "north" side for instance, set side=(1, 0),
+                (-1, 0) to access the south side, (0, 1) the east side, etc. This does not involve any communication.
 
            _:None
 
         Returns
-        ------- 
+        -------
             none if halo was not exposed (see exposeHalo)
         """
         if HAVE_MPI and side in self.__mpiWindows:
@@ -811,16 +817,20 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
 
     def fetchHaloData(self, pe, side):
         """
-        Fetch the halo data from another processor. The halo side is a subdomain of the halo that is exposed to other processors. It is an error to call this method when MPI is not enabled. This is a collective method (must be called by all processes), which involves synchronization of data among all processors.
+        Fetch the halo data from another processor. The halo side is a subdomain of the halo that
+        is exposed to other processors. It is an error to call this method when MPI is not enabled.
+        This is a collective method (must be called by all processes), which involves synchronization
+        of data among all processors.
 
         Parameters
         ----------
- 
+
            pe:
                 processor owning the halo data. This is a no operation when pe is None.
 
            side:
-               a tuple of zeros and one +1 or -1.  To access the "north" side for instance, set side=(1, 0), (-1, 0) to access the south side, (0, 1) the east side, etc.
+               a tuple of zeros and one +1 or -1.  To access the "north" side for instance,
+               set side=(1, 0), (-1, 0) to access the south side, (0, 1) the east side, etc.
 
         Note: collective, all procs must invoke this method. If some processors should not fetch then pass None for pe.
         """
@@ -854,7 +864,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         """
         Parameters
         ----------
- 
+
             Get slab:
                 A slab is a multi-dimensional slice extending in all directions except along dim where slce applies
 

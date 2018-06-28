@@ -29,13 +29,14 @@ def lock(filename):
 
         Usage:
             lock(filename)
-   
+
         If the function returns, the lock was acquired successfully.
 
 
     Note: This function is UNIX-specific.
-   
-    Note: It is important to delete the lock via unlock() if the process is interrupted, otherwise subsequent locks will fail.
+
+    Note: It is important to delete the lock via unlock() if the process is
+    interrupted, otherwise subsequent locks will fail.
     """
 
     path = lockpath(filename)
@@ -177,18 +178,20 @@ def copyFile(fromURL, toURL, callback=None,
     """
     Copy file <fromURL> to local file <toURL>.
 
-        For FTP transfers, if cache._useWindow is true, display a progress dialog, otherwise just print progress messages.
+        For FTP transfers, if cache._useWindow is true, display a progress dialog,
+        otherwise just print progress messages.
 
         For request manager transfers, <lcpath> is the logical collection distinguished name,
 
     Parameters
     ----------
-      
+
        <userid>
           is the string user ID,
 
-       <useReplica> 
-          is true if the request manager should search the replica catalog for the actual file to transfer.
+       <useReplica>
+          is true if the request manager should search the replica catalog for the actual
+          file to transfer.
     """
     if callback is None:
         if _useWindow:
@@ -360,11 +363,11 @@ class Cache:
 Parameters
 ----------
 
-           <userid> 
+           <userid>
                is the string user ID,
 
 
-           <useReplica> 
+           <useReplica>
                is true iff the request manager should search the replica catalog for the actual file to transfer.
         """
 
@@ -406,11 +409,11 @@ Parameters
         Get the file with <fileURL>.
 
            If the file is in the cache, read it.
-   
+
            If another process is transferring it into the cache, wait for the
         transfer to complete.
 
-         
+
         Parameters
         ---------
             <naptime>
@@ -429,7 +432,7 @@ Parameters
             <lcpath>
                is the logical collection path,
 
-            <userid> 
+            <userid>
                is the user string ID,
 
              <useReplica>

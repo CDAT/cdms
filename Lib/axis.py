@@ -217,16 +217,20 @@ Parameters
        yind:
            same for right endpoint j
 
-  
+
 Returns
 -------
 
-       True if the coordinate interval (a,b) intersects the node nodeSubI or cell bounds [boundLeft,boundRight], where the interval (a,b) is defined by:
+       True if the coordinate interval (a,b) intersects the node nodeSubI or
+       cell bounds [boundLeft,boundRight], where the interval (a,b) is defined by:
 
          * aMinusEps,aPlusEps = a +/- epsilon
          * bPlusEps,bMinusEps = b +/- epsilon
 
-       and the intersection option iind = 'n','b','e','s' specifies whether the intersection is with respect to the node value nodeSubI ('n' or 'e') or the cell bounds [boundLeft,boundRight].
+
+       and the intersection option iind = 'n','b','e','s' specifies whether the
+       intersection is with respect to the node value nodeSubI ('n' or 'e') or the cell
+       bounds [boundLeft,boundRight].
 
     See Also mapLinearExt
 
@@ -280,8 +284,8 @@ def mapLinearExt(axis, bounds, interval, indicator='ccn',
 
     Returns
     -------
-       The corresponding index interval (i,j), where i<j, indicating the half-open index interval [i,j), or None if the intersection is empty.
-
+       The corresponding index interval (i,j), where i<j, indicating the half-open index interval [i,j),
+       or None if the intersection is empty.
     """
 
     indicator = indicator.lower()
@@ -719,14 +723,14 @@ def allclose(ax1, ax2, rtol=1.e-5, atol=1.e-8):
     ----------
        ax1
            array_like
-       ax2 
+       ax2
            array_like
 
     Returns
     -------
        bool
            True if all elements of axes ax1 and ax2 are close,
-           in the sense of numpy.ma.allclose. 
+           in the sense of numpy.ma.allclose.
 
        See Also all, any
 

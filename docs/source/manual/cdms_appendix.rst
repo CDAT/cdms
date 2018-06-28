@@ -93,13 +93,28 @@ Release 4.0
 
 CDMS version 4.0 adds support for nonrectangular grids:
 
--  The following grid classes were added: AbstractHorizontalGrid,
-   AbstractCurve-Grid, AbstractGenericGrid, DatasetCurveGrid,
-   FileCurveGrid, TransientCurve-Grid, DatasetGenericGrid,
-   FileGenericGrid, and TransientGenericGrid.
--  The following axis classes were added: AbstractCoordinateAxis,
-   AbstractAuxAxis1D, AbstractAxis2D, DatasetAuxAxis1D, FileAuxAxis1D,
-   TransientAuxAxis1D, DatasetAxis2D, FileAxis2D, and TransientAxis2D.
+-  The following grid classes were added: 
+      * AbstractHorizontalGrid
+      * AbstractCurve-Grid
+      * AbstractGenericGrid
+      * DatasetCurveGrid
+      * FileCurveGrid
+      * TransientCurve-Grid
+      * DatasetGenericGrid
+      * FileGenericGrid
+      * TransientGenericGrid.
+
+-  The following axis classes were added:
+      * AbstractCoordinateAxis
+      * AbstractAuxAxis1D
+      * AbstractAxis2D
+      * DatasetAuxAxis1D
+      * FileAuxAxis1D,
+      * TransientAuxAxis1D
+      * DatasetAxis2D
+      * FileAxis2D
+      * TransientAxis2D.
+
 -  The getMesh and clone methods were added for grids.
 -  An interface to the SCRIP package was added.
 
@@ -138,8 +153,16 @@ Details
 AbstractVariable
 ''''''''''''''''
 
--  Functions getDomain, getSlice, rank, regrid, setMissing, size,
-   subRegion, and subSlice were added.
+-  The following functions were added:
+      * getDomain
+      * getSlice
+      * rank
+      * regrid
+      * setMissing
+      * size
+      * subRegion
+      * subSlice 
+
 -  The functions getRegion, getSlice, getValue, and the slice operators
    all return an instance of MV, a masked array. Singleton dimensions
    are squeezed.
@@ -149,17 +172,28 @@ AbstractVariable
    latitude, and longitude.
 -  The input functions have the keyword squeeze.
 -  AbstractVariable inherits from class Slab. The following functions
-   previously available in module cu are Slab methods: getattribute,
-   setattribute, listdimattributes, getdimattribute, listall, and info.
+   previously available in module cu are Slab methods:
+      * getattribute
+      * setattribute
+      * listdimattributes
+      * getdimattribute
+      * listall, and info
 -  AbstractVariable implements arithmetic functions, astype.
 -  The write function was added.
 
 AbstractAxis
 ''''''''''''
 
--  The functions asComponentTime, asRelativeTime, clone, getAxisIds,
-   getAxis-Index, getAxisList, getAxisListIndex, mapIntervalExt were
-   added.
+-  The following functions were added:
+      * asComponentTime
+      * asRelativeTime 
+      * clone
+      * getAxisIds
+      * getAxis-Index
+      * getAxisList
+      * getAxisListIndex
+      * mapIntervalExt 
+
 -  subaxis was renamed subAxis for consistency.
 -  Generalized wraparound was implemented, to handle multiple cycles,
    reversing, and negative strides. By default, coordinate intervals are
@@ -179,7 +213,10 @@ Dataset
 cdms module
 '''''''''''
 
--  The functions asVariable, isVariable, and createVariable were added.
+-  The following functions were added:
+      * asVariable
+      * isVariable
+      * createVariable
 -  The function setAutoReshapeMode was removed. It is replaced by the
    squeeze option for all I/O functions.
 
@@ -259,10 +296,11 @@ Table Slab Methods
         * ``field`` is a string, one of:  'name', 'values', 'length', 'units', 'weights', 'bounds'."
    "Various", "``getattribute(name)``", "Get the value of an attribute.
         * ``name`` is the string name of the attribute.
-        The following special names can always be used:
-        ``filename``, ``comments``, ``grid_name``, ``grid_type``. ``time_statistic``, ``long_name``, ``units``."
+        * The following special names can always be used:
+          ``filename``, ``comments``, ``grid_name``, ``grid_type``. ``time_statistic``, ``long_name``, ``units``."
    "None", "``info(flag=None, device=sys.stdout)``", "Print slab information. 
-        * If ``flag`` is nonzero, dimension values, weights, and bounds are also printed.  Output is sent to ``device``."
+        * If ``flag`` is nonzero, dimension values, weights, and bounds are also printed. 
+        * Output is sent to ``device``."
    "List", "``listall(all=None)``", "Print slab information. 
         * If ``all`` is nonzero, dimension values, weights, and bounds are also printed."
    "List", "``listdimattributes(dim, field)``", "List dimension attributes.  Returns a list of string attribute names which can be input to ``getdimattribute``.  
@@ -320,17 +358,21 @@ Table cuDataset Methods
    "Axis", "``dimensionobject(dname, vname=None)``", "Get an axis.
        * ``dname`` is the string name of an axis. ``vname`` is a string variable name. 
        * The default is the variable name set by ``default_variable.``"
-   "Various", "``getattribute (vname, attribute``)", "Get an attribute value. ``vname`` is a string variable name. attribute is the string attribute name."
+   "Various", "``getattribute (vname, attribute``)", "Get an attribute value.
+       * ``vname`` is a string variable name. 
+       * attribute is the string attribute name."
    "String", "``getdimensionunits (dname,vname=None``)", "Get the units for the given dimension.
        * ``dname`` is the string name of an axis.
        * ``vname`` is a string variable name. 
        * The default is the variable name set by ``default_variable``."
-   "Various", "``getglobal (attribute)``", "Get the value of the global attribute. attribute is the string attribute name."
+   "Various", "``getglobal (attribute)``", "Get the value of the global attribute. 
+       * attribute is the string attribute name."
    "Variable", "``getslab (vname, \*args)``", "Read data for a variable.
        * ``vname`` is the string name of the variable.
-       * ``args`` is an argument list corresponding to the dimensions of the variable. Arguments for each dimension can be:
-       * ':' or None -- select the entire dimension
-       * Ellipsis -- select entire dimensions between the ones given.
+       * ``args`` is an argument list corresponding to the dimensions of the variable.
+       * Arguments for each dimension can be:
+           * ':' or None -- select the entire dimension
+           * Ellipsis -- select entire dimensions between the ones given.
        * a pair of successive arguments giving an interval in world coordinates.
        * a CDMS-style tuple of world coordinates e.g. (start, stop, 'cc')"
    "List", "``listall (vname=None, all=None)``", "Get info about data from the file.
@@ -346,11 +388,14 @@ Table cuDataset Methods
    "List", "``listvariable ()``", "Return a list of the variables in the file."
    "None", "``showall (vname=None, all=None, device=sys.stdout)``", "Print a description of the variable.
        * ``vname`` is the string name of the variable.
-       *  If all is non-zero, dimension values, weights, and bounds are returned as well. Output is sent to device."
+       *  If all is non-zero, dimension values, weights, and bounds are returned as well. 
+       * Output is sent to device."
    "None", "``showattribute (vname=None, device=sys.stdout)``", "Print the attributes of a variable.
-       * ``vname`` is the string name of the variable. Output is sent to device."
+       * ``vname`` is the string name of the variable.
+       * Output is sent to device."
    "None", "``showdimension (vname=None, device=sys.stdout)``", "Print the dimension names associated with a variable.
-       * ``vname`` is the string name of the variable. Output is sent to device." 
+       * ``vname`` is the string name of the variable. 
+       * Output is sent to device." 
    "None", "``showglobal (device=sys.stdout)``", "Print the global file attributes. Output is sent to device."
    "None", "``showvariable (device=sys.stdout)``", "Print the list of variables in the file."
 ||||||| merged common ancestors

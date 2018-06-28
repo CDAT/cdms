@@ -87,9 +87,9 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
 
         Parameters
         ----------
-             cufile 
+             cufile
                   is a Cdunif file, NOT a CDMS file.
-             gridtitle 
+             gridtitle
                   is a string identifying the grid.
         """
 
@@ -162,7 +162,7 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
     def getGridSlices(self, domainlist, newaxislist, slicelist):
         """Determine which slices in slicelist correspond to the lat/lon elements
         of the grid.
-       
+
         Parameters
         ---------
 
@@ -175,7 +175,7 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
 
         All lists are of equal length.
 
-             Return value 
+             Return value
                   is (newslicelist, gridaxislist) where
              newslicelist
                   is the elements of slicelist that correspond to the grid, in the
@@ -214,7 +214,7 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
         """Intersect with the region specification.
 
        Parameters
-       ----------    
+       ----------
             'spec'
                  region specification of the form defined in the grid module.
 
@@ -264,7 +264,7 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
 
         Returns
         -------
- 
+
              1 iff g is a grid of the same type and shape.
 
 
@@ -284,7 +284,7 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
         """
 
         Returns
-        ------- 
+        -------
 
              1 iff every element of self.getAxisList() is in the list 'axes'."""
         for item in self.getAxisList():
@@ -301,7 +301,7 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
 
         Returns
         -------
-            
+
              a grid that is consistent with the axes, or None.
 
         Note
@@ -323,7 +323,7 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
             for i in missing:
                 for item in axes:
                     if (len(selfaxes[i]) == len(item)) and \
-                         allclose(selfaxes[i], item):
+                            allclose(selfaxes[i], item):
                         result._lataxis_.setAxis(i, item)
                         result._lonaxis_.setAxis(i, item)
                         break
@@ -396,7 +396,7 @@ class FileGenericGrid(AbstractGenericGrid):
 
 
 class TransientGenericGrid(AbstractGenericGrid):
-   
+
     grid_count = 0
 
     def __init__(self, latAxis, lonAxis, id=None, maskvar=None, tempmask=None):
@@ -423,7 +423,7 @@ class TransientGenericGrid(AbstractGenericGrid):
 
 def readScripGenericGrid(fileobj, dims, whichType, whichGrid):
     """Read a 'native' SCRIP grid file, returning a transient generic grid.
-   
+
     Parameters
     ----------
 
@@ -433,7 +433,7 @@ def readScripGenericGrid(fileobj, dims, whichType, whichGrid):
               is the grid shape.
          whichType
               is the type of file, either "grid" or "mapping"
- 
+
 
     Note
     ----

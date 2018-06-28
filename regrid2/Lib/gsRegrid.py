@@ -1,7 +1,7 @@
-#!/usr/bin/env python
-#Alex Pletzer and Dave Kindig, Tech-X (2011)
-#This code is provided with the hope that it will be useful.
-#No guarantee is provided whatsoever. Use at your own risk.
+# !/usr/bin/env python
+# Alex Pletzer and Dave Kindig, Tech-X (2011)
+# This code is provided with the hope that it will be useful.
+# No guarantee is provided whatsoever. Use at your own risk.
 """
 Regridding of curvilinear structured grids
 
@@ -652,7 +652,7 @@ class Regrid:
            _: None
 
         Note:  this definition is compatible with the numpy masked arrays
-        
+ 
         Note:  note see setValidMask for the opposite definition
 
         Note:  should be called before computing the weights

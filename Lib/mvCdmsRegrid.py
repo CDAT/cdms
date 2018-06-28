@@ -1,6 +1,6 @@
-#David Kindig and Alex Pletzer, Tech-X Corp. (2012)
-#This code is provided with the hope that it will be useful.
-#No guarantee is provided whatsoever. Use at your own risk.
+# David Kindig and Alex Pletzer, Tech-X Corp. (2012)
+# This code is provided with the hope that it will be useful.
+# No guarantee is provided whatsoever. Use at your own risk.
 """
 Cdms2 interface to multiple regridders
 
@@ -33,7 +33,7 @@ def _areCellsOk(cornerCoords, mask=None):
 
          None if OK, otherwise return a dict containing some diagnostics
 
- 
+
  `` 3         2
     +-------+
     | \     |
@@ -46,7 +46,7 @@ def _areCellsOk(cornerCoords, mask=None):
 
     Notes
     -----
-   
+
         assumes cornerCoords are in lat, lon order``
     """
 
@@ -54,7 +54,7 @@ def _areCellsOk(cornerCoords, mask=None):
         return True  # no-op, no check
 
     def projectToSphere(the, lam):
-        """ 
+        """
 
         Returns
         -------
@@ -191,7 +191,7 @@ def _buildBounds(bounds):
 
     Returns
     -------
- 
+
        ndarrray of corners
     """
 
@@ -384,8 +384,9 @@ class CdmsRegrid:
     regridder. If a multidimensional variable is passed in, the apply step
     loops over the axes above the Lat (Y) -- Lon (X) coordinates
 
-  Establish which regridding method to use, handle CDMS variables before handing off to regridder. See specific tool for more information.
-       
+  Establish which regridding method to use, handle CDMS variables before handing
+  off to regridder. See specific tool for more information.
+
 Parameters
 ----------
          srcGrid
@@ -396,10 +397,10 @@ Parameters
 
          dtype
              numpy data type for src and dst data
- 
+
          regridMethod
              linear (all tools - bi, tri),
-             conserve (ESMF Only)    
+             conserve (ESMF Only)
              patch (ESMF Only)
 
          regridTool
@@ -427,7 +428,7 @@ Parameters
                  dstGridMask=None, dstGridAreas=None,
                  **args):
         """
-       
+
         """
 
         srcBounds = None

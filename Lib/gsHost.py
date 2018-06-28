@@ -58,7 +58,7 @@ class Host:
 
         Parameters
         ----------
-    
+
              hostfile path to the host
 
              mode read only at the moment
@@ -270,7 +270,7 @@ class Host:
 
         Returns
         -------
-            
+
              mfn Mosaic filename
         """
         from .gsMosaic import Mosaic
@@ -300,7 +300,7 @@ class Host:
     def getGridNames(self):
         """
         Returns
-        -------  
+        -------
 
              a list of grid names
         """
@@ -322,8 +322,8 @@ class Host:
 
         Returns
         -------
-  
-  
+
+
              list the file names corresponding to varName
         """
         if varName is not None:
@@ -334,10 +334,10 @@ class Host:
     def getTimeFilenames(self, varName=None):
         """
         Returns
-        -------    
+        -------
 
              a list of time dependent variable filenames
-    
+
         Parameters
         ----------
 
@@ -379,7 +379,7 @@ class Host:
     def getNumStatDataFiles(self):
         """
         Get number of static data files
-        
+
         Returns
         -------
 
@@ -390,17 +390,17 @@ class Host:
     def getNumTimeDataFiles(self):
         """
         Get number of time dependent data files
-        
+
         Returns
         -------
-       
+
              number time data files
         """
         return self.nTimeDataFiles
 
     def listvariable(self, gstype=None):
         """
-        
+
         Parameters
         ----------
 
@@ -441,7 +441,7 @@ class Host:
 
         Returns
         -------
-       
+
              list of all variables, including static and time dependent
         """
         return self.listvariable(type)
@@ -613,7 +613,7 @@ class Host:
 
         Parameters
         ----------
-     
+
              varName variable name
 
         Returns
@@ -634,15 +634,15 @@ class Host:
     def getVariable(self, varName):
         """
         Get a variable by name
-     
+
         Parameters
         ----------
-           
+
              varName variable name
 
         Returns
         -------
-        
+
              list of cdms2 file variables, one for each grid
         """
         return self[varName]
@@ -653,7 +653,7 @@ class Host:
 
         Returns
         -------
-       
+
              list of file variables
         """
         statVars = [self[vn] for vn in self.statVars]
@@ -666,7 +666,7 @@ class Host:
 
         Parameters
         ----------
-            
+
              name attribute name
 
         Returns

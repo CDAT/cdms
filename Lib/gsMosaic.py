@@ -96,7 +96,7 @@ class Mosaic:
         ----------
 
              uri Filename with path
-   
+
              mode read/write. Currently only read is supported
         """
 
@@ -232,7 +232,7 @@ class Mosaic:
 
         Parameters
         ----------
-       
+
              coordData Coordinate data
 
         Returns
@@ -369,7 +369,7 @@ class Mosaic:
 
         Parameters
         ----------
- 
+
              slab1 First grid (tile)
 
              slab2 Second grid (tile)
@@ -465,7 +465,7 @@ class Mosaic:
         """
         Parameters
         ----------
-   
+
              tileName Name for the first tile
 
              otherTileName Name for the other tile

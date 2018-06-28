@@ -121,14 +121,14 @@ class StaticVariable:
         """
         Data accessor
 
-        Parameters 
+        Parameters
         ----------
 
              gridIndex grid file index
 
         Returns
         -------
-       
+
              variable at gridIndex
         """
         return self.vars[gridIndex]
@@ -155,7 +155,7 @@ class StaticVariable:
 
         Parameters
         ----------
-     
+
              gridIndex grid file indexer
 
 
@@ -296,10 +296,10 @@ class StaticFileVariable(StaticVariable):
         ----------
 
             all
-          
+
         Returns
         -------
-            
+
             list
         """
         return self[0].listall(all=all)
@@ -318,7 +318,7 @@ class StaticTransientVariable(StaticVariable):
         ----------
 
              hostObj host object
- 
+
               varName variable name
         """
 

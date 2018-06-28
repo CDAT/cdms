@@ -158,11 +158,13 @@ Cdms Module Functions
               * See ``setAutoBounds``. 
               * Also see: ``CdmsFile.createAxis``"
    "``Axis``", "``createEqualAreaAxis(nlat)``: 
-             Create an equal-area latitude axis.  The latitude values range from north to south, and for all axis values ``x[i]``, ``sin(x[i])sin(x[i+1])`` is constant. 
+             Create an equal-area latitude axis.  
+              * The latitude values range from north to south, and for all axis values ``x[i]``, ``sin(x[i])sin(x[i+1])`` is constant. 
               * ``nlat`` is the axis length. 
               **Note:** The axis is not associated with a file or dataset."
    "``Axis``", "``createGaussianAxis(nlat)``: 
-             Create a Gaussian latitude axis. Axis values range from north to south.  
+             Create a Gaussian latitude axis.\
+              * Axis values range from north to south.  
               * ``nlat`` is the axis length. 
               **Note:** The axis is not associated with a file or dataset."
    "``RectGrid``", "``createGaussianGrid(nlats, xorigin=0.0, order='yx')``:
@@ -189,7 +191,9 @@ Cdms Module Functions
                   * ``type`` is one of 'gaussian','uniform','equalarea',or 'generic'. 
                   * If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
    "``RectGrid``", "``createUniformGrid(startLat, nlat, deltaLat, start-Lon, nlon, deltaLon, order='yx', mask=None)``:
-             Create a uniform rectilinear grid.  The grid is not associated with a file or dataset. The grid boundaries are at the midpoints of the axis values. 
+             Create a uniform rectilinear grid.  
+                  * The grid is not associated with a file or dataset. 
+                  * The grid boundaries are at the midpoints of the axis values. 
                   * ``startLat`` is the starting latitude value. 
                   * ``nlat`` is the number of latitudes. If ``nlat`` is 1, the grid latitude boundaries will be ``startLat`` +/- ``deltaLat/2``.
                   * ``deltaLat`` is the increment between latitudes.
@@ -199,15 +203,21 @@ Cdms Module Functions
                   * ``order`` is a string with value 'yx. (the first grid dimension is latitude) or .xy. (the first grid dimension is longitude).
                   * If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
    "``Axis``", "``createUniformLatitudeAxis(startLat , nlat, deltaLat)``:
-           Create a uniform latitude axis. The axis boundaries are at the midpoints of the axis values. The axis is designated as a circular latitude axis. 
+           Create a uniform latitude axis.
+              *  The axis boundaries are at the midpoints of the axis values.
+              * The axis is designated as a circular latitude axis. 
               * ``startLat`` is the starting latitude value.
               * ``nlat`` is the number of latitudes.
               * ``deltaLat`` is the increment between latitudes."
    "``RectGrid``","``createZonalGrid(grid)``:
-           Create a zonal grid. The output grid has the same latitude as the input grid, and a single longitude. This may be used to calculate zonal averages via a regridding operation. 
+           Create a zonal grid.
+              * The output grid has the same latitude as the input grid, and a single longitude. 
+              * This may be used to calculate zonal averages via a regridding operation. 
               * ``grid`` is a RectGrid."
    "``Axis``", "``createUniformLongitudeAxis(startLon, nlon, delta-Lon)``:  
-          Create a uniform longitude axis. The axis boundaries are at the midpoints of the axis values. The axis is designated as a circular longitude axis. 
+          Create a uniform longitude axis.
+              * The axis boundaries are at the midpoints of the axis values.
+              * The axis is designated as a circular longitude axis. 
               * ``startLon`` is the starting longitude value.
               * ``nlon`` is the number of longitudes
               * ``deltaLon`` is the increment between longitudes."
@@ -299,7 +309,7 @@ external attributes are written, but not the internal attributes.
 Attributes Common to All CDMS Objects
 -------------------------------------
 
-.. csv-table:: Attributes common to all CDMS objects
+.. csv-table:: 
    :header:  "Type", "Name", "Definition"
    :widths:  20, 20, 50
 
@@ -318,7 +328,7 @@ Getting and Setting Attributes
               * If the attribute is not already in the database, it is created as an external attribute. 
               * Internal attributes cannot be created, only referenced."
    "various", "``obj.attname = value``
-         St an internal or external attribute value.
+         Set an internal or external attribute value.
               * If the attribute is external, it is written to the database."
 
 
@@ -382,7 +392,9 @@ CoordinateAxis Constructors
    "``Dataset.createAxis(name,ar)``", "Create an ``Axis`` in a ``Dataset``. (This function is not yet implemented.)"
    "``CdmsFile.createAxis(name,ar,unlimited=0)``", "Create an Axis in a ``CdmsFile``.
              * ``name`` is the string ``name`` of the ``Axis``. 
-             * ``ar`` is a 1-D data array which defines the ``Axis`` values. It may have the value ``None`` if an unlimited axis is being defined. At most one ``Axis`` in a ``CdmsFile`` may be designated as being unlimited, meaning that it may be extended in length.
+             * ``ar`` is a 1-D data array which defines the ``Axis`` values.
+             * It may have the value ``None`` if an unlimited axis is being defined. 
+             * At most one ``Axis`` in a ``CdmsFile`` may be designated as being unlimited, meaning that it may be extended in length.
    To define an axis as unlimited, either:
  
        * A) set ``ar`` to ``None``, and leave ``unlimited`` undefined, or
@@ -413,15 +425,19 @@ CoordinateAxis Methods
    "``Axis``", "``clone(copyData=1)``", "Return a copy of the axis, as a transient axis.
         * If ``copyData`` is 1 (the default) the data itself is copied."
    "``None``", "``designateLatitude(persistent=0)``", "Designate the axis to be a latitude axis.
-        * If persistent is true, the external file or dataset (if any) is modified. By default, the designation is temporary."
+        * If persistent is true, the external file or dataset (if any) is modified. 
+        * By default, the designation is temporary."
    "``None``", "``designateLevel(persistent=0)``", "Designate the axis to be a vertical level axis.
-        * If persistent is true, the external file or dataset (if any) is modified. By default, the designation is temporary."
+        * If persistent is true, the external file or dataset (if any) is modified. 
+        * By default, the designation is temporary."
    "``None``", "``designateLongitude(persistent=0, modulo=360.0)``", "Designate the axis to be a longitude axis.
         * ``modulo`` is the modulus value. Any given axis value
         * ``x`` is treated as equivalent to ``x + modulus``. 
-        * If ``persistent`` is true, the external file or dataset (if any) is modified. By default, the designation is temporary."
+        * If ``persistent`` is true, the external file or dataset (if any) is modified. 
+        * By default, the designation is temporary."
    "``None``", "``designateTime(persistent=0, calendar = cdtime.MixedCalendar)``", "Designate the axis to be a time axis.
-        * If ``persistent`` is true, the external file or dataset (if any) is modified. By default, the designation is temporary.
+        * If ``persistent`` is true, the external file or dataset (if any) is modified. 
+        * By default, the designation is temporary.
         * ``calendar`` is defined as in ``getCalendar()``."
    "``Array``", "``getBounds()``", "Get the associated boundary array. The shape of the return array depends on the type of axis:
      * ``Axis``: ``(n,2)``
@@ -438,7 +454,6 @@ CoordinateAxis Methods
      * ``cdtime.Calendar360``: a year is 360 days
      * ``None``: no calendar can be identified
      **Note**  If the axis is not a time axis, the global, file-related calendar is returned."
-
    "``Array``", "``getValue()``", "Get the entire axis vector."
    "``Integer``", "``isLatitude()``", "Returns true if the axis is a latitude axis."
    "``Integer``", "``isLevel()``", "Returns true if the axis is a level axis."
@@ -461,11 +476,13 @@ CoordinateAxis Methods, Additional to CoordinateAxis
    "``List`` of relative times", "``asRelativeTime()``", "``Array`` version of ``cdtime torel``. Returns a ``List`` of relative times."
    "``None``", "``designateCircular(modulo, persistent=0)``", "Designate the axis to be circular. 
            * ``modulo`` is the modulus value. Any given axis value ``x`` is treated as equivalent to ``x + modulus``.
-            **Note:** If ``persistent`` is ``True``, the external file or dataset (if any) is modified. By default, the designation is temporary."
+           * If ``persistent`` is ``True``, the external file or dataset (if any) is modified. 
+           * By default, the designation is temporary."
    "``Integer``", "``isCircular()``", "Returns ``True`` if the axis has circular topology. An axis is defined as circular if:
 
     * ``axis.topology == 'circular'``, or
-    * ``axis.topology`` is undefined, and the axis is a longitude. The default cycle for circular axes is 360.0"
+    * ``axis.topology`` is undefined, and the axis is a longitude. 
+    * The default cycle for circular axes is 360.0"
    "``Integer``", "``isLinear()``", "Returns ``True`` if the axis has a linear representation."
    "``Tuple``", "``mapInterval(interval)``", "Same as ``mapIntervalExt``, but returns only the tuple ``(i,j)``, and ``wraparound`` is restricted to one cycle."
    "``(i,j,k)``", "``mapIntervalExt(interval)``", "Map a coordinate interval to an index ``interval``. ``interval`` is a tuple having one of the forms:
@@ -488,7 +505,9 @@ CoordinateAxis Methods, Additional to CoordinateAxis
        * if ``0 <= i < n`` and ``0 <= j <= n``, the interval does not wrap around the axis endpoint.
        * otherwise the interval wraps around the axis endpoint.
        * see also: ``mapinterval``, ``variable.subregion()``"
-   "``transientaxis``", "``subaxis(i,j,k=1)``", "create an axis associated with the integer range ``[i:j:k]``. the stride ``k`` can be positive or negative. wraparound is supported for longitude dimensions or those with a modulus attribute." 
+   "``transientaxis``", "``subaxis(i,j,k=1)``", "create an axis associated with the integer range ``[i:j:k]``.
+       * the stride ``k`` can be positive or negative. 
+       * wraparound is supported for longitude dimensions or those with a modulus attribute." 
 
 CoordinateAxis Slice Operators
 ------------------------------
@@ -610,11 +629,13 @@ CdmsFile Methods Copy Axis, Grid
    :widths:  10, 30, 80
    :align: left
 
-   "``Axis``", "``copyAxis(axis, newname=None)``", "Copy ``axis`` values and attributes to a new axis in the file. The returned object is persistent: it can be used to write axis data to or read axis data from the file.
+   "``Axis``", "``copyAxis(axis, newname=None)``", "Copy ``axis`` values and attributes to a new axis in the file. 
+         * The returned object is persistent: it can be used to write axis data to or read axis data from the file.
          *  If an axis already exists in the file, having the same name and coordinate values, it is returned.  It is an error if an axis of the same name exists, but with different coordinate values. 
          * ``axis`` is the axis object to be copied. 
          * ``newname``, if specified, is the string identifier of the new axis object. If not specified, the identifier of the input axis is used."
-   "``Grid``", "``copyGrid(grid, newname=None)``", "Copy grid values and attributes to a new grid in the file. The returned grid is persistent. 
+   "``Grid``", "``copyGrid(grid, newname=None)``", "Copy grid values and attributes to a new grid in the file. 
+         * The returned grid is persistent. 
          * If a grid already exists in the file, having the same name and axes, it is returned. An error is raised if a grid of the same name exists, having different axes. 
          * ``grid`` is the grid object to be copied.
          *  ``newname``, if specified is the string identifier of the new grid object. If unspecified, the identifier of the input grid is used."
@@ -627,24 +648,28 @@ CdmsFile Methods Create Axis, RectGrid and Variable
    :widths:  10, 30, 80
    :align: left
 
-   "``Axis``", "``createAxis(id,ar, unlimited=0)``", "Create a new ``Axis``.  This is a persistent object which can be used to read or write axis data to the file.
-        *  ``id`` is an alphanumeric string identifier, containing no blanks.  
-        *  ``ar`` is the one-dimensional axis array. 
-        *   Set ``unlimited`` to ``cdms.Unlimited`` to indicate that the axis is extensible."
-   "``RectGrid``", "``createRectGrid(id,lat, lon,order,type='generic', mask=None)``", "Create a ``RectGrid`` in the file. This is not a persistent object: the order, type, and mask are not written to the file. However, the grid may be used for regridding operations.  
+   "``Axis``", "``createAxis(id,ar, unlimited=0)``", "Create a new ``Axis``. 
+         * This is a persistent object which can be used to read or write axis data to the file.
+         * ``id`` is an alphanumeric string identifier, containing no blanks.  
+         * ``ar`` is the one-dimensional axis array. 
+         *  Set ``unlimited`` to ``cdms.Unlimited`` to indicate that the axis is extensible."
+   "``RectGrid``", "``createRectGrid(id,lat, lon,order,type='generic', mask=None)``", "Create a ``RectGrid`` in the file. 
+         * This is not a persistent object: the order, type, and mask are not written to the file. However, the grid may be used for regridding operations.  
          * ``lat`` is a latitude axis in the file. 
          * ``lon`` is a longitude axis in the file. 
          * ``order`` is a string with value ``'yx'`` (the latitude) or ``'xy'`` (the first grid dimension is longitude).  
          * ``type`` is one of ``'gaussian'``,\ ``'uniform'``,\ ``'equalarea'`` , or ``'generic'``.
          *  If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
-   "``Variable``", "``createVariable(Stringid,String datatype,Listaxes,fill_value=None)``", "Create a new Variable.  This is a persistent object which can be used to read or write variable data to the file. 
-        * ``id`` is a String name which is unique with respect to all other objects in the file.
-        * ``datatype`` is an ``MV2`` typecode, e.g., ``MV2.Float``, ``MV2.Int``.
-        * ``axes`` is a list of Axis and/or Grid objects.  
-        * ``fill_value`` is the missing value (optional)."
-   "``Variable``", "``createVariableCopy(var, newname=None)``", "Create a new ``Variable``, with the   same name, axes, and attributes as the input variable. An error is raised if a variable of the same name exists in the file. 
-       * ``var`` is the ``Variable`` to be copied. 
-       * ``newname``, if specified is the name of the new variable. If unspecified, the returned variable has the same name as ``var``.
+   "``Variable``", "``createVariable(Stringid,String datatype,Listaxes,fill_value=None)``", "Create a new Variable. 
+         * This is a persistent object which can be used to read or write variable data to the file. 
+         * ``id`` is a String name which is unique with respect to all other objects in the file.
+         * ``datatype`` is an ``MV2`` typecode, e.g., ``MV2.Float``, ``MV2.Int``.
+         * ``axes`` is a list of Axis and/or Grid objects.  
+         * ``fill_value`` is the missing value (optional)."
+   "``Variable``", "``createVariableCopy(var, newname=None)``", "Create a new ``Variable``, with the   same name, axes, and attributes as the input variable.
+        * An error is raised if a variable of the same name exists in the file. 
+        * ``var`` is the ``Variable`` to be copied. 
+        * ``newname``, if specified is the name of the new variable. If unspecified, the returned variable has the same name as ``var``.
 
     **Note:** Unlike copyAxis, the actual data is not copied to the new variable."
 
@@ -657,9 +682,10 @@ CdmsFile Methods Read CurveGrid, Generic-Grid
    :widths:  10, 30, 80
    :align: left
 
-   "``CurveGrid`` or ``Generic-Grid``", "``readScripGrid  (self,whichGrid='destination',  check-Grid=1)``", "Read a curvilinear or generic grid from a SCRIP netCDF file. The file can be a SCRIP grid file or remapping file. 
-        *  If a mapping file, ``whichGrid`` chooses the grid to read, either ``'source'`` or ``'destination'``.
-        *  If ``checkGrid`` is ``1`` (default), the grid cells are checked for convexity, and 'repaired' if necessary.  Grid cells may appear to be nonconvex if they cross a ``0 / 2pi`` boundary. 
+   "``CurveGrid`` or ``Generic-Grid``", "``readScripGrid  (self,whichGrid='destination',  check-Grid=1)``", "Read a curvilinear or generic grid from a SCRIP netCDF file. 
+        * The file can be a SCRIP grid file or remapping file. 
+        * If a mapping file, ``whichGrid`` chooses the grid to read, either ``'source'`` or ``'destination'``.
+        * If ``checkGrid`` is ``1`` (default), the grid cells are checked for convexity, and 'repaired' if necessary.  Grid cells may appear to be nonconvex if they cross a ``0 / 2pi`` boundary. 
         * The repair consists of shifting the cell vertices to the same side modulo 360 degrees."
     "``None``", "``sync()``", "Writes any pending changes to the file."
 
@@ -673,7 +699,8 @@ CdmsFile Methods Write Variable
    :align: left
 
 
-   "``Variable``", "``write(var,attributes=None,axes=None, extbounds=None,id=None,extend=None, fill_value=None, index=None, typecode=None)``","Write a variable or array to the file. The return value is the associated file variable.
+   "``Variable``", "``write(var,attributes=None,axes=None, extbounds=None,id=None,extend=None, fill_value=None, index=None, typecode=None)``","Write a variable or array to the file.
+    * The return value is the associated file variable.
     * If the variable does not exist in the file, it is first defined and all attributes written, then the data is written. By default, the time dimension of the variable is defined as the unlimited dimension of the file.
     * If the data is already defined, then data is extended or overwritten depending on the value of keywords ``extend`` and ``index``, and the unlimited dimension values associated with ``var``.
 
@@ -1143,7 +1170,10 @@ Dataset Constructors
    :widths:  50, 80
    :align: left
 
-    "``datasetobj = cdms.open(String uri, String mode='r')``", "Open the dataset specified by the Universal Resource Indicator, a CDML file. Returns a Dataset object. mode is one of the indicators listed in `Open Modes <#id3>`__ . ``openDataset`` is a synonym for ``open``"
+    "``datasetobj = cdms.open(String uri, String mode='r')``", "Open the dataset specified by the Universal Resource Indicator, a CDML file.
+    * Returns a Dataset object. 
+    * mode is one of the indicators listed in `Open Modes <#id3>`__ .
+    * ``openDataset`` is a synonym for ``open``"
 
 
 Open Modes
@@ -1189,7 +1219,8 @@ Dataset Methods
 
        * gets the axis named time, equivalent to ``t=f.axes['time']``"
     "``None``", "``close()``", "Close the dataset."
-    "``RectGrid``", "``createRectGrid(id, lat, lon,order, type='generic', mask=None)``", "Create a RectGrid in the dataset. This is not a persistent object: the order, type, and mask are not written to the dataset. However, the grid may be used for regridding operations.
+    "``RectGrid``", "``createRectGrid(id, lat, lon,order, type='generic', mask=None)``", "Create a RectGrid in the dataset. 
+    * This is not a persistent object: the order, type, and mask are not written to the dataset. However, the grid may be used for regridding operations.
     * ``lat`` is a latitude axis in the dataset.
     * ``lon`` is a longitude axis in the dataset.
     * ``order`` is a string with value 'yx' (the first grid dimension is latitude) or 'xy' (the first grid dimension is longitude).
@@ -1202,11 +1233,12 @@ Dataset Methods
     "List", "``getPaths()``", "Get a sorted list of pathnames of datafiles which comprise the dataset. This does not include the XML metafile path, which is stored in the .uri attribute."
     "Variable", "``getVariable(id)``", "Get a variable object from a file or dataset.
     * ``id`` is the string variable identifier."
-    "CurveGrid or GenericGrid", "``readScripGrid(self, whichGrid='destination', check-orGeneric-Grid=1)``", "Read a curvilinear orgeneric grid from a SCRIP dataset. The dataset can be a SCRIP grid file or remappingfile.
-
+    "CurveGrid or GenericGrid", "``readScripGrid(self, whichGrid='destination', check-orGeneric-Grid=1)``", "Read a curvilinear orgeneric grid from a SCRIP dataset. 
+    * The dataset can be a SCRIP grid file or remappingfile.
     * If a mapping file, ``whichGrid`` chooses the grid to read, either ``'source'`` or ``'destination'``.
-
-    * If ``checkGrid`` is 1 (default), the grid cells are checked for convexity, and 'repaired' if necessary.  Grid cells may appear to be nonconvex if they cross a ``0 / 2pi`` boundary. The repair consists of shifting the cell vertices to the same side modulo 360 degrees."
+    * If ``checkGrid`` is 1 (default), the grid cells are checked for convexity, and 'repaired' if necessary.  
+    * Grid cells may appear to be nonconvex if they cross a ``0 / 2pi`` boundary. 
+    * The repair consists of shifting the cell vertices to the same side modulo 360 degrees."
     "None", "``sync()``", "Write any pending changes to the dataset."
 
 
@@ -1407,7 +1439,8 @@ HorizontalGrid Methods
     "Horizontal-Grid", "``clone()``", "Return a transient copy of the grid."
     "Axis", "``getAxis(Integer n)``", "Get the n-th axis.n is either 0 or 1."
     "Tuple", "``getBounds()``", "Get the grid boundary arrays.
-       * Returns a tuple ``(latitudeArray, longitudeArray)``, where latitudeArray is a Numpy array of latitude bounds, and similarly for longitudeArray.The shape of latitudeArray and longitudeArray depend on the type of grid:
+       * Returns a tuple ``(latitudeArray, longitudeArray)``, where latitudeArray is a Numpy array of latitude bounds, and similarly for longitudeArray.
+       The shape of latitudeArray and longitudeArray depend on the type of grid:
 
        *  For rectangular grids with shape (nlat, nlon), the boundary arrays have shape (nlat,2) and (nlon,2).
        *  For curvilinear grids with shape (nx, ny), the boundary arrays each have shape (nx, ny, 4).
@@ -1418,8 +1451,11 @@ HorizontalGrid Methods
        * By default, the grid type (Gaussian, uniform, etc.) is determined by calling grid.classifyInFamily.  If the mode is 'off' grid.getType is used instead."
     "Axis", "``getLatitude()``", "Get the latitude axis of this grid."
     "Axis", "``getLongitude()``", "Get the latitude axis of this grid."
-    "Axis", "``getMask()``", "Get the mask array of this grid, if any.Returns a 2-D Numpy array, having the same shape as the grid. If the mask is not explicitly defined, the return value is ``None``."
-    "Axis", "``getMesh(self, transpose=None)``", "Generate a mesh array for the meshfill graphics method.If transpose is defined to a tuple, say (1,0), first transpose latbounds and lonbounds according to the tuple, in this case (1,0,2)."
+    "Axis", "``getMask()``", "Get the mask array of this grid, if any.
+       * Returns a 2-D Numpy array, having the same shape as the grid.
+       * If the mask is not explicitly defined, the return value is ``None``."
+    "Axis", "``getMesh(self, transpose=None)``", "Generate a mesh array for the meshfill graphics method.
+       * If transpose is defined to a tuple, say (1,0), first transpose latbounds and lonbounds according to the tuple, in this case (1,0,2)."
     "None", "``setBounds(latBounds, lonBounds, persistent=0)``", "Set the grid boundaries. 
       * ``latBounds`` is a NumPy array of shape (n,2), such that the boundaries of the kth axis value are ``[latBounds[k,0],latBou nds[k,1] ]``. 
       *  ``lonBounds`` is defined similarly for the longitude array.
@@ -1483,7 +1519,8 @@ RectGrid Methods, Additional to HorizontalGrid Methods
     * Also see the function ``area_weights`` in module ``pcmdi.weighting``."
     "None", "``setType(gridtype)``", "Set the grid type.
     * ``gridtype`` is one of 'gaussian', 'uniform', 'equalarea', or 'generic'."
-    "RectGrid", "``subGrid((latStart,latStop),(lonStart,lonStop))``", "Create a new grid, with latitude index range ``latStart : latStop]`` and longitude index range ``[lonStart : lonStop]``.  Either index range can also be specified as None, indicating that the entire range of the latitude or longitude is used.
+    "RectGrid", "``subGrid((latStart,latStop),(lonStart,lonStop))``", "Create a new grid, with latitude index range ``latStart : latStop]`` and longitude index range ``[lonStart : lonStop]``. 
+    * Either index range can also be specified as None, indicating that the entire range of the latitude or longitude is used.
    
     **Example:**
 
@@ -1492,8 +1529,9 @@ RectGrid Methods, Additional to HorizontalGrid Methods
     * If a mask is defined, the subgrid also has a mask corresponding to the index ranges.
 
      **Note:** The result grid is not associated with any file or dataset."
-    "RectGrid", "``transpose()``", "Create a new grid, with axis order reversed. The grid mask is also transposed.
-       **Note:** The result grid is not associated with any file or dataset."
+    "RectGrid", "``transpose()``", "Create a new grid, with axis order reversed. 
+    * The grid mask is also transposed.
+    **Note:** The result grid is not associated with any file or dataset."
 
 
 Variable
@@ -1576,15 +1614,22 @@ Variable Methods
    :align: left
 
 
-    "Variable", "``tvar = var[ i:j, m:n]``", "Read a slice of data from the file or dataset, resulting in a transient variable.  Singleton dimensions are 'squeezed' out. Data is returned in the physical ordering defined in the dataset. The forms of the slice operator are listed in `Variable Slice Operators <#id12>`_ "
-    "None", "``var[ i:j, m:n] = array``", "Write a slice of data to the external dataset.  The forms of the slice operator are listed in `Result Entry Methods <#table-resultentry-methods>`_ .  (Variables in CdmsFiles only)"
-    "Variable", "``tvar = var(selector)``", "Calling a variable as a function reads the region of data defined by the selector. The result is a transient variable, unless raw=1 keyword is specified.  See `Selectors <#id14>`_."
+    "Variable", "``tvar = var[ i:j, m:n]``", "Read a slice of data from the file or dataset, resulting in a transient variable.  
+    * Singleton dimensions are 'squeezed' out. 
+    * Data is returned in the physical ordering defined in the dataset. 
+    * The forms of the slice operator are listed in `Variable Slice Operators <#id12>`_ "
+    "None", "``var[ i:j, m:n] = array``", "Write a slice of data to the external dataset.  
+    * The forms of the slice operator are listed in `Result Entry Methods <#table-resultentry-methods>`_ .  (Variables in CdmsFiles only)"
+    "Variable", "``tvar = var(selector)``", "Calling a variable as a function reads the region of data defined by the selector. 
+    * The result is a transient variable, unless raw=1 keyword is specified.  See `Selectors <#id14>`_."
     "None", "``assignValue(Array ar)``", "Write the entire data array. Equivalent to ``var[:] = ar``.  (Variables in CdmsFiles only)."
-    "Variable", "``astype(typecode)``", "Cast the variable to a new datatype. Typecodes are as for MV, MV2, and Numpy modules."
+    "Variable", "``astype(typecode)``", "Cast the variable to a new datatype. 
+    * Typecodes are as for MV, MV2, and Numpy modules."
     "Variable", "``clone(copyData=1)``", "Return a copy of a transient variable.
     * If copyData is 1 (the default) the variable data is copied as well. 
     * If copyData is 0, the result transient variable shares the original transient variables data array."
-    "Transient Variable", "``crossSectionRegrid(newLevel, newLatitude, method='log', missing=None, order=None)``", "Return a lat/level vertical cross-section regridded to a new set of latitudes newLatitude and levels newLevel. The variable should be a function of latitude, level, and (optionally) time.
+    "Transient Variable", "``crossSectionRegrid(newLevel, newLatitude, method='log', missing=None, order=None)``", "Return a lat/level vertical cross-section regridded to a new set of latitudes newLatitude and levels newLevel.
+     * The variable should be a function of latitude, level, and (optionally) time.
      * ``newLevel`` is an axis of the result pressure levels.
      * ``newLatitude`` is an axis of the result latitudes.
      * ``method`` is optional, either 'log' to interpolate in the log of pressure (default), or 'linear' for linear interpolation.
@@ -1608,7 +1653,8 @@ Variable Methods
     * ``order`` can be a string containing the characters t,x,y,z, or * .
     * If a dash ('-') is given, any elements of the result not chosen otherwise are filled in from left to right with remaining candidates."
     "List", "``getAxisListIndex(axes=None, omit=None, order=None)``", "Return a list of indices of axis objects.  Arguments are as for ``getAxisList``."
-    "List", "``getDomain()``", "Get the domain. Each element of the list is itself a tuple of the form ``(axis,start,length,tru e_length)`` where axis is an axis object,
+    "List", "``getDomain()``", "Get the domain. 
+    * Each element of the list is itself a tuple of the form ``(axis,start,length,tru e_length)`` where axis is an axis object,
     * ``start`` is the start index of the domain relative to the axis object, 
     * ``length`` is the length of the axis, and
     * ``true\_length`` is the actual number of (defined) points in the domain.
@@ -1618,7 +1664,11 @@ Variable Methods
     "Axis", "``getLevel()``", "Get the vertical level axis, or ``None`` if not found."
     "Axis", "``getLongitude()``", "Get the longitude axis, or ``None`` if not found."
     "Various", "``getMissing()``", "Get the missing data value, or ``None`` if not found.
-   String ``getOrder()`` Get the order string of a spatio-temporal variable. The order string specifies the physical ordering of the data. It is a string of characters with length equal to the rank of the variable, indicating the order of the variable's time, level, latitude, and/or longitude axes.  Each character is one of:
+    * String ``getOrder()`` 
+    * Get the order string of a spatio-temporal variable.
+    * The order string specifies the physical ordering of the data.
+    * It is a string of characters with length equal to the rank of the variable, indicating the order of the variable's time, level, latitude, and/or longitude axes. 
+     Each character is one of:
     *  't': time
     *  'z': vertical level
     *  'y': latitude
@@ -1635,9 +1685,11 @@ Variable Methods
     **Note:** This function is not defined for transient variables."
     "Axis", "``getTime()``", "Get the time axis, or ``None`` if not found."
     "List", "``getPaths(*intervals)``", "Get the file paths associated with the index region specified by intervals."
-    "Integer", "``len(var)``", "The length of the first dimension of the variable. If the variable is zero-dimensional (scalar), a length of 0 is returned.
+    "Integer", "``len(var)``", "The length of the first dimension of the variable. 
+    * If the variable is zero-dimensional (scalar), a length of 0 is returned.
     **Note:** ``size()`` returns the total number of elements."
-    "Transient Variable", "``pressureRegrid (newLevel, method='log', missin=None, order=None)``", "Return the variable regridded to a new set of pressure levels newLevel. The variable must be a function of latitude, longitude, pressure level, and (optionally) time.
+    "Transient Variable", "``pressureRegrid (newLevel, method='log', missin=None, order=None)``", "Return the variable regridded to a new set of pressure levels newLevel.
+    * The variable must be a function of latitude, longitude, pressure level, and (optionally) time.
     * ``newLevel`` is an axis of the result pressure levels.
     * ``method`` is optional, either 'log' to interpolate in the log of pressure (default), or 'linear' for linear interpolation.
     * ``missing`` is a missing data value. The default is ``var.getMissing()``

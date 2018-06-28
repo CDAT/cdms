@@ -44,9 +44,8 @@ where
 -  ``element-content`` depends on the type of element. It is either a
    list of elements, or text which defines the element values. For
    example, the content of an axis element either is a list of axis
-   values, or is a linear element. For datasets, the content is the
-   blank-separated list of elements corresponding to the axes, grids,
-   and variables contained in the dataset.
+   values, or is a linear element. 
+-  For datasets, the content is the blank-separated list of elements corresponding to the axes, grids, and variables contained in the dataset.
 
 The CDML elements are:
 

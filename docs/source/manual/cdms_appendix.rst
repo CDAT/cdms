@@ -4,7 +4,7 @@ APPENDIX A
 CDMS Classes
 ~~~~~~~~~~~~
 
-Figure 1, "CDMS Classes", on page 175 illustrates the class inheritance
+Figure 1, "CDMS Classes", illustrates the class inheritance
 structure of CDMS. The classes may be categorized as abstract or
 concrete. Only concrete classes are meant to be used directly. In
 contrast an abstract class defines the common interface of its
@@ -197,8 +197,8 @@ cdms module
 CdmsFile
 ''''''''
 
--  The function createVariable has a keyword fill\_value. The datatype
-   may be a Numpy/MV typecode.
+-  The function createVariable has a keyword fill\_value.
+-  The datatype may be a Numpy/MV typecode.
 -  The function write was added.
 
 CDMSError
@@ -214,9 +214,12 @@ AbstractRectGrid
 InternalAttributes
 ''''''''''''''''''
 
--  The class InternalAttributes was added. It has methods
-   add\_internal\_attribute, is\_internal\_attribute, and
-   replace\_external\_attributes.
+-  The class InternalAttributes was added. 
+-  It has methods:
+   
+   * add\_internal\_attribute
+   * is\_internal\_attribute
+   * replace\_external\_attributes
 
 TransientVariable
 '''''''''''''''''

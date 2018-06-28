@@ -48,18 +48,9 @@ def intersectHorizontalGrid(latspecs, lonspecs, latlin, lonlin, index):
         index:
             index is the bin index as returned from bindex.
 
-<<<<<<< HEAD
     Returns
     -------
        an array of indices, in latlin/lonlin, of the points in the intersection.
-||||||| merged common ancestors
-    Returns an array of indices, in latlin/lonlin, of the points in
-    the intersection.
-=======
-    Returns
-    -------
-    an array of indices, in latlin/lonlin, of the points in the intersection.
->>>>>>> f6c041d9b547372b3875cdbfe7cad805a03b382a
     """
     points = numpy.zeros(len(latlin), dtype='l')
     if latspecs is None:

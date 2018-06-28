@@ -37,9 +37,12 @@ FIGURE 1. CDMS Classes
                        
   
 
+
+
 APPENDIX B
 ----------
 
+<<<<<<< HEAD
 Quick Start (Cheat Sheet)
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 .. figure:: /manual/images/cdms_quick_start.jpg
@@ -60,6 +63,29 @@ VCS Quick Reference (Cheat Sheet)
 :download:`vcs quick ref <docs/vcs_quick_ref.pdf>`
 
 Release Notes
+||||||| merged common ancestors
+Version Notes
+=======
+Quick Start (Cheat Sheet)
+~~~~~~~~~~~~~~~~~~~~~~~~~
+.. figure:: /manual/images/cdms_quick_start.jpg
+   :scale: 25%
+   :alt: cheat sheet
+
+:download:`cdms quick start <docs/cdms_quick_start.pdf>`
+
+
+VCS Quick Reference (Cheat Sheet)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. figure:: /manual/images/vcs_quick_ref.jpg
+   :scale: 25%
+   :alt:  VCS Cheat Sheet
+
+
+
+Release Notes
+>>>>>>> f6c041d9b547372b3875cdbfe7cad805a03b382a
 ~~~~~~~~~~~~~
 
 Release 4.0
@@ -210,8 +236,16 @@ in CDMS, and ``cuDataset``, corresponding to ``Dataset`` in CDMS.
 Slab
 ~~~~
 
+<<<<<<< HEAD
 Slab Methods
 ^^^^^^^^^^^^
+||||||| merged common ancestors
+Table C.1 Slab Methods
+^^^^^^^^^^^^^^^^^^^^^^
+=======
+Table Slab Methods
+^^^^^^^^^^^^^^^^^^^^^^
+>>>>>>> f6c041d9b547372b3875cdbfe7cad805a03b382a
 
 
 .. csv-table:: 
@@ -219,6 +253,7 @@ Slab Methods
    :widths: 20,50,80
    :align: left
 
+<<<<<<< HEAD
    "Various", "``getdimattribute(dim, field)``", "Get the value of a dimension attribute.  
         * ``dim`` is the dimension number, an integer in the range 0..rank- 1. 
         * ``field`` is a string, one of:  'name', 'values', 'length', 'units', 'weights', 'bounds'."
@@ -236,6 +271,21 @@ Slab Methods
    "None", "``setattribute(name, value)``", "Set an attribute. 
         * ``name`` is the string name of the attribute. 
         * ``value`` is the value of the attribute."
+||||||| merged common ancestors
+   "Various", "``getdimattribute(dim, field)``", "Get the value of a dimension attribute.  ``dim`` is the dimension number, an integer in the range 0..rank- 1.  ``field`` is a string, one of:  'name', 'values', 'length', 'units', 'weights', 'bounds'."
+   "Various", "``getattribute(name)``", "Get the value of an attribute.``name`` is the string name of the attribute. The following special names can always be used:  'filename', 'comments', 'grid_name', 'grid_type', 'time_statistic', 'long_name', 'units'."
+   "None", "``info(flag=None, device=sys.stdout)``", "Print slab information.  If ``flag`` is nonzero, dimension values, weights, and bounds are also printed.  Output is sent to ``device ``. "
+   "List", "``listall(all=None)``", "Print slab information.  If ``all`` is nonzero, dimension values, weights, and bounds are also printed."
+   "List", "``listdimattributes(dim, field)``", "List dimension attributes.  Returns a list of string attribute names which can be input to ``getdimattribute``.  ``dim`` is the dimension number, an integer in the range 0..rank-1.  ``field`` is a string, one of: 'name', 'values', 'length', 'units', 'weights', 'bounds'."
+   "None", "``setattribute(name, value)``", "Set an attribute.  ``name`` is the string name of the attribute.  ``value`` is the value of the attribute."
+=======
+   "Various", "``getdimattribute(dim, field)``", "Get the value of a dimension attribute.  ``dim`` is the dimension number, an integer in the range 0..rank- 1.  ``field`` is a string, one of:  'name', 'values', 'length', 'units', 'weights', 'bounds'."
+   "Various", "``getattribute(name)``", "Get the value of an attribute.``name`` is the string name of the attribute. The following special names can always be used:  'filename', 'comments', 'grid_name', 'grid_type', 'time_statistic', 'long_name', 'units'."
+   "None", "``info(flag=None, device=sys.stdout)``", "Print slab information.  If ``flag`` is nonzero, dimension values, weights, and bounds are also printed.  Output is sent to ``device``."
+   "List", "``listall(all=None)``", "Print slab information.  If ``all`` is nonzero, dimension values, weights, and bounds are also printed."
+   "List", "``listdimattributes(dim, field)``", "List dimension attributes.  Returns a list of string attribute names which can be input to ``getdimattribute``.  ``dim`` is the dimension number, an integer in the range 0..rank-1.  ``field`` is a string, one of: 'name', 'values', 'length', 'units', 'weights', 'bounds'."
+   "None", "``setattribute(name, value)``", "Set an attribute.  ``name`` is the string name of the attribute.  ``value`` is the value of the attribute."
+>>>>>>> f6c041d9b547372b3875cdbfe7cad805a03b382a
 
 
 
@@ -243,12 +293,21 @@ Slab Methods
 cuDataset
 ~~~~~~~~~
 
+<<<<<<< HEAD
 cuDataset Methods
 ^^^^^^^^^^^^^^^^^
+||||||| merged common ancestors
+Table C.2 cuDataset Methods
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+=======
+Table cuDataset Methods
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>>>>>>> f6c041d9b547372b3875cdbfe7cad805a03b382a
 
 .. csv-table:: 
    :header: "Type", "Method", "Definition"
    :widths: 20, 50, 80
+<<<<<<< HEAD
    :align: left
 
    "None", "``cleardefault()``", "Clear the default variable name."
@@ -294,4 +353,72 @@ cuDataset Methods
        * ``vname`` is the string name of the variable. Output is sent to device." 
    "None", "``showglobal (device=sys.stdout)``", "Print the global file attributes. Output is sent to device."
    "None", "``showvariable (device=sys.stdout)``", "Print the list of variables in the file."
+||||||| merged common ancestors
+
+   "None", "cleardefault()", "Clear the default variable name."
+   "None", "default_variable(vname)", "Set the default variable name."
+   ,,"vname is the string variable name."
+   "Array", "dimensionarray(dname, vname=None)", "Values of the axis named dname."
+   ,,"dname is the string axis name."
+   ,,"vname is the string variable name. The default is the variable name set by default_variable."
+   "Axis", "dimensionobject(dname, vname=None)", "Get an axis. dname is the string name of an axis. vname is a string variable name. The default is the variable name set by default_variable."
+   "Various", "getattribute (vname, attribute)", "Get an attribute value. vname is a string variable name. attribute is the string attribute name."
+   "String", "getdimensionunits (dname,vname=None)", "Get the units for the given dimension."
+   ,,"dname is the string name of an axis."
+   ,,"vname is a string variable name. The default is the variable name set by default_variable."
+   "Various", "getglobal (attribute)", "Get the value of the global attribute. attribute is the string attribute name."
+   "Variable", "getslab (vname, \*args)", "Read data for a variable."
+   ,, "vname is the string name of the variable."
+   ,, "args is an argument list corresponding to the dimensions of the variable. Arguments for each dimension can be:"
+   ,, "- ':' or None -- select the entire dimension"
+   ,, "- Ellipsis -- select entire dimensions between the ones given."
+   ,, "- a pair of successive arguments giving an interval in world coordinates."
+   ,, "- a CDMS-style tuple of world coordinates e.g. (start, stop, 'cc')"
+   "List", "listall (vname=None, all=None)", "Get info about data from the file."
+   ,, "vname is the string name of the variable."
+   ,, "If all is non-zero, dimension values, weights, and bounds are returned as well"
+   "List", "listattribute (vname=None )", "Return a list of attribute names. vname is the name of the variable. The default is the variable name set by default_variable."
+   "List", "listdimension (vname=None)", "Return a list of the dimension names associated with a variable. vname is the name of the variable. The default is the variable name set by default_variable."
+   "List", "listglobal ()", "Return a list of the global attribute names."
+   "List", "listvariable ()", "Return a list of the variables in the file."
+   "None", "showall (vname=None, all=None, device=sys.stdout)", "Print a description of the variable. vname is the string name of the variable. If all is non-zero, dimension values, weights, and bounds are returned as well. Output is sent to device."
+   "None", "showattribute (vname=None, device=sys.stdout)", "Print the attributes of a variable. vname is the string name of the variable. Output is sent to device."
+   "None", "showdimension (vname=None, device=sys.stdout)", "Print the dimension names associated with a variable. vname is the string name of the variable. Output is sent to device." 
+   "None", "showglobal (device=sys.stdout)", "Print the global file attributes. Output is sent to device."
+   "None", "showvariable (device=sys.stdout)", "Print the list of variables in the file."
+=======
+   :align: left
+
+   "None", "``cleardefault()``", "Clear the default variable name."
+   "None", "``default_variable(vname``)", "Set the default variable name."
+   ,,"vname is the string variable name."
+   "Array", "``dimensionarray(dname, vname=None``)", "Values of the axis named dname."
+   ,,"dname is the string axis name."
+   ,,"vname is the string variable name. The default is the variable name set by default_variable."
+   "Axis", "``dimensionobject(dname, vname=None)``", "Get an axis. dname is the string name of an axis. vname is a string variable name. The default is the variable name set by default_variable."
+   "Various", "``getattribute (vname, attribute``)", "Get an attribute value. vname is a string variable name. attribute is the string attribute name."
+   "String", "``getdimensionunits (dname,vname=None``)", "Get the units for the given dimension."
+   ,,"dname is the string name of an axis."
+   ,,"vname is a string variable name. The default is the variable name set by default_variable."
+   "Various", "``getglobal (attribute)``", "Get the value of the global attribute. attribute is the string attribute name."
+   "Variable", "``getslab (vname, \*args)``", "Read data for a variable."
+   ,, "vname is the string name of the variable."
+   ,, "args is an argument list corresponding to the dimensions of the variable. Arguments for each dimension can be:"
+   ,, "- ':' or None -- select the entire dimension"
+   ,, "- Ellipsis -- select entire dimensions between the ones given."
+   ,, "- a pair of successive arguments giving an interval in world coordinates."
+   ,, "- a CDMS-style tuple of world coordinates e.g. (start, stop, 'cc')"
+   "List", "``listall (vname=None, all=None)``", "Get info about data from the file."
+   ,, "vname is the string name of the variable."
+   ,, "If all is non-zero, dimension values, weights, and bounds are returned as well"
+   "List", "``listattribute (vname=None )``", "Return a list of attribute names. vname is the name of the variable. The default is the variable name set by default_variable."
+   "List", "``listdimension (vname=None)``", "Return a list of the dimension names associated with a variable. vname is the name of the variable. The default is the variable name set by default_variable."
+   "List", "``listglobal ()``", "Return a list of the global attribute names."
+   "List", "``listvariable ()``", "Return a list of the variables in the file."
+   "None", "``showall (vname=None, all=None, device=sys.stdout)``", "Print a description of the variable. vname is the string name of the variable. If all is non-zero, dimension values, weights, and bounds are returned as well. Output is sent to device."
+   "None", "``showattribute (vname=None, device=sys.stdout)``", "Print the attributes of a variable. vname is the string name of the variable. Output is sent to device."
+   "None", "``showdimension (vname=None, device=sys.stdout)``", "Print the dimension names associated with a variable. vname is the string name of the variable. Output is sent to device." 
+   "None", "``showglobal (device=sys.stdout)``", "Print the global file attributes. Output is sent to device."
+   "None", "``showvariable (device=sys.stdout)``", "Print the list of variables in the file."
+>>>>>>> f6c041d9b547372b3875cdbfe7cad805a03b382a
 

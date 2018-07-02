@@ -475,7 +475,8 @@ CoordinateAxis Methods, Additional to CoordinateAxis
    "``List`` of component times", "``asComponentTime(calendar=None)``", "``Array`` version of ``cdtime tocomp``. Returns a ``List`` of component times."
    "``List`` of relative times", "``asRelativeTime()``", "``Array`` version of ``cdtime torel``. Returns a ``List`` of relative times."
    "``None``", "``designateCircular(modulo, persistent=0)``", "Designate the axis to be circular. 
-           * ``modulo`` is the modulus value. Any given axis value ``x`` is treated as equivalent to ``x + modulus``.
+           * ``modulo`` is the modulus value.
+           * Any given axis value ``x`` is treated as equivalent to ``x + modulus``.
            * If ``persistent`` is ``True``, the external file or dataset (if any) is modified. 
            * By default, the designation is temporary."
    "``Integer``", "``isCircular()``", "Returns ``True`` if the axis has circular topology. An axis is defined as circular if:
@@ -1588,7 +1589,8 @@ Variable Constructors
     "``Dataset.createVariable(String id, String datatype, List axes)``", "Create a Variable in a Dataset. This function is not yet implemented."
     "``CdmsFile.createVariable(String id, String datatype, List axes or Grids)``", "Create a Variable in a CdmsFile.
 
-    * ``id`` is the name of the variable.  ``datatype`` is the MV2 or Numpy | typecode, for example, MV2.Float.  
+    * ``id`` is the name of the variable. 
+    * ``datatype`` is the MV2 or Numpy | typecode, for example, MV2.Float.  
     * ``axesOrGrids`` is a list of Axis and/or Grid objects, on which the variable is defined. Specifying a rectilinear grid is equivalent to listing the grid latitude and longitude axes, in the order defined for the grid. 
     **Note:** this argument can either be a list or a tuple. If the tuple form is used, and there is only one element, it must have a following comma, e.g.: ``(axisobj,)``."
     "``cdms.createVariable(array, typecode=None, copy=0, savespace=0,mask=None, fill_value=None, grid=None, axes=None,attributes=None, id=None)``", "Create a transient variable, not associated with a file or dataset.  

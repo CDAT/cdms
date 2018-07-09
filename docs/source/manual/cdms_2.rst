@@ -56,7 +56,7 @@ PythonTypes used in CDMS
 
    "Array",  "Numpy or masked multidimensional data array. All elements of the array are of the same type. Defined in the Numpy and MV2 modules."
    "Comptime", "Absolute time value, a time with representation (year, month, day, hour, minute, second). Defined in the cdtime module. cf. reltime" 
-   "Dictionary","An unordered 2,3collection of objects, indexed by key. All dictionaries in CDMS are indexed by strings, e.g.: ``axes['time']``"
+   "Dictionary","An unordered 2,3 collection of objects, indexed by key. All dictionaries in CDMS are indexed by strings, e.g.: ``axes['time']``"
    "Float", "Floating-point value."
    "Integer", "Integer value."
    "List", "An ordered sequence of objects, which need not be of the same type. New members can be inserted or appended. Lists are denoted with square brackets, e.g., ``[1, 2.0, 'x', 'y']``"
@@ -100,15 +100,30 @@ latitude, longitude).
    :header:  "Line", "Notes"
    :widths:  10, 80
 
-   "2,3", "Makes the CDMS and MV modules available. MV defines arithmetic functions."
-   "4", "Opens a netCDF file read-only. The result jones is a dataset object."
-   "5", "Gets the surface air temperature variable. ‘tas’ is the name of the variable in the input dataset. This does not actually read the data."
-   "6", "Read all January monthly mean data into a variable jans. Variables can be sliced like arrays. The slice operator [0::12] means take every 12th slice from dimension 0, starting at index 0 and ending at the last index. If the stride 12 were omitted, it would default to 1. Note that the variable is actually 3-dimensional. Since no slice is specified for the second or third dimensions, all values of those 2,3 dimensions are retrieved. The slice operation could also have been written [0::12, : , :]. Also note that the same script works for multi-file datasets. CDMS opens the needed data files, extracts the appropriate slices, and concatenates them into the result array."
+   "2,3", "Makes the CDMS and MV modules available.
+       *  MV defines arithmetic functions."
+   "4", "Opens a netCDF file read-only. 
+       * The result jones is a dataset object."
+   "5", "Gets the surface air temperature variable. ‘tas’ is the name of the variable in the input dataset. 
+       * This does not actually read the data."
+   "6", "Read all January monthly mean data into a variable jans.
+       * Variables can be sliced like arrays. 
+       * The slice operator [0::12] means take every 12th slice from dimension 0, starting at index 0 and ending at the last index. 
+       * If the stride 12 were omitted, it would default to 1. 
+       **Note:** that the variable is actually 3-dimensional. Since no slice is specified for the second or third dimensions, all values of those 2,3 dimensions are retrieved. The slice operation could also have been written [0::12, : , :]. 
+
+       **Also note:** that the same script works for multi-file datasets. CDMS opens the needed data files, extracts the appropriate slices, and concatenates them into the result array."
    "7", "Reads all July data into a masked array julys."
-   "8", "Calculate the average January value for each grid zone. Any missing data is handled automatically."
-   "9,10", "Set the variable id and long\_name attributes. The id is used as the name of the variable when plotted or written to a file."
+   "8", "Calculate the average January value for each grid zone.
+       * Any missing data is handled automatically."
+   "9,10", "Set the variable id and long\_name attributes. 
+       * The id is used as the name of the variable when plotted or written to a file."
    "14", "Create a new netCDF output file named ‘janjuly.nc’ to hold the results."
-   "15", "Write the January average values to the output file. The variable will have id “tas\_jan” in the file. ``write`` is a utility function which creates the variable in the file, then writes data to the variable. A more general method of data output is first to create a variable, then set a slice of the variable. Note that janavg and julavg have the same latitude and longitude information as tasvar. It is carried along with the computations."
+   "15", "Write the January average values to the output file. 
+       * The variable will have id “tas\_jan” in the file.
+       * ``write`` is a utility function which creates the variable in the file, then writes data to the variable.
+       * A more general method of data output is first to create a variable, then set a slice of the variable.
+       **Note:** that janavg and julavg have the same latitude and longitude information as tasvar. It is carried along with the computations."
    "17", "Set the global attribute ‘comment’."
    "18", "Close the output file."
 

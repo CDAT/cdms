@@ -163,7 +163,7 @@ Dataset Attributes
     "appendices", "N", "N", "Y", "Version number"
     "calendar", "N", "N", "Y", "Calendar used for encoding time axes.
        * ``gregorian`` \| ``julian`` \| ``noleap`` \|\ ``360_day`` \| ``proleptic_gregorian`` \| ``standard``
-       * Note: for the CF convention, the calendar attribute is placed on the time axis."
+       **Note:** for the CF convention, the calendar attribute is placed on the time axis."
     "comment", "N", "Y", "Y", "Additional dataset information"
     "conventions", "Y", "Y", "Y", "The netCDF metadata standard. Example: 'CF-1.0'"
     "cdms_filemap", "Y", "N", "N", "Map of partitioned axes to files. See note below."

@@ -33,7 +33,7 @@ def lock(filename):
         If the function returns, the lock was acquired successfully.
 
 
-    Note: This function is UNIX-specific.
+    **Note:** This function is UNIX-specific.
 
     Note: It is important to delete the lock via unlock() if the process is
     interrupted, otherwise subsequent locks will fail.

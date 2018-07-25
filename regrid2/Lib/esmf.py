@@ -622,7 +622,7 @@ Parameters
 ----------
 
              srcField 
-                 the source field object of type EsmfStructField
+                 the source field object of type EsmfStructFields
 
              dstField
                  the destination field object of type EsmfStructField

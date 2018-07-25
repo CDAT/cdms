@@ -36,7 +36,7 @@ def lock(filename):
     Note: This function is UNIX-specific.
 
     Note: It is important to delete the lock via unlock() if the process is
-    interrupted, otherwise subsequent locks will fail.
+    interrupted, otherwise subsequent locks will fail. 
     """
 
     path = lockpath(filename)

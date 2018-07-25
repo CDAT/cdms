@@ -6,7 +6,7 @@ Overview
 
 The Community Data Management System is an object-oriented data management
 system, specialized for organizing multidimensional, gridded data used
-in climate analysis and simulation.
+in climate analysis and simulation. 
 
 CDMS is implemented as part of the Climate Data
 Analysis Tool (CDAT), which uses the Python language. The examples in

@@ -422,7 +422,7 @@ CoordinateAxis Constructors
 
 
 CoordinateAxis Methods
-----------------------
+-----------------------
 
 .. csv-table:: 
    :header:  "Type", "Method", "Definition"

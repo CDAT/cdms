@@ -42,7 +42,6 @@ database
       getitem
       searchPredicate
       len
-      getObject
 
       AbstractResultEntry
       getObject

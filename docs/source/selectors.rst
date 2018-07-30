@@ -6,9 +6,11 @@ selectors
 .. automodule:: cdms2.selectors
       :members:
 
+      SelectorError
       Selector
       components
       refine
+      repr
       and
       clone
       call
@@ -22,6 +24,7 @@ selectors
 
       axisComponent
       specify
+      repr
       
       coordinateComponent
       specifyGrid
@@ -30,10 +33,13 @@ selectors
       specify
 
       indexComponent
-      specify
 
+      indexedComponent
+      specify
+      
       positionalComponent
       specify
+      repr
       longitude
       latitude
       time

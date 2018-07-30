@@ -6,7 +6,7 @@ cdxmllib
 .. automodule:: cdms2.cdxmllib
       :members:
 
-      Error
+      Error(RuntimeError)
 
       XMLParser
       fixelements

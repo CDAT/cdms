@@ -10,7 +10,7 @@ regrid2-gsRegrid
       catchError
       getTensorProduct
       makeCurvilinear
-      make CoordsCyclic
+      makeCoordsCyclic
       checkForCoordCut
       handleCoordsCut
       getIndices

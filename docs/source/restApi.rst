@@ -13,7 +13,7 @@ restApi
       FacetConnection
       get_xmlelement
       make_facet_dict
-      get_xmlelement
+      get_xmlelement_count
       make_facet_dict_count
  
       esgfConnection

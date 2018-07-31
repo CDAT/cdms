@@ -23,10 +23,13 @@ CDMS assumes that there is some regularity in how datasets are
 partitioned:
 
 -  A variable can be partitioned (split across files) in at most two
-   dimensions. The partitioned dimension(s) must be either time or
+   dimensions. 
+-  The partitioned dimension(s) must be either time or
    vertical level dimensions; variables may not be partitioned across
-   longitude or latitude. Datasets can be parti-tioned by variable as
-   well. For example, one set of files might contain heat fluxes, while
+   longitude or latitude. 
+-  Datasets can be parti-tioned by variable as
+   well. 
+-  For example, one set of files might contain heat fluxes, while
    another set contains wind speeds.
 
 Otherwise, there is considerable flexibility in how a dataset can be

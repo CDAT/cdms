@@ -13,7 +13,7 @@ convention
 
       AbstractConvention
       getAxisIds
-      getAxisAuxids
+      getAxisAuxIds
       getDsetnodeAuxAxisIds
       axisIsLatitude
       axisIsLongitude

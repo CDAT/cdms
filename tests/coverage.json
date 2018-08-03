@@ -1,0 +1,4 @@
+{
+   "include": ["cdms2", "regrid2", "cdtime", "cdat_info", "testsrunner"]
+}
+

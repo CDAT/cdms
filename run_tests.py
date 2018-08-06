@@ -9,6 +9,14 @@ class CDMSTestRunner(cdat_info.TestRunnerBase):
     def __setup_cdms(self):
         home = os.environ["HOME"]
         os.mkdir("{h}/.esg".format(h=home))
+
+        esgf_pwd = os.environ["ESGF_PWD"]
+        esgf_user = os.environ["ESGF_USER"]
+        cmd = "echo ${p} | myproxyclient logon -s esgf-node.llnl.gov -p 7512 -t 12 -S -b -l ${u} -o {h}/.esg/esgf.cert".format(p=esgf_pwd, u=esgf_user, h=home)
+        ret_code, out = run_command(cmd)
+        if ret_code != 0:
+            return ret_code
+
         cookies = "-c {h}/.esg/.dods_cookies".format(h=home)
         cert_opt = "--cert {h}/.esg/esgf.cert".format(h=home)
         key_opt = "--key {h}/.esg/esgf.cert".format(h=home)

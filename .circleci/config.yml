@@ -32,8 +32,8 @@ aliases:
            conda install -n py2 -c cdat/label/unstable -c cdat/label/nightly -c conda-forge gcc
        fi
 
-  - &setup_cdms
-    name: setup_cdms
+  - &setup_cdms_ORIG
+    name: setup_cdms_ORIG
     command: |
        export PATH=$HOME/project/$WORKDIR/miniconda/bin:$PATH
        export UVCDAT_ANONYMOUS_LOG=False
@@ -49,6 +49,27 @@ aliases:
          LDSHARED="$CC -shared -pthread" python setup.py install
        else
          cp tests/dodsrccircleciDarwin $HOME/.dodsrc
+         python setup.py install
+       fi
+       source activate py2
+       rm -rf build
+       if [ $(uname) == "Linux" ];then
+         export LDSHARED="$CC -shared -pthread"
+         LDSHARED="$CC -shared -pthread" python setup.py install
+       else
+         python setup.py install
+       fi
+
+  - &setup_cdms
+    name: setup_cdms
+    command: |
+       export PATH=$HOME/project/$WORKDIR/miniconda/bin:$PATH
+       export UVCDAT_ANONYMOUS_LOG=False
+       source activate py3
+       if [ $(uname) == "Linux" ];then
+         export LDSHARED="$CC -shared -pthread"
+         LDSHARED="$CC -shared -pthread" python setup.py install
+       else
          python setup.py install
        fi
        source activate py2

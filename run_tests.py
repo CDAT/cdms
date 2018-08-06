@@ -4,6 +4,8 @@ import cdat_info
 from testsrunner.Util import run_command
 import tempfile
 
+SUCCESS = 0
+
 class CDMSTestRunner(cdat_info.TestRunnerBase):
 
     def __setup_cdms(self):
@@ -26,7 +28,7 @@ class CDMSTestRunner(cdat_info.TestRunnerBase):
                                                                key=key_opt,
                                                                dds=dds)
         ret_code, out = run_command(cmd)
-        if ret_code != 0:
+        if ret_code != SUCCESS:
             return ret_code
         if sys.platform == 'darwin':
             cmd = "cp tests/dodsrccircleciDarwin {h}/.dodsrc".format(h=home)

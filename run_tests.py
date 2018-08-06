@@ -14,7 +14,7 @@ class CDMSTestRunner(cdat_info.TestRunnerBase):
 
         esgf_pwd = os.environ["ESGF_PWD"]
         esgf_user = os.environ["ESGF_USER"]
-        cmd = "echo ${p} | myproxyclient logon -s esgf-node.llnl.gov -p 7512 -t 12 -S -b -l ${u} -o {h}/.esg/esgf.cert".format(p=esgf_pwd, u=esgf_user, h=home)
+        cmd = "echo {p} | myproxyclient logon -s esgf-node.llnl.gov -p 7512 -t 12 -S -b -l {u} -o {h}/.esg/esgf.cert".format(p=esgf_pwd, u=esgf_user, h=home)
         ret_code, out = run_command(cmd)
         if ret_code != 0:
             return ret_code

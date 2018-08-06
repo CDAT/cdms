@@ -1,13 +1,40 @@
 import os
 import sys
 import cdat_info
+from testsrunner.Util import run_command
 import tempfile
 
 class CDMSTestRunner(cdat_info.TestRunnerBase):
+
+    def __setup_cdms(self):
+        home = os.environ["HOME"]
+        os.mkdir("{h}/.esg".format(h=home))
+        cookies_opt = "-c {h}/.esg/.dods_cookies".format(h=home)
+        cert_opt = "--cert {h}/.esg/esgf.cert".format(h=home)
+        key_opt = "--key {h}/.esg/esgf.cert".format(h=home)
+        dds = "https://aims3.llnl.gov/thredds/dodsC/cmip5_css02_data/cmip5/output1/CMCC/CMCC-CM/decadal2005/mon/atmos/Amon/r1i1p1/cct/1/cct_Amon_CMCC-CM_decadal2005_r1i1p1_202601-203512.nc.dds"
+        cmd = "curl -L -v {cookies} {cert} {key} {dds}".format(cookies=cookies,
+                                                               cert=cert_opt,
+                                                               key=key_opt,
+                                                               dds=dds)
+        ret_code, out = run_command(cmd)
+        if ret_code != 0:
+            return ret_code
+        if sys.platform == 'darwin':
+            cmd = "cp tests/dodsrccircleciDarwin {h}/.dodsrc".format(h=home)
+        else:
+            cmd = "cp tests/dodsrccircleciLinux {h}/.dodsrc".format(h=home)
+        ret_code, out = run_command(cmd)
+        return ret_code
+
     def run(self, workdir, tests=None):
 
         os.chdir(workdir)
         test_names = super(CDMSTestRunner, self)._get_tests(workdir, self.args.tests)
+
+        ret_code = self.__setup_cdms()
+        if ret_code != SUCCESS:
+            return(ret_code)
 
         if self.args.checkout_baseline:
             ret_code = super(CDMSTestRunner, self)._get_baseline(workdir)

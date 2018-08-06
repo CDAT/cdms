@@ -28,9 +28,10 @@ class CDMSTestRunner(cdat_info.TestRunnerBase):
                                                                cert=cert_opt,
                                                                key=key_opt,
                                                                dds=dds)
-        ret_code, out = run_command(cmd)
-        if ret_code != SUCCESS:
-            return ret_code
+        os.system(cmd)
+        #ret_code, out = run_command(cmd)
+        #if ret_code != SUCCESS:
+        #    return ret_code
         if sys.platform == 'darwin':
             cmd = "cp tests/dodsrccircleciDarwin {h}/.dodsrc".format(h=home)
         else:

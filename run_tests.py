@@ -9,7 +9,7 @@ class CDMSTestRunner(cdat_info.TestRunnerBase):
     def __setup_cdms(self):
         home = os.environ["HOME"]
         os.mkdir("{h}/.esg".format(h=home))
-        cookies_opt = "-c {h}/.esg/.dods_cookies".format(h=home)
+        cookies = "-c {h}/.esg/.dods_cookies".format(h=home)
         cert_opt = "--cert {h}/.esg/esgf.cert".format(h=home)
         key_opt = "--key {h}/.esg/esgf.cert".format(h=home)
         dds = "https://aims3.llnl.gov/thredds/dodsC/cmip5_css02_data/cmip5/output1/CMCC/CMCC-CM/decadal2005/mon/atmos/Amon/r1i1p1/cct/1/cct_Amon_CMCC-CM_decadal2005_r1i1p1_202601-203512.nc.dds"

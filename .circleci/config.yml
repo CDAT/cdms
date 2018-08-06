@@ -94,7 +94,7 @@ aliases:
        source activate py3
        python run_tests.py --subdir -v2 
        PY3_RESULT=$?
-       echo "*** py3 test result: "${PY3_RESULT}
+       echo "**** py3 test result: "${PY3_RESULT}
        echo  $PY2_RESULT > $HOME/project/$WORKDIR/py2_result.txt
        echo  $PY3_RESULT > $HOME/project/$WORKDIR/py3_result.txt
 

@@ -525,7 +525,7 @@ CoordinateAxis Methods, Additional to CoordinateAxis
        * the stride ``k`` can be positive or negative. 
        * wraparound is supported for longitude dimensions or those with a modulus attribute." 
 
-CoordinateAxis Slice Operators
+CoordinateAxis Slice OperatorsCoordinateAxis Slice Operators
 ------------------------------
 
 .. csv-table::  

@@ -130,12 +130,12 @@ Component Time Types
    :header: "Type", "Name", "Summary"
    :widths: 15, 15, 50
 
-   "Integer", "year",  "Year value"
-   "Integer", "month", "Month, in the range 1..12"
-   "Integer", "day", "Day of month, in the range 1 .. 31"
-   "Integer", "hour", "Hour, in the range 0 .. 23"
-   "Integer", "minute", "Minute, in the range 0 .. 59"
-   "Float", "second", "Seconds, in the range 0.0 .. 60.0"
+      * "Integer", "year",  "Year value"
+      * "Integer", "month", "Month, in the range 1..12"
+      * "Integer", "day", "Day of month, in the range 1 .. 31"
+      * "Integer", "hour", "Hour, in the range 0 .. 23"
+      * "Integer", "minute", "Minute, in the range 0 .. 59"
+      * "Float", "second", "Seconds, in the range 0.0 .. 60.0"
 
 Time Methods
 ^^^^^^^^^^^^

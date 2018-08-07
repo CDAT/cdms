@@ -2,36 +2,37 @@
 
 convention
 ==========
+.. currentmodule:: cdms2.convention
 
-.. automodule:: cdms2.convention
-      :members:
+.. autosummary::
+   :toctree: generated/
 
       AliasList
-      setitem
-      setslice
-      append
+      AliasList.setitem
+      AliasList.setslice
+      AliasList.append
 
       AbstractConvention
-      getAxisIds
-      getAxisAuxIds
-      getDsetnodeAuxAxisIds
-      axisIsLatitude
-      axisIsLongitude
-      getVarLatId
-      getVarLonId
+      AbstractConvention.AbstractConvention.getAxisIds
+      AbstractConvention.getAxisAuxIds
+      AbstractConvention.getDsetnodeAuxAxisIds
+      AbstractConvention.axisIsLatitude
+      AbstractConvention.axisIsLongitude
+      AbstractConvention.getVarLatId
+      AbstractConvention.getVarLonId
     
       NUGConvention
-      getAxisIds
-      getAxisAuxIds
+      NUGConvention.getAxisIds
+      NUGConvention.getAxisAuxIds
       
       COARDSConvention
 
       CFConvention
-      getAxisAuxIds
-      getDsetnodeAuxAxisids
-      getVarLatId
-      getVarLonId
-      axisIsLatitude
-      axisIsLongitude
-      getVariableBounds
-      getDatasetConvention
+      CFConvention.getAxisAuxIds
+      CFConvention.getDsetnodeAuxAxisids
+      CFConvention.getVarLatId
+      CFConvention.getVarLonId
+      CFConvention.axisIsLatitude
+      CFConvention.axisIsLongitude
+      CFConvention.getVariableBounds
+      CFConvention.getDatasetConvention

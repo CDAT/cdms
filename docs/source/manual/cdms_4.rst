@@ -296,7 +296,7 @@ CDMS Horizontal Regridder
 
     from regrid2 import Regridder
 
-makes the CDMS Regridder class available within a Python program. An
+Makes the CDMS Regridder class available within a Python program. An
 instance of Regridder is a function which regrids data from rectangular
 input to output grids.
 

@@ -1,5 +1,6 @@
 import os
 import sys
+import shutil
 import cdat_info
 from testsrunner.Util import run_command
 import tempfile
@@ -10,7 +11,10 @@ class CDMSTestRunner(cdat_info.TestRunnerBase):
 
     def __setup_cdms(self):
         home = os.environ["HOME"]
-        os.mkdir("{h}/.esg".format(h=home))
+        esg_dir = "{h}/.esg".format(h=home)
+        if os.path.isdir(esg_dir):
+            shutil.rmtree(esg_dir)
+        os.mkdir(esg_dir)
 
         esgf_pwd = os.environ["ESGF_PWD"]
         esgf_user = os.environ["ESGF_USER"]

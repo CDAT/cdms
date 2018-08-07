@@ -2,6 +2,8 @@ import os
 import sys
 import shutil
 import cdat_info
+import socket
+
 from testsrunner.Util import run_command
 import tempfile
 
@@ -16,26 +18,39 @@ class CDMSTestRunner(cdat_info.TestRunnerBase):
             shutil.rmtree(esg_dir)
         os.mkdir(esg_dir)
 
+        # check if we are running tests from within the lab.
+        hostname = socket.gethostname()
+        cacert_pem = ""
+        if hostname.endswith('.llnl.gov'):
+            cmd = "curl https://access.llnl.gov/cspca.cer -o {h}/cspca.cer".format(h=home)
+            ret_code, out = run_command(cmd)
+            if ret_code != SUCCESS:
+                return ret_code
+
+            python_ver = "python{a}.{i}".format(a=sys.version_info.major,
+                                                i=sys.version_info.minor)
+            coverage_opts = ""
+            dest = os.path.join(sys.prefix, 'lib', python_ver, 'site-packages', 'certifi', 'cacert.pem')
+            cmd = "cat {h}/cspca.cer >> {dest}".format(h=home, dest=dest)
+            cacert_pem = "--cacert {cacert}".format(cacert=dest)
+
         esgf_pwd = os.environ["ESGF_PWD"]
         esgf_user = os.environ["ESGF_USER"]
         cmd = "echo {p} | myproxyclient logon -s esgf-node.llnl.gov -p 7512 -t 12 -S -b -l {u} -o {h}/.esg/esgf.cert".format(p=esgf_pwd, u=esgf_user, h=home)
-        #ret_code, out = run_command(cmd)
-        #if ret_code != 0:
-        #    return ret_code
         os.system(cmd)
 
         cookies = "-c {h}/.esg/.dods_cookies".format(h=home)
         cert_opt = "--cert {h}/.esg/esgf.cert".format(h=home)
         key_opt = "--key {h}/.esg/esgf.cert".format(h=home)
         dds = "https://aims3.llnl.gov/thredds/dodsC/cmip5_css02_data/cmip5/output1/CMCC/CMCC-CM/decadal2005/mon/atmos/Amon/r1i1p1/cct/1/cct_Amon_CMCC-CM_decadal2005_r1i1p1_202601-203512.nc.dds"
-        cmd = "curl -L -v {cookies} {cert} {key} \"{dds}\"".format(cookies=cookies,
-                                                               cert=cert_opt,
-                                                               key=key_opt,
-                                                               dds=dds)
+        cmd = "curl -L -v {cacert} {cookies} {cert} {key} \"{dds}\"".format(cacert=cacert_pem,
+                                                                            cookies=cookies,
+                                                                            cert=cert_opt,
+                                                                            key=key_opt,
+                                                                            dds=dds)
+        print("CMD: {cmd}".format(cmd=cmd))
         os.system(cmd)
-        #ret_code, out = run_command(cmd)
-        #if ret_code != SUCCESS:
-        #    return ret_code
+
         if sys.platform == 'darwin':
             cmd = "cp tests/dodsrccircleciDarwin {h}/.dodsrc".format(h=home)
         else:

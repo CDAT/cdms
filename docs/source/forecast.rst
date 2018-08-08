@@ -2,25 +2,26 @@
 
 forecast 
 ========
+.. currentmodule:: cdms2.convention
 
-.. automodule:: cdms2.forecast 
-      :members:
+.. autosummary::
+   :toctree: generated/
 
       forecast
-      two_times_from_one
-      comptime
-      close
-      call
-      getitem
-      rpr
-      available_forecasts
+      forecast.two_times_from_one
+      forecast.comptime
+      forecast.close
+      forecast.call
+      forecast.getitem
+      forecast.rpr
+      forecast.available_forecasts
       
       forecasts
-      forecast_times_to_list
-      time_interval_to_list
-      reduce_inplace
-      close
-      call
-      forecast_axis
-      getitem
-      rpr
+      forecasts.forecast_times_to_list
+      forecasts.time_interval_to_list
+      forecasts.reduce_inplace
+      forecasts.close
+      forecasts.call
+      forecasts.forecast_axis
+      forecasts.getitem
+      forecasts.rpr

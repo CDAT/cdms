@@ -2,14 +2,16 @@
 
 regrid2-mvGenericRegrid
 =======================
+.. currentmodule:: cdms2.regrid2-mvGenericRegrid
 
-.. automodule:: regrid2.mvGenericRegrid
-      :members:
+.. autosummary:: 
+   :toctree: generated/
+
 
       GenericRegrid
-      guessPeriodicity
-      computeWeights
-      apply
-      getDstGrid
-      fillInDiagnosticData
+      GenericRegrid.guessPeriodicity
+      GenericRegrid.computeWeights
+      GenericRegrid.apply
+      GenericRegrid.getDstGrid
+      GenericRegrid.fillInDiagnosticData
       

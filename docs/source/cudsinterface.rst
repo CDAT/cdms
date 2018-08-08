@@ -2,31 +2,32 @@
 
 cudsinterface
 =============
+.. currentmodule:: cdms2.cudsinterface
 
-.. automodule:: cdms2.cudsinterface
-      :members:
+.. autosummary::
+   :toctree: generated/
 
       cuDataSet
-      call
-      getitem
-      v
-      defaultvariable
-      cleardefault
-      listall
-      listattribute
-      listdimension
-      listglobal
-      listvariable
-      showglobal
-      showvariable
-      showattribute
-      showdimension
-      showall
-      dimensionobject
-      dimensionarray
-      getdimensionunits
-      getglobal
-      getattribute
-      getslab
-      readScripGrid
+      cuDataSet.call
+      cuDataSet.getitem
+      cuDataSet.v
+      cuDataSet.defaultvariable
+      cuDataSet.cleardefault
+      cuDataSet.listall
+      cuDataSet.listattribute
+      cuDataSet.listdimension
+      cuDataSet.listglobal
+      cuDataSet.listvariable
+      cuDataSet.showglobal
+      cuDataSet.showvariable
+      cuDataSet.showattribute
+      cuDataSet.showdimension
+      cuDataSet.showall
+      cuDataSet.dimensionobject
+      cuDataSet.dimensionarray
+      cuDataSet.getdimensionunits
+      cuDataSet.getglobal
+      cuDataSet.getattribute
+      cuDataSet.getslab
+      cuDataSet.readScripGrid
       

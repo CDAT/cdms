@@ -2,52 +2,53 @@
 
 selectors
 =========
+.. currentmodule:: cdms2.selectors
 
-.. automodule:: cdms2.selectors
-      :members:
+.. autosummary:: 
+   :toctree: generated/
 
-      SelectorError
+
       Selector
-      components
-      refine
-      repr
-      and
-      clone
-      call
-      select
-      unmodifiedselect
+      Selector.components
+      Selector.refine
+      Selector.repr
+      Selector.and
+      Selector.clone
+      Selector.call
+      Selector.select
+      Selector.unmodifiedselect
 
       SelectorComponent
-      specify
-      specifyGrid
-      post
+      SelectorComponent.specify
+      SelectorComponent.specifyGrid
+      SelectorComponent.post
 
       axisComponent
-      specify
-      repr
+      axisComponent.specify
+      axisComponent.repr
       
       coordinateComponent
-      specifyGrid
+      coordinateComponent.specifyGrid
       
       requiredComponent
-      specify
+      requiredComponent.specify
 
       indexComponent
 
       indexedComponent
-      specify
+      indexedComponent.specify
       
       positionalComponent
-      specify
-      repr
-      longitude
-      latitude
-      time
-      level
-      required
-      kwselect
-      timeslice
-      latitudeslice
-      longitudeslice
-      levelslice
-      setslice
+      positionalComponent.specify
+      positionalComponent.repr
+      positionalComponent.longitude
+      positionalComponent.latitude
+      positionalComponent.time
+      positionalComponent.level
+      positionalComponent.required
+      positionalComponent.kwselect
+      positionalComponent.timeslice
+      positionalComponent.latitudeslice
+      positionalComponent.longitudeslice
+      positionalComponent.levelslice
+      positionalComponent.setslice

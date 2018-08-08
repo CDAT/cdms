@@ -2,22 +2,23 @@
 
 slabinterface
 =============
+.. currentmodule:: cdms2.slabinterface
 
-.. automodule:: cdms2.slabinterface
-      :members:
+.. autosummary:: 
+   :toctree: generated/
 
       Slab
-      getattribute
-      setattribute
-      createattribute
-      deleteattribute
-      listattributes
-      listdimattributes
-      getdimattribute
-      showdim
-      listdimnames
-      listall
-      info
-      cdms_bounds2cu_bounds
+      Slab.getattribute
+      Slab.setattribute
+      Slab.createattribute
+      Slab.deleteattribute
+      Slab.listattributes
+      Slab.listdimattributes
+      Slab.getdimattribute
+      Slab.showdim
+      Slab.listdimnames
+      Slab.listall
+      Slab.info
+      Slab.cdms_bounds2cu_bounds
       
 

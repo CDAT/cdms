@@ -2,44 +2,45 @@
 
 coord
 =====
+.. currentmodule:: cdms2.coord
 
-.. automodule:: cdms2.coord
-      :members:
+.. autosummary::
+   :toctree: generated/
 
       AbstractCoordinateAxis
-      createCoordinateAxis
-      isAbstractCoordinate
-      clone
-      designateLatitude
-      designateLevel
-      designateLongitude
-      designateTime
-      getCalendar
-      getData
-      getExplicitBounds
-      info
-      isLatitude
-      isLevel
-      isLongitude
-      isTime
-      isForecast
-      listall
-      getBounds
-      setBounds
-      setCalendar
-      size
-      writeToFile      
+      AbstractCoordinateAxis.createCoordinateAxis
+      AbstractCoordinateAxis.isAbstractCoordinate
+      AbstractCoordinateAxis.clone
+      AbstractCoordinateAxis.designateLatitude
+      AbstractCoordinateAxis.designateLevel
+      AbstractCoordinateAxis.designateLongitude
+      AbstractCoordinateAxis.designateTime
+      AbstractCoordinateAxis.getCalendar
+      AbstractCoordinateAxis.getData
+      AbstractCoordinateAxis.getExplicitBounds
+      AbstractCoordinateAxis.info
+      AbstractCoordinateAxis.isLatitude
+      AbstractCoordinateAxis.isLevel
+      AbstractCoordinateAxis.isLongitude
+      AbstractCoordinateAxisisTime
+      AbstractCoordinateAxis.isForecast
+      AbstractCoordinateAxis.listall
+      AbstractCoordinateAxis.getBounds
+      AbstractCoordinateAxis.setBounds
+      AbstractCoordinateAxis.setCalendar
+      AbstractCoordinateAxis.size
+      AbstractCoordinateAxiswriteToFile      
 
       AbstractAxis2D
-      clone
-      setBounds
-      subSlice
+      AbstractAxis2D.clone
+      AbstractAxis2D.setBounds
+      AbstractAxis2D.subSlice
 
       DatasetAxis2D
-      rpr
+      DatasetAxis2D.rpr
 
       FileAxis2D
-      rpr
+      FileAxis2D.rpr
 
       TransientAxis2D
 

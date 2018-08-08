@@ -2,9 +2,10 @@
 
 cdurlparse
 ==========
+.. currentmodule:: cdms2.cdurlparse
 
-.. automodule:: cdms2.cdurlparse
-      :members:
+.. autosummary::
+   :toctree: generated/
 
       clear_cache
       urlparse

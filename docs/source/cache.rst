@@ -2,24 +2,25 @@
 
 cache
 =====
+.. currentmodule:: cdms2.cache
 
-.. automodule:: cdms2.cache
-      :members:
+.. autosummary:: 
+   :toctree: generated/
       
       Cache
-      get
-      put
-      deleteEntry
-      copyFile
-      getFile
-      delete
-      clean
-      lock
-      unlock
-      lockpath
-      useWindow
-      useTTY
-      useGlobusTransfer
-      usePythonTransfer
-      useRequestManagerTransfer
+      Cache.get
+      Cache.put
+      Cache.deleteEntry
+      Cache.copyFile
+      Cache.getFile
+      Cache.delete
+      Cache.clean
+      Cache.lock
+      Cache.unlock
+      Cache.lockpath
+      Cache.useWindow
+      Cache.useTTY
+      Cache.useGlobusTransfer
+      Cache.usePythonTransfer
+      Cache.useRequestManagerTransfer
       

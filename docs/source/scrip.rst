@@ -2,30 +2,32 @@
 
 regrid2-scrip
 =============
+.. currentmodule:: cdms2.regrid2-scrip
 
-.. automodule:: regrid2.scrip
-      :members:
+.. autosummary:: 
+   :toctree: generated/
+
 
       ScripRegridder
-      call
-      getOutputGrid
-      getInputGrid
-      getSourceFraction
-      getDestinationFraction
+      ScripRegridder.call
+      ScripRegridder.getOutputGrid
+      ScripRegridder.getInputGrid
+      ScripRegridder.getSourceFraction
+      ScripRegridder.getDestinationFraction
       
       ConservativeRegridder
-      getSourceArea
-      getDestinationArea
-      regrid
+      ConservativeRegridder.getSourceArea
+      ConservativeRegridder.getDestinationArea
+      ConservativeRegridder.regrid
       
       BilinearRegridder
-      regrid
+      BilinearRegridder.regrid
 
       BicubicRegridder
-      call
+      BicubicRegridder.call
 
       DistwgtRegridder
-      regrid
-      readRegridder
+      DistwgtRegridder.regrid
+      DistwgtRegridder.readRegridder
       
 

@@ -2,23 +2,25 @@
 
 regrid2-mvESMFRegrid
 ====================
+.. currentmodule:: cdms2.regrid2-mvESMFRegrid
 
-.. automodule:: regrid2.mvESMFRegrid
-      :members:
+.. autosummary:: 
+   :toctree: generated/
+
 
       ESMFRegrid
-      setCoords
-      computeWeights
-      apply
-      getDstGrid
-      getSrcAreas
-      getDstAreas
-      getSrcAreaFractions
-      getDstAreaFractions
-      getSrcLocalShape
-      getDstLocalShape
-      getSrcLocalSlab
-      getDstLocalSlab
-      fillInDiagnosticData
+      ESMFRegrid.setCoords
+      ESMFRegrid.computeWeights
+      ESMFRegrid.apply
+      ESMFRegrid.getDstGrid
+      ESMFRegrid.getSrcAreas
+      ESMFRegrid.getDstAreas
+      ESMFRegrid.getSrcAreaFractions
+      ESMFRegrid.getDstAreaFractions
+      ESMFRegrid.getSrcLocalShape
+      ESMFRegrid.getDstLocalShape
+      ESMFRegrid.getSrcLocalSlab
+      ESMFRegrid.getDstLocalSlab
+      ESMFRegrid.fillInDiagnosticData
       
 

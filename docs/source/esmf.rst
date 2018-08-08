@@ -2,38 +2,38 @@
 
 regrid2- esmf
 =============
+.. currentmodule:: cdms2.regrid2-esmf
 
-
-.. automodule:: regrid2.esmf
-      :members:
+.. autosummary:: 
+   :toctree: generated/
 
       EsmfUnstructGrid
-      setCells
-      setNodes
-      toVTK
-      del
+      EsmfUnstructGrid.setCells
+      EsmfUnstructGrid.setNodes
+      EsmfUnstructGrid.toVTK
+      EsmfUnstructGrid.del
 
       EsmfStructGrid
-      getLocalSlab
-      getLoHiBounds
-      getCoordShape
-      setCoords
-      getCoords
-      setCellAreas
-      getCellAreas
-      getMask
-      setMask
-      del
+      EsmfStructGrid.getLocalSlab
+      EsmfStructGrid.getLoHiBounds
+      EsmfStructGrid.getCoordShape
+      EsmfStructGrid.setCoords
+      EsmfStructGrid.getCoords
+      EsmfStructGrid.setCellAreas
+      EsmfStructGrid.getCellAreas
+      EsmfStructGrid.getMask
+      EsmfStructGrid.setMask
+      EsmfStructGrid.del
 
       EsmfStructField
-      getPointer
-      getData
-      setLocalData
+      EsmfStructField.getPointer
+      EsmfStructField.getData
+      EsmfStructField.setLocalData
       
       EsmfRegrid
-      getSrcAreas
-      getDstAreas
-      getSrcAreaFractions
-      getDstAreaFractions
-      call
-      del
+      EsmfRegrid.getSrcAreas
+      EsmfRegrid.getDstAreas
+      EsmfRegrid.getSrcAreaFractions
+      EsmfRegrid.getDstAreaFractions
+      EsmfRegrid.call
+      EsmfRegrid.del

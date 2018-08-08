@@ -2,51 +2,52 @@
 
 restApi
 =======
+.. currentmodule:: cdms2.restApi
 
-.. automodule:: cdms2.restApi
-      :members:
+.. autosummary:: 
+   :toctree: generated/
 
       esgfConnectionException
       esgfDatasetException
       esgfFilesException
 
       FacetConnection
-      get_xmlelement
-      make_facet_dict
-      get_xmlelement_count
-      make_facet_dict_count
+      FacetConnection.get_xmlelement
+      FacetConnection.make_facet_dict
+      FacetConnection.get_xmlelement_count
+      FacetConnection.make_facet_dict_count
  
       esgfConnection
-      getitem
-      setitem
-      search
-      generateRequest
-      request
-      extractTag
-      searchDatasets
+      esgfConnection.getitem
+      esgfConnection.setitem
+      esgfConnection.search
+      esgfConnection.generateRequest
+      esgfConnection.request
+      esgfConnection.extractTag
+      esgfConnection.searchDatasets
       
       esgfDataset
-      extractFiles
-      info
-      str
-      clearWebCache
-      saveCache
-      loadCache
-      clearOriginalQueryCache
-      clear
-      search
+      esgfDataset.extractFiles
+      esgfDataset.info
+      esgfDataset.str
+      esgfDataset.clearWebCache
+      esgfDataset.saveCache
+      esgfDataset.loadCache
+      esgfDataset.clearOriginalQueryCache
+      esgfDataset.clear
+      esgfDataset.search
 
       esgfFiles
-      getitem
-      setitem
-      len
-      getMapping
-      getMappingKeys
-      setMapping
-      remap
+      esgfFiles.getitem
+      esgfFiles.setitem
+      esgfFiles.len
+      esgfFiles.getMapping
+      esgfFiles.getMappingKeys
+      esgfFiles.setMapping
+      esgfFiles.remap
 
       esgfFile
-      getitem
-      setitem
-      str
+      esgfFile.getitem
+      esgfFile.setitem
+      esgfFile.str
       

@@ -2,13 +2,15 @@
 
 mvVTKUGWriter
 =============
+.. currentmodule:: cdms2.mvVTKUGWriter
 
-.. automodule:: cdms2.mvVTKUGWriter
-      :members:
+.. autosummary:: 
+   :toctree: generated/
+
 
       VTKUGWriter
-      write
-      test2DRect
-      test3D
+      VTKUGWriter.write
+      VTKUGWriter.test2DRect
+      VTKUGWriter.test3D
 
 

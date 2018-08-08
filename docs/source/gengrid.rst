@@ -2,40 +2,41 @@
 
 gengrid 
 =======
+.. currentmodule:: cdms2.gengrid
 
-.. automodule:: cdms2.gengrid 
-      :members:
+.. autosummary::
+   :toctree: generated/
 
       AbstractGenericGrid
-      clone
-      getMesh
-      getShape
-      getAxis
-      genBounds
-      getMask
-      size
-      writeScrip
-      writeToFile
-      subSlice
-      getGridSlices
-      getIndex
-      intersect
-      getAxisList
-      isClose
-      checkAxes
-      reconcile
-      flatAxes
-      toGenericGrid
+      AbstractGenericGrid.clone
+      AbstractGenericGrid.getMesh
+      AbstractGenericGrid.getShape
+      AbstractGenericGrid.getAxis
+      AbstractGenericGrid.genBounds
+      AbstractGenericGrid.getMask
+      AbstractGenericGrid.size
+      AbstractGenericGrid.writeScrip
+      AbstractGenericGrid.writeToFile
+      AbstractGenericGrid.subSlice
+      AbstractGenericGrid.getGridSlices
+      AbstractGenericGrid.getIndex
+      AbstractGenericGrid.intersect
+      AbstractGenericGrid.getAxisList
+      AbstractGenericGrid.isClose
+      AbstractGenericGrid.checkAxes
+      AbstractGenericGrid.reconcile
+      AbstractGenericGrid.flatAxes
+      AbstractGenericGrid.toGenericGrid
 
       DatasetGenericGrid
-      rpr
+      DatasetGenericGrid.rpr
     
       FileGenericGrid
-      rpr
+      FileGenericGrid.rpr
 
       TransientGenericGrid
-      rpr
-      toGenericGrid
-      readScripGenericGrid
+      TransientGenericGrid.rpr
+      TransientGenericGrid.toGenericGrid
+      TransientGenericGrid.readScripGenericGrid
 
  

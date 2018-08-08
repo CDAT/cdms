@@ -2,14 +2,15 @@
 
 mvSphereMesh
 ============
+.. currentmodule:: cdms2.mvSphereMesh
 
-.. automodule:: cdms2.mvSphereMesh
-      :members:
+.. autosummary:: 
+   :toctree: generated/
 
       SphereMesh
-      getXYZCoords
-      test2DRect
-      test2D
-      test3DRect
-      test3DposDown
+      SphereMesh.getXYZCoords
+      SphereMesh.test2DRect
+      SphereMesh.test2D
+      SphereMesh.test3DRect
+      SphereMesh.test3DposDown
       

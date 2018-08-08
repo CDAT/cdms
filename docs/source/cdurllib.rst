@@ -2,13 +2,14 @@
 
 cdurllib
 ========
-
-.. automodule:: cdms2.cdurllib
-      :members:
+.. currentmodule:: cdms2.cdurllib
+      
+.. autosummary::
+   :toctree: generated/
 
       CDURLopener
-      setUserObject
-      open_tfp
-      retrieve
-      sampleReportHook
+      CDURLopener.setUserObject
+      CDURLopener.open_tfp
+      CDURLopener.retrieve
+      CDURLopener.sampleReportHook
       

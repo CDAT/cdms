@@ -2,17 +2,18 @@
 
 mvCdmsRegrid
 ============
+.. currentmodule:: cdms2.mvCdmsRegrid
 
-.. automodule:: cdms2.mvCdmsRegrid
-      :members:
+.. autosummary:: 
+   :toctree: generated/
 
    CdmsRegrid
-   getboundlist
-   areCellsOk
-   projectToSphere
-   buildBounds
-   getBoundList
-   getCoordList
-   getDstDataShape
-   getAxisList
-   call
+   CdmsRegrid.getboundlist
+   CdmsRegrid.areCellsOk
+   CdmsRegrid.projectToSphere
+   CdmsRegrid.buildBounds
+   CdmsRegrid.getBoundList
+   CdmsRegrid.getCoordList
+   CdmsRegrid.getDstDataShape
+   CdmsRegrid.getAxisList
+   CdmsRegrid.call

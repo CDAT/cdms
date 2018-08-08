@@ -2,11 +2,13 @@
 
 mvVsWriter
 ==========
+.. currentmodule:: cdms2.mvVsWriter
 
-.. automodule:: cdms2.mvVsWriter
-      :members:
+.. autosummary:: 
+   :toctree: generated/
+:
 
       VsWriter
-      write
-      test2DRect
-      test3D
+      VsWriter.write
+      VsWriter.test2DRect
+      VsWriter.test3D

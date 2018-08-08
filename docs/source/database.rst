@@ -2,49 +2,50 @@
 
 database
 ========
+.. currentmodule:: cdms2.database
 
-.. automodule:: cdms2.database
-      :members:
+.. autosummary::
+   :toctree: generated/
 
       AbstractDatabase
-      connect
-      loadString
-      close
-      cachecdml
-      getDataset
-      getObjFromDataset
-      openDataset
-      searchFilter
-      enableCache
-      disableCache
-      useRequestManager
-      usingRequestManager
-      repr
+      AbstractDatabase.connect
+      AbstractDatabase.loadString
+      AbstractDatabase.close
+      AbstractDatabase.cachecdml
+      AbstractDatabase.getDataset
+      AbstractDatabase.getObjFromDataset
+      AbstractDatabase.openDataset
+      AbstractDatabase.searchFilter
+      AbstractDatabase.enableCache
+      AbstractDatabase.disableCache
+      AbstractDatabase.useRequestManager
+      AbstractDatabase.usingRequestManager
+      AbstractDatabase.repr
       
       LDAPDatabase
-      close
-      del
-      normalizedn
-      cachecdml
-      getDataset
-      getObjFromDataset
-      openDataset
-      setExternalDict
-      searchFilter
-      listDatasets
+      LDAPDatabase.close
+      LDAPDatabase.del
+      LDAPDatabase.normalizedn
+      LDAPDatabase.cachecdml
+      LDAPDatabase.getDataset
+      LDAPDatabase.getObjFromDataset
+      LDAPDatabase.openDataset
+      LDAPDatabase.setExternalDict
+      LDAPDatabase.searchFilter
+      LDAPDatabase.listDatasets
       
       AbstractSearchResult
-      getitem
-      len
-      searchPredicate
+      AbstractSearchResult.getitem
+      AbstractSearchResult.len
+      AbstractSearchResult.searchPredicate
 
       LDAPSearchResult
-      getitem
-      searchPredicate
-      len
+      LDAPSearchResult.getitem
+      LDAPSearchResult.searchPredicate
+      LDAPSearchResult.len
 
       AbstractResultEntry
-      getObject
+      AbstractResultEntry.getObject
       
       LDAPResultEntry
       

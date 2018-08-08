@@ -2,12 +2,13 @@
 
 CDML
 ====
+.. currentmodule:: cdms2.CDML
 
-.. automodule:: cdms2.CDML
-      :members:
+.. autosummary::
+   :toctree: generated/
 
       CDML
-      buildDTD
-      buildExtra
+      CDML.buildDTD
+      CDML.buildExtra
       
 

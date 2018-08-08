@@ -2,9 +2,11 @@
 
 mvBaseWriter
 ============
+.. currentmodule:: cdms2.mvBaseWriter
 
-.. automodule:: cdms2.mvBaseWriter
-      :members:
+.. autosummary:: 
+   :toctree: generated/
+:
 
       BaseWriter
-      write
+      BaseWriter.write

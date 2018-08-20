@@ -271,9 +271,10 @@ def mapLinearExt(axis, bounds, interval, indicator='ccn',
     meaning for the right-hand point. The third character indicates
     how the intersection of the interval and axis is treated:
 
-        'n' - the node is in the interval
-
-        'b' - the interval intersects the cell bounds
+    'n' - the node is in the interval
+    'b' - the interval intersects the cell bounds
+    's' - the cell bounds are a subset of the interval
+    'e' - same as 'n', plus an extra node on either side.
 
     Returns
     -------
@@ -1722,13 +1723,13 @@ class AbstractAxis(CdmsObj):
         else:
             mycopy = createAxis(self[:])
         mycopy.id = self.id
+        mycopy.__dict__.update(self.__dict__.copy())
+        mycopy._obj_ = None  # Erase Cdfile object if exist
         try:
             mycopy.setBounds(b, isGeneric=isGeneric[0])
         except CDMSError:
             b = mycopy.genGenericBounds()
             mycopy.setBounds(b, isGeneric=False)
-        for k, v in list(self.attributes.items()):
-            setattr(mycopy, k, v)
         return mycopy
 
     def listall(self, all=None):
@@ -1929,16 +1930,16 @@ class TransientAxis(AbstractAxis):
                 self._data_ = data[:]
             else:
                 self._data_ = numpy.array(data[:])
-        elif isinstance(data, numpy.ma.MaskedArray):
-            if numpy.ma.getmask(data).any() is numpy.bool_(True):
-                raise CDMSError(
-                    'Cannot construct an axis with a missing value.')
-            data = data.data
+        elif isinstance(data, numpy.ndarray):
             if copy == 0:
                 self._data_ = data
             else:
                 self._data_ = numpy.array(data)
-        elif isinstance(data, numpy.ndarray):
+        elif isinstance(data, numpy.ma.MaskedArray):
+            if numpy.ma.getmask(data) is not numpy.ma.nomask:
+                raise CDMSError(
+                    'Cannot construct an axis with a missing value.')
+            data = data.data
             if copy == 0:
                 self._data_ = data
             else:

@@ -113,6 +113,7 @@ class forecast():
         self.file = cdms2.open(self.filename)
 
     def close(self):
+        """close file."""
         self.file.close()
 
     def __call__(self, varname):

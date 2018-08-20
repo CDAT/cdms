@@ -299,6 +299,10 @@ class Cache:
     def get(self, filekey):
         """
         Get the path associated with <filekey>, or None if not present.
+Parameters
+----------
+        <filekey>
+            filekey for cache 
         """
         filekey = str(filekey)
         lock("index_lock")
@@ -318,6 +322,10 @@ class Cache:
     def put(self, filekey, path):
         """
         cache[filekey] = path
+Parameters
+----------
+        <filekey>
+            filekey for cache 
         """
 
         filekey = str(filekey)
@@ -341,6 +349,11 @@ class Cache:
     def deleteEntry(self, filekey):
         """
         Delete a cache index entry.
+
+Parameters
+----------
+        <filekey>
+            filekey for cache 
         """
         filekey = str(filekey)
 

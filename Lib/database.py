@@ -225,14 +225,23 @@ class LDAPDatabase(AbstractDatabase):
         self.close()
 
     def normalizedn(self, dn):
+        """
+        Returns
+        -------
+            string
+        """
         explodeddn = ldap.explode_dn(dn)
         return string.join(explodeddn, ',')
 
     def cachecdml(self, name, cdml, datapath):
+        """
+        """
         normaldn = self.normalizedn(name)
         self._cdmlcache_[normaldn] = (cdml, datapath)
 
     def getDataset(self, dn):
+        """
+        """
         normaldn = self.normalizedn(dn)
         if normaldn in self._cache_:
             dataset = self._cache_[normaldn]
@@ -262,6 +271,8 @@ class LDAPDatabase(AbstractDatabase):
         return dataset
 
     def getObjFromDataset(self, dn):
+        """
+        """
 
         # Get the parent dataset
         explodeddn = ldap.explode_dn(dn)

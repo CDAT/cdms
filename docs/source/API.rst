@@ -14,13 +14,11 @@ Classes
    ":ref:`axis`", "CDMS Axis objects"
    ":ref:`fvariable`", "CDMS File-based variables."
    ":ref:`bindex`", "Bin index for non-rectilinear grids"
-   ":ref:`variable`", "DatasetVariable: Dataset-based variables"
    ":ref:`cache`", "CDMS cache management and file movement objects"
-   ":ref:`CDML`", "CDML Document Type Definition This defines the CDML language"
+   ":ref:`variable`", "DatasetVariable: Dataset-based variables"
    ":ref:`cdurllib`", "Customized URLopener"
    ":ref:`cdurlparse`", "Parse (absolute and relative) URLs."
    ":ref:`cdxmllib`", "A parser for XML, using the derived class as static DTD."
-   ":ref:`convention`", "metadata conventions"
    ":ref:`coord`", "CDMS CoordinateAxis objects"
    ":ref:`cudsinterface`", "Emulation of old cu package"
    ":ref:`database`", "CDMS database objects"
@@ -49,11 +47,9 @@ Classes
    bindex 
    variable
    cache
-   CDML
    cdurllib
    cdurlparse
    cdxmllib
-   convention
    coord
    cudsinterface
    database

@@ -20,10 +20,14 @@ class CDURLopener(urllib.request.URLopener):
 
     # Attach an object to be returned with callbacks
     def setUserObject(self, userObject):
+        """
+        """
         self._userObject = userObject
 
     # Use FTP protocol
     def open_ftp(self, url):
+        """
+        """
         host, path = urllib.parse.splithost(url)
         if not host:
             raise IOError('ftp error', 'no host given')
@@ -85,6 +89,8 @@ class CDURLopener(urllib.request.URLopener):
             raise IOError('ftp error', msg).with_traceback(sys.exc_info()[2])
 
     def retrieve(self, url, filename=None, reporthook=None, blocksize=262144):
+        """
+        """
         url = urllib.unwrap(url)
         if self.tempcache and url in self.tempcache:
             return self.tempcache[url]

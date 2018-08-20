@@ -8,7 +8,6 @@ cdxmllib
    :toctree: generated/
 
 
-      XMLParser
       XMLParser.fixelements
       XMLParser.fixclass
       XMLParser.fixdict
@@ -44,20 +43,3 @@ cdxmllib
       XMLParser.unknown_charref
       XMLParser.unknown_entityref
      
-      TextXMLParser
-      TextXMLParser.handle_xml
-      TextXMLParser.handle_data
-      TextXMLParser.flush
-      TextXMLParser.handle_cdata
-      TextXMLParser.handle_proc
-      TextXMLParser.handle_comment
-      TextXMLParser.syntax_error
-      TextXMLParser.unknown_starttag
-      TextXMLParser.unknown_endtag
-      TextXMLParser.unknown_entityref
-      TextXMLParser.unknown_charref 
-      TextXMLParser.close
-      TextXMLParser.test
- 
-
-

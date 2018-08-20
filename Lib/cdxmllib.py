@@ -145,6 +145,9 @@ class XMLParser:
 
     # Interface -- reset this instance.  Loses all unprocessed data
     def reset(self):
+        """
+        Reset this instance.  Loses all unprocessed data
+        """
         self.rawdata = ''
         self.stack = []
         self.nomoretags = 0

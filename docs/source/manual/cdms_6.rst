@@ -49,21 +49,26 @@ where
 
 The CDML elements are:
 
-CDML Tags
-^^^^^^^^^   
-.. csv-table::
-   :header:  "Tag", "Description"
-   :widths:  8, 35                
+Table CDML Tags
+^^^^^^^^^^^^^^^^^^^                   
 
-   "attr", "Extra attribute"
-   "axis", "Coordinate axis"
-   "domain", "Axes on which a variable is defined"
-   "domElem", "Element of a variable domain"
-   "linear", "Linearly-spaced axis values"
-   "rectGrid", "Rectilinear Grid"
-   "variable", "Variable"
-
-
++------------+---------------------------------------+
+| Tag        | Description                           |
++============+=======================================+
+| attr       | Extra attribute                       |
++------------+---------------------------------------+
+| axis       | Coordinate axis                       |
++------------+---------------------------------------+
+| domain     | Axes on which a variable is defined   |
++------------+---------------------------------------+
+| domElem    | Element of a variable domain          |
++------------+---------------------------------------+
+| linear     | Linearly-spaced axis values           |
++------------+---------------------------------------+
+| rectGrid   | Rectilinear Grid                      |
++------------+---------------------------------------+
+| variable   | Variable                              |
++------------+---------------------------------------+
 
 Special Characters
 ~~~~~~~~~~~~~~~~~~
@@ -71,19 +76,23 @@ Special Characters
 XML reserves certain characters for markup. If they appear as content,
 they must be encoded to avoid confusion with markup:
 
-Special Character Encodings
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. csv-table::
-   :header:  "Character", "Encoding"
-   :widths:  8, 15                                       
+Table Special Character Encodings
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                     
 
-   "<", "&lt;"
-   ">", "&gt;"
-   "&", "&amp;"
-   "“", "&quot;"
-   "‘", "&apos;"
- 
-
++-------------+------------+
+| Character   | Encoding   |
++=============+============+
+| <           | &lt;       |
++-------------+------------+
+| >           | &gt;       |
++-------------+------------+
+| &           | &amp;      |
++-------------+------------+
+| “           | &quot;     |
++-------------+------------+
+| ‘           | &apos;     |
++-------------+------------+
 
 For example, the comment
 
@@ -210,8 +219,8 @@ into files. The format is:
 The pathname is appended to the value of the directory attribute, to
 obtain an absolute pathname.
 
-Axis Elements
-^^^^^^^^^^^^^
+Axis Element
+^^^^^^^^^^^^
 
 An axis element describes a single coordinate axis. The content can be a
 blank-separated list of axis values or a linear element. A linear
@@ -226,8 +235,8 @@ length).
 
 ``linear-element ::=`` **<linear delta=** ``"value”`` **length=** ``“Integer“`` **start=** ``“value“`` **> </linear>**
 
-Axis Element Attributes
-^^^^^^^^^^^^^^^^^^^^^^^
+Table Axis Elements
+^^^^^^^^^^^^^^^^^^^
 
 .. csv-table::
    :header: "Attribute", "Required?", "CF", "GDT", "Notes"
@@ -304,8 +313,8 @@ rectilinear in topology,
 ``grid-element ::=`` **<rectGrid** ``grid-attributes``\ **>**
 ``extra-attribute-element*`` **</rectGrid>**
 
-RectGrid Attributes
-^^^^^^^^^^^^^^^^^^^
+Table 6.5 RectGrid Attributes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                              
 
 .. raw:: html
@@ -360,8 +369,8 @@ start=\ **"``Integer``" **\ length=\ **"``Integer``"
 **\ partition\_length=\ **"``Integer``"**/>\*\*
 
 
-Variable Attributes
-^^^^^^^^^^^^^^^^^^^
+Table Variable Attributes
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 .. csv-table::
@@ -431,9 +440,9 @@ Dataset "sample" has two variables, and six axes.
 
    <?xml version="1.0"?>
 
-.. raw:: html
+::
 
-   <!DOCTYPE dataset SYSTEM "https://www-pcmdi.llnl.gov/software/cdms/cdml.dtd">
+   <!DOCTYPE dataset SYSTEM "http://www-pcmdi.llnl.gov/software/cdms/cdml.dtd">
 
  [-90. -78. -66. -54. -42. -30. -18. -6. 6. 18. 30. 42. 54. 66. 78. 90.]
 

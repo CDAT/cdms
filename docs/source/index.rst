@@ -3,6 +3,11 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+CDMS documentation
+==================
+
+
+**Version :** |release|
 
 **Table of content:**
 
@@ -18,7 +23,30 @@
    manual/cdms_7
    manual/cdms_appendix
    manual/sample_data
-   API
+
+#   AbstractAxis
+#   AbstractVariable
+#   avariable
+#   axis
+#   bindex
+#   cache
+#   cdmsfile
+#   cdmsobj
+#   database
+#   dataset
+#   fvariable
+#   gengrid
+#   grid
+#   gsHost
+#   gsStaticVariable
+#   gsTimeVariable
+#   hgrid
+#   MV2 
+#   mvSphereMesh
+#   mvCdmsRegrid
+#   selectors
+#   sliceut
+#   tvariable
 
 
 Indices and tables

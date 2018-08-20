@@ -63,8 +63,8 @@ where
 Output is written to standard output by default. Use the -x option to
 specify an output filename.
 
-CDScan Command Options
-^^^^^^^^^^^^^^^^^^^^^^                               
+Table CDScan Command Options
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^                               
 
 .. csv-table::
    :header: "Option:, "Description"

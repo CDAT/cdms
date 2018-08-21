@@ -2622,34 +2622,34 @@ def axisMatchIndex(axes, specifications=None, omit=None, order=None):
 
 def axisMatches(axis, specification):
     """
-       Parameters
-       ----------
-       axis:
-           See note below
-       specifications:
-           See note below
+    Parameters
+    ----------
+    axis:
+       See note below
+    specifications:
+       See note below
 
-       Returns
-       -------
-       1 or 0 depending on whether axis matches the specification.
+    Returns
+    -------
+    1 or 0 depending on whether axis matches the specification.
 
-       Note
-       ----
-       Specification must be one of:
+    Note
+    ----
+    Specification must be one of:
 
-       #. a string representing an axis id or one of the keywords time,
-          fctau0, latitude or lat, longitude or lon, or lev or level.
+    #. a string representing an axis id or one of the keywords time,
+      fctau0, latitude or lat, longitude or lon, or lev or level.
 
-       #. Axis may be surrounded with parentheses or spaces.
+    #. Axis may be surrounded with parentheses or spaces.
 
-          * We first attempt to match the axis id and the specification.
-          * Keywords try to match using isTime, isLatitude, etc.
-          * Comparisons to keywords and axis ids is case-insensitive.
+      * We first attempt to match the axis id and the specification.
+      * Keywords try to match using isTime, isLatitude, etc.
+      * Comparisons to keywords and axis ids is case-insensitive.
 
-       #. a function that takes an axis as an argument and returns a value.
-          * if the value returned is true, the axis matches.
+    #. a function that takes an axis as an argument and returns a value.
+      * if the value returned is true, the axis matches.
 
-       #. an axis object; will match if it is the same object as axis.
+    #. an axis object; will match if it is the same object as axis.
     """
     if isinstance(specification, string_types):
         s = specification.lower()

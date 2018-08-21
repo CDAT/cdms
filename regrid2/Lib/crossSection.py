@@ -543,19 +543,26 @@ class CrossSectionRegridder:
 
 
 def checkdimension(x, name):
-    """        #---------------------------------------------------------------------------------
-    #
-    #    purpose:  dimension  checks
-    #                  1. has a len method
-    #                  2. data type is float32
-    #                  3. monotonically increasing vectors
-    #
-    #    passed :  x - coordinate vector
-    #              name - coordinate vector ID
-    #
-    #    returned: x, xsize -- dimension vector and its size
-    #
-    #---------------------------------------------------------------------------------"""
+    """       
+      
+    Purpose 
+     
+        dimension  checks
+            1. has a len method
+            2. data type is float32
+            3. monotonically increasing vectors
+    
+    Parameters
+    ----------
+  
+        x - coordinate vector
+        name - coordinate vector ID
+    
+    Returns
+    -------
+          
+        x, xsize -- dimension vector and its size
+    """
 
     data = x[:]
     try:
@@ -605,20 +612,35 @@ def generic_wts_bnds(lat):
 
 
 def get_latitude_wts_bnds(checklatpass):
-    """        #-------------------------------------------------------------------
-    #
-    #     routine: get_latitude_wts_bnds
-    #
-    #     purpose: compare the passed checklatpass with the correct geophysical
-    #              ones calculated here. After finding a match call the function
-    #              to get the bounds.
-    #
-    #     usage:   wts,bnds = get_latitude_wts_bnds(checklatpass)
-    #              where checklatpass is the grid to check
-    #
-    #    return:   wts, bnds - tuple with weights and bounds
-    #
-    #-------------------------------------------------------------------------"""
+    """        
+    
+         routine: get_latitude_wts_bnds
+    
+         purpose: compare the passed checklatpass with the correct geophysical
+                  ones calculated here. After finding a match call the function
+                  to get the bounds.
+    
+         usage:   wts,bnds = get_latitude_wts_bnds(checklatpass)
+                  where
+
+    Parameters
+    ----------
+     
+        checklatpass
+
+            is the grid to check
+
+        None-
+        
+            N/A
+    
+
+    Return
+    ------
+       
+        wts, bnds - tuple with weights and bounds
+    
+    """
     small = 0.001                     # use as tolerance in checking values
 
     nlat = len(checklatpass)

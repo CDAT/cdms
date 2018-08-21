@@ -1,9 +1,14 @@
-.. _regrid2.horizontal:
+.. _horizontal:
 
-regrid2-horizontal
-==================
+horizontal
+==========
 
-.. automodule:: regrid2.horizontal
-      :members:
+.. currentmodule:: regrid2.horizontal
+
+.. autosummary::
+   :toctree:  generated/
+
+    extractBounds
+    input_mask
 
 

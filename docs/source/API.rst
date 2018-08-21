@@ -5,6 +5,7 @@ API
 
 Classes
 -------
+
 .. csv-table::
    :header:  "Type", "Constructor"
    :widths:  10, 40
@@ -39,52 +40,24 @@ Classes
    ":ref:`restApi`", ""
    ":ref:`slabinterface`", "Read part of the old cu slab interface implemented over CDMS"
 
-.. autosummary::
-
-   avariable
-   axis
-   fvariable
-   bindex 
-   variable
-   cache
-   cdurllib
-   cdurlparse
-   cdxmllib
-   coord
-   cudsinterface
-   database
-   dataset
-   forecast
-   gengrid
-   grid
-   hgrid
-   MV2
-   mvCdmsRegrid
-   selectors
-   tvariable
-   mvBaseWriter
-   mvSphereMesh
-   mvVsWriter
-   mvVTKSGWriter
-   mvVTKUGWriter
-   restApi
-   slabinterface
-   
 
 Regridder
 ---------
 
-.. autosummary:: 
+.. currentmodule:: regrid2
 
-   regrid2.horizontal
-   regrid2.esmf
-   regrid2.crossSection
-   regrid2.gsRegrid
-   regrid2.mvESMFRegrid
-   regrid2.mvGenericRegrid
-   regrid2.pressure
-   regrid2.scrip
-   regrid2.mvcdms2.FRegrid
+.. csv-table::
+   :header:  "Type", "Constructor"
+   :widths:  10, 40
+   :align: left
+
+   ":ref:`horizontal`", "Create a horizontal regridder"
+   ":ref:`esmf`", "Regrid source grid data to destination grid data using ESMF"
+   ":ref:`crossSection`", ""
+   ":ref:`mvESMFRegrid`", ""
+   ":ref:`mvGenericRegrid`", ""
+   ":ref:`pressure`", ""
+   ":ref:`scrip`", ""
    
 
  

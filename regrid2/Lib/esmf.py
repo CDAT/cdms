@@ -182,10 +182,8 @@ class EsmfStructGrid:
     """
     Structured grid
 
-    Constructor
-
-Parameters
-----------
+    Parameters
+    ----------
 
              shape
                  Tuple of cell sizes along each axis
@@ -618,8 +616,8 @@ class EsmfRegrid:
 
     Constuct regrid object
 
-Parameters
-----------
+    Parameters
+    ----------
 
              srcField 
                  the source field object of type EsmfStructFields

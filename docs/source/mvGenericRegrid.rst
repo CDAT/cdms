@@ -1,15 +1,13 @@
-.. _regrid2.mvGenericRegrid:
+.. _mvGenericRegrid:
 
-regrid2-mvGenericRegrid
-=======================
-.. currentmodule:: cdms2.regrid2-mvGenericRegrid
+mvGenericRegrid
+===============
+.. currentmodule:: regrid2.mvGenericRegrid
 
 .. autosummary:: 
    :toctree: generated/
 
-
-      GenericRegrid
-      GenericRegrid.guessPeriodicity
+      guessPeriodicity
       GenericRegrid.computeWeights
       GenericRegrid.apply
       GenericRegrid.getDstGrid

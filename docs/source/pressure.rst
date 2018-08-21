@@ -1,9 +1,14 @@
-.. _regrid2.pressure:
+.. _pressure:
 
-regrid2-pressure
-================
+pressure
+========
 
-.. automodule:: regrid2.pressure
-      :members:
+.. currentmodule:: regrid2.pressure
+
+.. autosummary::
+      :toctree: generated/
+
+        checkorder
+        sendmsg
 
 

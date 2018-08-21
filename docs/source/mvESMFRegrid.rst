@@ -1,8 +1,8 @@
-.. _regrid2.mvESMFRegrid:
+.. _mvESMFRegrid:
 
-regrid2-mvESMFRegrid
-====================
-.. currentmodule:: cdms2.regrid2-mvESMFRegrid
+mvESMFRegrid
+============
+.. currentmodule:: cdms2.regrid2.mvESMFRegrid
 
 .. autosummary:: 
    :toctree: generated/

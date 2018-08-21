@@ -157,6 +157,9 @@ class ConservativeRegridder(ScripRegridder):
         return self.destArea
 
     def regrid(self, input):
+        """
+        call regridder
+        """
         if self.normal is None:
             # print "On input, num_links = %d"%(len(self.sourceAddress))
             # print "On input, nextra = %d"%(input.shape[0])
@@ -210,7 +213,19 @@ class BilinearRegridder(ScripRegridder):
 
 
 class BicubicRegridder(ScripRegridder):
-    """Bicubic regrid."""
+    """Bicubic regrid.
+
+        Parameters
+        ----------
+            gradLat: 
+                df/di
+
+            gradLon:
+                df/dj
+
+            gradLatlon:
+                d(df)/(di)(dj)
+    """
 
     def __init__(self, outputGrid, remapMatrix, sourceAddress,
                  destAddress, inputGrid=None, sourceFrac=None, destFrac=None):
@@ -225,18 +240,6 @@ class BicubicRegridder(ScripRegridder):
             destFrac=destFrac)
 
     def __call__(self, input, gradLat, gradLon, gradLatlon):
-        """
-        Parameters
-        ----------
-            gradLat: 
-                df/di
-
-            gradLon:
-                df/dj
-
-            gradLatlon:
-                d(df)/(di)(dj)
-        """
 
         import numpy.ma
         from cdms2 import isVariable

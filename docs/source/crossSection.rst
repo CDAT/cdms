@@ -1,9 +1,21 @@
-.. _regrid2:
+.. _crossSection:
 
-regrid2- crossSection
-=====================
+crossSection
+============
 
-.. automodule:: regrid2.crossSection
-      :members:
+.. currentmodule:: regrid2.crossSection
+
+.. autosummary::
+      :toctree: generated/
+
+        checkdimension
+        generic_wts_bnds
+        get_latitude_wts_bnds
+        get_region_latitude_wts_bnds
+        latitude_bounds
+        rmserror
+        sectionmask
+        section
+        sendmsg
 
 

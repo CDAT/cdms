@@ -55,6 +55,7 @@ dependencies:
   - mpich=3.2.1=h26a2512_4
   - ncurses=6.1=hfc679d8_1
   - netcdf-fortran=4.4.4=7
+  - numpydoc=0.8.0=py_1
   - openssl=1.0.2o=h470a237_1
   - ossuuid=1.6.2=hfc679d8_0
   - packaging=17.1=py_0
@@ -72,7 +73,6 @@ dependencies:
   - setuptools=40.0.0=py27_1
   - six=1.11.0=py27_1
   - snowballstemmer=1.2.1=py_1
-  - sphinx=1.7.5=py27_0
   - sphinxcontrib-websupport=1.0.1=py27_0
   - sqlite=3.24.0=h2f33b56_0
   - tk=8.6.8=0
@@ -82,12 +82,28 @@ dependencies:
   - zlib=1.2.11=h470a237_3
   - binutils_impl_linux-64=2.31.1=h6176602_0
   - binutils_linux-64=2.31.1=h6176602_2
+  - freetype=2.9.1=h8a8886c_0
+  - funcsigs=1.0.2=py27_0
   - gcc_impl_linux-64=7.3.0=habb00fd_0
   - gcc_linux-64=7.3.0=h553295d_2
   - libgcc-ng=8.2.0=hdf63c60_1
   - libopenblas=0.2.20=h9ac9557_7
   - libstdcxx-ng=8.2.0=hdf63c60_1
+  - mock=2.0.0=py27_0
   - numpy=1.14.3=py27h28100ab_1
   - numpy-base=1.14.3=py27h0ea5e3f_1
+  - olefile=0.45.1=py27_0
+  - pbr=4.2.0=py27_0
+  - pillow=5.2.0=py27heded4f4_0
+  - pip=10.0.1=py27_0
+  - sphinx=1.7.6=py27_0
+  - sphinx_rtd_theme=0.4.1=py27_0
+  - wheel=0.31.1=py27_0
+  - pip:
+    - commonmark==0.5.4
+    - mv2==3.0.0
+    - readthedocs-sphinx-ext==0.5.14
+    - recommonmark==0.4.0
+    - regrid2==3.0.0
 prefix: /export/reshel3/anaconda52/envs/cdms2
 

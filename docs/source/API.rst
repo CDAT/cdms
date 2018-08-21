@@ -73,7 +73,9 @@ Classes
 
 Regridder
 ---------
+
 .. autosummary:: 
+
    regrid2.horizontal
    regrid2.esmf
    regrid2.crossSection

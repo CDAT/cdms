@@ -226,6 +226,8 @@ class LDAPDatabase(AbstractDatabase):
 
     def normalizedn(self, dn):
         """
+        normalizedn
+
         Returns
         -------
             string

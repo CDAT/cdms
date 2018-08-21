@@ -57,14 +57,16 @@ os.environ['UVCDAT_ANONYMOUS_LOG']="False"
 #    'sphinx.ext.napoleon'
 #]
 extensions = [
+    "sphinx.ext.autodoc",
+#    "readthedocs_ext.readthedocs",
     'easydev.copybutton',
     'sphinx.ext.autosummary',
     'sphinx.ext.todo',
-    'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
     'sphinx.ext.graphviz',
     'sphinx.ext.doctest',
-    'sphinx.ext.napoleon'
+    "numpydoc"
+#    'sphinx.ext.napoleon'
 ]
 
 jscopybutton_path = "copybutton.js"

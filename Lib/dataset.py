@@ -345,36 +345,41 @@ def getNetcdfUseParallelFlag():
 
 
 def getNetcdf4Flag():
-    """Returns
-       -------
+    """
+    Returns
+    -------
             NetCDF4 flag value."""
     return Cdunif.CdunifGetNCFLAGS("netcdf4")
 
 
 def getNetcdfClassicFlag():
-    """Returns
-       -------
+    """
+    Returns
+    -------
             NetCDF classic flag value."""
     return Cdunif.CdunifGetNCFLAGS("classic")
 
 
 def getNetcdfShuffleFlag():
-    """Returns
-       -------
+    """
+    Returns
+    -------
             NetCDF shuffle flag value."""
     return Cdunif.CdunifGetNCFLAGS("shuffle")
 
 
 def getNetcdfDeflateFlag():
-    """Returns
-       -------
+    """
+    Returns
+   -------
             NetCDF deflate flag value. """
     return Cdunif.CdunifGetNCFLAGS("deflate")
 
 
 def getNetcdfDeflateLevelFlag():
-    """Returns
-       -------
+    """
+    Returns
+    -------
             NetCDF deflate level flag value."""
     return Cdunif.CdunifGetNCFLAGS("deflate_level")
 
@@ -382,8 +387,8 @@ def getNetcdfDeflateLevelFlag():
 def useNetcdf3():
     """ Turns off (0) NetCDF flags for shuffle/cuDa/deflatelevel
     Output files are generated as NetCDF3 Classic after that
-       Returns
-       -------
+    Returns
+    -------
             No return value.
     """
     setNetcdfShuffleFlag(0)

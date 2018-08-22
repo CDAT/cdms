@@ -10,10 +10,8 @@ forecast
       two_times_from_one
       available_forecasts
       comptime
-
-      forecast.close
-      
       forecasts
+      forecasts.__init__
       forecasts.forecast_times_to_list
       forecasts.time_interval_to_list
       forecasts.reduce_inplace

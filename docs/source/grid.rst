@@ -8,21 +8,17 @@ grid
 .. autosummary::
    :toctree:  generated/
 
-   AbstractGrid.hasCoordType
-   AbstractGrid.hasCoordType.isGrid
-   AbstractGrid.hasCoordType.setClassifyGrids
-   AbstractGrid.hasCoordType.createRectGrid
-   AbstractGrid.hasCoordType.createUniformGrid
-   AbstractGrid.hasCoordType.createGlobalmeanGrid
-   AbstractGrid.hasCoordType.createZonalGrid
-   AbstractGrid.hasCoordType.createGenericGrid
-   AbstractGrid.hasCoordType.createGaussianGrid
-   AbstractGrid.hasCoordType.defaultRegion
-   AbstractGrid.hasCoordType.setRegionSpecs
+   isGrid
+   setClassifyGrids
+   createRectGrid
+   createUniformGrid
+   createGlobalMeanGrid
+   createZonalGrid
+   createGenericGrid
+   createGaussianGrid
+   defaultRegion
+   setRegionSpecs
 
-   AbstractGrid
-   AbstractGrid.listall
-   AbstractGrid.str
    AbstractGrid.info
    AbstractGrid.writeToFile
    AbstractGrid.subSlice
@@ -36,16 +32,12 @@ grid
    AbstractGrid.size
    AbstractGrid.writeScrip    
 
-   AbstractRectGrid
-   AbstractRectGrid.listall
-   AbstractRectGrid.getshape
    AbstractRectGrid.getAxis
    AbstractRectGrid.getBounds
    AbstractRectGrid.getLatitude
    AbstractRectGrid.getLongitude
    AbstractRectGrid.getMask
    AbstractRectGrid.setMask
-   AbstractRectGrid.GetOrder
    AbstractRectGrid.getType
    AbstractRectGrid.setType
    AbstractRectGrid.getWeights
@@ -57,27 +49,19 @@ grid
    AbstractRectGrid.genBounds   
    AbstractRectGrid.writeToFile
    AbstractRectGrid.getMesh
-   AbstractRectGrid.glatAxes
-   AbstractRectGrid.size
    AbstractRectGrid.writeScrip
    AbstractRectGrid.toCurveGrid
    AbstractRectGrid.toGenericGrid
-   AbstractRectGrid.initDomain
    AbstractRectGrid.getMask
-   AbstractRectGrid.getMaskVar
 
-   FileRectGrid
    FileRectGrid.setBounds
    FileRectGrid.getMask
    FileRectGrid.setMask
    FileRectGrid.getMaskVar
 
-   TransientRectGrid
    TransientRectGrid.getMask
    TransientRectGrid.setMask
    TransientRectGrid.setBounds
-   TransientRectGrid.isGrid
-   TransientRectGrid.writeScripGrid
     
 
 

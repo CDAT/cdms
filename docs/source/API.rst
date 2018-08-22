@@ -19,8 +19,6 @@ Classes
    ":ref:`variable`", "DatasetVariable: Dataset-based variables"
    ":ref:`cdurllib`", "Customized URLopener"
    ":ref:`cdurlparse`", "Parse (absolute and relative) URLs."
-   ":ref:`cdxmllib`", "A parser for XML, using the derived class as static DTD."
-   ":ref:`coord`", "CDMS CoordinateAxis objects"
    ":ref:`cudsinterface`", "Emulation of old cu package"
    ":ref:`database`", "CDMS database objects"
    ":ref:`dataset`", "CDMS dataset and file objects"

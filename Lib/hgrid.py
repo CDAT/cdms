@@ -31,6 +31,18 @@ def _flatten(boundsar):
 
 
 class AbstractHorizontalGrid(AbstractGrid):
+    """ Create an horizontal grid
+    
+    Parameters
+    ----------
+        latAxis 
+        lonAxis
+        id - Default None
+        maskvar - Default None
+        tempmask - Default None
+        node - Default None
+
+    """
 
     def __init__(self, latAxis, lonAxis, id=None,
                  maskvar=None, tempmask=None, node=None):
@@ -125,6 +137,9 @@ class AbstractHorizontalGrid(AbstractGrid):
         raise CDMSError(MethodNotImplemented)
 
     def hasCoordType(self, coordType):
+        """
+        Not documented
+        """
         return ((coordType == LatitudeType) or (coordType == LongitudeType))
 
     def checkConvex(self):
@@ -240,6 +255,8 @@ class AbstractHorizontalGrid(AbstractGrid):
 
 
 class AbstractCurveGrid(AbstractHorizontalGrid):
+    """Create a curvilinear grid.
+    """
 
     def __init__(self, latAxis, lonAxis, id=None,
                  maskvar=None, tempmask=None, node=None):
@@ -253,6 +270,9 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         self._index_ = None
 
     def clone(self, copyData=1):
+        """
+        Not documented
+        """
         newlat = self._lataxis_.clone(copyData)
         newlon = self._lonaxis_.clone(copyData)
         return TransientCurveGrid(newlat, newlon, id=self.id)
@@ -290,14 +310,23 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         return self._mesh_
 
     def _getShape(self):
+        """
+        Not documented
+        """
         return self._lataxis_.shape
 
     # Don't try to generate bounds for curvilinear grids
     def genBounds(self):
+        """
+        Not documented
+        """
         return (None, None)
 
     # Get the n-th index axis. naxis is 0 or 1.
     def getAxis(self, naxis):
+        """
+        Not documented
+        """
         return self._lataxis_.getAxis(naxis)
 
     def getMask(self):
@@ -308,6 +337,9 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
             return self._maskVar_[:]
 
     def size(self):
+        """
+        Not documented
+        """
         return self._lataxis_.size()
 
     def writeScrip(self, cufile, gridTitle=None):
@@ -378,6 +410,9 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         gridcornerlon[:] = clon
 
     def toGenericGrid(self, gridid=None):
+        """
+        Not documented
+        """
 
         from .auxcoord import TransientAuxAxis1D
         from .coord import TransientVirtualAxis
@@ -415,6 +450,9 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         return grid
 
     def toCurveGrid(self, gridid=None):
+        """
+        Not documented
+        """
         if gridid is None:
             gridid = self.id
         result = self.clone()
@@ -422,6 +460,9 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         return result
 
     def writeToFile(self, file):
+        """
+        Not documented
+        """
         latvar = self._lataxis_.writeToFile(file)
         lonvar = self._lonaxis_.writeToFile(file)
         if self._maskVar_ is not None:
@@ -725,6 +766,9 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         return submask, indexspecs
 
     def getAxisList(self):
+        """
+        Not documented
+        """
         return (self._lataxis_.getAxis(0), self._lataxis_.getAxis(1))
 
     def isClose(self, g):
@@ -842,6 +886,9 @@ class DatasetCurveGrid(AbstractCurveGrid):
 
 
 class FileCurveGrid(AbstractCurveGrid):
+    """
+        Not documented
+    """
 
     def __init__(self, latAxis, lonAxis, id, parent=None,
                  maskvar=None, tempmask=None, node=None):
@@ -857,6 +904,10 @@ class FileCurveGrid(AbstractCurveGrid):
 
 
 class TransientCurveGrid(AbstractCurveGrid):
+    """
+    Not documented
+    """
+
 
     grid_count = 0
 
@@ -874,6 +925,9 @@ class TransientCurveGrid(AbstractCurveGrid):
             self.id, repr(self.shape))
 
     def toCurveGrid(self, gridid=None):
+        """
+        Not documented
+        """
         if gridid is None:
             result = self
         else:

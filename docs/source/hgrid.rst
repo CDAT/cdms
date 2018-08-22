@@ -8,7 +8,6 @@ hgrid
    :toctree: generated/
       
       AbstractHorizontalGrid
-      AbstractHorizontalGrid.flatten
       AbstractHorizontalGrid.genBounds
       AbstractHorizontalGrid.getAxis
       AbstractHorizontalGrid.getBounds
@@ -16,7 +15,7 @@ hgrid
       AbstractHorizontalGrid.getLongitude
       AbstractHorizontalGrid.getMask
       AbstractHorizontalGrid.getMesh
-      AbstractHorizontalGridgetWeightsArray
+      AbstractHorizontalGrid.getWeightsArray
       AbstractHorizontalGrid.listall
       AbstractHorizontalGrid.setMask
       AbstractHorizontalGrid.subGridRegion
@@ -26,9 +25,8 @@ hgrid
       
       AbstractCurveGrid
       AbstractCurveGrid.clone
-      AbstractCurveGrid.rpr
       AbstractCurveGrid.getMesh
-      AbstractCurveGrid.getShape
+      AbstractCurveGrid._getShape
       AbstractCurveGrid.genBounds
       AbstractCurveGrid.getAxis
       AbstractCurveGrid.getMask
@@ -51,14 +49,5 @@ hgrid
       AbstractCurveGrid.reconcile
       AbstractCurveGrid.flatAxes
       
-      DatasetCurveGrid
-      DatasetCurveGrid.rpr
-     
-      FileCurveGrid
-      FileCurveGrid.rpr
- 
-      TransientCurveGrid
-      TransientCurveGrid.rpr
-      TransientCurveGrid.toCurveGrid
-      TransientCurveGrid.readScripCurveGrid
+      readScripCurveGrid
       

@@ -36,17 +36,22 @@ _numeric_compatibility = False
 
 def getMinHorizontalMask(var):
     """
-    Get the minimum mask associated with 'x' and 'y' (i.e. with the
-    min number of ones) across all axes
+       Get the minimum mask associated with 'x' and 'y' (i.e. with the min number of ones) across all axes
 
-    Parameters
-    ----------
-    var
-        CDMS variable with a mask
+Parameters
+----------
+ 
+       var
+          CDMS variable with a mask
+
+       N/A: 
+          None
 
     Return
     ------
-        mask array or None if order 'x' and 'y' were not found
+
+       mask array or None if order 'x' and 'y' were not found
+
     """
     from distarray import MultiArrayIter
 

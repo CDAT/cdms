@@ -78,19 +78,23 @@ class EsmfUnstructGrid:
                  cellMask=None, cellAreas=None):
         """Set Cell connectivity
 
-Parameters
-----------
-            cellIndices:
-               0-based)
-            cellTypes:
-               one of ESMF_MESHELEMTYPE_{TRI,QUAD,TETRA,HEX}
-            connectivityNode:
-               connectivity array, see below for node ordering
-            cellMask:
-               cellAreas area (volume) of each cell
+           Parameters
+           ----------
 
-        Note
-        ----
+                cellIndices:
+                   0-based)
+
+                cellTypes:
+                   one of ESMF_MESHELEMTYPE_{TRI,QUAD,TETRA,HEX}
+
+                connectivityNode:
+                   connectivity array, see below for node ordering
+
+                cellMask:
+                   cellAreas area (volume) of each cell
+
+            Note
+            ----
 
 ::
 
@@ -328,22 +332,21 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
     def setCoords(self, coords, staggerloc=CENTER, globalIndexing=False):
         """
         Populate the grid with staggered coordinates (e.g. corner or center).
-   
-        
+           
         Parameters
         ----------
-     
-             coords  
+
+            coords  
                 The curvilinear coordinates of the grid. List of numpy arrays. Must exist on all procs.
 
-             staggerloc 
+            staggerloc 
                  The stagger location ESMF.StaggerLoc.CENTER (default) ESMF.StaggerLoc.CORNER
 
-             globalIndexing
-                 if True array was allocated over global index space, otherwise array was allocated over local index space on this processor. This is only relevant if rootPe is None
+            globalIndexing
+                 if True array was allocated over global index space, otherwise array was allocated
+                 over local index space on this processor. This is only relevant if rootPe is None
 
-        Note: coord dims in cdms2 are ordered in y, x, but ESMF expects x, y,
-        hence the dimensions are reversed here.
+        Note: coord dims in cdms2 are ordered in y, x, but ESMF expects x, y, hence the dimensions are reversed here.
         """
         # allocate space for coordinates, can only add coordinates once
         for i in range(self.ndims):
@@ -377,11 +380,11 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
         Set the cell areas
  
         Parameters
-        ---------
+        ----------
 
-             areas numpy array
+           areas numpy array
 
-             _: None
+           _: None
 
         """
         self.grid.add_item(item=ESMF.GridItem.Area)
@@ -414,7 +417,10 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
         Returns
         -------
 
-             mask numpy array. 1 is invalid by default. This array exists on all procs
+             mask numpy array
+                 1 is invalid by default
+
+        Note: This array exists on all procs
         """
         try:
             maskPtr = self.grid.get_item(
@@ -427,13 +433,16 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
         """
         Set mask array. In ESMF, the mask is applied to cells.
   
-        Parameters
+        Returns
         ----------
 
-             mask numpy array.
-                 1 is invalid by default. This array exists on all procs
+             mask numpy array
+                 1 is invalid by default 
 
-             _: None
+
+        Note: This array exists on all procs
+
+        
         """
         self.grid.add_item(item=ESMF.GridItem.MASK, staggerloc=staggerloc)
         maskPtr = self.grid.get_item(

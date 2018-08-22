@@ -25,11 +25,10 @@ def guessPeriodicity(srcBounds):
     Parameters
     ----------
 
+          srcBounds
+             the nodal src set of coordinates
 
-        srcBounds
-            the nodal src set of coordinates
-
-        _: None
+           _: None
         
 
     Returns
@@ -60,8 +59,8 @@ class GenericRegrid:
     Constructor
 
 
-Parameters
-----------
+    Parameters
+    ----------
        
             srcGrid
                 list of numpy arrays, source horizontal coordinates
@@ -203,8 +202,8 @@ valid choices are: 'libcf', 'esmf'""" % regridTool
         """
         Regrid source to destination
 
-Parameters
-----------
+        Parameters
+        ----------
 
                 srcData
                     array (input)

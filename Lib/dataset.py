@@ -438,6 +438,7 @@ def createDataset(path, template=None):
        ----------
            path:
                is the XML file name, or netCDF filename for simple file creation.
+
            template:
                is a string template for the datafile(s), for dataset creation.
 

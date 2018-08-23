@@ -78,8 +78,8 @@ class EsmfUnstructGrid:
                  cellMask=None, cellAreas=None):
         """Set Cell connectivity
 
-           Parameters
-           ----------
+           Parameters:
+           
 
                 cellIndices:
                    0-based)
@@ -93,8 +93,9 @@ class EsmfUnstructGrid:
                 cellMask:
                    cellAreas area (volume) of each cell
 
-            Note
-            ----
+
+            Note:
+            
 
 ::
 
@@ -143,14 +144,14 @@ class EsmfUnstructGrid:
         Parameters
         ----------
 
-             indices
-                 Ids of the nodes (0-based)
+           indices -
+              Ids of the nodes (0-based)
 
-             coords
-                 nodal coordinates
+           coords -
+              nodal coordinates
 
-             peOwners
-                 processor ranks where the coordinates reside (0-based)
+           peOwners
+              processor ranks where the coordinates reside (0-based)
         """
         n = len(indices)
         if not self.nodesAdded:

@@ -70,16 +70,10 @@ avariable
   AbstractVariable.subRegion
   AbstractVariable.subSlice
   AbstractVariable.typecode
-  axisMatchAxis
-  axisMatches
-  axisMatchIndex
   getBoundList
   getMinHorizontalMask
   getNumericCompatibility
-  guessPeriodicity
   order2index
   orderparse
   setNumericCompatibility
-  splitSliceExt
-  splitSlice
 

@@ -1,11 +1,13 @@
 # Forecast support, experimental coding
 # probably all this will be rewritten, put in a different directory, etc.
 
+from __future__ import print_function
 import numpy
 import cdtime
 import cdms2
 import copy
 from cdms2 import CDMSError
+from six import string_types
 
 
 def two_times_from_one(t):
@@ -15,20 +17,20 @@ def two_times_from_one(t):
     Output is the same time, both as a long _and_ as a comptime."""
     if t == 0:
         t = 0
-    if isinstance(t, str):
+    if isinstance(t, string_types):
         t = cdtime.s2c(t)
-    if (isinstance(t, long) or isinstance(t, int)) and t > 1000000000:
+    if (isinstance(t, int) or isinstance(t, int)) and t > 1000000000:
         tl = t
-        year = tl / 1000000000
+        year = tl // 1000000000
         rem = tl % 1000000000
-        month = rem / 10000000
+        month = rem // 10000000
         rem = rem % 10000000
-        day = rem / 100000
+        day = rem // 100000
         allsecs = rem % 100000
         sec = allsecs % 60
-        allmins = allsecs / 60
+        allmins = allsecs // 60
         min = allmins % 60
-        hour = allmins / 60
+        hour = allmins // 60
         tc = cdtime.comptime(year, month, day, hour, min, sec)
     else:
         # I'd like to check that t is type comptime, but although Python
@@ -186,9 +188,9 @@ class forecasts():
     def time_interval_to_list(self, tlo, thi, openclosed='co'):
         """For internal use, translates a time interval to a list of times.
         """
-        if not isinstance(tlo, long):  # make tlo a long integer
+        if not isinstance(tlo, int):  # make tlo a long integer
             tlo, tdummy = two_times_from_one(tlo)
-        if not isinstance(thi, long):  # make thi a long integer
+        if not isinstance(thi, int):  # make thi a long integer
             thi, tdummy = two_times_from_one(thi)
         oclo = openclosed[0]
         ochi = openclosed[1]
@@ -260,13 +262,13 @@ class forecasts():
         # Create the variable from the data, with mask:
         v0 = vars[0]
         a = numpy.asarray([v.data for v in vars])
-        if not v0._mask:
-            m = False
-            v = cdms2.tvariable.TransientVariable(a)
-        else:
+        if (type(v0._mask) == numpy.ndarray):
             m = numpy.asarray([v._mask for v in vars])
             v = cdms2.tvariable.TransientVariable(
                 a, mask=m, fill_value=v0._fill_value)
+        else:
+            m = False
+            v = cdms2.tvariable.TransientVariable(a)
 
         # Domain-related attributes:
             # We get the tomain from __getitem__ to make sure that fcs[var] is consistent
@@ -348,7 +350,7 @@ class forecasts():
         attribute, normally a DatasetVariable.  The optional argument fccs
         is a list of forecasts to be passed on to forecast_axis().
         """
-        if not isinstance(varname, str):
+        if not isinstance(varname, string_types):
             raise CDMSError("bad argument to forecasts[]")
 
         var = self.dataset[varname]
@@ -367,10 +369,10 @@ class forecasts():
         return var
 
     def __repr__(self):
-        l = len(self.fcs)
-        if l == 0:
+        nlength = len(self.fcs)
+        if nlength == 0:
             return "<forecasts - None>"
         else:
             return "<forecasts from %s,...,%s>" % (
-                self.fcs[0].fct, self.fcs[l - 1].fct)
+                self.fcs[0].fct, self.fcs[nlength - 1].fct)
     __str__ = __repr__

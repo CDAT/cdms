@@ -91,7 +91,7 @@ class TestESMFRegridderMasked(unittest.TestCase):
         self.assertEqual(self.data3x4[0, 0], ESMF5x7[0, 0])
         self.assertEqual(1.0, ESMF5x7[0, 0])
         self.assertEqual(0.25, ESMF5x7[1, 1])
-        self.assertEqual(0.0, ESMF5x7[2, 2])
+        self.assertTrue(cdms2.MV2.is_masked(ESMF5x7[2,2]))
 
     def test2_3x4_to_5x7_degr(self):
         # Test non-periodic grid returning double grid resolution
@@ -161,7 +161,7 @@ class TestESMFRegridderMasked(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    print ""  # Spacer
+    print("")  # Spacer
     ESMF.Manager(debug=True)
     suite = unittest.TestLoader().loadTestsFromTestCase(TestESMFRegridderMasked)
     unittest.TextTestRunner(verbosity=1).run(suite)

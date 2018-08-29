@@ -6,18 +6,19 @@ TransientVariable (created by createVariable)
 is a child of both AbstractVariable and the masked array class.
 Contains also the write part of the old cu interface.
 """
+import sys
 import json
 import re
-import types
 import numpy
 from numpy import sctype2char
-from error import CDMSError
-from avariable import AbstractVariable
+from .error import CDMSError
+from .avariable import AbstractVariable
 
-from axis import createAxis, AbstractAxis
-from grid import createRectGrid, AbstractRectGrid
-from hgrid import AbstractCurveGrid
-from gengrid import AbstractGenericGrid
+from .axis import createAxis, AbstractAxis
+from .grid import createRectGrid, AbstractRectGrid
+from .hgrid import AbstractCurveGrid
+from .gengrid import AbstractGenericGrid
+from six import string_types
 
 # dist array support
 HAVE_MPI = False
@@ -43,14 +44,14 @@ def fromJSON(jsn):
                 a["_values"],
                 dtype=a["_dtype"]),
             id=a["id"])
-        for k, v in a.iteritems():
+        for k, v in a.items():
             if k not in ["_values", "id", "_dtype"]:
                 setattr(ax, k, v)
         axes.append(ax)
     # Now prep the variable
     V = createVariable(D["_values"], id=D["id"], typecode=D["_dtype"])
     V.setAxisList(axes)
-    for k, v in D.iteritems():
+    for k, v in D.items():
         if k not in ["id", "_values", "_axes",
                      "_grid", "_fill_value", "_dtype", ]:
             setattr(V, k, v)
@@ -96,7 +97,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             self.attributes = {}
         self._grid_ = getattr(obj, '_grid_', None)
         try:
-            for nm, val in obj.__dict__.items():
+            for nm, val in list(obj.__dict__.items()):
                 if nm[0] == '_':
                     # print nm
                     pass
@@ -118,9 +119,9 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         numpy.ma.MaskedArray.__array_finalize__(self, obj)
         return
 
-    def __copy__(self):
-        return numpy.ma.MaskedArray.copy(self)
+    squeeze = AbstractVariable.squeeze
 
+    __copy__ = AbstractVariable.__copy__
     __mul__ = AbstractVariable.__mul__
     __rmul__ = AbstractVariable.__rmul__
     __imul__ = AbstractVariable.__imul__
@@ -135,6 +136,8 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
     __rsub__ = AbstractVariable.__rsub__
     __isub__ = AbstractVariable.__isub__
     __div__ = AbstractVariable.__div__
+    __truediv__ = AbstractVariable.__truediv__
+    __floordiv__ = AbstractVariable.__floordiv__
     __rdiv__ = AbstractVariable.__rdiv__
     __idiv__ = AbstractVariable.__idiv__
     __pow__ = AbstractVariable.__pow__
@@ -163,7 +166,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             pass
         if fill_value is not None:
             self._setmissing(fill_value)
-        if attributes is not None and "_FillValue" in attributes.keys():
+        if attributes is not None and "_FillValue" in list(attributes.keys()):
             self._setmissing(attributes["_FillValue"])
 
         # tile index, None means no mosaic
@@ -173,7 +176,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             #            dtype = typeconv.convtypecode2(typecode)
             dtype = typecode
         typecode = sctype2char(dtype)
-        if isinstance(data, types.TupleType):
+        if isinstance(data, tuple):
             data = list(data)
 
         AbstractVariable.__init__(self)
@@ -183,7 +186,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
                 data = data.subSlice()
 #               if attributes is None: attributes = data.attributes
             if axes is None and not no_update_from:
-                axes = map(lambda x: x[0], data.getDomain())
+                axes = [x[0] for x in data.getDomain()]
             if grid is None and not no_update_from:
                 grid = data.getGrid()
                 if (grid is not None) and (not isinstance(grid, AbstractRectGrid)) \
@@ -204,7 +207,8 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         # Initialize the attributes
         if attributes is not None:
             for key, value in attributes.items():
-                if (key in ['shape', 'flat', 'imaginary', 'real'] or key[0] == '_') and key not in ['_FillValue']:
+                if (key in ['shape', 'flat', 'imaginary', 'real'] or
+                        key[0] == '_') and key not in ['_FillValue']:
                     raise CDMSError('Bad key in attributes: ' + key)
                 elif (key == 'missing_value' or key == '_FillValue'):
                     # ignore if fill value given explicitly
@@ -215,9 +219,13 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
 
         # Sync up missing_value attribute and the fill value.
         self.missing_value = self._getmissing()
-        self._FillValue = self._getmissing()
+#        self._FillValue = self._getmissing()
         if id is not None:
-            if not isinstance(id, (unicode, str)):
+            # convert unicode to string
+            if sys.version_info < (3, 0, 0):
+                if isinstance(id, unicode):  # noqa
+                    id = str(id)
+            if not isinstance(id, string_types):
                 raise CDMSError('id must be a string')
             self.id = id
         elif hasattr(data, 'id'):
@@ -259,7 +267,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             #            dtype = typeconv.convtypecode2(typecode)
             dtype = typecode
         typecode = sctype2char(dtype)
-        if isinstance(data, types.TupleType):
+        if isinstance(data, tuple):
             data = list(data)
         if isinstance(data, AbstractVariable):
             if not isinstance(data, TransientVariable):
@@ -286,7 +294,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         if dtype is None and data is not None:
             dtype = numpy.array(data).dtype
 
-        if fill_value in ["N/A"]:
+        if any(x is 'N/A' for x in str(fill_value)):
             fill_value = None
 
         if fill_value is not None:
@@ -410,7 +418,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         b = axis.getBounds(isGeneric)
         mycopy = createAxis(axis[:], b, genericBounds=isGeneric[0])
         mycopy.id = axis.id
-        for k, v in axis.attributes.items():
+        for k, v in list(axis.attributes.items()):
             setattr(mycopy, k, v)
         self.setAxis(n, mycopy)
 
@@ -473,7 +481,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
                 tinv[t[i]] = i
 
             # And reshape to fit the variable
-            if tinv != range(len(tinv)):
+            if tinv != list(range(len(tinv))):
                 bigmask = numpy.transpose(bigmask, tuple(tinv))
 
         else:
@@ -503,7 +511,10 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             raise CDMSError("setdimattribute, dim out of bounds.")
         d = self.getAxis(dim)
         if field == "name":
-            if not isinstance(value, types.StringType):
+            if sys.version_info < (3, 0, 0):
+                if isinstance(value, unicode):  # noqa
+                    value = str(value)
+            if not isinstance(value, string_types):
                 raise CDMSError("setdimattribute: name not a string")
             d.id = value
 
@@ -516,7 +527,10 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             self.setAxis(dim, a)
 
         elif field == "units":
-            if not isinstance(value, types.StringType):
+            if sys.version_info < (3, 0, 0):
+                if isinstance(value, unicode):  # noqa
+                    value = str(value)
+            if not isinstance(value, string_types):
                 raise CDMSError("setdimattribute: units not a string")
             d.units = value
 
@@ -553,7 +567,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         # Probably need something for curv/gen grids
         """ Dumps Variable to a jason object, args are passed directly to json.dump"""
         J = {}
-        for k, v in self.attributes.iteritems():
+        for k, v in self.attributes.items():
             if k == "autoApiInfo":
                 continue
             J[k] = v
@@ -561,7 +575,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         axes = []
         for a in self.getAxisList():
             ax = {}
-            for A, v in a.attributes.iteritems():
+            for A, v in a.attributes.items():
                 ax[A] = v
             ax['id'] = a.id
             ax["_values"] = a[:].tolist()
@@ -628,8 +642,8 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         sphereRadius: radius of the earth
         maxElev: maximum elevation for representation on the sphere
         """
-        import mvVTKSGWriter
-        import mvVsWriter
+        from . import mvVTKSGWriter
+        from . import mvVsWriter
         try:
             # required by mvVsWriter
             import tables                # noqa
@@ -951,4 +965,4 @@ if __name__ == '__main__':
         f.getdimattribute(
             0, 'bounds'), f2.getdimattribute(
             0, 'bounds'))
-    print "Transient Variable test passed ok."
+    print("Transient Variable test passed ok.")

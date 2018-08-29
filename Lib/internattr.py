@@ -1,5 +1,4 @@
 "InternalAttributes (implmentation class for CDMS)"
-import types
 import PropertiedClasses
 _PCLASS = PropertiedClasses.PropertiedClass
 
@@ -41,7 +40,7 @@ class AttributeDict:
 
     def items(self):
         result = []
-        for name, value in self._owner.__dict__.items():
+        for name, value in list(self._owner.__dict__.items()):
             if self._owner.is_internal_attribute(name):
                 continue
             result.append((name, value))
@@ -49,14 +48,14 @@ class AttributeDict:
 
     def keys(self):
         result = []
-        for name in self._owner.__dict__.keys():
+        for name in list(self._owner.__dict__.keys()):
             if self._owner.is_internal_attribute(name):
                 continue
             result.append(name)
         return result
 
     def update(self, d):
-        for name, value in d.items():
+        for name, value in list(d.items()):
             if self._owner.is_internal_attribute(name):
                 raise RuntimeError(
                     "Cannot update attribute dict with internal name")
@@ -64,7 +63,7 @@ class AttributeDict:
 
     def values(self):
         result = []
-        for name, value in self._owner.__dict__.items():
+        for name, value in list(self._owner.__dict__.items()):
             if self._owner.is_internal_attribute(name):
                 continue
             result.append(value)
@@ -94,13 +93,13 @@ class InternalAttributesClass (_PCLASS):
         """replace_external_attributes(newAttributes)
            Replace the external attributes with dictionary newAttributes.
         """
-        if not isinstance(newAttributes, types.DictType) and \
+        if not isinstance(newAttributes, dict) and \
            not isinstance(newAttributes, AttributeDict):
             raise ValueError("Argument must be a dictionary")
-        for n in self.__dict__.keys():
+        for n in list(self.__dict__.keys()):
             if not self.is_internal_attribute(n):
                 del self.__dict__[n]
-        for n, v in newAttributes.items():
+        for n, v in list(newAttributes.items()):
             self.__dict__[n] = v
 
 
@@ -153,18 +152,18 @@ if __name__ == '__main__':
     assert t1._p == 4
     t1.value = 2
     assert t1.value == 2
-    assert 'value' in t1.attributes.keys()
+    assert 'value' in list(t1.attributes.keys())
     t1.b = t1.value + 1
     assert t1.b == 3
     assert t1.b == t1.attributes['b']
     t1.node = 'me'
     t1.parent = 'dad'
     assert t1.node == 'me'
-    assert 'node' not in t1.attributes.keys()
+    assert 'node' not in list(t1.attributes.keys())
     assert t1.ro == 1
     try:
         t1.ro == 2
     except AttributeError:
         pass
     assert t1.ro == 1
-    print "Test passed."
+    print("Test passed.")

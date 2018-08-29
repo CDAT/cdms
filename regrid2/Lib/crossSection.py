@@ -3,9 +3,8 @@
 import cdms2
 import numpy
 import copy
-import string
-import _regrid
-from error import RegridError
+from . import _regrid
+from .error import RegridError
 
 
 class CrossSectionRegridder:
@@ -90,8 +89,8 @@ class CrossSectionRegridder:
         self.nlevi = len(levIn)
         self.nlevo = len(levOut)
 
-        latIn, self.nlati = checkdimension(latIn[:], 'input latitude')
-        latOut, self.nlato = checkdimension(latOut[:], 'output latitude')
+        latIn, self.nlati = checkdimension(latIn, 'input latitude')
+        latOut, self.nlato = checkdimension(latOut, 'output latitude')
 
         # --- check for a single grid point in the latitude-level plane
 
@@ -154,7 +153,6 @@ class CrossSectionRegridder:
         method is either 'log' to interpolate in the log of pressure, or 'linear' for linear interpolation.
         """
 
-        import cdms2
         from cdms2.avariable import AbstractVariable
         from cdms2.tvariable import TransientVariable
 
@@ -162,7 +160,7 @@ class CrossSectionRegridder:
         if isinstance(ar, AbstractVariable):
             attrs = copy.copy(ar.attributes)
             varid = ar.id
-            axislist = list(map(lambda x: x[0].clone(), ar.getDomain()))
+            axislist = list([x[0].clone() for x in ar.getDomain()])
             inputIsVariable = 1
             if order is None:
                 order = ar.getOrder()
@@ -207,7 +205,7 @@ class CrossSectionRegridder:
         assert rank == len(
             order), 'Order must be same length as array rank: %i' % len(ar.shape)
 
-        order = string.lower(order)
+        order = str.lower(order)
 
         # Map order to positionIn
         positionIn = [None] * 3
@@ -233,9 +231,9 @@ class CrossSectionRegridder:
         # Reconstruct the same class as on input
         # Mask fill_value and return results
         if inputIsVariable == 1:
-            result = cdms2.createVariable(outar, fill_value=missing,
+            result = numpy.ma.masked_values(outar, missing)
+            result = cdms2.createVariable(result, fill_value=missing,
                                           axes=axislist, attributes=attrs, id=varid)
-            result = numpy.ma.masked_values(result, missing)
         else:
             result = numpy.ma.masked_array(outar, fill_value=missing)
             result = numpy.ma.masked_values(result, missing)
@@ -558,14 +556,15 @@ def checkdimension(x, name):
     #
     #---------------------------------------------------------------------------------"""
 
+    data = x[:]
     try:
         xsize = len(x)
     except TypeError:
         sendmsg('Hgrid instance error -- instance requires a ' + name)
         raise TypeError
 
-    if x.dtype.char != 'f':
-        x = x.astype(numpy.float32)
+    if data.dtype.char != 'f':
+        x[:] = x[:].astype(numpy.float32)
 
     # -----  check for consistency  -----
 
@@ -583,6 +582,25 @@ def checkdimension(x, name):
                 return
 
     return x, xsize
+
+
+def generic_wts_bnds(lat):
+    try:
+        bnds = lat.getBounds()
+        if bnds is None:  # No bounds defined
+            newLat = lat.clone()
+            newLat.setBounds(None)
+        bnds = lat.getBounds()
+    except BaseException:  # just an array....
+        newLat = cdms2.createAxis(lat)
+        newLat.setBounds(None)
+        bnds = newLat.getBounds()
+    outBnds = bnds[:, 0].tolist()
+    outBnds.append(bnds[-1][-1])
+    outBnds = numpy.array(outBnds)
+    wts = [outBnds[i + 1] - outBnds[i] for i in range(len(lat))]
+    wts = numpy.array(wts) / numpy.sum(wts)
+    return wts, outBnds
 
 
 def get_latitude_wts_bnds(checklatpass):
@@ -673,11 +691,7 @@ def get_latitude_wts_bnds(checklatpass):
         return (wts, bnds)
 
     # ------ must be generic latitude -------
-
-#    wts, bnds = generic_wts_bnds(checklat)
-#    if reverse_latitude == 'yes':
-#        wts = wts[::-1]
-#        bnds = bnds[::-1]
+    wts, bnds = generic_wts_bnds(checklatpass)
     return (wts, bnds)
 
 
@@ -975,14 +989,14 @@ def sendmsg(msg, value1=None, value2=None):
     #
     #---------------------------------------------------------------------------------"""
 
-    print '*******************************************************************'
+    print('*******************************************************************')
     if value1 is None:
-        print msg
+        print(msg)
     elif value2 is None:
-        print msg, value1
+        print((msg, value1))
     else:
-        print msg, value1, value2
-    print '*******************************************************************'
+        print((msg, value1, value2))
+    print('*******************************************************************')
 
     return None
 
@@ -1029,9 +1043,9 @@ def rmserror(data1, data2):
     #---------------------------------------------------------------------------------"""
 
     if data1.shape != data2.shape:
-        print 'Error in shape in rmserror'
-        print 'data1 shape = ', data1.shape
-        print 'data2 shape = ', data2.shape
+        print('Error in shape in rmserror')
+        print(('data1 shape = ', data1.shape))
+        print(('data2 shape = ', data2.shape))
         raise ValueError
 
     d1 = numpy.ravel(data1)
@@ -1072,6 +1086,6 @@ if __name__ == '__main__':
     # find the rms error
     error = rmserror(dataOut, dataCheck)
 
-    print 'expected cross section test case rms error =  0.18581882'
+    print('expected cross section test case rms error =  0.18581882')
     # print 'expected cross section test case rms error =  0.23062'
-    print 'calculated cross section test case rms error = ', error
+    print(('calculated cross section test case rms error = ', error))

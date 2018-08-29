@@ -5,7 +5,7 @@
 import numpy
 from numpy import character, float, float32, float64  # noqa
 from numpy import int, int8, int16, int32, int64, byte  # noqa
-from numpy import  ubyte, uint8, uint16, uint32, uint64, long   # noqa
+from numpy import ubyte, uint8, uint16, uint32, uint64, long   # noqa
 from numpy.ma import allclose, allequal, common_fill_value  # noqa
 from numpy.ma import make_mask_none, dot, filled  # noqa
 from numpy.ma import getmask, getmaskarray, identity  # noqa
@@ -13,12 +13,12 @@ from numpy.ma import indices, innerproduct, masked, put, putmask, rank, ravel  #
 from numpy.ma import set_fill_value, shape, size, isMA, isMaskedArray, is_mask, isarray  # noqa
 from numpy.ma import make_mask, mask_or, nomask   # noqa
 from numpy import sctype2char, get_printoptions, set_printoptions
-from avariable import AbstractVariable, getNumericCompatibility
-from tvariable import TransientVariable, asVariable
-from grid import AbstractRectGrid
-from error import CDMSError
+from cdms2.avariable import AbstractVariable, getNumericCompatibility
+from cdms2.tvariable import TransientVariable, asVariable
+from cdms2.grid import AbstractRectGrid
+from cdms2.error import CDMSError
 # from numpy.ma import *
-from axis import allclose as axisAllclose, TransientAxis, concatenate as axisConcatenate, take as axisTake
+from cdms2.axis import allclose as axisAllclose, TransientAxis, concatenate as axisConcatenate, take as axisTake
 
 
 create_mask = make_mask_none
@@ -289,6 +289,8 @@ add = var_binary_operation(numpy.ma.add)
 subtract = var_binary_operation(numpy.ma.subtract)
 multiply = var_binary_operation(numpy.ma.multiply)
 divide = var_binary_operation(numpy.ma.divide)
+true_divide = var_binary_operation(numpy.ma.true_divide)
+floor_divide = var_binary_operation(numpy.ma.floor_divide)
 equal = var_binary_operation(numpy.ma.equal)
 less_equal = var_binary_operation(numpy.ma.less_equal)
 greater_equal = var_binary_operation(numpy.ma.greater_equal)
@@ -341,6 +343,15 @@ def _conv_axis_arg(axis):
     return axis
 
 
+def squeeze(x):
+    "call numpy.squeeze on ndarray and rebuild tvariable."
+    # ta = _makeMaskedArg(x)
+    maresult = numpy.squeeze(x._data)
+    axes, attributes, id, grid = _extractMetadata(x)
+    return TransientVariable(
+        maresult, axes=axes, attributes=attributes, grid=grid, id=id)
+
+
 def is_masked(x):
     "Is x a 0-D masked value?"
     return isMaskedArray(x) and x.size == 1 and x.ndim == 0 and x.mask.item()
@@ -354,7 +365,7 @@ def is_floating(x):
 def is_integer(x):
     "Is x a scalar integer, either python or numpy?"
     return (isinstance(x, numpy.integer) or isinstance(
-        x, int) or isinstance(x, long))
+        x, int))
 
 
 def get_print_limit():
@@ -390,6 +401,7 @@ alltrue = var_unary_operation_with_axis(numpy.ma.all)
 all = alltrue
 logical_not = var_unary_operation(numpy.ma.logical_not)
 divide.reduce = None
+true_divide.reduce = None
 remainder = var_binary_operation(numpy.ma.remainder)
 remainder.reduce = None
 fmod = var_binary_operation(numpy.ma.fmod)
@@ -551,7 +563,7 @@ def choose(myindices, t):
 
       The result has only the default axes.
     """
-    maresult = numpy.ma.choose(myindices, map(_makeMaskedArg, t))
+    maresult = numpy.ma.choose(myindices, list(map(_makeMaskedArg, t)))
     F = getattr(t, "fill_value", 1.e20)
     return TransientVariable(maresult, fill_value=F)
 
@@ -677,7 +689,7 @@ def concatenate(arrays, axis=0, axisid=None, axisattributes=None):
             if axes is None:
                 break
             axes = commonAxes(tarrays[i + 2], axes, omit=axis)
-            grid = commonGrid1(a, grid, axes)
+            grid = commonGrid1(tarrays[i + 2], grid, axes)
     else:
         axes = tarrays[0].getAxisList()
         varattributes = tarrays[0].attributes

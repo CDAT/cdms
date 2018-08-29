@@ -7,9 +7,10 @@ This code is provided with the hope that it will be useful.
 No guarantee is provided whatsoever. Use at your own risk.
 """
 
+from __future__ import print_function
 import numpy
 import time
-import mvBaseWriter
+from . import mvBaseWriter
 
 
 class VTKSGWriter(mvBaseWriter.BaseWriter):
@@ -20,31 +21,31 @@ class VTKSGWriter(mvBaseWriter.BaseWriter):
         @param filename file name
         """
         f = open(filename, 'w')
-        print >> f, '# vtk DataFile Version 2.0'
-        print >> f, 'generated on %s' % time.asctime()
-        print >> f, 'ASCII'
-        print >> f, 'DATASET STRUCTURED_GRID'
+        print('# vtk DataFile Version 2.0', file=f)
+        print('generated on %s' % time.asctime(), file=f)
+        print('ASCII', file=f)
+        print('DATASET STRUCTURED_GRID', file=f)
         shp = self.shape[:]
         shp.reverse()
-        print >> f, 'DIMENSIONS %d %d %d' % tuple(shp)
+        print('DIMENSIONS %d %d %d' % tuple(shp), file=f)
         npts = self.mesh.shape[0]
-        print >> f, 'POINTS %d float' % npts
+        print('POINTS %d float' % npts, file=f)
         for i in range(npts):
-            print >> f, '%f %f %f' % tuple(self.mesh[i, :])
+            print('%f %f %f' % tuple(self.mesh[i, :]), file=f)
         n0, n1, n2 = self.shape
         # nodal data
-        print >> f, 'POINT_DATA %d' % (n0 * n1 * n2)
-        print >> f, 'SCALARS %s float' % (self.var.id)
-        print >> f, 'LOOKUP_TABLE default'
+        print('POINT_DATA %d' % (n0 * n1 * n2), file=f)
+        print('SCALARS %s float' % (self.var.id), file=f)
+        print('LOOKUP_TABLE default', file=f)
         if n0 > 1:
             for k in range(n0):
                 for j in range(n1):
                     for i in range(n2):
-                        print >> f, '%f' % self.var[k, j, i]
+                        print('%f' % self.var[k, j, i], file=f)
         else:
             for j in range(n1):
                 for i in range(n2):
-                    print >> f, '%f' % self.var[j, i]
+                    print('%f' % self.var[j, i], file=f)
         f.close()
 
 

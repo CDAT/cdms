@@ -1,19 +1,21 @@
 """Customized URLopener"""
 
-import urllib
+from __future__ import print_function
+import urllib.request
+import urllib.parse
+import urllib.error
 import getpass
 import socket
 import string
-import sys
 import os
 
 MAXFTPCACHE = 10        # Trim the ftp cache beyond this size
 
 
-class CDURLopener(urllib.URLopener):
+class CDURLopener(urllib.request.URLopener):
 
     def __init__(self, proxies=None):
-        urllib.URLopener.__init__(self, proxies)
+        urllib.request.URLopener.__init__(self, proxies)
         self._userObject = None
 
     # Attach an object to be returned with callbacks
@@ -22,27 +24,27 @@ class CDURLopener(urllib.URLopener):
 
     # Use FTP protocol
     def open_ftp(self, url):
-        host, path = urllib.splithost(url)
+        host, path = urllib.parse.splithost(url)
         if not host:
-            raise IOError(('ftp error', 'no host given'))
-        host, port = urllib.splitport(host)
-        user, host = urllib.splituser(host)
+            raise IOError('ftp error', 'no host given')
+        host, port = urllib.parse.splitport(host)
+        user, host = urllib.parse.splituser(host)
         # if user: user, passwd = splitpasswd(user)
         if user:
             passwd = getpass.getpass()
         else:
             passwd = None
-        host = urllib.unquote(host)
-        user = urllib.unquote(user or '')
-        passwd = urllib.unquote(passwd or '')
+        host = urllib.parse.unquote(host)
+        user = urllib.parse.unquote(user or '')
+        passwd = urllib.parse.unquote(passwd or '')
         host = socket.gethostbyname(host)
         if not port:
             import ftplib
             port = ftplib.FTP_PORT
         else:
             port = int(port)
-        path, attrs = urllib.splitattr(path)
-        path = urllib.unquote(path)
+        path, attrs = urllib.parse.splitattr(path)
+        path = urllib.parse.unquote(path)
         dirs = string.splitfields(path, '/')
         dirs, file = dirs[:-1], dirs[-1]
         if dirs and not dirs[0]:
@@ -51,14 +53,14 @@ class CDURLopener(urllib.URLopener):
         # XXX thread unsafe!
         if len(self.ftpcache) > MAXFTPCACHE:
             # Prune the cache, rather arbitrarily
-            for k in self.ftpcache.keys():
+            for k in list(self.ftpcache.keys()):
                 if k != key:
                     v = self.ftpcache[k]
                     del self.ftpcache[k]
                     v.close()
         try:
             if key not in self.ftpcache:
-                print 'Creating ftpwrapper: ', user, host, port, dirs
+                print('Creating ftpwrapper: ', user, host, port, dirs)
                 self.ftpcache[key] = \
                     urllib.ftpwrapper(user, passwd, host, port, dirs)
             if not file:
@@ -66,43 +68,43 @@ class CDURLopener(urllib.URLopener):
             else:
                 type = 'I'
             for attr in attrs:
-                attr, value = urllib.splitvalue(attr)
+                attr, value = urllib.parse.splitvalue(attr)
                 if string.lower(attr) == 'type' and \
                    value in ('a', 'A', 'i', 'I', 'd', 'D'):
                     type = string.upper(value)
             (fp, retrlen) = self.ftpcache[key].retrfile(file, type)
             if retrlen is not None and retrlen >= 0:
                 import mimetools
-                import StringIO
-                headers = mimetools.Message(StringIO.StringIO(
+                import io
+                headers = mimetools.Message(io.StringIO(
                     'Content-Length: %d\n' % retrlen))
-#            else:
-#                headers = noheaders()
+            else:
+                headers = ""
             return urllib.addinfourl(fp, headers, "ftp:" + url)
         except urllib.ftperrors() as msg:
-            raise IOError(('ftp error', msg), sys.exc_info()[2])
+            raise IOError('ftp error', msg).with_traceback(sys.exc_info()[2])
 
     def retrieve(self, url, filename=None, reporthook=None, blocksize=262144):
         url = urllib.unwrap(url)
         if self.tempcache and url in self.tempcache:
             return self.tempcache[url]
-        type, url1 = urllib.splittype(url)
-#        if not filename and (not type or type == 'file'):
-#            try:
-#                fp = self.open_local_file(url1)
-#                hdrs = fp.info()
-#                del fp
-#                return url2pathname(urllib.splithost(url1)[1]), hdrs
-#            except IOError:
-#                pass
+        type, url1 = urllib.parse.splittype(url)
+        if not filename and (not type or type == 'file'):
+            try:
+                fp = self.open_local_file(url1)
+                fp.info()
+                del fp
+#                return url2pathname(urllib.parse.splithost(url1)[1]), hdrs
+            except IOError:
+                pass
         fp = self.open(url)
         headers = fp.info()
         if not filename:
             import tempfile
-            garbage, path = urllib.splittype(url)
-            garbage, path = urllib.splithost(path or "")
-            path, garbage = urllib.splitquery(path or "")
-            path, garbage = urllib.splitattr(path or "")
+            garbage, path = urllib.parse.splittype(url)
+            garbage, path = urllib.parse.splithost(path or "")
+            path, garbage = urllib.parse.splitquery(path or "")
+            path, garbage = urllib.parse.splitattr(path or "")
             suffix = os.path.splitext(path)[1]
             filename = tempfile.mktemp(suffix)
             self.__tempfiles.append(filename)
@@ -149,14 +151,15 @@ class CDURLopener(urllib.URLopener):
 def sampleReportHook(blocknum, blocksize, size, userObj):
     sizekb = size / 1024
     percent = min(100, int(100.0 * float(blocknum * blocksize) / float(size)))
-    print "Read: %3d%% of %dK" % (percent, sizekb)
+    print("Read: %3d%% of %dK" % (percent, sizekb))
     return 1
 
 
 if __name__ == '__main__':
 
+    import sys
     if len(sys.argv) != 4:
-        print 'Usage: cdurllib.py URL filename blocksize'
+        print('Usage: cdurllib.py URL filename blocksize')
         sys.exit(1)
 
     url = sys.argv[1]
@@ -166,4 +169,4 @@ if __name__ == '__main__':
     urlopener = CDURLopener()
     fname, headers = urlopener.retrieve(
         url, filename, sampleReportHook, blocksize)
-    print fname, 'written'
+    print(fname, 'written')

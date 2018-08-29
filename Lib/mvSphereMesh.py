@@ -7,8 +7,8 @@ This code is provided with the hope that it will be useful.
 No guarantee is provided whatsoever. Use at your own risk.
 """
 
+from __future__ import print_function
 import numpy
-from types import NoneType
 from functools import reduce
 
 
@@ -36,7 +36,7 @@ class SphereMesh:
 
         # compute the min/max of elevation, needed
         # for normalization
-        if not isinstance(elvs, NoneType):
+        if not isinstance(elvs, type(None)):
             self.minElv = min(elvs[:])
             self.maxElv = max(elvs[:])
             if hasattr(elvs, 'positive'):
@@ -46,7 +46,7 @@ class SphereMesh:
         # determine the dimensionality and
         # whether the grid is rectilinear
         for axis in lons, lats, elvs:
-            if not isinstance(axis, NoneType):
+            if not isinstance(axis, type(None)):
                 self.ndims += 1
                 if len(axis.shape) != 1:
                     self.isRectilinear = False
@@ -55,7 +55,7 @@ class SphereMesh:
         if self.isRectilinear:
             self.shape = []
             for axis in lons, lats, elvs:
-                if not isinstance(axis, NoneType):
+                if not isinstance(axis, type(None)):
                     self.shape.append(len(axis))
             self.shape.reverse()
 
@@ -65,7 +65,7 @@ class SphereMesh:
         # store lon, lat, elv as a curvilinear grid
         if self.isRectilinear:
             # apply tensore product of axes to generat curvilinear coordinates
-            if not isinstance(elvs, NoneType):
+            if not isinstance(elvs, type(None)):
                 self.elvs = numpy.outer(numpy.outer(numpy.ones(self.shape[:0], numpy.float32), elvs),
                                         numpy.ones(self.shape[0 + 1:], numpy.float32)).reshape(self.shape)
             else:
@@ -79,7 +79,7 @@ class SphereMesh:
             # already in curvilinear form
             self.lons = lons[:]
             self.lats = lats[:]
-            if not isinstance(elvs, NoneType):
+            if not isinstance(elvs, type(None)):
                 self.elvs = elvs[:]
             else:
                 self.elvs = numpy.zeros(self.shape, numpy.float32)
@@ -136,7 +136,7 @@ def test2DRect():
     var = cdms2.createVariable(data, id='fake_data_2d_rect',
                                axes=(lats, lons))
     sphere_mesh = SphereMesh(var, 0.1)
-    print sphere_mesh.getXYZCoords()
+    print(sphere_mesh.getXYZCoords())
 
 
 def test2D():
@@ -173,7 +173,7 @@ def test2D():
                                attributes={'coordinates': 'lats lons'},
                                )
     sphere_mesh = SphereMesh(var)
-    print sphere_mesh.getXYZCoords()
+    print(sphere_mesh.getXYZCoords())
 
 
 def test3DRect():
@@ -204,14 +204,14 @@ def test3DRect():
     var = cdms2.createVariable(data, id='fake_data_3d_rect',
                                axes=(elvs, lats, lons))
     sphere_mesh = SphereMesh(var)
-    print sphere_mesh.getXYZCoords()
+    print(sphere_mesh.getXYZCoords())
 
 
 def test3DposDown():
     """
     Test 3d data with elev positive down. Need to work with 1D axes.
     """
-    print 'test positive down'
+    print('test positive down')
     import cdms2
     import numpy
     nlev, nlat, nlon = 4, 5, 6
@@ -239,7 +239,7 @@ def test3DposDown():
     aa = sphereMesh.getXYZCoords()
     bb = aa.reshape((4, 5, 6, 3))
     for i in range(nlev):
-        print levs1d[i], bb[i, 0, 0, :]
+        print(levs1d[i], bb[i, 0, 0, :])
 
 
 if __name__ == '__main__':

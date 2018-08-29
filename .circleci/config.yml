@@ -1,0 +1,141 @@
+version: 2
+
+checkout:
+  post:
+    - ./ci-support/checkout_merge_commit.sh
+        
+aliases:
+
+  - &setup_miniconda
+    name: setup_miniconda
+    command: |
+      mkdir -p workspace
+      git clone -b validateNightly git@github.com:CDAT/cdat workspace/cdat
+      ls workspace/cdat
+      # following will install miniconda3 under $WORKDIR/miniconda/bin
+      python workspace/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py3'
+      
+  - &create_conda_env
+    name: create_conda_env
+    command: |
+       export PATH=$HOME/project/$WORKDIR/miniconda/bin:$PATH
+       conda config --set always_yes yes --set changeps1 no
+       conda update -y -q conda
+       conda config --set anaconda_upload no
+       conda create -n py3 -c cdat/label/unstable -c cdat/label/nightly -c conda-forge -c cdat libcf distarray cdtime libcdms cdat_info testsrunner numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient "python>3"
+       conda create -n py2 -c cdat/label/unstable -c cdat/label/nightly -c conda-forge -c cdat libcf distarray cdtime libcdms cdat_info testsrunner numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient "python<3"
+       if [ $(uname) == "Linux" ]; then
+           conda install -n py3 -c cdat/label/unstable -c cdat/label/nightly -c conda-forge gcc_linux-64
+           conda install -n py2 -c cdat/label/unstable -c cdat/label/nightly -c conda-forge gcc_linux-64
+       else
+           conda install -n py3 -c cdat/label/unstable -c cdat/label/nightly -c conda-forge gcc
+           conda install -n py2 -c cdat/label/unstable -c cdat/label/nightly -c conda-forge gcc
+       fi
+
+  - &setup_cdms
+    name: setup_cdms
+    command: |
+       export PATH=$HOME/project/$WORKDIR/miniconda/bin:$PATH
+       export UVCDAT_ANONYMOUS_LOG=False
+       source activate py3
+       if [ $(uname) == "Linux" ];then
+         export LDSHARED="$CC -shared -pthread"
+         LDSHARED="$CC -shared -pthread" python setup.py install
+       else
+         python setup.py install
+       fi
+       source activate py2
+       rm -rf build
+       if [ $(uname) == "Linux" ];then
+         export LDSHARED="$CC -shared -pthread"
+         LDSHARED="$CC -shared -pthread" python setup.py install
+       else
+         python setup.py install
+       fi
+
+  - &run_cdms_tests
+    name: run_cdms_tests
+    command: |
+       export PATH=$HOME/project/$WORKDIR/miniconda/bin:$PATH
+       export UVCDAT_ANONYMOUS_LOG=False
+       set -e
+       source activate py2
+       python run_tests.py --subdir -v2 
+       PY2_RESULT=$?
+       echo "**** py2 test result: "${PY2_RESULT}
+       source activate py3
+       python run_tests.py --subdir -v2 
+       PY3_RESULT=$?
+       echo "*** py3 test result: "${PY3_RESULT}
+       echo  $PY2_RESULT > $HOME/project/$WORKDIR/py2_result.txt
+       echo  $PY3_RESULT > $HOME/project/$WORKDIR/py3_result.txt
+
+  - &upload_cdms
+    name: upload_cdms
+    command: |
+       export PATH=$HOME/project/$WORKDIR/miniconda/bin:$PATH
+       export LABEL="nightly";
+       # Retrieve results
+       PY2_RESULT=$(cat $HOME/project/$WORKDIR/py2_result.txt)
+       PY3_RESULT=$(cat $HOME/project/$WORKDIR/py3_result.txt)
+       echo "*** CIRCLE BRANCH: "${CIRCLE_BRANCH}
+       echo "*** PY2_RESULT: "${PY2_RESULT}
+       echo "*** PY3_RESULT: "${PY3_RESULT}
+
+       if [ $PY2_RESULT -eq 0 -a $PY3_RESULT -eq 0 -a $CIRCLE_BRANCH == "master" ]; then conda install -n root conda-build anaconda-client ; fi
+       if [ $PY2_RESULT -eq 0 -a $PY3_RESULT -eq 0 -a $CIRCLE_BRANCH == "master" ]; then bash ./ci-support/conda_upload.sh ; fi
+       if [ $PY2_RESULT -eq 0 -a $PY3_RESULT -eq 0 -a $CIRCLE_BRANCH != "master" ]; then
+           export LABEL="unstable";
+           echo "NOTE: upload LABEL="${LABEL}
+           conda install -n root conda-build anaconda-client;
+           bash ./ci-support/conda_upload.sh;
+       fi
+
+jobs:
+  macos_cdms:
+    macos:
+      xcode: "9.2.0"
+    environment:
+      WORKDIR: "workspace/test_macos_cdms"
+    steps:
+      - checkout
+      - run: *setup_miniconda
+      - run: *create_conda_env
+      - run: *setup_cdms
+      - run: *run_cdms_tests
+      - run: *upload_cdms
+      - store_artifacts:
+          path: tests_html
+          destination: tests_html
+      - store_artifacts:
+          path: tests_png
+          destination: tests_png
+
+  linux_cdms:
+    machine:
+      image: circleci/classic:latest
+    environment:
+      WORKDIR: "workspace/test_linux_cdms"
+    steps:
+      - checkout
+      - run: *setup_miniconda
+      - run: *create_conda_env
+      - run: *setup_cdms
+      - run: *run_cdms_tests
+      - run: *upload_cdms
+      - store_artifacts:
+          path: tests_html
+          destination: tests_html
+      - store_artifacts:
+          path: tests_png
+          destination: tests_png
+
+
+workflows:
+  version: 2
+  cdms_test:
+    jobs:
+      - macos_cdms
+      - linux_cdms
+
+       

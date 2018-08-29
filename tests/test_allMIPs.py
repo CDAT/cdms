@@ -13,9 +13,19 @@ class TestMIPS(basetest.CDMSBaseTest):
         self.filename = os.path.join(
             pth,
             "161122_RobertPincus_multiple_input4MIPs_radiation_RFMIP_UColorado-RFMIP-20161122_none.nc")
+        self.filename2 = os.path.join(
+            pth,
+            "vmro3_input4MIPs_ozone_DAMIP_CCMI-hist-stratO3-1-0_gr_185001_nco.nc")
 
     def tearDown(self):
         super(TestMIPS, self).tearDown()
+
+    def dtestinput4MIPString(self):
+        f = cdms2.open(self.filename2)
+        institution_id = f.institution_id
+        latunits = f['lat'].units
+        self.assertEqual(institution_id, 'CCCma')
+        self.assertEqual(latunits, 'degrees_north')
 
     def testinput4MIPs(self):
         f = cdms2.open(self.filename)

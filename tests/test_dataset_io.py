@@ -23,7 +23,7 @@ class TestDatasetIO(basetest.CDMSBaseTest):
 
     def testScalarSlice(self):
         u = self.u
-        scalar = u[0, 0, 0]
+        scalar = u[0,0,0]
         self.assertEqual(scalar, 0.0)
 
     def testSize(self):
@@ -64,12 +64,8 @@ class TestDatasetIO(basetest.CDMSBaseTest):
         v1 = self.v.subSlice(1)
         v2 = self.v.subSlice(2)
         uout = out.write(u0)
-        vout = out.write(
-            v2,
-            attributes=self.v.attributes,
-            id='v',
-            extend=1,
-            index=2)
+        vout = out.write(v2, attributes=self.v.attributes, id='v', extend=1, index=2)
+        uout.getTime()
         out.write(u1, index=1)
         out.write(v0)
         out.write(u2)

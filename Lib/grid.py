@@ -2,19 +2,16 @@
 # Further modified to be pure new numpy June 24th 2008
 
 """CDMS Grid objects"""
-import types
 import re
-from error import CDMSError
+from .error import CDMSError
 import numpy  # , PropertiedClasses, internattr
-# import regrid2._regrid
 import copy
-import string
 import sys
-from cdmsobj import CdmsObj
-from axis import TransientAxis, createAxis, createUniformLatitudeAxis
-from axis import createUniformLongitudeAxis, getAutoBounds, createGaussianAxis
-from axis import isSubsetVector
-from axis import lookupArray  # noqa
+from .cdmsobj import CdmsObj
+from .axis import TransientAxis, createAxis, createUniformLatitudeAxis
+from .axis import createUniformLongitudeAxis, getAutoBounds
+from .axis import createGaussianAxis, isSubsetVector
+from .axis import lookupArray  # noqa
 
 MethodNotImplemented = "Method not yet implemented"
 
@@ -152,7 +149,7 @@ def setRegionSpecs(grid, coordSpec, coordType, resultSpec):
 
     if (coordSpec is None) or (coordSpec == ':'):
         canonSpec = None
-    elif isinstance(coordSpec, types.TupleType):
+    elif isinstance(coordSpec, tuple):
         if len(coordSpec) == 2:
             canonSpec = (coordSpec[0], coordSpec[1], 'cc', None)
         elif len(coordSpec) == 3:
@@ -161,7 +158,7 @@ def setRegionSpecs(grid, coordSpec, coordType, resultSpec):
             raise CDMSError(
                 'Invalid coordinate specification: %s' %
                 repr(coordSpec))
-    elif type(coordSpec) in [types.IntType, types.FloatType]:
+    elif type(coordSpec) in [int, float]:
         canonSpec = (coordSpec, coordSpec, 'cc', None)
     else:
         raise CDMSError(
@@ -196,7 +193,7 @@ class AbstractGrid (CdmsObj):
         return result
 
     def __str__(self):
-        return string.join(self.listall(), "\n") + "\n"
+        return "\n".join(self.listall())
 
     __repr__ = __str__
 
@@ -326,7 +323,8 @@ class AbstractRectGrid(AbstractGrid):
             gridtype = 'uniform'
         if gridtype == 'unknown':
             gridtype = 'generic'
-        # assert gridtype in AbstractRectGrid.gridtypes, 'Grid type must be one of %s'%`AbstractRectGrid.gridtypes`
+        # assert gridtype in AbstractRectGrid.gridtypes, 'Grid type must be one
+        # of %s'%`AbstractRectGrid.gridtypes`
         self._gridtype_ = gridtype
 
     # Return normalized area weights, as latWeights, lonWeights:
@@ -358,9 +356,11 @@ class AbstractRectGrid(AbstractGrid):
         maskArray = self.getMask()
         if maskArray is not None:
             if self._order_ == "yx":
-                submask = maskArray[latinterval[0]:latinterval[1], loninterval[0]:loninterval[1]]
+                submask = maskArray[latinterval[0]:latinterval[1],
+                                    loninterval[0]:loninterval[1]]
             else:
-                submask = maskArray[loninterval[0]:loninterval[1], latinterval[0]:latinterval[1]]
+                submask = maskArray[loninterval[0]:loninterval[1],
+                                    latinterval[0]:latinterval[1]]
         else:
             submask = None
 
@@ -515,7 +515,7 @@ class AbstractRectGrid(AbstractGrid):
         import regrid2._regrid
 
         if hasattr(self, "parent") and self.parent is not None:
-            gridfamily = self.parent.grids.values()
+            gridfamily = list(self.parent.grids.values())
         else:
             gridfamily = []
 
@@ -626,8 +626,8 @@ class AbstractRectGrid(AbstractGrid):
         'gridid' is the string identifier of the resulting curvilinear grid object.
         """
 
-        from coord import TransientVirtualAxis, TransientAxis2D
-        from hgrid import TransientCurveGrid
+        from .coord import TransientVirtualAxis, TransientAxis2D
+        from .hgrid import TransientCurveGrid
 
         lat = self._lataxis_[:]
         lon = self._lonaxis_[:]

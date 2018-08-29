@@ -41,7 +41,7 @@ class TestESMFRegridderConserve(unittest.TestCase):
     def test1_3x4_to_3x4(self):
         for d in dir(unittest):
             if re.search('assert', d):
-                print d
+                print(d)
         # Test NonPeriodic grid Returning same grid
         roESMF = CdmsRegrid(self.fromGrid3x4, self.toGrid3x4,
                             dtype='float64',
@@ -141,7 +141,7 @@ class TestESMFRegridderConserve(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    print ""  # Spacer
+    print("")  # Spacer
     ESMF.Manager()
     suite = unittest.TestLoader().loadTestsFromTestCase(TestESMFRegridderConserve)
     unittest.TextTestRunner(verbosity=1).run(suite)

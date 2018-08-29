@@ -1,7 +1,7 @@
 """
 CDMS Xlink objects - pointers to other objects
 """
-from cdmsobj import CdmsObj
+from .cdmsobj import CdmsObj
 
 
 class Xlink(CdmsObj):

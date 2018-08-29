@@ -1,10 +1,9 @@
 # Automatically adapted for numpy.oldnumeric Aug 02, 2007 by
 import cdms2
 import numpy
+from . import _regrid
+from .error import RegridError
 import copy
-import string
-import _regrid
-from error import RegridError
 
 
 class PressureRegridder:
@@ -114,7 +113,7 @@ class PressureRegridder:
         assert rank == len(
             order), 'Order must be same length as array rank: %i' % len(ar.shape)
 
-        order = string.lower(order)
+        order = order.lower()
 
         # Map order to positionIn
         positionIn = [None] * 4
@@ -166,14 +165,14 @@ class PressureRegridder:
         #                             A number -- the value to use in the search for possible missing data.
         #                       The presence of missing data at a grid point leads to recording 0.0 in the mask.
         #
-        #     missingMatch -- the comparison scheme used in searching for missing data in dataIn using the value passed
-        #                     in as missingValueIn. The choices are:
+        #             missingMatch -- the comparison scheme used in searching for missing data in dataIn using
+        #                             the value passed in as missingValueIn. The choices are:
         #                          None -- used if None is the entry for missingValueIn
         #                          exact -- used if missingValue is the exact value from the file
         #                          greater -- the missing data value is equal to or greater than missingValueIn
         #                          less -- the missing data value is equal to or less than missingValueIn
         #
-        #     logYes -- choose the level regrid as linear in log of level or linear in level. Set to
+        #             logYes -- choose the level regrid as linear in log of level or linear in level. Set to
         #               'yes' for log. Anything else is linear in level.
         #
         #
@@ -181,26 +180,27 @@ class PressureRegridder:
         #     positionIn -- a tuple with the numerical position of the dimensions
         #                   in C or Python order specified in the sequence longitude,
         #                   latitude, level and time. Longitude, latitude and level are
-        #                   required. If time is missing submit None in its slot in the
+        #                           required. If time is missing submit None in its slot in the
         #                   tuple. Notice that the length of the tuple is always four.
         #
         #                   Explicitly, in terms of the shape of dataIn as returned by Python's shape function
         #
-        #                        positionIn[0] contains the position of longitude in dataIn
-        #                        positionIn[1] contains the position of latitude in dataIn
-        #                        positionIn[2] contains the position of level in dataIn or None
-        #                        positionIn[3] contains the position of time in dataIn or None
+        #                                positionIn[0] contains the position of longitude in dataIn
+        #                                positionIn[1] contains the position of latitude in dataIn
+        #                                positionIn[2] contains the position of level in dataIn or None
+        #                                positionIn[3] contains the position of time in dataIn or None
         #
         #                   As  examples:
         #                        If the C order shape of 4D data is
-        #                            (number of longitudes, number of times, number of levels, number of latitudes)
+        #                                    (number of longitudes, number of times, number of levels,
+        #                                     number of latitudes)
         #                        submit
-        #                             (0, 3, 2, 1)
+        #                                     (0, 3, 2, 1)
         #
-        #                        If the C order shape of 3D data is
+        #                                If the C order shape of 3D data is
         #                    (number of longitudes, number of times, number oflatitudes)
         #                        submit
-        #                            (0, 2, 1, None)
+        #                                    (0, 2, 1, None)
         #
         #                   Send in None if the shape is a subset of (time, level,
         #                   latitude, longitude) which is evaluated as follows:
@@ -208,7 +208,8 @@ class PressureRegridder:
         #                      4D -- code assumes (3,2,1,0)
         #
         #      missingValueOut -- the value for the missing data used in writing the output data. If left at the
-        #                         default entry, None, the code uses missingValueIn if present or as a last resort
+        #                                 default entry, None, the code uses missingValueIn if present or as a last
+        #                                 resort
         #                         1.0e20
         #
         #
@@ -225,7 +226,7 @@ class PressureRegridder:
         #
         #                      dataOut = x.rgrd(dataIn, 1.e20, 'greater')
         #
-        #-----------------------------------------------------------------------------------------------------------"""
+        # ----------------------------------------------------------------------------------------------------------"""
 
         # check the required input -- dataIn, missingValueIn and  missingMatch
 
@@ -476,13 +477,13 @@ def sendmsg(msg, value1=None, value2=None):
     #
     #---------------------------------------------------------------------------------"""
 
-    print '*******************************************************************'
+    print('*******************************************************************')
     if value1 is None:
-        print msg
+        print(msg)
     elif value2 is None:
-        print msg, value1
+        print((msg, value1))
     else:
-        print msg, value1, value2
-    print '*******************************************************************'
+        print((msg, value1, value2))
+    print('*******************************************************************')
 
     return None

@@ -39,7 +39,7 @@ class TestForecastIO(basetest.CDMSBaseTest):
         f1 = self.getTempFile('test_fc1', 'w')
         f2 = self.getTempFile('test_fc2', 'w')
         f3 = self.getTempFile('test_fc3', 'w')
-        print "TEMP:", self.tempdir
+        print(("TEMP:", self.tempdir))
         f1.write(v1)
         f1.write(date1)
         f1.write(sec1)

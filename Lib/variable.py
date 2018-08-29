@@ -3,15 +3,20 @@
 """
 DatasetVariable: Dataset-based variables
 """
+# from cdms2 import Cdunif
 import numpy
-import cdmsNode
+from . import cdmsNode
 import cdtime
 import copy
+# import os
 import string
-from cdmsobj import getPathFromTemplate, Max32int
-from avariable import AbstractVariable
-from sliceut import slicePartition, sliceIntersect, reverseSlice, lenSlice
-from error import CDMSError
+# import sys
+# import types
+# from . import cdmsobj
+from .cdmsobj import getPathFromTemplate, Max32int
+from .avariable import AbstractVariable
+from .sliceut import slicePartition, sliceIntersect, reverseSlice, lenSlice
+from .error import CDMSError
 
 InvalidGridElement = "Grid domain elements are not yet implemented: "
 InvalidRegion = "Invalid region: "
@@ -133,9 +138,13 @@ class DatasetVariable(AbstractVariable):
             domelem = axisdict.get(dename)
             if domelem is None:
                 domelem = griddict.get(dename)
+#                if grid is None:
+#                    raise CDMSError(NoSuchAxisOrGrid + dename)
+#                else:
+#                    raise CDMSError(InvalidGridElement + dename)
             partlenstr = denode.getExternalAttr('partition_length')
             if partlenstr is not None:
-                truelen = string.atoi(partlenstr)
+                truelen = int(partlenstr)
             else:
                 truelen = denode.length
             self.domain.append((domelem, denode.start, denode.length, truelen))
@@ -181,6 +190,7 @@ class DatasetVariable(AbstractVariable):
         speclist = self._process_specs(specs, keys)
         slicelist = self.specs2slices(speclist)
 
+        print(slicelist)
         # Generate the filelist
         npart, idims, partitionSlices = self.expertPaths(slicelist)
 
@@ -328,11 +338,13 @@ class DatasetVariable(AbstractVariable):
             if hasattr(axis, 'partition'):
                 npart = npart + 1
                 if npart == 1:
+                    # part1 = axis
                     npart1 = ndim
                 elif npart == 2:
+                    # part2 = axis
                     npart2 = ndim
                 else:
-                    raise CDMSError(TooManyPartitions + axis.id)
+                    raise CDMSError(TooManyPartitions + self.id)
             ndim = ndim + 1
 
         # If no partitioned axes, just read the data
@@ -490,6 +502,7 @@ class DatasetVariable(AbstractVariable):
         for i in range(len(self.domain)):
             if self.domain[i][0].isForecast():
                 fci = i
+                # fcv = initslist[i].start
                 break
 
         # If no intersection, return an 'empty' array.
@@ -526,7 +539,7 @@ class DatasetVariable(AbstractVariable):
                     # But the result still needs an index in the forecast direction,
                     # which is simple to do because there is only one forecast
                     # per file:
-                    result.resize(map(lenSlice, slicelist))
+                    result.resize(list(map(lenSlice, slicelist)))
 
             finally:
                 f.close()
@@ -543,7 +556,7 @@ class DatasetVariable(AbstractVariable):
 
                 # If the slice is missing, interpose missing data
                 if filename is None:
-                    shapelist = map(lenSlice, slicelist)
+                    shapelist = list(map(lenSlice, slicelist))
                     chunk = numpy.ma.zeros(
                         tuple(shapelist), self._numericType_)
                     chunk[...] = numpy.ma.masked
@@ -563,7 +576,7 @@ class DatasetVariable(AbstractVariable):
                             # But the chunk still needs an index in the forecast direction,
                             # which is simple to do because there is only one
                             # forecast per file:
-                            chunk.resize(map(lenSlice, slicelist))
+                            chunk.resize(list(map(lenSlice, slicelist)))
 
                     finally:
                         f.close()
@@ -593,7 +606,7 @@ class DatasetVariable(AbstractVariable):
 
                     # If the slice is missing, interpose missing data
                     if filename is None:
-                        shapelist = map(lenSlice, slicelist)
+                        shapelist = list(map(lenSlice, slicelist))
                         chunk = numpy.ma.zeros(
                             tuple(shapelist), self._numericType_)
                         chunk[...] = numpy.ma.masked
@@ -613,7 +626,7 @@ class DatasetVariable(AbstractVariable):
                                 # But the chunk still needs an index in the forecast direction,
                                 # which is simple to do because there is only
                                 # one forecast per file:
-                                chunk.resize(map(lenSlice, slicelist))
+                                chunk.resize(list(map(lenSlice, slicelist)))
 
                         finally:
                             f.close()
@@ -643,4 +656,13 @@ class DatasetVariable(AbstractVariable):
         return result
 
     shape = property(_getShape, None)
+#     shape = _getShape
     dtype = property(_getdtype, None)
+
+# PropertiedClasses.set_property (DatasetVariable, 'shape',
+#                                   DatasetVariable._getShape, nowrite=1,
+# nodelete=1)
+# PropertiedClasses.set_property (DatasetVariable, 'dtype',
+#                                   DatasetVariable._getdtype, nowrite=1,
+# nodelete=1)
+# internattr.add_internal_attribute(DatasetVariable, 'domain')

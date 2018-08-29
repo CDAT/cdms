@@ -58,6 +58,13 @@ class TestCDMSFileIO(basetest.CDMSBaseTest):
         uwrap = self.u.subRegion(longitude=(-180, 180))
         self.assertIsNotNone(uwrap.getGrid())
 
+    def testwith(self):
+        try:
+            with cdms2.open('something.nc') as f:
+                 data = f['dd']
+        except cdms2.CDMSError:
+            pass
+
     def testClosedOperations(self):
         u = self.u
         transient_u = self.u[:]

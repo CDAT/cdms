@@ -28,13 +28,13 @@ class Test(unittest.TestCase):
             nprocs1 = 1
         pe2 = ESMF.local_pet()
         nprocs2 = ESMF.pet_count()
-        print "Hello ESMPy World from PET (processor) {0}!".format(ESMF.local_pet())
+        print(("Hello ESMPy World from PET (processor) {0}!".format(ESMF.local_pet())))
         self.assertEqual(pe1, pe2)
         self.assertEqual(nprocs1, nprocs2)
 
 
 if __name__ == '__main__':
     ESMF.Manager()
-    print ""
+    print("")
     suite = unittest.TestLoader().loadTestsFromTestCase(Test)
     unittest.TextTestRunner(verbosity=1).run(suite)

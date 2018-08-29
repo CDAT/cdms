@@ -57,7 +57,7 @@ class TestESMFRegridding(unittest.TestCase):
         gclt = numpy.ones(
             self.gGrid2D[0].shape,
             'float64') * self.fclt.missing_value
-        roESMF.apply(self.fclt[0, ...].data, gclt)
+        roESMF.apply(self.fclt[0, ...].data, gclt, zero_region=None)
         roBack = GenericRegrid([numpy.array(g) for g in self.gGrid2D],
                                [numpy.array(g) for g in self.fGrid2D],
                                'float64',
@@ -66,7 +66,7 @@ class TestESMFRegridding(unittest.TestCase):
         bclt = numpy.ones(
             self.fGrid2D[0].shape,
             'float64') * self.fclt.missing_value
-        roBack.apply(gclt, bclt)
+        roBack.apply(gclt, bclt, zero_region=None)
         diff = abs(bclt - self.fclt[0, ...])
         self.assertTrue(diff.all() < self.eps)
 
@@ -79,7 +79,7 @@ class TestESMFRegridding(unittest.TestCase):
         hclt = numpy.ones(
             self.hGrid2D[0].shape,
             'float64') * self.fclt.missing_value
-        roESMF.apply(self.fclt[0, ...].data, hclt)
+        roESMF.apply(self.fclt[0, ...].data, hclt, zero_region=None)
         roBack = GenericRegrid([numpy.array(g) for g in self.hGrid2D],
                                [numpy.array(g) for g in self.fGrid2D],
                                'float64', 'linear', 'ESMF')
@@ -87,7 +87,7 @@ class TestESMFRegridding(unittest.TestCase):
         bclt = numpy.ones(
             self.fGrid2D[0].shape,
             'float64') * self.fclt.missing_value
-        roBack.apply(hclt[:], bclt)
+        roBack.apply(hclt[:], bclt, zero_region=None)
         diff = abs(self.fclt[0, ...] - bclt)
         self.assertTrue(numpy.all(diff) < self.eps)
 
@@ -101,7 +101,7 @@ class TestESMFRegridding(unittest.TestCase):
         fso = numpy.ones(
             self.fGrid2D[0].shape,
             'float64') * self.hso.missing_value
-        roESMF.apply(self.hso.data, fso)
+        roESMF.apply(self.hso.data, fso, zero_region=None)
         roBack = GenericRegrid([numpy.array(g) for g in self.fGrid2D],
                                [numpy.array(g) for g in self.hGrid2D],
                                self.hso.dtype, 'linear', 'ESMF')
@@ -109,7 +109,7 @@ class TestESMFRegridding(unittest.TestCase):
         bso = numpy.ones(
             self.hGrid[0].shape,
             'float64') * self.hso.missing_value
-        roBack.apply(fso[:], bso)
+        roBack.apply(fso[:], bso, zero_region=None)
         diff = abs(self.hso - bso)
         self.assertTrue(diff.all() < self.eps)
 
@@ -124,7 +124,7 @@ class TestESMFRegridding(unittest.TestCase):
         fso = numpy.ones(
             self.fGrid2D[0].shape,
             'float64') * self.hso.missing_value
-        roESMF.apply(self.hso.data, fso)
+        roESMF.apply(self.hso.data, fso, zero_region=None)
         roBack = GenericRegrid([numpy.array(g) for g in self.fGrid2D],
                                [numpy.array(g) for g in self.hGrid2D],
                                'float64', 'linear', 'ESMF')
@@ -132,7 +132,7 @@ class TestESMFRegridding(unittest.TestCase):
         bso = numpy.ones(
             self.hGrid[0].shape,
             'float64') * self.hso.missing_value
-        roBack.apply(fso, bso)
+        roBack.apply(fso, bso, zero_region=None)
         aa = fso < self.hso.max() + 1
         bb = fso > 0
         cc = (numpy.array(aa, numpy.int32) + numpy.array(bb, numpy.int32)) == 2
@@ -163,7 +163,7 @@ class TestESMFRegridding(unittest.TestCase):
         cso = numpy.ones(
             self.fGrid2D[0].shape,
             'float64') * self.hso.missing_value
-        roESMF.apply(self.hso.data, cso)
+        roESMF.apply(self.hso.data, cso, zero_region=None)
         roESMF.fillInDiagnosticData(diag)
         # * numpy.nansum(diag['srcAreaFractions'])
         srcResult = (self.hso * diag['srcAreas']).sum()
@@ -176,6 +176,6 @@ class TestESMFRegridding(unittest.TestCase):
 
 if __name__ == '__main__':
     ESMF.Manager()
-    print ""
+    print("")
     suite = unittest.TestLoader().loadTestsFromTestCase(TestESMFRegridding)
     unittest.TextTestRunner(verbosity=2).run(suite)

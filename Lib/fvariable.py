@@ -3,12 +3,11 @@
 
 "CDMS File-based variables."
 import numpy
-
-from cdmsobj import Max32int
-from variable import DatasetVariable
-from error import CDMSError
-from sliceut import reverseSlice
-from Cdunif import CdunifError
+from .cdmsobj import Max32int
+from .variable import DatasetVariable
+from .error import CDMSError
+from .sliceut import reverseSlice
+from .Cdunif import CdunifError
 
 FileClosed = "Cannot read from closed file, variable: "
 FileClosedWrite = "Cannot write to a closed file, variable: "
@@ -21,7 +20,7 @@ class FileVariable(DatasetVariable):
         DatasetVariable.__init__(self, parent, varname)
         self._obj_ = cdunifobj
         if cdunifobj is not None:
-            for attname, attval in cdunifobj.__dict__.items():
+            for attname, attval in list(cdunifobj.__dict__.items()):
                 self.__dict__[attname] = attval
                 self.attributes[attname] = attval
             if '_FillValue' in self.__dict__.keys():
@@ -38,7 +37,7 @@ class FileVariable(DatasetVariable):
 
     # Initialize the domain
     def initDomain(self, axisdict):
-        "Called by whoever made me."
+        "Initialized the domain"
         self.domain = []
         for dimname in self._obj_.dimensions:
             axis = axisdict.get(dimname)
@@ -48,7 +47,7 @@ class FileVariable(DatasetVariable):
             self.domain.append((axis, start, length, truelen))
 
     def typecode(self):
-        # Compatibility: convert to new typecode
+        """convert to new typecode."""
         tc = self._obj_.typecode()
 #        tc = typeconv.convtypecode2(tc).char
         return tc
@@ -155,7 +154,7 @@ class FileVariable(DatasetVariable):
         if (name not in self.__cdms_internals__) and (value is not None):
             try:
                 setattr(self._obj_, name, value)
-            except CdunifError:
+            except Exception:
                 raise CDMSError(
                     "Setting %s.%s=%s" %
                     (self.id, name, repr(value)))
@@ -185,7 +184,7 @@ class FileVariable(DatasetVariable):
             return self._obj_.getValue()
 
     def __len__(self):
-        " Length of first dimension. "
+        "Length of first dimension. "
         if self.parent is None:
             raise CDMSError(FileClosed + self.id)
         return len(self._obj_)

@@ -15,7 +15,7 @@ class Foo:
     def __init__(self):
         global INIT_REF_COUNT
         if INIT_REF_COUNT == 0:
-            print 'calling ESMP.ESMP_Initialize()...'
+            print('calling ESMP.ESMP_Initialize()...')
             ESMF.Manager()
         INIT_REF_COUNT += 1
 
@@ -23,7 +23,7 @@ class Foo:
         global INIT_REF_COUNT
         INIT_REF_COUNT -= 1
         if INIT_REF_COUNT == 0:
-            print 'now finalizing...'
+            print('now finalizing...')
 
 
 class Test(unittest.TestCase):
@@ -45,6 +45,6 @@ class Test(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    print ""  # Spacer
+    print("")  # Spacer
     suite = unittest.TestLoader().loadTestsFromTestCase(Test)
     unittest.TextTestRunner(verbosity=1).run(suite)

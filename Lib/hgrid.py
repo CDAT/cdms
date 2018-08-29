@@ -3,17 +3,20 @@
 
 """CDMS HorizontalGrid objects"""
 
+from __future__ import print_function
 import numpy
 import cdms2
 import os
 import os.path
-from error import CDMSError
-from grid import AbstractGrid, LongitudeType, LatitudeType, CoordTypeToLoc
-from coord import TransientVirtualAxis
-from axis import getAutoBounds, allclose
-import bindex
-import _bindex
+# import PropertiedClasses
+from .error import CDMSError
+from .grid import AbstractGrid, LongitudeType, LatitudeType, CoordTypeToLoc
+from .axis import TransientVirtualAxis
+from .axis import getAutoBounds, allclose
+from . import bindex
+from . import _bindex
 from functools import reduce
+import copy
 
 MethodNotImplemented = "Method not yet implemented"
 
@@ -131,7 +134,7 @@ class AbstractHorizontalGrid(AbstractGrid):
             mask = where(less(cross, 0.0), 1, 0)
             badmask = logical_or(mask, badmask)
 
-        badcells = compress(badmask, range(len(badmask)))
+        badcells = compress(badmask, list(range(len(badmask))))
 
         lonb.shape = saveshape
         latb.shape = saveshape
@@ -284,10 +287,9 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         cufile is a Cdunif file, NOT a CDMS file.
         gridtitle is a string identifying the grid.
         """
-        import copy
 
-        lat = numpy.ma.filled(self._lataxis_)
-        lon = numpy.ma.filled(self._lonaxis_)
+        lat = numpy.ma.filled(self._lataxis_[:])
+        lon = numpy.ma.filled(self._lonaxis_[:])
         blat, blon = self.getBounds()
         mask = self.getMask()
 
@@ -342,14 +344,13 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
 
     def toGenericGrid(self, gridid=None):
 
-        import copy
-        from auxcoord import TransientAuxAxis1D
-        from coord import TransientVirtualAxis
-        from gengrid import TransientGenericGrid
+        from .auxcoord import TransientAuxAxis1D
+        from .coord import TransientVirtualAxis
+        from .gengrid import TransientGenericGrid
 
-        lat = numpy.ma.filled(self._lataxis_)
+        lat = numpy.ma.filled(self._lataxis_[:])
         latunits = self._lataxis_.units
-        lon = numpy.ma.filled(self._lonaxis_)
+        lon = numpy.ma.filled(self._lonaxis_[:])
         lonunits = self._lonaxis_.units
         blat, blon = self.getBounds()
         mask = self.getMask()
@@ -456,10 +457,10 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
 
         x = self._lonaxis_
         if (not hasattr(x, 'units')):
-            print "Warning, no units found for longitude"
+            print("Warning, no units found for longitude")
             x.units = 'degree_east'
         if (not hasattr(x, 'standard_name')):
-            print "Warning, no standard_name found for longitude axis"
+            print("Warning, no standard_name found for longitude axis")
             x.standard_name = 'longitude'
         if (x.standard_name == 'geographic_longitude'):
             # temporary for updating test files
@@ -471,10 +472,10 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
 
         y = self._lataxis_
         if (not hasattr(y, 'units')):
-            print "Warning, no units found for latitude"
+            print("Warning, no units found for latitude")
             y.units = 'degree_north'
         if (not hasattr(y, 'standard_name')):
-            print "Warning, no standard_name found for latitude axis"
+            print("Warning, no standard_name found for latitude axis")
             y.standard_name = 'latitude'
         if (y.standard_name == 'geographic_latitude'):
             # temporary for updating test files
@@ -515,6 +516,24 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
             raise RuntimeError(
                 'The libCF/Gridspec API does not provide for writing CurveGrids<<<')
 
+    def init_from_gridspec(self, filename):
+        """reads to grid from a Gridspec-compliant file.  The filename should be a
+        complete path.  The contents of the file may overwrite data in the existing
+        grid object."""
+        # - This is really a kind of init function.  The __init__ function should
+        # determine what kind of initialization is being done (from a file, from
+        # another object, from arguments specifying the contents e.g. axes) and branch
+        # to call a method such as this one.
+        # - Another way to read a file is with the standard CDMS
+        # pattern        file=cdms2.open(...);   g=file('grid') or g=file('')
+        try:
+            f = cdms2.open(filename)
+        except IOError:
+            print("Cannot open grid file for reading: ", filename)
+            return
+        self.init_from_gridspec_file(self, f)
+        f.close()
+
     def init_from_gridspec_file(self, f):
         """reads to grid from a Gridspec-compliant file, f.  This f should be a
         CdmsFile object, already open for reading.  The contents of the file may
@@ -534,24 +553,6 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         # harmless and may come in useful
         self.gs_discretizationType = gs_attr['gs_discretizationType']
         return self
-
-    def init_from_gridspec(self, filename):
-        """reads to grid from a Gridspec-compliant file.  The filename should be a
-        complete path.  The contents of the file may overwrite data in the existing
-        grid object."""
-        # - This is really a kind of init function.  The __init__ function should
-        # determine what kind of initialization is being done (from a file, from
-        # another object, from arguments specifying the contents e.g. axes) and branch
-        # to call a method such as this one.
-        # - Another way to read a file is with the standard CDMS
-        # pattern        file=cdms2.open(...);   g=file('grid') or g=file('')
-        try:
-            f = cdms2.open(filename)
-        except IOError:
-            print "Cannot open grid file for reading: ", filename
-            return
-        self.init_from_gridspec_file(self, f)
-        f.close()
 
     def subSlice(self, *specs, **keys):
         """Get a transient subgrid based on an argument list <specs> of slices."""
@@ -587,14 +588,16 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         k = 0
         i = j = -1
         for d in domainlist:
-            if d is iaxis:
-                inewaxis = newaxislist[k]
-                islice = slicelist[k]
-                i = k
-            if d is jaxis:
-                jnewaxis = newaxislist[k]
-                jslice = slicelist[k]
-                j = k
+            if d.shape == iaxis.shape:
+                if numpy.allclose(d[:], iaxis[:]) is True:
+                    inewaxis = newaxislist[k]
+                    islice = slicelist[k]
+                    i = k
+            if d.shape == jaxis.shape:
+                if numpy.allclose(d[:], jaxis[:]) is True:
+                    jnewaxis = newaxislist[k]
+                    jslice = slicelist[k]
+                    j = k
             k += 1
 
         if i == -1 or j == -1:
@@ -608,12 +611,12 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         if self._index_ is None:
             # Trying to stick in Stephane Raynaud's patch for autodetection
             nj, ni = self._lataxis_.shape
-            dlon = numpy.max(self._lonaxis_) - numpy.min(self._lonaxis_)
+            dlon = numpy.max(self._lonaxis_[:]) - numpy.min(self._lonaxis_[:])
             dx = max(dlon / ni, dlon / nj)
-            dlat = numpy.max(self._lataxis_) - numpy.min(self._lataxis_)
+            dlat = numpy.max(self._lataxis_[:]) - numpy.min(self._lataxis_[:])
             dy = max(dlat / ni, dlat / nj)
-            latlin = numpy.ravel(numpy.ma.filled(self._lataxis_))
-            lonlin = numpy.ravel(numpy.ma.filled(self._lonaxis_))
+            latlin = numpy.ravel(numpy.ma.filled(self._lataxis_[:]))
+            lonlin = numpy.ravel(numpy.ma.filled(self._lonaxis_[:]))
             _bindex.setDeltas(dx, dy)
             self._index_ = bindex.bindexHorizontalGrid(latlin, lonlin)
 
@@ -629,13 +632,12 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         'indexspecs' is a list of index specifications suitable for slicing a
           variable with the given grid.
         """
-
         ni, nj = self.shape
         index = self.getIndex()
         latspec = spec[CoordTypeToLoc[LatitudeType]]
         lonspec = spec[CoordTypeToLoc[LongitudeType]]
-        latlin = numpy.ravel(numpy.ma.filled(self._lataxis_))
-        lonlin = numpy.ravel(numpy.ma.filled(self._lonaxis_))
+        latlin = numpy.ravel(numpy.ma.filled(self._lataxis_[:]))
+        lonlin = numpy.ravel(numpy.ma.filled(self._lonaxis_[:]))
         points = bindex.intersectHorizontalGrid(
             latspec, lonspec, latlin, lonlin, index)
         if len(points) == 0:
@@ -647,7 +649,7 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         numpy.put(fullmask, points, 0)
         fullmask = numpy.reshape(fullmask, (ni, nj))
 
-        iind = points / nj
+        iind = points // nj
         jind = points - iind * nj
         imin, imax, jmin, jmax = (
             min(iind), max(iind) + 1, min(jind), max(jind) + 1)
@@ -663,7 +665,7 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         return (self._lataxis_.getAxis(0), self._lataxis_.getAxis(1))
 
     def isClose(self, g):
-        """Return 1 iff g is a grid of the same type and shape. A real element-by-element
+        """Return 1 if g is a grid of the same type and shape. A real element-by-element
         comparison would be too expensive here."""
         if g is None:
             return 0
@@ -677,7 +679,8 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
     def checkAxes(self, axes):
         """Return 1 iff every element of self.getAxisList() is in the list 'axes'."""
         for item in self.getAxisList():
-            if item not in axes:
+            # if all [False, False, ....] result=0
+            if not any([allclose(item[:], axis[:]) for axis in axes]):
                 result = 0
                 break
         else:
@@ -721,7 +724,7 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         having the same length as the number of cells in the grid, similarly
         for flatlon."""
         if self._flataxes_ is None:
-            import MV2 as MV
+            from . import MV2 as MV
             alat = MV.filled(self.getLatitude())
             alon = MV.filled(self.getLongitude())
             alatflat = numpy.ravel(alat)
@@ -799,9 +802,9 @@ def readScripCurveGrid(fileobj, dims, whichType, whichGrid):
     if whichType is "mapping", whichGrid is the choice of grid, either "source" or "destination"
     """
     import string
-    from coord import TransientAxis2D
+    from .coord import TransientAxis2D
 
-    if 'S' in fileobj.variables.keys():
+    if 'S' in list(fileobj.variables.keys()):
         if whichType == "grid":
             gridCornerLatName = 'grid_corner_lat'
             gridCornerLonName = 'grid_corner_lon'

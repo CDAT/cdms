@@ -2,8 +2,10 @@
 
 # Author: Sjoerd Mullender.
 
+from __future__ import print_function
+from future.builtins import bytes
 import re
-import string
+# import bytes
 
 # import warnings
 # warnings.warn("The xmllib module is obsolete.  Use xml.sax instead.",
@@ -72,7 +74,7 @@ procclose = re.compile(_opS + r'\?>')
 commentopen = re.compile('<!--')
 commentclose = re.compile('-->')
 doubledash = re.compile('--')
-attrtrans = string.maketrans(' \r\n\t', '    ')
+attrtrans = bytes.maketrans(b' \r\n\t', b'    ')
 
 # definitions for XML namespaces
 _NCName = '[a-zA-Z_][-a-zA-Z0-9._]*'    # XML Name, minus the ":"
@@ -129,7 +131,7 @@ class XMLParser:
             self.__fixclass(k)
 
     def __fixdict(self, dict):
-        for key in dict.keys():
+        for key in list(dict.keys()):
             if key[:6] == 'start_':
                 tag = key[6:]
                 start, end = self.elements.get(tag, (None, None))
@@ -552,7 +554,7 @@ class XMLParser:
             if namespace:
                 self.syntax_error(
                     'namespace declaration inside namespace declaration')
-            for attrname in attrdict.keys():
+            for attrname in list(attrdict.keys()):
                 if attrname not in self.__xml_namespace_attributes:
                     self.syntax_error(
                         "unknown attribute `%s' in xml:namespace tag" %
@@ -655,11 +657,11 @@ class XMLParser:
         # translate namespace of attributes
         # map from new name to old name (used for error reporting)
         attrnamemap = {}
-        for key in attrdict.keys():
+        for key in list(attrdict.keys()):
             attrnamemap[key] = key
         if self.__use_namespaces:
             nattrdict = {}
-            for key, val in attrdict.items():
+            for key, val in list(attrdict.items()):
                 okey = key
                 res = qname.match(key)
                 if res is not None:
@@ -685,12 +687,12 @@ class XMLParser:
             attrdict = nattrdict
         attributes = self.attributes.get(nstag)
         if attributes is not None:
-            for key in attrdict.keys():
+            for key in list(attrdict.keys()):
                 if key not in attributes:
                     self.syntax_error(
                         "unknown attribute `%s' in tag `%s'" %
                         (attrnamemap[key], tagname))
-            for key, val in attributes.items():
+            for key, val in list(attributes.items()):
                 if val is not None and key not in attrdict:
                     attrdict[key] = val
         method = self.elements.get(nstag, (None, None))[0]
@@ -844,11 +846,11 @@ class TestXMLParser(XMLParser):
 
     def handle_xml(self, encoding, standalone):
         self.flush()
-        print 'xml: encoding =', encoding, 'standalone =', standalone
+        print('xml: encoding =', encoding, 'standalone =', standalone)
 
     def handle_doctype(self, tag, pubid, syslit, data):
         self.flush()
-        print 'DOCTYPE:', tag, repr(data)
+        print('DOCTYPE:', tag, repr(data))
 
     def handle_data(self, data):
         self.testdata = self.testdata + data
@@ -859,47 +861,47 @@ class TestXMLParser(XMLParser):
         data = self.testdata
         if data:
             self.testdata = ""
-            print 'data:', repr(data)
+            print('data:', repr(data))
 
     def handle_cdata(self, data):
         self.flush()
-        print 'cdata:', repr(data)
+        print('cdata:', repr(data))
 
     def handle_proc(self, name, data):
         self.flush()
-        print 'processing:', name, repr(data)
+        print('processing:', name, repr(data))
 
     def handle_comment(self, data):
         self.flush()
         r = repr(data)
         if len(r) > 68:
             r = r[:32] + '...' + r[-32:]
-        print 'comment:', r
+        print('comment:', r)
 
     def syntax_error(self, message):
-        print 'error at line %d:' % self.lineno, message
+        print('error at line %d:' % self.lineno, message)
 
     def unknown_starttag(self, tag, attrs):
         self.flush()
         if not attrs:
-            print 'start tag: <' + tag + '>'
+            print('start tag: <' + tag + '>')
         else:
-            print 'start tag: <' + tag,
-            for name, value in attrs.items():
-                print name + '=' + '"' + value + '"',
-            print '>'
+            print('start tag: <' + tag, end=' ')
+            for name, value in list(attrs.items()):
+                print(name + '=' + '"' + value + '"', end=' ')
+            print('>')
 
     def unknown_endtag(self, tag):
         self.flush()
-        print 'end tag: </' + tag + '>'
+        print('end tag: </' + tag + '>')
 
     def unknown_entityref(self, ref):
         self.flush()
-        print '*** unknown entity ref: &' + ref + ';'
+        print('*** unknown entity ref: &' + ref + ';')
 
     def unknown_charref(self, ref):
         self.flush()
-        print '*** unknown char ref: &#' + ref + ';'
+        print('*** unknown char ref: &#' + ref + ';')
 
     def close(self):
         XMLParser.close(self)
@@ -934,7 +936,7 @@ def test(args=None):
         try:
             f = open(file, 'r')
         except IOError as msg:
-            print file, ":", msg
+            print(file, ":", msg)
             sys.exit(1)
 
     data = f.read()
@@ -953,13 +955,13 @@ def test(args=None):
             x.close()
     except Error as msg:
         t1 = time()
-        print msg
+        print(msg)
         if do_time:
-            print 'total time: %g' % (t1 - t0)
+            print('total time: %g' % (t1 - t0))
         sys.exit(1)
     t1 = time()
     if do_time:
-        print 'total time: %g' % (t1 - t0)
+        print('total time: %g' % (t1 - t0))
 
 
 if __name__ == '__main__':

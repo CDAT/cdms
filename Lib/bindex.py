@@ -3,16 +3,23 @@
 
 """Bin index for non-rectilinear grids"""
 
-import _bindex
+from . import _bindex
 import numpy
 
 
 def bindexHorizontalGrid(latlin, lonlin):
     """Create a bin index for a horizontal grid.
-    'latlin' is the raveled latitude values.
-    'lonlin' is the raveled longitude values.
 
-    Returns the index.
+    Parameters
+    ----------
+         latlin:
+            latlin is the raveled latitude values.
+         latlon:
+            lonlin is the raveled longitude values.
+
+    Returns
+    -------
+         resulting index.
     """
     lonlin = numpy.mod(lonlin, 360)
     NI, NJ = _bindex.getLens()
@@ -27,13 +34,22 @@ def bindexHorizontalGrid(latlin, lonlin):
 def intersectHorizontalGrid(latspecs, lonspecs, latlin, lonlin, index):
     """Intersect a horizontal grid with a lat-lon region.
 
-    'latspecs' and 'lonspecs' are the latitude/longitude specs
-      as defined in the grid module.
-    'latlin' and 'lonlin' are the raveled latitude/longitude arrays.
-    'index' is the bin index as returned from bindex.
+    Parameters
+    ----------
+        latspecs:
+            latitude specs as defined in the grid module.
+        lonspecs:
+            longitude specs as defined in the grid module.
+        latlin:
+            latlin is the raveled latitude array.
+        lonlin:
+            lonlin is the raveled longitude array.
+        index:
+            index is the bin index as returned from bindex.
 
-    Returns an array of indices, in latlin/lonlin, of the points in
-    the intersection.
+    Returns
+    -------
+    an array of indices, in latlin/lonlin, of the points in the intersection.
     """
     points = numpy.zeros(len(latlin), dtype='l')
     if latspecs is None:

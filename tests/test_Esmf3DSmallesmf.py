@@ -8,7 +8,7 @@ import cdms2  # ESMP_Initialize()
 import unittest
 import ESMF
 from regrid2 import esmf
-from regrid2 import ESMFRegrid
+from regrid2.mvESMFRegrid import ESMFRegrid  # noqa
 import numpy
 import numpy as np
 
@@ -111,9 +111,9 @@ class TestESMPRegridderConserve(unittest.TestCase):
                                         ESMF.StaggerLoc.CENTER_VCENTER)
         srcField.setLocalData(srcData, ESMF.StaggerLoc.CENTER_VCENTER,
                               globalIndexing=True)
-        dstField.setLocalData(dstData * 0, ESMF.StaggerLoc.CENTER_VCENTER,
+        dstField.setLocalData(dstData * 1e20, ESMF.StaggerLoc.CENTER_VCENTER,
                               globalIndexing=True)
-        srcFldIn.setLocalData(srcData * 0, ESMF.StaggerLoc.CENTER_VCENTER,
+        srcFldIn.setLocalData(srcData * 1e20, ESMF.StaggerLoc.CENTER_VCENTER,
                               globalIndexing=True)
 
         # Regrid
@@ -241,7 +241,7 @@ class TestESMPRegridderConserve(unittest.TestCase):
             self.assertEqual(maxlsd, maxlsi)
 
     def dtest2_3D_Native_Conserve(self):
-        print
+        print()
 #        srcDims, srcXYZCenter, srcData, srcBounds = makeGrid(5, 4, 3)
 #        dstDims, dstXYZCenter, dstData, dstBounds = makeGrid(5, 4, 3)
 
@@ -275,7 +275,7 @@ class TestESMPRegridderConserve(unittest.TestCase):
             ys.shape[0] - 1,
             xs.shape[0] - 1) * 100
 
-        print srcData.dtype
+        print((srcData.dtype))
         # Establish the Destination grid
 
 
@@ -304,9 +304,9 @@ class TestESMPRegridderConserve(unittest.TestCase):
             boundsx[:, :, i2] = xcorner[i2, 0]
         boundsx[:, :, -1] = xcorner[-1, 1]
 
-        print boundsz[:, 1, 1]
-        print boundsy[1, :, 1]
-        print boundsx[1, 1, :]
+        print((boundsz[:, 1, 1]))
+        print((boundsy[1, :, 1]))
+        print((boundsx[1, 1, :]))
 
         myCenter = [ZCenter, YCenter, XCenter]
 
@@ -380,7 +380,7 @@ class TestESMPRegridderConserve(unittest.TestCase):
             self.assertEqual(maxlsd, maxlsi)
 
     def xtest2_2D_Native_Conserve(self):
-        print
+        print()
         srcDims, srcXYZCenter, srcData, srcBounds = makeGrid(5, 4, 1)
         dstDims, dstXYZCenter, dstData, dstBounds = makeGrid(5, 4, 1)
 
@@ -456,7 +456,7 @@ class TestESMPRegridderConserve(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    print ""  # Spacer
+    print("")  # Spacer
     ESMF.Manager(debug=True)
     suite = unittest.TestLoader().loadTestsFromTestCase(TestESMPRegridderConserve)
     unittest.TextTestRunner(verbosity=1).run(suite)

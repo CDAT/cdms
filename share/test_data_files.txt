@@ -22,6 +22,8 @@ cc1ce8a03dd04903bf24ae62357b721d  v_2000.nc
 e1cfa78966764bdd0643ee73654a23fe  cdtest14.xml
 aab6236b40e5701526da14cf7db304d7  cdtest10.xml
 74298ac04f312f0a383c0f4a797d0416  cdtest13.xml
+793920296d8ee7f6375bd0f63f98ba02  sftlf.nc
+a42e05c76039d90a60a0f3288d826c74  ta.nc
 c20b5a0f5f6d031436730df16ad42ab6  tas_mo_clim.nc
 acf9323a1f057415cb6a2e06f3a6050d  tas_ccsr-95a.xml
 4e4648ad9855cb71259926c9d4a1d361  tas_ccsr-95a_1979.01-1979.12.nc
@@ -34,6 +36,8 @@ bae6d4d96aeb7faafee00f2a906392a5  era40_tas_sample.nc
 a58748f192e02ae1ec2cf9375a1141cc  161122_RobertPincus_multiple_input4MIPs_radiation_RFMIP_UColorado-RFMIP-20161122_none.nc
 fe00a043c990b2cfd8ff1e2f9e9c4cc0  tas_GFDL-ESM2G_Amon_historical_r1i1p1_198501-200512-clim.nc 
 4f8e5dcfe78e4be26af2c2440971bee5  stereographic.nc
+6c5bcd38ce3f77954e4353d2b9cba2f4  gpcp_cdr_v23rB1_y2016_m08.nc
 f515f21f4a62d182617f0ae24f60e495  20160520.A_WCYCL1850.ne30_oEC.edison.alpha6_01_ANN_climo_Q.nc
 c85f1abcd5769f4056209413e64d894a  MERRA_ANN_climo_SHUM.nc
 de706e7a27149612965acfff7868d836  netcdf4_compressed_example.nc
+43d54b60e1b7b46b9dd0720c85e4a3a3  vmro3_input4MIPs_ozone_DAMIP_CCMI-hist-stratO3-1-0_gr_185001_nco.nc

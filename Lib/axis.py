@@ -4,24 +4,24 @@
 """
 CDMS Axis objects
 """
-import string
+
+from future import standard_library
 import sys
 import types
 import copy
 import numpy
 # import regrid2._regrid
-import cdmsNode
+from . import cdmsNode
 import cdtime
-import cdmsobj
-from cdmsobj import CdmsObj, Max32int
-from sliceut import reverseSlice, splitSlice, splitSliceExt
-from error import CDMSError
-import forecast
+from . import cdmsobj
+from .cdmsobj import CdmsObj, Max32int
+from .sliceut import reverseSlice, splitSlice, splitSliceExt
+from .error import CDMSError
+from . import forecast
 import warnings
-from UserList import UserList
-# import internattr
-
-
+from six import string_types
+standard_library.install_aliases()
+from collections import UserList  # noqa
 _debug = 0
 std_axis_attributes = ['name', 'units', 'length', 'values', 'bounds']
 
@@ -31,16 +31,16 @@ class AliasList (UserList):
         UserList.__init__(self, alist)
 
     def __setitem__(self, i, value):
-        self.data[i] = string.lower(value)
+        self.data[i] = value.lower()
 
     def __setslice(self, i, j, values):
-        self.data[i:j] = map(lambda x: string.lower(x), values)
+        self.data[i:j] = [x.lower() for x in values]
 
     def append(self, value):
-        self.data.append(string.lower(value))
+        self.data.append(value.lower())
 
     def extend(self, values):
-        self.data.extend(map(string.lower, values))
+        self.data.extend(list(map(str.lower, values)))
 
 
 level_aliases = AliasList(['plev'])
@@ -100,7 +100,8 @@ _autobounds = 2
 # Modes:
 # 0 : off (not bounds generation)
 # 1 : on  (generate bounds)
-# 2 : grid (generate bounds for lat/lon grids only)
+# 2 : grid (generate bounds for lat/lon
+# grids only)
 
 # Set autobounds mode to 'on' or 'off'. If on, getBounds will automatically
 # generate boundary information for an axis or grid, if not explicitly defined.
@@ -139,7 +140,7 @@ def createGaussianAxis(nlat):
     # For odd number of latitudes, gridattr returns 0 in the second half of
     # lats
     if nlat % 2:
-        mid = nlat / 2
+        mid = int(nlat / 2)
         lats[mid + 1:] = -lats[:mid][::-1]
 
     latBounds = numpy.zeros((nlat, 2), numpy.float)
@@ -194,20 +195,28 @@ def mapLinearIntersection(xind, yind, iind,
                           aMinusEps, aPlusEps, bPlusEps, bMinusEps,
                           boundLeft, nodeSubI, boundRight):
     """
+    Parameters
+    ----------
+    xind:
+       'c' if (a,b) is closed on the left, 'o' if open,
+    yind:
+        same for right endpoint
+j
+    Returns
+    -------
+    True if the coordinate interval (a,b) intersects the node nodeSubI or cell
+    bounds [boundLeft,boundRight], where the interval (a,b) is defined by:
 
-    Return true iff the coordinate interval (a,b) intersects the node
-    nodeSubI or cell bounds [boundLeft,boundRight], where the interval
-    (a,b) is defined by:
+      * aMinusEps,aPlusEps = a +/- epsilon
+      * bPlusEps,bMinusEps = b +/- epsilon
 
-    xind = 'c' if (a,b) is closed on the left, 'o' if open,
-    yind same for right endpoint
-    aMinusEps,aPlusEps = a +/- epsilon
-    bPlusEps,bMinusEps = b +/- epsilon
+    and the intersection option iind = 'n','b','e','s' specifies whether
+    the intersection is with respect to the node value nodeSubI ('n' or 'e')
+    or the cell bounds [boundLeft,boundRight].
 
-    and the intersection option iind = 'n','b','e','s' specifies
-    whether the intersection is with respect to the node value
-    nodeSubI ('n' or 'e') or the cell bounds [boundLeft,boundRight].
-    See mapLinearExt.
+    See Also
+    --------
+    mapLinearExt
 
     """
 
@@ -242,8 +251,8 @@ def mapLinearIntersection(xind, yind, iind,
 def mapLinearExt(axis, bounds, interval, indicator='ccn',
                  epsilon=None, stride=1, wrapped=0):
     """Map coordinate interval to index interval, without
-    wraparound. interval has the form (x,y) where x and y are the
-    endpoints in coordinate space. indicator is a three-character
+    wraparound. Interval has the form (x,y) where x and y are the
+    endpoints in coordinate space. Indicator is a three-character
     string, where the first character is 'c' if the interval is closed
     on the left, 'o' if open, and the second character has the same
     meaning for the right-hand point. The third character indicates
@@ -254,12 +263,13 @@ def mapLinearExt(axis, bounds, interval, indicator='ccn',
     's' - the cell bounds are a subset of the interval
     'e' - same as 'n', plus an extra node on either side.
 
-    Returns the corresponding index interval (i,j), where i<j,
-    indicating the half-open index interval [i,j), or None if the
-    intersection is empty.
+    Returns
+    -------
+    The corresponding index interval (i,j), where i<j, indicating the
+    half-open index interval [i,j), or None if the intersection is empty.
     """
 
-    indicator = string.lower(indicator)
+    indicator = indicator.lower()
     length = len(axis)
 
     # Make the interval and search array non-decreasing
@@ -594,13 +604,23 @@ def mapLinearExt(axis, bounds, interval, indicator='ccn',
 
 
 def lookupArray(ar, value):
-    """Lookup value in array ar. Return index such that:
-    (a) ar is monotonically increasing:
-    value <= ar[index], index==0..len(ar)-1
-    value > ar[index], index==len(ar)
-    (b) ar is monotonically decreasing:
-    value >= ar[index], index==0..len(ar)-1
-    value < ar[index], index==len(ar)
+    """Lookup value in array ar.
+
+    Parameters
+    ----------
+    ar:
+        Input array
+    value:
+        Value to search
+    Returns
+    -------
+        index:
+            * ar is monotonically increasing.
+                * value <= ar[index], index==0..len(ar)-1
+                * value > ar[index], index==len(ar)
+            * ar is monotonically decreasing:
+                * value >= ar[index], index==0..len(ar)-1
+                * value < ar[index], index==len(ar)
     """
     ar = numpy.ma.filled(ar)
     ascending = (ar[0] < ar[-1]) or len(ar) == 1
@@ -646,10 +666,22 @@ def isSubsetVector(vec1, vec2, tol):
 
 
 def isOverlapVector(vec1, vec2, atol=1.e-8):
-    """Returns (isoverlap, index) where:
-    isoverlap is true iff a leading portion of vec1 is a subset of vec2;
-    index is the index such that vec1[0]<=vec2[index]. If index==len(vec2),
-    then vec1[0]>vec2[len(vec2)-1]
+    """
+    Parameters
+    ----------
+    vec1:
+        Input arrays to compare
+    vec2:
+        Input arrays to compare
+    atol: float, optional
+        Absolute tolerance, The absolute differenc is equal to **atol** Default is 1e-8
+
+    Returns
+    -------
+    (isoverlap, index) :
+        where isoverlap is true if a leading portion of vec1 is a subset of vec2;
+            * index is the index such that vec1[0] <= vec2[index]
+            * If indexl == len(vec2), then vec1[0] > vec2[len(vec2) - 1]
     """
     index = lookupArray(vec2, vec1[0])
     if index == 0 and abs(vec1[0] - vec2[0]):
@@ -667,8 +699,32 @@ def isOverlapVector(vec1, vec2, atol=1.e-8):
 
 
 def allclose(ax1, ax2, rtol=1.e-5, atol=1.e-8):
-    """True if all elements of axes ax1 and ax2 are close,
-    in the sense of numpy.ma.allclose."""
+    """
+    Parameters
+    ----------
+    ax1, ax2:  array_like
+
+    Returns
+    -------
+    bool
+        True if all elements of axes ax1 and ax2 are close,
+        in the sense of numpy.ma.allclose.
+
+    See Also
+    --------
+    all, any
+
+    Examples
+    --------
+    >>> a = ma.array([1e10, 1e-7, 42.0], mask=[0, 0, 1])
+    >>> a
+    masked_array(data = [10000000000.0 1e-07 --],
+                 mask = [False False True],
+           fill_value = 1e+20)
+    >>> b = ma.array([1e10, 1e-8, 42.0], mask=[0, 0, 1])
+    >>> ma.allclose(a, b)
+    False
+    """
     return ((ax1 is ax2) or numpy.ma.allclose(
         ax1[:], ax2[:], rtol=rtol, atol=atol))
 
@@ -689,7 +745,7 @@ class AbstractAxis(CdmsObj):
         self._doubledata_ = None
 
     def __str__(self):
-        return string.join(self.listall(), "\n") + "\n"
+        return "\n".join(self.listall()) + "\n"
 
     __repr__ = __str__
 
@@ -907,14 +963,14 @@ class AbstractAxis(CdmsObj):
         for val in self[:]:
             comptime = cdtime.reltime(val, self.units).tocomp(calendar)
             s = repr(comptime)
-            tt = string.split(s, ' ')
+            tt = str.split(s, ' ')
 
-            ttt = string.split(tt[0], '-')
+            ttt = str.split(tt[0], '-')
             yr = int(ttt[0])
             mo = int(ttt[1])
             da = int(ttt[2])
 
-            ttt = string.split(tt[1], ':')
+            ttt = str.split(tt[1], ':')
             hr = int(ttt[0])
             dtg = "%04d%02d%02d%02d" % (yr, mo, da, hr)
             result.append(dtg)
@@ -1118,7 +1174,7 @@ class AbstractAxis(CdmsObj):
     # calendar.
     def getCalendar(self):
         if hasattr(self, 'calendar'):
-            calendar = string.lower(self.calendar)
+            calendar = self.calendar.lower()
         else:
             calendar = None
 
@@ -1153,7 +1209,7 @@ class AbstractAxis(CdmsObj):
         if self.isTime():
             if type(value) in CdtimeTypes:
                 value = value.torel(self.units, self.getCalendar()).value
-            elif isinstance(value, types.StringType) and value not in [':', unspecified]:
+            elif isinstance(value, string_types) and value not in [':', unspecified]:
                 cal = self.getCalendar()
                 value = cdtime.s2c(value, cal).torel(self.units, cal).value
         return value
@@ -1165,7 +1221,7 @@ class AbstractAxis(CdmsObj):
             #
             # mf 20010419 test if attribute is a string (non CF), set to 360.0
             #
-            if(isinstance(cycle, types.StringType)):
+            if(isinstance(cycle, string_types)):
                 cycle = 360.0
         else:
             cycle = 360.0
@@ -1184,16 +1240,16 @@ class AbstractAxis(CdmsObj):
 
     def mapInterval(self, interval, indicator='ccn', cycle=None):
         """
-        Map coordinate interval to index interval. interval has one of the forms:
+        Map coordinate interval to index interval. interval has one of the forms
 
-          (x,y)
-          (x,y,indicator): indicator overrides keywork argument
-          (x,y,indicator,cycle): indicator, cycle override keyword arguments
-          None: indicates the full interval
+          * `(x,y)`
+          * `(x,y,indicator)`: indicator overrides keywork argument
+          * `(x,y,indicator,cycle)`: indicator, cycle override keyword arguments
+          * `None`: indicates the full interval
 
-        where x and y are the endpoints in coordinate space. indicator is a
-        two-character string, where the first character is 'c' if the interval
-        is closed on the left, 'o' if open, and the second character has the
+        where `x` and `y` are the endpoints in coordinate space. indicator is a
+        two-character string, where the first character is `c` if the interval
+        is closed on the left, `o` if open, and the second character has the
         same meaning for the right-hand point. Set cycle to a nonzero value
         to force wraparound.
 
@@ -1206,12 +1262,14 @@ class AbstractAxis(CdmsObj):
         (1) if j<=N, the interval does not wrap around the axis endpoint
         (2) if j>N, the interval wraps around, and is equivalent to the
             two consecutive intervals [i,N), [0,j-N)
+
         For example, if the vector is [0,2,4,...,358] of length 180,
         and the coordinate interval is [-5,5), the return index interval is
         [178,183). This is equivalent to the two intervals [178,180) and [0,3).
 
-        Note: if the interval is interior to the axis, but does not span any
-        axis element, a singleton (i,i+1) indicating an adjacent index is returned.
+.. note::
+           if the interval is interior to the axis, but does not span any axis element,
+           a singleton (i,i+1) indicating an adjacent index is returned.
         """
         i, j, k = self.mapIntervalExt(interval, indicator, cycle)
         j = min(j, i + len(self))
@@ -1249,7 +1307,7 @@ class AbstractAxis(CdmsObj):
         # check length of indicator if overridden by user
         #
 
-        indicator = string.lower(indicator)
+        indicator = indicator.lower()
         if len(indicator) == 2:
             indicator += 'n'
 
@@ -1462,15 +1520,16 @@ class AbstractAxis(CdmsObj):
 
                 sn = splitSliceExt(slice(i, j, k), size)
                 if(_debug):
-                    print "SSSS1-------------------- ", sn, len(sn)
+                    print("SSSS1-------------------- ", sn, len(sn))
 
                 for kk in range(0, len(sn)):
                     sl = sn[kk]
                     if(_debug):
-                        print "SSSSSSSS kk = ", kk, sl
+                        print("SSSSSSSS kk = ", kk, sl)
                     part = self[sl] + kk * modulo
                     if(_debug):
-                        print "SSSSSSSSSSSSSSS modulo", part[0], part[-1], modulo
+                        print("SSSSSSSSSSSSSSS modulo",
+                              part[0], part[-1], modulo)
                     if(kk == 0):
                         data = part
                     else:
@@ -1489,12 +1548,12 @@ class AbstractAxis(CdmsObj):
 
                 s1, s2 = splitSlice(slice(i, j, k), size)
                 if(_debug):
-                    print "SSSS0: original ", s1, s2
+                    print("SSSS0: original ", s1, s2)
 
                 part1 = self[s1]
                 part2 = self[s2] + modulo
                 if(_debug):
-                    print "SSSSSSSSSSSSSSS modulo", self[0], self[-1], modulo
+                    print("SSSSSSSSSSSSSSS modulo", self[0], self[-1], modulo)
                 data = numpy.concatenate((part1, part2))
                 if fullBounds is not None:
                     bounds1 = fullBounds[s1]
@@ -1526,7 +1585,7 @@ class AbstractAxis(CdmsObj):
         if self.isTime():
             newaxis.designateTime()
 
-        for attname in self.attributes.keys():
+        for attname in list(self.attributes.keys()):
             if attname not in ["datatype", "length", "isvar",
                                "name_in_file", "partition", "partition_length"]:
                 setattr(newaxis, attname, getattr(self, attname))
@@ -1649,13 +1708,13 @@ class AbstractAxis(CdmsObj):
         else:
             mycopy = createAxis(self[:])
         mycopy.id = self.id
+        mycopy.__dict__.update(self.__dict__.copy())
+        mycopy._obj_ = None  # Erase Cdfile object if exist
         try:
             mycopy.setBounds(b, isGeneric=isGeneric[0])
         except CDMSError:
             b = mycopy.genGenericBounds()
             mycopy.setBounds(b, isGeneric=False)
-        for k, v in self.attributes.items():
-            setattr(mycopy, k, v)
         return mycopy
 
     def listall(self, all=None):
@@ -1681,7 +1740,7 @@ class AbstractAxis(CdmsObj):
         result.append('   First:  ' + str(d[0]))
         result.append('   Last:   ' + str(d[-1]))
         flag = 1
-        for k in self.attributes.keys():
+        for k in list(self.attributes.keys()):
             if k in std_axis_attributes:
                 continue
             if flag:
@@ -1729,7 +1788,7 @@ class Axis(AbstractAxis):
             if axisNode.partition is not None:
                 flatpart = axisNode.partition
                 self.__dict__['partition'] = numpy.reshape(
-                    flatpart, (len(flatpart) / 2, 2))
+                    flatpart, (len(flatpart) // 2, 2))
                 self.attributes['partition'] = self.partition
         self.id = axisNode.id
 
@@ -1742,25 +1801,25 @@ class Axis(AbstractAxis):
         length = len(node)
 
         # Allow key of form (slice(i,j),) etc.
-        if isinstance(key, types.TupleType) and len(key) == 1:
+        if isinstance(key, tuple) and len(key) == 1:
             key = key[0]
 
-        if isinstance(key, (types.IntType, numpy.int, numpy.int32)):  # x[i]
+        if isinstance(key, (int, numpy.int, numpy.int32)):  # x[i]
             if key >= length:
                 raise IndexError('index out of bounds')
             else:
                 # Don't generate the entire array (if linear) just for one
                 # value
                 return node.data[key % length]
-        elif isinstance(key, types.SliceType):  # x[i:j:k]
+        elif isinstance(key, slice):  # x[i:j:k]
             if self._data_ is None:
                 self._data_ = node.getData()
             return self._data_[key.start:key.stop:key.step]
-        elif isinstance(key, types.EllipsisType):  # x[...]
+        elif isinstance(key, type(Ellipsis)):  # x[...]
             if self._data_ is None:
                 self._data_ = node.getData()
             return self._data_
-        elif isinstance(key, types.TupleType):
+        elif isinstance(key, tuple):
             raise IndexError('axis is one-dimensional')
         else:
             raise IndexError('index must be an integer: %s' % repr(key))
@@ -1819,9 +1878,9 @@ class Axis(AbstractAxis):
 
     def getCalendar(self):
         if hasattr(self, 'calendar'):
-            calendar = string.lower(self.calendar)
+            calendar = self.calendar.lower()
         elif self.parent is not None and hasattr(self.parent, 'calendar'):
-            calendar = string.lower(self.parent.calendar)
+            calendar = self.parent.calendar.lower()
         else:
             calendar = None
 
@@ -1847,7 +1906,7 @@ class TransientAxis(AbstractAxis):
             if hasattr(data, 'attributes'):
                 attributes = data.attributes
         if attributes is not None:
-            for name, value in attributes.items():
+            for name, value in list(attributes.items()):
                 if name not in ['missing_value', 'name']:
                     setattr(self, name, value)
         self.id = id
@@ -2032,7 +2091,7 @@ class FileAxis(AbstractAxis):
             self.name_in_file = name_in_file
         # Combine the attributes of the variable object, if any
         if obj is not None:
-            for attname in self._obj_.__dict__.keys():
+            for attname in list(self._obj_.__dict__.keys()):
                 attval = getattr(self._obj_, attname)
                 if not isinstance(attval, types.BuiltinFunctionType):
                     self.__dict__[attname] = attval
@@ -2042,7 +2101,7 @@ class FileAxis(AbstractAxis):
 
     def getData(self):
         if cdmsobj._debug == 1:
-            print 'Getting array for axis', self.id
+            print('Getting array for axis', self.id)
         if self.parent is None:
             raise CDMSError(FileWasClosed + self.id)
         try:
@@ -2137,30 +2196,30 @@ class FileAxis(AbstractAxis):
                 hasattr(self.parent, 'format') and self.parent.format == "DRS"):
             # For negative strides, get the equivalent slice with positive stride,
             # then reverse the result.
-            if (isinstance(key, types.SliceType)) and (
+            if (isinstance(key, slice)) and (
                     key.step is not None) and key.step < 0:
                 posslice = reverseSlice(key, len(self))
                 result = self._obj_.getitem(*(posslice,))
                 return result[::-1]
             else:
-                if isinstance(key, types.IntType) and key >= len(self):
+                if isinstance(key, int) and key >= len(self):
                     raise IndexError('Index out of bounds: %d' % key)
-                if not isinstance(key, types.TupleType):
+                if not isinstance(key, tuple):
                     key = (key,)
                 return self._obj_.getitem(*key)
         if self._data_ is None:
             self._data_ = self.getData()
         length = len(self._data_)
-        if isinstance(key, types.IntType):  # x[i]
+        if isinstance(key, int):  # x[i]
             if key >= length:
                 raise IndexError('index out of bounds')
             else:
                 return self._data_[key % length]
-        elif isinstance(key, types.SliceType):  # x[i:j:k]
+        elif isinstance(key, slice):  # x[i:j:k]
             return self._data_[key.start:key.stop:key.step]
-        elif isinstance(key, types.EllipsisType):  # x[...]
+        elif isinstance(key, type(Ellipsis)):  # x[...]
             return self._data_
-        elif isinstance(key, types.TupleType):
+        elif isinstance(key, tuple):
             raise IndexError('axis is one-dimensional')
         else:
             raise IndexError(
@@ -2188,10 +2247,23 @@ class FileAxis(AbstractAxis):
             raise CDMSError(ReadOnlyAxis + self.id)
         if self.parent is None:
             raise CDMSError(FileWasClosed + self.id)
+        # need setslice to create a new shape using [newaxis]
+        if(isinstance(index, slice)):
+            if(index.start is not None):
+                if(self.shape[0] < index.start):
+                    low = index.start
+                    high = index.stop
+                    if(self.isUnlimited() and (high >= Max32int)):
+                        high = self.__len__()
+                    high = min(Max32int, high)
+                    return self._obj_.setslice(
+                        *(low, high, numpy.ma.filled(value)))
         return self._obj_.setitem(*(index, numpy.ma.filled(value)))
 
     def __setslice__(self, low, high, value):
         # Hack to prevent netCDF overflow error on 64-bit architectures
+        if(self.isUnlimited() and (high >= Max32int)):
+            high = self.__len__()
         high = min(Max32int, high)
         if self._obj_ is None:
             raise CDMSError(ReadOnlyAxis + self.id)
@@ -2244,7 +2316,7 @@ class FileAxis(AbstractAxis):
                     boundsArray = numpy.ma.filled(boundsVar)
                     self._boundsArray_ = boundsArray  # for climatology performance
                 except KeyError as err:
-                    print err
+                    print(err)
                     boundsArray = None
         else:
             boundsArray = self._boundsArray_
@@ -2300,9 +2372,9 @@ class FileAxis(AbstractAxis):
 
     def getCalendar(self):
         if hasattr(self, 'calendar'):
-            calendar = string.lower(self.calendar)
+            calendar = self.calendar.lower()
         elif self.parent is not None and hasattr(self.parent, 'calendar'):
-            calendar = string.lower(self.parent.calendar)
+            calendar = self.parent.calendar.lower()
         else:
             calendar = None
 
@@ -2358,59 +2430,82 @@ class FileVirtualAxis(FileAxis):
 # Functions for selecting axes
 
 
+# Functions for selecting axes
 def axisMatchAxis(axes, specifications=None, omit=None, order=None):
-    """Given a list of axes and a specification or list of
+    """Match a list of axes following a specification or list of
      specificatons, and a specification or list of specifications
-     of those axes to omit, return a list of
-     those axes in the list that match the specification but
-     do not include in the list any axes that matches an omit
-     specification.
+     of those axes to omit.
 
-     If specifications is None, include all axes less the omitted ones.
+     Parameters
+     ----------
+     specifications:
+         *  is None, include all axes less the omitted ones.
 
-     Individual specifications must be integer indices into axes or
-     matching criteria as detailed in axisMatches.
+         *  Individual specifications must be integer indices into axes or
+            matching criteria as detailed in axisMatches.
 
-     Axes are returned in the order they occur in the axes argument unless
-     order is given.
+     omit:
+         *  is None, do not omit any axis.
 
-     order can be a string containing the symbols t,x,y,z, or -.
-     If a - is given, any elements of the result not chosen otherwise are
-     filled in from left to right with remaining candidates.
+         *  Individual specifications must be integer indices into axes or
+            matching criteria as detailed in axisMatches.
+
+     order:
+         *  A string containing the symbols `t,x,y,z` or `-`.  If a `-` is
+            given, any elements of the result not chosen otherwise are filled
+            in from left to right with remaining candidates.
+
+     Return
+     ------
+     A list of axes that match the specification omitting any axes that matches
+     an omit specification.
+
+     Axes are returned in the order they occur in the axes argument unless order is given.
     """
     return [axes[i] for i in
             axisMatchIndex(axes, specifications, omit, order)]
 
 
 def axisMatchIndex(axes, specifications=None, omit=None, order=None):
-    """Given a list of axes and a specification or list of
+    """Match a list of axes following a specification or list of
      specificatons, and a specification or list of specifications
-     of those axes to omit, return a list of the indices of
-     those axes in the list that match the specification but
-     do not include in the list any axes that matches an omit
-     specification.
+     of those axes to omit.
 
-     If specifications is None, include all axes less the omitted ones.
+     Parameters
+     ----------
+     specifications:
+         *  is None, include all axes less the omitted ones.
 
-     Individual specifications must be integer indices into axes or
-     matching criteria as detailed in axisMatches.
+         *  Individual specifications must be integer indices into axes or
+            matching criteria as detailed in axisMatches.
 
-     The indices of axes are returned in the order the axes
-     occur in the axes argument, unless order is given.
+     omit:
+         *  is None, do not omit any axis.
 
-     order can be a string containing the symbols t,x,y,z, or -.
-     If a - is given, any elements of the result not chosen otherwise are
-     filled in from left to right with remaining candidates.
+         *  Individual specifications must be integer indices into axes or
+            matching criteria as detailed in axisMatches.
+
+     order:
+         *  A string containing the symbols `t,x,y,z` or `-`.  If a `-` is
+            given, any elements of the result not chosen otherwise are filled
+            in from left to right with remaining candidates.
+
+     Return
+     ------
+     A list of axis' indices which match the specification omitting any axes that matches an omit specification.
+
+     Axes are returned in the order they occur in the axes argument unless order is given.
+
     """
     if specifications is None:
         speclist = axes
-    elif isinstance(specifications, types.StringType):
+    elif isinstance(specifications, bytes):
         speclist = [specifications]
-    elif isinstance(specifications, types.ListType):
+    elif isinstance(specifications, list):
         speclist = specifications
-    elif isinstance(specifications, types.TupleType):
+    elif isinstance(specifications, tuple):
         speclist = list(specifications)
-    elif isinstance(specifications, types.IntType):
+    elif isinstance(specifications, int):
         speclist = [specifications]
     elif isinstance(specifications, types.FunctionType):
         speclist = [specifications]
@@ -2420,7 +2515,7 @@ def axisMatchIndex(axes, specifications=None, omit=None, order=None):
     candidates = []
     for i in range(len(axes)):
         for s in speclist:
-            if isinstance(s, types.IntType):
+            if isinstance(s, int):
                 r = (s == i)
             else:
                 r = axisMatches(axes[i], s)
@@ -2433,13 +2528,13 @@ def axisMatchIndex(axes, specifications=None, omit=None, order=None):
 
     if omit is None:
         omitlist = []
-    elif isinstance(omit, types.StringType):
+    elif isinstance(omit, string_types):
         omitlist = [omit]
-    elif isinstance(omit, types.ListType):
+    elif isinstance(omit, list):
         omitlist = omit
-    elif isinstance(omit, types.TupleType):
+    elif isinstance(omit, tuple):
         omitlist = list(omit)
-    elif isinstance(omit, types.IntType):
+    elif isinstance(omit, int):
         omitlist = [omit]
     elif isinstance(omit, types.FunctionType):
         omitlist = [omit]
@@ -2449,7 +2544,7 @@ def axisMatchIndex(axes, specifications=None, omit=None, order=None):
         raise CDMSError('Unknown type of omit specifier.')
 
     for s in omitlist:
-        if isinstance(s, types.IntType):
+        if isinstance(s, int):
             for i in range(len(candidates)):
                 if axes[candidates[i]] is axes[s]:
                     del candidates[i]
@@ -2511,31 +2606,44 @@ def axisMatchIndex(axes, specifications=None, omit=None, order=None):
 
 
 def axisMatches(axis, specification):
-    """Return 1 or 0 depending on whether axis matches the specification.
-       Specification must be one of:
-       1. a string representing an axis id or one of
-          the keywords time, fctau0, latitude or lat, longitude or lon, or
-          lev or level.
-
-          axis may be surrounded with parentheses or spaces.
-
-          We first attempt to match the axis id and the specification.
-          Keywords try to match using isTime, isLatitude, etc.
-          Comparisons to keywords and axis ids is case-insensitive.
-
-       2. a function that takes an axis as an argument and returns a value.
-          if the value returned is true, the axis matches.
-
-       3. an axis object; will match if it is the same object as axis.
     """
-    if isinstance(specification, basestring):
-        s = string.lower(specification)
+       Parameters
+       ----------
+       axis:
+           See note below
+       specifications:
+           See note below
+
+       Returns
+       -------
+       1 or 0 depending on whether axis matches the specification.
+
+       Note
+       ----
+       Specification must be one of:
+
+       #. a string representing an axis id or one of the keywords time,
+          fctau0, latitude or lat, longitude or lon, or lev or level.
+
+       #. Axis may be surrounded with parentheses or spaces.
+
+          * We first attempt to match the axis id and the specification.
+          * Keywords try to match using isTime, isLatitude, etc.
+          * Comparisons to keywords and axis ids is case-insensitive.
+
+       #. a function that takes an axis as an argument and returns a value.
+          * if the value returned is true, the axis matches.
+
+       #. an axis object; will match if it is the same object as axis.
+    """
+    if isinstance(specification, string_types):
+        s = specification.lower()
         s = s.strip()
         while s[0] == '(':
             if s[-1] != ')':
                 raise CDMSError('Malformed axis spec, ' + specification)
             s = s[1:-1].strip()
-        if string.lower(axis.id) == s:
+        if axis.id.lower() == s:
             return True
         elif (s == 'time') or (s in time_aliases):
             return axis.isTime()
@@ -2565,11 +2673,24 @@ def axisMatches(axis, specification):
 
 
 def concatenate(axes, id=None, attributes=None):
-    """Concatenate the axes, return a transient axis."""
+    """Concatenate multiple axes including boundaries.
+
+    Parameters
+    ----------
+        axes:
+            Axes to concatenate
+        id:
+            New axis identification (default None)
+        attributes:
+            Attributes to attached to the new Axis
+
+    Returns
+    -------
+        Transient axis."""
 
     data = numpy.ma.concatenate([ax[:] for ax in axes])
     boundsArray = [ax.getBounds() for ax in axes]
-    if None in boundsArray:
+    if any(elem is None for elem in boundsArray):
         bounds = None
     else:
         bounds = numpy.ma.concatenate(boundsArray)
@@ -2577,7 +2698,18 @@ def concatenate(axes, id=None, attributes=None):
 
 
 def take(ax, indices):
-    """Take values indicated by indices list, return a transient axis."""
+    """Take elements form an array along an axis
+    Parameters
+    ----------
+        ax:
+            The source array.
+        indices:
+            The indices of the values to extract.
+    Returns
+    -------
+    axis: TransientAxis
+        The return array has the same type of ax.
+    """
 
     # Bug in ma compatibility module
     data = numpy.ma.take(ax[:], indices)

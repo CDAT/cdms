@@ -3,6 +3,7 @@ extern "C" {
 #endif
 #include "Python.h"
 #include "numpy/arrayobject.h"
+#include "py3c.h"
  
 static PyObject *ErrorObject;
 
@@ -504,31 +505,38 @@ static struct PyMethodDef _bindex_methods[] = {
 static char _bindex_module_documentation[] =
 "Fortran interface module _bindex";
 
-void init_bindex(void)
+static struct PyModuleDef moduledef = {
+    PyModuleDef_HEAD_INIT,     /* m_base */
+    "_bindex",                 /* m_name */
+    _bindex_module_documentation,                   /* m_doc */
+    -1,                        /* m_size */
+    _bindex_methods            /* m_methods */
+};
+
+MODULE_INIT_FUNC(_bindex)
 {
         PyObject *m, *d, *j;
  
-        import_array ();
-        m = Py_InitModule4("_bindex", _bindex_methods,
-                _bindex_module_documentation,
-                (PyObject*)NULL,PYTHON_API_VERSION);
- 
+        import_array1(NULL);
+        m = PyModule_Create(&moduledef);
         d = PyModule_GetDict(m);
-        ErrorObject = PyString_FromString("_bindex.error");
+        ErrorObject = PyStr_FromString("_bindex.error");
         PyDict_SetItemString(d, "error", ErrorObject);
-        j = PyInt_FromLong((long) TRANSPOSE_OPTION);
+        j = PyLong_FromLong((long) TRANSPOSE_OPTION);
         PyDict_SetItemString(d, "TRANSPOSE", j);
         Py_XDECREF(j);
-        j = PyInt_FromLong((long) MIRROR_OPTION);
+        j = PyLong_FromLong((long) MIRROR_OPTION);
         PyDict_SetItemString(d, "MIRROR", j);
         Py_XDECREF(j);
-        j = PyInt_FromLong(0L);
+        j = PyLong_FromLong(0L);
         PyDict_SetItemString(d, "NONE", j);
         Py_XDECREF(j);
 
         if (PyErr_Occurred()) {
             Py_FatalError("can't initialize module _bindex");
+            return NULL;
         }
+        return m;
 }
 
 /* C++ trailer */

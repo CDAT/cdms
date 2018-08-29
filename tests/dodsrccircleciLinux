@@ -1,0 +1,6 @@
+HTTP.VERBOSE=0
+HTTP.COOKIEJAR=/home/circleci/.esg/.dods_cookies
+HTTP.SSL.CERTIFICATE=/home/circleci/.esg/esgf.cert
+HTTP.SSL.KEY=/home/circleci/.esg/esgf.cert
+HTTP.SSL.CAPATH=/home/circleci/.esg/
+

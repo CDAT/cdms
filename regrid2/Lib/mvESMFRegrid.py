@@ -6,14 +6,13 @@ No guarantee is provided whatsoever. Use at your own risk.
 
 David Kindig and Alex Pletzer, Tech-X Corp. (2012)
 """
-import types
 import re
 import numpy
 
 import ESMF
-from regrid2 import esmf
-from regrid2 import RegridError
-from regrid2 import GenericRegrid
+from . import esmf
+from . import RegridError
+from .mvGenericRegrid import GenericRegrid
 
 ESMF.Manager(debug=False)
 HAVE_MPI = False
@@ -77,7 +76,7 @@ class ESMFRegrid(GenericRegrid):
 
         self.regridMethod = BILINEAR
         self.regridMethodStr = 'linear'
-        if isinstance(regridMethod, types.StringType):
+        if isinstance(regridMethod, str):
             if re.search('conserv', regridMethod.lower()):
                 self.regridMethod = CONSERVE
                 self.regridMethodStr = 'conserve'
@@ -88,7 +87,7 @@ class ESMFRegrid(GenericRegrid):
         # data stagger
         self.staggerloc = CENTER
         self.staggerlocStr = 'center'
-        if isinstance(staggerLoc, types.StringType):
+        if isinstance(staggerLoc, str):
             if re.search('vface', staggerLoc.lower(), re.I):
                 self.staggerloc = VFACE
                 self.staggerlocStr = 'vcorner'
@@ -121,7 +120,7 @@ class ESMFRegrid(GenericRegrid):
 #        self.srcMaskValues = numpy.array([1],dtype = numpy.int32)
 #        self.dstMaskValues = numpy.array([1],dtype = numpy.int32)
 
-        if isinstance(regridMethod, types.StringType):
+        if isinstance(regridMethod, str):
             if re.search('conserv', regridMethod.lower()):
                 self.srcMaskValues = numpy.array([1], dtype=numpy.int32)
                 self.dstMaskValues = numpy.array([1], dtype=numpy.int32)
@@ -314,11 +313,15 @@ staggerLoc = %s!""" % self.staggerLoc
 #                self.maskPtr[:] = srcDataMask[:]
 #                self.computeWeights(**args)
 
-        self.srcFld.field.data[:] = srcData
-        self.dstFld.field.data[:] = dstData
+        zero_region = ESMF.Region.SELECT
+        if 'zero_region' in args.keys():
+            zero_region = args.get('zero_region')
+
+        self.srcFld.field.data[:] = srcData.T
+        self.dstFld.field.data[:] = dstData.T
         # regrid
 
-        self.regridObj(self.srcFld.field, self.dstFld.field)
+        self.regridObj(self.srcFld.field, self.dstFld.field, zero_region=zero_region)
 
         # fill in dstData
         if rootPe is None and globalIndexing:
@@ -326,7 +329,7 @@ staggerLoc = %s!""" % self.staggerLoc
             slab = self.dstGrid.getLocalSlab(staggerloc=self.staggerloc)
             dstData[slab] = self.dstFld.getData(rootPe=rootPe)
         else:
-            tmp = self.dstFld.field.data
+            tmp = self.dstFld.field.data.T
             if tmp is None:
                 dstData = None
             else:
@@ -472,7 +475,7 @@ staggerLoc = %s!""" % self.staggerLoc
                 'srcAreas', 'dstAreas':
             if entry in diag:
                 diag[entry] = eval(
-                    'self.' + oldMethods[entry] + '(rootPe=rootPe)')
+                    'self.' + oldMethods[entry] + '(rootPe=rootPe)').T
         diag['regridTool'] = 'esmf'
         diag['regridMethod'] = self.regridMethodStr
         diag['periodicity'] = self.periodicity

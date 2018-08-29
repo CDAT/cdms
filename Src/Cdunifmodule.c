@@ -535,7 +535,9 @@ static int cdopen(const char* controlpath, int ncmode, CuFileType *filetype) {
 		/* Take care for mode flag */
 		if ((cdms_classic == 0) || (cdms_shuffle != 0) || (cdms_deflate != 0)
 				|| (cdms_netcdf4 == 1)) {
-			ncmode = ncmode | NC_NETCDF4;
+		    if(strstr(controlpath, "http") == NULL){
+		        ncmode = ncmode | NC_NETCDF4;
+		    }
 		}
 #ifdef PARALLEL
 		/* ok we can only use MPIIO if not using shuffle or deflate for reason
@@ -2527,8 +2529,8 @@ PyCdunifVariable_ReadAsArray(PyCdunifVariableObject *self,
 		array = (PyArrayObject *) PyArray_SimpleNew(d, dims, self->type);
     }
 
-	if (array != NULL && nitems > 0) {
-		if (self->nd == 0) {
+	if (nitems > 0) {
+		if ((self->nd == 0) && (array != NULL)) {
 			long zero = 0;
 			int ret;
 			Py_BEGIN_ALLOW_THREADS
@@ -2609,11 +2611,16 @@ PyCdunifVariable_ReadAsArray(PyCdunifVariableObject *self,
                     }
                     PyMem_Free(value);
                 } else {
-                    ret = cdvargets(self->file, self->id, start, count, stride,
-                            array->data);
+                    if(array != NULL) {
+                        ret = cdvargets(self->file,
+                                self->id, start,
+                                count, stride,
+                                array->data);
+                    } else {
+                        ret = -1;
+                    }
                 }
 				release_Cdunif_lock()
-
 				Py_END_ALLOW_THREADS
 				;
 				if (ret == -1) {
@@ -3084,7 +3091,9 @@ static int PyCdunifVariableObject_ass_subscript(PyCdunifVariableObject *self,
 		if (PySlice_Check(index)) {
 			Py_ssize_t slicelen;
 			int length;
-			if( self->dimensions[0] == self->file->recdim ){
+            length = INT_MAX;
+ 			if( self->dimids[0]== self->file->recdim &&
+			        self->dimensions[0] == 0){
 			    length = INT_MAX;
 			} else {
 			    length = self->dimensions[0];
@@ -3092,6 +3101,10 @@ static int PyCdunifVariableObject_ass_subscript(PyCdunifVariableObject *self,
 			PySlice_GetIndicesEx((PySliceObject *) index, length,
 					&indices->start, &indices->stop, &indices->stride,
 					&slicelen);
+
+			if(indices->stop == indices->start){
+			    indices->stop = indices->start + indices->stride;
+			}
 			return PyCdunifVariable_WriteArray(self, indices, value);
 		}
 		if (PyTuple_Check(index)) {

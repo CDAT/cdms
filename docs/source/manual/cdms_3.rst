@@ -1,8 +1,11 @@
-CHAPTER 3 cdtime Module
------------------------
+Module: CdTime
+--------------
 
-3.1 Time types
-^^^^^^^^^^^^^^
+Time Types
+^^^^^^^^^^
+.. highlight:: python
+   :linenothreshold: 3
+
 .. testsetup:: *
 
    import requests
@@ -21,7 +24,7 @@ CHAPTER 3 cdtime Module
 
 
 The ``cdtime`` module implements the CDMS time types, methods, and
-calendars. These are made available with the command
+calendars. These are made available with the command:
 
 .. doctest::
 
@@ -44,8 +47,8 @@ The ``cdtime`` module contains functions for converting between these
 forms, based on the common calendars used in climate simulation. Basic
 arithmetic and comparison operators are also available.
 
-3.2 Calendars
-^^^^^^^^^^^^^
+Calendars
+^^^^^^^^^
 
 A calendar specifies the number of days in each month, for a given year.
 cdtime supports these calendars:
@@ -70,15 +73,18 @@ changed with the command:
 
 ``cdtime.DefaultCalendar = newCalendar``
 
-3.3 Time Constructors
-^^^^^^^^^^^^^^^^^^^^^
+Time Constructors
+^^^^^^^^^^^^^^^^^
 
 The following table describes the methods for creating time types.
+ 
+Table Time Constructors
+~~~~~~~~~~~~~~~~~~~~~~~
 
-
-.. csv-table:: Time Constructors
+.. csv-table:: 
    :header:  "Type", "Constructor", "Defintion"
    :widths:  10, 40, 80
+   :align: left
 
    "Reltime", "``cdtime.reltime(value, relunits)``", "Create a relative time type."
    ,, "``value`` is an integer or floating point value."
@@ -94,12 +100,12 @@ The following table describes the methods for creating time types.
    ,,"``second`` is a floating point number in the range 0.0 ,, 60.0. **Example:** ``c = cdtime.comptime(1996, 2, 28)``"
 
 
-3.4 Relative Time
-^^^^^^^^^^^^^^^^^
+Relative Time
+^^^^^^^^^^^^^
 
 A relative time type has two members, value and units. Both can be set.
 
-Table 3.2 Relative Time Members
+Table Relative Time Members
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 +----------+---------+-------------------------------------------------------+
@@ -110,12 +116,14 @@ Table 3.2 Relative Time Members
 | String   | units   | Relative units, of the form “unit(s) since basetime   |
 +----------+---------+-------------------------------------------------------+
 
-3.5 Component Time
-^^^^^^^^^^^^^^^^^^
+Component Time
+^^^^^^^^^^^^^^
 
 A component time type has six members, all of which are settable.
 
-.. csv-table:: Table 3.3 Component Time
+Table Component Time
+~~~~~~~~~~~~~~~~~~~~
+.. csv-table:: 
    :header: "Type", "Name", "Summary"
    :widths: 15, 15, 50
 
@@ -126,23 +134,26 @@ A component time type has six members, all of which are settable.
    "Integer", "minute", "Minute, in the range 0 .. 59"
    "Float", "second", "Seconds, in the range 0.0 .. 60.0"
 
-3.6 Time Methods
-^^^^^^^^^^^^^^^^
+Time Methods
+^^^^^^^^^^^^
 
 The following methods apply both to relative and component times.
 
-.. csv-table:: Table 3.4 Time Methods
+Table Time Methods
+~~~~~~~~~~~~~~~~~~
+.. csv-table:: 
    :header: "Type", "Method", "Definition"
    :widths: 20, 75, 80
+   :align: left
 
-   "Comptime or Reltime", "``t.add(value, intervalUnits, calendar=cdtime.Default-Calendar)``", "Add an interval of time to a time type t.  Returns the same type of time."
+   "Comptime or Reltime", "``t.add(value,intervalUnits, calendar=cdtime.Default-Calendar)``", "Add an interval of time to a time type t.  Returns the same type of time."
    ,, "``value`` is the   Float number of interval units."
    ,, "``intervalUnits`` is ``cdtime.[Second (s) | Minute(s) Hour(s) | Day(s) |  Week(s) | Month(s) | Season(s) | Year(s) ]``"
    ,, "``calendar`` is the calendar type."
    "Integer", "``t.cmp(t2, calendar=cdtime.DefaultCalendar)``", "Compare time values t and t2. Returns -1, 0, 1 as t is less than, equal to, or greater than t2 respectively."
    ,, "``t2`` is the time to compare."
    ,, "``calendar`` is the calendar type."
-   "Comptime or Reltime", "``t.sub(value, intervalUnits, calendar=cdtime.DefaultCalendar)``", "Subtract an interval of time from a time type t.  Returns the same type of time."
+   "Comptime or Reltime", "``t.sub(value,intervalUnits, calendar=cdtime.DefaultCalendar)``", "Subtract an interval of time from a time type t.  Returns the same type of time."
    ,, "``value`` is the Float number of interval units."
    ,, "``intervalUnits`` is cdtime.[Second (s) | Minute(s) | Hour(s) | Day(s) | Week(s) | Month(s) | Season(s) | Year(s)]"
    ,, "``calendar`` is the calendar type. "
@@ -151,8 +162,8 @@ The following methods apply both to relative and component times.
    "Reltime", "``t.torel(units, calendar=cdtime.DefaultCalendar)``", "Convert to relative time.  Returns the equivalent relative time."
    
 
-3.7 Examples
-^^^^^^^^^^^^
+Examples
+^^^^^^^^
 .. doctest:: 
 
    >>> from cdtime import *

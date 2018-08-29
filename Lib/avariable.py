@@ -36,21 +36,23 @@ _numeric_compatibility = False
 
 def getMinHorizontalMask(var):
     """
-       Get the minimum mask associated with 'x' and 'y' (i.e. with the min number of ones) across all axes
+    Get the minimum mask associated with 'x' and 'y' 
+    (i.e. with the min number of ones) across all axes
 
-Parameters
-----------
- 
-       var
-          CDMS variable with a mask
+    Parameters
+    ----------
 
-       N/A: 
-          None
+    var : 
+       CDMS variable with a mask
 
-    Return
-    ------
+    N/A : 
+       None
 
-       mask array or None if order 'x' and 'y' were not found
+    Returns
+    -------
+
+    mask array or None :
+        if order 'x' and 'y' were not found
 
     """
     from distarray import MultiArrayIter
@@ -177,14 +179,14 @@ class AbstractVariable(CdmsObj, Slab):
 
         Parameters
         ----------
-        raw:
-            if set to 1, return numpy.ma only
-        squeeze:
-            if set to 1, eliminate any dimension of length 1
-        grid:
-            if given, result is regridded ont this grid.
-        order:
-            if given, result is permuted into this order
+            raw:
+                if set to 1, return numpy.ma only
+            squeeze:
+                if set to 1, eliminate any dimension of length 1
+            grid:
+                if given, result is regridded ont this grid.
+            order:
+                if given, result is permuted into this order
 
         Returns
         -------
@@ -1846,14 +1848,15 @@ __crp = re.compile(__rp)
 
 def orderparse(order):
     """Parse an order string. Returns a list of axes specifiers.
-       Note
-       ----
-       Order elements can be:
-          * Letters t, x, y, z meaning time, longitude, latitude, level
-          * Numbers 0-9 representing position in axes
-          * The letter - meaning insert the next available axis here.
-          * The ellipsis ... meaning fill these positions with any remaining axes.
-          * (name) meaning an axis whose id is name
+       
+       Note:
+            
+           Order elements can be:
+              * Letters t, x, y, z meaning time, longitude, latitude, level
+              * Numbers 0-9 representing position in axes
+              * The letter - meaning insert the next available axis here.
+              * The ellipsis ... meaning fill these positions with any remaining axes.
+              * (name) meaning an axis whose id is name
     """
     if not isinstance(order, string_types):
         raise CDMSError('order arguments must be strings.')
@@ -1884,14 +1887,15 @@ def orderparse(order):
 def order2index(axes, order):
     """Find the index permutation of axes to match order.
        The argument order is a string.
-       Note
-       ----
-       Order elements can be:
-          * Letters t, x, y, z meaning time, longitude, latitude, level.
-          * Numbers 0-9 representing position in axes
-          * The letter - meaning insert the next available axis here.
-          * The ellipsis ... meaning fill these positions with any remaining axes.
-          * (name) meaning an axis whose id is name.
+
+       Note:
+       
+           Order elements can be:
+              * Letters t, x, y, z meaning time, longitude, latitude, level.
+              * Numbers 0-9 representing position in axes
+              * The letter - meaning insert the next available axis here.
+              * The ellipsis ... meaning fill these positions with any remaining axes.
+              * (name) meaning an axis whose id is name.
     """
     if isinstance(order, string_types):
         result = orderparse(order)

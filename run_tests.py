@@ -42,7 +42,9 @@ class CDMSTestRunner(cdat_info.TestRunnerBase):
         cookies = "-c {h}/.esg/.dods_cookies".format(h=home)
         cert_opt = "--cert {h}/.esg/esgf.cert".format(h=home)
         key_opt = "--key {h}/.esg/esgf.cert".format(h=home)
-        dds = "https://aims3.llnl.gov/thredds/dodsC/cmip5_css02_data/cmip5/output1/CMCC/CMCC-CM/decadal2005/mon/atmos/Amon/r1i1p1/cct/1/cct_Amon_CMCC-CM_decadal2005_r1i1p1_202601-203512.nc.dds"
+#        dds = "https://aims3.llnl.gov/thredds/dodsC/cmip5_css02_data/cmip5/output1/CMCC/CMCC-CM/decadal2005/mon/atmos/Amon/r1i1p1/cct/1/cct_Amon_CMCC-CM_decadal2005_r1i1p1_202601-203512.nc.dds"
+        dds = "https://esgf-node.cmcc.it/thredds/dodsC/esg_dataroot/cmip5/output1/CMCC/CMCC-CM/decadal1960/6hr/atmos/6hrPlev/r1i1p1/v20170725/psl/psl_6hrPlev_CMCC-CM_decadal1960_r1i1p1_1990120100-1990123118.nc.dds"
+
         cmd = "curl -L -v {cacert} {cookies} {cert} {key} \"{dds}\"".format(cacert=cacert_pem,
                                                                             cookies=cookies,
                                                                             cert=cert_opt,

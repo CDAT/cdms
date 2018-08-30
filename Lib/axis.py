@@ -1708,7 +1708,9 @@ class AbstractAxis(CdmsObj):
         else:
             mycopy = createAxis(self[:])
         mycopy.id = self.id
-        mycopy.__dict__.update(copy.deepcopy(self.__dict__))
+        mydict = self.__dict__
+        newdict = {k: mydict[k] for k in mydict if k not in ['_data_']}
+        mycopy.__dict__.update(newdict)
         mycopy._obj_ = None  # Erase Cdfile object if exist
         try:
             mycopy.setBounds(b, isGeneric=isGeneric[0])

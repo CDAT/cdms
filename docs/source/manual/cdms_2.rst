@@ -143,76 +143,102 @@ Table Cdms Module Functions
    :align: left
 
 
-   "``Variable``", "``asVariable(s)``: Transform ``s`` into a transient variable. ``s`` is a masked array, Numpy array, or Variable. If ``s`` is already a transient variable, ``s`` is returned. See also: ``isVariable``."
-   "``Axis``", "``createAxis(data, bounds=None)``:"
-             , "Create a one-dimensional coordinate Axis, which is not associated with a file or dataset. This is useful for creating a grid which is not contained in a file or dataset."
-             ,   " * ``data`` is a one-dimensional, monotonic Numpy array. ``bounds`` is an array of shape ``(len(data),2)``, such that for all ``i``, ``data[i]`` is in the range ``[bounds[i,0],bounds[i,1] ]``. If ``bounds`` is not specified, the default boundaries are generated at the midpoints between the consecutive data values, provided that the autobounds mode is 'on' (the default)."
-             ,   " * See ``setAutoBounds``." 
-             ,   " * Also see: ``CdmsFile.createAxis``"
-   "``Axis``", "``createEqualAreaAxis(nlat)``:" 
-             , "Create an equal-area latitude axis.  The latitude values range from north to south, and for all axis values ``x[i]``, ``sin(x[i])sin(x[i+1])`` is constant. ``nlat`` is the axis length. The axis is not associated with a file or dataset."
-   "``Axis``", "``createGaussianAxis(nlat)``:" 
-             , "Create a Gaussian latitude axis. Axis values range from north to south.  ``nlat`` is the axis length. The axis is not associated with a file or dataset."
-   "``RectGrid``", "``createGaussianGrid(nlats, xorigin=0.0, order='yx')``:"
-                 , "Create a Gaussian grid, with shape ``(nlats, 2*nlats)``. ``nlats`` is the number of latitudes. ``xorigin`` is the origin of the longitude axis.  ``order`` is either 'yx' (lat-lon, default) or 'xy' (lon-lat)"
-   "``RectGrid``", "``createGenericGrid(latArray, lonArray, latBounds=None, lonBounds=None, order='yx', mask=None)``:"
-                 , "Create a generic grid, that is, a grid which is not typed as Gaussian, uniform, or equal-area. The grid is not associated with a file or dataset. ``latArray`` is a NumPy array of latitude values."
-                 , " * ``lonArray`` is a NumPy array of longitude values. "
-                 , " * ``latBounds`` is a NumPy array having shape ``(len(latArray),2)``, of latitude boundaries. "
-                 , " * ``lonBounds`` is a NumPy array having shape ``(len(lonArray),2)``, of longitude boundaries. "
-                 , " * ``order`` is a ``string`` specifying the order of the axes, either 'yx' for (latitude, longitude), or 'xy' for the reverse."
-                 , " * ``mask`` (optional) is an ``integer``-valued NumPy mask array, having the same shape and ordering as the grid."
-                 
-   "``RectGrid``", "``createGlobalMeanGrid(grid)``:"
-                 , "Generate a grid for calculating the global mean via a regridding operation. The return grid is a single zone covering the range of he input grid. ``grid`` is a RectGrid."
-
-   "``RectGrid``", "``createRectGrid(lat, lon, order, type='generic', mask=None)``:"
-                 , "Create a rectilinear grid, not associated with a file or dataset.  This might be used as the target grid for a regridding operation." 
-                 ,  " * ``lat`` is a latitude axis, created by ``cdms.createAxis``." 
-                 ,  " * ``lon`` is a longitude axis, created by ``cdms.createAxis``." 
-                 ,  " * ``order`` is a string with value 'yx' (the first grid dimension is latitude) or 'xy' (the first grid dimension is longitude)." 
-                 ,  " * ``type`` is one of 'gaussian','uniform','equalarea',or 'generic'." 
-                 ,  " * If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
-
-   "``RectGrid``", "``createUniformGrid(startLat, nlat, deltaLat, start-Lon, nlon, deltaLon, order='yx', mask=None)``:"
-                 , "Create a uniform rectilinear grid.  The grid is not associated with a file or dataset. The grid boundaries are at the midpoints of the axis values." 
-                 , " * ``startLat`` is the starting latitude value." 
-                 , " * ``nlat`` is the number of latitudes. If ``nlat`` is 1, the grid latitude boundaries will be ``startLat`` +/- ``deltaLat/2``."
-                 , " * ``deltaLat`` is the increment between latitudes. ``startLon`` is the starting longitude value."
-                 , " * ``nlon`` is the number of longitudes. If ``nlon`` is 1, the grid longitude boundaries will be ``startLon`` +/- ``deltaLon/2``."
-                 , " * ``deltaLon`` is the increment between longitudes. ``order`` is a string with value 'yx. (the first grid dimension is latitude) or .xy. (the first grid dimension is longitude)."
-                 , " * If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
-   "``Axis``", "``createUniformLatitudeAxis(startLat , nlat, deltaLat)``:"
-             , "Create a uniform latitude axis. The axis boundaries are at the midpoints of the axis values. The axis is designated as a circular latitude axis." 
-             , " * ``startLat`` is the starting latitude value."
-             , " * ``nlat`` is the number of latitudes."
-             , " * ``deltaLat`` is the increment between latitudes."
-   "``RectGrid``"," ``createZonalGrid(grid)``: Create a zonal grid. The output grid has the same latitude as the input grid, and a single longitude. This may be used to calculate zonal averages via a regridding operation. ``grid`` is a RectGrid."
-   "``Axis``", "``createUniformLongitudeAxis(startLon, nlon, delta-Lon)``:" 
-             , "Create a uniform longitude axis. The axis boundaries are at the midpoints of the axis values. The axis is designated as a circular longitude axis." 
-             , " * ``startLon`` is the starting longitude value."
-             , " * ``nlon`` is the number of longitudes."
-             , " * ``deltaLon`` is the increment between longitudes."
+   "``Variable``", "``asVariable(s)``:
+                  Transform ``s`` into a transient variable.
+                 * ``s`` is a masked array, Numpy array, or Variable.
+                 * If ``s`` is already a transient variable, ``s`` is returned. 
+                 * See also: ``isVariable``."
+   "``Axis``", "``createAxis(data, bounds=None)``:
+              Create a one-dimensional coordinate Axis, which is not associated with a file or dataset. This is useful for creating a grid which is not contained in a file or dataset.
+                 * ``data`` is a one-dimensional, monotonic Numpy array.
+                 * ``bounds`` is an array of shape ``(len(data),2)``, such that for all ``i``
+                 * ``data[i]`` is in the range ``[bounds[i,0],bounds[i,1] ]``.
+                 **Note:** If ``bounds`` is not specified, the default boundaries are generated at the midpoints between the consecutive data values, provided that the autobounds mode is 'on' (the default).
+                   *  See ``setAutoBounds``. 
+                   *  Also see: ``CdmsFile.createAxis``"
+   "``Axis``", "``createEqualAreaAxis(nlat)``: 
+                  Create an equal-area latitude axis.  The latitude values range from north to south, and for all axis values ``x[i]``, ``sin(x[i])sin(x[i+1])`` is constant.
+                 * ``nlat`` is the axis length. 
+                 **Note:** The axis is not associated with a file or dataset."
+   "``Axis``", "``createGaussianAxis(nlat)``: 
+                  Create a Gaussian latitude axis. Axis values range from north to south.
+                 * ``nlat`` is the axis length.
+                 **Note:** The axis is not associated with a file or dataset."
+   "``RectGrid``", "``createGaussianGrid(nlats, xorigin=0.0, order='yx')``:
+                  Create a Gaussian grid, with shape ``(nlats, 2*nlats)``. 
+                 * ``nlats`` is the number of latitudes. 
+                 * ``xorigin`` is the origin of the longitude axis. 
+                 * ``order`` is either 'yx' (lat-lon, default) or 'xy' (lon-lat)"
+   "``RectGrid``", "``createGenericGrid(latArray, lonArray, latBounds=None, lonBounds=None, order='yx', mask=None)``:
+                  Create a generic grid, that is, a grid which is not typed as Gaussian, uniform, or equal-area. The grid is not associated with a file or dataset. 
+                 * ``latArray`` is a NumPy array of latitude values.
+                 * ``lonArray`` is a NumPy array of longitude values. 
+                 * ``latBounds`` is a NumPy array having shape ``(len(latArray),2)``, of latitude boundaries. 
+                 * ``lonBounds`` is a NumPy array having shape ``(len(lonArray),2)``, of longitude boundaries. 
+                 * ``order`` is a ``string`` specifying the order of the axes, either 'yx' for (latitude, longitude), or 'xy' for the reverse.
+                 * ``mask`` (optional) is an ``integer``-valued NumPy mask array, having the same shape and ordering as the grid."                 
+   "``RectGrid``", "``createGlobalMeanGrid(grid)``:
+                  Generate a grid for calculating the global mean via a regridding operation. The return grid is a single zone covering the range of he input grid. 
+                 * ``grid`` is a RectGrid."
+   "``RectGrid``", "``createRectGrid(lat, lon, order, type='generic', mask=None)``:
+                  Create a rectilinear grid, not associated with a file or dataset.  This might be used as the target grid for a regridding operation. 
+                 * ``lat`` is a latitude axis, created by ``cdms.createAxis``. 
+                 * ``lon`` is a longitude axis, created by ``cdms.createAxis``. 
+                 * ``order`` is a string with value 'yx' (the first grid dimension is latitude) or 'xy' (the first grid dimension is longitude). 
+                 * ``type`` is one of 'gaussian','uniform','equalarea',or 'generic'. 
+                 * If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
+   "``RectGrid``", "``createUniformGrid(startLat, nlat, deltaLat, start-Lon, nlon, deltaLon, order='yx', mask=None)``:
+                 Create a uniform rectilinear grid.  The grid is not associated with a file or dataset. The grid boundaries are at the midpoints of the axis values. 
+                  * ``startLat`` is the starting latitude value. 
+                  * ``nlat`` is the number of latitudes. 
+                  * If ``nlat`` is 1, the grid latitude boundaries will be ``startLat`` +/- ``deltaLat/2``.
+                  * ``deltaLat`` is the increment between latitudes. 
+                  * ``startLon`` is the starting longitude value.
+                  * ``nlon`` is the number of longitudes. 
+                  * If ``nlon`` is 1, the grid longitude boundaries will be ``startLon`` +/- ``deltaLon/2``.
+                  * ``deltaLon`` is the increment between longitudes. 
+                  * ``order`` is a string with value 'yx. (the first grid dimension is latitude) or .xy. (the first grid dimension is longitude).
+                  * If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
+   "``Axis``", "``createUniformLatitudeAxis(startLat , nlat, deltaLat)``:
+                Create a uniform latitude axis. The axis boundaries are at the midpoints of the axis values. The axis is designated as a circular latitude axis. 
+                 * ``startLat`` is the starting latitude value.
+                 * ``nlat`` is the number of latitudes.
+                 * ``deltaLat`` is the increment between latitudes."
+   "``RectGrid``"," ``createZonalGrid(grid)``:
+                Create a zonal grid. The output grid has the same latitude as the input grid, and a single longitude. This may be used to calculate zonal averages via a regridding operation. 
+                 * ``grid`` is a RectGrid."
+   "``Axis``", "``createUniformLongitudeAxis(startLon, nlon, delta-Lon)``: 
+                Create a uniform longitude axis. The axis boundaries are at the midpoints of the axis values. The axis is designated as a circular longitude axis. 
+                 * ``startLon`` is the starting longitude value.
+                 * ``nlon`` is the number of longitudes.
+                 * ``deltaLon`` is the increment between longitudes."
    "``Variable``", "``createVariable(array, typecode=None, copy=0, savespace=0, mask=None, fill_value=None, grid=None, axes=None , attributes=None, id=None)``:"
-   "``Integer``", "``getAutoBounds()``: Get the current autobounds mode. Returns 0, 1, or 2."
-                , " * See ``setAutoBounds``."
-   "``Integer``", "``isVariable(s)``: "
-                , " * Return ``1`` if ``s`` is a variable, ``0`` otherwise. See also: ``asVariable``."
-   "``Dataset``", "``open(url,mode='r')``: Open or create a ``Dataset`` or ``CdmsFile``." 
-                , " * ``url`` is a Uniform Resource Locator, referring to a cdunif or XML file. If the URL has the extension '.xml' or '.cdml', a ``Dataset`` is returned, otherwise a ``CdmsFile`` is returned." 
-                , "   * If the URL protocol is 'http', the file must be a '.xml' or '.cdml' file, and the mode must be 'r'. If the protocol is 'file' or is omitted, a local file or dataset is opened. ``mode`` is the open mode.  See `Open Modes <#table-open-modes>`__"
-                , "   * **Example**: Open an existing dataset: ``f = cdms.open('sampleset.xml')``"
-                , "   * **Example**: Create a netCDF file: ``f = cdms.open('newfile.nc','w')``"
-   "``List``", "``order2index (axes, orderstring)``:"
-             , "Find the index permutation of axes to match order. Return a list of indices. ``axes`` is a list of axis objects. ``orderstring`` is defined as in ``orderparse``."
-   "``List``", "``orderparse(orderstring)``:" 
-             , "Parse an order string. Returns a list of axes specifiers. ``orderstring`` consists of:"
-
-             , " * Letters t, x, y, z meaning time, longitude, latitude, level"
-             , " * Numbers 0-9 representing position in axes"
-             , " * Dash (-) meaning insert the next available axis here."
-             , " * The ellipsis ... meaning fill these positions with any remaining axes."
-             , " * (name) meaning an axis whose id is name"
+   "``Integer``", "``getAutoBounds()``: Get the current autobounds mode. Returns 0, 1, or 2.
+                 * See ``setAutoBounds``."
+   "``Integer``", "``isVariable(s)``: 
+                 * Return ``1`` if ``s`` is a variable, ``0`` otherwise. 
+                 * See also: ``asVariable``."
+   "``Dataset``", "``open(url,mode='r')``: 
+                 Open or create a ``Dataset`` or ``CdmsFile``. 
+                  * ``url`` is a Uniform Resource Locator, referring to a cdunif or XML file.
+                  * If the URL has the extension '.xml' or '.cdml', a ``Dataset`` is returned, otherwise a ``CdmsFile`` is returned. 
+                  * If the URL protocol is 'http', the file must be a '.xml' or '.cdml' file, and the mode must be 'r'. 
+                  * If the protocol is 'file' or is omitted, a local file or dataset is opened.
+                  * ``mode`` is the open mode.  See `Open Modes <#table-open-modes>`__
+                  * **Example:** Open an existing dataset: ``f = cdms.open('sampleset.xml')``
+                  * **Example:** Create a netCDF file: ``f = cdms.open('newfile.nc','w')``"
+   "``List``", "``order2index (axes, orderstring)``:
+                Find the index permutation of axes to match order. Return a list of indices.
+                 * ``axes`` is a list of axis objects. 
+                 * ``orderstring`` is defined as in ``orderparse``."
+   "``List``", "``orderparse(orderstring)``: 
+                Parse an order string. Returns a list of axes specifiers.
+                 ``orderstring`` consists of:
+                    * Letters t, x, y, z meaning time, longitude, latitude, level
+                    * Numbers 0-9 representing position in axes
+                    * Dash (-) meaning insert the next available axis here.
+                    * The ellipsis ... meaning fill these positions with any remaining axes.
+                    * (name) meaning an axis whose id is name"
    "``None``", "``setAutoBounds(mode)``:" 
              , "Set autobounds mode. In some circumstances CDMS can generate boundaries for 1-D axes and rectilinear grids, when the bounds are not explicitly defined. The autobounds mode determines how this is done: If ``mode`` is ``'grid'`` or ``2`` (the default), the ``getBounds`` method will automatically generate boundary information for an axis or grid if the axis is designated as a latitude or longitude axis, and the boundaries are not explicitly defined. If ``mode`` is ``'on'`` or ``1``, the ``getBounds`` method will automatically generate boundary information for an axis or grid, if the boundaries are not explicitly defined. If ``mode`` is ``'off'`` or ``0``, and no boundary data is explicitly defined, the bounds will NOT be generated; the ``getBounds`` method will return ``None`` for the boundaries. Note: In versions of CDMS prior to V4.0, the default ``mode`` was ``'on'``."
    "``None``", "``setClassifyGrids(mode)``:"

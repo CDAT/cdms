@@ -241,13 +241,22 @@ Table Slab Methods
    :align: left
 
    "Various", "``getdimattribute(dim, field)``", "Get the value of a dimension attribute.  
-   *  ``dim`` is the dimension number, an integer in the range 0..rank- 1. 
-   *  ``field`` is a string, one of:  'name', 'values', 'length', 'units', 'weights', 'bounds'."
-   "Various", "``getattribute(name)``", "Get the value of an attribute.``name`` is the string name of the attribute. The following special names can always be used:  'filename', 'comments', 'grid_name', 'grid_type', 'time_statistic', 'long_name', 'units'."
-   "None", "``info(flag=None, device=sys.stdout)``", "Print slab information.  If ``flag`` is nonzero, dimension values, weights, and bounds are also printed.  Output is sent to ``device``."
-   "List", "``listall(all=None)``", "Print slab information.  If ``all`` is nonzero, dimension values, weights, and bounds are also printed."
-   "List", "``listdimattributes(dim, field)``", "List dimension attributes.  Returns a list of string attribute names which can be input to ``getdimattribute``.  ``dim`` is the dimension number, an integer in the range 0..rank-1.  ``field`` is a string, one of: 'name', 'values', 'length', 'units', 'weights', 'bounds'."
-   "None", "``setattribute(name, value)``", "Set an attribute.  ``name`` is the string name of the attribute.  ``value`` is the value of the attribute."
+       * ``dim`` is the dimension number, an integer in the range 0..rank- 1. 
+       * ``field`` is a string, one of:  'name', 'values', 'length', 'units', 'weights', 'bounds'."
+   "Various", "``getattribute(name)``", "Get the value of an attribute.
+       * ``name`` is the string name of the attribute. 
+      The following special names can always be used: 
+       * ``filename``, ``comments``, ``grid_name``, ``grid_type``, ``time_statistic``, ``long_name``, ``units``."
+   "None", "``info(flag=None, device=sys.stdout)``", "Print slab information. 
+      *  If ``flag`` is nonzero, dimension values, weights, and bounds are also printed.  Output is sent to ``device``."
+   "List", "``listall(all=None)``", "Print slab information. 
+      *  If ``all`` is nonzero, dimension values, weights, and bounds are also printed."
+   "List", "``listdimattributes(dim, field)``", "List dimension attributes.  Returns a list of string attribute names which can be input to ``getdimattribute``. 
+      * ``dim`` is the dimension number, an integer in the range 0..rank-1.  
+      * ``field`` is a string, one of: 'name', 'values', 'length', 'units', 'weights', 'bounds'."
+   "None", "``setattribute(name, value)``", "Set an attribute.  
+        * ``name`` is the string name of the attribute.  
+        * ``value`` is the value of the attribute."
 
 
 

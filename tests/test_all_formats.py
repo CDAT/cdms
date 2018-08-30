@@ -46,10 +46,11 @@ class TestFormats(basetest.CDMSBaseTest):
         file.write("HTTP.SSL.KEY="+os.environ['HOME']+"/.esg/esgf.cert\n")
         file.write("HTTP.SSL.CAPATH="+os.environ['HOME']+"/.esg/\n")
         file.close()
-        f = cdms2.open("https://aims3.llnl.gov/thredds/dodsC/cmip5_css01_data/cmip5/output1/BCC/bcc-csm1-1-m/1pctCO2/day/ocean/day/r1i1p1/v20120910/tos/tos_day_bcc-csm1-1-m_1pctCO2_r1i1p1_02800101-02891231.nc")
-        self.assertIn('tos', f.listvariables())
-        data=f['tos']
-        self.assertEqual(data[1,84,4], 303.6062927246094)
+#        f = cdms2.open("https://aims3.llnl.gov/thredds/dodsC/cmip5_css01_data/cmip5/output1/BCC/bcc-csm1-1-m/1pctCO2/day/ocean/day/r1i1p1/v20120910/tos/tos_day_bcc-csm1-1-m_1pctCO2_r1i1p1_02800101-02891231.nc")
+        f = cdms2.open("https://esgf-node.cmcc.it/thredds/dodsC/esg_dataroot/cmip5/output1/CMCC/CMCC-CM/decadal1960/6hr/atmos/6hrPlev/r1i1p1/v20170725/psl/psl_6hrPlev_CMCC-CM_decadal1960_r1i1p1_1990120100-1990123118.nc")
+        self.assertIn('psl', f.listvariables())
+        data=f['psl']
+        self.assertEqual(data[1,84,4], 101826.1875)
 
 if __name__ == "__main__":
     basetest.run()

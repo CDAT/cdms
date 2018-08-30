@@ -1,11 +1,11 @@
-CHAPTER 7 CDMS Utilities
-------------------------
+CDMS Utilities
+--------------
 
-7.1 ``cdscan``: Importing datasets into CDMS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+CdScan: Importing datasets into CDMS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-7.1.1 Overview
-^^^^^^^^^^^^^^
+Overview
+^^^^^^^^
 
 A dataset is a partitioned collection of files. To create a dataset, the
 files must be scanned to produce a text representation of the dataset.
@@ -40,8 +40,8 @@ partitioned:
 -  Files may be in any of the self-describing formats supported by CDMS,
    including netCDF, HDF, GrADS/GRIB, and DRS.
 
-7.1.2 ``cdscan`` Syntax
-^^^^^^^^^^^^^^^^^^^^^^^
+Syntax
+^^^^^^
 
 The syntax of the ``cdscan`` command is
 
@@ -60,8 +60,8 @@ where
 Output is written to standard output by default. Use the -x option to
 specify an output filename.
 
-Table 7.1 cdscan command options
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                
+Table CDScan Command Options
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^                               
 
 .. csv-table::
    :header: "Option:, "Description"
@@ -125,14 +125,14 @@ Table 7.1 cdscan command options
     - The ``[--time-linear]`` option should be used with caution, as it is applied to all the time dimensions found.
 
 
-7.1.3 Examples
-^^^^^^^^^^^^^^
+Examples
+^^^^^^^^
 
 - cdscan -c noleap -d test -x test.xml [uv]\*.nc 
 - cdscan -d pcmdi\_6h -i 0.25 -r 'days since 1979-1-1' *6h*.ctl 
 
-7.1.4 File Formats
-^^^^^^^^^^^^^^^^^^
+File Formats
+^^^^^^^^^^^^
 
 Data may be represented in a variety of self-describing binary file
 formats, including
@@ -143,8 +143,8 @@ formats, including
    non-comment line of the control file must be a dset specification.
 -  DRS, the PCMDI legacy format.
 
-7.1.5 Name Aliasing
-^^^^^^^^^^^^^^^^^^^
+Name Aliasing
+^^^^^^^^^^^^^
 
 A problem can occur if variables in different files are defined on
 different grids. What if the axis names are the same? CDMS requires that

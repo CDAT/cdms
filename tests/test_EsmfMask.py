@@ -47,6 +47,25 @@ class TestESMFMask(unittest.TestCase):
         self.assertAlmostEqual(s4.min(), 0.0)
         self.assertAlmostEqual(s4.max(), 100.0, places=1)
 
+    def testMask2(self):
+        data = cdms2.open(os.path.join(
+                cdat_info.get_sampledata_path(),
+                "ta.nc"))("ta")
+        tmp = cdms2.open(os.path.join(
+                cdat_info.get_sampledata_path(),
+               "sftlf.nc"))
+        sft = tmp("sftlf")
+        tmp.close()
+
+        data2 = cdms2.MV2.masked_where(cdms2.MV2.less(sft,50.),data)
+
+        tGrid = cdms2.createUniformGrid(-88.875, 72, 2.5, 0, 144, 2.5)
+
+        for mthd in ["conservative", "linear"]:
+            print("USING REGRID METHOD:",mthd)
+            data3 = data2.regrid(tGrid, regridTool="esmf", regridMethod=mthd, mask=data2.mask)
+
+
 
 if __name__ == "__main__":
     ESMF.Manager()

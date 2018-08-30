@@ -1,27 +1,30 @@
-CHAPTER 5 Plotting CDMS data in Python
---------------------------------------
+Plotting CDMS data in Python
+----------------------------
 
-5.1 Overview
-~~~~~~~~~~~~
+Overview
+~~~~~~~~
 
 Data read via the CDMS Python interface can be plotted using the ``vcs``
-module. This module, part of the Ultrascale Visualization Climate Data
-Analysis Tool (UV-CDAT) is documented in the UV-CDAT reference manual.
+module. This module, part of the Climate Data
+Analysis Tool (CDAT) is documented in the CDAT reference manual.
 The ``vcs`` module provides access to the functionality of the VCS
 visualization program.
 
 Examples of plotting data accessed from CDMS are given below, as well as
 documentation for the plot routine keywords.
 
-5.2 Examples
-~~~~~~~~~~~~
+Examples
+~~~~~~~~
 
 In the following examples, it is assumed that variable ``psl`` is
 dimensioned (time, latitude, longitude). ``psl`` is contained in the
 dataset named ``'sample.xml'``.
 
-5.2.1 Example: plotting a gridded variable
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Plotting a Gridded Variable
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. highlight:: python
+   :linenothreshold: 3
+
 .. testsetup:: *
 
    import requests
@@ -53,7 +56,7 @@ dataset named ``'sample.xml'``.
 
 **Notes:**
 
-.. csv-table::  LineNotes
+.. csv-table::  
    :header:  "Line", "Notes"
    :widths:  10, 90
 
@@ -69,8 +72,8 @@ What if the units are not explicitly defined for ``clt``, or a different
 description is desired? ``plot`` has a number of other keywords which
 fill in the extra plot information.
 
-5.2.2 Example: using aplot keywords.
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Using A Plot Keywords
+^^^^^^^^^^^^^^^^^^^^^
 
 .. doctest::
 
@@ -86,8 +89,8 @@ fill in the extra plot information.
 
 **Note:** Keyword arguments can be listed in any order.
 
-5.2.3 Example: plotting a time-latitude slice
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Plotting a Time-Latitude Slice
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Assuming that variable ``clt`` has domain ``(time,latitude,longitude)``,
 this example selects and plots a time-latitude slice:
@@ -102,15 +105,16 @@ this example selects and plots a time-latitude slice:
     >>> w.plot(samp, name='Total Cloudiness') 
     <vcs.displayplot.Dp object ...>
 
-.. csv-table:: LineNotes
+
+.. csv-table:: Line Notes
   :header:  "Line", "Notes"
   :widths:  10, 90
 
   "4", "``samp`` is a slice of ``clt``, at index ``0`` of the last dimension.  Since ``samp`` was obtained from the slice operator, it is a transient variable, which includes the latitude and time information."
   "6", "The ``name`` keyword defines the identifier, default is the name found in the file."
 
-5.2.4 Example: plotting subsetted data
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Plotting Subsetted Data
+^^^^^^^^^^^^^^^^^^^^^^^
 
 Calling the variable ``clt`` as a function reads a subset of the
 variable. The result variable ``samp`` can be plotted directly:
@@ -127,10 +131,10 @@ variable. The result variable ``samp`` can be plotted directly:
     >>> f.close()
 
 
-5.3 ``plot`` method
-~~~~~~~~~~~~~~~~~~~
+Plot Method
+~~~~~~~~~~~
 
-The ``plot`` method is documented in the UV-CDAT Reference Manual. This
+The ``plot`` method is documented in the CDAT Reference Manual. This
 section augments the documentation with a description of the optional
 keyword arguments. The general form of the plot command is:
 
@@ -140,7 +144,7 @@ where:
 
 -  canvas is a VCS Canvas object, created with the vcs.init method.
 
--  array is a variable, masked array, or Numeric array having between
+-  array is a variable, masked array, or Numpy array having between
    two and five dimensions. The last dimensions of the array is termed
    the 'x' dimension, the next-to-last the 'y' dimension, then 'z', 't',
    and 'w'. For example, if array is three-dimensional, the axes are
@@ -167,14 +171,16 @@ where:
    ``graphics_name``: the name of the specific graphics method
    ('default')
 
-   See the UV-CDAT Reference Manual and VCS Reference Manual for a
+   See the CDAT Reference Manual and VCS Reference Manual for a
    detailed description of these arguments.
 
 -  ``key=value``, ... are optional keyword/value pairs, listed in any
    order. These are defined in the table below.
 
+Table Plot Keywords
+^^^^^^^^^^^^^^^^^^^
 
-.. csv-table:: "plot keywords"
+.. csv-table::
     :header: "Key", "Type", "Value"
     :widths: 20, 20, 80
 
@@ -187,20 +193,20 @@ where:
     "``hms``", "string", "Hour, minute, second"
     "``long_name``", "string", "Descriptive variable name, defaults to ``variable.long_name``."
     "``missing_value``", "same type as array", "Missing data value, defaults to ``variable.getMissing()``"
-    "``name``", "string", "Variable name, defaults to `variable.id``"
+    "``name``", "string", "Variable name, defaults to ``variable.id``"
     "``time``", "cdtime relative or absolute", "Time associated with the data."
     ,,"Example:"
     ,,"- ``cdtime.reltime(30.0, 'days since 1978-1-1').``"
     "``units``", "string",  "Data units. Defaults to ``variable.units``"
     "``variable``", "CDMS variable object", "Variable associated with the data. The variable grid must have the same shape as the data array."
-    "``xarray`` (``[y|z|t|w]array``)", "1-D Numeric array", "*Rectangular grids only*. Array of coordinate values, having the same length as the corresponding dimension. Defaults to xaxis[:\] (y|z|t|waxis[:])"
+    "``xarray`` (``[y|z|t|w]array``)", "1-D Numpy array", "*Rectangular grids only*. Array of coordinate values, having the same length as the corresponding dimension. Defaults to ``xaxis[:\] (y|z|t|waxis[:])``"
     "``xaxis`` (``[y|z|t|w]axis``)", "CDMS axis object", "*Rectangular grids only*. Axis object. ``xaxis`` defaults to ``grid.getAxis(0)``, ``yaxis`` defaults to ``grid.getAxis(1)``"
-    "``xbounds`` (``ybounds``)", "2-D Numeric array",  "*Rectangular grids only*. Boundary array of shape ``(n,2)`` where ``n`` is the axis length. Defaults to ``xaxis.getBounds()``, or ``xaxis.genGenericBounds()`` if ``None``, similarly for ``ybounds``."
+    "``xbounds`` (``ybounds``)", "2-D Numpy array",  "*Rectangular grids only*. Boundary array of shape ``(n,2)`` where ``n`` is the axis length. Defaults to ``xaxis.getBounds()``, or ``xaxis.genGenericBounds()`` if ``None``, similarly for ``ybounds``."
 
     "``xname`` (``[y|z|t|w]name``)", "string", "*Rectangular grids only*. Axis name. Defaults to ``xaxis.id`` (``[y|z|t|w]axis.id``)"
-    "``xrev`` (``yrev``)", "0 or 1", "If ``xrev`` (``yrev``) is 1, reverse the direction of the x-axis (y-axis). Defaults to 0, with the following exceptions:"
-    ,,"- If the y-axis is latitude, and has decreasing values, ``yrev`` defaults to 1"
-    ,,"- If the y-axis is a vertical level, and has increasing pressure levels, ``yrev`` defaults to 1."
+    "``xrev`` (``yrev``)", "0 or 1", "If ``xrev`` (``yrev``) is 1, reverse the direction of the ``x-axis (y-axis)``. Defaults to 0, with the following exceptions:"
+    ,,"- If the ``y-axis`` is latitude, and has decreasing values, ``yrev`` defaults to 1"
+    ,,"- If the ``y-axis`` is a vertical level, and has increasing pressure levels, ``yrev`` defaults to 1."
 
     "``xunits`` (``[y|z|t|w]units``)", "string", "*Rectangular grids only*. Axis units. Defaults to ``xaxis.units`` (``[y|z|t|w]axis.units``)."
 

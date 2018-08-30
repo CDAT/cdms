@@ -1,37 +1,42 @@
-CHAPTER 1
----------
+Introduction
+------------
 
-CHAPTER 1 Introduction
+Overview
+^^^^^^^^
 
-1.1 Overview
-^^^^^^^^^^^^
-
-The Climate Data Management System is an object-oriented data management
+The Community Data Management System is an object-oriented data management
 system, specialized for organizing multidimensional, gridded data used
 in climate analysis and simulation.
 
-CDMS is implemented as part of the Ultrascale Visualization Climate Data
-Analysis Tool (UV-CDAT), which uses the Python language. The examples in
+CDMS is implemented as part of the Climate Data
+Analysis Tool (CDAT), which uses the Python language. The examples in
 this chapter assume some familiarity with the language and the Python
-Numeric module (http://www.numpy.org). A number of excellent tutorials
+Numpy module (http://www.numpy.org). A number of excellent tutorials
 on Python are available in books or on the Internet. For example, see
 the `Python Foundation's homepage <http://python.org>`__.
 
-1.2 Variables
-^^^^^^^^^^^^^
+Variables
+^^^^^^^^^
 
 The basic unit of computation in CDMS is the variable. A variable is
 essentially a multidimensional data array, augmented with a domain, a
 set of attributes, and optionally a spatial and/or temporal coordinate
-system (see `Coordinate Axes <#1.4>`__). As a data array, a variable can
+system (see `Coordinate Axes <#coordinate-axes>`__). As a data array, a variable can
 be sliced to obtain a portion of the data, and can be used in arithmetic
 computations. For example, if ``u`` and ``v`` are variables representing
 the eastward and northward components of wind speed, respectively, and
 both variables are functions of time, latitude, and longitude, then the
-velocity for time 0 (first index) can be calculated as
+velocity for time 0 (first index) can be calculated as:
+
+
+.. highlight:: python
 
 .. doctest::
 
+   >>> # wget "http://cdat.llnl.gov/cdat/sample_data/clt.nc"
+   >>> f1=cdms2.open("clt.nc")
+   >>> u = f1('u')
+   >>> v = f1('v')
    >>> from cdms2 import MV
    >>> vel = MV.sqrt(u[0]**2 + v[0]**2)
 
@@ -40,26 +45,26 @@ This illustrates several points:
 -  Square brackets represent the slice operator. Indexing starts at 0,
    so ``u[0]`` selects from variable ``u`` for the first timepoint. The
    result of this slice operation is another variable. The slice
-   operator can be multidimensional, and follows the syntax of Numeric
+   operator can be multidimensional, and follows the syntax of Numpy
    Python arrays. In this example, ``u[0:10,:,1]`` would retrieve data
    for the first ten timepoints, at all latitudes, for the second
    longitude.
 -  Variables can be used in computation. ``**`` is the Python
    exponentiation operator.
--  Arithmetic functions are defined in the ``cdms.MV`` module.
+-  Arithmetic functions are defined in the ``cdms2.MV2`` module.
 -  Operations on variables carry along the corresponding metadata where
    applicable. In the above example, ``vel`` has the same latitude and
    longitude coordinates as ``u`` and ``v``, and the time coordinate is
    the first time of ``u`` and ``v``.
 
-1.3 File I/O
-^^^^^^^^^^^^
+File I/O
+^^^^^^^^
 
 A variable can be obtained from a file or collection of files, or can be
 generated as the result of a computation. Files can be in any of the
 self- describing formats netCDF, HDF, GrADS/GRIB (GRIB with a GrADS
 control file), or PCMDI DRS. (HDF and DRS support is optional, and is
-configured at the time UV-CDAT is installed.) For instance, to read data
+configured at the time CDAT is installed.) For instance, to read data
 from file sample.nc into variable u:
 
 .. testsetup:: *
@@ -76,7 +81,7 @@ from file sample.nc into variable u:
    largevar=MV2.reshape(MV2.arange(400),(20,20),id="large variable").astype(MV2.float32)
    fnames = [ 'clt.nc', 'geos-sample', 'xieArkin-T42.nc', 'remap_grid_POP43.nc', 'remap_grid_T42.nc', 'rmp_POP43_to_T42_conserv.n', 'rmp_T42_to_POP43_conserv.nc', 'ta_ncep_87-6-88-4.nc', 'rmp_T42_to_C02562_conserv.nc' ]
    for file in fnames:
-       url = 'http://uvcdat.llnl.gov/cdat/sample_data/'+file
+       url = 'http://cdat.llnl.gov/cdat/sample_data/'+file
        r = requests.get(url)
        open(file, 'wb').write(r.content)
 
@@ -90,6 +95,7 @@ from file sample.nc into variable u:
 
 .. doctest::
 
+    >>> # wget "http://cdat.llnl.gov/cdat/sample_data/clt.nc"
     >>> f = cdms2.open('clt.nc')
     >>> u = f('u')
 
@@ -106,7 +112,7 @@ To read ``u`` at time 1.:
 
 .. doctest::
 
-    >>> u1 = f('u',time=1.)
+   >>> u1 = f('u',time=1.)
 
 A variable can be written to a file with the write function:
 
@@ -117,8 +123,8 @@ A variable can be written to a file with the write function:
    <cdms2.fvariable.FileVariable object at ...
    >>> g.close()
 
-1.4 Coordinate Axes
-^^^^^^^^^^^^^^^^^^^
+Coordinate Axes
+^^^^^^^^^^^^^^^
 
 A coordinate axis is a variable that represents coordinate information.
 Typically an axis is associated with one or more variables in a file or
@@ -127,15 +133,15 @@ system(s) of the variable(s).
 
 Often in climate applications an axis is a one-dimensional variable
 whose values are floating-point and strictly monotonic. In some cases an
-axis can be multidimensional (see `Grids <#1.9>`__). If an axis is
+axis can be multidimensional (see `Grids <#grids>`__). If an axis is
 associated with one of the canonical types latitude, longitude, level,
-or time, then the axis is called tep emporal .
+or time, then the axis is called temporal .
 
 The shape and physical ordering of a variable is represented by the
 variables domain , an ordered tuple of one-dimensional axes. In the
 previous example, the domain of the variable u is the tuple (time,
 latitude, longitude). This indicates the order of the dimensions, with
-the slowest- varying dimension listed first (time). The domain may be
+the slowest-varying dimension listed first (time). The domain may be
 accessed with the ``getAxisList()`` method:
 
 .. doctest::
@@ -195,7 +201,7 @@ a domain is spatiotemporal:
    system.
 -  The latitude and/or longitude coordinate axes associated with a
    variable need not be elements of the domain. In particular this will
-   be true if the variable is defined on a non-rectangular grid (see `Grids <#1.9>`__).
+   be true if the variable is defined on a non-rectangular grid (see `Grids <#grids>`__).
 
 As previously noted, a spatial and/or temporal coordinate system may be
 associated with a variable. The methods getLatitude, getLongitude,
@@ -210,8 +216,8 @@ example:
    >>> print t.units
    months since 1978-12
 
-1.5 Attributes
-^^^^^^^^^^^^^^
+Attributes
+^^^^^^^^^^
 
 As mentioned above, variables can have associated attributes ,
 name-value pairs. In fact, nearly all CDMS objects can have associated
@@ -223,7 +229,7 @@ attributes, which are accessed using the Python dot notation:
    >>> print u.units 
    m/s
 
-Attribute values can be strings, scalars, or 1-D Numeric arrays.
+Attribute values can be strings, scalars, or 1-D Numpy arrays.
 
 When a variable is written to a file, not all the attributes are
 written. Some attributes, called internal attributes, are used for
@@ -249,8 +255,8 @@ In general internal attributes should not be modified directly. One
 exception is the id attribute, the name of the variable. It is used in
 plotting and I/O, and can be set directly.
 
-1.6 Masked values
-^^^^^^^^^^^^^^^^^
+Masked values
+^^^^^^^^^^^^^
 
 Optionally, variables have a mask that represents where data are
 missing. If present, the mask is an array of ones and zeros having the
@@ -258,7 +264,7 @@ shape of the data array. A mask value of one indicates that the
 corresponding data array element is missing or invalid.
 
 Arithmetic operations in CDMS take missing data into account. The same
-is true of the functions defined in the cdms.MV module. For example:
+is true of the functions defined in the cdms2.MV2 module. For example:
 
 .. doctest::
 
@@ -292,14 +298,14 @@ with a corresponding mask value of one are set to the value of the
 variables ``missing_value`` attribute. The data and ``missing_value``
 attribute are then written to the file.
 
-Masking is covered in `Section 2.9 <cdms_2.html#2.9>`__. See also the
-documentation of the Python Numeric and MA modules, on which ``cdms.MV``
+Masking is covered in `Section 2.9 <cdms_2.html#id3>`__. See also the
+documentation of the Python Numpy and MA modules, on which ``cdms.MV``
 is based, at
 
 `http://www.numpy.org/ <http://www.numpy.org/>`__.
 
-1.7 File Variables
-^^^^^^^^^^^^^^^^^^
+File Variables
+^^^^^^^^^^^^^^
 
 A variable can be obtained either from a file, a collection of files, or
 as the result of computation. Correspondingly there are three types of
@@ -396,8 +402,8 @@ The datatype of the variable is determined with the typecode function:
    >>> u.typecode() 
    'f'
 
-1.8 Dataset Variables
-^^^^^^^^^^^^^^^^^^^^^
+Dataset Variables
+^^^^^^^^^^^^^^^^^
 
 The third type of variable, a *dataset variable*, is associated with a
 *dataset*, a collection of files that is treated as a single file. A
@@ -432,8 +438,8 @@ The metafile **cdsample.xml** is then used like an ordinary data file:
    >>> u.shape
    (3, 16, 32)
 
-1.9 Grids
-^^^^^^^^^
+Grids
+^^^^^^^^
 
 A latitude-longitude grid represents the coordinate information
 associated with a variable. A grid encapsulates:
@@ -463,8 +469,8 @@ CDMS supports two types of nonrectangular grid:
    However, it is more difficult to determine adjacency relationships
    between grid points.
 
-1.9.1 Example: a curvilinear grid
-'''''''''''''''''''''''''''''''''
+Example: A Curvilinear Grid
+'''''''''''''''''''''''''''
 
 In this example, variable sample is defined on a 128x192 curvilinear
 grid. Note that:
@@ -535,13 +541,15 @@ grid. Note that:
 .. figure:: images/curvilinear_grid.jpg
    :alt: curvilinear grid
 
-   Figure1: Curvilinear Grid
+   Figure 1: Curvilinear Grid
 
-1.9.2 Example: a generic grid
-'''''''''''''''''''''''''''''
+
+
+Example: A Generic Grid
+'''''''''''''''''''''''
 
 In this example variable zs is defined on a generic grid. Figure 2
-illustrates the grid, in this case a geodesic grid.
+illustrates the grid, in this case a geodesic grid:
 
 .. doctest::
 
@@ -600,8 +608,8 @@ grid to curvilinear representation:
    >>> genericgrid
    <TransientGenericGrid, id: ..., shape: (3312,)>
 
-1.10 Regridding
-^^^^^^^^^^^^^^^
+Regridding
+^^^^^^^^^^
 
 Regridding is the process of mapping variables from one grid to another.
 CDMS supports two forms of regridding. Which one you use depends on the
@@ -614,8 +622,8 @@ class of grids being transformed:
 -  To interpolate from any lat-lon grid, rectangular or non-rectangular,
    use the SCRIP regridder.
 
-1.10.1 CDMS Regridder
-'''''''''''''''''''''
+CDMS Regridder
+''''''''''''''
 
 The built-in CDMS regridder is used to transform data from one
 rectangular grid to another. For example, to regrid variable ``u`` (from
@@ -648,14 +656,14 @@ To regrid a variable ``uold`` to the same grid as variable ``vnew``:
    >>> u63.shape
    (1, 2, 181, 360)
 
-1.10.2 SCRIP Regridder
-''''''''''''''''''''''
+SCRIP Regridder
+'''''''''''''''
 
 To interpolate between any lat-lon grid types, the SCRIP regridder may
 be used. The SCRIP package was developed at [Los Alamos National
-Laboratory](http://oceans11.lanl.gov/drupal/Models/OtherSoftware).
+Laboratory] (http://oceans11.lanl.gov/drupal/Models/OtherSoftware).
 SCRIP is written in Fortran 90, and must be built and installed
-separately from the UV-CDAT/CDMS installation.
+separately from the CDAT/CDMS installation.
 
 The steps to regrid a variable are:
 
@@ -673,32 +681,32 @@ The steps to regrid a variable are:
 Steps 1 and 2 need only be done once. The regridder can be used as often
 as necessary.
 
-#For example, suppose the source data on a T42 grid is to be mapped to a
-#POP curvilinear grid. Assume that SCRIP generated a remapping file named
-#rmp_T42_to_POP43_conserv.nc:
-#
-#.. doctest::
-#
-#   >>> # Import regrid package for regridder functions
-#   >>> import regrid2, cdms2
-#   
-#   >>> # Get the source variable
-#   >>> f = cdms2.open('sampleT42Grid.nc') 
-#   >>> dat = f('src_array') 
-#   >>> f.close()
-#   
-#   >>> # Read the regridder from the remapper file
-#   >>> remapf = cdms2.open('rmp_T42_to_POP43_conserv.nc') 
-#   >>> regridf = regrid2.readRegridder(remapf) 
-#   >>> remapf.close()
-#   
-#   >>> # Regrid the source variable
-#   >>> popdat = regridf(dat)
+For example, suppose the source data on a T42 grid is to be mapped to a
+POP curvilinear grid. Assume that SCRIP generated a remapping file named
+rmp_T42_to_POP43_conserv.nc:
+
+.. doctest::
+
+   >>> # Import regrid package for regridder functions
+   >>> import regrid2, cdms2
+   
+   >>> # Get the source variable
+   >>> f = cdms2.open('sampleT42Grid.nc') 
+   >>> dat = f('src_array') 
+   >>> f.close()
+   
+   >>> # Read the regridder from the remapper file
+   >>> remapf = cdms2.open('rmp_T42_to_POP43_conserv.nc') 
+   >>> regridf = regrid2.readRegridder(remapf) 
+   >>> remapf.close()
+   
+   >>> # Regrid the source variable
+   >>> popdat = regridf(dat)
 
 Regridding is discussed in `Chapter 4 <cdms_4.html>`__.
 
-1.11 Time types
-^^^^^^^^^^^^^^^
+Time types
+^^^^^^^^^^
 
 CDMS provides extensive support for time values in the cdtime module.
 cdtime also defines a set of calendars , specifying the number of days
@@ -777,12 +785,11 @@ or string representations can be used:
 
 Time types are described in Chapter 3.
 
-1.12 Plotting data
-^^^^^^^^^^^^^^^^^^
+Plotting data
+^^^^^^^^^^^^^
 
 Data read via the CDMS Python interface can be plotted using the vcs
-module. This module, part of the Ultrascale Visualization Climate Data
-Analysis Tool (UV-CDAT) is documented in the VCS reference manual. The
+module. This module, part of the Climate Data Analysis Tool (CDAT) is documented in the VCS reference manual. The
 vcs module provides access to the functionality of the VCS visualization
 program.
 
@@ -818,8 +825,8 @@ The plot routine has a number of options for producing different types
 of plots, such as isofill and x-y plots. See `Chapter 5 <cdms_5.html>`__
 for details.
 
-1.13 Databases
-^^^^^^^^^^^^^^
+Databases
+^^^^^^^^^
 
 Datasets can be aggregated together into hierarchical collections,
 called databases . In typical usage, a program:
@@ -842,4 +849,5 @@ Protocol (LDAP).
 ..   >>> f.variables.keys() # List the variables in the dataset.
 ..   ['ua', 'evs', 'cvvta', 'tauv', 'wap', 'cvwhusa', 'rss', 'rls', ... 'prc', 'ts', 'va']
 
-Databases are discussed further in `Section 2.7 <cdms_2.html#2.7>`__.
+
+Databases are discussed further in `Section 2.7 <cdms_2.html#database>`__.

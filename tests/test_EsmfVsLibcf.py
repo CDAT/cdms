@@ -143,8 +143,7 @@ class Test(unittest.TestCase):
         # print 'time to interpolate (ESMF interface) forward/backward: ', toc
         # - tic
         ntot = reduce(operator.mul, so.shape)
-        aa = soInterpInterp < 100
-        bb = aa * soInterpInterp
+        bb = numpy.ma.masked_where(soInterpInterp>100, soInterpInterp)
         avgdiff = numpy.sum(so - bb) / float(ntot)
         # print 'avgdiff = ', avgdiff
         # Changed 3.0 to 7.0 here. Missing values are not missing in

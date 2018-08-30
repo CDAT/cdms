@@ -14,7 +14,7 @@ __all__ = ["cdmsobj", "axis", "coord", "grid", "hgrid", "avariable",
            "mvBaseWriter", "mvSphereMesh", "mvVsWriter", "mvCdmsRegrid"]
 
 # Errors
-from .error import CDMSError  # noqa 
+from .error import CDMSError  # noqa
 
 # CDMS datatypes
 from .cdmsobj import CdArray, CdChar, CdByte, CdDouble, CdFloat, CdFromObject, CdInt, CdLong, CdScalar, CdShort, CdString  # noqa

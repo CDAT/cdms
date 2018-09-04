@@ -239,12 +239,20 @@ Table Cdms Module Functions
                     * Dash (-) meaning insert the next available axis here.
                     * The ellipsis ... meaning fill these positions with any remaining axes.
                     * (name) meaning an axis whose id is name"
-   "``None``", "``setAutoBounds(mode)``:" 
-             , "Set autobounds mode. In some circumstances CDMS can generate boundaries for 1-D axes and rectilinear grids, when the bounds are not explicitly defined. The autobounds mode determines how this is done: If ``mode`` is ``'grid'`` or ``2`` (the default), the ``getBounds`` method will automatically generate boundary information for an axis or grid if the axis is designated as a latitude or longitude axis, and the boundaries are not explicitly defined. If ``mode`` is ``'on'`` or ``1``, the ``getBounds`` method will automatically generate boundary information for an axis or grid, if the boundaries are not explicitly defined. If ``mode`` is ``'off'`` or ``0``, and no boundary data is explicitly defined, the bounds will NOT be generated; the ``getBounds`` method will return ``None`` for the boundaries. Note: In versions of CDMS prior to V4.0, the default ``mode`` was ``'on'``."
-   "``None``", "``setClassifyGrids(mode)``:"
-             , "Set the grid classification mode. This affects how grid type is determined, for the purpose of generating grid boundaries. If ``mode`` is ``'on'`` (the default), grid type is determined by a grid classification method, regardless of the value of ``grid.get-Type()``. If ``mode`` is ``'off'``, the value of ``grid.getType()`` determines the grid type." 
-   "``None``", "``writeScripGrid(path, grid, gridTitle=None)``:"
-             , "Write a grid to a SCRIP grid file.  ``path`` is a string, the path of the SCRIP file to be created.  ``grid`` is a CDMS grid object. It may be rectangular. ``gridTitle`` is a string ID for the grid."
+   "``None``", "``setAutoBounds(mode)``: 
+             Set autobounds mode. In some circumstances CDMS can generate boundaries for 1-D axes and rectilinear grids, when the bounds are not explicitly defined. The autobounds mode determines how this is done:
+                * If ``mode`` is ``'grid'`` or ``2`` (the default), the ``getBounds`` method will automatically generate boundary information for an axis or grid if the axis is designated as a latitude or longitude axis, and the boundaries are not explicitly defined. 
+                * If ``mode`` is ``'on'`` or ``1``, the ``getBounds`` method will automatically generate boundary information for an axis or grid, if the boundaries are not explicitly defined.
+                * If ``mode`` is ``'off'`` or ``0``, and no boundary data is explicitly defined, the bounds will NOT be generated; the ``getBounds`` method will return ``None`` for the boundaries. 
+                 **Note:** In versions of CDMS prior to V4.0, the default ``mode`` was ``'on'``."
+   "``None``", "``setClassifyGrids(mode)``:
+             Set the grid classification mode. This affects how grid type is determined, for the purpose of generating grid boundaries.
+                * If ``mode`` is ``'on'`` (the default), grid type is determined by a grid classification method, regardless of the value of ``grid.get-Type()``.
+                * If ``mode`` is ``'off'``, the value of ``grid.getType()`` determines the grid type." 
+   "``None``", "``writeScripGrid(path, grid, gridTitle=None)``:
+             Write a grid to a SCRIP grid file. 
+                * ``path`` is a string, the path of the SCRIP file to be created. 
+                * ``grid`` is a CDMS grid object. It may be rectangular. ``gridTitle`` is a string ID for the grid."
 
 
 
@@ -301,10 +309,14 @@ Table Getting and Setting Attributes
    :header:  "Type", "Definition"
    :widths:  20, 80
 
-   "various", "``value = obj.attname``"
-            , "Get an internal or external attribute value. If the attribute is external, it is read from the database. If the attribute is not already in the database, it is created as an external attribute.  Internal attributes cannot be created, only referenced."
-   "various", "``obj.attname = value``"
-            , "Set an internal or external attribute value. If the attribute is external, it is written to the database."
+   "various", "``value = obj.attname``
+            Get an internal or external attribute value.
+              * If the attribute is external, it is read from the database.
+              * If the attribute is not already in the database, it is created as an external attribute. 
+              **Note:**  Internal attributes cannot be created, only referenced."
+   "various", "``obj.attname = value``
+            Set an internal or external attribute value. 
+               * If the attribute is external, it is written to the database."
 
 
 
@@ -356,17 +368,22 @@ Table Axis Constructors
 
    "``cdms.createAxis(data, bounds=None)``", "Create an axis which is not associated with a dataset or file. See `A First Example <#a-first-example>`_."
    "``Dataset.createAxis(name,ar)``", "Create an ``Axis`` in a ``Dataset``. (This function is not yet implemented.)"
-   "``CdmsFile.createAxis(name,ar,unlimited=0)``", "Create an Axis in a ``CdmsFile``. ``name`` is the string ``name`` of the ``Axis``. ``ar`` is a 1-D data array which defines the ``Axis`` values. It may have the value ``None`` if an unlimited axis is being defined. At most one ``Axis`` in a ``CdmsFile`` may be designated as being unlimited, meaning that it may be extended in length. To define an axis as unlimited, either:"
-   , "* A) set ``ar`` to ``None``, and leave ``unlimited`` undefined, or"
-   , "* B) set ``ar`` to the initial 1-D array, and set ``unlimited`` to ``cdms.Unlitmited``"
-   , "``cdms.createEqualAreaAxis(nlat)``"
-   , "* See `A First Example`_."
-   , "``cdms.createGaussianAxis(nlat)``"
-   , "* See `A First Example`_."
-   , "``cdms.createUniformLatitudeAxis(startlat, nlat, deltalat)``"
-   , "* See `A First Example`_."
-   , "``cdms.createUniformLongitudeAxis(startlon, nlon, deltalon)``"
-   , "* See `A First Example`_ ."
+   "``CdmsFile.createAxis(name,ar,unlimited=0)``", "Create an Axis in a ``CdmsFile``.
+         * ``name`` is the string ``name`` of the ``Axis``. 
+         * ``ar`` is a 1-D data array which defines the ``Axis`` values.
+         * It may have the value ``None`` if an unlimited axis is being defined.
+         * At most one ``Axis`` in a ``CdmsFile`` may be designated as being unlimited, meaning that it may be extended in length. 
+       To define an axis as unlimited, either:
+         * A) set ``ar`` to ``None``, and leave ``unlimited`` undefined, or
+         * B) set ``ar`` to the initial 1-D array, and set ``unlimited`` to ``cdms.Unlitmited``
+             * ``cdms.createEqualAreaAxis(nlat)``
+             * See `A First Example`_.
+             * ``cdms.createGaussianAxis(nlat)``
+             * See `A First Example`_.
+             * ``cdms.createUniformLatitudeAxis(startlat, nlat, deltalat)``
+             * See `A First Example`_.
+             * ``cdms.createUniformLongitudeAxis(startlon, nlon, deltalon)``
+             * See `A First Example`_ ."
 
 
 Table CoordinateAxis Methods
@@ -378,33 +395,52 @@ Table CoordinateAxis Methods
    :align: left
  
 
-   "``Array``", "``array = axis[i:j]``", "Read a slice of data from the external file or dataset. Data is returned in the physical ordering defined in the dataset. See `Variable Slice Operators <#table-variable-slice-operators>`_ for a description of slice operators."
-   "``None``", "``axis[i:j] = array``", "Write a slice of data to the external file. Dataset axes are read-only."
-   "``None``", "``assignValue(array)``", "Set the entire value of the axis. ``array`` is a Numpy array, of the same dimensionality as the axis."
-   "``Axis``", "``clone(copyData=1)``", "Return a copy of the axis, as a transient axis. If copyData is 1 (the default) the data itself is copied."
-   "``None``", "``designateLatitude(persistent=0)``", "Designate the axis to be a latitude axis. If persistent is true, the external file or dataset (if any) is modified. By default, the designation is temporary."
-   "``None``", "``designateLevel(persistent=0)``", "Designate the axis to be a vertical level axis. If persistent is true, the external file or dataset (if any) is modified. By default, the designation is temporary."
-   "``None``", "``designateLongitude(persistent=0, modulo=360.0)``", "Designate the axis to be a longitude axis. ``modulo`` is the modulus value. Any given axis value ``x`` is treated as equivalent to ``x + modulus``. If ``persistent`` is true, the external file or dataset (if any) is modified. By default, the designation is temporary."
-   "``None``", "``designateTime(persistent=0, calendar = cdtime.MixedCalendar)``", "Designate the axis to be a time axis. If ``persistent`` is true, the external file or dataset (if any) is modified. By default, the designation is temporary. ``calendar`` is defined as in ``getCalendar()``."
-   "``Array``", "``getBounds()``", "Get the associated boundary array. The shape of the return array depends on the type of axis:"
-   ,,"* ``Axis``: ``(n,2)``"
-   ,,"* ``Axis2D``: ``(i,j,4)``"
-   ,,"* ``AuxAxis1D``: ``(ncell, nvert)`` where nvert is the maximum number of vertices of a cell."
-   ,,"If the boundary array of a latitude or longitude ``Axis`` is not explicitly defined, and ``autoBounds`` mode is on, a default array is generated by calling ``genGenericBounds``. Otherwise if auto-Bounds mode is off, the return value is ``None``. See ``setAutoBounds``."
-   "``Integer``", "``getCalendar()``", "Returns the calendar associated with the ``(time)``\ axis. Possible return values, as defined in the ``cdtime`` module, are:"
-   ,,"* ``cdtime.GregorianCalendar``: the standard Gregorian calendar"
-   ,,"* ``cdtime.MixedCalendar``: mixed Julian/Gregorian calendar"
-   ,,"* ``cdtime.JulianCalendar``: years divisible by 4 are leap years"
-   ,,"* ``cdtime.NoLeapCalendar``: a year is 365 days"
-   ,,"* ``cdtime.Calendar360``: a year is 360 days"
-   ,,"* ``None``: no calendar can be identified"
-   ,," **Note**  If the axis is not a time axis, the global, file-related calendar is returned."
+   "``Array``", "``array = axis[i:j]``", "Read a slice of data from the external file or dataset.
+            * Data is returned in the physical ordering defined in the dataset. 
+            * See `Variable Slice Operators <#table-variable-slice-operators>`_ for a description of slice operators."
+   "``None``", "``axis[i:j] = array``", "Write a slice of data to the external file. 
+            * Dataset axes are read-only."
+   "``None``", "``assignValue(array)``", "Set the entire value of the axis. 
+            * ``array`` is a Numpy array, of the same dimensionality as the axis."
+   "``Axis``", "``clone(copyData=1)``", "Return a copy of the axis, as a transient axis.
+            * If copyData is 1 (the default) the data itself is copied."
+   "``None``", "``designateLatitude(persistent=0)``", "Designate the axis to be a latitude axis.
+            * If persistent is true, the external file or dataset (if any) is modified. 
+            * By default, the designation is temporary."
+   "``None``", "``designateLevel(persistent=0)``", "Designate the axis to be a vertical level axis.
+            * If persistent is true, the external file or dataset (if any) is modified. 
+            * By default, the designation is temporary."
+   "``None``", "``designateLongitude(persistent=0, modulo=360.0)``", "Designate the axis to be a longitude axis. 
+            * ``modulo`` is the modulus value.
+            * Any given axis value ``x`` is treated as equivalent to ``x + modulus``.
+            * If ``persistent`` is true, the external file or dataset (if any) is modified. 
+            * By default, the designation is temporary."
+   "``None``", "``designateTime(persistent=0, calendar = cdtime.MixedCalendar)``", "Designate the axis to be a time axis. 
+            * If ``persistent`` is true, the external file or dataset (if any) is modified.
+            * By default, the designation is temporary. 
+            * ``calendar`` is defined as in ``getCalendar()``."
+   "``Array``", "``getBounds()``", "Get the associated boundary array. The shape of the return array depends on the type of axis:
+            * ``Axis``: ``(n,2)``
+            * ``Axis2D``: ``(i,j,4)``
+            * ``AuxAxis1D``: ``(ncell, nvert)`` where nvert is the maximum number of vertices of a cell.
+         If the boundary array of a latitude or longitude 
+            * ``Axis`` is not explicitly defined, and ``autoBounds`` mode is on, a default array is generated by calling ``genGenericBounds``. 
+            * Otherwise if auto-Bounds mode is off, the return value is ``None``. See ``setAutoBounds``."
+   "``Integer``", "``getCalendar()``", "Returns the calendar associated with the ``(time)``\ axis. Possible return values, as defined in the ``cdtime`` module, are:
+            * ``cdtime.GregorianCalendar``: the standard Gregorian calendar
+            * ``cdtime.MixedCalendar``: mixed Julian/Gregorian calendar
+            * ``cdtime.JulianCalendar``: years divisible by 4 are leap years
+            * ``cdtime.NoLeapCalendar``: a year is 365 days
+            * ``cdtime.Calendar360``: a year is 360 days
+            * ``None``: no calendar can be identified
+            **Note**  If the axis is not a time axis, the global, file-related calendar is returned."
    "``Array``", "``getValue()``", "Get the entire axis vector."
    "``Integer``", "``isLatitude()``", "Returns true iff the axis is a latitude axis."
    "``Integer``", "``isLevel()``", "Returns true iff the axis is a level axis."
    "``Integer``", "``isLongitude()``", "Returns true iff the axis is a longitude axis."
    "``Integer``", "``isTime()``", "Returns true iff the axis is a time axis."
-   "``Integer``", "``len(axis)``", "The length of the axis if one-dimensional. If multidimensional, the length of the first dimension."
+   "``Integer``", "``len(axis)``", "The length of the axis if one-dimensional.
+            * If multidimensional, the length of the first dimension."
    "``Integer``", "``size()``", "The number of elements in the axis."
    "``String``", "``typecode()``", "The ``Numpy`` datatype identifier."
 
@@ -419,31 +455,38 @@ Table Axis Methods, Additional to CoordinateAxis
 
    "``List`` of component times", "``asComponentTime(calendar=None)``", "``Array`` version of ``cdtime tocomp``. Returns a ``List`` of component times."
    "``List`` of relative times", "``asRelativeTime()``", "``Array`` version of ``cdtime torel``. Returns a ``List`` of relative times."
-   "``None``", "``designateCircular(modulo, persistent=0)``", "Designate the axis to be circular. ``modulo`` is the modulus value. Any given axis value ``x`` is treated as equivalent to ``x + modulus``. If ``persistent`` is ``True``, the external file or dataset (if any) is modified. By default, the designation is temporary."
-   "``Integer``", "``isCircular()``", "Returns ``True`` if the axis has circular topology. An axis is defined as circular if:"
-   ,," * ``axis.topology == 'circular'``, or"
-   ,," * ``axis.topology`` is undefined, and the axis is a longitude. The default cycle for circular axes is 360.0"
+   "``None``", "``designateCircular(modulo, persistent=0)``", "Designate the axis to be circular. 
+          * ``modulo`` is the modulus value.
+          * Any given axis value ``x`` is treated as equivalent to ``x + modulus``.
+          * If ``persistent`` is ``True``, the external file or dataset (if any) is modified.
+          * By default, the designation is temporary."
+   "``Integer``", "``isCircular()``", "Returns ``True`` if the axis has circular topology.
+       An axis is defined as circular if:
+          * ``axis.topology == 'circular'``, or
+          * ``axis.topology`` is undefined, and the axis is a longitude. 
+          * The default cycle for circular axes is 360.0"
    "``Integer``", "``isLinear()``", "Returns ``True`` if the axis has a linear representation."
    "``Tuple``", "``mapInterval(interval)``", "Same as ``mapIntervalExt``, but returns only the tuple ``(i,j)``, and ``wraparound`` is restricted to one cycle."
-   "``(i,j,k)``", "``mapIntervalExt(interval)``", "Map a coordinate interval to an index ``interval``. ``interval`` is a tuple having one of the forms:"
-   ,,"* ``(x,y)``"
-   ,,"* ``(x,y,indicator)``"
-   ,,"* ``(x,y,indicator,cycle)``"
-   ,,"* ``None or ':'``"
-   ,,"* where ``x`` and ``y`` are coordinates indicating the interval ``[x,y]``, and:"
-   ,,"* ``indicator`` is a two or three-character string, where the first character is ``'c'`` if the interval is closed on the left, ``'o'`` if open, and the second character has the same meaning for the right-hand point. If present, the third character specifies how the interval should be intersected with the axis"
-   ,,"* ``'n'`` - select node values which are contained in the interval"
-   ,,"* ``'b'`` -select axis elements for which the corresponding cell boundary intersects the interval"
-   ,,"* ``'e'`` - same as n, but include an extra node on either side"
-   ,,"* ``'s'`` - select axis elements for which the cell boundary is a subset of the interval"
-   ,,"* The default indicator is ‘ccn’, that is, the interval is closed, and nodes in the interval are selected."
-   ,,"* If ``cycle`` is specified, the axis is treated as circular with the given cycle value. By default, if ``axis.isCircular()`` is true, the axis is treated as circular with a default modulus of ``360.0``."
-   ,,"* An interval of ``None`` or ``':'`` returns the full index interval of the axis."
-   ,,"* The method returns the corresponding index interval as a 3tuple ``(i,j,k)``, where ``k`` is the integer stride, and ``[i.j)`` is the half-open index interval ``i <= k < j`` ``(i >= k > j if k < 0)``, or ``none`` if the intersection is empty."
-   ,,"* for an axis which is circular (``axis.topology == 'circular'``), ``[i,j)`` is interpreted as follows, where ``n = len(axis)``"
-   ,,"* if ``0 <= i < n`` and ``0 <= j <= n``, the interval does not wrap around the axis endpoint."
-   ,,"* otherwise the interval wraps around the axis endpoint."
-   ,,"* see also: ``mapinterval``, ``variable.subregion()``"
+   "``(i,j,k)``", "``mapIntervalExt(interval)``", "Map a coordinate interval to an index
+      ``interval``. ``interval`` is a tuple having one of the forms:
+          * ``(x,y)``
+          * ``(x,y,indicator)``
+          * ``(x,y,indicator,cycle)``
+          * ``None or ':'``
+      where ``x`` and ``y`` are coordinates indicating the interval ``[x,y]``, and:
+          * ``indicator`` is a two or three-character string, where the first character is ``'c'`` if the interval is closed on the left, ``'o'`` if open, and the second character has the same meaning for the right-hand point. If present, the third character specifies how the interval should be intersected with the axis
+          * ``'n'`` - select node values which are contained in the interval
+          * ``'b'`` -select axis elements for which the corresponding cell boundary intersects the interval
+          * ``'e'`` - same as n, but include an extra node on either side
+          * ``'s'`` - select axis elements for which the cell boundary is a subset of the interval
+          * The default indicator is ‘ccn’, that is, the interval is closed, and nodes in the interval are selected.
+          * If ``cycle`` is specified, the axis is treated as circular with the given cycle value. By default, if ``axis.isCircular()`` is true, the axis is treated as circular with a default modulus of ``360.0``.
+          * An interval of ``None`` or ``':'`` returns the full index interval of the axis.
+          * The method returns the corresponding index interval as a 3tuple ``(i,j,k)``, where ``k`` is the integer stride, and ``[i.j)`` is the half-open index interval ``i <= k < j`` ``(i >= k > j if k < 0)``, or ``none`` if the intersection is empty.
+          * for an axis which is circular (``axis.topology == 'circular'``), ``[i,j)`` is interpreted as follows, where ``n = len(axis)``
+          * if ``0 <= i < n`` and ``0 <= j <= n``, the interval does not wrap around the axis endpoint.
+          * otherwise the interval wraps around the axis endpoint.
+          * see also: ``mapinterval``, ``variable.subregion()``"
    "``transientaxis``", "``subaxis(i,j,k=1)``", "create an axis associated with the integer range ``[i:j:k]``. the stride ``k`` can be positive or negative. wraparound is supported for longitude dimensions or those with a modulus attribute." 
 
 Table Axis Slice Operators

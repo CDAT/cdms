@@ -502,16 +502,16 @@ Table Axis Slice Operators
    "``[:j]``", "the beginning element through, but not including, element ``j``"
    "``[:]``", "the entire array"
    "``[i:j:k]``", "every ``kth`` element, starting at ``i``, through but not including ``j``"
-   "``[-i]``", "the ``ith`` element from the end. ``-1`` is the last element."
-   , " **Example:** a longitude axis has value"
-   , " * ``[0.0, 2.0, ..., 358.0]``"
-   , " *   of length ``180``"
-   , " *    map the coordinate interval:"    
-   , " * ``-5.0 <= x < 5.0``  to index interval(s), with wraparound. the result index interval"  
-   , " * ``-2 <= n < 3`` wraps around, since"     
-   , " * ``-2 < 0``,  and has a stride of ``1``" 
-   , " * this is equivalent to the two contiguous index intervals"      
-   , " *  ``2 <= n < 0`` and ``0 <= n < 3``"
+   "``[-i]``", "the ``ith`` element from the end. ``-1`` is the last element.
+     **Example:** a longitude axis has value
+      * ``[0.0, 2.0, ..., 358.0]``
+      *   of length ``180``
+        * map the coordinate interval:    
+           * ``-5.0 <= x < 5.0``  to index interval(s), with wraparound. the result index interval  
+           * ``-2 <= n < 3`` wraps around, since     
+           * ``-2 < 0``,  and has a stride of ``1`` 
+           * this is equivalent to the two contiguous index intervals      
+           *  ``2 <= n < 0`` and ``0 <= n < 3``"
 
 Example 1
 '''''''''''
@@ -556,7 +556,9 @@ Table CdmsFile Constructors
    :align: left
 
    "Constructor", "Description"
-   "``fileobj = cdms.open(path, mode)``", "Open the file specified by path returning a CdmsFile object. ``path`` is the file pathname, a string. ``mode`` is the open mode indicator, as listed in See `Open Modes <#table-open-modes>`_." 
+   "``fileobj = cdms.open(path, mode)``", "Open the file specified by path returning a CdmsFile object. 
+         * ``path`` is the file pathname, a string. 
+         * ``mode`` is the open mode indicator, as listed in See `Open Modes <#table-open-modes>`_." 
    "``fileobj = cdms.createDataset(path)``", "Create the file specified by path, a string."
 
 Table CdmsFile Methods
@@ -568,42 +570,81 @@ Table CdmsFile Methods
    :align: left
 
 
-   "``Transient-Variable``", "``fileobj(varname, selector)``", "Calling a ``CdmsFile``"
-   ,, "object as a function reads the region of data specified by the ``selector``. The result is a transient variable, unless ``raw = 1`` is specified. See 'Selectors'."
-   ,, " **Example:** The following reads data for variable 'prc', year 1980:"
-   ,, " * >>> f = cdms.open('test.nc')"
-   ,, " * >>> x = f('prc', time=('1980-1','1981-1'))"
-   "``Variable``, ``Axis``, or ``Grid``", "``fileobj['id']``", "Get the persistent variable, axis or grid object having the string identifier. This does not read the data for a variable."
-   ,, " **Example:** The following gets the persistent variable"
-   ,, "   * ``v``, equivalent to"
-   ,, "   * ``v = f.variables['prc']``."
-   ,, "   * f = cdms.open('sample.nc')"
-   ,, "   * v = f['prc']"
-   ,, " **Example:** The following gets the axis named time, equivalent to"
-   ,, "   * ``t = f.axes['time']``."
-   ,, "   * ``t = f['time']``"
+   "``Transient-Variable``", "``fileobj(varname, selector)``", "Calling a ``CdmsFile`` object as a function reads the region of data specified by the ``selector``.
+       The result is a transient variable, unless ``raw = 1`` is specified. 
+       See `Selectors <#selectors>`_.
+          **Example:** The following reads data for variable 'prc', year 1980:
+              >>> f = cdms.open('test.nc')
+              >>> x = f('prc', time=('1980-1','1981-1'))"
+   "``Variable``, ``Axis``, or ``Grid``", "``fileobj['id']``", "Get the persistent variable, axis or grid object having the string identifier. This does not read the data for a variable.
+          **Example:** The following gets the persistent variable
+            * ``v``, equivalent to
+            * ``v = f.variables['prc']``.
+            * f = cdms.open('sample.nc')
+            * v = f['prc']
+          **Example:** The following gets the axis named time, equivalent to
+            * ``t = f.axes['time']``.
+            * ``t = f['time']``"
    "``None``", "``close()``", "Close the file."
-   "``Axis``", "``copyAxis(axis, newname=None)``", "Copy ``axis`` values and attributes to a new axis in the file. The returned object is persistent: it can be used to write axis data to or read axis data from the file. If an axis already exists in the file, having the same name and coordinate values, it is returned.  It is an error if an axis of the same name exists, but with different coordinate values. ``axis`` is the axis object to be copied. ``newname``, if specified, is the string identifier of the new axis object. If not specified, the identifier of the input axis is used."
-   "``Grid``", "``copyGrid(grid, newname=None)``", "Copy grid values and attributes to a new grid in the file. The returned grid is persistent. If a grid already exists in the file, having the same name and axes, it is returned. An error is raised if a grid of the same name exists, having different axes. ``grid`` is the grid object to be copied. ``newname``, if specified is the string identifier of the new grid object. If unspecified, the identifier of the input grid is used."
-   "``Axis``", "``createAxis(id,ar, unlimited=0)``", "Create a new ``Axis``.  This is a persistent object which can be used to read or write axis data to the file. ``id`` is an alphanumeric string identifier, containing no blanks.  ``ar`` is the one-dimensional axis array. Set ``unlimited`` to ``cdms.Unlimited`` to indicate that the axis is extensible."
-   "``RectGrid``", "``createRectGrid(id,lat, lon,order,type='generic', mask=None)``", "Create a ``RectGrid`` in the file. This is not a persistent object: the order, type, and mask are not written to the file. However, the grid may be used for regridding operations.  ``lat`` is a latitude axis in the file.  ``lon`` is a longitude axis in the file.  ``order`` is a string with value ``'yx'`` (the latitude) or ``'xy'`` (the first grid dimension is longitude).  ``type`` is one of ``'gaussian'``,\ ``'unif orm'``,\ ``'equalarea'`` , or ``'generic'``. If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
-   "``Variable``", "``createVariable(Stringid,String datatype,Listaxes,fill_value=None)``", "Create a new Variable.  This is a persistent object which can be used to read or write variable data to the file. ``id`` is a String name which is unique with respect to all other objects in the file. ``datatype`` is an ``MV2`` typecode, e.g., ``MV2.Float``, ``MV2.Int``. ``axes`` is a list of Axis and/or Grid objects.  ``fill_value`` is the missing value (optional)."
-   "``Variable``", "``createVariableCopy(var, newname=None)``", "Create a new ``Variable``, with the   same name, axes, and attributes as the input variable. An error is raised if a variable of the same name exists in the file. ``var`` is the ``Variable`` to be copied. ``newname``, if specified is the name of the new variable. If unspecified, the returned variable has the same name as ``var``."
-   ,," **Note:** Unlike copyAxis, the actual data is not copied to the new variable."
-   "``CurveGrid`` or ``Generic-Grid``", "``readScripGrid(self,whichGrid='destination',check-Grid=1)``", "Read a curvilinear or generic grid from a SCRIP netCDF file. The file can be a SCRIP grid file or remapping file.  If a mapping file, ``whichGrid`` chooses the grid to read, either ``'source'`` or ``'destination'``. If ``checkGrid`` is ``1`` (default), the grid cells are checked for convexity, and 'repaired' if necessary.  Grid cells may appear to be nonconvex if they cross a ``0 / 2pi`` boundary. The repair consists of shifting the cell vertices to the same side modulo 360 degrees."
+   "``Axis``", "``copyAxis(axis, newname=None)``", "Copy ``axis`` values and attributes to a new axis in the file. 
+         The returned object is persistent: it can be used to write axis data to or read axis data from the file.
+            * If an axis already exists in the file, having the same name and coordinate values, it is returned.  
+            * It is an error if an axis of the same name exists, but with different coordinate values.
+            * ``axis`` is the axis object to be copied. 
+            * ``newname``, if specified, is the string identifier of the new axis object. 
+            * If not specified, the identifier of the input axis is used."
+   "``Grid``", "``copyGrid(grid, newname=None)``", "Copy grid values and attributes to a new grid in the file. 
+            * The returned grid is persistent.
+            * If a grid already exists in the file, having the same name and axes, it is returned.
+            * An error is raised if a grid of the same name exists, having different axes. 
+            * ``grid`` is the grid object to be copied. 
+            * ``newname``, if specified is the string identifier of the new grid object. 
+            * If unspecified, the identifier of the input grid is used."
+   "``Axis``", "``createAxis(id,ar, unlimited=0)``", "Create a new ``Axis``.  
+         This is a persistent object which can be used to read or write axis data to the file.
+            * ``id`` is an alphanumeric string identifier, containing no blanks.  
+            * ``ar`` is the one-dimensional axis array.
+            * Set ``unlimited`` to ``cdms.Unlimited`` to indicate that the axis is extensible."
+   "``RectGrid``", "``createRectGrid(id,lat, lon,order,type='generic', mask=None)``", "Create a ``RectGrid`` in the file.
+         This is not a persistent object: the order, type, and mask are not written to the file. However, the grid may be used for regridding operations.  
+            * ``lat`` is a latitude axis in the file.  
+            * ``lon`` is a longitude axis in the file.  
+            * ``order`` is a string with value ``'yx'`` (the latitude) or ``'xy'`` (the first grid dimension is longitude). 
+            * ``type`` is one of ``'gaussian'``,\ ``'unif orm'``,\ ``'equalarea'`` , or ``'generic'``.
+            * If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
+   "``Variable``", "``createVariable(Stringid,String datatype,Listaxes,fill_value=None)``", "Create a new Variable. 
+         This is a persistent object which can be used to read or write variable data to the file.
+           * ``id`` is a String name which is unique with respect to all other objects in the file.
+           * ``datatype`` is an ``MV2`` typecode, e.g., ``MV2.Float``, ``MV2.Int``. 
+           * ``axes`` is a list of Axis and/or Grid objects. 
+           * ``fill_value`` is the missing value (optional)."
+   "``Variable``", "``createVariableCopy(var, newname=None)``", "Create a new ``Variable``, with the   same name, axes, and attributes as the input variable.
+        An error is raised if a variable of the same name exists in the file. 
+           * ``var`` is the ``Variable`` to be copied. 
+           * ``newname``, if specified is the name of the new variable. 
+           * If unspecified, the returned variable has the same name as ``var``.
+        **Note:** Unlike copyAxis, the actual data is not copied to the new variable."
+   "``CurveGrid`` or ``Generic-Grid``", "``readScripGrid(self,whichGrid='destination',check-Grid=1)``", "Read a curvilinear or generic grid from a SCRIP netCDF file. The file can be a SCRIP grid file or remapping file. 
+           * If a mapping file, ``whichGrid`` chooses the grid to read, either ``'source'`` or ``'destination'``. 
+           * If ``checkGrid`` is ``1`` (default), the grid cells are checked for convexity, and 'repaired' if necessary.  
+           * Grid cells may appear to be nonconvex if they cross a ``0 / 2pi`` boundary. 
+           * The repair consists of shifting the cell vertices to the same side modulo 360 degrees."
     "``None``", "``sync()``", "Writes any pending changes to the file."
-    "``Variable``", "``write(var,attributes=None,axes=None, extbounds=None,id=None,extend=None, fill_value=None, index=None, typecode=None)``","Write a variable or array to the file. The return value is the associated file variable."
-    ,,"If the variable does not exist in the file, it is first defined and all attributes written, then the data is written. By default, the time dimension of the variable is defined as the unlimited dimension of the file. If the data is already defined, then data is extended or overwritten depending on the value of keywords ``extend`` and ``index``, and the unlimited dimension values associated with ``var``."
-    ,,"* ``var`` is a Variable, masked array, or Numpy array."
-    ,,"* ``attributes`` is the attribute dictionary for the variable. The default is ``var.attributes``."
-    ,,"* ``axes`` is the list of file axes comprising the domain of the variable.  The default is to copy ``var.getAxisList()``."
-    ,,"* ``extbounds`` is the unlimited dimension bounds. Defaults to ``var.getAxis(0).getBounds()``."
-    ,,"* ``id`` is the variable name in the file.  Default is ``var.id``."
-    ,,"* ``extend = 1`` causes the first dimension to be unlimited: iteratively writeable."  
-    ,,"  * The default is ``None``, in which case the first dimension is extensible if it is ``time.Set`` to ``0`` to turn off this behaviour."
-    ,,"* ``fill_value`` is the missing value flag."
-    ,,"* ``index`` is the extended dimension index to write to. The default index is determined by lookup relative to the existing extended dimension."
-    ,," **Note:** data can also be written by setting a slice of a file variable, and attributes can be written by setting an attribute of a file variable."
+    "``Variable``", "``write(var,attributes=None,axes=None, extbounds=None,id=None,extend=None, fill_value=None, index=None, typecode=None)``","Write a variable or array to the file. The return value is the associated file variable.
+           * If the variable does not exist in the file, it is first defined and all attributes written, then the data is written. 
+           * By default, the time dimension of the variable is defined as the unlimited dimension of the file.
+           *  If the data is already defined, then data is extended or overwritten depending on the value of keywords ``extend`` and ``index``, and the unlimited dimension values associated with ``var``.
+           * ``var`` is a Variable, masked array, or Numpy array.
+           * ``attributes`` is the attribute dictionary for the variable. The default is ``var.attributes``.
+           * ``axes`` is the list of file axes comprising the domain of the variable.  
+           * The default is to copy ``var.getAxisList()``.
+           * ``extbounds`` is the unlimited dimension bounds. Defaults to ``var.getAxis(0).getBounds()``.
+           * ``id`` is the variable name in the file.  Default is ``var.id``.
+           * ``extend = 1`` causes the first dimension to be unlimited: iteratively writeable.  
+           * The default is ``None``, in which case the first dimension is extensible if it is ``time.Set`` to ``0`` to turn off this behaviour.
+           * ``fill_value`` is the missing value flag.
+           * ``index`` is the extended dimension index to write to. The default index is determined by lookup relative to the existing extended dimension.
+           **Note:** data can also be written by setting a slice of a file variable, and attributes can be written by setting an attribute of a file variable."
 
 Table CDMS Datatypes
 --------------------
@@ -721,9 +762,16 @@ Table Database Constructors
    :align: left
 
 
-    "``db = cdms.connect(uri=None, user='', password='')``", "Connect to the database. ``uri`` is the Universal Resource Indentifier of the database. The form of the URI depends on the implementation of the database."
-    ,"For a Lightweight Directory Access Protocol (LDAP) database, the form is: ``ldap://host[:port]/dbname``."
-    ,"For example, if the database is located on host dbhost.llnl.gov, and is named ``'database=CDMS,ou=PCMDI,o=LLNL,c=US'``, the URI is: ``ldap://dbhost.llnl.gov/database=CDMS,ou=PCMDI,o=LLNL,c=US``. If unspecified, the URI defaults to the value of environment variable CDMSROOT. ``user`` is the user ID. If unspecified, an anonymous connection is made. ``password`` is the user password. A password is not required for an anonymous connection"
+    "``db = cdms.connect(uri=None, user='', password='')``", "Connect to the database. 
+       * ``uri`` is the Universal Resource Indentifier of the database. 
+       * The form of the URI depends on the implementation of the database.
+       * For a Lightweight Directory Access Protocol (LDAP) database, the form is: ``ldap://host[:port]/dbname``.
+       For example, if the database is located on host dbhost.llnl.gov, and is named ``'database=CDMS,ou=PCMDI,o=LLNL,c=US'``, the URI is: 
+          * ``ldap://dbhost.llnl.gov/database=CDMS,ou=PCMDI,o=LLNL,c=US``.
+          * If unspecified, the URI defaults to the value of environment variable CDMSROOT. 
+          * ``user`` is the user ID. If unspecified, an anonymous connection is made. 
+          * ``password`` is the user password. 
+          **Note:** A password is not required for an anonymous connection"
 
 Table Database Methods
 ----------------------
@@ -734,33 +782,34 @@ Table Database Methods
 
     "None", "``close()``", "Close a database"
     "List", "``listDatasets()``", "Return a list of the dataset IDs in this database. A dataset ID can be passed to the ``open`` command."
-    "Dataset", "``open(dsetid, mode='r')``", "Open a dataset."
-    , "* ``dsetid``","is the string dataset identifier"
-    , "* ``mode``","is the open mode, 'r' - read-only, 'r+' - read-write, 'w' - create."
-    , "* ``openDataset``", "is a synonym for ``open``."
-    "SearchResult","``searchFilter(filter=None, tag=None, relbase=None, scope=Subtree, attnames=None, timeout=None)``","Search a CDMS database."
-    ,, "``filter`` is the string search filter. Simple filters have the form 'tag = value'. Simple filters can be combined using logical operators '&', '\|', '!' in prefix notation."
-    ,,
-    ,," **Example:**"
-    ,," * The filter ``'(&(objec)(id=cli))'`` finds all variables named 'cli'."
-    ,,"   - A formal definition of search filters is provided in the following section."
-    ,,"   - ``tag`` restricts the search to objects with that tag ('dataset' | 'variable' | 'database' | 'axis' | 'grid')."
-    ,,"   - ``relbase`` is the relative name of the base object of the search. The search is restricted to the base object and all objects below it in the hierarchy."
-    ,,
-    ,," **Example:**"
-    ,," * To search only dataset 'ncep_reanalysis_mo', specify:"
-    ,,"   - ``relbase='dataset=ncep_reanalysis_mo'``"
-    ,," * To search only variable 'ua' in 'ncep_reanalysis_mo', use:"
-    ,,"   - ``relbase='variable=ua, dataset=ncep_reanalysis_mo'``"
-    ,,
-    ,,"If no base is specified, the entire database is searched. See the ``scope`` argument also."
-    ,,"``scope`` is the search scope (**Subtree** | **Onelevel** | **Base**)."
-    ,," *  **Subtree** searches the base object and its descendants."
-    ,," *  **Onelevel** searches the base object and its immediate descendants."
-    ,," *  **Base**\ searches the base object alone."
-    ,," * The default is **Subtree**."
-    ,,"``attnames``: list of attribute names.  Restricts the attributes returned. If ``None``, all attributes are returned. Attributes 'id' and 'objectclass' are always included in the list."
-    ,,"``timeout``: integer number of seconds before timeout. The default is no timeout."
+    "Dataset", "``open(dsetid, mode='r')``", "Open a dataset.
+          * ``dsetid``is the string dataset identifier
+          * ``mode`` is the open mode, 'r' - read-only, 'r+' - read-write, 'w' - create.
+          * ``openDataset`` is a synonym for ``open``."
+    "SearchResult","``searchFilter(filter=None, tag=None, relbase=None, scope=Subtree, attnames=None, timeout=None)``","Search a CDMS database.
+          * ``filter`` is the string search filter.
+          *  Simple filters have the form 'tag = value'. 
+          * Simple filters can be combined using logical operators '&', '\|', '!' in prefix notation.
+          **Example:**
+             * The filter ``'(&(objec)(id=cli))'`` finds all variables named 'cli'.
+             * A formal definition of search filters is provided in the following section.
+             * ``tag`` restricts the search to objects with that tag ('dataset' | 'variable' | 'database' | 'axis' | 'grid').
+             * ``relbase`` is the relative name of the base object of the search. The search is restricted to the base object and all objects below it in the hierarchy.
+          **Example:**
+             * To search only dataset 'ncep_reanalysis_mo', specify:
+             * ``relbase='dataset=ncep_reanalysis_mo'``
+             * To search only variable 'ua' in 'ncep_reanalysis_mo', use:
+             * ``relbase='variable=ua, dataset=ncep_reanalysis_mo'``
+             * If no base is specified, the entire database is searched. See the ``scope`` argument also.
+             * ``scope`` is the search scope (**Subtree** | **Onelevel** | **Base**).
+             *  **Subtree** searches the base object and its descendants.
+             *  **Onelevel** searches the base object and its immediate descendants.
+             *  **Base** searches the base object alone.
+             * The default is **Subtree**.
+             * ``attnames``: list of attribute names.  Restricts the attributes returned.
+             *  If ``None``, all attributes are returned. 
+             * Attributes 'id' and 'objectclass' are always included in the list.
+             * ``timeout``: integer number of seconds before timeout. The default is no timeout."
 
 
 ------------

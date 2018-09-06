@@ -453,8 +453,10 @@ Table Axis Methods, Additional to CoordinateAxis
    :align: left
 
 
-   "``List`` of component times", "``asComponentTime(calendar=None)``", "``Array`` version of ``cdtime tocomp``. Returns a ``List`` of component times."
-   "``List`` of relative times", "``asRelativeTime()``", "``Array`` version of ``cdtime torel``. Returns a ``List`` of relative times."
+   "``List`` of component times", "``asComponentTime(calendar=None)``", "``Array`` version of ``cdtime tocomp``. 
+          * Returns a ``List`` of component times."
+   "``List`` of relative times", "``asRelativeTime()``", "``Array`` version of ``cdtime torel``.
+          *  Returns a ``List`` of relative times."
    "``None``", "``designateCircular(modulo, persistent=0)``", "Designate the axis to be circular. 
           * ``modulo`` is the modulus value.
           * Any given axis value ``x`` is treated as equivalent to ``x + modulus``.
@@ -487,7 +489,9 @@ Table Axis Methods, Additional to CoordinateAxis
           * if ``0 <= i < n`` and ``0 <= j <= n``, the interval does not wrap around the axis endpoint.
           * otherwise the interval wraps around the axis endpoint.
           * see also: ``mapinterval``, ``variable.subregion()``"
-   "``transientaxis``", "``subaxis(i,j,k=1)``", "create an axis associated with the integer range ``[i:j:k]``. the stride ``k`` can be positive or negative. wraparound is supported for longitude dimensions or those with a modulus attribute." 
+   "``transientaxis``", "``subaxis(i,j,k=1)``", "create an axis associated with the integer range ``[i:j:k]``. 
+          * The stride ``k`` can be positive or negative.
+          * Wraparound is supported for longitude dimensions or those with a modulus attribute." 
 
 Table Axis Slice Operators
 --------------------------
@@ -696,7 +700,9 @@ Overview
 
 To access a database:
 
-#. Open a connection. The connect method opens a database connection. Connect takes a database URI and returns a database object:
+#. Open a connection. 
+   The connect method opens a database connection. 
+   Connect takes a database URI and returns a database object:
    ``db=cdms.connect("ldap://dbhost.llnl.gov/database=CDMS,ou=PCMDI,o=LLNL,c=US")``
 
 #. Search the database, locating one or more datasets, variables, and/or
@@ -835,11 +841,11 @@ Searching a Database
   (id = ncep*)
   (project = AMIP2)
 
-**Note**  Simple filters can be combined with the logical operators '&', '|', '!'. For example,
+**Note:**  Simple filters can be combined with the logical operators '&', '|', '!'. For example,
 
      * ``mode``, is the open mode, 'r' - read-only, 'r+' - read-write, 'w' - create.
 
-  (&(id = bmrc*)(project = AMIP2))
+(&(id = bmrc*)(project = AMIP2))
 
 
      * To search only dataset 'ncep_reanalysis_mo', specify:
@@ -938,8 +944,10 @@ Table SearchResult Methods
 
     "ResultEntry", "``[i]``", "Return the i-th search result. Results can also be returned in a for loop: ``for entry in db.searchResult(tag='dataset'):``"
     "Integer", "``len()``", "Number of entries in the result."
-    "SearchResult", "``searchPredicate(predicate, tag=None)``", "Refine a search result, with a predicate search. ``predicate`` is a function which takes a single CDMS object and returns true (1) if the object satisfies the predicate, 0 if not. ``tag`` restricts the search to objects of the class denoted by the tag." 
-    ,,"**Note**: In the current implementation, ``searchPredicate`` is much less efficient than ``searchFilter``. For best performance, use ``searchFilter`` to narrow the scope of the search, then use ``searchPredicate`` for more general searches."
+    "SearchResult", "``searchPredicate(predicate, tag=None)``", "Refine a search result, with a predicate search. 
+        * ``predicate`` is a function which takes a single CDMS object and returns true (1) if the object satisfies the predicate, 0 if not. 
+        * ``tag`` restricts the search to objects of the class denoted by the tag.
+        **Note:**: In the current implementation, ``searchPredicate`` is much less efficient than ``searchFilter``. For best performance, use ``searchFilter`` to narrow the scope of the search, then use ``searchPredicate`` for more general searches."
 
 A search result is a sequence of result entries. Each entry has a string
 name, the name of the object in the database hierarchy, and an attribute
@@ -968,9 +976,8 @@ Table ResultEntry Methods
    :header:  "Type", "Method", "Definition"
    :widths:  20, 30, 80
 
-    "``CdmsObj``", "``getObject()``", "Return the CDMS object associated with this entry."
-    ,, "**Note:** For many search applications it is unnecessary to access the associated CDMS object. For best performance this function should be used only when necessary, for example, to retrieve data associated with a variable."
-
+    "``CdmsObj``", "``getObject()``", "Return the CDMS object associated with this entry.
+        **Note:** For many search applications it is unnecessary to access the associated CDMS object. For best performance this function should be used only when necessary, for example, to retrieve data associated with a variable."
     "``CdmsObj``", "``getObject()``", "Return the CDMS object associated with this entry.
         **Note:** For many search applications it is unnecessary to access the associated CDMS object. For best performance this function should be used only when necessary, for example, to retrieve data associated with a variable."
 
@@ -1132,34 +1139,34 @@ Table Dataset Methods
    :header:  "Type", "Definition", "Description"
    :widths:  30, 30, 80
 
-    "Transient-Variable", "``datasetobj(varname, selector)``", "Calling a Dataset object as a function reads the region of data defined by the selector. The result is a transient variable, unless ``raw = 1`` is specified. See 'Selectors'."
-    ,, "**Example:** The following reads data for variable 'prc', year 1980:"
-    ,, "   * f = cdms.open('test.  xml')"
-    ,, "   * x = f('prc', time=('1980-1','1981-1'))"
-    "Variable, Axis, or Grid", "``datasetobj['id']``", "The square bracket operator applied to a dataset gets the persistent variable, axis or grid object having the string identifier. This does not read the data for a variable. Returns ``None`` if not found."
-    ,, "**Example:**"
-    ,, "   * f = cdms.open('sampl e.xml')"
-    ,, "   * v = f['prc']"
-    ,, "   * gets the persistent variable v, equivalent to ``v =f.variab les['prc']``."
-    ,, "**Example:**"
-    ,, "``t = f['time']`` gets the axis named 'time', equivalent to ``t = f.axes['time']``"
+    "Transient-Variable", "``datasetobj(varname, selector)``", "Calling a Dataset object as a function reads the region of data defined by the selector. The result is a transient variable, unless ``raw = 1`` is specified. See 'Selectors'.
+        **Example:** The following reads data for variable 'prc', year 1980:
+           * f = cdms.open('test.  xml')
+           * x = f('prc', time=('1980-1','1981-1'))"
+    "Variable, Axis, or Grid", "``datasetobj['id']``", "The square bracket operator applied to a dataset gets the persistent variable, axis or grid object having the string identifier. This does not read the data for a variable. Returns ``None`` if not found.
+        **Example:**
+           * f = cdms.open('sampl e.xml')
+           * v = f['prc']
+           * gets the persistent variable v, equivalent to ``v =f.variab les['prc']``.
+        **Example:**
+           ``t = f['time']`` gets the axis named 'time', equivalent to ``t = f.axes['time']``"
     "``None``", "``close()``", "Close the dataset."
-    "``RectGrid``", "``createRectGrid(id, lat, lon,order, type='generic', mask=None)``", "Create a RectGrid in the dataset. This is not a persistent object: the order, type, and mask are not written to the dataset. However, the grid may be used for regridding operations."
-    ,,"``lat`` is a latitude axis in the dataset."
-    ,,"``lon`` is a longitude axis in the dataset."
-    ,,"``order`` is a string with value 'yx' (the first grid dimension is latitude) or 'xy' (the first grid dimension is longitude)."
-    ,,"``type`` is one of 'gaussian','uniform','eq ualarea',or 'generic'"
-    ,,"If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
-    "Axis", "``getAxis(id)``", "Get an axis object from the file or dataset."
-    ,,"``id`` is the string axis identifier."
-    "Grid", "``getGrid(id)``", "Get a grid object from a file or dataset."
-    ,,"``id`` is the string grid identifier."
+    "``RectGrid``", "``createRectGrid(id, lat, lon,order, type='generic', mask=None)``", "Create a RectGrid in the dataset. This is not a persistent object: the order, type, and mask are not written to the dataset. However, the grid may be used for regridding operations.
+           * ``lat`` is a latitude axis in the dataset.
+           * ``lon`` is a longitude axis in the dataset.
+           * ``order`` is a string with value 'yx' (the first grid dimension is latitude) or 'xy' (the first grid dimension is longitude).
+           * ``type`` is one of 'gaussian','uniform','eq ualarea',or 'generic'
+           * If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
+    "Axis", "``getAxis(id)``", "Get an axis object from the file or dataset.
+           * ``id`` is the string axis identifier."
+    "Grid", "``getGrid(id)``", "Get a grid object from a file or dataset.
+           * ``id`` is the string grid identifier."
     "List", "``getPaths()``", "Get a sorted list of pathnames of datafiles which comprise the dataset. This does not include the XML metafile path, which is stored in the .uri attribute."
-    "Variable", "``getVariable(id)``", "Get a variable object from a file or dataset."
-    ,,"``id`` is the string variable identifier."
-    "CurveGrid or GenericGrid", "``readScripGrid(self, whichGrid='destination', check-orGeneric-Grid=1)``", "Read a curvilinear orgeneric grid from a SCRIP dataset. The dataset can be a SCRIP grid file or remappingfile."
-    ,, "If a mapping file, ``whichGrid`` chooses the grid to read, either ``'source'`` or ``'destination'``."
-    ,, " If ``checkGrid`` is 1 (default), the grid cells are checked for convexity, and 'repaired' if necessary.  Grid cells may appear to be nonconvex if they cross a ``0 / 2pi`` boundary. The repair consists of shifting the cell vertices to the same side modulo 360 degrees."
+    "Variable", "``getVariable(id)``", "Get a variable object from a file or dataset.
+           * ``id`` is the string variable identifier."
+    "CurveGrid or GenericGrid", "``readScripGrid(self, whichGrid='destination', check-orGeneric-Grid=1)``", "Read a curvilinear orgeneric grid from a SCRIP dataset. The dataset can be a SCRIP grid file or remappingfile.
+           * If a mapping file, ``whichGrid`` chooses the grid to read, either ``'source'`` or ``'destination'``.
+           * If ``checkGrid`` is 1 (default), the grid cells are checked for convexity, and 'repaired' if necessary.  Grid cells may appear to be nonconvex if they cross a ``0 / 2pi`` boundary. The repair consists of shifting the cell vertices to the same side modulo 360 degrees."
     "None", "``sync()``", "Write any pending changes to the dataset."
 
 
@@ -1357,34 +1364,55 @@ Table HorizontalGrid Methods
 
     "Horizontal-Grid", "``clone()``", "Return a transient copy of the grid."
     "Axis", "``getAxis(Integer n)``", "Get the n-th axis.n is either 0 or 1."
-    "Tuple", "``getBounds()``", "Get the grid boundary arrays."
-    ,,"Returns a tuple ``(latitudeArray, longitudeArray)``, where latitudeArray is a Numpy array of latitude bounds, and similarly for longitudeArray.The shape of latitudeArray and longitudeArray depend on the type of grid:"
-    ,,"*  for rectangular grids with shape (nlat, nlon), the boundary arrays have shape (nlat,2) and (nlon,2)."
-    ,,"*  for curvilinear grids with shape (nx, ny), the boundary arrays each have shape (nx, ny, 4)."
-    ,,"*  for generic grids with shape (ncell,), the boundary arrays each have shape (ncell, nvert) where nvert is the maximum number of vertices per cell."
-    ,,"For rectilinear grids: If no boundary arrays are explicitly defined (in the file or dataset), the result depends on the auto- Bounds mode (see ``cdms.setAutoBounds``) and the grid classification mode (see ``cdms.setClassifyGrids``)."
-    ,,"By default, autoBounds mode is enabled, in which case the boundary arrays are generated based on the type of grid. If disabled, the return value is (None,None).For rectilinear grids: The grid classification mode specifies how the grid type is to be determined. By default, the grid type (Gaussian, uniform, etc.) is determined by calling grid.classifyInFamily.  If the mode is 'off' grid.getType is used instead."
+    "Tuple", "``getBounds()``", "Get the grid boundary arrays.
+         Returns a tuple ``(latitudeArray, longitudeArray)``, where latitudeArray is a Numpy array of latitude bounds, and similarly for longitudeArray.The shape of latitudeArray and longitudeArray depend on the type of grid:
+           * for rectangular grids with shape (nlat, nlon), the boundary arrays have shape (nlat,2) and (nlon,2).
+           * for curvilinear grids with shape (nx, ny), the boundary arrays each have shape (nx, ny, 4).
+           * for generic grids with shape (ncell,), the boundary arrays each have shape (ncell, nvert) where nvert is the maximum number of vertices per cell.
+           * for rectilinear grids: If no boundary arrays are explicitly defined (in the file or dataset), the result depends on the auto- Bounds mode (see ``cdms.setAutoBounds``) and the grid classification mode (see ``cdms.setClassifyGrids``).
+        By default, autoBounds mode is enabled, in which case the boundary arrays are generated based on the type of grid. 
+           * If disabled, the return value is (None,None).For rectilinear grids:
+           * The grid classification mode specifies how the grid type is to be determined. 
+           * By default, the grid type (Gaussian, uniform, etc.) is determined by calling grid.classifyInFamily.  
+           * If the mode is 'off' grid.getType is used instead."
     "Axis", "``getLatitude()``", "Get the latitude axis of this grid."
-    "Axis", "``getLongitude()``", " Get the latitude axis of this grid."
-    "Axis", "``getMask()``", "Get the mask array of this grid, if any.Returns a 2-D Numpy array, having the same shape as the grid. If the mask is not explicitly defined, the return value is ``None``."
-    "Axis", "``getMesh(self, transpose=None)``", "Generate a mesh array for the meshfill graphics method.If transpose is defined to a tuple, say (1,0), first transpose latbounds and lonbounds according to the tuple, in this case (1,0,2)."
-    "None", "``setBounds(latBounds, lonBounds, persistent=0)``", "Set the grid boundaries. ``latBounds`` is a NumPy array of shape (n,2), such that the boundaries of the kth axis value are ``[latBounds[k,0],latBou nds[k,1] ]``.  ``lonBounds`` is defined similarly for the longitude array."
-    ,,"**Note:** By default, the boundaries are not written to the file or dataset containing the grid (if any). This allows bounds to be set on read-only files, for regridding. If the optional argument ``persistent`` is set to the boundary array is written to the file."
-    "None", "``setMask(mask, persistent=0)``", "Set the grid mask. If ``persistent == 1``, the mask values are written to the associated file, if any. Otherwise, the mask is associated with the grid, but no I/O is generated. ``mask`` is a two-dimensional, Boolean-valued Numpy array, having the same shape as the grid."
-    "Horizontal-Grid", "``subGridRegion(latInterval, lonInterval)``", "Create a new grid corresponding to the coordinate region defined by ``latInterval, lonInterv al.``"
-    ,,"``latInterval`` and ``lonInterval`` are the coordinate intervals for latitude and longitude, respectively."
-    ,,"Each interval is a tuple having one of the forms:"
-    ,,"*  ``(x,y)``"
-    ,,"*  ``(x,y,indicator)``"
-    ,,"*  ``(x,y,indicator,cycle)``"
-    ,,"*  ``None``"
-    ,,"where ``x`` and ``y`` are coordinates indicating the interval ``[x,y)``, and:"
-    ,,"``indicator`` is a two-character string, where the first character is 'c' if the interval is closed on the left, 'o' if open, and the second character has the same meaning for the right-hand point.  (Default: 'co')."
-    ,,"If ``cycle`` is specified, the axis is treated as circular with the given cycle value.  By default, if ``grid.isCircular()`` is true, the axis is treated as circular with a default value of 360.0."
-   ,,"An interval of ``None`` returns the full index interval of the axis."
-   ,,"If a mask is defined, the subgrid also has a mask corresponding to the index ranges.Note: The result grid is not associated with any file or dataset."
-    "Transient-CurveGrid", "``toCurveGrid(gridid=None)``", "Convert to a curvilinear grid. If the grid is already curvilinear, a copy of the grid object is returned. ``gridid`` is the string identifier of the resulting curvilinear grid object.  If unspecified, the grid ID is copied." 
-    ,,"**Note:** This method does not apply to generic grids.  Transient-GenericGrid ``toGenericGrid(gridid=None)`` Convert to a generic grid. If the grid is already generic, a copy of the grid is returned.  ``gridid`` is the string identifier of the resulting curvilinear grid object. If unspecified, the grid ID is copied."
+    "Axis", "``getLongitude()``", "Get the latitude axis of this grid."
+    "Axis", "``getMask()``", "Get the mask array of this grid, if any.
+           * Returns a 2-D Numpy array, having the same shape as the grid. 
+           * If the mask is not explicitly defined, the return value is ``None``."
+    "Axis", "``getMesh(self, transpose=None)``", "Generate a mesh array for the meshfill graphics method.
+           * If transpose is defined to a tuple, say (1,0), first transpose latbounds and lonbounds according to the tuple, in this case (1,0,2)."
+    "None", "``setBounds(latBounds, lonBounds, persistent=0)``", "Set the grid boundaries. 
+           * ``latBounds`` is a NumPy array of shape (n,2), such that the boundaries of the kth axis value are ``[latBounds[k,0],latBou nds[k,1] ]``.  
+           * ``lonBounds`` is defined similarly for the longitude array.
+           **Note:** By default, the boundaries are not written to the file or dataset containing the grid (if any). This allows bounds to be set on read-only files, for regridding. If the optional argument ``persistent`` is set to the boundary array is written to the file."
+    "None", "``setMask(mask, persistent=0)``", "Set the grid mask.
+           * If ``persistent == 1``, the mask values are written to the associated file, if any. 
+           * Otherwise, the mask is associated with the grid, but no I/O is generated. 
+           * ``mask`` is a two-dimensional, Boolean-valued Numpy array, having the same shape as the grid."
+    "Horizontal-Grid", "``subGridRegion(latInterval, lonInterval)``", "Create a new grid corresponding to the coordinate region defined by ``latInterval, lonInterv al.``
+           * ``latInterval`` and ``lonInterval`` are the coordinate intervals for latitude and longitude, respectively.
+           * Each interval is a tuple having one of the forms:
+           *  ``(x,y)``
+           *  ``(x,y,indicator)``
+           *  ``(x,y,indicator,cycle)``
+           *  ``None``
+        Where ``x`` and ``y`` are coordinates indicating the interval ``[x,y)``, and:
+           * ``indicator`` is a two-character string, where the first character is 'c' if the interval is closed on the left, 'o' if open, and the second character has the same meaning for the right-hand point.  (Default: 'co').
+           * If ``cycle`` is specified, the axis is treated as circular with the given cycle value. 
+           *  By default, if ``grid.isCircular()`` is true, the axis is treated as circular with a default value of 360.0.
+           * An interval of ``None`` returns the full index interval of the axis.
+           * If a mask is defined, the subgrid also has a mask corresponding to the index ranges.
+           **Note:** The result grid is not associated with any file or dataset."
+    "Transient-CurveGrid", "``toCurveGrid(gridid=None)``", "Convert to a curvilinear grid. 
+           * If the grid is already curvilinear, a copy of the grid object is returned. 
+           * ``gridid`` is the string identifier of the resulting curvilinear grid object. 
+           *  If unspecified, the grid ID is copied.
+           **Note:** This method does not apply to generic grids. 
+              * Transient-GenericGrid ``toGenericGrid(gridid=None)`` Convert to a generic grid.
+              * If the grid is already generic, a copy of the grid is returned. 
+              * ``gridid`` is the string identifier of the resulting curvilinear grid object.
+              * If unspecified, the grid ID is copied." 
 
 
 Table RectGrid Methods, Additional to HorizontalGrid Methods
@@ -1394,28 +1422,33 @@ Table RectGrid Methods, Additional to HorizontalGrid Methods
    :header:  "Type", "Method", "Description"
    :widths:  30, 30, 80
 
-    "String", "``getOrder()``",  "Get the grid ordering, either 'yx' if latitude is the first axis, or 'xy' if longitude is the first axis.  String ``getType()`` Get the grid type, either 'gaussian', 'uniform', 'equalarea', or 'generic'.  (Array,Array) ``getWeights()`` Get the normalized area weight arrays, as a tuple ``(latWeights, lonWeights)``.  It is assumed that the latitude and longitude axes are defined in degrees."
-    ,,"The latitude weights are defined as:"
-    ,,"``latWeights[i] = 0.5 * abs(sin(latBounds[i+1]) - sin(latBounds[i]))``"
-    ,," The longitude weights are defined as:"
-    ,,"``lonWeights[i] = abs(lonBounds[i+1] - lonBounds [i])/360.0``"
-    ,,"For a global grid, the weight arrays are normalized such that the sum of the weights is 1.0"
-    ,,"**Example:**"
-    ,,"Generate the 2-D weights array, such that ``weights[i.j]`` is the fractional area of grid zone ``[i,j]``."
-    ,,"* from cdms import MV"
-    ,,"* latwts, lonwts = gri d.getWeights()"
-    ,,"* weights = MV.outerproduct(latwts, lonwts)"
-    ,,"Also see the function ``area_weights`` in module ``pcmdi.weighting``."
-    ,," "
-    "None", "``setType(gridtype)``", "Set the grid type.  ``gridtype`` is one of 'gaussian', 'uniform', 'equalarea', or 'generic'."
-    "RectGrid", "``subGrid((latStart,latStop),(lonStart,lonStop))``", "Create a new grid, with latitude index range `` [latStart : latStop] and longitude index range [lonStart : lonStop].  Either index range can also be specified as None, indicating that the entire range of the latitude or longitude is used."
-    ,,"**Example:**"
-    ,,"This creates newgrid corresponding to all latitudes and index range [lonStart:lonStop] of oldgrid."
-    ,,"``newgrid = oldgrid.subGrid(None, (lonStart, lon Stop))``"
-    ,,"If a mask is defined, the subgrid also has a mask corresponding to the index ranges."
-    ,,"**Note:** The result grid is not associated with any file or dataset."
-    "RectGrid", "``transpose()``", "Create a new grid, with axis order reversed. The grid mask is also transposed."
-    ,,"**Note:** The result grid is not associated with any file or dataset."
+    "String", "``getOrder()``",  "Get the grid ordering, either 'yx' if latitude is the first axis, or 'xy' if longitude is the first axis. 
+          String ``getType()`` 
+            * Get the grid type, either 'gaussian', 'uniform', 'equalarea', or 'generic'. 
+            * (Array,Array) ``getWeights()`` 
+            * Get the normalized area weight arrays, as a tuple ``(latWeights, lonWeights)``.
+            * It is assumed that the latitude and longitude axes are defined in degrees.
+          The latitude weights are defined as:
+            * ``latWeights[i] = 0.5 * abs(sin(latBounds[i+1]) - sin(latBounds[i]))``
+          The longitude weights are defined as:
+            * ``lonWeights[i] = abs(lonBounds[i+1] - lonBounds [i])/360.0``
+          For a global grid, the weight arrays are normalized such that the sum of the weights is 1.0
+            **Example:**
+              * Generate the 2-D weights array, such that ``weights[i.j]`` is the fractional area of grid zone ``[i,j]``.
+              * from cdms import MV
+              * latwts, lonwts = gri d.getWeights()
+              * weights = MV.outerproduct(latwts, lonwts)
+              *  Also see the function ``area_weights`` in module ``pcmdi.weighting``."
+        "None", "``setType(gridtype)``", "Set the grid type. 
+              * ``gridtype`` is one of 'gaussian', 'uniform', 'equalarea', or 'generic'."
+    "RectGrid", "``subGrid((latStart,latStop),(lonStart,lonStop))``", "Create a new grid, with latitude index range `` [latStart : latStop] and longitude index range [lonStart : lonStop].  Either index range can also be specified as None, indicating that the entire range of the latitude or longitude is used.
+            **Example:**
+              * This creates newgrid corresponding to all latitudes and index range [lonStart:lonStop] of oldgrid.
+              * ``newgrid = oldgrid.subGrid(None, (lonStart, lon Stop))``
+              * If a mask is defined, the subgrid also has a mask corresponding to the index ranges.
+            **Note:** The result grid is not associated with any file or dataset."
+    "RectGrid", "``transpose()``", "Create a new grid, with axis order reversed. The grid mask is also transposed.
+            **Note:** The result grid is not associated with any file or dataset."
 
 
 Variable
@@ -1470,9 +1503,22 @@ Table Variable Constructors
 
 
     "``Dataset.createVariable(String id, String datatype, List axes)``", "Create a Variable in a Dataset. This function is not yet implemented."
-    "``CdmsFile.createVariable(String id, String datatype, List axes or Grids)``", "Create a Variable in a CdmsFile."
-    ,"``id`` is the name of the variable.  ``datatype`` is the MV2 or Numpy | typecode, for example, MV2.Float.  ``axesOrGrids`` is a list of Axis and/or Grid objects, on which the variable is defined. Specifying a rectilinear grid is equivalent to listing the grid latitude and longitude axes, in the order defined for the grid. \*\*Note:\*\* this argument can either be a list or a tuple. If the tuple form is used, and there is only one element, it must have a following comma, e.g.: ``(axisobj,)``."
-    "``cdms.createVariable(array, typecode=None, copy=0, savespace=0,mask=None, fill_value=None, grid=None, axes=None,attributes=None, id=None)``", "Create a transient variable, not associated with a file or dataset.  ``array`` is the data values: a Variable, masked array, or Numpy array. ``typecode`` is the MV2 typecode of the array. Defaults to the typecode of array. ``copy`` is an integer flag: if 1, the variable is created with a copy of the array, if 0 the variable data is shared with array. ``savespace`` is an integer flag: if set to 1, internal Numpy operations will attempt to avoid silent upcasting. ``mask`` is an array of integers with value 0 or 1, having the same shape as array.  array elements with a corresponding mask value of 1 are considered invalid, and are not used for subsequent Numpy operations. The default mask is obtained from array if present, otherwise is None.  ``fill_value`` is the missing value flag. The default is obtained from array if possible, otherwise is set to 1.0e20 for floating point variables, 0 for integer-valued variables. ``grid`` is a rectilinear grid object. ``axes`` is a tuple of axis objects. By default the axes are obtained from array if present.  Otherwise for a dimension of length n, the default axis has values [0., 1., ..., double(n)]. ``attributes`` is a dictionary of attribute values.  The dictionary keys must be strings.  By default the dictionary is obtained from array if present, otherwise is empty. ``id`` is the string identifier of the variable.  By default the id is obtained from array if possible, otherwise is set to 'variable\_n' for some integer."
+    "``CdmsFile.createVariable(String id, String datatype, List axes or Grids)``", "Create a Variable in a CdmsFile.
+       * ``id`` is the name of the variable. 
+       * ``datatype`` is the MV2 or Numpy | typecode, for example, MV2.Float. 
+       * ``axesOrGrids`` is a list of Axis and/or Grid objects, on which the variable is defined. Specifying a rectilinear grid is equivalent to listing the grid latitude and longitude axes, in the order defined for the grid. 
+       **Note:** this argument can either be a list or a tuple. If the tuple form is used, and there is only one element, it must have a following comma, e.g.: ``(axisobj,)``."
+    "``cdms.createVariable(array, typecode=None, copy=0, savespace=0,mask=None, fill_value=None, grid=None, axes=None,attributes=None, id=None)``", "Create a transient variable, not associated with a file or dataset.  
+       * ``array`` is the data values: a Variable, masked array, or Numpy array.
+       * ``typecode`` is the MV2 typecode of the array. Defaults to the typecode of array. 
+       * ``copy`` is an integer flag: if 1, the variable is created with a copy of the array, if 0 the variable data is shared with array. 
+       * ``savespace`` is an integer flag: if set to 1, internal Numpy operations will attempt to avoid silent upcasting. 
+       * ``mask`` is an array of integers with value 0 or 1, having the same shape as array.  array elements with a corresponding mask value of 1 are considered invalid, and are not used for subsequent Numpy operations. The default mask is obtained from array if present, otherwise is None. 
+       * ``fill_value`` is the missing value flag. The default is obtained from array if possible, otherwise is set to 1.0e20 for floating point variables, 0 for integer-valued variables. 
+       * ``grid`` is a rectilinear grid object.
+       * ``axes`` is a tuple of axis objects. By default the axes are obtained from array if present.  Otherwise for a dimension of length n, the default axis has values [0., 1., ..., double(n)]. 
+       * ``attributes`` is a dictionary of attribute values.  The dictionary keys must be strings.  By default the dictionary is obtained from array if present, otherwise is empty. 
+       * ``id`` is the string identifier of the variable.  By default the id is obtained from array if possible, otherwise is set to 'variable\_n' for some integer."
 
 
 
@@ -1485,55 +1531,74 @@ Table Variable Methods
    :align: left
 
 
-    "Variable", "``tvar = var[ i:j, m:n]``", "Read a slice of data from the file or dataset, resulting in a transient variable.  Singleton dimensions are 'squeezed' out. Data is returned in the physical ordering defined in the dataset. The forms of the slice operator are listed in `Variable Slice Operators <#table-variable-slice-operators>`_ "
-    "None", "``var[ i:j, m:n] = array``", "Write a slice of data to the external dataset.  The forms of the slice operator are listed in `Result Entry Methods <#table-resultentry-methods>`_ .  (Variables in CdmsFiles only)"
-    "Variable", "``tvar = var(selector)``", "Calling a variable as a function reads the region of data defined by the selector. The result is a transient variable, unless raw=1 keyword is specified.  See 'Selectors'."
+    "Variable", "``tvar = var[ i:j, m:n]``", "Read a slice of data from the file or dataset, resulting in a transient variable. 
+        * Singleton dimensions are 'squeezed' out. 
+        * Data is returned in the physical ordering defined in the dataset. 
+        * The forms of the slice operator are listed in `Variable Slice Operators <#table-variable-slice-operators>`_ "
+    "None", "``var[ i:j, m:n] = array``", "Write a slice of data to the external dataset. 
+        * The forms of the slice operator are listed in `Result Entry Methods <#table-resultentry-methods>`_ .  (Variables in CdmsFiles only)"
+    "Variable", "``tvar = var(selector)``", "Calling a variable as a function reads the region of data defined by the selector. 
+        * The result is a transient variable, unless raw=1 keyword is specified. 
+        * See `Selectors' <#selectors>`_ ."
     "None", "``assignValue(Array ar)``", "Write the entire data array. Equivalent to ``var[:] = ar``.  (Variables in CdmsFiles only)."
-    "Variable", "``astype(typecode)``", "Cast the variable to a new datatype. Typecodes are as for MV, MV2, and Numpy modules."
-    "Variable", "``clone(copyData=1)``", "Return a copy of a transient variable."
-    ,,"If copyData is 1 (the default) the variable data is copied as well.  If copyData is 0, the result transient variable shares the original transient variables data array."
-    "Transient Variable", "``crossSectionRegrid(newLevel, newLatitude, method='log', missing=None, order=None)``", "Return a lat/level vertical cross-section regridded to a new set of latitudes newLatitude and levels newLevel. The variable should be a function of latitude, level, and (optionally) time."
-    ,,"* ``newLevel`` is an axis of the result pressure levels."
-    ,,"* ``newLatitude`` is an axis of the result latitudes."
-    ,,"* ``method`` is optional, either 'log' to interpolate in the log of pressure (default), or 'linear' for linear interpolation."
-    ,,"* ``missing`` is a missing data value. The default is ``var.getMissing()``"
-    ,,"* ``order`` is an order string such as 'tzy' or 'zy'. The default is ``var.getOrder()``."
-    ,,"*See also:* ``regrid``, ``pressureRegrid``."
-    "Axis", "``getAxis(n)``", "Get the n-th axis."
-    ,,"``n`` is an integer."
+    "Variable", "``astype(typecode)``", "Cast the variable to a new datatype.
+        * Typecodes are as for MV, MV2, and Numpy modules."
+    "Variable", "``clone(copyData=1)``", "Return a copy of a transient variable.
+        * If copyData is 1 (the default) the variable data is copied as well. 
+        * If copyData is 0, the result transient variable shares the original transient variables data array."
+    "Transient Variable", "``crossSectionRegrid(newLevel, newLatitude, method='log', missing=None, order=None)``", "Return a lat/level vertical cross-section regridded to a new set of latitudes newLatitude and levels newLevel. 
+        * The variable should be a function of latitude, level, and (optionally) time.
+        * ``newLevel`` is an axis of the result pressure levels.
+        * ``newLatitude`` is an axis of the result latitudes.
+        * ``method`` is optional, either 'log' to interpolate in the log of pressure (default), or 'linear' for linear interpolation.
+        * ``missing`` is a missing data value. The default is ``var.getMissing()``
+        * ``order`` is an order string such as 'tzy' or 'zy'. The default is ``var.getOrder()``.
+        * See also: ``regrid``, ``pressureRegrid``."
+    "Axis", "``getAxis(n)``", "Get the n-th axis.
+        * ``n`` is an integer."
     "List", "``getAxisIds()``", "Get a list of axis identifiers."
-    "Integer", "``getAxisIndex(axis_spec)``", "Return the index of the axis specificed by axis\_spec. Return -1 if no match."
-    ,,"``axis_spec`` is a specification as defined for getAxisList"
-    "List", "``getAxisList(axes=None, omit=None, order=None)``", "Get an ordered list of axis objects in the domain of the variable."
-    ,,"If ``axes`` is not ``None``, include only certain axes. Otherwise axes is a list of specifications as described below. Axes are returned in the order specified unless the order keyword is given."
-    ,,"If ``omit`` is not ``None``, omit those specified by an integer dimension number.  Otherwise omit is a list of specifications as described below."  
-    ,,"``order`` is an optional string determining the output order."
-    ,,"Specifications for the axes or omit keywords are a list, each element having one of the following forms:"
-    ,,"*  an integer dimension index, starting at 0."
-    ,,"*  a string representing an axis id or one of the strings 'time', 'latitude', 'lat', 'longitude', 'lon', 'lev' or 'level'."
-    ,,"*  a function that takes an axis as an argument and returns a value. If the value returned is true, the axis matches."
-    ,,"*  an axis object; will match if it is the same object as axis."
-    ,,"``order`` can be a string containing the characters t,x,y,z, or * ."
-    ,,"If a dash ('-') is given, any elements of the result not chosen otherwise are filled in from left to right with remaining candidates."
+    "Integer", "``getAxisIndex(axis_spec)``", "Return the index of the axis specificed by axis\_spec. Return -1 if no match.
+        * ``axis_spec`` is a specification as defined for getAxisList"
+    "List", "``getAxisList(axes=None, omit=None, order=None)``", "Get an ordered list of axis objects in the domain of the variable.
+        * If ``axes`` is not ``None``, include only certain axes. Otherwise axes is a list of specifications as described below. Axes are returned in the order specified unless the order keyword is given.
+        * If ``omit`` is not ``None``, omit those specified by an integer dimension number.  Otherwise omit is a list of specifications as described below.  
+        * ``order`` is an optional string determining the output order.
+      Specifications for the axes or omit keywords are a list, each element having one of the following forms:
+        * an integer dimension index, starting at 0.
+        * a string representing an axis id or one of the strings 'time', 'latitude', 'lat', 'longitude', 'lon', 'lev' or 'level'.
+        * a function that takes an axis as an argument and returns a value. If the value returned is true, the axis matches.
+        *  an axis object; will match if it is the same object as axis.
+        * ``order`` can be a string containing the characters t,x,y,z, or * .
+        * If a dash ('-') is given, any elements of the result not chosen otherwise are filled in from left to right with remaining candidates."
     "List", "``getAxisListIndex(axes=None, omit=None, order=None)``", "Return a list of indices of axis objects.  Arguments are as for getAxisList."
-    "List", "``getDomain()``", "Get the domain. Each element of the list is itself a tuple of the form ``(axis,start,length,tru e_length)`` where axis is an axis object, start is the start index of the domain relative to the axis object, length is the length of the axis, and true\_length is the actual number of (defined) points in the domain. *See also:* ``getAxisList``."
+    "List", "``getDomain()``", "Get the domain. 
+      Each element of the list is itself a tuple of the form ``(axis,start,length,tru e_length)``
+        * where axis is an axis object,
+        * start is the start index of the domain relative to the axis object,
+        * length is the length of the axis, and true\_length is the actual number of (defined) points in the domain.
+       * See also: ``getAxisList``."
     "Horizontal-Grid", "``getGrid()``", "Return the associated grid, or ``None`` if the variable is not gridded."
     "Axis", "``getLatitude()``", "Get the latitude axis, or ``None`` if not found."
     "Axis", "``getLevel()``", "Get the vertical level axis, or ``None`` if not found."
     "Axis", "``getLongitude()``", "Get the longitude axis, or ``None`` if not found."
-    "Various", "``getMissing()``", "Get the missing data value, or ``None`` if not found."
-    ,, "String ``getOrder()`` Get the order string of a spatio-temporal variable. The order string specifies the physical ordering of the data. It is a string of characters with length equal to the rank of the variable, indicating the order of the variable's time, level, latitude, and/or longitude axes.  Each character is one of:"
-    ,, "*  't': time"
-    ,, "*  'z': vertical level"
-    ,, "*  'y': latitude"
-    ,, "*  'x': longitude"
-    ,, "*  '-': the axis is not spatio-temporal."
-    ,, "**Example:**"
-    ,, "A variable with ordering 'tzyx' is 4-dimensional, where the ordering of axes is (time, level, latitude, longitude)."
-    ,, "**Note:** The order string is of the form required for the order argument of a regridder function."
-    ,,"``intervals`` is a list of scalars, 2-tuples representing [i,j), slices, and/or Ellipses.  If no ``argument(s)`` are present, all file paths associated with the variable are returned."
-    ,," Returns a list of tuples of the form (path,slicetuple), where path is the path of a file, and slicetuple is itself a tuple of slices, of the same length as the rank of the variable, representing the portion of the variable in the file corresponding to intervals."
-    ,, "**Note:** This function is not defined for transient variables."
+    "Various", "``getMissing()``", "Get the missing data value, or ``None`` if not found.
+       String ``getOrder()`` Get the order string of a spatio-temporal variable. 
+        * The order string specifies the physical ordering of the data. 
+        * It is a string of characters with length equal to the rank of the variable, indicating the order of the variable's time, level, latitude, and/or longitude axes. 
+       Each character is one of:
+        * 't': time
+        * 'z': vertical level
+        * 'y': latitude
+        * 'x': longitude
+        * '-': the axis is not spatio-temporal.
+        **Example:**
+        * A variable with ordering 'tzyx' is 4-dimensional, where the ordering of axes is (time, level, latitude, longitude).
+
+      **Note:** The order string is of the form required for the order argument of a regridder function.
+        * ``intervals`` is a list of scalars, 2-tuples representing [i,j), slices, and/or Ellipses. 
+        * If no ``argument(s)`` are present, all file paths associated with the variable are returned.
+        * Returns a list of tuples of the form (path,slicetuple), where path is the path of a file, and slicetuple is itself a tuple of slices, of the same length as the rank of the variable, representing the portion of the variable in the file corresponding to intervals.
+      **Note:** This function is not defined for transient variables."
     "Axis", "``getTime()``", "Get the time axis, or ``None`` if not found."
     "List", "``getPaths(*intervals)``", "Get the file paths associated with the index region specified by intervals."
     "Integer", "``len(var)``", "The length of the first dimension of the variable. If the variable is zero-dimensional (scalar), a length of 0 is returned."

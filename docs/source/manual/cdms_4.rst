@@ -308,7 +308,10 @@ Table CDMS Regridder Constructor
    :widths:  50, 90
    :align: left
 
-   "``regridFunction = Regridder(inputGrid, outputGrid)``", "reate a regridder function which interpolates a data array from input to output grid. `CDMS regridder functions`_ describes the calling sequence of this function. ``inputGrid`` and ``outputGrid`` are CDMS grid objects. **Note:** To set the mask associated with inputGrid or outputGrid, use the grid setMask function."
+   "``regridFunction = Regridder(inputGrid, outputGrid)``", "Create a regridder function which interpolates a data array from input to output grid.
+       * `CDMS regridder functions`_ describes the calling sequence of this function. 
+       * ``inputGrid`` and ``outputGrid`` are CDMS grid objects.
+       **Note:** To set the mask associated with inputGrid or outputGrid, use the grid setMask function."
 
 SCRIP Regridder
 ^^^^^^^^^^^^^^^
@@ -324,16 +327,17 @@ Table SCRIP Regridder Constructor
    :widths:  80, 90
    :align: left
 
-   "``regridFunction = regrid.readRegridder(fileobj, mapMethod=None, checkGrid=1)``", "Read a regridder from an open CDMS file object."
-   "", "``fileobj`` is a CDMS file object, as returned from ``cdms.open``."
-   "", "``mapMethod`` is one of:"
-   "", "-  ``'conservative'``: conservative remapper, suitable where area-integrated fields such as water or heat fluxes must be conserved."
-   "", "-  ``'bilinear'``: bilinear interpolation"
-   "", "-  ``'bicubic'``: bicubic interpolation"
-   "", "-   ``'distwgt'``: distance-weighted interpolation."
-   "", "It is only necessary to specify the map method if it is not defined in the file."
-   "", ""
-   "", "If ``checkGrid`` is 1 (default), the grid cells are checked for convexity, and 'repaired' if necessary. Grid cells may appear to be nonconvex if they cross a ``0 / 2pi`` boundary. The repair consists of shifting the cell vertices to the same side modulo 360 degrees."
+   "``regridFunction = regrid.readRegridder(fileobj, mapMethod=None, checkGrid=1)``", "Read a regridder from an open CDMS file object.
+      * ``fileobj`` is a CDMS file object, as returned from ``cdms.open``.
+      * ``mapMethod`` is one of:
+      * ``'conservative'``: conservative remapper, suitable where area-integrated fields such as water or heat fluxes must be conserved.
+      * ``'bilinear'``: bilinear interpolation
+      * ``'bicubic'``: bicubic interpolation
+      * ``'distwgt'``: distance-weighted interpolation.
+      * It is only necessary to specify the map method if it is not defined in the file.
+      * If ``checkGrid`` is 1 (default), the grid cells are checked for convexity, and 'repaired' if necessary.
+      * Grid cells may appear to be nonconvex if they cross a ``0 / 2pi`` boundary. 
+      * The repair consists of shifting the cell vertices to the same side modulo 360 degrees."
 
 Regridder Functions
 ^^^^^^^^^^^^^^^^^^^

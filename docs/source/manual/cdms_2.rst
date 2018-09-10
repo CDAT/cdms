@@ -144,7 +144,7 @@ Table Cdms Module Functions
 
 
    "``Variable``", "``asVariable(s)``:
-                  Transform ``s`` into a transient variable.
+              Transform ``s`` into a transient variable.
                  * ``s`` is a masked array, Numpy array, or Variable.
                  * If ``s`` is already a transient variable, ``s`` is returned. 
                  * See also: ``isVariable``."
@@ -154,23 +154,23 @@ Table Cdms Module Functions
                  * ``bounds`` is an array of shape ``(len(data),2)``, such that for all ``i``
                  * ``data[i]`` is in the range ``[bounds[i,0],bounds[i,1] ]``.
                  **Note:** If ``bounds`` is not specified, the default boundaries are generated at the midpoints between the consecutive data values, provided that the autobounds mode is 'on' (the default).
-                   *  See ``setAutoBounds``. 
+                 *  See ``setAutoBounds``. 
                    *  Also see: ``CdmsFile.createAxis``"
    "``Axis``", "``createEqualAreaAxis(nlat)``: 
-                  Create an equal-area latitude axis.  The latitude values range from north to south, and for all axis values ``x[i]``, ``sin(x[i])sin(x[i+1])`` is constant.
+              Create an equal-area latitude axis.  The latitude values range from north to south, and for all axis values ``x[i]``, ``sin(x[i])sin(x[i+1])`` is constant.
                  * ``nlat`` is the axis length. 
                  **Note:** The axis is not associated with a file or dataset."
    "``Axis``", "``createGaussianAxis(nlat)``: 
-                  Create a Gaussian latitude axis. Axis values range from north to south.
+              Create a Gaussian latitude axis. Axis values range from north to south.
                  * ``nlat`` is the axis length.
                  **Note:** The axis is not associated with a file or dataset."
    "``RectGrid``", "``createGaussianGrid(nlats, xorigin=0.0, order='yx')``:
-                  Create a Gaussian grid, with shape ``(nlats, 2*nlats)``. 
+              Create a Gaussian grid, with shape ``(nlats, 2*nlats)``. 
                  * ``nlats`` is the number of latitudes. 
                  * ``xorigin`` is the origin of the longitude axis. 
                  * ``order`` is either 'yx' (lat-lon, default) or 'xy' (lon-lat)"
    "``RectGrid``", "``createGenericGrid(latArray, lonArray, latBounds=None, lonBounds=None, order='yx', mask=None)``:
-                  Create a generic grid, that is, a grid which is not typed as Gaussian, uniform, or equal-area. The grid is not associated with a file or dataset. 
+              Create a generic grid, that is, a grid which is not typed as Gaussian, uniform, or equal-area. The grid is not associated with a file or dataset. 
                  * ``latArray`` is a NumPy array of latitude values.
                  * ``lonArray`` is a NumPy array of longitude values. 
                  * ``latBounds`` is a NumPy array having shape ``(len(latArray),2)``, of latitude boundaries. 
@@ -178,17 +178,17 @@ Table Cdms Module Functions
                  * ``order`` is a ``string`` specifying the order of the axes, either 'yx' for (latitude, longitude), or 'xy' for the reverse.
                  * ``mask`` (optional) is an ``integer``-valued NumPy mask array, having the same shape and ordering as the grid."                 
    "``RectGrid``", "``createGlobalMeanGrid(grid)``:
-                  Generate a grid for calculating the global mean via a regridding operation. The return grid is a single zone covering the range of he input grid. 
+              Generate a grid for calculating the global mean via a regridding operation. The return grid is a single zone covering the range of he input grid. 
                  * ``grid`` is a RectGrid."
    "``RectGrid``", "``createRectGrid(lat, lon, order, type='generic', mask=None)``:
-                  Create a rectilinear grid, not associated with a file or dataset.  This might be used as the target grid for a regridding operation. 
+              Create a rectilinear grid, not associated with a file or dataset.  This might be used as the target grid for a regridding operation. 
                  * ``lat`` is a latitude axis, created by ``cdms.createAxis``. 
                  * ``lon`` is a longitude axis, created by ``cdms.createAxis``. 
                  * ``order`` is a string with value 'yx' (the first grid dimension is latitude) or 'xy' (the first grid dimension is longitude). 
                  * ``type`` is one of 'gaussian','uniform','equalarea',or 'generic'. 
                  * If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
    "``RectGrid``", "``createUniformGrid(startLat, nlat, deltaLat, start-Lon, nlon, deltaLon, order='yx', mask=None)``:
-                 Create a uniform rectilinear grid.  The grid is not associated with a file or dataset. The grid boundaries are at the midpoints of the axis values. 
+            Create a uniform rectilinear grid.  The grid is not associated with a file or dataset. The grid boundaries are at the midpoints of the axis values. 
                   * ``startLat`` is the starting latitude value. 
                   * ``nlat`` is the number of latitudes. 
                   * If ``nlat`` is 1, the grid latitude boundaries will be ``startLat`` +/- ``deltaLat/2``.
@@ -200,12 +200,12 @@ Table Cdms Module Functions
                   * ``order`` is a string with value 'yx. (the first grid dimension is latitude) or .xy. (the first grid dimension is longitude).
                   * If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
    "``Axis``", "``createUniformLatitudeAxis(startLat , nlat, deltaLat)``:
-                Create a uniform latitude axis. The axis boundaries are at the midpoints of the axis values. The axis is designated as a circular latitude axis. 
+             Create a uniform latitude axis. The axis boundaries are at the midpoints of the axis values. The axis is designated as a circular latitude axis. 
                  * ``startLat`` is the starting latitude value.
                  * ``nlat`` is the number of latitudes.
                  * ``deltaLat`` is the increment between latitudes."
-   "``RectGrid``"," ``createZonalGrid(grid)``:
-                Create a zonal grid. The output grid has the same latitude as the input grid, and a single longitude. This may be used to calculate zonal averages via a regridding operation. 
+   "``RectGrid``","``createZonalGrid(grid)``:
+             Create a zonal grid. The output grid has the same latitude as the input grid, and a single longitude. This may be used to calculate zonal averages via a regridding operation. 
                  * ``grid`` is a RectGrid."
    "``Axis``", "``createUniformLongitudeAxis(startLon, nlon, delta-Lon)``: 
                 Create a uniform longitude axis. The axis boundaries are at the midpoints of the axis values. The axis is designated as a circular longitude axis. 
@@ -240,11 +240,12 @@ Table Cdms Module Functions
                     * The ellipsis ... meaning fill these positions with any remaining axes.
                     * (name) meaning an axis whose id is name"
    "``None``", "``setAutoBounds(mode)``: 
-             Set autobounds mode. In some circumstances CDMS can generate boundaries for 1-D axes and rectilinear grids, when the bounds are not explicitly defined. The autobounds mode determines how this is done:
-                * If ``mode`` is ``'grid'`` or ``2`` (the default), the ``getBounds`` method will automatically generate boundary information for an axis or grid if the axis is designated as a latitude or longitude axis, and the boundaries are not explicitly defined. 
-                * If ``mode`` is ``'on'`` or ``1``, the ``getBounds`` method will automatically generate boundary information for an axis or grid, if the boundaries are not explicitly defined.
-                * If ``mode`` is ``'off'`` or ``0``, and no boundary data is explicitly defined, the bounds will NOT be generated; the ``getBounds`` method will return ``None`` for the boundaries. 
-                 **Note:** In versions of CDMS prior to V4.0, the default ``mode`` was ``'on'``."
+             Set autobounds mode. In some circumstances CDMS can generate boundaries for 1-D axes and rectilinear grids, when the bounds are not explicitly defined.
+                The autobounds mode determines how this is done:
+                   * If ``mode`` is ``'grid'`` or ``2`` (the default), the ``getBounds`` method will automatically generate boundary information for an axis or grid if the axis is designated as a latitude or longitude axis, and the boundaries are not explicitly defined. 
+                   * If ``mode`` is ``'on'`` or ``1``, the ``getBounds`` method will automatically generate boundary information for an axis or grid, if the boundaries are not explicitly defined.
+                   * If ``mode`` is ``'off'`` or ``0``, and no boundary data is explicitly defined, the bounds will NOT be generated; the ``getBounds`` method will return ``None`` for the boundaries. 
+                   **Note:** In versions of CDMS prior to V4.0, the default ``mode`` was ``'on'``."
    "``None``", "``setClassifyGrids(mode)``:
              Set the grid classification mode. This affects how grid type is determined, for the purpose of generating grid boundaries.
                 * If ``mode`` is ``'on'`` (the default), grid type is determined by a grid classification method, regardless of the value of ``grid.get-Type()``.
@@ -366,7 +367,8 @@ Table Axis Constructors
    :header:  "Constructor", "Description"
    :widths:  20, 80
 
-   "``cdms.createAxis(data, bounds=None)``", "Create an axis which is not associated with a dataset or file. See `A First Example <#a-first-example>`_."
+   "``cdms.createAxis(data, bounds=None)``", "Create an axis which is not associated with a dataset or file. 
+         * See `A First Example <#a-first-example>`_."
    "``Dataset.createAxis(name,ar)``", "Create an ``Axis`` in a ``Dataset``. (This function is not yet implemented.)"
    "``CdmsFile.createAxis(name,ar,unlimited=0)``", "Create an Axis in a ``CdmsFile``.
          * ``name`` is the string ``name`` of the ``Axis``. 
@@ -456,7 +458,7 @@ Table Axis Methods, Additional to CoordinateAxis
    "``List`` of component times", "``asComponentTime(calendar=None)``", "``Array`` version of ``cdtime tocomp``. 
           * Returns a ``List`` of component times."
    "``List`` of relative times", "``asRelativeTime()``", "``Array`` version of ``cdtime torel``.
-          *  Returns a ``List`` of relative times."
+          * Returns a ``List`` of relative times."
    "``None``", "``designateCircular(modulo, persistent=0)``", "Designate the axis to be circular. 
           * ``modulo`` is the modulus value.
           * Any given axis value ``x`` is treated as equivalent to ``x + modulus``.
@@ -562,7 +564,7 @@ Table CdmsFile Constructors
    "Constructor", "Description"
    "``fileobj = cdms.open(path, mode)``", "Open the file specified by path returning a CdmsFile object. 
          * ``path`` is the file pathname, a string. 
-         * ``mode`` is the open mode indicator, as listed in See `Open Modes <#table-open-modes>`_." 
+         * ``mode`` is the open mode indicator, as listed in `Open Modes <#table-open-modes>`_." 
    "``fileobj = cdms.createDataset(path)``", "Create the file specified by path, a string."
 
 Table CdmsFile Methods
@@ -1263,9 +1265,16 @@ Table MV Functions
    :align: left
 
     "``argsort(x, axis=-1, fill_value=None)``", "Return a Numpy array of indices for sorting along a given axis."
-    "``asarray(data, typecode=None)``", "Same as ``cdms.createVariable(data, typecode, copy=0)``. This is a short way of ensuring that something is an instance of a variable of a given type before proceeding, as in ``data = asarray(data)``. Also see the variable ``astype()`` function."
-    "``average(a, axis=0, weights=None)``", "Computes the average value of the non-masked elements of x along the selected axis. If weights is given, it must match the size and shape of x, and the value returned is: ``sum(a*weights)/sum(weights)`` In computing these sums, elements that correspond to those that are masked in x or weights are ignored."
-    "``choose(condition, t)``", "Has a result shaped like array condition. ``t`` must be a tuple of two arrays ``t1`` and ``t2``. Each element of the result is the corresponding element of ``t1``\ where ``condition`` is true, and the corresponding element of ``t2`` where ``condition`` is false. The result is masked where ``condition`` is masked or where the selected element is masked."
+    "``asarray(data, typecode=None)``", "Same as ``cdms.createVariable(data, typecode, copy=0)``.
+        * This is a short way of ensuring that something is an instance of a variable of a given type before proceeding, as in ``data = asarray(data)``.
+        *  Also see the variable ``astype()`` function."
+    "``average(a, axis=0, weights=None)``", "Computes the average value of the non-masked elements of x along the selected axis.
+        * If weights is given, it must match the size and shape of x, and the value returned is: ``sum(a*weights)/sum(weights)``
+        * In computing these sums, elements that correspond to those that are masked in x or weights are ignored."
+    "``choose(condition, t)``", "Has a result shaped like array condition. 
+        * ``t`` must be a tuple of two arrays ``t1`` and ``t2``. 
+        * Each element of the result is the corresponding element of ``t1``\ where ``condition`` is true, and the corresponding element of ``t2`` where ``condition`` is false. 
+        * The result is masked where ``condition`` is masked or where the selected element is masked."
     "``concatenate(arrays, axis=0, axisid=None, axisattributes=None)``", "Concatenate the arrays along the given axis. Give the extended axis the id and attributes provided - by default, those of the first array."
     "``count(a, axis=None)``", "Count of the non-masked elements in ``a``, or along a certain axis."
     "``isMaskedVariable(x)``", "Return true if ``x`` is an instance of a variable."
@@ -1276,14 +1285,18 @@ Table MV Functions
     "``masked_less_equal(x, value)``", "``x`` masked where ``x &le; value``"
     "``masked_not_equal(x, value)``", "``x`` masked where ``x != value``"
     "``masked_outside(x, v1, v2)``", "``x`` with mask of all values of ``x`` that are outside ``[v1,v2]``"
-    "``masked_where(condition, x, copy=1)``", "Return ``x`` as a variable masked where condition is true. Also masked where ``x`` or ``condition`` masked. ``condition`` is a masked array having the same shape as ``x``."
+    "``masked_where(condition, x, copy=1)``", "Return ``x`` as a variable masked where condition is true.
+       * Also masked where ``x`` or ``condition`` masked. 
+       * ``condition`` is a masked array having the same shape as ``x``."
     "``maximum(a, b=None)``", "Compute the maximum valid values of ``x`` if ``y`` is ``None``; with two arguments, return the element-wise larger of valid values, and mask the result where either ``x`` or ``y`` is masked."
     "``minimum(a, b=None)``", "Compute the minimum valid values of ``x`` if ``y`` is None; with two arguments, return the element-wise smaller of valid values, and mask the result where either ``x`` or ``y`` is masked."
     "``outerproduct(a, b)``", "Return a variable such that ``result[i, j] = a[i] * b[j]``. The result will be masked where ``a[i]`` or ``b[j]`` is masked."
     "``power(a, b)``", "``a**b``"
     "``product(a, axis=0, fill_value=1)``", "Product of elements along axis using ``fill_value`` for missing elements."
     "``repeat(ar, repeats, axis=0)``", "Return ``ar`` repeated ``repeats`` times along ``axis``. ``repeats`` is a sequence of length ``ar.shape[axis]`` telling how many times to repeat each element."
-    "``set_default_fill_value(value_type, value)``", "Set the default fill value for ``value_type`` to ``value``. ``value_type`` is a string: ‘real’,’complex’,’character’,’integer’,or ‘object’. ``value`` should be a scalar or single-element array."
+    "``set_default_fill_value(value_type, value)``", "Set the default fill value for ``value_type`` to ``value``. 
+       * ``value_type`` is a string: ‘real’,’complex’,’character’,’integer’,or ‘object’.
+       * ``value`` should be a scalar or single-element array."
     "``sort(ar, axis=-1)``", "Sort array ``ar`` elementwise along the specified axis. The corresponding axis in the result has dummy values."
     "``sum(a, axis=0, fill_value=0)``", "Sum of elements along a certain axis using ``fill_value`` for missing."
     "``take(a, indices, axis=0)``", "Return a selection of items from ``a``. See the documentation in the Numpy manual."
@@ -1601,41 +1614,55 @@ Table Variable Methods
       **Note:** This function is not defined for transient variables."
     "Axis", "``getTime()``", "Get the time axis, or ``None`` if not found."
     "List", "``getPaths(*intervals)``", "Get the file paths associated with the index region specified by intervals."
-    "Integer", "``len(var)``", "The length of the first dimension of the variable. If the variable is zero-dimensional (scalar), a length of 0 is returned."
-    ,,"**Note:** ``size()`` returns the total number of elements."
-    "Transient Variable", "``pressureRegrid (newLevel, method='log', missin=None, order=None)``", "Return the variable regridded to a new set of pressure levels newLevel. The variable must be a function of latitude, longitude, pressure level, and (optionally) time."
-    ,, "``newLevel`` is an axis of the result pressure levels."
-    ,, "``method`` is optional, either 'log' to interpolate in the log of pressure (default), or 'linear' for linear interpolation."
-    ,, "``missing`` is a missing data value. The default is ``var.getMissing()``"
-    ,, "``order`` is an order string such as 'tzyx' or 'zyx'. The default is ``var.getOrder()``"
-    ,, "See also: ``regrid``, ``crossSectionRegrid``."
+    "Integer", "``len(var)``", "The length of the first dimension of the variable. If the variable is zero-dimensional (scalar), a length of 0 is returned.
+    **Note:** ``size()`` returns the total number of elements."
+    "Transient Variable", "``pressureRegrid (newLevel, method='log', missin=None, order=None)``", "Return the variable regridded to a new set of pressure levels newLevel. The variable must be a function of latitude, longitude, pressure level, and (optionally) time.
+        * ``newLevel`` is an axis of the result pressure levels.
+        * ``method`` is optional, either 'log' to interpolate in the log of pressure (default), or 'linear' for linear interpolation.
+        * ``missing`` is a missing data value. The default is ``var.getMissing()``
+        * ``order`` is an order string such as 'tzyx' or 'zyx'. The default is ``var.getOrder()``
+        * See also: ``regrid``, ``crossSectionRegrid``."
     "Integer", "``rank()``", "The number of dimensions of the variable."
-    "Transient", "``regrid (togrid, missing=None, order=None, Variable mask=None)``","Return the variable regridded to the horizontal grid togrid."
-    ,, "``missing`` is a Float specifying the missing data value. The default is 1.0e20."
-    ,, "``order`` is a string indicating the order of dimensions of the array.  It has the form returned from ``variable.getOrder()``.  For example, the string 'tzyx' indicates that the dimension order of array is (time, level, latitude, longitude). If unspecified, the function assumes that the last two dimensions of array match the input grid."
-    ,, "``mask`` is a Numpy array, of datatype Integer or Float, consisting of ones and zeros. A value of 0 or 0.0 indicates that the corresponding data value is to be ignored for purposes of regridding.  If mask is two-dimensional of the same shape as the input grid, it overrides the mask of the input grid.  If the mask has more than two dimensions, it must have the same shape as array. In this case, the missing data value is also ignored. Such an n-dimensional mask is useful if the pattern of missing data varies with level (e.g., ocean data) or time. Note: If neither missing or mask is set, the default mask is obtained from the mask of the array if any."
-    ,, "See also: ``crossSectionRegrid``, ``pressureRegrid``."
+    "Transient", "``regrid (togrid, missing=None, order=None, Variable mask=None)``","Return the variable regridded to the horizontal grid togrid.
+        * ``missing`` is a Float specifying the missing data value. The default is 1.0e20.
+        * ``order`` is a string indicating the order of dimensions of the array.  It has the form returned from ``variable.getOrder()``.  
+        * For example, the string 'tzyx' indicates that the dimension order of array is (time, level, latitude, longitude). 
+        * If unspecified, the function assumes that the last two dimensions of array match the input grid.
+        * ``mask`` is a Numpy array, of datatype Integer or Float, consisting of ones and zeros. A value of 0 or 0.0 indicates that the corresponding data value is to be ignored for purposes of regridding.  
+        * If mask is two-dimensional of the same shape as the input grid, it overrides the mask of the input grid. 
+        * If the mask has more than two dimensions, it must have the same shape as array. In this case, the missing data value is also ignored. 
+        * Such an n-dimensional mask is useful if the pattern of missing data varies with level (e.g., ocean data) or time. 
+        **Note:** If neither missing or mask is set, the default mask is obtained from the mask of the array if any.
+      See also: ``crossSectionRegrid``, ``pressureRegrid``."
     "``None``", "``setAxis(n, axis)``", "Set the n-th axis (0-origin index) of to a copy of axis."
     "``None``", "``setAxisList(axislist)``", "Set all axes of the variable. axislist is a list of axis objects."
     "``None``", "``setMissing(value)``", "Set the missing value.  Integer ``size()`` Number of elements of the variable."
-    "Variable", "``subRegion(* region, time=None, level=None, latitude=None, longitude=None, squeeze=0, raw=0)``", "Read a coordinate region of data, returning a transient variable. A region is a hyperrectangle in coordinate space."
-    ,,"``region`` is an argument list, each item of which specifies an interval of a coordinate axis. The intervals are listed in the order of the variable axes. If trailing dimensions are omitted, all values of those dimensions are retrieved. If an axis is circular (axis.isCircular() is true) or cycle is specified (see below), then data will be read with wraparound in that dimension. Only one axis may be read with wraparound. A coordinate interval has one of the forms listed in `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_ . Also see ``axis.mapIntervalExt``."
-    ,,"The optional keyword arguments ``time``, ``level``, ``latitude``, and ``longitude`` may also be used to specify the dimension for which the interval applies.  This is particularly useful if the order of dimensions is not known in advance. An exception is raised if a keyword argument conflicts with a positional region argument."
-    ,,"The optional keyword argument ``squeeze`` determines whether or not the shape of the returned array contains dimensions whose length is 1; by default this argument is 0, and such dimensions are not 'squeezed out'."
-    ,,"The optional keyword argument ``raw`` specifies whether the return object is a variable or a masked array. By default, a transient variable is returned, having the axes and attributes corresponding to2,3 the region read. If raw=1, an MV2 masked array is returned, equivalent to the transient variable without the axis and attribute information."
-    "Variable", "``subSlice(* specs, time=None, level=None, latitude=None, longitude=None, squeeze=0, raw=0)``", "Read a slice of data, returning a transient variable. This is a functional form of the slice operator [] with the squeeze option turned off."
-    ,,"``specs`` is an argument list, each element of which specifies a slice of the corresponding dimension. There can be zero or more positional arguments, each of the form:"
-    ,,"*  a single integer n, meaning ``slice(n, n+1)``"
-    ,,"*  an instance of the slice class"
-    ,,"*  a tuple, which will be used as arguments to create a slice"
-    ,,"*  ':', which means a slice covering that entire dimension"
-    ,,"*  Ellipsis (...), which means to fill the slice list with ':' leaving only enough room at the end for the remaining positional arguments"
-    ,,"*  a Python slice object, of the form ``slice(i,j,k)``"
-    ,,"If there are fewer slices than corresponding dimensions, all values of the trailing dimensions are read."
-    ,,"The keyword arguments are defined as in subRegion."
-    ,,"There must be no conflict between the positional arguments and the keywords."
-    ,,"In ``(a)-(c)`` and (f), negative numbers are treated as offsets from the end of that dimension, as in normal Python indexing."
-    ,,"String ``typecode()`` The Numpy datatype identifier."
+    "Variable", "``subRegion(* region, time=None, level=None, latitude=None, longitude=None, squeeze=0, raw=0)``", "Read a coordinate region of data, returning a transient variable. A region is a hyperrectangle in coordinate space.
+        * ``region`` is an argument list, each item of which specifies an interval of a coordinate axis. The intervals are listed in the order of the variable axes.
+        *  If trailing dimensions are omitted, all values of those dimensions are retrieved. 
+        * If an axis is circular (axis.isCircular() is true) or cycle is specified (see below), then data will be read with wraparound in that dimension.
+        *  Only one axis may be read with wraparound.
+        *  A coordinate interval has one of the forms listed in `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_ . 
+        * Also see ``axis.mapIntervalExt``.
+        * The optional keyword arguments ``time``, ``level``, ``latitude``, and ``longitude`` may also be used to specify the dimension for which the interval applies.  This is particularly useful if the order of dimensions is not known in advance. 
+        *  An exception is raised if a keyword argument conflicts with a positional region argument.
+        * The optional keyword argument ``squeeze`` determines whether or not the shape of the returned array contains dimensions whose length is 1; by default this argument is 0, and such dimensions are not 'squeezed out'.
+        * The optional keyword argument ``raw`` specifies whether the return object is a variable or a masked array. 
+        * By default, a transient variable is returned, having the axes and attributes corresponding to2,3 the region read. If raw=1, an MV2 masked array is returned, equivalent to the transient variable without the axis and attribute information."
+    "Variable", "``subSlice(* specs, time=None, level=None, latitude=None, longitude=None, squeeze=0, raw=0)``", "Read a slice of data, returning a transient variable. This is a functional form of the slice operator [] with the squeeze option turned off.
+        * ``specs`` is an argument list, each element of which specifies a slice of the corresponding dimension. 
+     There can be zero or more positional arguments, each of the form:
+        *  a single integer n, meaning ``slice(n, n+1)``
+        *  an instance of the slice class
+        *  a tuple, which will be used as arguments to create a slice
+        *  ':', which means a slice covering that entire dimension
+        *  Ellipsis (...), which means to fill the slice list with ':' leaving only enough room at the end for the remaining positional arguments
+        *  a Python slice object, of the form ``slice(i,j,k)``
+        * If there are fewer slices than corresponding dimensions, all values of the trailing dimensions are read.
+        * The keyword arguments are defined as in subRegion.
+        * There must be no conflict between the positional arguments and the keywords.
+        * In ``(a)-(c)`` and (f), negative numbers are treated as offsets from the end of that dimension, as in normal Python indexing.
+        * String ``typecode()`` The Numpy datatype identifier."
 
 Example Get a Region of Data.
 -----------------------------
@@ -1689,15 +1716,15 @@ Table Index and Coordinate Intervals
    :header:  "Interval Definition", "Example Interval Definition", "Example"
    :widths:  30, 80, 80
 
-    "``x``", "single point, such that axis[i]==x In general x is a scalar. If the axis is a time axis, x may also be a cdtime relative time type, component time type, or string of the form ‘yyyy-mm-dd hh:mi:ss’ (where trailing fields of the string may be omitted.", "``180.0``"
-    ,,"``cdtime.reltime(48,'hour s since 1980-1')``"
-    ,,"``'1980-1-3'``"
+    "``x``", "single point, such that axis[i]==x In general x is a scalar. If the axis is a time axis, x may also be a cdtime relative time type, component time type, or string of the form ‘yyyy-mm-dd hh:mi:ss’ (where trailing fields of the string may be omitted.", "``180.0``
+     ``cdtime.reltime(48,'hour s since 1980-1')``
+     ``'1980-1-3'``"
     "``(x,y)``", "indices i such that x ≤ axis[i] ≤ y", "``(-180,180)``"
     "``(x,y,'co')``", "``x ≤ axis[i] < y``. The third item is defined as in mapInterval.", "``(-90,90,'cc')``"
-    "``(x,y,'co',cycle)``", "``x ≤ axis[i]< y``, with wraparound", "``( 180, 180, 'co', 360.0)``"
-    "","**Note:** It is not necesary to specify the cycle of a circular longitude axis, that is, for which ``axis.isCircular()`` is true.",
-    "``slice(i,j,k)``", " slice object, equivalent to i:j:k in a slice operator. Refers to the indices i, i+k, i+2k, … up to but not including index j. If i is not specified or is None it defaults to 0. If j is not specified or is None it defaults to the length of the axis. The stride k defaults to 1. k may be negative.","``slice(1,10)``"
-    ,,"``slice(,,-1)`` reverses the direction of the axis."
+    "``(x,y,'co',cycle)``", "``x ≤ axis[i]< y``, with wraparound", "``( 180, 180, 'co', 360.0)``
+    **Note:** It is not necesary to specify the cycle of a circular longitude axis, that is, for which ``axis.isCircular()`` is true."
+    "``slice(i,j,k)``", " slice object, equivalent to i:j:k in a slice operator. Refers to the indices i, i+k, i+2k, … up to but not including index j. If i is not specified or is None it defaults to 0. If j is not specified or is None it defaults to the length of the axis. The stride k defaults to 1. k may be negative.","``slice(1,10)``
+     ``slice(,,-1)`` reverses the direction of the axis."
     "``':'``", "all axis values of one dimension",
     "``Ellipsis``", "all values of all intermediate axes",
 
@@ -1775,14 +1802,14 @@ Table Selector Keywords
    :widths:  30, 80, 80
 
     "``axisid``", "Restrict the axis with ID axisid to a value or range of values.",  See `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_
-    "``grid``", "Regrid the result to the grid.", " Grid object"
+    "``grid``", "Regrid the result to the grid.", "Grid object"
     "``latitude``", "Restrict latitude values to a value or range. Short form: lat", See `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_
     "``level``", "Restrict vertical levels to a value or range. Short form: lev",See `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_
     "``longitude``", "Restrict longitude values to a value or range. Short form: lon", See `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_
-    "``order``", "Reorder the result.", " Order string, e.g., 'tzyx'"
-    "``raw``", "Return a masked array (MV2.array) rather than a transient variable.", "0: return a transient variable (default); =1: return a masked array."
-    "``required``", "Require that the axis IDs be present.", " List of axis identifiers."
-    "``squeeze``", "Remove singleton dimensions from the result.", " 0: leave singleton dimensions (default); 1: remove singleton dimensions."
+    "``order``", "Reorder the result.", "Order string, e.g., 'tzyx'"
+    "``raw``", "Return a masked array (MV2.array) rather than a transient variable.", "0: return a transient variable (default);  =1: return a masked array."
+    "``required``", "Require that the axis IDs be present.", "List of axis identifiers."
+    "``squeeze``", "Remove singleton dimensions from the result.", "0: leave singleton dimensions (default);    1: remove singleton dimensions."
     "``time``", "Restrict time values to a value or range.", See `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_ 
 
 Another form of selector components is the positional form, where the

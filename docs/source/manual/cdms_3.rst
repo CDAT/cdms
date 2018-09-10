@@ -107,12 +107,12 @@ Table Component Time
    :header: "Type", "Name", "Summary"
    :widths: 15, 15, 50
 
-      * "Integer", "year",  "Year value"
-      * "Integer", "month", "Month, in the range 1..12"
-      * "Integer", "day", "Day of month, in the range 1 .. 31"
-      * "Integer", "hour", "Hour, in the range 0 .. 23"
-      * "Integer", "minute", "Minute, in the range 0 .. 59"
-      * "Float", "second", "Seconds, in the range 0.0 .. 60.0"
+       "Integer", "year",  "Year value"
+       "Integer", "month", "Month, in the range 1..12"
+       "Integer", "day", "Day of month, in the range 1 .. 31"
+       "Integer", "hour", "Hour, in the range 0 .. 23"
+       "Integer", "minute", "Minute, in the range 0 .. 59"
+       "Float", "second", "Seconds, in the range 0.0 .. 60.0"
 
 Time Methods
 ^^^^^^^^^^^^
@@ -126,17 +126,18 @@ Table Time Methods
    :widths: 20, 75, 80
    :align: left
 
-   "Comptime or Reltime", "``t.add(value,intervalUnits, calendar=cdtime.Default-Calendar)``", "Add an interval of time to a time type t.  Returns the same type of time."
-   ,, "``value`` is the   Float number of interval units."
-   ,, "``intervalUnits`` is ``cdtime.[Second (s) | Minute(s) Hour(s) | Day(s) |  Week(s) | Month(s) | Season(s) | Year(s) ]``"
-   ,, "``calendar`` is the calendar type."
-   "Integer", "``t.cmp(t2, calendar=cdtime.DefaultCalendar)``", "Compare time values t and t2. Returns -1, 0, 1 as t is less than, equal to, or greater than t2 respectively."
-   ,, "``t2`` is the time to compare."
-   ,, "``calendar`` is the calendar type."
-   "Comptime or Reltime", "``t.sub(value,intervalUnits, calendar=cdtime.DefaultCalendar)``", "Subtract an interval of time from a time type t.  Returns the same type of time."
-   ,, "``value`` is the Float number of interval units."
-   ,, "``intervalUnits`` is cdtime.[Second (s) | Minute(s) | Hour(s) | Day(s) | Week(s) | Month(s) | Season(s) | Year(s)]"
-   ,, "``calendar`` is the calendar type. "
+   "Comptime or Reltime", "``t.add(value,intervalUnits, calendar=cdtime.Default-Calendar)``", "Add an interval of time to a time type t.  Returns the same type of time.
+       * ``value`` is the   Float number of interval units.
+       * ``intervalUnits`` is ``cdtime.
+       * [Second (s) | Minute(s) Hour(s) | Day(s) |  Week(s) | Month(s) | Season(s) | Year(s) ]``
+       * ``calendar`` is the calendar type."
+   "Integer", "``t.cmp(t2, calendar=cdtime.DefaultCalendar)``", "Compare time values t and t2. Returns -1, 0, 1 as t is less than, equal to, or greater than t2 respectively.
+       * ``t2`` is the time to compare.
+       * ``calendar`` is the calendar type."
+   "Comptime or Reltime", "``t.sub(value,intervalUnits, calendar=cdtime.DefaultCalendar)``", "Subtract an interval of time from a time type t.  Returns the same type of time.
+       * ``value`` is the Float number of interval units.
+       * ``intervalUnits`` is cdtime.[Second (s) | Minute(s) | Hour(s) | Day(s) | Week(s) | Month(s) | Season(s) | Year(s)]
+       * ``calendar`` is the calendar type. "
    "Comptime", "``t.tocomp(calendar = cdtime.DefaultCalendar)``", "Convert to component time.  Returns the equivalent component time."
    ,, "``calendar`` is the calendar type."
    "Reltime", "``t.torel(units, calendar=cdtime.DefaultCalendar)``", "Convert to relative time.  Returns the equivalent relative time."

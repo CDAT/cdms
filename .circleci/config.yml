@@ -59,6 +59,14 @@ aliases:
        echo "*** $PY_VER test result: "${RESULT}
        exit $RESULT
 
+  - &run_coveralls
+    name: run_coveralls
+    command: |
+       export PATH=$WORKDIR/miniconda/bin:$PATH
+       source activate $PY_VER
+       coveralls
+       source deactivate
+
   - &conda_upload
     name: conda_upload
     command: |

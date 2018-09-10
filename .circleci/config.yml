@@ -22,7 +22,7 @@ aliases:
        conda config --set always_yes yes --set changeps1 no
        conda update -y -q conda
        conda config --set anaconda_upload no
-       conda create -n py3 -c cdat/label/unstable -c cdat/label/nightly -c conda-forge -c cdat libcf distarray cdtime libcdms cdat_info testsrunner numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient "python>3"
+       conda create -n py3 -c cdat/label/unstable -c cdat/label/nightly -c conda-forge -c cdat libcf distarray cdtime libcdms cdat_info testsrunner numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient "python>3" coverage coveralls
        conda create -n py2 -c cdat/label/unstable -c cdat/label/nightly -c conda-forge -c cdat libcf distarray cdtime libcdms cdat_info testsrunner numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient "python<3"
        if [ $(uname) == "Linux" ]; then
            conda install -n py3 -c cdat/label/unstable -c cdat/label/nightly -c conda-forge gcc_linux-64
@@ -31,6 +31,8 @@ aliases:
            conda install -n py3 -c cdat/label/unstable -c cdat/label/nightly -c conda-forge gcc
            conda install -n py2 -c cdat/label/unstable -c cdat/label/nightly -c conda-forge gcc
        fi
+       conda install -n py2 -c cdat/label/linatest testsrunner
+       conda install -n py3 -c cdat/label/linatest testsrunner
 
   - &setup_cdms
     name: setup_cdms
@@ -53,8 +55,8 @@ aliases:
          python setup.py install
        fi
 
-  - &run_cdms_tests
-    name: run_cdms_tests
+  - &run_cdms_tests_ORIG
+    name: run_cdms_tests_ORIG
     command: |
        export PATH=$HOME/project/$WORKDIR/miniconda/bin:$PATH
        export UVCDAT_ANONYMOUS_LOG=False
@@ -69,6 +71,27 @@ aliases:
        echo "*** py3 test result: "${PY3_RESULT}
        echo  $PY2_RESULT > $HOME/project/$WORKDIR/py2_result.txt
        echo  $PY3_RESULT > $HOME/project/$WORKDIR/py3_result.txt
+
+  - &run_cdms_tests
+    name: run_cdms_tests
+    command: |
+       export PATH=$HOME/project/$WORKDIR/miniconda/bin:$PATH
+       export UVCDAT_ANONYMOUS_LOG=False
+       source activate py2
+       python run_tests.py --subdir -v2 
+       RESULT=$?
+       echo "**** py2 test result: "${RESULT}
+       source activate py3
+       python run_tests.py --subdir -v2 $COVERAGE
+       PY3_RESULT=$?
+       echo "*** py3 test result: "${PY3_RESULT}
+       RESULT=$(( $RESULT + $PY3_RESULT))
+       if [[ $COVERAGE == '-c' ]]; then
+          cd run_tests_dir
+          coveralls
+          cd ..
+       fi
+       exit $RESULT
 
   - &upload_cdms
     name: upload_cdms
@@ -91,6 +114,21 @@ aliases:
            bash ./ci-support/conda_upload.sh;
        fi
 
+  - &conda_upload
+    name: conda_upload
+    command: |
+       export PATH=$HOME/project/$WORKDIR/miniconda/bin:$PATH
+       export LABEL="nightly";
+
+       if [ $CIRCLE_BRANCH == "master" ]; then conda install -n root conda-build anaconda-client ; fi
+       if [ $CIRCLE_BRANCH == "master" ]; then bash ./ci-support/conda_upload.sh ; fi
+       if [ $CIRCLE_BRANCH != "master" ]; then
+           export LABEL="unstable";
+           echo "NOTE: upload LABEL="${LABEL}
+           conda install -n root conda-build anaconda-client;
+           bash ./ci-support/conda_upload.sh;
+       fi
+
 jobs:
   macos_cdms:
     macos:
@@ -103,7 +141,7 @@ jobs:
       - run: *create_conda_env
       - run: *setup_cdms
       - run: *run_cdms_tests
-      - run: *upload_cdms
+      - run: *conda_upload
       - store_artifacts:
           path: tests_html
           destination: tests_html
@@ -116,13 +154,14 @@ jobs:
       image: circleci/classic:latest
     environment:
       WORKDIR: "workspace/test_linux_cdms"
+      COVERAGE: "-c"
     steps:
       - checkout
       - run: *setup_miniconda
       - run: *create_conda_env
       - run: *setup_cdms
       - run: *run_cdms_tests
-      - run: *upload_cdms
+      - run: *conda_upload
       - store_artifacts:
           path: tests_html
           destination: tests_html

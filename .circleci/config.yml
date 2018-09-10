@@ -178,6 +178,4 @@ workflows:
       #- linux_cdms_py3:
       #     requires:
       #        - linux_cdms_py2
-      linux_cdms_py3
-
-       
+      - linux_cdms_py3

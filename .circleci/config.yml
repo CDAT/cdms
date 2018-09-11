@@ -29,6 +29,8 @@ aliases:
        else
           conda create -n $PY_VER $CHANNELS $PKGS $CONDA_COMPILER "python>3" coverage coveralls
        fi
+       conda install -n $PY_VER -c cdat/label/linatest testsrunner
+
   - &setup_cdms
     name: setup_cdms
     command: |
@@ -145,10 +147,10 @@ jobs:
     machine:
       image: circleci/classic:latest
     environment:
-      WORKDIR: "workspace/test_linux_cdms_py3"
+      WORKDIR: "/home/circleci/project/workdir"
       PY_VER: "py3"
       CONDA_COMPILER: "gcc_linux-64"
-      COVERAGE: "-c tests/coverage.json"
+      COVERAGE: "-c /home/circleci/project/workdir/tests/coverage.json"
     steps:
       - checkout
       - run: *setup_miniconda
@@ -168,12 +170,13 @@ workflows:
   version: 2
   cdms_test:
     jobs:
-      - macos_cdms_py2
-      - macos_cdms_py3:
-           requires:
-              - macos_cdms_py2
-      - linux_cdms_py2
-      - linux_cdms_py3:
-           requires:
-              - linux_cdms_py2
+      #- macos_cdms_py2
+      #- macos_cdms_py3:
+      #     requires:
+      #        - macos_cdms_py2
+      #- linux_cdms_py2
+      #- linux_cdms_py3:
+      #     requires:
+      #        - linux_cdms_py2
+      - linux_cdms_py3
 

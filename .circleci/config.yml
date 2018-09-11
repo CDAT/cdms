@@ -34,7 +34,6 @@ aliases:
        else
            conda install -n $PY_VER -c cdat/label/unstable -c cdat/label/nightly -c conda-forge gcc
        fi
-       conda install -n $PY_VER -c cdat/label/linatest testsrunner
 
   - &setup_cdms
     name: setup_cdms
@@ -171,12 +170,12 @@ workflows:
   version: 2
   cdms_test:
     jobs:
-      #- macos_cdms_py2
-      #- macos_cdms_py3:
-      #     requires:
-      #        - macos_cdms_py2
-      #- linux_cdms_py2
-      #- linux_cdms_py3:
-      #     requires:
-      #        - linux_cdms_py2
-      - linux_cdms_py3
+      - macos_cdms_py2
+      - macos_cdms_py3:
+           requires:
+              - macos_cdms_py2
+      - linux_cdms_py2
+      - linux_cdms_py3:
+           requires:
+              - linux_cdms_py2
+

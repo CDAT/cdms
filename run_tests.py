@@ -92,12 +92,9 @@ class CDMSTestRunner(cdat_info.TestRunnerBase):
 test_suite_name = 'cdms'
 
 this_dir = os.path.abspath(os.path.dirname(__file__))
-workdir = os.getcwd()
 runner = CDMSTestRunner(test_suite_name, options=["--subdir"],
                         options_files=["tests/cdms_runtests.json"],
                         get_sample_data=True,
                         test_data_files_info="share/test_data_files.txt")
-# ret_code = runner.run(workdir)
 ret_code = runner.run(this_dir)
-
 sys.exit(ret_code)

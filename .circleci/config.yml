@@ -25,16 +25,10 @@ aliases:
        conda update -y -q conda
        conda config --set anaconda_upload no
        if [[ $PY_VER = 'py2' ]]; then
-          conda create -n $PY_VER $CHANNELS $PKGS "python<3"
+          conda create -n $PY_VER $CHANNELS $PKGS $CONDA_COMPILER "python<3"
        else
-          conda create -n $PY_VER $CHANNELS $PKGS "python>3" coverage coveralls
+          conda create -n $PY_VER $CHANNELS $PKGS $CONDA_COMPILER "python>3" coverage coveralls
        fi
-       if [ $(uname) == "Linux" ]; then
-           conda install -n $PY_VER -c cdat/label/unstable -c cdat/label/nightly -c conda-forge gcc_linux-64
-       else
-           conda install -n $PY_VER -c cdat/label/unstable -c cdat/label/nightly -c conda-forge gcc
-       fi
-
   - &setup_cdms
     name: setup_cdms
     command: |
@@ -90,6 +84,7 @@ jobs:
     environment:
       WORKDIR: "workspace/test_macos_cdms_py2"
       PY_VER: "py2"
+      CONDA_COMPILER: "gcc"
     steps:
       - checkout
       - run: *setup_miniconda
@@ -110,6 +105,7 @@ jobs:
     environment:
       WORKDIR: "workspace/test_macos_cdms_py3"
       PY_VER: "py3"
+      CONDA_COMPILER: "gcc"
     steps:
       - checkout
       - run: *setup_miniconda
@@ -130,6 +126,7 @@ jobs:
     environment:
       WORKDIR: "workspace/test_linux_cdms_py2"
       PY_VER: "py2"
+      CONDA_COMPILER: "gcc_linux-64"
     steps:
       - checkout
       - run: *setup_miniconda
@@ -150,6 +147,7 @@ jobs:
     environment:
       WORKDIR: "workspace/test_linux_cdms_py3"
       PY_VER: "py3"
+      CONDA_COMPILER: "gcc_linux-64"
       COVERAGE: "-c tests/coverage.json"
     steps:
       - checkout

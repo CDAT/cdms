@@ -411,17 +411,21 @@ Table CDMS Regridder Function
    :widths:  40, 40, 80
    :align: left
 
-   "Array or Transient-Variable", "``regridFunction(array, missing=None, order=None, mask=None)``", "Interpolate a gridded data array to a new grid. The interpolation preservesthe area-weighted mean on each horizontal slice. If array is a Variable, a TransientVariable of  the same rank as the inputarrayisreturned, otherwiseamaskedarray is returned."
-   , , "``array`` is a Variable, masked array, or Numpy array of rank 2, 3, or 4."
-   , ,                                                                            
-   , , "For example, the string 'tzyx' indicates that the dimension order of ``array`` is (time, level, latitude, longitude). If unspecified, the function assumes that the last two dimensions of ``array`` match the input grid."
-   , , "- ``missing`` is a Float specifying the missing data value. The default is 1.0e20."
-   , , "- ``order`` is a string indicating the order of dimensions of the array.  It has the form returned from ``variable.getOrder().``"
-   , , "- ``mask`` is a Numpy array, of datatype Integer or Float, consisting of a fractional number between 0 and 1. A value of 1 or 1.0 indicates that the corresponding data value is to be ignored for purposes of regridding. A value of 0 or 0.0 indicates that the corresponding data value is valid. This is consistent with the convention for masks used by the MV2 module. A fractional value between 0.0 and 1.0 indicates the fraction of the data value (e.g., the corresponding cell) to be ignored when regridding. This is useful if a variable is regridded first to grid A and then to another grid B; the mask when regridding from A to B would be (1.0 - f) where f is the maskArray returned from the initial grid operation using the ``returnTuple`` argument."
-   , , "If ``mask`` is two-dimensional of the same shape as the input grid, it overrides the mask of the input grid.  If the mask has more than two dimensions, it must have the same shape as ``array``. In this case, the ``missing`` data value is also ignored. Such an ndimensional mask is useful if the pattern of missing data varies with level (e.g., ocean data) or time. Note: If neither ``missing`` or ``mask`` is set, the default mask is obtained from the mask of the array if any."
-   "Array, Array",  "``regridFunction(ar, missing=None, order=None, mask=None, returnTuple=1)``", "If called with the optional ``returnTuple`` argument equal to 1, the function returns a tuple ``dataArray``, ``maskArray``)."
-   , , "``dataArray`` is the result data array."
-   , , "``maskArray`` is a Float32 array of the same shape as ``dataArray``, such that ``maskArray[i,j]`` is fraction of the output grid cell [i,j] overlapping a non-missing cell of the grid."
+   "Array or Transient-Variable", "``regridFunction(array, missing=None, order=None, mask=None)``", "Interpolate a gridded data array to a new grid. The interpolation preservesthe area-weighted mean on each horizontal slice. If array is a Variable, a TransientVariable of  the same rank as the inputarrayisreturned, otherwiseamaskedarray is returned.
+       * ``array`` is a Variable, masked array, or Numpy array of rank 2, 3, or 4.
+       *  For example, the string 'tzyx' indicates that the dimension order of ``array`` is (time, level, latitude, longitude).
+       * If unspecified, the function assumes that the last two dimensions of ``array`` match the input grid.
+       * ``missing`` is a Float specifying the missing data value. The default is 1.0e20.
+       * ``order`` is a string indicating the order of dimensions of the array.  It has the form returned from ``variable.getOrder().``
+       * ``mask`` is a Numpy array, of datatype Integer or Float, consisting of a fractional number between 0 and 1.
+       * A value of 1 or 1.0 indicates that the corresponding data value is to be ignored for purposes of regridding.
+       * A value of 0 or 0.0 indicates that the corresponding data value is valid. This is consistent with the convention for masks used by the MV2 module. 
+       * A fractional value between 0.0 and 1.0 indicates the fraction of the data value (e.g., the corresponding cell) to be ignored when regridding. This is useful if a variable is regridded first to grid A and then to another grid B; the mask when regridding from A to B would be (1.0 - f) where f is the maskArray returned from the initial grid operation using the ``returnTuple`` argument.
+       * If ``mask`` is two-dimensional of the same shape as the input grid, it overrides the mask of the input grid.  If the mask has more than two dimensions, it must have the same shape as ``array``. In this case, the ``missing`` data value is also ignored. Such an ndimensional mask is useful if the pattern of missing data varies with level (e.g., ocean data) or time. 
+       **Note:** If neither ``missing`` or ``mask`` is set, the default mask is obtained from the mask of the array if any."
+   "Array, Array",  "``regridFunction(ar, missing=None, order=None, mask=None, returnTuple=1)``", "If called with the optional ``returnTuple`` argument equal to 1, the function returns a tuple ``dataArray``, ``maskArray``).
+       * ``dataArray`` is the result data array.
+       * ``maskArray`` is a Float32 array of the same shape as ``dataArray``, such that ``maskArray[i,j]`` is fraction of the output grid cell [i,j] overlapping a non-missing cell of the grid."
 
 SCRIP Regridder Functions
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -472,17 +476,29 @@ Table SCRIP Regridder Functions
    :widths:  40, 40, 80
    :align: left
 
-    "Array or Transient-Variable", "[conservative, bilinear, and distance-weighted regridders] ``regridFunction(array)``", "Interpolate a gridded data array to a new grid. The return value is the regridded data variable. ``array`` is a Variable, MaskedArray, or Numpy array. The rank of the array may be greater than the rank of the input grid, in which case the input grid shape must match a trailing portion of the array shape. For example, if the input grid is curvilinear with shape (64,128), the last two dimensions of the array must match. Similarly, if the input grid is generic with shape (2560,), the last dimension of the array must have that length."
-    "Array or Transient-Variable", "[bicubic regridders] ``regridFunction(array, gradientLat, gradientLon, gradientLatLon)``", "Interpolate a gridded data array to a new grid, using a bicubic regridder. The return value is the regridded data variable."
-    ,,"``array`` is a Variable, MaskedArray, or Numpy array. The rank of the array may be greater than the rank of the input grid, in which case the input grid shape must match a trailing portion of the array shape. For example, if the input grid is curvilinear with shape (64,128), the last two dimensions of the array must match. Simiarly, if the input grid is generic with shape (2560,), the last dimension of the array must have that length."
-    ,,"``gradientLat``: df/di (see the SCRIP documentation). Same shape as ``array``."
-    ,,"``gradientLon``: df/dj. Same shape as ``array``."
-    ,,"``gradientLatLon``: d(df)/(di)(dj). Same shape as array."
-    "Numpy array", "``getDestinationArea()`` [conservative regridders only]", "Return the area of the destination (output) grid cell. The array is 1-D, with length equal to the number of cells in the output grid."
-    "Numpy array", "``getDestinationFraction()``", "Return the area fraction of the destination (output) grid cell that participates in the regridding. The array is 1-D, with length equal to the number of cells in the output grid."
+    "Array or Transient-Variable", "[conservative, bilinear, and distance-weighted regridders] ``regridFunction(array)``", "Interpolate a gridded data array to a new grid. 
+    The return value is the regridded data variable. 
+       * ``array`` is a Variable, MaskedArray, or Numpy array.
+       * The rank of the array may be greater than the rank of the input grid, in which case the input grid shape must match a trailing portion of the array shape. 
+       * For example, if the input grid is curvilinear with shape (64,128), the last two dimensions of the array must match. 
+       * Similarly, if the input grid is generic with shape (2560,), the last dimension of the array must have that length."
+    "Array or Transient-Variable", "[bicubic regridders] ``regridFunction(array, gradientLat, gradientLon, gradientLatLon)``", "Interpolate a gridded data array to a new grid, using a bicubic regridder. 
+    The return value is the regridded data variable.
+       * ``array`` is a Variable, MaskedArray, or Numpy array. 
+       * The rank of the array may be greater than the rank of the input grid, in which case the input grid shape must match a trailing portion of the array shape. 
+       * For example, if the input grid is curvilinear with shape (64,128), the last two dimensions of the array must match. 
+       * Simiarly, if the input grid is generic with shape (2560,), the last dimension of the array must have that length.
+       * ``gradientLat``: df/di (see the SCRIP documentation). Same shape as ``array``.
+       * ``gradientLon``: df/dj. Same shape as ``array``.
+       * ``gradientLatLon``: d(df)/(di)(dj). Same shape as array."
+    "Numpy array", "``getDestinationArea()`` [conservative regridders only]", "Return the area of the destination (output) grid cell. 
+       * The array is 1-D, with length equal to the number of cells in the output grid."
+    "Numpy array", "``getDestinationFraction()``", "Return the area fraction of the destination (output) grid cell that participates in the regridding. 
+       * The array is 1-D, with length equal to the number of cells in the output grid."
     "CurveGrid or Generic-Grid", "``getInputGrid()``", "Return the input grid, or None if no input grid is associated with the regridder."
     "CurveGrid or Generic-Grid", "``getOutputGrid()``", "Return the output grid."
-    "Numpy array", "``getSourceFraction()``", "Return the area fraction of the source (input) grid cell that participates in the regridding. The array is 1-D, with length equal to the number of cells in the input grid"
+    "Numpy array", "``getSourceFraction()``", "Return the area fraction of the source (input) grid cell that participates in the regridding. 
+       * The array is 1-D, with length equal to the number of cells in the input grid"
 
 Examples
 ^^^^^^^^

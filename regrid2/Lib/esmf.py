@@ -39,7 +39,7 @@ class EsmfUnstructGrid:
     """
     Constructor
 
-    Parameters
+    Parameters 
     ----------
         
         numTopoDims 
@@ -274,8 +274,8 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
 
         Parameters
         ----------
-
-             staggerloc
+         :
+            staggerloc
                  (e.g. ESMF.StaggerLoc.CENTER)
 
              _: None

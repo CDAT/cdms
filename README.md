@@ -1,7 +1,7 @@
 ### Builds
 
 [![CircleCI](https://circleci.com/gh/CDAT/cdms.svg?style=svg)](https://circleci.com/gh/CDAT/cdms)
-[![Coverage Status](https://coveralls.io/repos/github/CDAT/cdms/badge.svg?branch=add_coverage)](https://coveralls.io/github/CDAT/cdms?branch=add_coverage)
+[![Coverage Status](https://coveralls.io/repos/github/CDAT/cdms/badge.svg)](https://coveralls.io/github/CDAT/cdms)
 [![TravisCI](https://travis-ci.org/CDAT/cdms.svg?branch=master)](https://travis-ci.org/CDAT/cdms/builds)
 ![platforms](http://img.shields.io/badge/platforms-linux%20|%20osx-lightgrey.svg)
 

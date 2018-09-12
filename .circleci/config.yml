@@ -153,7 +153,7 @@ jobs:
       WORKDIR: "test_linux_cdms_py3"
       PY_VER: "py3"
       CONDA_COMPILER: "gcc_linux-64"
-      COVERAGE: "-c $CIRCLE_WORKING_DIRECTORY/tests/coverage.json"
+      COVERAGE: "-c /home/circleci/project/tests/coverage.json"
     steps:
       - checkout
       - run: pwd

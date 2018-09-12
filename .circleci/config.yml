@@ -29,7 +29,6 @@ aliases:
        else
           conda create -n $PY_VER $CHANNELS $PKGS $CONDA_COMPILER "python>3" coverage coveralls
        fi
-       conda install -n $PY_VER -c cdat/label/linatest testsrunner
 
   - &setup_cdms
     name: setup_cdms

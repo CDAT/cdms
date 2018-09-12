@@ -90,6 +90,7 @@ jobs:
       WORKDIR: "workspace/test_macos_cdms_py2"
       PY_VER: "py2"
       CONDA_COMPILER: "gcc"
+    working_directory: $WORKDIR
     steps:
       - checkout
       - run: *setup_miniconda
@@ -111,6 +112,7 @@ jobs:
       WORKDIR: "workspace/test_macos_cdms_py3"
       PY_VER: "py3"
       CONDA_COMPILER: "gcc"
+    working_directory: $WORKDIR
     steps:
       - checkout
       - run: *setup_miniconda
@@ -132,6 +134,7 @@ jobs:
       WORKDIR: "workspace/test_linux_cdms_py2"
       PY_VER: "py2"
       CONDA_COMPILER: "gcc_linux-64"
+    working_directory: $WORKDIR
     steps:
       - checkout
       - run: *setup_miniconda
@@ -154,6 +157,7 @@ jobs:
       PY_VER: "py3"
       CONDA_COMPILER: "gcc_linux-64"
       COVERAGE: "-c /home/circleci/project/workdir/tests/coverage.json"
+    working_directory: $WORKDIR
     steps:
       - checkout
       - run: *setup_miniconda

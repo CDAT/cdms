@@ -9,6 +9,7 @@ aliases:
   - &setup_miniconda
     name: setup_miniconda
     command: |
+      exit 1
       mkdir -p workspace
       git clone -b validateNightly --depth 1 git@github.com:CDAT/cdat workspace/cdat
       ls workspace/cdat
@@ -90,7 +91,6 @@ jobs:
       WORKDIR: "workspace/test_macos_cdms_py2"
       PY_VER: "py2"
       CONDA_COMPILER: "gcc"
-    working_directory: $WORKDIR
     steps:
       - checkout
       - run: *setup_miniconda
@@ -112,7 +112,6 @@ jobs:
       WORKDIR: "workspace/test_macos_cdms_py3"
       PY_VER: "py3"
       CONDA_COMPILER: "gcc"
-    working_directory: $WORKDIR
     steps:
       - checkout
       - run: *setup_miniconda
@@ -134,7 +133,6 @@ jobs:
       WORKDIR: "workspace/test_linux_cdms_py2"
       PY_VER: "py2"
       CONDA_COMPILER: "gcc_linux-64"
-    working_directory: $WORKDIR
     steps:
       - checkout
       - run: *setup_miniconda
@@ -153,13 +151,14 @@ jobs:
     machine:
       image: circleci/classic:latest
     environment:
-      WORKDIR: "/home/circleci/project/workdir"
+      WORKDIR: "test_linux_cdms_py3"
       PY_VER: "py3"
       CONDA_COMPILER: "gcc_linux-64"
-      COVERAGE: "-c /home/circleci/project/workdir/tests/coverage.json"
-    working_directory: $WORKDIR
+      COVERAGE: "-c test_linux_cdms_py3/tests/coverage.json"
     steps:
       - checkout
+      - run: pwd
+      - run: ls -l
       - run: *setup_miniconda
       - run: *create_conda_env
       - run: *setup_cdms

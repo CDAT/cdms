@@ -20,7 +20,7 @@ aliases:
        CHANNELS: "-c cdat/label/unstable -c cdat/label/nightly -c conda-forge -c cdat"
        PKGS: "libcf distarray cdtime libcdms cdat_info testsrunner numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient"
     command: |
-       export PATH=$HOME/project/$WORKDIR/miniconda/bin:$PATH
+       export PATH=$WORKDIR/miniconda/bin:$PATH
        conda config --set always_yes yes --set changeps1 no
        conda update -y -q conda
        conda config --set anaconda_upload no
@@ -29,10 +29,11 @@ aliases:
        else
           conda create -n $PY_VER $CHANNELS $PKGS $CONDA_COMPILER "python>3" coverage coveralls
        fi
+
   - &setup_cdms
     name: setup_cdms
     command: |
-       export PATH=$HOME/project/$WORKDIR/miniconda/bin:$PATH
+       export PATH=$WORKDIR/miniconda/bin:$PATH
        export CDAT_ANONYMOUS_LOG=False
        source activate $PY_VER
        if [ $(uname) == "Linux" ];then
@@ -45,7 +46,7 @@ aliases:
   - &run_cdms_tests
     name: run_cdms_tests
     command: |
-       export PATH=$HOME/project/$WORKDIR/miniconda/bin:$PATH
+       export PATH=$WORKDIR/miniconda/bin:$PATH
        export CDAT_ANONYMOUS_LOG=False
        source activate $PY_VER
        python run_tests.py --subdir -v2 $COVERAGE
@@ -64,7 +65,7 @@ aliases:
   - &conda_upload
     name: conda_upload
     command: |
-       export PATH=$HOME/project/$WORKDIR/miniconda/bin:$PATH
+       export PATH=$WORKDIR/miniconda/bin:$PATH
        export LABEL="nightly";
        if [ $CIRCLE_BRANCH == "master" ]; then
           conda install -n root conda-build anaconda-client
@@ -82,7 +83,7 @@ jobs:
     macos:
       xcode: "9.2.0"
     environment:
-      WORKDIR: "workspace/test_macos_cdms_py2"
+      WORKDIR: "test_macos_cdms_py2"
       PY_VER: "py2"
       CONDA_COMPILER: "gcc"
     steps:
@@ -103,7 +104,7 @@ jobs:
     macos:
       xcode: "9.2.0"
     environment:
-      WORKDIR: "workspace/test_macos_cdms_py3"
+      WORKDIR: "test_macos_cdms_py3"
       PY_VER: "py3"
       CONDA_COMPILER: "gcc"
     steps:
@@ -124,7 +125,7 @@ jobs:
     machine:
       image: circleci/classic:latest
     environment:
-      WORKDIR: "workspace/test_linux_cdms_py2"
+      WORKDIR: "test_linux_cdms_py2"
       PY_VER: "py2"
       CONDA_COMPILER: "gcc_linux-64"
     steps:
@@ -145,12 +146,14 @@ jobs:
     machine:
       image: circleci/classic:latest
     environment:
-      WORKDIR: "workspace/test_linux_cdms_py3"
+      WORKDIR: "test_linux_cdms_py3"
       PY_VER: "py3"
       CONDA_COMPILER: "gcc_linux-64"
-      COVERAGE: "-c tests/coverage.json"
+      COVERAGE: "-c /home/circleci/project/tests/coverage.json"
     steps:
       - checkout
+      - run: pwd
+      - run: ls -l
       - run: *setup_miniconda
       - run: *create_conda_env
       - run: *setup_cdms

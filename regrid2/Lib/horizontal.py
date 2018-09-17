@@ -378,15 +378,15 @@ class Regridder(Horizontal):
 def input_mask(ain, type, mask, missing=None):
     """    
         
-       Purpose: 
+    **Purpose:** 
 
           set up the input mask including missing from ain
     
-       Usage:
+    **Usage:**
     
-       Passed :
+    **Passed:**
     
-       Returns:
+    **Returns:**
     
     
     """

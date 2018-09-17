@@ -22,18 +22,12 @@ def guessPeriodicity(srcBounds):
     """
     Guess if a src grid is periodic
 
-    Parameters
-    ----------
-
+    **Parameters:**
+ 
           srcBounds
-             the nodal src set of coordinates
+             the nodal src set of coordinates      
 
-           _: None
-        
-
-    Returns
-    -------
-
+    **Returns:**
 
         1 if periodic, warp around, 0 otherwise
     """
@@ -202,9 +196,8 @@ valid choices are: 'libcf', 'esmf'""" % regridTool
         """
         Regrid source to destination
 
-        Parameters
-        ----------
-
+        **Parameters:**
+    
                 srcData
                     array (input)
 
@@ -350,9 +343,8 @@ valid choices are: 'libcf', 'esmf'""" % regridTool
         Return the destination grid, may be different from the dst grid provided
         to the constructor due to domain decomposition
 
-        Returns
-        -------
-
+        **Returns:**
+     
             local grid on this processor
         """
         return self.tool.getDstGrid()
@@ -361,9 +353,8 @@ valid choices are: 'libcf', 'esmf'""" % regridTool
         """
         Fill in diagnostic data
 
-        Parameters
-        ----------
-
+        **Parameters:**
+       
             diag 
                 a dictionary whose entries, if present, will be filled entries are tool dependent
 

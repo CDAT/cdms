@@ -545,23 +545,21 @@ class CrossSectionRegridder:
 def checkdimension(x, name):
     """       
       
-    Purpose 
+    **Purpose:** 
      
         dimension  checks
             1. has a len method
             2. data type is float32
             3. monotonically increasing vectors
     
-    Parameters
-    ----------
+    **Parameters:**
   
        x - coordinate vector
 
        name - coordinate vector ID
     
-    Returns
-    -------
-          
+    **Returns:**
+            
         x, xsize -- dimension vector and its size
     """
 
@@ -615,34 +613,28 @@ def generic_wts_bnds(lat):
 def get_latitude_wts_bnds(checklatpass):
     """        
     
-       Routine: 
+       **Routine:** 
       
           get_latitude_wts_bnds
     
-       Purpose: 
+       **Purpose:** 
 
           Compare the passed checklatpass with the correct geophysical ones calculated here. After finding a match call the function to get the bounds.
     
-       Usage:  
+       **Usage:**  
 
           wts,bnds = get_latitude_wts_bnds(checklatpass)
                   where
 
-       Parameters
-       ----------
-
+       **Parameters:**
+       
           checklatpass:
 
              is the grid to check
+   
 
-          N/A:
-        
-             None
-    
-
-       Returns
-       -------
-       
+       **Returns:**
+             
           wts, bnds - tuple with weights and bounds
     
     """
@@ -726,13 +718,13 @@ def get_latitude_wts_bnds(checklatpass):
 def latitude_bounds(lat_bnds):
     """    
     
-       Purpose: 
+       **Purpose:** 
 
           set up the shape and bounds for use by maparea
     
-       Usage:
+       **Usage:**
     
-       Returns: 
+       **Returns:** 
 
           tuple ( bn,bs )
     
@@ -753,22 +745,22 @@ def latitude_bounds(lat_bnds):
 def get_region_latitude_wts_bnds(latRegionpass, latType, latSize):
     """       
 
-       Routine: 
+       **Routine:** 
 
           get_region_latitude_wts_bnds
    
-       Purpose: 
+       **Purpose:** 
 
           compare the passed latitudes, latRegion, with the global
           ones calculated here and extract the wts and bounds for
           the region
     
-       Usage:
+       **Usage:**
 
           wts,bnds = get_region_latitude_wts_bnds(latRegion, latType, latSize)
           where latRegion is the regional grid to check
     
-       Returns : 
+       **Returns:** 
 
           wts, bnds - tuple with weights and bounds
     
@@ -846,15 +838,15 @@ def get_region_latitude_wts_bnds(latRegionpass, latType, latSize):
 def sectionmask(dataIn, positionIn, maskIn, missingValueIn, missingMatch):
     """    
     
-       Purpose: 
+       **Purpose:** 
 
           construct the mask for the input data for use by rgdlength
     
-       Usage:   
+       **Usage:**   
 
           amskin = mask(dataIn, positionIn, maskIn, missingValueIn, missingValueOut, flag2D)
     
-       Returns:
+       **Returns:**
 
           amskin
 
@@ -1026,17 +1018,17 @@ def sectionmask(dataIn, positionIn, maskIn, missingValueIn, missingMatch):
 def sendmsg(msg, value1=None, value2=None):
     """       
     
-       Purpose: 
+       **Purpose:** 
 
           send the same message to the screen
     
-       Passed :
+       **Passed:**
 
           msg - the string
         
           value - the number associated with the string
     
-       Returns:
+       **Returns:**
 
           return
     
@@ -1057,15 +1049,15 @@ def sendmsg(msg, value1=None, value2=None):
 def section(latvals, levvals):
     """        
     
-       Purpose:
+       **Purpose:**
 
           make the crossi section analytical test case
     
-       Passed :
+       **Passed:**
  
           the grid coordinate vectors
     
-       Returns: 
+       **Returns:** 
 
            xsection -- a temerature like cross section
     
@@ -1093,17 +1085,17 @@ def section(latvals, levvals):
 def rmserror(data1, data2):
     """       
     
-       Purpose: 
+       **Purpose:** 
 
           compute the rms error for two data sets having the same shape
 
     
-       Passed: 
+       **Passed:** 
 
           the two data sets
 
    
-       Returns:
+       **Returns:**
 
           rms error
     

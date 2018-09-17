@@ -424,20 +424,26 @@ class PressureRegridder:
 
 
 def checkorder(positionIn):
-    """    #-----------------------------------------------------------------------------------------
-    #
-    #     purpose: construct the tuples for transposing the data to standard dimension order and the
-    #              inverse for transposing it back to the original dimension order
-    #
-    #     usage:   newOrder, inverseOrder = checkorder(positionIn)
-    #
-    #     passed:  positionIn -- array with location of longitude, latitude. level and time respectively
-    #                            in the sense of the python shape of the data
-    #
-    #     returned: newOrder -- tuple to transpose data to the order (t,z,y,x)
-    #               inverseOrder -- tuple to transpose data to back to the original order
-    #
-    #----------------------------------------------------------------------------------------------"""
+    """
+    **Purpose:**
+
+        construct the tuples for transposing the data to standard dimension order and the inverse for transposing it back to the original dimension order
+   
+    **Usage:**
+
+        newOrder, inverseOrder = checkorder(positionIn)
+   
+    **Passed:**
+     
+        positionIn -- array with location of longitude, latitude. level and time respectively in the sense of the python shape of the data
+    
+    **Returns:**
+
+        newOrder -- tuple to transpose data to the order (t,z,y,x)
+              
+        inverseOrder -- tuple to transpose data to back to the original order
+   
+    """
 
     # remove the None values from positionIn and reverse the order
 
@@ -467,16 +473,22 @@ def checkorder(positionIn):
 
 
 def sendmsg(msg, value1=None, value2=None):
-    """        #---------------------------------------------------------------------------------
-    #
-    #    purpose: send the same message to the screen
-    #
-    #    passed :  msg - the string
-    #              value - the number associated with the string
-    #
-    #    returned: return
-    #
-    #---------------------------------------------------------------------------------"""
+    """ 
+    **Purpose:** 
+    
+         send the same message to the screen
+    
+    **Passed:** 
+
+         msg - the string
+
+         value - the number associated with the string
+    
+    **Returns:**
+
+         return
+    
+   """
 
     print('*******************************************************************')
     if value1 is None:

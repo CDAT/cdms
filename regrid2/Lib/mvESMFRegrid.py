@@ -222,9 +222,8 @@ dimensions. len(srcGridshape) = %d != len(dstGridshape) = %d""" % \
         """
         Populator of grids, bounds and masks
 
-        Parameters
-        ----------
-
+        **Parameters:**
+   
             srcGrid
                 list [[z], y, x] of source grid arrays
 

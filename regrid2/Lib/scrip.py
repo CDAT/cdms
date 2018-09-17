@@ -371,19 +371,15 @@ class DistwgtRegridder(ScripRegridder):
 def readRegridder(fileobj, mapMethod=None, checkGrid=1):
     """Read a regridder from an open fileobj.
 
-       Parameters
-       ----------
+       **Parameters:**
+    
+            mapMethod
+                is one of "conservative", "bilinear", "bicubic", or "distwgt".
 
-           mapMethod
+            If unspecified, it defaults to the method defined in the file.
 
-               is one of "conservative", "bilinear", "bicubic", or "distwgt".
-
-                   If unspecified, it defaults to the method defined in the file.
-
-                   If 'checkGrid' is 1 (default), the grid cells are checked for convexity,
-                   and 'repaired' if necessary.
-
-           _: None
+            If 'checkGrid' is 1 (default), the grid cells are checked for convexity, and 'repaired' if necessary.
+          
     """
 
     if isinstance(fileobj, str):

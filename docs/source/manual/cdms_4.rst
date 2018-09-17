@@ -411,7 +411,8 @@ Table CDMS Regridder Function
    :widths:  40, 40, 80
    :align: left
 
-   "Array or Transient-Variable", "``regridFunction(array, missing=None, order=None, mask=None)``", "Interpolate a gridded data array to a new grid. The interpolation preservesthe area-weighted mean on each horizontal slice. If array is a Variable, a TransientVariable of  the same rank as the inputarrayisreturned, otherwiseamaskedarray is returned.
+   "Array or Transient-Variable", "``regridFunction(array, missing=None, order=None, mask=None)``", "Interpolate a gridded data array to a new grid.
+     The interpolation preserves the area-weighted mean on each horizontal slice. If array is a Variable, a TransientVariable of  the same rank as the inputarrayisreturned, otherwiseamaskedarray is returned.
        * ``array`` is a Variable, masked array, or Numpy array of rank 2, 3, or 4.
        *  For example, the string 'tzyx' indicates that the dimension order of ``array`` is (time, level, latitude, longitude).
        * If unspecified, the function assumes that the last two dimensions of ``array`` match the input grid.

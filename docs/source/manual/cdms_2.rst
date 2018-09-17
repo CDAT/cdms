@@ -102,12 +102,21 @@ latitude, longitude).
    "2,3", "Makes the CDMS and MV modules available. MV defines arithmetic functions."
    "4", "Opens a netCDF file read-only. The result jones is a dataset object."
    "5", "Gets the surface air temperature variable. ‘tas’ is the name of the variable in the input dataset. This does not actually read the data."
-   "6", "Read all January monthly mean data into a variable jans. Variables can be sliced like arrays. The slice operator [0::12] means take every 12th slice from dimension 0, starting at index 0 and ending at the last index. If the stride 12 were omitted, it would default to 1. Note that the variable is actually 3-dimensional. Since no slice is specified for the second or third dimensions, all values of those 2,3 dimensions are retrieved. The slice operation could also have been written [0::12, : , :]. Also note that the same script works for multi-file datasets. CDMS opens the needed data files, extracts the appropriate slices, and concatenates them into the result array."
+   "6", "Read all January monthly mean data into a variable jans. 
+           * Variables can be sliced like arrays.
+           * The slice operator [0::12] means take every 12th slice from dimension 0, starting at index 0 and ending at the last index. If the stride 12 were omitted, it would default to 1. 
+         **Note:** that the variable is actually 3-dimensional. 
+           * Since no slice is specified for the second or third dimensions, all values of those 2,3 dimensions are retrieved. 
+           * The slice operation could also have been written [0::12, : , :].
+           * Also note that the same script works for multi-file datasets. CDMS opens the needed data files, extracts the appropriate slices, and concatenates them into the result array."
    "7", "Reads all July data into a masked array julys."
    "8", "Calculate the average January value for each grid zone. Any missing data is handled automatically."
    "9,10", "Set the variable id and long\_name attributes. The id is used as the name of the variable when plotted or written to a file."
    "14", "Create a new netCDF output file named ‘janjuly.nc’ to hold the results."
-   "15", "Write the January average values to the output file. The variable will have id “tas\_jan” in the file. ``write`` is a utility function which creates the variable in the file, then writes data to the variable. A more general method of data output is first to create a variable, then set a slice of the variable. Note that janavg and julavg have the same latitude and longitude information as tasvar. It is carried along with the computations."
+   "15", "Write the January average values to the output file.
+           * The variable will have id “tas\_jan” in the file. ``write`` is a utility function which creates the variable in the file, then writes data to the variable. 
+           * A more general method of data output is first to create a variable, then set a slice of the variable. 
+           **Note:** that janavg and julavg have the same latitude and longitude information as tasvar. It is carried along with the computations."
    "17", "Set the global attribute ‘comment’."
    "18", "Close the output file."
 
@@ -145,25 +154,26 @@ Table Cdms Module Functions
 
    "``Variable``", "``asVariable(s)``:
               Transform ``s`` into a transient variable.
-                 * ``s`` is a masked array, Numpy array, or Variable.
-                 * If ``s`` is already a transient variable, ``s`` is returned. 
-                 * See also: ``isVariable``."
+                * ``s`` is a masked array, Numpy array, or Variable.
+                * If ``s`` is already a transient variable, ``s`` is returned. 
+                * See also: ``isVariable``."
    "``Axis``", "``createAxis(data, bounds=None)``:
-              Create a one-dimensional coordinate Axis, which is not associated with a file or dataset. This is useful for creating a grid which is not contained in a file or dataset.
-                 * ``data`` is a one-dimensional, monotonic Numpy array.
-                 * ``bounds`` is an array of shape ``(len(data),2)``, such that for all ``i``
-                 * ``data[i]`` is in the range ``[bounds[i,0],bounds[i,1] ]``.
-                 **Note:** If ``bounds`` is not specified, the default boundaries are generated at the midpoints between the consecutive data values, provided that the autobounds mode is 'on' (the default).
-                 *  See ``setAutoBounds``. 
-                   *  Also see: ``CdmsFile.createAxis``"
+              Create a one-dimensional coordinate Axis, which is not associated with a file or dataset. 
+              This is useful for creating a grid which is not contained in a file or dataset.
+                * ``data`` is a one-dimensional, monotonic Numpy array.
+                * ``bounds`` is an array of shape ``(len(data),2)``, such that for all ``i``
+                * ``data[i]`` is in the range ``[bounds[i,0],bounds[i,1] ]``.
+              **Note:** If ``bounds`` is not specified, the default boundaries are generated at the midpoints between the consecutive data values, provided that the autobounds mode is 'on' (the default).
+                  * See ``setAutoBounds``. 
+                  * Also see: ``CdmsFile.createAxis``"
    "``Axis``", "``createEqualAreaAxis(nlat)``: 
               Create an equal-area latitude axis.  The latitude values range from north to south, and for all axis values ``x[i]``, ``sin(x[i])sin(x[i+1])`` is constant.
                  * ``nlat`` is the axis length. 
-                 **Note:** The axis is not associated with a file or dataset."
+              **Note:** The axis is not associated with a file or dataset."
    "``Axis``", "``createGaussianAxis(nlat)``: 
               Create a Gaussian latitude axis. Axis values range from north to south.
                  * ``nlat`` is the axis length.
-                 **Note:** The axis is not associated with a file or dataset."
+              **Note:** The axis is not associated with a file or dataset."
    "``RectGrid``", "``createGaussianGrid(nlats, xorigin=0.0, order='yx')``:
               Create a Gaussian grid, with shape ``(nlats, 2*nlats)``. 
                  * ``nlats`` is the number of latitudes. 
@@ -178,17 +188,21 @@ Table Cdms Module Functions
                  * ``order`` is a ``string`` specifying the order of the axes, either 'yx' for (latitude, longitude), or 'xy' for the reverse.
                  * ``mask`` (optional) is an ``integer``-valued NumPy mask array, having the same shape and ordering as the grid."                 
    "``RectGrid``", "``createGlobalMeanGrid(grid)``:
-              Generate a grid for calculating the global mean via a regridding operation. The return grid is a single zone covering the range of he input grid. 
+              Generate a grid for calculating the global mean via a regridding operation. 
+                 * The return grid is a single zone covering the range of he input grid. 
                  * ``grid`` is a RectGrid."
    "``RectGrid``", "``createRectGrid(lat, lon, order, type='generic', mask=None)``:
-              Create a rectilinear grid, not associated with a file or dataset.  This might be used as the target grid for a regridding operation. 
+              Create a rectilinear grid, not associated with a file or dataset.
+                 *  This might be used as the target grid for a regridding operation. 
                  * ``lat`` is a latitude axis, created by ``cdms.createAxis``. 
                  * ``lon`` is a longitude axis, created by ``cdms.createAxis``. 
                  * ``order`` is a string with value 'yx' (the first grid dimension is latitude) or 'xy' (the first grid dimension is longitude). 
                  * ``type`` is one of 'gaussian','uniform','equalarea',or 'generic'. 
                  * If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
    "``RectGrid``", "``createUniformGrid(startLat, nlat, deltaLat, start-Lon, nlon, deltaLon, order='yx', mask=None)``:
-            Create a uniform rectilinear grid.  The grid is not associated with a file or dataset. The grid boundaries are at the midpoints of the axis values. 
+            Create a uniform rectilinear grid.  
+                  * The grid is not associated with a file or dataset. 
+                  * The grid boundaries are at the midpoints of the axis values. 
                   * ``startLat`` is the starting latitude value. 
                   * ``nlat`` is the number of latitudes. 
                   * If ``nlat`` is 1, the grid latitude boundaries will be ``startLat`` +/- ``deltaLat/2``.
@@ -200,56 +214,71 @@ Table Cdms Module Functions
                   * ``order`` is a string with value 'yx. (the first grid dimension is latitude) or .xy. (the first grid dimension is longitude).
                   * If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
    "``Axis``", "``createUniformLatitudeAxis(startLat , nlat, deltaLat)``:
-             Create a uniform latitude axis. The axis boundaries are at the midpoints of the axis values. The axis is designated as a circular latitude axis. 
+             Create a uniform latitude axis. 
+                 * The axis boundaries are at the midpoints of the axis values. 
+                 * The axis is designated as a circular latitude axis. 
                  * ``startLat`` is the starting latitude value.
                  * ``nlat`` is the number of latitudes.
                  * ``deltaLat`` is the increment between latitudes."
    "``RectGrid``","``createZonalGrid(grid)``:
-             Create a zonal grid. The output grid has the same latitude as the input grid, and a single longitude. This may be used to calculate zonal averages via a regridding operation. 
+             Create a zonal grid. 
+                 * The output grid has the same latitude as the input grid, and a single longitude.
+                 * This may be used to calculate zonal averages via a regridding operation. 
                  * ``grid`` is a RectGrid."
    "``Axis``", "``createUniformLongitudeAxis(startLon, nlon, delta-Lon)``: 
-                Create a uniform longitude axis. The axis boundaries are at the midpoints of the axis values. The axis is designated as a circular longitude axis. 
+                Create a uniform longitude axis.
+                 * The axis boundaries are at the midpoints of the axis values. 
+                 * The axis is designated as a circular longitude axis. 
                  * ``startLon`` is the starting longitude value.
                  * ``nlon`` is the number of longitudes.
                  * ``deltaLon`` is the increment between longitudes."
    "``Variable``", "``createVariable(array, typecode=None, copy=0, savespace=0, mask=None, fill_value=None, grid=None, axes=None , attributes=None, id=None)``:"
-   "``Integer``", "``getAutoBounds()``: Get the current autobounds mode. Returns 0, 1, or 2.
+   "``Integer``", "``getAutoBounds()``: 
+              Get the current autobounds mode.
+                 * Returns 0, 1, or 2.
                  * See ``setAutoBounds``."
    "``Integer``", "``isVariable(s)``: 
-                 * Return ``1`` if ``s`` is a variable, ``0`` otherwise. 
-                 * See also: ``asVariable``."
+                     * Return ``1`` if ``s`` is a variable, ``0`` otherwise. 
+                     * See also: ``asVariable``."
    "``Dataset``", "``open(url,mode='r')``: 
-                 Open or create a ``Dataset`` or ``CdmsFile``. 
-                  * ``url`` is a Uniform Resource Locator, referring to a cdunif or XML file.
-                  * If the URL has the extension '.xml' or '.cdml', a ``Dataset`` is returned, otherwise a ``CdmsFile`` is returned. 
-                  * If the URL protocol is 'http', the file must be a '.xml' or '.cdml' file, and the mode must be 'r'. 
-                  * If the protocol is 'file' or is omitted, a local file or dataset is opened.
-                  * ``mode`` is the open mode.  See `Open Modes <#table-open-modes>`__
-                  * **Example:** Open an existing dataset: ``f = cdms.open('sampleset.xml')``
-                  * **Example:** Create a netCDF file: ``f = cdms.open('newfile.nc','w')``"
+               Open or create a ``Dataset`` or ``CdmsFile``. 
+                 * ``url`` is a Uniform Resource Locator, referring to a cdunif or XML file.
+                 * If the URL has the extension '.xml' or '.cdml', a ``Dataset`` is returned, otherwise a ``CdmsFile`` is returned. 
+                 * If the URL protocol is 'http', the file must be a '.xml' or '.cdml' file, and the mode must be 'r'. 
+                 * If the protocol is 'file' or is omitted, a local file or dataset is opened.
+                 * ``mode`` is the open mode.  See `Open Modes <#table-open-modes>`__
+                **Example:**
+                       Open an existing dataset: ``f = cdms.open('sampleset.xml')``
+
+                **Example:** 
+                       Create a netCDF file: ``f = cdms.open('newfile.nc','w')``"
    "``List``", "``order2index (axes, orderstring)``:
-                Find the index permutation of axes to match order. Return a list of indices.
-                 * ``axes`` is a list of axis objects. 
-                 * ``orderstring`` is defined as in ``orderparse``."
+                Find the index permutation of axes to match order. 
+                   * Return a list of indices.
+                   * ``axes`` is a list of axis objects. 
+                   * ``orderstring`` is defined as in ``orderparse``."
    "``List``", "``orderparse(orderstring)``: 
-                Parse an order string. Returns a list of axes specifiers.
+              Parse an order string. 
+                * Returns a list of axes specifiers.
                  ``orderstring`` consists of:
-                    * Letters t, x, y, z meaning time, longitude, latitude, level
-                    * Numbers 0-9 representing position in axes
-                    * Dash (-) meaning insert the next available axis here.
-                    * The ellipsis ... meaning fill these positions with any remaining axes.
-                    * (name) meaning an axis whose id is name"
+                  * Letters t, x, y, z meaning time, longitude, latitude, level
+                  * Numbers 0-9 representing position in axes
+                  * Dash (-) meaning insert the next available axis here.
+                  * The ellipsis ... meaning fill these positions with any remaining axes.
+                  * (name) meaning an axis whose id is name"
    "``None``", "``setAutoBounds(mode)``: 
-             Set autobounds mode. In some circumstances CDMS can generate boundaries for 1-D axes and rectilinear grids, when the bounds are not explicitly defined.
+             Set autobounds mode.
+                 In some circumstances CDMS can generate boundaries for 1-D axes and rectilinear grids, when the bounds are not explicitly defined.
                 The autobounds mode determines how this is done:
                    * If ``mode`` is ``'grid'`` or ``2`` (the default), the ``getBounds`` method will automatically generate boundary information for an axis or grid if the axis is designated as a latitude or longitude axis, and the boundaries are not explicitly defined. 
                    * If ``mode`` is ``'on'`` or ``1``, the ``getBounds`` method will automatically generate boundary information for an axis or grid, if the boundaries are not explicitly defined.
                    * If ``mode`` is ``'off'`` or ``0``, and no boundary data is explicitly defined, the bounds will NOT be generated; the ``getBounds`` method will return ``None`` for the boundaries. 
                    **Note:** In versions of CDMS prior to V4.0, the default ``mode`` was ``'on'``."
    "``None``", "``setClassifyGrids(mode)``:
-             Set the grid classification mode. This affects how grid type is determined, for the purpose of generating grid boundaries.
-                * If ``mode`` is ``'on'`` (the default), grid type is determined by a grid classification method, regardless of the value of ``grid.get-Type()``.
-                * If ``mode`` is ``'off'``, the value of ``grid.getType()`` determines the grid type." 
+             Set the grid classification mode. 
+                This affects how grid type is determined, for the purpose of generating grid boundaries.
+                  * If ``mode`` is ``'on'`` (the default), grid type is determined by a grid classification method, regardless of the value of ``grid.get-Type()``.
+                  * If ``mode`` is ``'off'``, the value of ``grid.getType()`` determines the grid type." 
    "``None``", "``writeScripGrid(path, grid, gridTitle=None)``:
              Write a grid to a SCRIP grid file. 
                 * ``path`` is a string, the path of the SCRIP file to be created. 
@@ -344,9 +373,17 @@ Table CoordinateAxis Types
    :widths:  20, 80
 
    "``CoordinateAxis``", "A variable that represents coordinate information. Has subtypes ``Axis2D`` and ``AuxAxis1D``."
-   "``Axis``", "A one-dimensional coordinate axis whose values are strictly monotonic. Has subtypes ``DatasetAxis``, ``FileAxis``, and ``TransientAxis``. May be an index axis, mapping a range of integers to the equivalent floating point value. If a latitude or longitude axis, may be associated with a ``RectGrid``."
-   "``Axis2D``", "A two-dimensional coordinate axis, typically a latitude or longitude axis related to a ``CurvilinearGrid``. Has subtypes ``DatasetAxis2D``, ``FileAxis2D``, and ``TransientAxis2D``."
-   "``AuxAxis1D``", "A one-dimensional coordinate axis whose values need not be monotonic. Typically a latitude or longitude axis associated with a ``GenericGrid``. Has subtypes ``DatasetAuxAxis1D``, ``FileAuxAxis1D``, and ``TransientAuxAxis1D``. An axis in a ``CdmsFile`` may be designated the unlimited axis, meaning that it can be extended in length after the initial definition. There can be at most one unlimited axis associated with a ``CdmsFile``."
+   "``Axis``", "A one-dimensional coordinate axis whose values are strictly monotonic.
+                 * Has subtypes ``DatasetAxis``, ``FileAxis``, and ``TransientAxis``. 
+                 * May be an index axis, mapping a range of integers to the equivalent floating point value. 
+                 * If a latitude or longitude axis, may be associated with a ``RectGrid``."
+   "``Axis2D``", "A two-dimensional coordinate axis, typically a latitude or longitude axis related to a ``CurvilinearGrid``. 
+                 * Has subtypes ``DatasetAxis2D``, ``FileAxis2D``, and ``TransientAxis2D``."
+   "``AuxAxis1D``", "A one-dimensional coordinate axis whose values need not be monotonic.
+                 * Typically a latitude or longitude axis associated with a ``GenericGrid``.
+                 * Has subtypes ``DatasetAuxAxis1D``, ``FileAuxAxis1D``, and ``TransientAuxAxis1D``. 
+                 * An axis in a ``CdmsFile`` may be designated the unlimited axis, meaning that it can be extended in length after the initial definition. 
+                 * There can be at most one unlimited axis associated with a ``CdmsFile``."
 
 Table CoordinateAxis Internal Attributes
 ----------------------------------------
@@ -582,7 +619,8 @@ Table CdmsFile Methods
           **Example:** The following reads data for variable 'prc', year 1980:
               >>> f = cdms.open('test.nc')
               >>> x = f('prc', time=('1980-1','1981-1'))"
-   "``Variable``, ``Axis``, or ``Grid``", "``fileobj['id']``", "Get the persistent variable, axis or grid object having the string identifier. This does not read the data for a variable.
+   "``Variable``, ``Axis``, or ``Grid``", "``fileobj['id']``", "Get the persistent variable, axis or grid object having the string identifier.
+        This does not read the data for a variable.
           **Example:** The following gets the persistent variable
             * ``v``, equivalent to
             * ``v = f.variables['prc']``.
@@ -630,13 +668,15 @@ Table CdmsFile Methods
            * ``newname``, if specified is the name of the new variable. 
            * If unspecified, the returned variable has the same name as ``var``.
         **Note:** Unlike copyAxis, the actual data is not copied to the new variable."
-   "``CurveGrid`` or ``Generic-Grid``", "``readScripGrid(self,whichGrid='destination',check-Grid=1)``", "Read a curvilinear or generic grid from a SCRIP netCDF file. The file can be a SCRIP grid file or remapping file. 
+   "``CurveGrid`` or ``Generic-Grid``", "``readScripGrid(self,whichGrid='destination',check-Grid=1)``", "Read a curvilinear or generic grid from a SCRIP netCDF file. 
+         The file can be a SCRIP grid file or remapping file. 
            * If a mapping file, ``whichGrid`` chooses the grid to read, either ``'source'`` or ``'destination'``. 
            * If ``checkGrid`` is ``1`` (default), the grid cells are checked for convexity, and 'repaired' if necessary.  
            * Grid cells may appear to be nonconvex if they cross a ``0 / 2pi`` boundary. 
            * The repair consists of shifting the cell vertices to the same side modulo 360 degrees."
     "``None``", "``sync()``", "Writes any pending changes to the file."
-    "``Variable``", "``write(var,attributes=None,axes=None, extbounds=None,id=None,extend=None, fill_value=None, index=None, typecode=None)``","Write a variable or array to the file. The return value is the associated file variable.
+    "``Variable``", "``write(var,attributes=None,axes=None, extbounds=None,id=None,extend=None, fill_value=None, index=None, typecode=None)``","Write a variable or array to the file. 
+         The return value is the associated file variable.
            * If the variable does not exist in the file, it is first defined and all attributes written, then the data is written. 
            * By default, the time dimension of the variable is defined as the unlimited dimension of the file.
            *  If the data is already defined, then data is extended or overwritten depending on the value of keywords ``extend`` and ``index``, and the unlimited dimension values associated with ``var``.
@@ -804,20 +844,20 @@ Table Database Methods
              * ``tag`` restricts the search to objects with that tag ('dataset' | 'variable' | 'database' | 'axis' | 'grid').
              * ``relbase`` is the relative name of the base object of the search. The search is restricted to the base object and all objects below it in the hierarchy.
           **Example:**
-             * To search only dataset 'ncep_reanalysis_mo', specify:
-             * ``relbase='dataset=ncep_reanalysis_mo'``
-             * To search only variable 'ua' in 'ncep_reanalysis_mo', use:
-             * ``relbase='variable=ua, dataset=ncep_reanalysis_mo'``
-             * If no base is specified, the entire database is searched. See the ``scope`` argument also.
-             * ``scope`` is the search scope (**Subtree** | **Onelevel** | **Base**).
-             *  **Subtree** searches the base object and its descendants.
-             *  **Onelevel** searches the base object and its immediate descendants.
-             *  **Base** searches the base object alone.
-             * The default is **Subtree**.
-             * ``attnames``: list of attribute names.  Restricts the attributes returned.
-             *  If ``None``, all attributes are returned. 
-             * Attributes 'id' and 'objectclass' are always included in the list.
-             * ``timeout``: integer number of seconds before timeout. The default is no timeout."
+              To search only dataset 'ncep_reanalysis_mo', specify:
+               * ``relbase='dataset=ncep_reanalysis_mo'``
+              o search only variable 'ua' in 'ncep_reanalysis_mo', use:
+               * ``relbase='variable=ua, dataset=ncep_reanalysis_mo'``
+         If no base is specified, the entire database is searched. See the ``scope`` argument also.
+            * ``scope`` is the search scope (**Subtree** | **Onelevel** | **Base**).
+            *  **Subtree** searches the base object and its descendants.
+            *  **Onelevel** searches the base object and its immediate descendants.
+            *  **Base** searches the base object alone.
+            * The default is **Subtree**.
+            * ``attnames``: list of attribute names.  Restricts the attributes returned.
+            *  If ``None``, all attributes are returned. 
+            * Attributes 'id' and 'objectclass' are always included in the list.
+            * ``timeout``: integer number of seconds before timeout. The default is no timeout."
 
 
 ------------

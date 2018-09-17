@@ -138,9 +138,11 @@ Table Time Methods
        * ``value`` is the Float number of interval units.
        * ``intervalUnits`` is cdtime.[Second (s) | Minute(s) | Hour(s) | Day(s) | Week(s) | Month(s) | Season(s) | Year(s)]
        * ``calendar`` is the calendar type. "
-   "Comptime", "``t.tocomp(calendar = cdtime.DefaultCalendar)``", "Convert to component time.  Returns the equivalent component time."
-   ,, "``calendar`` is the calendar type."
-   "Reltime", "``t.torel(units, calendar=cdtime.DefaultCalendar)``", "Convert to relative time.  Returns the equivalent relative time."
+   "Comptime", "``t.tocomp(calendar = cdtime.DefaultCalendar)``", "Convert to component time.  
+       * Returns the equivalent component time.
+       * ``calendar`` is the calendar type."
+   "Reltime", "``t.torel(units, calendar=cdtime.DefaultCalendar)``", "Convert to relative time.  
+       * Returns the equivalent relative time."
    
 
 Examples

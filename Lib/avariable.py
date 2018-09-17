@@ -177,8 +177,8 @@ class AbstractVariable(CdmsObj, Slab):
         """
         Selection of a subregion using selectors.
 
-        Parameters
-        ----------
+        **Parameters:**
+     
             raw:
                 if set to 1, return numpy.ma only
             squeeze:
@@ -188,9 +188,9 @@ class AbstractVariable(CdmsObj, Slab):
             order:
                 if given, result is permuted into this order
 
-        Returns
-        -------
-        Subregion selected
+        **Returns:**
+       
+             Subregion selected
         """
         # separate options from selector specs
         d = kwargs.copy()

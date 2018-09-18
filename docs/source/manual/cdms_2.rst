@@ -104,7 +104,8 @@ latitude, longitude).
    "5", "Gets the surface air temperature variable. ‘tas’ is the name of the variable in the input dataset. This does not actually read the data."
    "6", "Read all January monthly mean data into a variable jans. 
            * Variables can be sliced like arrays.
-           * The slice operator [0::12] means take every 12th slice from dimension 0, starting at index 0 and ending at the last index. If the stride 12 were omitted, it would default to 1. 
+           * The slice operator [0::12] means take every 12th slice from dimension 0, starting at index 0 and ending at the last index.
+           * If the stride 12 were omitted, it would default to 1. 
          **Note:** that the variable is actually 3-dimensional. 
            * Since no slice is specified for the second or third dimensions, all values of those 2,3 dimensions are retrieved. 
            * The slice operation could also have been written [0::12, : , :].
@@ -158,7 +159,7 @@ Table Cdms Module Functions
                 * If ``s`` is already a transient variable, ``s`` is returned. 
                 * See also: ``isVariable``."
    "``Axis``", "``createAxis(data, bounds=None)``:
-              Create a one-dimensional coordinate Axis, which is not associated with a file or dataset. 
+            Create a one-dimensional coordinate Axis, which is not associated with a file or dataset. 
               This is useful for creating a grid which is not contained in a file or dataset.
                 * ``data`` is a one-dimensional, monotonic Numpy array.
                 * ``bounds`` is an array of shape ``(len(data),2)``, such that for all ``i``
@@ -167,7 +168,8 @@ Table Cdms Module Functions
                   * See ``setAutoBounds``. 
                   * Also see: ``CdmsFile.createAxis``"
    "``Axis``", "``createEqualAreaAxis(nlat)``: 
-              Create an equal-area latitude axis.  The latitude values range from north to south, and for all axis values ``x[i]``, ``sin(x[i])sin(x[i+1])`` is constant.
+            Create an equal-area latitude axis.  
+              The latitude values range from north to south, and for all axis values ``x[i]``, ``sin(x[i])sin(x[i+1])`` is constant.
                  * ``nlat`` is the axis length. 
               **Note:** The axis is not associated with a file or dataset."
    "``Axis``", "``createGaussianAxis(nlat)``: 
@@ -180,7 +182,8 @@ Table Cdms Module Functions
                  * ``xorigin`` is the origin of the longitude axis. 
                  * ``order`` is either 'yx' (lat-lon, default) or 'xy' (lon-lat)"
    "``RectGrid``", "``createGenericGrid(latArray, lonArray, latBounds=None, lonBounds=None, order='yx', mask=None)``:
-              Create a generic grid, that is, a grid which is not typed as Gaussian, uniform, or equal-area. The grid is not associated with a file or dataset. 
+            Create a generic grid, that is, a grid which is not typed as Gaussian, uniform, or equal-area. 
+              The grid is not associated with a file or dataset. 
                  * ``latArray`` is a NumPy array of latitude values.
                  * ``lonArray`` is a NumPy array of longitude values. 
                  * ``latBounds`` is a NumPy array having shape ``(len(latArray),2)``, of latitude boundaries. 
@@ -188,12 +191,12 @@ Table Cdms Module Functions
                  * ``order`` is a ``string`` specifying the order of the axes, either 'yx' for (latitude, longitude), or 'xy' for the reverse.
                  * ``mask`` (optional) is an ``integer``-valued NumPy mask array, having the same shape and ordering as the grid."                 
    "``RectGrid``", "``createGlobalMeanGrid(grid)``:
-              Generate a grid for calculating the global mean via a regridding operation. 
-                 * The return grid is a single zone covering the range of he input grid. 
+             Generate a grid for calculating the global mean via a regridding operation. 
+                The return grid is a single zone covering the range of he input grid. 
                  * ``grid`` is a RectGrid."
    "``RectGrid``", "``createRectGrid(lat, lon, order, type='generic', mask=None)``:
-              Create a rectilinear grid, not associated with a file or dataset.
-                 *  This might be used as the target grid for a regridding operation. 
+            Create a rectilinear grid, not associated with a file or dataset.
+               This might be used as the target grid for a regridding operation. 
                  * ``lat`` is a latitude axis, created by ``cdms.createAxis``. 
                  * ``lon`` is a longitude axis, created by ``cdms.createAxis``. 
                  * ``order`` is a string with value 'yx' (the first grid dimension is latitude) or 'xy' (the first grid dimension is longitude). 
@@ -201,8 +204,8 @@ Table Cdms Module Functions
                  * If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
    "``RectGrid``", "``createUniformGrid(startLat, nlat, deltaLat, start-Lon, nlon, deltaLon, order='yx', mask=None)``:
             Create a uniform rectilinear grid.  
-                  * The grid is not associated with a file or dataset. 
-                  * The grid boundaries are at the midpoints of the axis values. 
+               The grid is not associated with a file or dataset. 
+               The grid boundaries are at the midpoints of the axis values. 
                   * ``startLat`` is the starting latitude value. 
                   * ``nlat`` is the number of latitudes. 
                   * If ``nlat`` is 1, the grid latitude boundaries will be ``startLat`` +/- ``deltaLat/2``.
@@ -214,16 +217,16 @@ Table Cdms Module Functions
                   * ``order`` is a string with value 'yx. (the first grid dimension is latitude) or .xy. (the first grid dimension is longitude).
                   * If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
    "``Axis``", "``createUniformLatitudeAxis(startLat , nlat, deltaLat)``:
-             Create a uniform latitude axis. 
-                 * The axis boundaries are at the midpoints of the axis values. 
+            Create a uniform latitude axis. 
+               The axis boundaries are at the midpoints of the axis values. 
                  * The axis is designated as a circular latitude axis. 
                  * ``startLat`` is the starting latitude value.
                  * ``nlat`` is the number of latitudes.
                  * ``deltaLat`` is the increment between latitudes."
    "``RectGrid``","``createZonalGrid(grid)``:
-             Create a zonal grid. 
-                 * The output grid has the same latitude as the input grid, and a single longitude.
-                 * This may be used to calculate zonal averages via a regridding operation. 
+            Create a zonal grid. 
+               The output grid has the same latitude as the input grid, and a single longitude.
+               This may be used to calculate zonal averages via a regridding operation. 
                  * ``grid`` is a RectGrid."
    "``Axis``", "``createUniformLongitudeAxis(startLon, nlon, delta-Lon)``: 
                 Create a uniform longitude axis.

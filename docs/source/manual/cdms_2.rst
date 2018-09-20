@@ -173,7 +173,7 @@ Table Cdms Module Functions
                  * ``nlat`` is the axis length. 
               **Note:** The axis is not associated with a file or dataset."
    "``Axis``", "``createGaussianAxis(nlat)``: 
-              Create a Gaussian latitude axis. Axis values range from north to south.
+            Create a Gaussian latitude axis. Axis values range from north to south.
                  * ``nlat`` is the axis length.
               **Note:** The axis is not associated with a file or dataset."
    "``RectGrid``", "``createGaussianGrid(nlats, xorigin=0.0, order='yx')``:
@@ -219,7 +219,7 @@ Table Cdms Module Functions
    "``Axis``", "``createUniformLatitudeAxis(startLat , nlat, deltaLat)``:
             Create a uniform latitude axis. 
                The axis boundaries are at the midpoints of the axis values. 
-                 * The axis is designated as a circular latitude axis. 
+               The axis is designated as a circular latitude axis. 
                  * ``startLat`` is the starting latitude value.
                  * ``nlat`` is the number of latitudes.
                  * ``deltaLat`` is the increment between latitudes."
@@ -230,11 +230,11 @@ Table Cdms Module Functions
                  * ``grid`` is a RectGrid."
    "``Axis``", "``createUniformLongitudeAxis(startLon, nlon, delta-Lon)``: 
                 Create a uniform longitude axis.
-                 * The axis boundaries are at the midpoints of the axis values. 
-                 * The axis is designated as a circular longitude axis. 
-                 * ``startLon`` is the starting longitude value.
-                 * ``nlon`` is the number of longitudes.
-                 * ``deltaLon`` is the increment between longitudes."
+                   The axis boundaries are at the midpoints of the axis values. 
+                   The axis is designated as a circular longitude axis. 
+                     * ``startLon`` is the starting longitude value.
+                     * ``nlon`` is the number of longitudes.
+                     * ``deltaLon`` is the increment between longitudes."
    "``Variable``", "``createVariable(array, typecode=None, copy=0, savespace=0, mask=None, fill_value=None, grid=None, axes=None , attributes=None, id=None)``:"
    "``Integer``", "``getAutoBounds()``: 
               Get the current autobounds mode.
@@ -271,8 +271,8 @@ Table Cdms Module Functions
                   * (name) meaning an axis whose id is name"
    "``None``", "``setAutoBounds(mode)``: 
              Set autobounds mode.
-                 In some circumstances CDMS can generate boundaries for 1-D axes and rectilinear grids, when the bounds are not explicitly defined.
-                The autobounds mode determines how this is done:
+               In some circumstances CDMS can generate boundaries for 1-D axes and rectilinear grids, when the bounds are not explicitly defined.
+                 The autobounds mode determines how this is done:
                    * If ``mode`` is ``'grid'`` or ``2`` (the default), the ``getBounds`` method will automatically generate boundary information for an axis or grid if the axis is designated as a latitude or longitude axis, and the boundaries are not explicitly defined. 
                    * If ``mode`` is ``'on'`` or ``1``, the ``getBounds`` method will automatically generate boundary information for an axis or grid, if the boundaries are not explicitly defined.
                    * If ``mode`` is ``'off'`` or ``0``, and no boundary data is explicitly defined, the bounds will NOT be generated; the ``getBounds`` method will return ``None`` for the boundaries. 
@@ -375,7 +375,8 @@ Table CoordinateAxis Types
    :header:  "Type", "Definition"
    :widths:  20, 80
 
-   "``CoordinateAxis``", "A variable that represents coordinate information. Has subtypes ``Axis2D`` and ``AuxAxis1D``."
+   "``CoordinateAxis``", "A variable that represents coordinate information. 
+                 *  Has subtypes ``Axis2D`` and ``AuxAxis1D``."
    "``Axis``", "A one-dimensional coordinate axis whose values are strictly monotonic.
                  * Has subtypes ``DatasetAxis``, ``FileAxis``, and ``TransientAxis``. 
                  * May be an index axis, mapping a range of integers to the equivalent floating point value. 
@@ -461,14 +462,16 @@ Table CoordinateAxis Methods
             * If ``persistent`` is true, the external file or dataset (if any) is modified.
             * By default, the designation is temporary. 
             * ``calendar`` is defined as in ``getCalendar()``."
-   "``Array``", "``getBounds()``", "Get the associated boundary array. The shape of the return array depends on the type of axis:
+   "``Array``", "``getBounds()``", "Get the associated boundary array. 
+         The shape of the return array depends on the type of axis:
             * ``Axis``: ``(n,2)``
             * ``Axis2D``: ``(i,j,4)``
             * ``AuxAxis1D``: ``(ncell, nvert)`` where nvert is the maximum number of vertices of a cell.
          If the boundary array of a latitude or longitude 
             * ``Axis`` is not explicitly defined, and ``autoBounds`` mode is on, a default array is generated by calling ``genGenericBounds``. 
             * Otherwise if auto-Bounds mode is off, the return value is ``None``. See ``setAutoBounds``."
-   "``Integer``", "``getCalendar()``", "Returns the calendar associated with the ``(time)``\ axis. Possible return values, as defined in the ``cdtime`` module, are:
+   "``Integer``", "``getCalendar()``", "Returns the calendar associated with the ``(time)``\ axis.
+          Possible return values, as defined in the ``cdtime`` module, are:
             * ``cdtime.GregorianCalendar``: the standard Gregorian calendar
             * ``cdtime.MixedCalendar``: mixed Julian/Gregorian calendar
             * ``cdtime.JulianCalendar``: years divisible by 4 are leap years
@@ -524,7 +527,8 @@ Table Axis Methods, Additional to CoordinateAxis
           * ``'e'`` - same as n, but include an extra node on either side
           * ``'s'`` - select axis elements for which the cell boundary is a subset of the interval
           * The default indicator is ‘ccn’, that is, the interval is closed, and nodes in the interval are selected.
-          * If ``cycle`` is specified, the axis is treated as circular with the given cycle value. By default, if ``axis.isCircular()`` is true, the axis is treated as circular with a default modulus of ``360.0``.
+          * If ``cycle`` is specified, the axis is treated as circular with the given cycle value. 
+          * By default, if ``axis.isCircular()`` is true, the axis is treated as circular with a default modulus of ``360.0``.
           * An interval of ``None`` or ``':'`` returns the full index interval of the axis.
           * The method returns the corresponding index interval as a 3tuple ``(i,j,k)``, where ``k`` is the integer stride, and ``[i.j)`` is the half-open index interval ``i <= k < j`` ``(i >= k > j if k < 0)``, or ``none`` if the intersection is empty.
           * for an axis which is circular (``axis.topology == 'circular'``), ``[i,j)`` is interpreted as follows, where ``n = len(axis)``
@@ -1659,7 +1663,8 @@ Table Variable Methods
     "List", "``getPaths(*intervals)``", "Get the file paths associated with the index region specified by intervals."
     "Integer", "``len(var)``", "The length of the first dimension of the variable. If the variable is zero-dimensional (scalar), a length of 0 is returned.
     **Note:** ``size()`` returns the total number of elements."
-    "Transient Variable", "``pressureRegrid (newLevel, method='log', missin=None, order=None)``", "Return the variable regridded to a new set of pressure levels newLevel. The variable must be a function of latitude, longitude, pressure level, and (optionally) time.
+    "Transient Variable", "``pressureRegrid (newLevel, method='log', missin=None, order=None)``", "Return the variable regridded to a new set of pressure levels newLevel.
+     The variable must be a function of latitude, longitude, pressure level, and (optionally) time.
         * ``newLevel`` is an axis of the result pressure levels.
         * ``method`` is optional, either 'log' to interpolate in the log of pressure (default), or 'linear' for linear interpolation.
         * ``missing`` is a missing data value. The default is ``var.getMissing()``
@@ -1680,7 +1685,8 @@ Table Variable Methods
     "``None``", "``setAxis(n, axis)``", "Set the n-th axis (0-origin index) of to a copy of axis."
     "``None``", "``setAxisList(axislist)``", "Set all axes of the variable. axislist is a list of axis objects."
     "``None``", "``setMissing(value)``", "Set the missing value.  Integer ``size()`` Number of elements of the variable."
-    "Variable", "``subRegion(* region, time=None, level=None, latitude=None, longitude=None, squeeze=0, raw=0)``", "Read a coordinate region of data, returning a transient variable. A region is a hyperrectangle in coordinate space.
+    "Variable", "``subRegion(* region, time=None, level=None, latitude=None, longitude=None, squeeze=0, raw=0)``", "Read a coordinate region of data, returning a transient variable.
+      A region is a hyperrectangle in coordinate space.
         * ``region`` is an argument list, each item of which specifies an interval of a coordinate axis. The intervals are listed in the order of the variable axes.
         *  If trailing dimensions are omitted, all values of those dimensions are retrieved. 
         * If an axis is circular (axis.isCircular() is true) or cycle is specified (see below), then data will be read with wraparound in that dimension.
@@ -1692,7 +1698,8 @@ Table Variable Methods
         * The optional keyword argument ``squeeze`` determines whether or not the shape of the returned array contains dimensions whose length is 1; by default this argument is 0, and such dimensions are not 'squeezed out'.
         * The optional keyword argument ``raw`` specifies whether the return object is a variable or a masked array. 
         * By default, a transient variable is returned, having the axes and attributes corresponding to2,3 the region read. If raw=1, an MV2 masked array is returned, equivalent to the transient variable without the axis and attribute information."
-    "Variable", "``subSlice(* specs, time=None, level=None, latitude=None, longitude=None, squeeze=0, raw=0)``", "Read a slice of data, returning a transient variable. This is a functional form of the slice operator [] with the squeeze option turned off.
+    "Variable", "``subSlice(* specs, time=None, level=None, latitude=None, longitude=None, squeeze=0, raw=0)``", "Read a slice of data, returning a transient variable. 
+     This is a functional form of the slice operator [] with the squeeze option turned off.
         * ``specs`` is an argument list, each element of which specifies a slice of the corresponding dimension. 
      There can be zero or more positional arguments, each of the form:
         *  a single integer n, meaning ``slice(n, n+1)``

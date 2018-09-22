@@ -80,19 +80,19 @@ NumericToCdType = {numpy.sctype2char(numpy.float32): CdFloat,
                    }
 
 CdToNumericType = {CdChar: 'c',
-                   CdByte: numpy.int8,
-                   CdUByte: numpy.uint8,
-                   CdShort: numpy.int16,
+                   CdByte: numpy.byte,
+                   CdUByte: numpy.ubyte,
+                   CdShort: numpy.short,
                    CdUShort: numpy.ushort,
-                   CdInt: numpy.int32,
-                   CdUInt: numpy.uint32,
-                   CdLong: numpy.int,
+                   CdInt: numpy.intc,
+                   CdUInt: numpy.uintc,
+                   CdLong: numpy.int_,
                    CdInt64: numpy.int64,
                    CdUInt64: numpy.uint64,
-                   CdULongLong: numpy.longlong,
-                   CdFloat: numpy.float32,
-                   CdDouble: numpy.float,
-                   CdString: numpy.str}
+                   CdULongLong: numpy.ulonglong,
+                   CdFloat: numpy.single,
+                   CdDouble: numpy.double,
+                   CdString: numpy.str_}
 
 # Grid types
 UnknownGridType = "unknown"

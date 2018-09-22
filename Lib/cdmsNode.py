@@ -63,19 +63,19 @@ CdDatatypes = [
 CdScalar = CDML.CdScalar
 CdArray = CDML.CdArray
 
-NumericToCdType = {numpy.sctype2char(numpy.float32): CdFloat,
-                   numpy.sctype2char(numpy.float): CdDouble,
-                   numpy.sctype2char(numpy.int16): CdShort,
-                   numpy.sctype2char(numpy.int32): CdInt,
-                   numpy.sctype2char(numpy.uint32): CdUInt,
-                   numpy.sctype2char(numpy.int64): CdInt64,
-                   numpy.sctype2char(numpy.int8): CdByte,
-                   'q': CdLongLong,
+NumericToCdType = {numpy.dtype(numpy.single).char: CdFloat,
+                   numpy.dtype(numpy.double).char: CdDouble,
+                   numpy.dtype(numpy.short).char: CdShort,
+                   numpy.dtype(numpy.intc).char: CdInt,
+                   numpy.dtype(numpy.uintc).char: CdUInt,
+                   numpy.dtype(numpy.int64).char: CdInt64,
+                   numpy.dtype(numpy.byte).char: CdByte,
+                   numpy.dtype(numpy.longlong).char: CdLongLong,
                    'c': CdChar,
-                   'B': CdUByte,
-                   'H': CdUShort,
-                   'L': CdUInt64,
-                   'Q': CdULongLong,
+                   numpy.dtype(numpy.ubyte).char: CdUByte,
+                   numpy.dtype(numpy.ushort).char: CdUShort,
+                   numpy.dtype(numpy.uint64).char: CdUInt64,
+                   numpy.dtype(numpy.ulonglong).char: CdULongLong,
                    'S': CdString
                    }
 

@@ -543,8 +543,6 @@ grid. Note that:
 
    Figure 1: Curvilinear Grid
 
-
-
 Example: A Generic Grid
 '''''''''''''''''''''''
 
@@ -652,7 +650,7 @@ To regrid a variable ``uold`` to the same grid as variable ``vnew``:
    >>> unew.shape
    (1, 14, 181, 360)
    >>> t63_grid = unew.getGrid() # Obtain the grid for vnew
-   >>> u63 = u.regrid(t63_grid)
+   >>> u63 = uold.regrid(t63_grid)
    >>> u63.shape
    (1, 2, 181, 360)
 

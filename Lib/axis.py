@@ -1708,13 +1708,15 @@ class AbstractAxis(CdmsObj):
         else:
             mycopy = createAxis(self[:])
         mycopy.id = self.id
+        mydict = self.__dict__
+        newdict = {k: mydict[k] for k in mydict if k not in ['_data_']}
+        mycopy.__dict__.update(newdict)
+        mycopy._obj_ = None  # Erase Cdfile object if exist
         try:
             mycopy.setBounds(b, isGeneric=isGeneric[0])
         except CDMSError:
             b = mycopy.genGenericBounds()
             mycopy.setBounds(b, isGeneric=False)
-        for k, v in list(self.attributes.items()):
-            setattr(mycopy, k, v)
         return mycopy
 
     def listall(self, all=None):

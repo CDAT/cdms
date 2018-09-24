@@ -543,8 +543,6 @@ grid. Note that:
 
    Figure 1: Curvilinear Grid
 
-
-
 Example: A Generic Grid
 '''''''''''''''''''''''
 

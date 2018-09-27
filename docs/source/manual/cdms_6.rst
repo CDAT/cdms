@@ -448,62 +448,62 @@ Dataset "sample" has two variables, and six axes.
 
 ::
 
-    <axis
-        id ="longitude"
-        length="32"
-        units="degrees_east"
-        datatype="Double"
-    >
-
-        [ 0. 11.25 22.5 33.75 45. 56.25 67.5 78.75 90.
-
-        101.25 112.5 123.75 135. 146.25 157.5 168.75 180. 191.25
-
-        202.5 213.75 225. 236.25 247.5 258.75 270. 281.25 292.5
-
-        303.75 315. 326.25 337.5 348.75]
-    </axis>
-
-    <axis
-        id ="time"
-        partition="[0 1 1 2 2 3]"
-        calendar="gregorian"
-        units="days since 2000-1-1"
-        datatype="Double"
-        length="3"
-        name_in_file="time"
-    >
-
-        [ 0. 366. 731.]
-    </axis>
-
-    <variable
-        id ="u"
-        missing_value="-99.9"
-        units="m/s"
-        datatype="Double"
-    >
-        <domain>
-            <domElem name="time" length="3" start="0"/>
-            <domElem name="latitude" length="16" start="0"/>
-            <domElem name="longitude" length="32" start="0"/>
-        </domain>
-    </variable>
-
-    <variable
-        id ="v"
-        missing_value="-99.9"
-        units="m/s"
-        datatype="Double"
-    >
-        <domain>
-            <domElem name="time" length="3" start="0"/>
-            <domElem name="latitude" length="16" start="0"/>
-            <domElem name="longitude" length="32" start="0"/>
-        </domain>
-    </variable>
-
- {% endhighlight %}
+    >>> <axis
+    >>>     id ="longitude"
+    >>>     length="32"
+    >>>     units="degrees_east"
+    >>>     datatype="Double"
+    >>> >
+    >>> 
+    >>>     [ 0. 11.25 22.5 33.75 45. 56.25 67.5 78.75 90.
+    >>> 
+    >>>     101.25 112.5 123.75 135. 146.25 157.5 168.75 180. 191.25
+    >>> 
+    >>>     202.5 213.75 225. 236.25 247.5 258.75 270. 281.25 292.5
+    >>> 
+    >>>     303.75 315. 326.25 337.5 348.75]
+    >>>     </axis>
+    >>> 
+    >>> <axis
+    >>>     id ="time"
+    >>>     partition="[0 1 1 2 2 3]"
+    >>>     calendar="gregorian"
+    >>>     units="days since 2000-1-1"
+    >>>     datatype="Double"
+    >>>     length="3"
+    >>>     name_in_file="time"
+    >>> >
+    >>> 
+    >>>    [ 0. 366. 731.]
+    >>> </axis>
+    >>> 
+    >>> <variable
+    >>>    id ="u"
+    >>>    missing_value="-99.9"
+    >>>    units="m/s"
+    >>>    datatype="Double"
+    >>> >
+    >>>    <domain>
+    >>>        <domElem name="time" length="3" start="0"/>
+    >>>        <domElem name="latitude" length="16" start="0"/>
+    >>>        <domElem name="longitude" length="32" start="0"/>
+    >>>    </domain>
+    >>> </variable>
+    >>> 
+    >>> <variable
+    >>>    id ="v"
+    >>>    missing_value="-99.9"
+    >>>    units="m/s"
+    >>>    datatype="Double"
+    >>> >
+    >>>    <domain>
+    >>>        <domElem name="time" length="3" start="0"/>
+    >>>        <domElem name="latitude" length="16" start="0"/>
+    >>>        <domElem name="longitude" length="32" start="0"/>
+    >>>    </domain>
+    >>> </variable>
+    >>> 
+    >>> {% endhighlight %}
 
 
 

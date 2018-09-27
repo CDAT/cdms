@@ -147,7 +147,7 @@ Table Time Methods
 
 Examples
 ^^^^^^^^
-.. doctest:: 
+:: 
 
    >>> from cdtime import *
    >>> c = comptime(1996,2,28)

@@ -39,7 +39,7 @@ grid to another is to use the regrid function defined for variables.
 This function takes the target grid as an argument, and returns the
 variable regridded to the target grid:
 
-.. doctest::
+::
 
     >>> # wget "http://cdat.llnl.gov/cdat/sample_data/clt.nc"
     >>> # wget "http://cdat.llnl.gov/cdat/sample_data/geos5-sample.nc"
@@ -72,7 +72,7 @@ of an MV2.MaskedArray. The steps in this process are:
 The following example illustrates this process. The regridder function
 is generated at line 9, and the regridding is performed at line 10:
 
-.. doctest::
+::
 
     >>> # wget "http://cdat.llnl.gov/cdat/sample_data/clt.nc"
     >>> # wget "http://cdat.llnl.gov/cdat/sample_data/geos5-sample.nc"
@@ -157,22 +157,22 @@ In this example:
 
 ::
 
-    &remap_inputs
-    num_maps = 1
-
-    grid1_file = 'remap_grid_T42.nc'
-    grid2_file = 'remap_grid_POP43.nc'
-    interp_file1 = 'rmp_T42_to_POP43_conserv.nc'
-    interp_file2 = 'rmp_POP43_to_T42_conserv.nc'
-    map1_name = 'T42 to POP43 Conservative Mapping'           
-    map2_name = 'POP43 to T42 Conservative Mapping'
-    map_method = 'conservative'
-    normalize_opt = 'frac'
-    output_opt = 'scrip'
-    restrict_type = 'latitude'
-    num_srch_bins = 90
-    luse_grid1_area = .false.
-    luse_grid2_area = .false.
+    >>> &remap_inputs
+    >>> num_maps = 1
+    >>> 
+    >>> grid1_file = 'remap_grid_T42.nc'
+    >>> grid2_file = 'remap_grid_POP43.nc'
+    >>> interp_file1 = 'rmp_T42_to_POP43_conserv.nc'
+    >>> interp_file2 = 'rmp_POP43_to_T42_conserv.nc'
+    >>> map1_name = 'T42 to POP43 Conservative Mapping'           
+    >>> map2_name = 'POP43 to T42 Conservative Mapping'
+    >>> map_method = 'conservative'
+    >>> normalize_opt = 'frac'
+    >>> output_opt = 'scrip'
+    >>> restrict_type = 'latitude'
+    >>> num_srch_bins = 90
+    >>> luse_grid1_area = .false.
+    >>> luse_grid2_area = .false.
 
 
 ``num_maps`` specifies the number of mappings generated, either 1 or 2.
@@ -188,20 +188,20 @@ generate the remapping file ‘rmp\_T42\_to\_POP43\_conserv.nc’
 
 ::
 
-    % scrip
-     Using latitude bins to restrict search.
-      Computing remappings between:
-     T42 Gaussian Grid
-                                          and
-      POP 4/3 Displaced-Pole T grid
-      grid1 sweep
-      grid2 sweep
-      Total number of links = 63112
+    >>> % scrip
+    >>> Using latitude bins to restrict search.
+    >>>  Computing remappings between:
+    >>> T42 Gaussian Grid
+    >>>                                      and
+    >>> POP 4/3 Displaced-Pole T grid
+    >>> grid1 sweep
+    >>> grid2 sweep
+    >>> Total number of links = 63112
 
 
 Next, run CDAT and create the regridder:
 
-.. doctest::
+::
 
     >>> # wget "http://cdat.llnl.gov/cdat/sample_data/remap_grid_POP43.nc"
     >>> # wget "http://cdat.llnl.gov/cdat/sample_data/remap_grid_T42.nc"
@@ -217,7 +217,7 @@ Next, run CDAT and create the regridder:
 
 Then read the input data and regrid:
 
-.. doctest::
+::
 
     >>> # Get the source variable
     >>> f = cdms2.open('xieArkin-T42.nc')
@@ -241,7 +241,7 @@ use the ``pressureRegrid`` function defined for variables. This function
 takes an axis representing the target set of pressure levels, and
 returns a new variable ``d`` regridded to that dimension.
 
-.. doctest::
+::
 
     >>> # wget "http://cdat.llnl.gov/cdat/sample_data/ta_ncep_87-6-88-4.nc"
     >>> f=cdms2.open("ta_ncep_87-6-88-4.nc")
@@ -587,13 +587,13 @@ Generate an array of zonal mean values.
 
 .. doctest::
 
-   >>> f = cdms.open(‘rls_ccc_per.nc’)
-   >>> rlsf = f.variables[‘rls’]
-   >>> ingrid = rlsf.getGrid()
-   >>> outgrid = cdms.createZonalGrid(ingrid)
-   >>> regridFunc = Regridder(ingrid,outgrid)
-   >>> mean = regridFunc(rlsf)
-   >>> f.close()
+     >>> f = cdms.open(‘rls_ccc_per.nc’)
+     >>> rlsf = f.variables[‘rls’]
+     >>> ingrid = rlsf.getGrid()
+     >>> outgrid = cdms.createZonalGrid(ingrid)
+     >>> regridFunc = Regridder(ingrid,outgrid)
+     >>> mean = regridFunc(rlsf)
+     >>> f.close()
 
 
 

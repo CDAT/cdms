@@ -55,7 +55,7 @@ Table PythonTypes used in CDMS
 
    "Array",  "Numpy or masked multidimensional data array. All elements of the array are of the same type. Defined in the Numpy and MV2 modules."
    "Comptime", "Absolute time value, a time with representation (year, month, day, hour, minute, second). Defined in the cdtime module. cf. reltime" 
-   "Dictionary","An unordered 2,3collection of objects, indexed by key. All dictionaries in CDMS are indexed by strings, e.g.: ``axes['time']``"
+   "Dictionary","An unordered 2,3 collection of objects, indexed by key. All dictionaries in CDMS are indexed by strings, e.g.: ``axes['time']``"
    "Float", "Floating-point value."
    "Integer", "Integer value."
    "List", "An ordered sequence of objects, which need not be of the same type. New members can be inserted or appended. Lists are denoted with square brackets, e.g., ``[1, 2.0, 'x', 'y']``"
@@ -173,7 +173,8 @@ Table Cdms Module Functions
                  * ``nlat`` is the axis length. 
               **Note:** The axis is not associated with a file or dataset."
    "``Axis``", "``createGaussianAxis(nlat)``: 
-            Create a Gaussian latitude axis. Axis values range from north to south.
+            Create a Gaussian latitude axis. 
+              Axis values range from north to south.
                  * ``nlat`` is the axis length.
               **Note:** The axis is not associated with a file or dataset."
    "``RectGrid``", "``createGaussianGrid(nlats, xorigin=0.0, order='yx')``:
@@ -556,7 +557,7 @@ Table Axis Slice Operators
      **Example:** a longitude axis has value
       * ``[0.0, 2.0, ..., 358.0]``
       *   of length ``180``
-        * map the coordinate interval:    
+    Map the coordinate interval:    
            * ``-5.0 <= x < 5.0``  to index interval(s), with wraparound. the result index interval  
            * ``-2 <= n < 3`` wraps around, since     
            * ``-2 < 0``,  and has a stride of ``1`` 
@@ -565,12 +566,12 @@ Table Axis Slice Operators
 
 Example 1
 '''''''''''
-.. doctest::
+::
 
     >>> axis.isCircular()
-     1
+    >>> 1
     >>> axis.mapIntervalExt((-5.0,5.0,'co'))
-    (-2,3,1)
+    >>> (-2,3,1)
 
 
 
@@ -629,13 +630,13 @@ Table CdmsFile Methods
    "``Variable``, ``Axis``, or ``Grid``", "``fileobj['id']``", "Get the persistent variable, axis or grid object having the string identifier.
         This does not read the data for a variable.
           **Example:** The following gets the persistent variable
-            * ``v``, equivalent to
-            * ``v = f.variables['prc']``.
-            * f = cdms.open('sample.nc')
-            * v = f['prc']
+             >>> ``v``, equivalent to
+             >>> ``v = f.variables['prc']``.
+             >>> f = cdms.open('sample.nc')
+             >>> v = f['prc']
           **Example:** The following gets the axis named time, equivalent to
-            * ``t = f.axes['time']``.
-            * ``t = f['time']``"
+             >>> ``t = f.axes['time']``.
+             >>> ``t = f['time']``"
    "``None``", "``close()``", "Close the file."
    "``Axis``", "``copyAxis(axis, newname=None)``", "Copy ``axis`` values and attributes to a new axis in the file. 
          The returned object is persistent: it can be used to write axis data to or read axis data from the file.
@@ -917,7 +918,7 @@ Searching a Database
     >>> (&(id = bmrc*)(project = AMIP2))
 
 
-matches all objects with id starting with bmrc, and a project attribute
+Matches all objects with id starting with bmrc, and a project attribute
 with value ‘AMIP2’.
 
 Formally, search filters are strings defined as follows:
@@ -953,9 +954,9 @@ several ways:
 
 ::
 
-    result = db.searchFilter('(&(category=obs*)(id=ncep*))')
-    for entry in result:
-      print entry.name
+    >>> result = db.searchFilter('(&(category=obs*)(id=ncep*))')
+    >>> for entry in result:
+    >>>    print entry.name
 
 Search results can be narrowed using ``searchPredicate``. In the
 following example, the result of one search is itself searched for all
@@ -1044,9 +1045,9 @@ In the next example, a portion of variable ‘ua’ is read from dataset
 
 ::
 
-    dset = db.open('ncep_reanalysis_mo')
-    ua = dset.variables['ua']
-    data = ua[0,0]
+    >>> dset = db.open('ncep_reanalysis_mo')
+    >>> ua = dset.variables['ua']
+    >>> data = ua[0,0]
 
 
 Examples of Database Searches
@@ -1056,7 +1057,7 @@ In the following examples, db is the database opened with:
 
 ::
 
-    db = cdms.connect()
+    >>> db = cdms.connect()
 
 This defaults to the database defined in environment variable
 ``CDMSROOT``.
@@ -1065,13 +1066,11 @@ This defaults to the database defined in environment variable
 
 ::
 
-    for entry in db.searchFilter(filter = "parentid=ncep_reanalysis_mo", tag = "variable"):
-      print entry.name
+    >>> for entry in db.searchFilter(filter = "parentid=ncep_reanalysis_mo", tag = "variable"):
+    >>>    print entry.name
 
 
 **Example:** Find all axes with bounds defined:
-
-::
 
 
 
@@ -1079,8 +1078,8 @@ This defaults to the database defined in environment variable
 
 ::
 
-    for entry in db.searchFilter(filter="Conventions=GDT*",tag="dataset"):
-    print entry.name
+    >>> for entry in db.searchFilter(filter="Conventions=GDT*",tag="dataset"):
+    >>>    print entry.name
 
 **Example:** Find all variables with missing time values, in observed datasets:
 
@@ -1240,7 +1239,7 @@ MV can be imported with the command:
 
 ::
 
-    import MV
+    >>> import MV
 
 The command
 
@@ -1620,9 +1619,9 @@ Table Variable Methods
     "Integer", "``getAxisIndex(axis_spec)``", "Return the index of the axis specificed by axis\_spec. Return -1 if no match.
         * ``axis_spec`` is a specification as defined for getAxisList"
     "List", "``getAxisList(axes=None, omit=None, order=None)``", "Get an ordered list of axis objects in the domain of the variable.
-        * If ``axes`` is not ``None``, include only certain axes. Otherwise axes is a list of specifications as described below. Axes are returned in the order specified unless the order keyword is given.
-        * If ``omit`` is not ``None``, omit those specified by an integer dimension number.  Otherwise omit is a list of specifications as described below.  
-        * ``order`` is an optional string determining the output order.
+       * If ``axes`` is not ``None``, include only certain axes. Otherwise axes is a list of specifications as described below. Axes are returned in the order specified unless the order keyword is given.
+       * If ``omit`` is not ``None``, omit those specified by an integer dimension number.  Otherwise omit is a list of specifications as described below.  
+       * ``order`` is an optional string determining the output order.
       Specifications for the axes or omit keywords are a list, each element having one of the following forms:
         * an integer dimension index, starting at 0.
         * a string representing an axis id or one of the strings 'time', 'latitude', 'lat', 'longitude', 'lon', 'lev' or 'level'.
@@ -1723,7 +1722,7 @@ including+45.0, longitudes 0.0 through and including longitude 180.0:
 
 ::
 
-    data = ta.subRegion(':', (-45.0,45.0,'co'), (0.0, 180.0))
+    >>> data = ta.subRegion(':', (-45.0,45.0,'co'), (0.0, 180.0))
 
 or equivalently:
 
@@ -1736,7 +1735,7 @@ Read all data for March, 1980:
 
 ::
 
-    data = ta.subRegion(time=('1980-3','1980-4','co'))
+    >>> data = ta.subRegion(time=('1980-3','1980-4','co'))
 
 
 
@@ -1788,7 +1787,7 @@ variable. For example, the statement:
 
 ::
 
-    x = v(time='1979-1-1', level=(1000.0,100.0))
+    >>> x = v(time='1979-1-1', level=(1000.0,100.0))
 
 
 means ‘select the values of variable v for time ‘1979-1-1’ and levels
@@ -1800,7 +1799,7 @@ The form for using a selector is:
 
 ::
 
-    result = v(s)
+    >>> result = v(s)
 
 
 where v is a variable and s is the selector. An equivalent form is:
@@ -1819,7 +1818,7 @@ selector:
 
 ::
 
-    time='1979-1-1', level=(1000.0,100.0)
+    >>> time='1979-1-1', level=(1000.0,100.0)
 
 
 has two components: time=’1979-1-1’, and level=(1000.0,100.0). This
@@ -1829,7 +1828,7 @@ the form:
 
 ::
 
-    keyword=value
+    >>> keyword=value
 
 
 Note that for the keywords time, level, latitude, and longitude, the
@@ -1869,7 +1868,7 @@ example:
 
 ::
 
-    x9 = hus(('1979-1-1','1979-2-1'),1000.0)
+    >>> x9 = hus(('1979-1-1','1979-2-1'),1000.0)
 
 
 reads data for the range (‘1979-1-1’,’1979-2-1’) of the first axis, and
@@ -1891,10 +1890,10 @@ takes an argument list of selector components. For example:
    >>> x1 = v1(sel)
    >>> x2 = v2(sel)
 
-    from cdms.selectors import Selector
-    sel = Selector(time=('1979-1-1','1979-2-1'), level=1000.)
-    x1 = v1(sel)
-    x2 = v2(sel)
+   >>> from cdms.selectors import Selector
+   >>> sel = Selector(time=('1979-1-1','1979-2-1'), level=1000.)
+   >>> x1 = v1(sel)
+   >>> x2 = v2(sel)
 
 
 For convenience CDMS provides several predefined selectors, which can be
@@ -1905,8 +1904,8 @@ to their keyword counterparts. For example:
 
 ::
 
-    from cdms import time, level
-    x = hus(time('1979-1-1','1979-2-1'), level(1000.))
+    >>> from cdms import time, level
+    >>> x = hus(time('1979-1-1','1979-2-1'), level(1000.))
 
 
 and
@@ -1932,12 +1931,12 @@ Finally, a collection of selectors is defined in module cdutil.region:
 
 ::
 
-    from cdutil.region import *
-    NH=NorthernHemisphere=domain(latitude=(0.,90.)
-    SH=SouthernHemisphere=domain(latitude=(-90.,0.))
-    Tropics=domain(latitude=(-23.4,23.4))
-    NPZ=AZ=ArcticZone=domain(latitude=(66.6,90.))
-    SPZ=AAZ=AntarcticZone=domain(latitude=(-90.,-66.6))
+    >>> from cdutil.region import *
+    >>> NH=NorthernHemisphere=domain(latitude=(0.,90.)
+    >>> SH=SouthernHemisphere=domain(latitude=(-90.,0.))
+    >>> Tropics=domain(latitude=(-23.4,23.4))
+    >>> NPZ=AZ=ArcticZone=domain(latitude=(66.6,90.))
+    >>> SPZ=AAZ=AntarcticZone=domain(latitude=(-90.,-66.6))
 
 
 Selectors can be combined using the & operator, or by refining them in
@@ -1945,12 +1944,12 @@ the call:
 
 ::
 
-    from cdms.selectors import Selector
-    from cdms import level
-    sel2 = Selector(time=('1979-1-1','1979-2-1'))
-    sel3 = sel2 & level(1000.0)
-    x1 = hus(sel3)
-    x2 = hus(sel2, level=1000.0)
+    >>> from cdms.selectors import Selector
+    >>> from cdms import level
+    >>> sel2 = Selector(time=('1979-1-1','1979-2-1'))
+    >>> sel3 = sel2 & level(1000.0)
+    >>> x1 = hus(sel3)
+    >>> x2 = hus(sel2, level=1000.0)
 
 
 
@@ -1967,50 +1966,50 @@ remove the singleton level dimension from the result array.
 
 ::
 
-    import cdms
-    f = cdms.open('sample.nc')
-    hus = f.variables['hus']
-
-    # Keyword selection
-    x = hus(time=('1979-1-1','1979-2-1'), level=1000.)
-
-    # Interval indicator (see mapIntervalExt)
-    x = hus(time=('1979-1-1','1979-3-1','co'), level=1000.)
-
-    # Axis ID (plev) as a keyword
-    x = hus(time=('1979-1-1','1979-2-1'), plev=1000.)
-
-    # Positional
-    x9 = hus(('1979-1-1','1979-2-1'),1000.0)
-
-    # Predefined selectors
-    from cdms import time, level
-    x = hus(time('1979-1-1','1979-2-1'), level(1000.))
-
-    from cdms import timeslice, levelslice
-    x = hus(timeslice(0,2), levelslice(16,17))
-
-    # Call file as a function
-    x = f('hus', time=('1979-1-1','1979-2-1'), level=1000.)
-
-    # Python slices
-    x = hus(time=slice(0,2), level=slice(16,17))
-
-    # Selector objects
-    from cdms.selectors import Selector
-    sel = Selector(time=('1979-1-1','1979-2-1'), level=1000.)
-    x = hus(sel)
-
-    sel2 = Selector(time=('1979-1-1','1979-2-1'))
-    sel3 = sel2 & level(1000.0)
-    x = hus(sel3)
-    x = hus(sel2, level=1000.0)
-
-    # Squeeze singleton dimension (level)
-    x = hus[0:2,16]
-    x = hus(time=('1979-1-1','1979-2-1'), level=1000., squeeze=1)
-
-    f.close()
+    >>> import cdms
+    >>> f = cdms.open('sample.nc')
+    >>> hus = f.variables['hus']
+    >>> 
+    >>> # Keyword selection
+    >>> x = hus(time=('1979-1-1','1979-2-1'), level=1000.)
+    >>> 
+    >>> # Interval indicator (see mapIntervalExt)
+    >>> x = hus(time=('1979-1-1','1979-3-1','co'), level=1000.)
+    >>> 
+    >>> # Axis ID (plev) as a keyword
+    >>> x = hus(time=('1979-1-1','1979-2-1'), plev=1000.)
+    >>> 
+    >>> # Positional
+    >>> x9 = hus(('1979-1-1','1979-2-1'),1000.0)
+    >>> 
+    >>> # Predefined selectors
+    >>> from cdms import time, level
+    >>> x = hus(time('1979-1-1','1979-2-1'), level(1000.))
+    >>> 
+    >>> from cdms import timeslice, levelslice
+    >>> x = hus(timeslice(0,2), levelslice(16,17))
+    >>> 
+    >>> # Call file as a function
+    >>> x = f('hus', time=('1979-1-1','1979-2-1'), level=1000.)
+    >>> 
+    >>> # Python slices
+    >>> x = hus(time=slice(0,2), level=slice(16,17))
+    >>> 
+    >>> # Selector objects
+    >>> from cdms.selectors import Selector
+    >>> sel = Selector(time=('1979-1-1','1979-2-1'), level=1000.)
+    >>> x = hus(sel)
+    >>> 
+    >>> sel2 = Selector(time=('1979-1-1','1979-2-1'))
+    >>> sel3 = sel2 & level(1000.0)
+    >>> x = hus(sel3)
+    >>> x = hus(sel2, level=1000.0)
+    >>> 
+    >>> # Squeeze singleton dimension (level)
+    >>> x = hus[0:2,16]
+    >>> x = hus(time=('1979-1-1','1979-2-1'), level=1000., squeeze=1)
+    >>> 
+    >>> f.close()
 
 
 Examples
@@ -2035,60 +2034,60 @@ results are written to a netCDF file. For brevity, the functions
 
 ::
 
-    1.  import cdms
-        import MV
-
-        # Calculate variance, slope, and correlation of    
-        # surface air temperature with upper air temperature
-        # by level, and save to a netCDF file. 'pathTa' is the location of
-        # the file containing 'ta', 'pathTas' is the file with contains 'tas'.
-        # Data is extracted from January of year1 through December of year2.
-        def ccSlopeVarianceBySeasonFiltNet(pathTa,pathTas,month1,month2):
-
-            # Open the files for ta and tas
-            fta = cdms.open(pathTa)
-            ftas = cdms.open(pathTas)
-
-    2.      #Get upper air temperature
-            taObj = fta['ta']
-            levs = taObj.getLevel()
-
-            #Get the surface temperature for the closed interval [time1,time2]
-            tas = ftas('tas', time=(month1,month2,'cc'))
-
-            # Allocate result arrays
-            newaxes = taObj.getAxisList(omit='time')
-            newshape = tuple([len(a) for a in newaxes])
-            cc = MV.zeros(newshape, typecode=MV.Float, axes=newaxes, id='correlation')
-            b = MV.zeros(newshape, typecode=MV.Float, axes=newaxes, id='slope')
-            v = MV.zeros(newshape, typecode=MV.Float, axes=newaxes, id='variance')
-
-            # Remove seasonal cycle from surface air temperature
-            tas = removeSeasonalCycle(tas)
-
-            # For each level of air temperature, remove seasonal cycle
-            # from upper air temperature, and calculate statistics
-    5.      for ilev in range(len(levs)):
-
-                ta = taObj(time=(month1,month2,'cc'), \
-                           level=slice(ilev, ilev+1), squeeze=1)
-                ta = removeSeasonalCycle(ta)   
-                cc[ilev], b[ilev] = corrCoefSlope(tas ,ta)
-                v[ilev] = MV.sum( ta**2 )/(1.0*ta.shape[0])
-
-            # Write slope, correlation, and variance variables
-    6.      f = cdms.open('CC_B_V_ALL.nc','w')
-            f.title = filtered
-            f.write(b)
-            f.write(cc)
-            f.write(v)
-            f.close()
-
-    7.  if __name__=='__main__':
-            pathTa = '/pcmdi/cdms/sample/ccmSample_ta.xml'
-            pathTas = '/pcmdi/cdms/sample/ccmSample_tas.xml'  
-            # Process Jan80 through Dec81
-            ccSlopeVarianceBySeasonFiltNet(pathTa,pathTas,'80-1','81-12')
+    >>> 1.  import cdms
+    >>>    import MV
+    >>> 
+    >>>    # Calculate variance, slope, and correlation of    
+    >>>    # surface air temperature with upper air temperature
+    >>>    # by level, and save to a netCDF file. 'pathTa' is the location of
+    >>>    # the file containing 'ta', 'pathTas' is the file with contains 'tas'.
+    >>>    # Data is extracted from January of year1 through December of year2.
+    >>>    def ccSlopeVarianceBySeasonFiltNet(pathTa,pathTas,month1,month2):
+    >>> 
+    >>>        # Open the files for ta and tas
+    >>>        fta = cdms.open(pathTa)
+    >>>        ftas = cdms.open(pathTas)
+    >>> 
+    >>> 2.      #Get upper air temperature
+    >>>        taObj = fta['ta']
+    >>>        levs = taObj.getLevel()
+    >>> 
+    >>>        #Get the surface temperature for the closed interval [time1,time2]
+    >>>        tas = ftas('tas', time=(month1,month2,'cc'))
+    >>> 
+    >>>        # Allocate result arrays
+    >>>        newaxes = taObj.getAxisList(omit='time')
+    >>>        newshape = tuple([len(a) for a in newaxes])
+    >>>        cc = MV.zeros(newshape, typecode=MV.Float, axes=newaxes, id='correlation')
+    >>>        b = MV.zeros(newshape, typecode=MV.Float, axes=newaxes, id='slope')
+    >>>        v = MV.zeros(newshape, typecode=MV.Float, axes=newaxes, id='variance')
+    >>> 
+    >>>        # Remove seasonal cycle from surface air temperature
+    >>>        tas = removeSeasonalCycle(tas)
+    >>> 
+    >>>        # For each level of air temperature, remove seasonal cycle
+    >>>        # from upper air temperature, and calculate statistics
+    >>> 5.      for ilev in range(len(levs)):
+    >>> 
+    >>>            ta = taObj(time=(month1,month2,'cc'), \
+    >>>                       level=slice(ilev, ilev+1), squeeze=1)
+    >>>            ta = removeSeasonalCycle(ta)   
+    >>>            cc[ilev], b[ilev] = corrCoefSlope(tas ,ta)
+    >>>            v[ilev] = MV.sum( ta**2 )/(1.0*ta.shape[0])
+    >>> 
+    >>>        # Write slope, correlation, and variance variables
+    >>> 6.      f = cdms.open('CC_B_V_ALL.nc','w')
+    >>>        f.title = filtered
+    >>>        f.write(b)
+    >>>        f.write(cc)
+    >>>        f.write(v)
+    >>>        f.close()
+    >>> 
+    >>> 7.  if __name__=='__main__':
+    >>>        pathTa = '/pcmdi/cdms/sample/ccmSample_ta.xml'
+    >>>        pathTas = '/pcmdi/cdms/sample/ccmSample_tas.xml'  
+    >>>        # Process Jan80 through Dec81
+    >>>        ccSlopeVarianceBySeasonFiltNet(pathTa,pathTas,'80-1','81-12')
 
 
 **Notes:**
@@ -2123,108 +2122,108 @@ the vcs module.
 
 ::
 
-            #!/usr/bin/env python
-            #
-            # Calculates gridpoint total variance
-            # from an array of interest
-            #
-
-            import cdms
-            from MV import *
-
-            # Wait for return in an interactive window
-
-            def pause():
-                print Hit return to continue: ,
-                line = sys.stdin.readline()
-
-    1.      # Calculate pointwise variance of variable over time
-            # Returns the variance and the number of points
-            # for which the data is defined, for each grid point
-            def calcVar(x):
-                # Check that the first axis is a time axis
-                firstaxis = x.getAxis(0)
-                if not firstaxis.isTime():
-                    raise 'First axis is not time, variable:', x.id
-                
-                n = count(x,0)
-                sumxx = sum(x*x)
-                sumx = sum(x)
-                variance = (n*sumxx -(sumx * sumx))/(n * (n-1.))
-
-                return variance, n
-
-            if __name__=='__main__':
-                import vcs, sys
-
-                print 'Enter dataset path [/pcmdi/cdms/obs/erbs_mo.xml]: ',
-                path = string.strip(sys.stdin.readline())
-                if path=='': path='/pcmdi/cdms/obs/erbs_mo.xml'
-
-    2.          # Open the dataset
-                dataset = cdms.open(path)
-
-                # Select a variable from the dataset
-                print 'Variables in file:',path
-                varnames = dataset.variables.keys()
-                varnames.sort()
-                for varname in varnames:
-
-                    var = dataset.variables[varname]
-                    if hasattr(var,'long_name'):
-                        long_name = var.long_name
-                    elif hasattr(var,'title'):
-                        long_name = var.title
-                    else:
-                        long_name = '?'
-
-                print '%-10s: %s'%(varname,long_name)
-                print 'Select a variable: ',
-    3.          varname = string.strip(sys.stdin.readline())
-                var = dataset(varname)
-                dataset.close()
-
-                # Calculate variance, count, and set attributes
-                variance,n = calcVar(var)
-                variance.id = 'variance_%s'%var.id
-                n.id = 'count_%s'%var.id
-                if hasattr(var,'units'):
-                    variance.units = '(%s)^2'%var.units
-            
-                # Plot variance
-                w=vcs.init()
-    4.          w.plot(variance)
-                pause()
-                w.clear()
-                w.plot(n)
-                pause()
-                w.clear()
+         >>> #!/usr/bin/env python
+         >>> #
+         >>> # Calculates gridpoint total variance
+         >>> # from an array of interest
+         >>> #
+         >>> 
+         >>> import cdms
+         >>> from MV import *
+         >>> 
+         >>> # Wait for return in an interactive window
+         >>> 
+         >>> def pause():
+         >>>     print Hit return to continue: ,
+         >>>     line = sys.stdin.readline()
+         >>> 
+         >>> 1.      # Calculate pointwise variance of variable over time
+         >>> # Returns the variance and the number of points
+         >>> # for which the data is defined, for each grid point
+         >>> def calcVar(x):
+         >>>     # Check that the first axis is a time axis
+         >>>     firstaxis = x.getAxis(0)
+         >>>     if not firstaxis.isTime():
+         >>>         raise 'First axis is not time, variable:', x.id
+         >>>       
+         >>>     n = count(x,0)
+         >>>     sumxx = sum(x*x)
+         >>>     sumx = sum(x)
+         >>>     variance = (n*sumxx -(sumx * sumx))/(n * (n-1.))
+         >>> 
+         >>>     return variance, n
+         >>> 
+         >>>   if __name__=='__main__':
+         >>>     import vcs, sys
+         >>> 
+         >>>     print 'Enter dataset path [/pcmdi/cdms/obs/erbs_mo.xml]: ',
+         >>>     path = string.strip(sys.stdin.readline())
+         >>>     if path=='': path='/pcmdi/cdms/obs/erbs_mo.xml'
+         >>> 
+         >>> 2.  # Open the dataset
+         >>>     dataset = cdms.open(path)
+         >>> 
+         >>>     # Select a variable from the dataset
+         >>>     print 'Variables in file:',path
+         >>>     varnames = dataset.variables.keys()
+         >>>     varnames.sort()
+         >>>     for varname in varnames:
+         >>> 
+         >>>         var = dataset.variables[varname]
+         >>>         if hasattr(var,'long_name'):
+         >>>             long_name = var.long_name
+         >>>         elif hasattr(var,'title'):
+         >>>             long_name = var.title
+         >>>         else:
+         >>>             long_name = '?'
+         >>> 
+         >>>     print '%-10s: %s'%(varname,long_name)
+         >>>     print 'Select a variable: ',
+         >>> 3.  varname = string.strip(sys.stdin.readline())
+         >>>     var = dataset(varname)
+         >>>     dataset.close()
+         >>> 
+         >>>     # Calculate variance, count, and set attributes
+         >>>     variance,n = calcVar(var)
+         >>>     variance.id = 'variance_%s'%var.id
+         >>>     n.id = 'count_%s'%var.id
+         >>>     if hasattr(var,'units'):
+         >>>         variance.units = '(%s)^2'%var.units
+         >>>   
+         >>>     # Plot variance
+         >>>     w=vcs.init()
+         >>> 4.  w.plot(variance)
+         >>>     pause()
+         >>>     w.clear()
+         >>>     w.plot(n)
+         >>>     pause()
+         >>>     w.clear()
 
 
 The result of running this script is as follows:
 
 ::
 
-    % calcVar.py
-    Enter dataset path [/pcmdi/cdms/sample/obs/erbs_mo.xml]:
-
-    Variables in file: /pcmdi/cdms/sample/obs/erbs_mo.xml
-    albt    : Albedo TOA [%]
-    albtcs : Albedo TOA clear sky [%]
-    rlcrft  : LW Cloud Radiation Forcing TOA [W/m^2]
-    rlut    : LW radiation TOA (OLR) [W/m^2]
-    rlutcs : LW radiation upward TOA clear sky [W/m^2]
-    rscrft : SW Cloud Radiation Forcing TOA [W/m^2]
-    rsdt    : SW radiation downward TOA [W/m^2]
-    rsut    : SW radiation upward TOA [W/m^2]
-    rsutcs : SW radiation upward TOA clear sky [W/m^2]
-    Select a variable: albt
-
-    <The variance is plotted>
-
-    Hit return to continue:
-
-    <The number of points is plotted>
+    >>> % calcVar.py
+    >>> Enter dataset path [/pcmdi/cdms/sample/obs/erbs_mo.xml]:
+    >>> 
+    >>> Variables in file: /pcmdi/cdms/sample/obs/erbs_mo.xml
+    >>> albt    : Albedo TOA [%]
+    >>> albtcs : Albedo TOA clear sky [%]
+    >>> rlcrft  : LW Cloud Radiation Forcing TOA [W/m^2]
+    >>> rlut    : LW radiation TOA (OLR) [W/m^2]
+    >>> rlutcs : LW radiation upward TOA clear sky [W/m^2]
+    >>> rscrft : SW Cloud Radiation Forcing TOA [W/m^2]
+    >>> rsdt    : SW radiation downward TOA [W/m^2]
+    >>> rsut    : SW radiation upward TOA [W/m^2]
+    >>> rsutcs : SW radiation upward TOA clear sky [W/m^2]
+    >>> Select a variable: albt
+    >>> 
+    >>> <The variance is plotted>
+    >>> 
+    >>> Hit return to continue:
+    >>> 
+    >>> <The number of points is plotted>
 
 
 **Notes:**

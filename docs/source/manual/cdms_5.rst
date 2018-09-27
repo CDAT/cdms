@@ -42,8 +42,10 @@ Plotting a Gridded Variable
       os.remove(file)
 
 
+**Example:**
+  Plotting a gridded variable
 
-.. doctest:: Example: plotting a gridded variable
+.. doctest::
 
     >>> import cdms2, vcs 
     >>> f = cdms2.open("clt.nc") 

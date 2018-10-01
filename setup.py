@@ -22,28 +22,6 @@ MINOR = 0
 PATCH = 0
 Version = "%s.%s.%s" % (MAJOR,MINOR,PATCH)
 
-f=open("git.py","w")
-git_branch=subprocess.Popen(["git","rev-parse","--abbrev-ref","HEAD"],stdout=subprocess.PIPE).stdout.read().strip().decode("utf-8")
-print("branch = '%s'" % git_branch, file=f)
-git_tag = subprocess.Popen(["git","describe","--tags"],stdout=subprocess.PIPE).stdout.read().strip().decode("utf-8")
-sp=git_tag.split("-")
-if len(sp)>2:
-    commit = sp[-1]
-    nm = "-".join(sp[:-2])
-    diff=sp[-2]
-else:
-    commit = git_tag
-    nm = git_tag
-    diff=0
-print("closest_tag = '%s'" % nm, file=f)
-print("commit = '%s'" % commit, file=f)
-print("diff_from_tag = %s" % diff, file=f)
-print("version = '%s'" % Version, file=f)
-f.close()
-
-shutil.copy("git.py",os.path.join("Lib","git.py"))
-shutil.copy("git.py",os.path.join("regrid2","Lib","git.py"))
-
 import cdat_info
 import numpy
 macros = []

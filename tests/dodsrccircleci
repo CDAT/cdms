@@ -1,6 +1,6 @@
 HTTP.VERBOSE=0
-HTTP.COOKIEJAR=/Users/distiller/.esg/.dods_cookies
-HTTP.SSL.CERTIFICATE=/Users/distiller/.esg/esgf.cert
-HTTP.SSL.KEY=/Users/distiller/.esg/esgf.cert
-HTTP.SSL.CAPATH=/Users/distiller/.esg/
+HTTP.COOKIEJAR=$HOME/.esg/.dods_cookies
+HTTP.SSL.CERTIFICATE=$HOME/.esg/esgf.cert
+HTTP.SSL.KEY=$HOME/.esg/esgf.cert
+HTTP.SSL.CAPATH=$HOME/.esg/
 

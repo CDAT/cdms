@@ -22,7 +22,7 @@ class TestFormats(basetest.CDMSBaseTest):
         data = f['a']
         self.assertEqual(data.missing_value, 1e20)
 
-    def dtestDAP(self):
+    def testDAP(self):
         try:
             os.unlink(os.environ['HOME']+'/.dodsrc')
         except:

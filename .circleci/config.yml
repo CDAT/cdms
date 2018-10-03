@@ -17,7 +17,7 @@ aliases:
   - &create_conda_env
     name: create_conda_env
     environment:
-       CHANNELS: "-c cdat/label/unstable -c cdat/label/nightly -c conda-forge -c cdat"
+       CHANNELS: "-c cdat/label/unstable -c cdat/label/nightly -c conda-forge/label/gcc7 -c conda-forge -c cdat"
        PKGS: "libcf distarray cdtime libcdms cdat_info testsrunner numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient"
     command: |
        export PATH=$WORKDIR/miniconda/bin:$PATH

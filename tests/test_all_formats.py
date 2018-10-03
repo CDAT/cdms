@@ -22,6 +22,7 @@ class TestFormats(basetest.CDMSBaseTest):
         data = f['a']
         self.assertEqual(data.missing_value, 1e20)
 
+    #Does not work once cdms2 is loaded with certificate
     def dtestDAP(self):
         try:
             os.unlink(os.environ['HOME']+'/.dodsrc')

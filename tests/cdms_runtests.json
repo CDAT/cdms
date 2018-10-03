@@ -1,0 +1,8 @@
+{
+    "--subdir": {
+        "action": "store_true",
+        "default": true,
+        "help": "specifies if tests should be run in a subdir",
+	"type": null
+    }
+}

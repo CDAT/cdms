@@ -535,7 +535,9 @@ static int cdopen(const char* controlpath, int ncmode, CuFileType *filetype) {
 		/* Take care for mode flag */
 		if ((cdms_classic == 0) || (cdms_shuffle != 0) || (cdms_deflate != 0)
 				|| (cdms_netcdf4 == 1)) {
-			ncmode = ncmode | NC_NETCDF4;
+		    if(strstr(controlpath, "http") == NULL){
+		        ncmode = ncmode | NC_NETCDF4;
+		    }
 		}
 #ifdef PARALLEL
 		/* ok we can only use MPIIO if not using shuffle or deflate for reason
@@ -3089,7 +3091,9 @@ static int PyCdunifVariableObject_ass_subscript(PyCdunifVariableObject *self,
 		if (PySlice_Check(index)) {
 			Py_ssize_t slicelen;
 			int length;
-			if( self->dimensions[0] == self->file->recdim ){
+            length = INT_MAX;
+ 			if( self->dimids[0]== self->file->recdim &&
+			        self->dimensions[0] == 0){
 			    length = INT_MAX;
 			} else {
 			    length = self->dimensions[0];
@@ -3097,6 +3101,10 @@ static int PyCdunifVariableObject_ass_subscript(PyCdunifVariableObject *self,
 			PySlice_GetIndicesEx((PySliceObject *) index, length,
 					&indices->start, &indices->stop, &indices->stride,
 					&slicelen);
+
+			if(indices->stop == indices->start){
+			    indices->stop = indices->start + indices->stride;
+			}
 			return PyCdunifVariable_WriteArray(self, indices, value);
 		}
 		if (PyTuple_Check(index)) {

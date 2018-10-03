@@ -1,8 +1,10 @@
 ### Builds
 
-[![CircleCI](https://circleci.com/gh/UV-CDAT/cdms.svg?style=shield&circle-token=b960fe5194ad7052b820e6589014887531fa53f8)](https://github.com/UV-CDAT/cdms/build)
-[![TravisCI](https://travis-ci.org/UV-CDAT/cdms.svg?branch=master)](https://travis-ci.org/UV-CDAT/cdms/builds)
+[![CircleCI](https://circleci.com/gh/CDAT/cdms.svg?style=svg)](https://circleci.com/gh/CDAT/cdms)
+[![Coverage Status](https://coveralls.io/repos/github/CDAT/cdms/badge.svg)](https://coveralls.io/github/CDAT/cdms)
+[![TravisCI](https://travis-ci.org/CDAT/cdms.svg?branch=master)](https://travis-ci.org/CDAT/cdms/builds)
 ![platforms](http://img.shields.io/badge/platforms-linux%20|%20osx-lightgrey.svg)
+
 
 ### Anaconda
 [![Anaconda-Server Badge](https://anaconda.org/uvcdat/cdms2/badges/version.svg)](https://anaconda.org/uvcdat/cdms2)

@@ -11,7 +11,7 @@ from .cdmsobj import CdmsObj
 from .axis import TransientAxis, createAxis, createUniformLatitudeAxis
 from .axis import createUniformLongitudeAxis, getAutoBounds
 from .axis import createGaussianAxis, isSubsetVector
-from .axis import lookupArray # noqa
+from .axis import lookupArray  # noqa
 
 MethodNotImplemented = "Method not yet implemented"
 

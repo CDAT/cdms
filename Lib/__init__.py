@@ -4,7 +4,6 @@ CDMS module-level API
 
 import cdat_info
 cdat_info.pingPCMDIdb("cdat", "cdms2")  # noqa
-from . import git  # noqa
 from . import myproxy_logon  # noqa
 
 __all__ = ["cdmsobj", "axis", "coord", "grid", "hgrid", "avariable",
@@ -14,7 +13,7 @@ __all__ = ["cdmsobj", "axis", "coord", "grid", "hgrid", "avariable",
            "mvBaseWriter", "mvSphereMesh", "mvVsWriter", "mvCdmsRegrid"]
 
 # Errors
-from .error import CDMSError  # noqa 
+from .error import CDMSError  # noqa
 
 # CDMS datatypes
 from .cdmsobj import CdArray, CdChar, CdByte, CdDouble, CdFloat, CdFromObject, CdInt, CdLong, CdScalar, CdShort, CdString  # noqa

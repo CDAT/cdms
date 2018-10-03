@@ -26,10 +26,9 @@ aliases:
        conda config --set anaconda_upload no
        if [[ $PY_VER = 'py2' ]]; then
           conda create -n $PY_VER $CHANNELS $PKGS $CONDA_COMPILER "python<3"
-          conda install python
+          conda install -n $PY_VER -c conda-forge/label/gcc7 python
        else
           conda create -n $PY_VER $CHANNELS $PKGS $CONDA_COMPILER "python>3" coverage coveralls
-          conda install python
        fi
 
   - &setup_cdms

@@ -126,23 +126,26 @@ Table Time Methods
    :widths: 20, 75, 80
    :align: left
 
-   "Comptime or Reltime", "``t.add(value,intervalUnits, calendar=cdtime.Default-Calendar)``", "Add an interval of time to a time type t.  Returns the same type of time.
+   "Comptime or Reltime", "``t.add(value,intervalUnits, calendar=cdtime.Default-Calendar)``", "Add an interval of time to a time type t.  
+     Returns the same type of time.
        * ``value`` is the   Float number of interval units.
        * ``intervalUnits`` is ``cdtime.
        * [Second (s) | Minute(s) Hour(s) | Day(s) |  Week(s) | Month(s) | Season(s) | Year(s) ]``
        * ``calendar`` is the calendar type."
-   "Integer", "``t.cmp(t2, calendar=cdtime.DefaultCalendar)``", "Compare time values t and t2. Returns -1, 0, 1 as t is less than, equal to, or greater than t2 respectively.
+   "Integer", "``t.cmp(t2, calendar=cdtime.DefaultCalendar)``", "Compare time values t and t2. 
+     Returns -1, 0, 1 as t is less than, equal to, or greater than t2 respectively.
        * ``t2`` is the time to compare.
        * ``calendar`` is the calendar type."
-   "Comptime or Reltime", "``t.sub(value,intervalUnits, calendar=cdtime.DefaultCalendar)``", "Subtract an interval of time from a time type t.  Returns the same type of time.
+   "Comptime or Reltime", "``t.sub(value,intervalUnits, calendar=cdtime.DefaultCalendar)``", "Subtract an interval of time from a time type t. 
+     Returns the same type of time.
        * ``value`` is the Float number of interval units.
        * ``intervalUnits`` is cdtime.[Second (s) | Minute(s) | Hour(s) | Day(s) | Week(s) | Month(s) | Season(s) | Year(s)]
        * ``calendar`` is the calendar type. "
    "Comptime", "``t.tocomp(calendar = cdtime.DefaultCalendar)``", "Convert to component time.  
-       * Returns the equivalent component time.
+     Returns the equivalent component time.
        * ``calendar`` is the calendar type."
    "Reltime", "``t.torel(units, calendar=cdtime.DefaultCalendar)``", "Convert to relative time.  
-       * Returns the equivalent relative time."
+     Returns the equivalent relative time."
    
 
 Examples

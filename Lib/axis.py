@@ -1079,7 +1079,6 @@ class AbstractAxis(CdmsObj):
     # (1) self.topology=='circular', or
     # (2) self.topology is undefined, and the axis is a longitude
     def isCircular(self):
-
         if hasattr(self, 'realtopology'):
             if self.realtopology == 'circular':
                 return True

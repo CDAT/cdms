@@ -1067,7 +1067,6 @@ class AbstractAxis(CdmsObj):
 
         return iscircle
 
-
 # mfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmf
 #
 # mf 20010405 -- test if an transient Axis is REALLY circular
@@ -1078,6 +1077,7 @@ class AbstractAxis(CdmsObj):
     # An axis is defined as circular if:
     # (1) self.topology=='circular', or
     # (2) self.topology is undefined, and the axis is a longitude
+
     def isCircular(self):
         if hasattr(self, 'realtopology'):
             if self.realtopology == 'circular':

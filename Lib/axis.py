@@ -1276,7 +1276,6 @@ class AbstractAxis(CdmsObj):
         # i=i-1
         return (i, j)
 
-
 # mfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmf
 #
 # mf 20010308 - 20010412 -- general handing of wrapping

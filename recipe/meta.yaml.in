@@ -1,0 +1,42 @@
+package:
+    name: cdms2
+    version: @VERSION@
+
+source:
+    git_rev: @UVCDAT_BRANCH@
+    git_url: git://github.com/CDAT/cdms.git
+
+build:
+  number: @BUILD_NUMBER@
+ 
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('fortran') }}
+  host:
+    - python
+    - setuptools
+    - libcdms
+    - cdat_info
+    - numpy
+    - libdrs_f
+  run:
+    - python
+    - libcf
+    - distarray
+    - cdtime
+    - libcdms
+    - cdat_info
+    - {{ pin_compatible('numpy') }}
+    - esmf >=7.1.*
+    - esmpy >=7.1.*
+    - libdrs_f
+    - pyopenssl
+
+about:
+    home:  http://github.com/CDAT/cdms
+    license: '3-Clause BSD'
+    license_file: 'bsd-3-clause.txt'
+
+
+

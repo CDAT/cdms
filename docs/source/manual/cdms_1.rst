@@ -95,7 +95,7 @@ from file sample.nc into variable u:
 
 
 ..
-
+::
     >>> # wget "http://cdat.llnl.gov/cdat/sample_data/clt.nc"
     >>> f = cdms2.open('clt.nc')
     >>> u = f('u')

@@ -28,6 +28,9 @@ pi = numpy.pi
 newaxis = numpy.newaxis
 counter = 0
 
+load = numpy.load
+dump = numpy.ndarray.dump
+
 
 def fill_value(ar):
     return ar.fill_value

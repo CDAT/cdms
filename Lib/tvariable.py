@@ -164,8 +164,13 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
                 fill_value = data.fill_value
         except BaseException:
             pass
+
         if fill_value is not None:
             self._setmissing(fill_value)
+        else:
+            fill_value = numpy.ma.MaskedArray(1).astype(dtype).item()
+            fill_value = numpy.ma.default_fill_value(fill_value)
+
         if attributes is not None and "_FillValue" in list(attributes.keys()):
             self._setmissing(attributes["_FillValue"])
 
@@ -297,16 +302,9 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         if any(x is 'N/A' for x in str(fill_value)):
             fill_value = None
 
-        if fill_value is not None:
-            fill_value = numpy.array(fill_value).astype(dtype)
-        else:
-            fill_value = numpy.ma.MaskedArray(1).astype(dtype).item()
-            fill_value = numpy.ma.default_fill_value(fill_value)
-
         self = numpy.ma.MaskedArray.__new__(cls, data, dtype=dtype,
                                             copy=ncopy,
                                             mask=mask,
-                                            fill_value=fill_value,
                                             subok=False,
                                             order=order)
 

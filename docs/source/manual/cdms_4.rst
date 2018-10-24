@@ -263,7 +263,7 @@ To regrid a variable which is a function of latitude, height, and
 arguments the new latitudes and heights, and returns the variable
 regridded to those axes.
 
-.. doctest::
+::
 
     >>> # wget "http://cdat.llnl.gov/cdat/sample_data/ta_ncep_87-6-88-4.nc"
     >>> f=cdms2.open("ta_ncep_87-6-88-4.nc")
@@ -292,7 +292,7 @@ of CDMS, it is designed to work with CDMS objects.
 CDMS Horizontal Regridder
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. doctest::
+::
 
     from regrid2 import Regridder
 
@@ -435,7 +435,7 @@ A SCRIP regridder function is an instance of the ScripRegridder class.
 Such a function is created by calling the regrid.readRegridder method.
 Typical usage is straightforward:
 
-.. doctest::
+::
 
     >>> import cdms2
     >>> import regrid2
@@ -451,7 +451,7 @@ Typical usage is straightforward:
 
 The bicubic regridder takes four arguments:
 
-.. doctest::
+::
 
     >>> # outdat = regridf(t42prc, gradlat, gradlon, gradlatlon)
 
@@ -511,7 +511,7 @@ CDMS Regridder
 
 Regrid data to a uniform output grid.
 
-.. doctest::
+::
 
     
     >>> import cdms2
@@ -544,7 +544,7 @@ the number of cells in the input grid.
 
 Get a mask from a separate file, and set as the input grid mask.
 
-.. doctest::
+::
 
     >>> # wget http://cdat.llnl.gov/cdat/sample_data/clt.nc
     >>> # wget http://cdat.llnl.gov/cdat/sample_data/geos5-sample.nc
@@ -585,8 +585,7 @@ case.
 Generate an array of zonal mean values.
 
 
-.. doctest::
-
+::
      >>> f = cdms.open(‘rls_ccc_per.nc’)
      >>> rlsf = f.variables[‘rls’]
      >>> ingrid = rlsf.getGrid()
@@ -614,7 +613,7 @@ Generate an array of zonal mean values.
 Regrid an array with missing data, and calculate the area-weighted mean
 of the result.
 
-.. doctest:: 
+:: 
 
    >>> import cdms2
    >>> from cdms2.MV2 import *
@@ -670,7 +669,7 @@ Regrid from a curvilinear to a generic grid, using a conservative
 remapping. Compute the area-weighted means on input and output for
 comparison.
 
-.. doctest::
+::
 
     >>> # wget "http://cdat.llnl.gov/cdat/sample_data/remap_grid_T42.nc"
     >>> # wget http://cdat.llnl.gov/cdat/sample_data/rmp_T42_to_C02562_conserv.nc

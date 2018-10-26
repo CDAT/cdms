@@ -49,7 +49,8 @@ def fromJSON(jsn):
                 setattr(ax, k, v)
         axes.append(ax)
     # Now prep the variable
-    V = createVariable(D["_values"], id=D["id"], typecode=D["_dtype"])
+    D["_mask"]=numpy.array(D["_mask"])
+    V = createVariable(D["_values"], id=D["id"], typecode=D["_dtype"], mask=D["_mask"])
     V.setAxisList(axes)
     for k, v in D.items():
         if k not in ["id", "_values", "_axes",
@@ -258,6 +259,43 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
     fill_value = property(_getmissing, _setmissing)
     _FillValue = property(_getmissing, _setmissing)
     missing_value = property(_getmissing, _setmissing)
+
+    # Pickling
+    def __getstate__(self):
+        """Return the internal state of the tvariable, for pickling
+        purposes.
+
+        """
+        cf = 'CF'[self.flags.fnc]
+        data_state = super(numpy.ma.MaskedArray, self).__reduce__()[2]
+        state = self.dumps()
+        return data_state + (numpy.ma.getmaskarray(self).tobytes(cf), self._fill_value,state)
+
+    def __setstate__(self, state):
+        """Restore the internal state of the tvariable, for
+        pickling purposes.  ``state`` is typically the output of the
+        ``__getstate__`` output, and is a 5-tuple:
+
+        - json file from dumps()
+
+        """
+        (_, shp, typ, isf, raw, msk, flv, json) = state
+
+        msk=numpy.array(msk)
+        #
+        # create a dummy variable to restore pickel
+        #
+        newvar=createVariable(json, fromJSON=True)
+        (_, shp, typ, isf, raw) = newvar.data.__reduce__()[2]
+        super(TransientVariable, self).__setstate__(state[0:7])
+        self.__dict__.update(newvar.__dict__)
+        self.__dict__.update(newvar.__dict__)
+        self.setAxisList(newvar.getAxisList())
+        self.setGrid(newvar.getGrid())
+        axes = [x[0] for x in newvar.getDomain()]
+        if axes is not None:
+            self.initDomain(axes)
+
 
     def __new__(cls, data, typecode=None, copy=0, savespace=0,
                 mask=numpy.ma.nomask, fill_value=None, grid=None,
@@ -574,13 +612,17 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         for a in self.getAxisList():
             ax = {}
             for A, v in a.attributes.items():
-                ax[A] = v
+                if isinstance(v, numpy.ndarray):
+                    ax[A] = v.tolist()
+                else:
+                    ax[A] = v
             ax['id'] = a.id
             ax["_values"] = a[:].tolist()
             ax["_dtype"] = a[:].dtype.char
             axes.append(ax)
         J["_axes"] = axes
         J["_values"] = self[:].filled(self.fill_value).tolist()
+        J["_mask"] = self._mask.tolist()
         J["_fill_value"] = float(self.fill_value)
         J["_dtype"] = self.typecode()
         J["_grid"] = None  # self.getGrid()

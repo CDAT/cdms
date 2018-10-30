@@ -10,6 +10,8 @@ import sys
 import json
 import re
 import numpy
+import zlib  # for pickling JSON
+
 from numpy import sctype2char
 from .error import CDMSError
 from .avariable import AbstractVariable
@@ -49,7 +51,7 @@ def fromJSON(jsn):
                 setattr(ax, k, v)
         axes.append(ax)
     # Now prep the variable
-    D["_mask"]=numpy.array(D["_mask"])
+    D["_mask"] = numpy.array(D["_mask"])
     V = createVariable(D["_values"], id=D["id"], typecode=D["_dtype"], mask=D["_mask"])
     V.setAxisList(axes)
     for k, v in D.items():
@@ -151,7 +153,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
     __sqrt__ = AbstractVariable.__sqrt__
 
     def __init__(self, data, typecode=None, copy=1, savespace=0,
-                 mask=numpy.ma.nomask, fill_value=None, grid=None,
+                 mask=[numpy.ma.nomask], fill_value=None, grid=None,
                  axes=None, attributes=None, id=None, copyaxes=1, dtype=None,
                  order='C', no_update_from=False, **kargs):
         """createVariable (self, data, typecode=None, copy=0, savespace=0,
@@ -268,8 +270,8 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         """
         cf = 'CF'[self.flags.fnc]
         data_state = super(numpy.ma.MaskedArray, self).__reduce__()[2]
-        state = self.dumps()
-        return data_state + (numpy.ma.getmaskarray(self).tobytes(cf), self._fill_value,state)
+        state = zlib.compress(self.dumps())
+        return data_state + (numpy.ma.getmaskarray(self).tobytes(cf), self._fill_value, state)
 
     def __setstate__(self, state):
         """Restore the internal state of the tvariable, for
@@ -281,11 +283,11 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         """
         (_, shp, typ, isf, raw, msk, flv, json) = state
 
-        msk=numpy.array(msk)
+        msk = numpy.array(msk)
         #
         # create a dummy variable to restore pickel
         #
-        newvar=createVariable(json, fromJSON=True)
+        newvar = createVariable(zlib.decompress(json), fromJSON=True)
         (_, shp, typ, isf, raw) = newvar.data.__reduce__()[2]
         super(TransientVariable, self).__setstate__(state[0:7])
         self.__dict__.update(newvar.__dict__)
@@ -296,9 +298,8 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         if axes is not None:
             self.initDomain(axes)
 
-
     def __new__(cls, data, typecode=None, copy=0, savespace=0,
-                mask=numpy.ma.nomask, fill_value=None, grid=None,
+                mask=[numpy.ma.nomask], fill_value=None, grid=None,
                 axes=None, attributes=None, id=None, copyaxes=1, dtype=None, order='C', **kargs):
         """createVariable (self, data, typecode=None, copy=0, savespace=0,
                  mask=None, fill_value=None, grid=None,
@@ -327,7 +328,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             try:
                 mask = data.mask
             except Exception:
-                mask = numpy.ma.nomask
+                mask = [numpy.ma.nomask]
 
         # Handle the case where ar[i:j] returns a single masked value
         if data is numpy.ma.masked:

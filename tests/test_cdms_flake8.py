@@ -26,7 +26,7 @@ class TestFlake8(unittest.TestCase):
         print(pth)
         # W504 and W503 are mutually execlusive.  
         # http://pycodestyle.pycqa.org/en/latest/intro.html#error-codes
-        P = Popen(shlex.split("flake8 --show-source --statistics --ignore=F999,F405,E121,E123,E126,E226,E24,E704,W504 --max-line-length=120 %s" % pth),
+        P = Popen(shlex.split("flake8 --show-source --statistics --ignore=F999,F405,E121,E123,E126,E226,E24,E704,W504,W605 --max-line-length=120 %s" % pth),
                              stdin=PIPE,
                              stdout=PIPE,
                              stderr=PIPE, close_fds=True)

@@ -153,7 +153,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
     __sqrt__ = AbstractVariable.__sqrt__
 
     def __init__(self, data, typecode=None, copy=1, savespace=0,
-                 mask=[numpy.ma.nomask], fill_value=None, grid=None,
+                 mask=numpy.ma.nomask, fill_value=None, grid=None,
                  axes=None, attributes=None, id=None, copyaxes=1, dtype=None,
                  order='C', no_update_from=False, **kargs):
         """createVariable (self, data, typecode=None, copy=0, savespace=0,
@@ -270,7 +270,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         """
         cf = 'CF'[self.flags.fnc]
         data_state = super(numpy.ma.MaskedArray, self).__reduce__()[2]
-        state = zlib.compress(self.dumps())
+        state = zlib.compress(self.dumps().encode("utf-8"))
         return data_state + (numpy.ma.getmaskarray(self).tobytes(cf), self._fill_value, state)
 
     def __setstate__(self, state):
@@ -283,13 +283,18 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         """
         (_, shp, typ, isf, raw, msk, flv, json) = state
 
-        msk = numpy.array(msk)
+        #msk = numpy.array(msk)
         #
         # create a dummy variable to restore pickel
         #
-        newvar = createVariable(zlib.decompress(json), fromJSON=True)
+        newvar = createVariable(zlib.decompress(json.decode("utf-8")), fromJSON=True)
+
+        msk = [numpy.ma.MaskType(x) for x in list(bytearray(msk))]
+        newvar = createVariable(newvar,  mask=msk, fill_value=flv)
+
         (_, shp, typ, isf, raw) = newvar.data.__reduce__()[2]
         super(TransientVariable, self).__setstate__(state[0:7])
+
         self.__dict__.update(newvar.__dict__)
         self.__dict__.update(newvar.__dict__)
         self.setAxisList(newvar.getAxisList())
@@ -299,7 +304,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             self.initDomain(axes)
 
     def __new__(cls, data, typecode=None, copy=0, savespace=0,
-                mask=[numpy.ma.nomask], fill_value=None, grid=None,
+                mask=numpy.ma.nomask, fill_value=None, grid=None,
                 axes=None, attributes=None, id=None, copyaxes=1, dtype=None, order='C', **kargs):
         """createVariable (self, data, typecode=None, copy=0, savespace=0,
                  mask=None, fill_value=None, grid=None,
@@ -623,7 +628,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             axes.append(ax)
         J["_axes"] = axes
         J["_values"] = self[:].filled(self.fill_value).tolist()
-        J["_mask"] = self._mask.tolist()
+        J["_mask"] = numpy.array(self._mask).tolist()
         J["_fill_value"] = float(self.fill_value)
         J["_dtype"] = self.typecode()
         J["_grid"] = None  # self.getGrid()

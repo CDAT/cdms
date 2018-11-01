@@ -1,0 +1,52 @@
+package:
+    name: cdms2
+    version: @VERSION@
+
+source:
+    git_rev: @UVCDAT_BRANCH@
+    git_url: git://github.com/CDAT/cdms.git
+
+build:
+  number: @BUILD_NUMBER@
+ 
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('fortran') }}
+  host:
+    - python
+    - setuptools
+    - libcdms
+    - cdat_info
+    - numpy
+    - libdrs_f
+  run:
+    - python
+    - libcf
+    - distarray
+    - cdtime
+    - libcdms
+    - cdat_info
+    - {{ pin_compatible('numpy') }}
+    - esmf >=7.1.*
+    - esmpy >=7.1.*
+    - libdrs_f
+    - pyopenssl
+
+about:
+
+  home: https://cdms.readthedocs.io/en/latest
+  license: '3-Clause BSD'
+  license_file: 'bsd-3-clause.txt'
+  summary: 'Community Data Management System'
+  description: |
+    The Community Data Management System is an object-oriented
+    data management system, specialized for organizing
+    multidimensional, gridded data used in climate
+    analysis and simulation.
+  dev_url: http://github.com/CDAT/cdms2
+
+
+
+
+

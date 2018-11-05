@@ -34,9 +34,17 @@ requirements:
     - pyopenssl
 
 about:
-    home:  http://github.com/CDAT/cdms
-    license: '3-Clause BSD'
-    license_file: 'bsd-3-clause.txt'
+
+  home: https://cdms.readthedocs.io/en/latest
+  license: '3-Clause BSD'
+  license_file: 'bsd-3-clause.txt'
+  summary: 'Community Data Management System'
+  description: |
+    The Community Data Management System is an object-oriented
+    data management system, specialized for organizing
+    multidimensional, gridded data used in climate
+    analysis and simulation.
+  dev_url: http://github.com/CDAT/cdms2
 
 
 

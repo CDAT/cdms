@@ -17,13 +17,40 @@ Steps to reproduce the behavior:
 **Expected behavior**
 A clear and concise description of what you expected to happen.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+**Screenshots or traceback**
+If applicable, add screenshots/traceback to help explain your problem.
 
 **Desktop (please complete the following information):**
  - OS: [e.g. iOS]
  - Browser [e.g. chrome, safari]
  - Version [e.g. 22]
+
+## Environment Information
+<details open><summary><code>`conda info`</code></summary><p>
+<!-- between the ticks below, paste the output of 'conda info' -->
+
+```
+
+```
+</p></details>
+
+
+<details open><summary><code>`conda config --show-sources`</code></summary><p>
+<!-- between the ticks below, paste the output of 'conda config --show-sources' -->
+
+```
+
+```
+</p></details>
+
+
+<details><summary><code>`conda list --show-channel-urls`</code></summary><p>
+<!-- between the ticks below, paste the output of 'conda list --show-channel-urls' -->
+
+```
+
+```
+</p></details>
 
 **Additional context**
 Add any other context about the problem here.

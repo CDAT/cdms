@@ -95,7 +95,7 @@ from file sample.nc into variable u:
 
 
 ..
-::
+
     >>> # wget "http://cdat.llnl.gov/cdat/sample_data/clt.nc"
     >>> f = cdms2.open('clt.nc')
     >>> u = f('u')
@@ -690,8 +690,8 @@ For example, suppose the source data on a T42 grid is to be mapped to a
 POP curvilinear grid. Assume that SCRIP generated a remapping file named
 rmp_T42_to_POP43_conserv.nc:
 
-.. doctest::
-
+..
+  
    >>> # Import regrid package for regridder functions
    >>> import regrid2, cdms2
    
@@ -846,13 +846,12 @@ distributed computing environment. At present CDMS supports one
 particular type of database, based on the Lightweight Directory Access
 Protocol (LDAP).
 
-.. Here is an example of accessing data via a database:
+Here is an example of accessing data via a database:
 
-.. .. doctest::
- 
-..   >>> db = cdms.connect() # Connect to the default database.
-..   >>> f = db.open('ncep_reanalysis_mo') # Open a dataset.
-..   >>> f.variables.keys() # List the variables in the dataset.
+::
+   >>> db = cdms.connect() # Connect to the default database.
+   >>> f = db.open('ncep_reanalysis_mo') # Open a dataset.
+   >>> f.variables.keys() # List the variables in the dataset.
 ..   ['ua', 'evs', 'cvvta', 'tauv', 'wap', 'cvwhusa', 'rss', 'rls', ... 'prc', 'ts', 'va']
 
 

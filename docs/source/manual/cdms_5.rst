@@ -45,7 +45,7 @@ Plotting a Gridded Variable
 **Example:**
   Plotting a gridded variable
 
-.. doctest::
+::
 
     >>> import cdms2, vcs 
     >>> f = cdms2.open("clt.nc") 
@@ -77,7 +77,7 @@ fill in the extra plot information.
 Using A Plot Keywords
 ^^^^^^^^^^^^^^^^^^^^^
 
-.. doctest::
+::
 
     >>> import cdms2, vcs 
     >>> f = cdms2.open("clt.nc") 
@@ -97,7 +97,7 @@ Plotting a Time-Latitude Slice
 Assuming that variable ``clt`` has domain ``(time,latitude,longitude)``,
 this example selects and plots a time-latitude slice:
 
-.. doctest::
+::
 
     >>> import cdms2, vcs 
     >>> f = cdms2.open("clt.nc") 
@@ -121,7 +121,7 @@ Plotting Subsetted Data
 Calling the variable ``clt`` as a function reads a subset of the
 variable. The result variable ``samp`` can be plotted directly:
 
-.. doctest::
+::
 
     >>> import cdms2, vcs 
     >>> f = cdms2.open("clt.nc")

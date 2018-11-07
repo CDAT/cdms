@@ -445,7 +445,6 @@ def createDataset(path, template=None):
 #   or LDAP URL of a catalog dataset entry.
 # 'mode' is 'r', 'r+', 'a', or 'w'
 
-
 def openDataset(uri, mode='r', template=None,
                 dods=1, dpath=None, hostObj=None):
     """
@@ -1202,6 +1201,7 @@ class Dataset(CdmsObj, cuDataset):
     def __repr__(self):
         return "<Dataset: '%s', URI: '%s', mode: '%s', status: %s>" % (
             self.id, self.uri, self.mode, self._status_)
+
 
 # internattr.add_internal_attribute (Dataset, 'datapath',
 # 'variables',

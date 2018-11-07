@@ -18,7 +18,7 @@ sys.path.append(os.environ.get('BUILD_DIR',"build"))
 
 
 MAJOR = 3
-MINOR = 0
+MINOR = 1
 PATCH = 0
 Version = "%s.%s.%s" % (MAJOR,MINOR,PATCH)
 

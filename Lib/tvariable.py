@@ -52,7 +52,8 @@ def fromJSON(jsn):
         axes.append(ax)
     # Now prep the variable
     D["_mask"] = numpy.array(D["_mask"])
-    V = createVariable(D["_values"], id=D["id"], typecode=D["_dtype"], mask=D["_mask"])
+    D["_msk"]  = [numpy.ma.MaskType(x) for x in list(bytearray(str(D["_msk"])))]
+    V = createVariable(D["_values"], id=D["id"], typecode=D["_dtype"], mask=D["_msk"])
     V.setAxisList(axes)
     for k, v in D.items():
         if k not in ["id", "_values", "_axes",
@@ -367,7 +368,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
     def expertSlice(self, slicelist):
         if slicelist == []:
             slicelist = ()
-        return numpy.ma.MaskedArray.__getitem__(self, slicelist)
+        return numpy.ma.MaskedArray.__getitem__(self, tuple(slicelist))
 
     def initDomain(self, axes, copyaxes=1):
         # lazy evaluation via getAxis to avoid creating axes that aren't ever
@@ -628,6 +629,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             axes.append(ax)
         J["_axes"] = axes
         J["_values"] = self[:].filled(self.fill_value).tolist()
+        J["_msk"] =  numpy.ma.getmaskarray(self).tobytes('C')
         J["_mask"] = numpy.array(self._mask).tolist()
         J["_fill_value"] = float(self.fill_value)
         J["_dtype"] = self.typecode()
@@ -678,6 +680,30 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         Get the tile index (for mosaics)
         """
         return self.tileIndex
+
+    def to_dataframe(self):
+        """Convert a TransientVariable into a pandas.DataFrame.
+
+        Transient variable the column of the DataFrame. 
+        The DataFrame is be indexed by the cartesian product of
+        this Transient variable dimensions
+        """
+        import pandas as pd
+        from collections import OrderedDict
+        columns = [self.id]
+        data = [self[:]._data.reshape(-1)]
+        axes =[]
+        axes.append([str(i) for i in self.getTime().asComponentTime()])
+        if self.getLevel() is not None:
+            axes.append(self.getLevel()[:])
+        if self.getLatitude() is not None:
+            axes.append(self.getLatitude()[:])
+        if self.getLongitude() is not None:
+            axes.append(self.getLongitude()[:])
+        names = [axis.id for axis in self.getAxisList()]
+        index = pd.MultiIndex.from_product(axes,names=names)
+        return pd.DataFrame(OrderedDict(zip(columns, data)), index=index)
+
 
     def toVisit(self, filename, format='Vs', sphereRadius=1.0,
                 maxElev=0.1):

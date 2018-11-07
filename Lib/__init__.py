@@ -29,7 +29,7 @@ from .axis import createAxis, createEqualAreaAxis, createGaussianAxis, createUni
 from .grid import createGenericGrid, createGlobalMeanGrid, createRectGrid, createUniformGrid, createZonalGrid, setClassifyGrids, createGaussianGrid, writeScripGrid, isGrid  # noqa
 
 # Dataset functions
-from .dataset import createDataset, openDataset, useNetcdf3  # noqa
+from .dataset import createDataset, openDataset, useNetcdf3   # noqa
 from .dataset import getNetcdfClassicFlag, getNetcdfShuffleFlag, getNetcdfDeflateFlag, getNetcdfDeflateLevelFlag  # noqa
 from .dataset import setNetcdfClassicFlag, setNetcdfShuffleFlag, setNetcdfDeflateFlag, setNetcdfDeflateLevelFlag  # noqa
 from .dataset import setNetcdfUseNCSwitchModeFlag, getNetcdfUseNCSwitchModeFlag  # noqa
@@ -69,3 +69,5 @@ except BaseException:
 from .restApi import esgfConnection, esgfDataset, FacetConnection  # noqa
 
 MV = MV2  # noqa
+#from . import dask_protocol
+from .dask_protocol import serialize, deserialize

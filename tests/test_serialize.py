@@ -7,7 +7,6 @@ import platform
 from shutil import copyfile
 import MV2
 import cdms2
-print(dir(cdms2))
 from cdms2 import serialize, deserialize
 import dask.array.ma as dam
 from distributed.utils_test import gen_cluster

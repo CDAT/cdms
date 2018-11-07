@@ -49,8 +49,8 @@ where
 
 The CDML elements are:
 
-Table CDML Tags
-^^^^^^^^^^^^^^^^^^^                   
+CDML Tags
+^^^^^^^^^                   
 
 +------------+---------------------------------------+
 | Tag        | Description                           |
@@ -76,8 +76,8 @@ Special Characters
 XML reserves certain characters for markup. If they appear as content,
 they must be encoded to avoid confusion with markup:
 
-Table Special Character Encodings
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Special Character Encodings
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
                                      
 
 +-------------+------------+
@@ -235,8 +235,8 @@ length).
 
 ``linear-element ::=`` **<linear delta=** ``"value”`` **length=** ``“Integer“`` **start=** ``“value“`` **> </linear>**
 
-Table Axis Elements
-^^^^^^^^^^^^^^^^^^^
+Axis Elements
+^^^^^^^^^^^^^
 
 .. csv-table::
    :header: "Attribute", "Required?", "CF", "GDT", "Notes"
@@ -313,8 +313,8 @@ rectilinear in topology,
 ``grid-element ::=`` **<rectGrid** ``grid-attributes``\ **>**
 ``extra-attribute-element*`` **</rectGrid>**
 
-Table 6.5 RectGrid Attributes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6.5 RectGrid Attributes
+^^^^^^^^^^^^^^^^^^^^^^^
                              
 
 .. raw:: html
@@ -369,8 +369,8 @@ start=\ **"``Integer``" **\ length=\ **"``Integer``"
 **\ partition\_length=\ **"``Integer``"**/>\*\*
 
 
-Table Variable Attributes
-^^^^^^^^^^^^^^^^^^^^^^^^^
+Variable Attributes
+^^^^^^^^^^^^^^^^^^^
 
 
 .. csv-table::

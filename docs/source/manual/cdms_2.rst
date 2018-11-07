@@ -46,8 +46,8 @@ the class internal (non-persistent) attributes, constructors (functions
 for creating an object), and class methods (functions). A method can
 return an instance of a CDMS class, or one of the Python types:
 
-Table PythonTypes used in CDMS
--------------------------------
+PythonTypes used in CDMS
+------------------------
 .. csv-table:: 
    :header:  "Type", "Description"
    :widths:  10, 80
@@ -144,8 +144,8 @@ Rather, they are called as module functions, e.g.,
 
 
 
-Table Cdms Module Functions
----------------------------
+Cdms Module Functions
+---------------------
 
 .. csv-table::  
    :header:  "Type", "Definition"
@@ -291,8 +291,8 @@ Table Cdms Module Functions
 
 
 
-Table Class Tags
---------------------
+Class Tags
+----------
 .. csv-table::  
    :header:  "Tag", "Class"
    :widths:  20, 20
@@ -327,8 +327,8 @@ external attributes are written, but not the internal attributes.
 Attributes Common to All CDMS Objects
 -------------------------------------
 
-Table Attributes Common to All CDMS Objects
--------------------------------------------
+Attributes Common to All CDMS Objects
+-------------------------------------
 
 .. csv-table:: Attributes common to all CDMS objects
    :header:  "Type", "Name", "Definition"
@@ -337,8 +337,8 @@ Table Attributes Common to All CDMS Objects
    "Dictionary", "attributes", "External attribute dictionary for this object."
 
 
-Table Getting and Setting Attributes
-------------------------------------
+Getting and Setting Attributes
+------------------------------
 .. csv-table::  
    :header:  "Type", "Definition"
    :widths:  20, 80
@@ -369,8 +369,8 @@ documents methods that are common to all CoordinateAxis
 types. See `HorizontalGrid <#id4>`_ specifies methods that are unique to 1D
 Axis objects.
 
-Table CoordinateAxis Types
---------------------------
+CoordinateAxis Types
+--------------------
 
 .. csv-table:: 
    :header:  "Type", "Definition"
@@ -390,8 +390,8 @@ Table CoordinateAxis Types
                  * An axis in a ``CdmsFile`` may be designated the unlimited axis, meaning that it can be extended in length after the initial definition. 
                  * There can be at most one unlimited axis associated with a ``CdmsFile``."
 
-Table CoordinateAxis Internal Attributes
-----------------------------------------
+CoordinateAxis Internal Attributes
+----------------------------------
 
 .. csv-table:: 
    :header:  "Type", "Name", "Definition"
@@ -402,8 +402,8 @@ Table CoordinateAxis Internal Attributes
    "``Dataset``", "``parent``", "The dataset which contains the variable."
    "``Tuple``", "``shape``", "The length of each axis."
 
-Table Axis Constructors
------------------------
+Axis Constructors
+-----------------
 
 .. csv-table:: 
    :header:  "Constructor", "Description"
@@ -430,8 +430,8 @@ Table Axis Constructors
              * See `A First Example`_ ."
 
 
-Table CoordinateAxis Methods
-----------------------------
+CoordinateAxis Methods
+----------------------
 
 .. csv-table:: 
    :header:  "Type", "Method", "Definition"
@@ -490,8 +490,8 @@ Table CoordinateAxis Methods
    "``Integer``", "``size()``", "The number of elements in the axis."
    "``String``", "``typecode()``", "The ``Numpy`` datatype identifier."
 
-Table Axis Methods, Additional to CoordinateAxis
-------------------------------------------------
+Axis Methods, Additional to CoordinateAxis
+------------------------------------------
 
 .. csv-table::  
    :header:  "Type", "Method", "Definition"
@@ -540,8 +540,8 @@ Table Axis Methods, Additional to CoordinateAxis
           * The stride ``k`` can be positive or negative.
           * Wraparound is supported for longitude dimensions or those with a modulus attribute." 
 
-Table Axis Slice Operators
---------------------------
+Axis Slice Operators
+--------------------
 
 .. csv-table::  
    :header:  "Slice", "Definition"
@@ -585,8 +585,8 @@ As of CDMS V3, the legacy cuDataset interface is also supported by
 Cdms-Files. See “cu Module”.
 
 
-Table CdmsFile Internal Attributes
-----------------------------------
+CdmsFile Internal Attributes
+----------------------------
 
 .. csv-table::  
    :header:  "Type", "Name", "Definition"
@@ -598,8 +598,8 @@ Table CdmsFile Internal Attributes
    "``String``", "``id``", "File pathname."
    "``Dictionary``", "``variables``", "Variables contained in the file."
 
-Table CdmsFile Constructors
----------------------------
+CdmsFile Constructors
+---------------------
 
 .. csv-table::  
    :header:  "Constructor", "Description"
@@ -612,8 +612,8 @@ Table CdmsFile Constructors
          * ``mode`` is the open mode indicator, as listed in `Open Modes <#table-open-modes>`_." 
    "``fileobj = cdms.createDataset(path)``", "Create the file specified by path, a string."
 
-Table CdmsFile Methods
-----------------------
+CdmsFile Methods
+----------------
 
 .. csv-table:: 
    :header:  "Type", "Method", "Definition"
@@ -700,8 +700,8 @@ Table CdmsFile Methods
            * ``index`` is the extended dimension index to write to. The default index is determined by lookup relative to the existing extended dimension.
            **Note:** data can also be written by setting a slice of a file variable, and attributes can be written by setting an attribute of a file variable."
 
-Table CDMS Datatypes
---------------------
+CDMS Datatypes
+--------------
 
 .. csv-table::  
    :header:  "CDMS Datatype", "Definition"
@@ -794,8 +794,8 @@ To access a database:
 
    ``db.close()``
 
-Table Database Internal Attributes
-----------------------------------
+Database Internal Attributes
+----------------------------
 
 
 .. csv-table::  
@@ -809,8 +809,8 @@ Table Database Internal Attributes
     "``String``", "``uri``", "Uniform Resource Identifier"
 
 
-Table Database Constructors
----------------------------
+Database Constructors
+---------------------
 
 .. csv-table::  
    :header:  "Constructor", "Description"
@@ -829,8 +829,8 @@ Table Database Constructors
           * ``password`` is the user password. 
           **Note:** A password is not required for an anonymous connection"
 
-Table Database Methods
-----------------------
+Database Methods
+----------------
 
 .. csv-table::  
    :header:  "Type", "Method", "Definition"
@@ -985,8 +985,8 @@ variables defined on a 94x192 grid:
 
 
 
-Table SearchResult Methods
---------------------------
+SearchResult Methods
+--------------------
 
 .. csv-table::  
    :header:  "Type", "Method", "Definition"
@@ -1008,8 +1008,8 @@ information defined for the associated CDMS object, which is retrieved
 with the ``getObject`` method.
 
 
-Table ResultEntry Attributes
-----------------------------
+ResultEntry Attributes
+----------------------
 
 .. csv-table::  
    :header:  "Type", "Method", "Definition"
@@ -1019,8 +1019,8 @@ Table ResultEntry Attributes
     "Dictionary", "``attributes``", "The attributes returned from the search. ``attributes[key]`` is a list of all string values associated with the key"
 
 
-Table ResultEntry Methods
--------------------------
+ResultEntry Methods
+-------------------
 
 .. csv-table::  
    :header:  "Type", "Method", "Definition"
@@ -1138,8 +1138,8 @@ As of CDMS V3, the legacy cuDataset interface is supported by Datasets.
 See “cu Module".
 
 
-Table Dataset Internal Attributes
----------------------------------
+Dataset Internal Attributes
+---------------------------
 
 .. csv-table:: 
    :header:  "Type", "Name", "Description"
@@ -1155,8 +1155,8 @@ Table Dataset Internal Attributes
     "Dictionary", "``variables``", "Variables contained in the dataset."
     "Dictionary", "``xlinks``", "External links contained in the dataset."
 
-Table Dataset Constructors
---------------------------
+Dataset Constructors
+--------------------
 
 .. csv-table::  
    :header:  "Constructor", "Description"
@@ -1166,8 +1166,8 @@ Table Dataset Constructors
     "``datasetobj = cdms.open(String uri, String mode='r')``", "Open the dataset specified by the Universal Resource Indicator, a CDML file. Returns a Dataset object. mode is one of the indicators listed in `Open Modes <#table-open-modes>`__ . ``openDataset`` is a synonym for ``open``"
 
 
-Table Open Modes
-----------------
+Open Modes
+----------
 
 .. csv-table:: 
    :header:  "Mode", "Definition"
@@ -1180,8 +1180,8 @@ Table Open Modes
    "‘w’", "Create a new file, read-write"
 
 
-Table Dataset Methods
----------------------
+Dataset Methods
+---------------
 
 .. csv-table::  
    :header:  "Type", "Definition", "Description"
@@ -1277,8 +1277,8 @@ http://numpy.sourceforge.net for a description of these functions.
 
   
 
-Table Variable  Constructors in Module MV
------------------------------------------
+Variable  Constructors in Module MV
+-----------------------------------
 
 .. tabularcolumns:: |l|r|
 
@@ -1303,8 +1303,8 @@ The following table describes the MV non-constructor functions. with the
 exception of argsort, all functions return a transient variable.
 
 
-Table MV Functions
-------------------
+MV Functions
+------------
 .. csv-table::   
    :header:  "Function", "Description"
    :widths:  50,  80
@@ -1365,8 +1365,8 @@ cells. Specifically, a HorizontalGrid:
 CDMS supports several types of HorizontalGrids:
 
 
-Table Grids
------------
+Grids
+-----
 
 .. csv-table:: 
    :header:  "Grid Type", "Definition"
@@ -1377,8 +1377,8 @@ Table Grids
     "``GenericGrid``", "Latitude and longitude are 1-D auxiliary coordinate axis (AuxAxis1D)"
 
 
-Table HorizontalGrid Internal Attribute
----------------------------------------
+HorizontalGrid Internal Attribute
+---------------------------------
 
 .. csv-table::  
    :header:  "Type", "Name", "Definition"
@@ -1392,8 +1392,8 @@ Table HorizontalGrid Internal Attribute
 
      
 
-Table RectGrid Constructors
----------------------------
+RectGrid Constructors
+---------------------
 
 .. csv-table:: 
    :header:  "Constructor", "Description"
@@ -1413,8 +1413,8 @@ Table RectGrid Constructors
 
 
 
-Table HorizontalGrid Methods
-----------------------------
+HorizontalGrid Methods
+----------------------
 
 
 .. csv-table:: 
@@ -1474,8 +1474,8 @@ Table HorizontalGrid Methods
               * If unspecified, the grid ID is copied." 
 
 
-Table RectGrid Methods, Additional to HorizontalGrid Methods
-------------------------------------------------------------
+RectGrid Methods, Additional to HorizontalGrid Methods
+------------------------------------------------------
 
 .. csv-table::  
    :header:  "Type", "Method", "Description"
@@ -1538,8 +1538,8 @@ advantage of the attribute, domain, and mask information in a transient
 variable.
 
 
-Table Variable Internal Attributes
-----------------------------------
+Variable Internal Attributes
+----------------------------
 
 .. csv-table::  
    :header:  "Type", "Name", "Definition"
@@ -1552,8 +1552,8 @@ Table Variable Internal Attributes
     "Tuple", "``shape``", "The length of each axis of the variable"
 
 
-Table Variable Constructors
----------------------------
+Variable Constructors
+---------------------
 
 .. csv-table::  
    :header:  "Constructor", "Description"
@@ -1581,8 +1581,8 @@ Table Variable Constructors
 
 
 
-Table Variable Methods
-----------------------
+Variable Methods
+----------------
 
 .. csv-table::  
    :header:  "Type", "Method", "Definition"
@@ -1739,8 +1739,8 @@ Read all data for March, 1980:
 
 
 
-Table Variable Slice Operators
-------------------------------
+Variable Slice Operators
+------------------------
 
 .. csv-table::  
    :header:  "Operator", "Description"
@@ -1758,8 +1758,8 @@ Table Variable Slice Operators
 
 
 
-Table Index and Coordinate Intervals
-------------------------------------
+Index and Coordinate Intervals
+------------------------------
 
 .. csv-table::  
    :header:  "Interval Definition", "Example Interval Definition", "Example"
@@ -1843,8 +1843,8 @@ components is the positional form, where the component order corresponds
 to the axis order of a variable. For example:
 
 
-Table Selector Keywords
------------------------
+Selector Keywords
+-----------------
 
 .. csv-table::  
    :header:  "Keyword", "Description", "Value"

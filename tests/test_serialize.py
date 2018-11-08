@@ -1,15 +1,11 @@
 import cdms2
-import os
-import sys
 import cdat_info
 import basetest
-import platform
-from shutil import copyfile
 import MV2
 import cdms2
 from distributed.protocol import serialize, deserialize
-import dask.array.ma as dam
 from distributed.utils_test import gen_cluster
+# import dask.array.ma as dam
 import dask.array as da
 import pickle
 

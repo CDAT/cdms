@@ -2,7 +2,6 @@ from distributed.protocol import register_serialization
 from cdms2.fvariable import FileVariable
 from cdms2.tvariable import TransientVariable, createVariable
 import zlib
-import numpy.ma
 import cdms2
 
 

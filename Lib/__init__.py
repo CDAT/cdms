@@ -69,5 +69,5 @@ except BaseException:
 from .restApi import esgfConnection, esgfDataset, FacetConnection  # noqa
 
 MV = MV2  # noqa
-#from . import dask_protocol
-from .dask_protocol import serialize, deserialize
+# from .dask_protocol import serialize, deserialize  # noqa
+import dask_protocol

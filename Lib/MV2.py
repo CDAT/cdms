@@ -19,8 +19,8 @@ from cdms2.grid import AbstractRectGrid
 from cdms2.error import CDMSError
 # from numpy.ma import *
 from cdms2.axis import allclose as axisAllclose, TransientAxis, concatenate as axisConcatenate, take as axisTake
-import dask.array as da
-import dask
+# import dask.array as da
+# import dask
 
 create_mask = make_mask_none
 e = numpy.e

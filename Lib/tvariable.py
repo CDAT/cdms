@@ -50,24 +50,27 @@ def convertJSON(jsn):
             if k not in ["_values", "id", "_dtype"]:
                 setattr(ax, k, v)
         axes.append(ax)
-    D["_msk"]  = numpy.array([numpy.ma.MaskType(x) for x in list(bytearray(str(D["_msk"])))])
+    D["_msk"] = numpy.array([numpy.ma.MaskType(x)
+                             for x in list(bytearray(str(D["_msk"])))])
     attrs = {}
     for k, v in D.items():
         if k not in ["id", "_values", "_axes",
-                     "_grid", "_fill_value", "_dtype", "_msk", "_mask"  ]:
-            attrs[str(k)]=str(v)
+                     "_grid", "_fill_value", "_dtype", "_msk", "_mask"]:
+            attrs[str(k)] = str(v)
 
     return (D, axes, attrs)
+
 
 def fromJSON(jsn):
     """ Recreate a TV from a dumped jsn object from dumps()"""
     try:
-       jsn = zlib.decompress(jsn)
-    except:
-       pass
+        jsn = zlib.decompress(jsn)
+    except BaseException:
+        pass
 
     (D, axes, attrs) = convertJSON(jsn)
-    V = createVariable(D["_values"], id=D["id"], typecode=D["_dtype"], mask=D["_msk"], axes=axes, fill_value=D["_fill_value"], attributes=attrs)
+    V = createVariable(D["_values"], id=D["id"], typecode=D["_dtype"],
+                       mask=D["_msk"], axes=axes, fill_value=D["_fill_value"], attributes=attrs)
     return V
 
 
@@ -280,7 +283,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         myjson = self.dumps().encode("utf-8")
         state = zlib.compress(myjson)
         return(state)
-        #return(self.dumps().encode("utf-8"))
+        # return(self.dumps().encode("utf-8"))
 
     def __setstate__(self, state):
         """Restore the internal state of the tvariable, for
@@ -290,16 +293,18 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         - json file from dumps()
 
         """
-        state2=zlib.decompress(state)
+        state2 = zlib.decompress(state)
         (D, axes, attrs) = convertJSON(state2)
-        newvar = createVariable(D["_values"], id=D["id"], typecode=D["_dtype"], mask=D["_msk"], axes=axes, fill_value=D["_fill_value"], attributes=attrs)
+        newvar = createVariable(D["_values"], id=D["id"], typecode=D["_dtype"],
+                                mask=D["_msk"], axes=axes, fill_value=D["_fill_value"], attributes=attrs)
 
-        # 
+        #
         # Pickle has already create an empty variable by calling __new__()
         # Reset the pickled Transient variable with the new data from nevar
-        # 
+        #
         (_, shp, typ, isf, raw) = newvar.data.__reduce__()[2]
-        state = (_, shp, typ, isf, raw, D["_msk"].tobytes('C'), D["_fill_value"])
+        state = (_, shp, typ, isf, raw,
+                 D["_msk"].tobytes('C'), D["_fill_value"])
         super(TransientVariable, self).__setstate__(state)
 
         self.__dict__.update(newvar.__dict__)
@@ -309,7 +314,6 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         axes = [x[0] for x in newvar.getDomain()]
         if axes is not None:
             self.initDomain(axes)
-
 
     def __new__(cls, data, typecode=None, copy=0, savespace=0,
                 mask=numpy.ma.nomask, fill_value=None, grid=None,
@@ -636,7 +640,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             axes.append(ax)
         J["_axes"] = axes
         J["_values"] = self[:].filled(self.fill_value).tolist()
-        J["_msk"] =  numpy.ma.getmaskarray(self).tobytes('C')
+        J["_msk"] = numpy.ma.getmaskarray(self).tobytes('C')
         J["_mask"] = numpy.array(self._mask).tolist()
         J["_fill_value"] = float(self.fill_value)
         J["_dtype"] = self.typecode()
@@ -691,7 +695,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
     def to_dataframe(self):
         """Convert a TransientVariable into a pandas.DataFrame.
 
-        Transient variable the column of the DataFrame. 
+        Transient variable the column of the DataFrame.
         The DataFrame is be indexed by the cartesian product of
         this Transient variable dimensions
         """
@@ -699,7 +703,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         from collections import OrderedDict
         columns = [self.id]
         data = [self[:]._data.reshape(-1)]
-        axes =[]
+        axes = []
         axes.append([str(i) for i in self.getTime().asComponentTime()])
         if self.getLevel() is not None:
             axes.append(self.getLevel()[:])
@@ -708,9 +712,8 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         if self.getLongitude() is not None:
             axes.append(self.getLongitude()[:])
         names = [axis.id for axis in self.getAxisList()]
-        index = pd.MultiIndex.from_product(axes,names=names)
+        index = pd.MultiIndex.from_product(axes, names=names)
         return pd.DataFrame(OrderedDict(zip(columns, data)), index=index)
-
 
     def toVisit(self, filename, format='Vs', sphereRadius=1.0,
                 maxElev=0.1):

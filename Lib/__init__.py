@@ -50,7 +50,7 @@ from .selectors import longitudeslice, latitudeslice, levelslice, timeslice  # n
 
 from .avariable import order2index, orderparse, setNumericCompatibility, getNumericCompatibility  # noqa
 # TV
-from .tvariable import asVariable, createVariable, isVariable  # noqa
+from .tvariable import asVariable, createVariable, isVariable, fromJSON  # noqa
 
 from .mvSphereMesh import SphereMesh  # noqa
 from .mvBaseWriter import BaseWriter  # noqa

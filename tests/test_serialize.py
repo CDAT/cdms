@@ -10,9 +10,8 @@ import cdms2
 from cdms2 import serialize, deserialize
 import dask.array.ma as dam
 from distributed.utils_test import gen_cluster
-
-
 import dask.array as da
+import pickle
 
 @gen_cluster(client=True)
 def testDaskArrayFV(c, s, a, b):
@@ -23,8 +22,8 @@ def testDaskArrayFV(c, s, a, b):
     myResult = yield x
     assert MV2.allclose(myResult, dataFV)==True
     f.close()
-@gen_cluster(client=True)
 
+@gen_cluster(client=True)
 def testDaskArrayTV(c, s, a, b):
     f = cdms2.open(cdat_info.get_sampledata_path()+"/clt.nc")
     dataTV=f("clt")
@@ -37,10 +36,27 @@ def testDaskArrayTV(c, s, a, b):
 class TestDask(basetest.CDMSBaseTest):
 
     def setUp(self):
-        super(TestDask,self ).setUp()
+        super(TestDask, self).setUp()
         self.f = cdms2.open(cdat_info.get_sampledata_path()+"/clt.nc")
         self.dataTV=self.f("clt")
         self.dataFV=self.f["clt"]                                                                                                                                                                                     
+    def testpickle(self):
+        newvar = pickle.loads(pickle.dumps(self.dataTV))
+        self.assertTrue(MV2.allclose(self.dataTV, newvar))
+
+    def testTVdumps(self):
+        TVstate = self.dataTV.dumps()
+        newvar=cdms2.fromJSON(TVstate)
+        self.assertTrue(MV2.allclose(self.dataTV, newvar))
+
+    def testTVSerializeDeserialize(self):
+        #
+        # make sure that JSON is uncomporessed since
+        # zlib compress is called by __getstate__()
+        #
+        TVstate = self.dataTV.__getstate__()
+        newvar=cdms2.fromJSON(TVstate)
+        self.assertTrue(MV2.allclose(self.dataTV, newvar))
 
     def testSerializeDeserialize(self):
         result = deserialize(*serialize(self.dataFV))

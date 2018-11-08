@@ -34,8 +34,8 @@ except BaseException:
 id_builtin = id  # built_in gets clobbered by keyword
 
 
-def fromJSON(jsn):
-    """ Recreate a TV from a dumped jsn object"""
+def convertJSON(jsn):
+    """ Extract Data axes and attributes from JSON string"""
     D = json.loads(jsn)
 
     # First recreates the axes
@@ -50,16 +50,24 @@ def fromJSON(jsn):
             if k not in ["_values", "id", "_dtype"]:
                 setattr(ax, k, v)
         axes.append(ax)
-    # Now prep the variable
-    D["_mask"] = numpy.array(D["_mask"])
-    D["_msk"]  = [numpy.ma.MaskType(x) for x in list(bytearray(str(D["_msk"])))]
-    V = createVariable(D["_values"], id=D["id"], typecode=D["_dtype"], mask=D["_msk"])
-    V.setAxisList(axes)
+    D["_msk"]  = numpy.array([numpy.ma.MaskType(x) for x in list(bytearray(str(D["_msk"])))])
+    attrs = {}
     for k, v in D.items():
         if k not in ["id", "_values", "_axes",
-                     "_grid", "_fill_value", "_dtype", ]:
-            setattr(V, k, v)
-    V.set_fill_value(D["_fill_value"])
+                     "_grid", "_fill_value", "_dtype", "_msk", "_mask"  ]:
+            attrs[str(k)]=str(v)
+
+    return (D, axes, attrs)
+
+def fromJSON(jsn):
+    """ Recreate a TV from a dumped jsn object from dumps()"""
+    try:
+       jsn = zlib.decompress(jsn)
+    except:
+       pass
+
+    (D, axes, attrs) = convertJSON(jsn)
+    V = createVariable(D["_values"], id=D["id"], typecode=D["_dtype"], mask=D["_msk"], axes=axes, fill_value=D["_fill_value"], attributes=attrs)
     return V
 
 
@@ -269,10 +277,10 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         purposes.
 
         """
-        cf = 'CF'[self.flags.fnc]
-        data_state = super(numpy.ma.MaskedArray, self).__reduce__()[2]
-        state = zlib.compress(self.dumps().encode("utf-8"))
-        return data_state + (numpy.ma.getmaskarray(self).tobytes(cf), self._fill_value, state)
+        myjson = self.dumps().encode("utf-8")
+        state = zlib.compress(myjson)
+        return(state)
+        #return(self.dumps().encode("utf-8"))
 
     def __setstate__(self, state):
         """Restore the internal state of the tvariable, for
@@ -282,19 +290,17 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         - json file from dumps()
 
         """
-        (_, shp, typ, isf, raw, msk, flv, json) = state
+        state2=zlib.decompress(state)
+        (D, axes, attrs) = convertJSON(state2)
+        newvar = createVariable(D["_values"], id=D["id"], typecode=D["_dtype"], mask=D["_msk"], axes=axes, fill_value=D["_fill_value"], attributes=attrs)
 
-        #msk = numpy.array(msk)
-        #
-        # create a dummy variable to restore pickel
-        #
-        newvar = createVariable(zlib.decompress(json.decode("utf-8")), fromJSON=True)
-
-        msk = [numpy.ma.MaskType(x) for x in list(bytearray(msk))]
-        newvar = createVariable(newvar,  mask=msk, fill_value=flv)
-
+        # 
+        # Pickle has already create an empty variable by calling __new__()
+        # Reset the pickled Transient variable with the new data from nevar
+        # 
         (_, shp, typ, isf, raw) = newvar.data.__reduce__()[2]
-        super(TransientVariable, self).__setstate__(state[0:7])
+        state = (_, shp, typ, isf, raw, D["_msk"].tobytes('C'), D["_fill_value"])
+        super(TransientVariable, self).__setstate__(state)
 
         self.__dict__.update(newvar.__dict__)
         self.__dict__.update(newvar.__dict__)
@@ -303,6 +309,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         axes = [x[0] for x in newvar.getDomain()]
         if axes is not None:
             self.initDomain(axes)
+
 
     def __new__(cls, data, typecode=None, copy=0, savespace=0,
                 mask=numpy.ma.nomask, fill_value=None, grid=None,

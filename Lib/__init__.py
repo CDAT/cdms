@@ -70,4 +70,4 @@ from .restApi import esgfConnection, esgfDataset, FacetConnection  # noqa
 
 MV = MV2  # noqa
 # from .dask_protocol import serialize, deserialize  # noqa
-import dask_protocol
+import dask_protocol  # noqa

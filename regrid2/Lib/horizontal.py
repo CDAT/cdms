@@ -96,20 +96,22 @@ class Horizontal:
         Parameters
         ----------
 
-            ar
-                is the input array.
+        ar :
+            is the input array.
 
-            order
-                is of the form "tzyx", "tyx", etc.
+        order :
+            is of the form "tzyx", "tyx", etc.
 
-            missing
-               is the missing data value, if any.
+        missing :
+            is the missing data value, if any.
 
-            mask
-               is either 2-D or the same shape as ar.
+        mask :
+            is either 2-D or the same shape as ar.
 
-           returnTuple
-               If true, return the tuple (outArray, outWeights) where outWeights is the fraction of each zone of the output grid which overlaps non-missing zones of the input grid; it has the same shape as the output array.
+        returnTuple :
+            If true, return the tuple (outArray, outWeights) where outWeights is
+            the fraction of each zone of the output grid which overlaps non-missing
+            zones of the input grid; it has the same shape as the output array.
         """
 
         from cdms2.avariable import AbstractVariable
@@ -376,7 +378,7 @@ class Regridder(Horizontal):
 
 
 def input_mask(ain, type, mask, missing=None):
-    """    
+    """
     set up the input mask including missing from ain
     """
     if type != 'h' and type != 'v':

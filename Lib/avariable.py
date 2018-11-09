@@ -36,16 +36,16 @@ _numeric_compatibility = False
 
 def getMinHorizontalMask(var):
     """
-    Get the minimum mask associated with 'x' and 'y' 
+    Get the minimum mask associated with 'x' and 'y'
     (i.e. with the min number of ones) across all axes
 
     Parameters
     ----------
 
-    var : 
+    var :
        CDMS variable with a mask
 
-    N/A : 
+    N/A :
        None
 
     Returns
@@ -178,7 +178,7 @@ class AbstractVariable(CdmsObj, Slab):
         Selection of a subregion using selectors.
 
         **Parameters:**
-     
+
             raw:
                 if set to 1, return numpy.ma only
             squeeze:
@@ -189,7 +189,7 @@ class AbstractVariable(CdmsObj, Slab):
                 if given, result is permuted into this order
 
         **Returns:**
-       
+
              Subregion selected
         """
         # separate options from selector specs
@@ -1848,9 +1848,9 @@ __crp = re.compile(__rp)
 
 def orderparse(order):
     """Parse an order string. Returns a list of axes specifiers.
-       
+
        Note:
-            
+
            Order elements can be:
               * Letters t, x, y, z meaning time, longitude, latitude, level
               * Numbers 0-9 representing position in axes
@@ -1889,7 +1889,7 @@ def order2index(axes, order):
        The argument order is a string.
 
        Note:
-       
+
            Order elements can be:
               * Letters t, x, y, z meaning time, longitude, latitude, level.
               * Numbers 0-9 representing position in axes

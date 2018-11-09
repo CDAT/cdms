@@ -113,7 +113,7 @@ class ConservativeRegridder(ScripRegridder):
 
                If 'normal' is specified, it should be a one-dimensional array of the same length
                as the output grid size, with values:
-     
+
                    1.0 for normalize="fracarea",
 
                    grid_frac for normalize="destarea", or
@@ -217,7 +217,7 @@ class BicubicRegridder(ScripRegridder):
 
         Parameters
         ----------
-            gradLat: 
+            gradLat:
                 df/di
 
             gradLon:
@@ -372,14 +372,14 @@ def readRegridder(fileobj, mapMethod=None, checkGrid=1):
     """Read a regridder from an open fileobj.
 
        **Parameters:**
-    
+
             mapMethod
                 is one of "conservative", "bilinear", "bicubic", or "distwgt".
 
             If unspecified, it defaults to the method defined in the file.
 
             If 'checkGrid' is 1 (default), the grid cells are checked for convexity, and 'repaired' if necessary.
-          
+
     """
 
     if isinstance(fileobj, str):

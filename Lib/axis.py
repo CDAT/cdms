@@ -7,7 +7,6 @@ CDMS Axis objects
 
 from future import standard_library
 import sys
-import os
 import types
 import copy
 import numpy
@@ -26,34 +25,22 @@ from collections import UserList  # noqa
 _debug = 0
 std_axis_attributes = ['name', 'units', 'length', 'values', 'bounds']
 
-ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
-if not ON_RTD:
-    class AliasList (UserList):
-        def __init__(self, alist):
-            UserList.__init__(self, alist)
+class AliasList (UserList):
+    def __init__(self, alist):
+        UserList.__init__(self, alist)
 
-        def __setitem__(self, i, value):
-            self.data[i] = value.lower()
+    def __setitem__(self, i, value):
+        self.data[i] = value.lower()
 
-        def __setslice(self, i, j, values):
-            self.data[i:j] = [x.lower() for x in values]
+    def __setslice(self, i, j, values):
+        self.data[i:j] = [x.lower() for x in values]
 
-        def append(self, value):
-            self.data.append(value.lower())
+    def append(self, value):
+        self.data.append(value.lower())
 
-        def extend(self, values):
-            self.data.extend(list(map(str.lower, values)))
-else:
-    class MockObject(object):
-        def __init__(self, *args, **kwargs):
-            super(MockObject, self).__init__()
-
-        def __call__(self, *args, **kwargs):
-            return None
-
-    class AliasList(MockObject):
-        pass
+    def extend(self, values):
+        self.data.extend(list(map(str.lower, values)))
 
 
 level_aliases = AliasList(['plev'])
@@ -1265,9 +1252,7 @@ class AbstractAxis(CdmsObj):
         same meaning for the right-hand point. Set cycle to a nonzero value
         to force wraparound.
 
-        Returns
-        -------
-            The corresponding index interval (i,j), where i<j, indicating
+        Returns the corresponding index interval (i,j), where i<j, indicating
         the half-open index interval [i,j), or None if the intersection is empty.
 
         For an axis which is circular (self.topology == 'circular'), [i,j)
@@ -2622,34 +2607,34 @@ def axisMatchIndex(axes, specifications=None, omit=None, order=None):
 
 def axisMatches(axis, specification):
     """
-    Parameters
-    ----------
-    axis:
-       See note below
-    specifications:
-       See note below
+       Parameters
+       ----------
+       axis:
+           See note below
+       specifications:
+           See note below
 
-    Returns
-    -------
-    1 or 0 depending on whether axis matches the specification.
+       Returns
+       -------
+       1 or 0 depending on whether axis matches the specification.
 
-    Note
-    ----
-    Specification must be one of:
+       Note
+       ----
+       Specification must be one of:
 
-    #. a string representing an axis id or one of the keywords time,
-      fctau0, latitude or lat, longitude or lon, or lev or level.
+       #. a string representing an axis id or one of the keywords time,
+          fctau0, latitude or lat, longitude or lon, or lev or level.
 
-    #. Axis may be surrounded with parentheses or spaces.
+       #. Axis may be surrounded with parentheses or spaces.
 
-      * We first attempt to match the axis id and the specification.
-      * Keywords try to match using isTime, isLatitude, etc.
-      * Comparisons to keywords and axis ids is case-insensitive.
+          * We first attempt to match the axis id and the specification.
+          * Keywords try to match using isTime, isLatitude, etc.
+          * Comparisons to keywords and axis ids is case-insensitive.
 
-    #. a function that takes an axis as an argument and returns a value.
-      * if the value returned is true, the axis matches.
+       #. a function that takes an axis as an argument and returns a value.
+          * if the value returned is true, the axis matches.
 
-    #. an axis object; will match if it is the same object as axis.
+       #. an axis object; will match if it is the same object as axis.
     """
     if isinstance(specification, string_types):
         s = specification.lower()

@@ -23,9 +23,9 @@ def guessPeriodicity(srcBounds):
     Guess if a src grid is periodic
 
     **Parameters:**
- 
+
           srcBounds
-             the nodal src set of coordinates      
+             the nodal src set of coordinates
 
     **Returns:**
 
@@ -55,7 +55,7 @@ class GenericRegrid:
 
     Parameters
     ----------
-       
+
             srcGrid
                 list of numpy arrays, source horizontal coordinates
 
@@ -102,7 +102,7 @@ class GenericRegrid:
                  dstGridMask=None, dstBounds=None, dstGridAreas=None,
                  **args):
         """
-       
+
         """
 
         self.nGridDims = len(srcGrid)
@@ -197,7 +197,7 @@ valid choices are: 'libcf', 'esmf'""" % regridTool
         Regrid source to destination
 
         **Parameters:**
-    
+
                 srcData
                     array (input)
 
@@ -344,7 +344,7 @@ valid choices are: 'libcf', 'esmf'""" % regridTool
         to the constructor due to domain decomposition
 
         **Returns:**
-     
+
             local grid on this processor
         """
         return self.tool.getDstGrid()
@@ -354,8 +354,8 @@ valid choices are: 'libcf', 'esmf'""" % regridTool
         Fill in diagnostic data
 
         **Parameters:**
-       
-            diag 
+
+            diag
                 a dictionary whose entries, if present, will be filled entries are tool dependent
 
             rootPe

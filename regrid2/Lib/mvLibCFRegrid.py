@@ -58,7 +58,7 @@ class LibCFRegrid(GenericRegrid):
     def computeWeights(self, **args):
         """
         Compute interpolation weights
-       
+
         Parameters
         ----------
 
@@ -75,26 +75,24 @@ class LibCFRegrid(GenericRegrid):
 
         Parameters
         ----------
-
-            srcData 
-                array (input)
-
-            dstData 
-               array (output)
-
-            missingValue
-                value that should be set for points falling outside the src domain, pass None if these should not be touched.
+        srcData :
+            array (input)
+        dstData :
+            array (output)
+        missingValue :
+            value that should be set for points falling outside
+            the src domain, pass None if these should not be touched.
         """
 
         self.regridObj.apply(srcData, dstData, missingValue)
 
     def getSrcGrid(self):
         """
-        Get the grid of the src data (maybe larger than the dst grid passed to the constructor due to column/row padding)
+        Get the grid of the src data (maybe larger than the dst
+        grid passed to the constructor due to column/row padding)
 
         Returns
         -------
-
             grid
         """
         return self.regridObj.getSrcGrid()
@@ -102,7 +100,7 @@ class LibCFRegrid(GenericRegrid):
     def getDstGrid(self):
         """
         Get the grid of the dst data
-       
+
         Returns
         -------
             grid
@@ -112,11 +110,11 @@ class LibCFRegrid(GenericRegrid):
     def fillInDiagnosticData(self, diag, rootPe):
         """
         Fill in diagnostic data
- 
+
         Parameters
         ----------
 
-            diag 
+            diag
                 a dictionary whose entries, if present, will be filled valid entries are: 'numDstPoints' and 'numValid'
             rootPe
                 not used

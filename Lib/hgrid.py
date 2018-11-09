@@ -32,10 +32,10 @@ def _flatten(boundsar):
 
 class AbstractHorizontalGrid(AbstractGrid):
     """ Create an horizontal grid
-    
+
     Parameters
     ----------
-        latAxis 
+        latAxis
         lonAxis
         id - Default None
         maskvar - Default None
@@ -907,7 +907,6 @@ class TransientCurveGrid(AbstractCurveGrid):
     """
     Not documented
     """
-
 
     grid_count = 0
 

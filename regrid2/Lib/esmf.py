@@ -39,12 +39,12 @@ class EsmfUnstructGrid:
     """
     Constructor
 
-    Parameters 
+    Parameters
     ----------
-    numTopoDims 
+    numTopoDims
         number of topological dimensions
 
-    numSpaceDims 
+    numSpaceDims
         number of space dimensions
     """
 
@@ -71,7 +71,7 @@ class EsmfUnstructGrid:
 
     def setCells(self, cellIndices, cellTypes, connectivity,
                  cellMask=None, cellAreas=None):
-        """ 
+        """
         Set Cell connectivity.
 
         **Parameters**
@@ -93,12 +93,12 @@ class EsmfUnstructGrid:
 ::
 
 
-                    3                       4-------------3    
-                    /\                      |             |                    
-                   /  \                     |             |                     
-                  /    \                    |             |                    
-                 /      \                   |             |                        
-                /        \                  |             |                         
+                    3                       4-------------3
+                    /\                      |             |
+                   /  \                     |             |
+                  /    \                    |             |
+                 /      \                   |             |
+                /        \                  |             |
                /          \                 |             |
               1------------2                1-------------2
 
@@ -118,7 +118,7 @@ class EsmfUnstructGrid:
                 \|/                         |/              |/
                  1                          1---------------2
 
-       ESMF_MESHELEMTYPE_TETRA             ESMF.MESHELEMTYPE_HEX 
+       ESMF_MESHELEMTYPE_TETRA             ESMF.MESHELEMTYPE_HEX
 
         """
         n = len(cellIndices)
@@ -326,7 +326,7 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
                 if True array was allocated over global index space, otherwise array was allocated
                 over local index space on this processor. This is only relevant if rootPe is None
 
-        Note 
+        Note
         ----
         coord dims in cdms2 are ordered in y, x, but ESMF expects x, y, hence the dimensions are reversed here.
         """
@@ -414,7 +414,7 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
         Returns
         -------
             mask numpy array
-                 1 is invalid by default 
+                 1 is invalid by default
 
 
         Note
@@ -445,7 +445,7 @@ class EsmfStructField:
     Parameters
     ----------
 
-             esmfGrid 
+             esmfGrid
                  instance of an ESMF
 
              name field
@@ -522,7 +522,8 @@ class EsmfStructField:
         Parameters
         ----------
         rootPe :
-            if None then local data will be fetched, otherwise gather the data on processor "rootPe" (all other procs will return None).
+            if None then local data will be fetched, otherwise gather the
+            data on processor "rootPe" (all other procs will return None).
 
         Returns
         -------
@@ -572,16 +573,18 @@ class EsmfStructField:
         """
         Set local field data
 
-        **Parameters:**
+        Parameters
+        ----------
+        data :
+            full numpy array, this method will take care of setting
+            a the subset of the data that reside on the local processor
 
-             data
-                 full numpy array, this method will take care of setting a the subset of the data that reside on the local processor
+        staggerloc :
+            stagger location of the data
 
-             staggerloc
-                 stagger location of the data
-
-             globalIndexing
-                 if True array was allocated over global index space, array was allocated over local index space (on this processor)
+        globalIndexing :
+            if True array was allocated over global index space, array
+            was allocated over local index space (on this processor)
         """
         ptr = self.field.data
         if globalIndexing:
@@ -601,33 +604,24 @@ class EsmfRegrid:
 
     Parameters
     ----------
-
-             srcField 
-                 the source field object of type EsmfStructFields
-
-             dstField
-                 the destination field object of type EsmfStructField
-
-             srcMaskValues
-                 Value of masked cells in source
-
-             dstMaskValues
-                 Value of masked cells in destination
-
-             srcFrac 
-                 Cell fractions on source grid (type EsmfStructField)
-
-             dstFrac
-                 Cell fractions on destination grid (type EsmfStructField)
-
-             regridMethod
-                 ESMF.RegridMethod.{BILINEAR,CONSERVE,PATCH}
-
-             unMappedAction
-                 ESMF.UnmappedAction.{IGNORE,ERROR}
-
-             ignoreDegenerate
-                 Ignore degenerate cells when checking inputs
+    srcField :
+        the source field object of type EsmfStructFields
+    dstField :
+        the destination field object of type EsmfStructField
+    srcMaskValues :
+        Value of masked cells in source
+    dstMaskValues :
+        Value of masked cells in destination
+    srcFrac :
+        Cell fractions on source grid (type EsmfStructField
+    dstFrac :
+        Cell fractions on destination grid (type EsmfStructField)
+    regridMethod :
+        ESMF.RegridMethod.{BILINEAR,CONSERVE,PATCH}
+    unMappedAction :
+        ESMF.UnmappedAction.{IGNORE,ERROR}
+    ignoreDegenerate :
+        Ignore degenerate cells when checking inputs
     """
 
     def __init__(self, srcField, dstField,

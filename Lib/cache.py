@@ -36,7 +36,7 @@ def lock(filename):
     Note: This function is UNIX-specific.
 
     Note: It is important to delete the lock via unlock() if the process is
-    interrupted, otherwise subsequent locks will fail. 
+    interrupted, otherwise subsequent locks will fail.
     """
 
     path = lockpath(filename)
@@ -302,7 +302,7 @@ class Cache:
 Parameters
 ----------
         <filekey>
-            filekey for cache 
+            filekey for cache
         """
         filekey = str(filekey)
         lock("index_lock")
@@ -325,7 +325,7 @@ Parameters
 Parameters
 ----------
         <filekey>
-            filekey for cache 
+            filekey for cache
         """
 
         filekey = str(filekey)
@@ -353,7 +353,7 @@ Parameters
 Parameters
 ----------
         <filekey>
-            filekey for cache 
+            filekey for cache
         """
         filekey = str(filekey)
 

@@ -9,17 +9,17 @@ from .error import RegridError
 
 
 class CrossSectionRegridder:
-    """   
-    
+    """
+
         PURPOSE: To perform all the tasks required to regrid the input data into the ouput data in the
                  latitude-level plane for all times
-    
+
         PROCEDURE: Step One:
                       Make an instance of class CrossSectionRegridder passing it input and output grid information
                    Step Two:
                       Pass the input data with some descriptive parameters and get the output data
                       in return
-    
+
     """
 
     def __init__(self, latIn, latOut, levIn, levOut, latTypeIn=None, latSizeIn=None,
@@ -543,23 +543,23 @@ class CrossSectionRegridder:
 
 
 def checkdimension(x, name):
-    """       
-      
-    **Purpose:** 
-     
+    """
+
+    **Purpose:**
+
         dimension  checks
             1. has a len method
             2. data type is float32
             3. monotonically increasing vectors
-    
+
     **Parameters:**
-  
+
        x - coordinate vector
 
        name - coordinate vector ID
-    
+
     **Returns:**
-            
+
         x, xsize -- dimension vector and its size
     """
 
@@ -611,32 +611,23 @@ def generic_wts_bnds(lat):
 
 
 def get_latitude_wts_bnds(checklatpass):
-    """        
-    
-       **Routine:** 
-      
-          get_latitude_wts_bnds
-    
-       **Purpose:** 
+    """
+    get_latitude_wts_bnds
 
-          Compare the passed checklatpass with the correct geophysical ones calculated here. After finding a match call the function to get the bounds.
-    
-       **Usage:**  
+    Compare the passed checklatpass with the correct geophysical ones
+    calculated here. After finding a match call the function to get the bounds.
 
-          wts,bnds = get_latitude_wts_bnds(checklatpass)
-                  where
+    wts,bnds = get_latitude_wts_bnds(checklatpass)
 
-       **Parameters:**
-       
-          checklatpass:
+    Parameters
+    ----------
+        checklatpass:
+            is the grid to check
 
-             is the grid to check
-   
+    Returns
+    -------
+        wts, bnds - tuple with weights and bounds
 
-       **Returns:**
-             
-          wts, bnds - tuple with weights and bounds
-    
     """
     small = 0.001                     # use as tolerance in checking values
 
@@ -716,18 +707,18 @@ def get_latitude_wts_bnds(checklatpass):
 
 
 def latitude_bounds(lat_bnds):
-    """    
-    
-       **Purpose:** 
+    """
+
+       **Purpose:**
 
           set up the shape and bounds for use by maparea
-    
+
        **Usage:**
-    
-       **Returns:** 
+
+       **Returns:**
 
           tuple ( bn,bs )
-    
+
     """
 
     latbnds = lat_bnds.astype(numpy.float32)
@@ -743,27 +734,27 @@ def latitude_bounds(lat_bnds):
 
 
 def get_region_latitude_wts_bnds(latRegionpass, latType, latSize):
-    """       
+    """
 
-       **Routine:** 
+       **Routine:**
 
           get_region_latitude_wts_bnds
-   
-       **Purpose:** 
+
+       **Purpose:**
 
           compare the passed latitudes, latRegion, with the global
           ones calculated here and extract the wts and bounds for
           the region
-    
+
        **Usage:**
 
           wts,bnds = get_region_latitude_wts_bnds(latRegion, latType, latSize)
           where latRegion is the regional grid to check
-    
-       **Returns:** 
+
+       **Returns:**
 
           wts, bnds - tuple with weights and bounds
-    
+
     """
 
     latTypeList = ['gaussian', 'equalarea', 'uniform', 'generic']
@@ -836,16 +827,16 @@ def get_region_latitude_wts_bnds(latRegionpass, latType, latSize):
 
 
 def sectionmask(dataIn, positionIn, maskIn, missingValueIn, missingMatch):
-    """    
-    
-       **Purpose:** 
+    """
+
+       **Purpose:**
 
           construct the mask for the input data for use by rgdlength
-    
-       **Usage:**   
+
+       **Usage:**
 
           amskin = mask(dataIn, positionIn, maskIn, missingValueIn, missingValueOut, flag2D)
-    
+
        **Returns:**
 
           amskin
@@ -1016,22 +1007,22 @@ def sectionmask(dataIn, positionIn, maskIn, missingValueIn, missingMatch):
 
 
 def sendmsg(msg, value1=None, value2=None):
-    """       
-    
-       **Purpose:** 
+    """
+
+       **Purpose:**
 
           send the same message to the screen
-    
+
        **Passed:**
 
           msg - the string
-        
+
           value - the number associated with the string
-    
+
        **Returns:**
 
           return
-    
+
     """
 
     print('*******************************************************************')
@@ -1047,20 +1038,20 @@ def sendmsg(msg, value1=None, value2=None):
 
 
 def section(latvals, levvals):
-    """        
-    
+    """
+
        **Purpose:**
 
           make the crossi section analytical test case
-    
+
        **Passed:**
- 
+
           the grid coordinate vectors
-    
-       **Returns:** 
+
+       **Returns:**
 
            xsection -- a temerature like cross section
-    
+
     """
 
     nlev = len(levvals)
@@ -1083,22 +1074,22 @@ def section(latvals, levvals):
 
 
 def rmserror(data1, data2):
-    """       
-    
-       **Purpose:** 
+    """
+
+       **Purpose:**
 
           compute the rms error for two data sets having the same shape
 
-    
-       **Passed:** 
+
+       **Passed:**
 
           the two data sets
 
-   
+
        **Returns:**
 
           rms error
-    
+
    """
 
     if data1.shape != data2.shape:

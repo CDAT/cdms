@@ -7,7 +7,7 @@ from .cdmsobj import Max32int
 from .variable import DatasetVariable
 from .error import CDMSError
 from .sliceut import reverseSlice
-from cdms2.Cdunif import CdunifError
+from .Cdunif import CdunifError
 # import cdms2.Cdunif.CdunifError as CdunifError
 
 FileClosed = "Cannot read from closed file, variable: "

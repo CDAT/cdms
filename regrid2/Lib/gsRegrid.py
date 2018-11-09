@@ -48,7 +48,7 @@ def getTensorProduct(axis, dim, dims):
     Parameters
     ----------
 
-       axis 
+       axis
           1D array of coordinates
 
        dim
@@ -296,7 +296,7 @@ def handleCoordsCut(coords, dims, bounds):
     """
     Generate connectivity across a cut. e.g. from a tri-polar grid.
     Assume latitude is next to last coordinate and longitude is last coordinate!!!
-    
+
     Parameters
     ----------
 
@@ -376,30 +376,30 @@ class Regrid:
 
     Parameters
     ----------
-       src_grid
-          source grid, a list of [x, y, ...] coordinates or a cdms2.grid.Transient
+    src_grid
+        source grid, a list of [x, y, ...] coordinates or a cdms2.grid.Transient
+    dst_grid
+        destination grid, a list of [x, y, ...] coordinate
+    src_bounds
+        list of cell bounding coordinates (to be used when handling a cut in coordinates)
+    mkCyclic
+        Add a column to the right side of the grid to complete a cyclic grid
+    handleCut
+        Add a row to the top of grid to handle a cut for grids such as the tri-polar
+        grid verbose print diagnostic messages
 
-       dst_grid
-          destination grid, a list of [x, y, ...] coordinates
-
-       src_bounds
-          list of cell bounding coordinates (to be used when handling a cut in coordinates)
-
-       mkCyclic
-          Add a column to the right side of the grid to complete a cyclic grid
-
-       handleCut
-          Add a row to the top of grid to handle a cut for grids such as the tri-polar grid verbose print diagnostic messages
-
-
-       Note: the grid coordinates can either be axes (rectilinear grid) or n-dimensional for curvilinear grids. Rectilinear grids will be converted to curvilinear grids.
+       Note
+       ----
+       the grid coordinates can either be axes (rectilinear grid) or n-dimensional
+       for curvilinear grids. Rectilinear grids will be converted to curvilinear grids.
     """
+
     def __init__(self, src_grid, dst_grid, src_bounds=None, mkCyclic=False,
                  handleCut=False, verbose=False):
         """
         Constructor
 
-        
+
         """
         self.regridid = c_int(-1)
         self.src_gridid = c_int(-1)
@@ -644,7 +644,7 @@ class Regrid:
         Parameters
         ----------
 
-           inDataOrMask 
+           inDataOrMask
               cdms2 array or flat mask array,
                  0 - valid data
                  1 - invalid data
@@ -652,7 +652,7 @@ class Regrid:
            _: None
 
         Note:  this definition is compatible with the numpy masked arrays
- 
+
         Note:  note see setValidMask for the opposite definition
 
         Note:  should be called before computing the weights
@@ -672,7 +672,7 @@ class Regrid:
     def computeWeights(self, nitermax=100, tolpos=1.e-2):
         """
         Compute the the interpolation weights
-   
+
         Parameters
         ----------
 
@@ -702,7 +702,8 @@ class Regrid:
                data on destination grid
 
            missingValue
-               value that should be set for points falling outside the src domain, pass None if these should not be touched.
+               value that should be set for points falling outside
+               the src domain, pass None if these should not be touched.
         """
         if not self.weightsComputed:
             raise RegridError('Weights must be set before applying the regrid')
@@ -823,7 +824,8 @@ class Regrid:
                data on destination grid
 
             missingValue
-               value that should be set for points falling outside the src domain, pass None if these should not be touched.
+               value that should be set for points falling outside the src domain,
+               pass None if these should not be touched.
         """
         self.apply(src_data, dst_data, missingValue)
 
@@ -926,16 +928,12 @@ class Regrid:
 
         Parameters
         ----------
-
-            src_data
-                input source data
-
-            _: None
+        src_data :
+            input source data
 
         Returns
         -------
-
-             extended source data (or source input data of no padding was applied)
+            extended source data (or source input data of no padding was applied)
         """
 
         # nlatX, nlonX = self.src_dims[-2], self.src_dims[-1]
@@ -974,7 +972,7 @@ class Regrid:
 
            targetPos
                numpy array of target positions
-   
+
            nitermax
                max number of iterations
 

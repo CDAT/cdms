@@ -543,23 +543,23 @@ class CrossSectionRegridder:
 
 
 def checkdimension(x, name):
-    """       
+    """
          purpose:  dimension  checks
                      1. has a len method
                      2. data type is float32
                      3. monotonically increasing vectors
-    
+
         Parameters
         ----------
 
             x - coordinate vector
             name - coordinate vector ID
-    
+
        Returns
        -------
-          
+
            x, xsize -- dimension vector and its size
-   
+
     """
 
     data = x[:]

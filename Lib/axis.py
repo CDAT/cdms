@@ -1736,6 +1736,8 @@ class AbstractAxis(CdmsObj):
         except BaseException:
             pass
         d = self.getValue()
+        if not isinstance(self.getValue(), numpy.ndarray):
+            d = numpy.array([d])  # make sure this is an array
         result.append('   Length: ' + str(len(d)))
         result.append('   First:  ' + str(d[0]))
         result.append('   Last:   ' + str(d[-1]))

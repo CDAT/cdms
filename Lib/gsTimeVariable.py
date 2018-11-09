@@ -25,9 +25,15 @@ class TimeAggregatedFileVariable:
 
     def __init__(self, gridIndex, listOfFVs, hostObj):
         """
-        @param gridIndex Index of requested grid
-        @param listOfFVs List of cdms2.FileVariable
-        @param hostObj For access to constants
+
+        Parameters
+        ----------
+
+             gridIndex Index of requested grid
+
+             listOfFVs List of cdms2.FileVariable
+
+             hostObj For access to constants
         """
         self.fvs = listOfFVs
         self.gridIndex = gridIndex
@@ -40,9 +46,17 @@ class TimeAggregatedFileVariable:
 
     def __call__(self, *args, **kwargs):
         """
-        @param *args cdms2 arguments
-        @param kwargs cdms2 keywords
-        @return sliced variable
+        Parameters
+        ----------
+
+            *args cdms2 arguments
+
+            kwargs cdms2 keywords
+
+        Returns
+        -------
+
+            sliced variable
         """
 
         subsetList = []
@@ -59,8 +73,15 @@ class TimeAggregatedFileVariable:
 
     def __getitem__(self, slc):
         """
-        @param slc Integer, slice or tuple of slices. If tuple 0 is time
-        @return sliced variable
+        Parameters
+        ----------
+
+             slc Integer, slice or tuple of slices. If tuple 0 is time
+
+        Returns
+        -------
+
+             sliced variable
         """
 
         if isinstance(slc, int):
@@ -102,8 +123,15 @@ class TimeAggregatedFileVariable:
 
     def getTimeFileIndex(self, timeslc):
         """
-        @param index The time index requested
-        @return the file index for a given time index
+        Parameters
+        ----------
+
+             index The time index requested
+
+        Returns
+        -------
+
+            the file index for a given time index
         """
 
         # Loop over the number of time slices per file for the given variable and
@@ -151,8 +179,16 @@ class TimeAggregatedFileVariable:
     def getTimeAxisIndex(self, inAxes):
         """
         Get the index for the time index
-        @param inAxes The axes list where we want to find the time index
-        @return the index - None if time not found
+
+         Parameters
+         ----------
+
+            inAxes The axes list where we want to find the time index
+
+         Returns
+         -------
+
+              the index - None if time not found
         """
         for indx, axis in enumerate(inAxes):
             if axis.isTime():
@@ -164,9 +200,18 @@ class TimeAggregatedFileVariable:
         Build a slice where the global time is either removed (single time step
         requested) OR the all requested times are returned. This is based on
         the new variables time shape.
-        @param inslc The original slice
-        @param inAxes The input axis to search for the time axis
-        @return newslc New slice with no time dimension or the time axis slice is
+
+         Parameters
+         ----------
+
+              inslc The original slice
+
+              inAxes The input axis to search for the time axis
+
+        Returns
+        -------
+
+             newslc New slice with no time dimension or the time axis slice is
                        (None, None, None)
         """
         newslc = []
@@ -186,9 +231,18 @@ class TimeAggregatedFileVariable:
         """
         Construct the time axis based on the current time index and insert into
         proper location in the axes list
-        @param timeAxis The Current time axis
-        @param inAxes The current axes
-        @return new axes
+
+        Parameters
+        ----------
+
+            timeAxis The Current time axis
+
+            inAxes The current axes
+
+        Returns
+        -------
+
+             new axes
         """
         axes = []
         for axis in inAxes:
@@ -201,8 +255,16 @@ class TimeAggregatedFileVariable:
     def createTransientVariableFromList(self, tvList):
         """
         Aggregate a sliced/subseted list of transient variables.
-        @param tvlist List of subset/sliced transient variables.
-        @return aggregated transient variable
+
+        Parameters
+        ----------
+
+             tvlist List of subset/sliced transient variables.
+
+        Returns
+        -------
+
+            aggregated transient variable
         """
 
         outvar = tvList[0]
@@ -216,10 +278,20 @@ class TimeAggregatedFileVariable:
     def createTransientVariableFromIndices(self, fileIndices, timeIndices):
         """
         Aggregate a time file variable. Start and End Indices use slice notation.
-        @param fileIndices the file indices to aggregate across
-        @param timeIndices which time steps with in each file
-        @return aggregated time dep. variable. Has shape of full grid.
-                Subset the grid after exiting.
+
+        Parameters
+        ----------
+
+             fileIndices the file indices to aggregate across
+
+             timeIndices which time steps with in each file
+
+        Returns
+        -------
+
+             aggregated time dep. variable. Has shape of full grid.
+
+             Subset the grid after exiting.
         """
         from numpy import reshape
         firsttime = True
@@ -285,8 +357,13 @@ class TimeFileVariable:
     def __init__(self, hostObj, varName):
         """
         Create a list of file variable with grid attached
-        @param hostObj The host object opened by gsHost
-        @param varName the variable name to be returned
+
+        Parameters
+        ----------
+
+              hostObj The host object opened by gsHost
+
+              varName the variable name to be returned
         """
 
         self.id = varName
@@ -360,8 +437,16 @@ class TimeFileVariable:
     def listall(self, all=None):
         """
         Gain access to cdms2 listall method. Requires a TimeFileVariable
-        @param all
-        @returns list
+
+        Parameters
+        ----------
+
+              all
+
+        Returns
+        -------
+
+             list
         """
         return self[0][0].listall(all=all)
 
@@ -369,15 +454,28 @@ class TimeFileVariable:
         """
         Gain access to cdms2 showall method
         Requires a TimeFileVariable
-        @param all
-        @param device
-        @returns list
+
+        Parameters
+        ----------
+
+             all
+
+             device
+
+        Returns
+        -------
+
+             list
         """
         return self[0][0][:].showall(all=all, device=device)
 
     def __getitem__(self, gridIndex):
         """
-        @param gridIndex gridIndex
+
+         Parameters
+         ----------
+
+              gridIndex gridIndex
         """
         return self.vars[gridIndex]
 
@@ -390,11 +488,17 @@ class TimeTransientVariable:
     def __init__(self, hostObj, varName, **slicekwargs):
         """
         Constructor
-        @param hostObj host object
-        @param varName variable name
-        @param slicekwargs eg lon=(-180,180), lat=(-90,90), time=5
-                           cf Packages/cdms2/Lib/cudsinterface.py for
-                           a list of keywords
+
+        Parameters
+        ----------
+
+             hostObj host object
+
+             varName variable name
+
+             slicekwargs eg lon=(-180,180), lat=(-90,90), time=5
+                          cf Packages/cdms2/Lib/cudsinterface.py for
+                          a list of keywords
         """
 
 #        TimeVariable(self, hostObj, varName)

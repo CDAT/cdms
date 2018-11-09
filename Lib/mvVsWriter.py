@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-
+# Alex Pletzer, Tech-X Corp. (2011)
+# This code is provided with the hope that it will be useful.
+# No guarantee is provided whatsoever. Use at your own risk.
 """
 Write data to VizSchema compliant file
-Alex Pletzer, Tech-X Corp. (2011)
-This code is provided with the hope that it will be useful.
-No guarantee is provided whatsoever. Use at your own risk.
+
 """
 
 import numpy
@@ -13,11 +13,21 @@ import re
 
 
 class VsWriter(mvBaseWriter.BaseWriter):
+    """
+    Write file
+
+       Parameters
+       ----------
+
+           filename
+               file name
+
+           _: None
+    """
 
     def write(self, filename):
         """
-        Write file
-        @param filename file name
+
         """
         try:
             import tables

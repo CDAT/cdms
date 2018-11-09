@@ -36,17 +36,24 @@ _numeric_compatibility = False
 
 def getMinHorizontalMask(var):
     """
-    Get the minimum mask associated with 'x' and 'y' (i.e. with the
-    min number of ones) across all axes
+    Get the minimum mask associated with 'x' and 'y'
+    (i.e. with the min number of ones) across all axes
 
     Parameters
     ----------
-    var
-        CDMS variable with a mask
 
-    Return
-    ------
-        mask array or None if order 'x' and 'y' were not found
+    var :
+       CDMS variable with a mask
+
+    N/A :
+       None
+
+    Returns
+    -------
+
+    mask array or None :
+        if order 'x' and 'y' were not found
+
     """
     from distarray import MultiArrayIter
 
@@ -127,14 +134,21 @@ def getNumericCompatibility():
 
 
 class AbstractVariable(CdmsObj, Slab):
+    """Not to be called by users.
+
+    Parameters
+    ----------
+        variableNode
+            is the variable tree node, if any.
+        parent
+            is the containing dataset instance.
+    """
+
     def info(self, flag=None, device=None):
         Slab.info(self, flag, device)
 
     def __init__(self, parent=None, variableNode=None):
-        """Not to be called by users.
-           variableNode is the variable tree node, if any.
-           parent is the containing dataset instance.
-        """
+
         if variableNode is not None and variableNode.tag != 'variable':
             raise CDMSError('Node is not a variable node')
         CdmsObj.__init__(self, variableNode)
@@ -163,20 +177,20 @@ class AbstractVariable(CdmsObj, Slab):
         """
         Selection of a subregion using selectors.
 
-        Parameters
-        ----------
-        raw:
-            if set to 1, return numpy.ma only
-        squeeze:
-            if set to 1, eliminate any dimension of length 1
-        grid:
-            if given, result is regridded ont this grid.
-        order:
-            if given, result is permuted into this order
+        **Parameters:**
 
-        Returns
-        -------
-        Subregion selected
+            raw:
+                if set to 1, return numpy.ma only
+            squeeze:
+                if set to 1, eliminate any dimension of length 1
+            grid:
+                if given, result is regridded ont this grid.
+            order:
+                if given, result is permuted into this order
+
+        **Returns:**
+
+             Subregion selected
         """
         # separate options from selector specs
         d = kwargs.copy()
@@ -468,6 +482,10 @@ class AbstractVariable(CdmsObj, Slab):
            If axes is `None`, use all axes of this variable.
 
            Other specificiations are as for axisMatchIndex.
+
+        Returns
+        -------
+           a list of indices of axis objects;
         """
         return axisMatchIndex(self.getAxisList(), axes, omit, order)
 
@@ -521,7 +539,8 @@ class AbstractVariable(CdmsObj, Slab):
 
         if asarray == 0 and isinstance(mv, numpy.ndarray):
             mv = mv[0]
-        if isinstance(mv, string_types) and self.dtype.char not in ['?', 'c', 'O', 'S']:
+        if isinstance(mv, string_types) and self.dtype.char not in [
+                '?', 'c', 'O', 'S']:
             try:
                 mv = float(mv)
             except BaseException:
@@ -1426,7 +1445,8 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
         nsupplied = len(specs)
         # numpy will broadcast if we have a new axis in specs
         # ---------------------------------------------------
-        if [x for x in specs if numpy.array_equal(x, numpy.newaxis)] == [numpy.newaxis]:
+        if [x for x in specs if numpy.array_equal(x, numpy.newaxis)] == [
+                numpy.newaxis]:
             nnewaxis = 1
         else:
             nnewaxis = 0
@@ -1713,8 +1733,13 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
                 raise IndexError("Index too large: %d" % key)
             speclist = self._process_specs([key], {})
 
-        if [x for x in speclist if (type(x) is numpy.ndarray or type(x) is list)] != []:
-            index = [x for x in speclist if (type(x) is numpy.ndarray or type(x) is list)]
+        if [x for x in speclist if (isinstance(
+                x, numpy.ndarray) or isinstance(x, list))] != []:
+            index = [
+                x for x in speclist if (
+                    isinstance(
+                        x, numpy.ndarray) or isinstance(
+                        x, list))]
             return self.data.take(index)
         # Note: raw=0 ensures that a TransientVariable is returned
         return self.getSlice(numericSqueeze=1, raw=0, isitem=1, *speclist)
@@ -1823,14 +1848,15 @@ __crp = re.compile(__rp)
 
 def orderparse(order):
     """Parse an order string. Returns a list of axes specifiers.
-       Note
-       ----
-       Order elements can be:
-          * Letters t, x, y, z meaning time, longitude, latitude, level
-          * Numbers 0-9 representing position in axes
-          * The letter - meaning insert the next available axis here.
-          * The ellipsis ... meaning fill these positions with any remaining axes.
-          * (name) meaning an axis whose id is name
+
+       Note:
+
+           Order elements can be:
+              * Letters t, x, y, z meaning time, longitude, latitude, level
+              * Numbers 0-9 representing position in axes
+              * The letter - meaning insert the next available axis here.
+              * The ellipsis ... meaning fill these positions with any remaining axes.
+              * (name) meaning an axis whose id is name
     """
     if not isinstance(order, string_types):
         raise CDMSError('order arguments must be strings.')
@@ -1861,14 +1887,15 @@ def orderparse(order):
 def order2index(axes, order):
     """Find the index permutation of axes to match order.
        The argument order is a string.
-       Note
-       ----
-       Order elements can be:
-          * Letters t, x, y, z meaning time, longitude, latitude, level.
-          * Numbers 0-9 representing position in axes
-          * The letter - meaning insert the next available axis here.
-          * The ellipsis ... meaning fill these positions with any remaining axes.
-          * (name) meaning an axis whose id is name.
+
+       Note:
+
+           Order elements can be:
+              * Letters t, x, y, z meaning time, longitude, latitude, level.
+              * Numbers 0-9 representing position in axes
+              * The letter - meaning insert the next available axis here.
+              * The ellipsis ... meaning fill these positions with any remaining axes.
+              * (name) meaning an axis whose id is name.
     """
     if isinstance(order, string_types):
         result = orderparse(order)

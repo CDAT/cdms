@@ -6,7 +6,7 @@ Introduction
 
 The Climate Data Markup Language (CDML) is the markup language used to
 represent metadata in CDMS. CDML is based on the W3C XML standard
-(http://www.w3.org). This chapter defines the syntax of CDML. Read this
+(https://www.w3.org). This chapter defines the syntax of CDML. Read this
 section if you will be building or maintaining a CDMS database.
 
 XML, the eXtensible Markup Language, makes it possible to define
@@ -44,14 +44,13 @@ where
 -  ``element-content`` depends on the type of element. It is either a
    list of elements, or text which defines the element values. For
    example, the content of an axis element either is a list of axis
-   values, or is a linear element. For datasets, the content is the
-   blank-separated list of elements corresponding to the axes, grids,
-   and variables contained in the dataset.
+   values, or is a linear element. 
+-  For datasets, the content is the blank-separated list of elements corresponding to the axes, grids, and variables contained in the dataset.
 
 The CDML elements are:
 
-Table CDML Tags
-^^^^^^^^^^^^^^^^^^^                   
+CDML Tags
+^^^^^^^^^                   
 
 +------------+---------------------------------------+
 | Tag        | Description                           |
@@ -77,8 +76,8 @@ Special Characters
 XML reserves certain characters for markup. If they appear as content,
 they must be encoded to avoid confusion with markup:
 
-Table Special Character Encodings
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Special Character Encodings
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
                                      
 
 +-------------+------------+
@@ -122,7 +121,7 @@ on the length of an identifier.
 CF Metadata Standard
 ~~~~~~~~~~~~~~~~~~~~
 
-`The CF metadata standard <http://cfconventions.org/>`__ defines a set
+`The CF metadata standard <https://cfconventions.org/>`__ defines a set
 of conventions for usage of netCDF. This standard is supported by CDML.
 The document defines names and usage for metadata attributes. CF
 supersedes the GDT 1.3 standard.
@@ -145,11 +144,11 @@ element.
 
 The prolog defines the XML version, and the Document Type Definition
 (DTD), a formal specification of the document syntax. 
-See http://www.w3.org/TR/1998/REC-xml-19980210 for a formal definition of XML
+See https://www.w3.org/TR/1998/REC-xml-19980210 for a formal definition of XML
 
 Version 1.0.
 
-``prolog ::= <?xml version="1.0"?> <!DOCTYPE dataset SYSTEM "http://www-pcmdi.llnl.gov/~drach/cdms/cdml.dtd">``
+``prolog ::= <?xml version="1.0"?> <!DOCTYPE dataset SYSTEM "https://www-pcmdi.llnl.gov/~drach/cdms/cdml.dtd">``
 
 Dataset Element
 ^^^^^^^^^^^^^^^
@@ -171,9 +170,9 @@ Dataset Attributes
    :widths:  10,5,5,5,80
 
     "appendices", "N", "N", "Y", "Version number"
-    "calendar", "N", "N", "Y", "Calendar used for encoding time axes."
-    ,,,,"``gregorian`` \| ``julian`` \| ``noleap`` \|\ ``360_day`` \| ``proleptic_gregorian`` \| ``standard``"
-    ,,,,"Note: for the CF convention, the calendar attribute is placed on the time axis."
+    "calendar", "N", "N", "Y", "Calendar used for encoding time axes.
+       * ``gregorian`` \| ``julian`` \| ``noleap`` \|\ ``360_day`` \| ``proleptic_gregorian`` \| ``standard``
+       **Note:** for the CF convention, the calendar attribute is placed on the time axis."
     "comment", "N", "Y", "Y", "Additional dataset information"
     "conventions", "Y", "Y", "Y", "The netCDF metadata standard. Example: 'CF-1.0'"
     "cdms_filemap", "Y", "N", "N", "Map of partitioned axes to files. See note below."
@@ -236,20 +235,20 @@ length).
 
 ``linear-element ::=`` **<linear delta=** ``"value”`` **length=** ``“Integer“`` **start=** ``“value“`` **> </linear>**
 
-Table Axis Elements
-^^^^^^^^^^^^^^^^^^^
+Axis Elements
+^^^^^^^^^^^^^
 
 .. csv-table::
    :header: "Attribute", "Required?", "CF", "GDT", "Notes"
    :widths: 18,1,1,1,80
 
      "``associate``", "N", "N", "Y", "IDs of variables containing alternative sets of coordinates."
-     "``axis``", "N", "Y", "Y", "The spatial type of the axis:"
-     ,,,,"- 'T' - time"
-     ,,,,"- 'X' - longitude"
-     ,,,,"- 'Y' - latitude"
-     ,,,,"- 'Z' - vertical level"
-     ,,,,"- '-' - not spatiotemporal"
+     "``axis``", "N", "Y", "Y", "The spatial type of the axis:
+         * 'T' - time
+         * 'X' - longitude
+         * 'Y' - latitude
+         * 'Z' - vertical level
+         * '-' - not spatiotemporal"
      "``bounds``", "N", "Y", "Y", "ID of the boundary variable"
      "``calendar``", "N", "Y", "N", "See dataset.calendar"
      "``climatology``", "N", "Y", "N", "Range of dates to which climatological statistics apply."
@@ -260,9 +259,9 @@ Table Axis Elements
      "``expand``", "N", "N", "Y", "Coordinates prior to contraction"
      "``formula_terms``", "N", "Y", "N", "Variables that correspond to the terms in a formula."
      "``id``", "Y", "N", "N", "Axis identifier. Also the name of the axis in the underlying file(s), if name_in_file is undefined."  
-     "``isvar``", "N", "N", "N", "* 'true' | 'false'"
-     ,,,,"- 'false' if the axis does not have coordinate values explicitly defined in the underlying file(s)."
-     ,,,,"- Default: 'true'"
+     "``isvar``", "N", "N", "N", "'true' | 'false'
+         * 'false' if the axis does not have coordinate values explicitly defined in the underlying file(s).
+         * Default: 'true'"
      "``leap_month``", "N", "Y", "N", "For a user-defined calendar, the month which is lengthened by a day in leap years."
      "``leap_year``", "N", "Y", "N", "An example of a leap year for a user-defined calendar. All years that differ from this year by a multiple of four are leap years."
      "``length``", "N", "N", "N", "Number of axis values, including values for which no data is defined. Cf.  partition_length."
@@ -274,8 +273,8 @@ Table Axis Elements
      "``partition_length``", "N", "N", "N", "Number of axis points for which data is actually defined. If data is missing for some values, this will be smaller than the length."  
      "``positive``", "N", "Y", "Y", "Direction of positive for a vertical axis"
      "``standard_name``", "N", "Y", "N", "Reference to an entry in the standard name table."
-     "``topology``", "N", "N", "Y", "- Axis topology."
-     ,,,,"- 'circular' | 'linear'"
+     "``topology``", "N", "N", "Y", "Axis topology.
+         * 'circular' | 'linear'"
      "``units``", "Y", "Y", "Y", "Units of a physical quantity"
      "``weights``", "N", "N", "N", "Name of the weights array" 
 
@@ -314,8 +313,8 @@ rectilinear in topology,
 ``grid-element ::=`` **<rectGrid** ``grid-attributes``\ **>**
 ``extra-attribute-element*`` **</rectGrid>**
 
-Table 6.5 RectGrid Attributes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6.5 RectGrid Attributes
+^^^^^^^^^^^^^^^^^^^^^^^
                              
 
 .. raw:: html
@@ -370,8 +369,8 @@ start=\ **"``Integer``" **\ length=\ **"``Integer``"
 **\ partition\_length=\ **"``Integer``"**/>\*\*
 
 
-Table Variable Attributes
-^^^^^^^^^^^^^^^^^^^^^^^^^
+Variable Attributes
+^^^^^^^^^^^^^^^^^^^
 
 
 .. csv-table::
@@ -441,7 +440,7 @@ Dataset "sample" has two variables, and six axes.
 
    <?xml version="1.0"?>
 
-.. raw:: html
+::
 
    <!DOCTYPE dataset SYSTEM "http://www-pcmdi.llnl.gov/software/cdms/cdml.dtd">
 
@@ -449,62 +448,62 @@ Dataset "sample" has two variables, and six axes.
 
 ::
 
-    <axis
-        id ="longitude"
-        length="32"
-        units="degrees_east"
-        datatype="Double"
-    >
-
-        [ 0. 11.25 22.5 33.75 45. 56.25 67.5 78.75 90.
-
-        101.25 112.5 123.75 135. 146.25 157.5 168.75 180. 191.25
-
-        202.5 213.75 225. 236.25 247.5 258.75 270. 281.25 292.5
-
-        303.75 315. 326.25 337.5 348.75]
-    </axis>
-
-    <axis
-        id ="time"
-        partition="[0 1 1 2 2 3]"
-        calendar="gregorian"
-        units="days since 2000-1-1"
-        datatype="Double"
-        length="3"
-        name_in_file="time"
-    >
-
-        [ 0. 366. 731.]
-    </axis>
-
-    <variable
-        id ="u"
-        missing_value="-99.9"
-        units="m/s"
-        datatype="Double"
-    >
-        <domain>
-            <domElem name="time" length="3" start="0"/>
-            <domElem name="latitude" length="16" start="0"/>
-            <domElem name="longitude" length="32" start="0"/>
-        </domain>
-    </variable>
-
-    <variable
-        id ="v"
-        missing_value="-99.9"
-        units="m/s"
-        datatype="Double"
-    >
-        <domain>
-            <domElem name="time" length="3" start="0"/>
-            <domElem name="latitude" length="16" start="0"/>
-            <domElem name="longitude" length="32" start="0"/>
-        </domain>
-    </variable>
-
- {% endhighlight %}
+    >>> <axis
+    >>>     id ="longitude"
+    >>>     length="32"
+    >>>     units="degrees_east"
+    >>>     datatype="Double"
+    >>> >
+    >>> 
+    >>>     [ 0. 11.25 22.5 33.75 45. 56.25 67.5 78.75 90.
+    >>> 
+    >>>     101.25 112.5 123.75 135. 146.25 157.5 168.75 180. 191.25
+    >>> 
+    >>>     202.5 213.75 225. 236.25 247.5 258.75 270. 281.25 292.5
+    >>> 
+    >>>     303.75 315. 326.25 337.5 348.75]
+    >>>     </axis>
+    >>> 
+    >>> <axis
+    >>>     id ="time"
+    >>>     partition="[0 1 1 2 2 3]"
+    >>>     calendar="gregorian"
+    >>>     units="days since 2000-1-1"
+    >>>     datatype="Double"
+    >>>     length="3"
+    >>>     name_in_file="time"
+    >>> >
+    >>> 
+    >>>    [ 0. 366. 731.]
+    >>> </axis>
+    >>> 
+    >>> <variable
+    >>>    id ="u"
+    >>>    missing_value="-99.9"
+    >>>    units="m/s"
+    >>>    datatype="Double"
+    >>> >
+    >>>    <domain>
+    >>>        <domElem name="time" length="3" start="0"/>
+    >>>        <domElem name="latitude" length="16" start="0"/>
+    >>>        <domElem name="longitude" length="32" start="0"/>
+    >>>    </domain>
+    >>> </variable>
+    >>> 
+    >>> <variable
+    >>>    id ="v"
+    >>>    missing_value="-99.9"
+    >>>    units="m/s"
+    >>>    datatype="Double"
+    >>> >
+    >>>    <domain>
+    >>>        <domElem name="time" length="3" start="0"/>
+    >>>        <domElem name="latitude" length="16" start="0"/>
+    >>>        <domElem name="longitude" length="32" start="0"/>
+    >>>    </domain>
+    >>> </variable>
+    >>> 
+    >>> {% endhighlight %}
 
 
 

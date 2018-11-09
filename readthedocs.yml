@@ -1,0 +1,15 @@
+formats:
+  - epub
+  - pdf
+
+requirements_file: docs/requirements.txt
+
+conda:
+  file: docs/environment.yml
+
+build:
+  image: latest
+python:
+  version: 2.70
+  setup_py_install: true
+

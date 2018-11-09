@@ -23,30 +23,8 @@ CDMS documentation
    manual/cdms_7
    manual/cdms_appendix
    manual/sample_data
+   API
 
-#   AbstractAxis
-#   AbstractVariable
-#   avariable
-#   axis
-#   bindex
-#   cache
-#   cdmsfile
-#   cdmsobj
-#   database
-#   dataset
-#   fvariable
-#   gengrid
-#   grid
-#   gsHost
-#   gsStaticVariable
-#   gsTimeVariable
-#   hgrid
-#   MV2 
-#   mvSphereMesh
-#   mvCdmsRegrid
-#   selectors
-#   sliceut
-#   tvariable
 
 
 Indices and tables

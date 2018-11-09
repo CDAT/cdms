@@ -28,9 +28,18 @@ except BaseException:
 def createTransientGrid(gFName, coordinates):
     """
     Return the coordinate data associated with variable.
-    @param gName The grid_filename
-    @param coordinates The coordinates attribute from the variable to be created
-    @return grid a cdms2.hgrid.AbstractCurveGrid object
+
+    Parameters
+    ----------
+
+         gName The grid_filename
+
+         coordinates The coordinates attribute from the variable to be created
+
+    Returns
+    -------
+
+        grid a cdms2.hgrid.AbstractCurveGrid object
     """
     import re
 
@@ -91,9 +100,15 @@ class StaticVariable:
     def __init__(self, StaticVariable, hostObj, varName):
         """
         Constructor - Contains methods applicable to both file and transient static variables
-        @param StaticVariable A generic static variable (Either File or Transient)
-        @param hostObj The host file object
-        @param varName for the id
+
+        Parameters
+        ----------
+
+             StaticVariable A generic static variable (Either File or Transient)
+
+             hostObj The host file object
+
+             varName for the id
         """
         StaticVariable.id = varName
         StaticVariable.nGrids = hostObj.nGrids
@@ -105,24 +120,46 @@ class StaticVariable:
     def __getitem__(self, gridIndex):
         """
         Data accessor
-        @param gridIndex grid file index
-        @return variable at gridIndex
+
+        Parameters
+        ----------
+
+             gridIndex grid file index
+
+        Returns
+        -------
+
+             variable at gridIndex
         """
         return self.vars[gridIndex]
 
     def __call__(self, gridIndex):
         """
         Data accessor
-        @param gridIndex grid file index
-        @return variable at gridIndex
+
+        Parameters
+        ----------
+
+             gridIndex grid file index
+
+        Returns
+        -------
+
+             variable at gridIndex
         """
         return self.vars[gridIndex]
 
     def __setitem__(self, gridIndex, vals):
         """
         Data setter
-        @param gridIndex grid file indexer
-        @param vals values to set
+
+        Parameters
+        ----------
+
+             gridIndex grid file indexer
+
+
+             vals values to set
         """
         self.vars[gridIndex] = vals
 
@@ -135,15 +172,27 @@ class StaticVariable:
     def shape(self, gridIndex):
         """
         Return the shape in the format (n0, n1, ...) for a given grid index
-        @param gridIndex grid file index
-        @return result
+
+        Parameters
+        ----------
+
+             gridIndex grid file index
+
+        Returns
+        -------
+
+             result
         """
         return self.vars[gridIndex].shape
 
     def size(self):
         """
         Return the total number of elements for the whole grid
-        @return number of elements
+
+        Returns
+        -------
+
+             number of elements
         """
         # adding the size of each tile
         return reduce(operator.add, [v.size for v in self.vars])
@@ -151,7 +200,11 @@ class StaticVariable:
     def typecode(self):
         """
         Return the type of the data
-        @return type
+
+        Returns
+        -------
+
+             type
         """
         v = self.vars[0]
         if v:
@@ -167,8 +220,13 @@ class StaticFileVariable(StaticVariable):
     def __init__(self, hostObj, varName):
         """
         Create a list of file variable with grid attached
-        @param hostObj The host object opened by gsHost
-        @param varName the variable name to be returned
+
+        Parameters
+        ----------
+
+             hostObj The host object opened by gsHost
+
+             varName the variable name to be returned
         """
 
         StaticVariable(self, hostObj, varName)
@@ -233,8 +291,16 @@ class StaticFileVariable(StaticVariable):
     def listall(self, all=None):
         """
         Gain access to cdms2 listall method. Requires a StaticFileVariable
-        @param all
-        @returns list
+
+        Parameters
+        ----------
+
+            all
+
+        Returns
+        -------
+
+            list
         """
         return self[0].listall(all=all)
 
@@ -247,8 +313,13 @@ class StaticTransientVariable(StaticVariable):
     def __init__(self, hostObj, varName):
         """
         Constructor
-        @param hostObj host object
-        @param varName variable name
+
+        Parameters
+        ----------
+
+             hostObj host object
+
+              varName variable name
         """
 
         # Inititialize the variable

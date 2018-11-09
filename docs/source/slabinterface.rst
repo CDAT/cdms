@@ -7,7 +7,6 @@ slabinterface
 .. autosummary:: 
    :toctree: generated/
 
-      Slab
       Slab.getattribute
       Slab.setattribute
       Slab.createattribute
@@ -19,6 +18,6 @@ slabinterface
       Slab.listdimnames
       Slab.listall
       Slab.info
-      Slab.cdms_bounds2cu_bounds
+      cdms_bounds2cu_bounds
       
 

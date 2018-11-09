@@ -7,7 +7,6 @@ mvCdmsRegrid
 .. autosummary:: 
    :toctree: generated/
 
-   CdmsRegrid
    CdmsRegrid.getboundlist
    CdmsRegrid.areCellsOk
    CdmsRegrid.projectToSphere

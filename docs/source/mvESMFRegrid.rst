@@ -2,13 +2,11 @@
 
 mvESMFRegrid
 ============
-.. currentmodule:: cdms2.regrid2.mvESMFRegrid
+.. currentmodule:: regrid2.mvESMFRegrid
 
 .. autosummary:: 
    :toctree: generated/
 
-
-      ESMFRegrid
       ESMFRegrid.setCoords
       ESMFRegrid.computeWeights
       ESMFRegrid.apply

@@ -377,18 +377,7 @@ class Regridder(Horizontal):
 
 def input_mask(ain, type, mask, missing=None):
     """    
-        
-    **Purpose:** 
-
-          set up the input mask including missing from ain
-    
-    **Usage:**
-    
-    **Passed:**
-    
-    **Returns:**
-    
-    
+    set up the input mask including missing from ain
     """
     if type != 'h' and type != 'v':
         raise ValueError('Mask type must be h or v')

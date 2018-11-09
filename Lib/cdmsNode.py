@@ -63,36 +63,36 @@ CdDatatypes = [
 CdScalar = CDML.CdScalar
 CdArray = CDML.CdArray
 
-NumericToCdType = {numpy.sctype2char(numpy.float32): CdFloat,
-                   numpy.sctype2char(numpy.float): CdDouble,
-                   numpy.sctype2char(numpy.int16): CdShort,
-                   numpy.sctype2char(numpy.int32): CdInt,
-                   numpy.sctype2char(numpy.uint32): CdUInt,
-                   numpy.sctype2char(numpy.int64): CdInt64,
-                   numpy.sctype2char(numpy.int8): CdByte,
-                   'q': CdLongLong,
+NumericToCdType = {numpy.dtype(numpy.single).char: CdFloat,
+                   numpy.dtype(numpy.double).char: CdDouble,
+                   numpy.dtype(numpy.short).char: CdShort,
+                   numpy.dtype(numpy.intc).char: CdInt,
+                   numpy.dtype(numpy.uintc).char: CdUInt,
+                   numpy.dtype(numpy.int64).char: CdInt64,
+                   numpy.dtype(numpy.byte).char: CdByte,
+                   numpy.dtype(numpy.longlong).char: CdLongLong,
                    'c': CdChar,
-                   'B': CdUByte,
-                   'H': CdUShort,
-                   'L': CdUInt64,
-                   'Q': CdULongLong,
+                   numpy.dtype(numpy.ubyte).char: CdUByte,
+                   numpy.dtype(numpy.ushort).char: CdUShort,
+                   numpy.dtype(numpy.uint64).char: CdUInt64,
+                   numpy.dtype(numpy.ulonglong).char: CdULongLong,
                    'S': CdString
                    }
 
 CdToNumericType = {CdChar: 'c',
-                   CdByte: numpy.int8,
-                   CdUByte: numpy.uint8,
-                   CdShort: numpy.int16,
+                   CdByte: numpy.byte,
+                   CdUByte: numpy.ubyte,
+                   CdShort: numpy.short,
                    CdUShort: numpy.ushort,
-                   CdInt: numpy.int32,
-                   CdUInt: numpy.uint32,
-                   CdLong: numpy.int,
+                   CdInt: numpy.intc,
+                   CdUInt: numpy.uintc,
+                   CdLong: numpy.int_,
                    CdInt64: numpy.int64,
                    CdUInt64: numpy.uint64,
-                   CdULongLong: numpy.longlong,
-                   CdFloat: numpy.float32,
-                   CdDouble: numpy.float,
-                   CdString: numpy.str}
+                   CdULongLong: numpy.ulonglong,
+                   CdFloat: numpy.single,
+                   CdDouble: numpy.double,
+                   CdString: numpy.str_}
 
 # Grid types
 UnknownGridType = "unknown"

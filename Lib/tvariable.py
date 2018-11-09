@@ -1,3 +1,4 @@
+
 # Automatically adapted for numpy.oldnumeric Aug 01, 2007 by
 # Further modified to be pure new numpy June 24th 2008
 
@@ -101,6 +102,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
     ascontiguous = ascontiguousarray
 
     def asma(self):
+        "Convert a Transient Variable into a numpy masked array."
         return numpy.ma.array(self._data, mask=self._mask)
 
     def _update_from(self, obj):
@@ -168,10 +170,14 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
                  mask=numpy.ma.nomask, fill_value=None, grid=None,
                  axes=None, attributes=None, id=None, copyaxes=1, dtype=None,
                  order='C', no_update_from=False, **kargs):
-        """createVariable (self, data, typecode=None, copy=0, savespace=0,
-                 mask=None, fill_value=None, grid=None,
-                 axes=None, attributes=None, id=None, dtype=None, order='C')
-           The savespace argument is ignored, for backward compatibility only.
+        """
+        Parameters
+        ----------
+
+            createVariable
+                (self, data, typecode=None, copy=0, savespace=0, mask=None, fill_value=None, grid=None,
+                axes=None, attributes=None, id=None, dtype=None, order='C') The savespace argument is ignored,
+                for backward compatibility only.
         """
         try:
             if data.fill_value is not None:
@@ -318,10 +324,15 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
     def __new__(cls, data, typecode=None, copy=0, savespace=0,
                 mask=numpy.ma.nomask, fill_value=None, grid=None,
                 axes=None, attributes=None, id=None, copyaxes=1, dtype=None, order='C', **kargs):
-        """createVariable (self, data, typecode=None, copy=0, savespace=0,
-                 mask=None, fill_value=None, grid=None,
-                 axes=None, attributes=None, id=None, dtype=None, order='C')
-           The savespace argument is ignored, for backward compatibility only.
+        """
+
+        Parameters
+        ----------
+
+            createVariable
+               (self, data, typecode=None, copy=0, savespace=0, mask=None, fill_value=None,
+               grid=None, axes=None, attributes=None, id=None, dtype=None, order='C') The savespace
+               argument is ignored, for backward compatibility only.
         """
         # Compatibility: assuming old typecode, map to new
         if dtype is None and typecode is not None:
@@ -611,9 +622,20 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             setattr(d, field, value)
 
     def clone(self, copyData=1):
-        """clone (self, copyData=1)
-        Return a copy of self as a transient variable.
-        If copyData is 1 (default), make a separate copy of the data."""
+        """
+
+        Parameters
+        ----------
+
+            clone
+               (self, copyData=1)
+
+            _: None
+
+        Returns
+        -------
+
+            a copy of self as a transient variable. If copyData is 1 (default), make a separate copy of the data."""
         result = createVariable(self, copy=copyData)
         return result
 
@@ -857,12 +879,18 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         """
         Get the ellipsis for a given halo side.
 
-        side - a tuple of zeros and one +1 or -1.  To access
-               the "north" side for instance, set side=(1, 0),
-               (-1, 0) to access the south side, (0, 1) the east
-               side, etc. This does not involve any communication.
+        Parameters
+        ----------
 
-        Return none if halo was not exposed (see exposeHalo)
+           side:
+                a tuple of zeros and one +1 or -1.  To access the "north" side for instance, set side=(1, 0),
+                (-1, 0) to access the south side, (0, 1) the east side, etc. This does not involve any communication.
+
+           _:None
+
+        Returns
+        -------
+            none if halo was not exposed (see exposeHalo)
         """
         if HAVE_MPI and side in self.__mpiWindows:
             return self.__mpiWindows[side]['slab']
@@ -871,22 +899,22 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
 
     def fetchHaloData(self, pe, side):
         """
-        Fetch the halo data from another processor. The halo side
-        is a subdomain of the halo that is exposed to other
-        processors. It is an error to call this method when
-        MPI is not enabled. This is a collective method (must
-        be called by all processes), which involves synchronization
+        Fetch the halo data from another processor. The halo side is a subdomain of the halo that
+        is exposed to other processors. It is an error to call this method when MPI is not enabled.
+        This is a collective method (must be called by all processes), which involves synchronization
         of data among all processors.
 
-        pe       -  processor owning the halo data. This is a no
-                    operation when pe is None.
-        side     -  a tuple of zeros and one +1 or -1.  To access
-                    the "north" side for instance, set side=(1, 0),
-                    (-1, 0) to access the south side, (0, 1) the east
-                    side, etc.
+        Parameters
+        ----------
 
-        Note: collective, all procs must invoke this method. If some
-        processors should not fetch then pass None for pe.
+           pe:
+                processor owning the halo data. This is a no operation when pe is None.
+
+           side:
+               a tuple of zeros and one +1 or -1.  To access the "north" side for instance,
+               set side=(1, 0), (-1, 0) to access the south side, (0, 1) the east side, etc.
+
+        Note: collective, all procs must invoke this method. If some processors should not fetch then pass None for pe.
         """
         if HAVE_MPI:
             iw = self.__mpiWindows[side]
@@ -916,13 +944,22 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
 
     def __getSlab(self, dim, slce):
         """
-        Get slab. A slab is a multi-dimensional slice extending in
-        all directions except along dim where slce applies
+        Parameters
+        ----------
 
-        dim      - dimension (0=first index, 1=2nd index...)
-        slce     - python slice object along dimension dim
+            Get slab:
+                A slab is a multi-dimensional slice extending in all directions except along dim where slce applies
 
-        return slab
+            dim:
+                dimension (0=first index, 1=2nd index...)
+
+            slce:
+                python slice object along dimension dim
+
+        Returns
+        -------
+
+             slab
         """
         ndims = len(self.shape)
 

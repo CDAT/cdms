@@ -26,11 +26,17 @@ _cache_tempdir = None                   # Default temporary directory
 def lock(filename):
     """
     Acquire a file-based lock with the given name.
-    Usage: lock(filename)
-    If the function returns, the lock was acquired successfully.
+
+        Usage:
+            lock(filename)
+
+        If the function returns, the lock was acquired successfully.
+
+
     Note: This function is UNIX-specific.
-    Note: It is important to delete the lock via unlock() if the process
-      is interrupted, otherwise subsequent locks will fail.
+
+    Note: It is important to delete the lock via unlock() if the process is
+    interrupted, otherwise subsequent locks will fail.
     """
 
     path = lockpath(filename)
@@ -80,8 +86,13 @@ def lock(filename):
 def unlock(filename):
     """
     Delete a file-based lock with the given name.
-    Usage:unlock(filename)
-    If the function returns, the lock was successfully deleted.
+
+        Usage:
+            unlock(filename)
+
+        If the function returns, the lock was successfully deleted.
+
+
     Note: This function is UNIX-specific.
     """
 
@@ -95,7 +106,9 @@ def lockpath(filename):
     """
     Generate the pathname of a lock. Creates the directory containing the lock
     if necessary.
-    Usage: lockpath(filename)
+
+        Usage:
+            lockpath(filename)
     """
     global _cache_tempdir
 
@@ -163,12 +176,22 @@ def useRequestManagerTransfer():
 def copyFile(fromURL, toURL, callback=None,
              lcpath=None, userid=None, useReplica=1):
     """
-    Copy file <fromURL> to local file <toURL>. For FTP transfers, if cache._useWindow is true,
-    display a progress dialog, otherwise just print progress messages.
+    Copy file <fromURL> to local file <toURL>.
 
-    For request manager transfers, <lcpath> is the logical collection distinguished name,
-    <userid> is the string user ID, <useReplica> is true iff the request manager should
-    search the replica catalog for the actual file to transfer.
+        For FTP transfers, if cache._useWindow is true, display a progress dialog,
+        otherwise just print progress messages.
+
+        For request manager transfers, <lcpath> is the logical collection distinguished name,
+
+    Parameters
+    ----------
+
+       <userid>
+          is the string user ID,
+
+       <useReplica>
+          is true if the request manager should search the replica catalog for the actual
+          file to transfer.
     """
     if callback is None:
         if _useWindow:
@@ -276,6 +299,10 @@ class Cache:
     def get(self, filekey):
         """
         Get the path associated with <filekey>, or None if not present.
+Parameters
+----------
+        <filekey>
+            filekey for cache
         """
         filekey = str(filekey)
         lock("index_lock")
@@ -295,6 +322,10 @@ class Cache:
     def put(self, filekey, path):
         """
         cache[filekey] = path
+Parameters
+----------
+        <filekey>
+            filekey for cache
         """
 
         filekey = str(filekey)
@@ -318,6 +349,11 @@ class Cache:
     def deleteEntry(self, filekey):
         """
         Delete a cache index entry.
+
+Parameters
+----------
+        <filekey>
+            filekey for cache
         """
         filekey = str(filekey)
 
@@ -335,9 +371,17 @@ class Cache:
         """
         Copy the file <fromURL> into the cache. Return the result path.
 
-        For request manager transfers, lcpath is the logical collection path,
-        <userid> is the string user ID, <useReplica> is true iff the request manager should
-        search the replica catalog for the actual file to transfer.
+           For request manager transfers, lcpath is the logical collection path,
+
+Parameters
+----------
+
+           <userid>
+               is the string user ID,
+
+
+           <useReplica>
+               is true iff the request manager should search the replica catalog for the actual file to transfer.
         """
 
         # Put a notification into the cache, that this file is being read.
@@ -375,19 +419,37 @@ class Cache:
     def getFile(self, fromURL, filekey, naptime=5, maxtries=60,
                 lcpath=None, userid=None, useReplica=None):
         """
-        Get the file with <fileURL>. If the file is in the cache, read it.
-        If another process is transferring it into the cache, wait for the
-        transfer to complete. <naptime> is the number of seconds between
-        retries, <maxtries> is the maximum number of retries.
-        Otherwise, copy it from the remote file.
+        Get the file with <fileURL>.
 
-        <filekey> is the cache index key. A good choice is (datasetDN, filename)
+           If the file is in the cache, read it.
+
+           If another process is transferring it into the cache, wait for the
+        transfer to complete.
+
+
+        Parameters
+        ---------
+            <naptime>
+               is the number of seconds between retries,
+
+            <maxtries>
+               is the maximum number of retries. Otherwise, copy it from the remote file.
+
+            <filekey>
+               is the cache index key. A good choice is (datasetDN, filename)
         where datasetDN is the distinguished name of the dataset, and filename
         is the name of the file within the dataset.
 
-        For request manager transfers, <lcpath> is the logical collection path,
-        <userid> is the user string ID, <useReplica> is true iff the request manager should
-        search the replica catalog for the actual file to transfer.
+            For request manager transfers,
+
+            <lcpath>
+               is the logical collection path,
+
+            <userid>
+               is the user string ID,
+
+             <useReplica>
+               is true iff the request manager should search the replica catalog for the actual file to transfer.
 
         Returns the path of a file in the cache.
 

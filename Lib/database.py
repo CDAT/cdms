@@ -39,27 +39,24 @@ _Att = re.compile('([a-zA-Z_:][-a-zA-Z0-9._:]*)=(.*)', re.DOTALL)
 
 def connect(uri=None, user="", password=""):
     """
-    Method:
 
-      connect(uri=None, user="", password="")
+    Method:  connect(uri=None, user="", password="")
 
-    Description:
+    Description:  Open a CDMS database connection.
 
-      Open a CDMS database connection.
+    Arguments
 
-    Arguments:
+       uri: Universal Resource Identifier. If unspecified, defaults to the environment variable CDMSROOT.
+       user: user id
+       password: password
 
-      uri: Universal Resource Identifier. If unspecified, defaults to the environment variable CDMSROOT.
-      user: user id
-      password: password
+    Returns
+    -------
+       Database instance.
 
-    Returns:
-
-      Database instance.
-
-    Example:
-
-      db = cdms.connect("ldap://dbhost.llnl.gov/database=CDMS,ou=PCMDI,o=LLNL,c=US")
+    Example
+    -------
+       db = cdms.connect("ldap://dbhost.llnl.gov/database=CDMS,ou=PCMDI,o=LLNL,c=US")
     """
     if uri is None:
         try:
@@ -106,10 +103,19 @@ def connect(uri=None, user="", password=""):
 
 
 def loadString(text, uri, parent=None, datapath=None):
-    """ Create a dataset from a text string. <text> is the string in CDML format.
-        <uri> is the URL of the dataset in a catalog or file.
-        <parent> is the containing database object, if any.
-        <datapath> is the location of data files relative to the parent database URL.
+    """ Create a dataset from a text string.
+
+            <text>
+                is the string in CDML format.
+
+            <uri>
+                is the URL of the dataset in a catalog or file.
+
+            <parent>
+                is the containing database object, if any.
+
+            <datapath>
+                is the location of data files relative to the parent database URL.
     """
     p = CDMLParser()
     p.feed(text)
@@ -194,16 +200,17 @@ class LDAPDatabase(AbstractDatabase):
 
     def close(self):
         """
-        Method:
+        Method
 
-          close()
+            close()
 
-        Description:
+        Description
 
-          Close a database connection.
 
-        Returns:
+            Close a database connection.
 
+        Returns
+        -------
           None
 
         """
@@ -218,14 +225,25 @@ class LDAPDatabase(AbstractDatabase):
         self.close()
 
     def normalizedn(self, dn):
+        """
+        normalizedn
+
+        Returns
+        -------
+            string
+        """
         explodeddn = ldap.explode_dn(dn)
         return string.join(explodeddn, ',')
 
     def cachecdml(self, name, cdml, datapath):
+        """
+        """
         normaldn = self.normalizedn(name)
         self._cdmlcache_[normaldn] = (cdml, datapath)
 
     def getDataset(self, dn):
+        """
+        """
         normaldn = self.normalizedn(dn)
         if normaldn in self._cache_:
             dataset = self._cache_[normaldn]
@@ -255,6 +273,8 @@ class LDAPDatabase(AbstractDatabase):
         return dataset
 
     def getObjFromDataset(self, dn):
+        """
+        """
 
         # Get the parent dataset
         explodeddn = ldap.explode_dn(dn)
@@ -274,25 +294,25 @@ class LDAPDatabase(AbstractDatabase):
 
     def openDataset(self, dsetid, mode='r'):
         """
-        Method:
+        Method
 
           openDataset(dsetid, mode='r')
 
-        Description:
+        Description
 
           Open a dataset.
 
-        Arguments:
+        Arguments
 
           dsetid: string dataset identifier
           mode: open mode ('r' - read-only, 'r+' - read-write, 'w' - create)
 
-        Returns:
-
+        Returns
+        -------
           Dataset instance.
 
-        Example:
-
+        Example
+        -------
           dset = db.openDataset('ncep_reanalysis_mo')
         """
         dn = "dataset=%s,%s" % (dsetid, self.path)
@@ -326,58 +346,77 @@ class LDAPDatabase(AbstractDatabase):
     def searchFilter(self, filter=None, tag=None, relbase=None,
                      scope=Subtree, attnames=None, timeout=None):
         """
-        Method:
+        Method
 
-          searchFilter(filter=None, tag=None, relbase=None, scope=Subtree, attnames=None, timeout=None)
+           searchFilter
+              (filter=None, tag=None, relbase=None, scope=Subtree, attnames=None, timeout=None)
 
-        Description:
+        Description
 
-          Search a CDMS database.
+           Search a CDMS database.
 
-        Arguments:
+        Arguments        -
 
-          filter: string search filter
-            Simple filters have the form "tag = value". Simple filters can be combined using
-            logical operators '&', '|', '!' in prefix notation. For example,
-            the filter '(&(objectclass=variable)(id=cli))' finds all variables named cli.
+           filter: string search filter
+           Simple filters have the form "tag = value". Simple filters can be combined
+           using logical operators '&', '|', '!' in prefix notation. For example,
+           the filter '(&(objectclass=variable)(id=cli))' finds all variables named cli.
 
-            More formally:
+            More formally
 
-              filter     ::= "(" filtercomp ")"
-              filtercomp ::= "&" filterlist | # and
+              filter        = "(" filtercomp ")"
+
+              filtercomp    = "&" filterlist | # and
                              "|" filterlist | # or
                              "!" filterlist | # not
                              simple
-              filterlist ::= filter | filter filterlist
-              simple     ::= tag op value
-              op         ::= "=" |      # equality
+
+              filterlist    = filter | filter filterlist
+
+              simple        = tag op value
+
+              op            = "=" |      # equality
                              "~=" |     # approximate equality
                              "<=" |     # lexicographically less than or equal to
                              ">="       # lexicographically greater than or equal to
-              value      ::= string, may include '*' as a wild card
 
-          tag: string class tag ("dataset" | "variable" | "database" | "axis" | "grid").
-            Restricts the search to a class of objects
-          relbase: string search base, relative to the database path
-          scope: search scope (Subtree | Onelevel | Base). Subtree searches the base object and its descendants.
-            Onelevel searches the base object and its immediate descendants. Base searches the base object alone.
+              value         = string, may include '*' as a wild card
+
+              tag: string class tag ("dataset" | "variable" | "database" | "axis" | "grid").
+              Restricts the search to a class of objects
+
+              relbase: string search base, relative to the database path
+              scope: search scope (Subtree | Onelevel | Base). Subtree searches the base object and its descendants.
+
+              Onelevel searches the base object and its immediate descendants. Base searches the base object alone.
             Default is Subtree.
-          attnames: list of attribute names. Restricts the attributes returned.
-          timeout: integer number of seconds before timeout.
 
-        Returns:
+                attnames:
+                    list of attribute names. Restricts the attributes returned.
 
-          SearchResult instance. Entries can be accessed sequentially. For each entry, entry.name is the
-          name of the entry, entry.attributes is a dictionary of the attributes returned by the search,
-          entry.getObject() returns the CDMS object associated with the entry:
+                timeout:
+                    integer number of seconds before timeout.
 
-          for entry in result:
-            print entry.name, entry.attributes["id"]
+        Returns
+        -------
+           SearchResult instance.
 
-          Entries can be refined with searchPredicate().
+              Entries can be accessed sequentially.
 
-        Example:
+                 For each entry,
 
+                     entry.name is the name of the entry,
+
+                     entry.attributes is a dictionary of the attributes returned by the search,
+
+                     entry.getObject() returns the CDMS object associated with the entry:
+
+                     for entry in result: print entry.name, entry.attributes["id"]
+
+              Entries can be refined with searchPredicate().
+
+        Example
+        -------
         (1) Find all variables named "cli":
 
           result = db.searchFilter(filter="id=cli",tag="variable")
@@ -464,37 +503,36 @@ class LDAPSearchResult(AbstractSearchResult):
 
     def searchPredicate(self, predicate, tag=None):
         """
-        Method:
+        Method
 
-          searchPredicate(predicate, tag=None)
+            searchPredicate(predicate, tag=None)
 
-        Description:
+        Description
 
-          Refine a search result, with a predicate search.
+            Refine a search result, with a predicate search.
 
-        Arguments:
+        Arguments
 
-          predicate: Function name or lambda function. The function takes a single CDMS object,
+            predicate: Function name or lambda function. The function takes a single CDMS object,
             and returns true (1) if the object satisfies the predicate, 0 if not.
-          tag: Restrict the search to objects in one class.
+            tag: Restrict the search to objects in one class.
 
-        Returns:
+        Returns
+        -------
+           SearchResult instance. Entries can be accessed sequentially. For each entry, entry.name is the
+           name of the entry, entry.attributes is a dictionary of the attributes returned by the search,
+           entry.getObject() returns the CDMS object associated with the entry:
 
-          SearchResult instance. Entries can be accessed sequentially. For each entry, entry.name is the
-          name of the entry, entry.attributes is a dictionary of the attributes returned by the search,
-          entry.getObject() returns the CDMS object associated with the entry:
+           for entry in result:
+               print entry.name, entry.attributes["id"]
 
-          for entry in result:
-            print entry.name, entry.attributes["id"]
+           Entries can be refined with searchPredicate().
 
-          Entries can be refined with searchPredicate().
+        Example
+        -------
+            (1) Find all variables on a 73x96 grid
 
-        Example:
-
-        (1) Find all variables on a 73x96 grid
-
-          newresult = result.searchPredicate(lambda obj: obj.getGrid().shape==(73,96),"variable")
-
+            newresult = result.searchPredicate(lambda obj: obj.getGrid().shape==(73,96),"variable")
         """
         if tag is not None:
             tag = string.lower(tag)
@@ -522,16 +560,16 @@ class AbstractResultEntry:
 
     def getObject(self):
         """
-        Method:
-
+        Method
+        ------
           getObject()
 
-        Description:
-
+        Description
+        -----------
           Get the CDMS object associated with this entry.
 
-        Returns:
-
+        Returns
+        -------
           Instance of a CDMS object.
 
         """

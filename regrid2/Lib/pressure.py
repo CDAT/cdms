@@ -1,13 +1,15 @@
 # Automatically adapted for numpy.oldnumeric Aug 02, 2007 by
 import cdms2
 import numpy
-from . import _regrid
+# from . import _regrid
+import regrid2._regrid as _regrid
 from .error import RegridError
 import copy
 
 
 class PressureRegridder:
-    """    #-----------------------------------------------------------------------------------------------
+    """
+    #-----------------------------------------------------------------------------------------------
     #
     #    PURPOSE: To perform all the tasks required to regrid the input data into the ouput data along
     #             the pressure dimension only.
@@ -18,10 +20,12 @@ class PressureRegridder:
     #                  Pass the input data with some descriptive parameters and get the output data
     #                  in return
     #
-    #------------------------------------------------------------------------------------------------"""
+    #------------------------------------------------------------------------------------------------
+    """
 
     def __init__(self, axisIn, axisOut):
-        """        #-----------------------------------------------------------------------------------------------
+        """
+        #-----------------------------------------------------------------------------------------------
         #
         #    PURPOSE: To make an instance which entails setting up the input and output grids
         #
@@ -43,7 +47,8 @@ class PressureRegridder:
         #
         #             r = PressureRegridder(levIn, levOut)
         #
-        #------------------------------------------------------------------------------------------------"""
+        #------------------------------------------------------------------------------------------------
+        """
 
         # ---  set the instance grid data attributes used to describe input and output grid sizes
 
@@ -423,20 +428,28 @@ class PressureRegridder:
 
 
 def checkorder(positionIn):
-    """    #-----------------------------------------------------------------------------------------
-    #
-    #     purpose: construct the tuples for transposing the data to standard dimension order and the
-    #              inverse for transposing it back to the original dimension order
-    #
-    #     usage:   newOrder, inverseOrder = checkorder(positionIn)
-    #
-    #     passed:  positionIn -- array with location of longitude, latitude. level and time respectively
-    #                            in the sense of the python shape of the data
-    #
-    #     returned: newOrder -- tuple to transpose data to the order (t,z,y,x)
-    #               inverseOrder -- tuple to transpose data to back to the original order
-    #
-    #----------------------------------------------------------------------------------------------"""
+    """
+    **Purpose:**
+
+        construct the tuples for transposing the data to standard dimension
+        order and the inverse for transposing it back to the original dimension order
+
+    **Usage:**
+
+        newOrder, inverseOrder = checkorder(positionIn)
+
+    **Passed:**
+
+        positionIn -- array with location of longitude, latitude. level and time
+         respectively in the sense of the python shape of the data
+
+    **Returns:**
+
+        newOrder -- tuple to transpose data to the order (t,z,y,x)
+
+        inverseOrder -- tuple to transpose data to back to the original order
+
+    """
 
     # remove the None values from positionIn and reverse the order
 
@@ -466,16 +479,22 @@ def checkorder(positionIn):
 
 
 def sendmsg(msg, value1=None, value2=None):
-    """        #---------------------------------------------------------------------------------
-    #
-    #    purpose: send the same message to the screen
-    #
-    #    passed :  msg - the string
-    #              value - the number associated with the string
-    #
-    #    returned: return
-    #
-    #---------------------------------------------------------------------------------"""
+    """
+    **Purpose:**
+
+         send the same message to the screen
+
+    **Passed:**
+
+         msg - the string
+
+         value - the number associated with the string
+
+    **Returns:**
+
+         return
+
+   """
 
     print('*******************************************************************')
     if value1 is None:

@@ -1,9 +1,10 @@
+# David Kindig and Alex Pletzer, Tech-X Corp. (2012)
+# This code is provided with the hope that it will be useful.
+# No guarantee is provided whatsoever. Use at your own risk.
 """
 Cdms2 interface to multiple regridders
 
-David Kindig and Alex Pletzer, Tech-X Corp. (2012)
-This code is provided with the hope that it will be useful.
-No guarantee is provided whatsoever. Use at your own risk.
+
 """
 from __future__ import print_function
 import operator
@@ -17,11 +18,23 @@ from functools import reduce
 def _areCellsOk(cornerCoords, mask=None):
     """
     Check cell corner points (in 2D)
-    @param cornerCoords
-    @param mask checks will not be performed where mask is 1 (True)
-    @return None if OK, otherwise return a dict containing some diagnostics
 
-   3         2
+    Parameters
+    ----------
+
+        cornerCoords
+
+           mask checks will not be performed where mask is 1 (True)
+
+        _: None
+
+    Returns
+    -------
+
+         None if OK, otherwise return a dict containing some diagnostics
+
+
+ `` 3         2
     +-------+
     | \     |
     |  \    |
@@ -31,14 +44,22 @@ def _areCellsOk(cornerCoords, mask=None):
     +-------+
    0         1
 
-    @note assumes cornerCoords are in lat, lon order
+    Notes
+    -----
+
+        assumes cornerCoords are in lat, lon order``
     """
 
     if len(cornerCoords) != 2:
         return True  # no-op, no check
 
     def projectToSphere(the, lam):
-        """ @return x, y, z coordinates in Cartesian space"""
+        """
+
+        Returns
+        -------
+              x, y, z coordinates in Cartesian space
+       """
         ct = numpy.cos(the)
         return ct * numpy.cos(lam), ct * numpy.sin(lam), numpy.sin(the)
 
@@ -159,8 +180,19 @@ def _areCellsOk(cornerCoords, mask=None):
 def _buildBounds(bounds):
     """
     Build corner coordinates from bounds array
-    @param bounds CdmsVar.getBounds()
-    @return ndarrray of corners
+
+    Parameters
+    ----------
+
+       bounds
+          CdmsVar.getBounds()
+
+       _:None
+
+    Returns
+    -------
+
+       ndarrray of corners
     """
 
     bndShape = [s + 1 for s in bounds.shape[:-1]]
@@ -181,12 +213,26 @@ def getBoundList(coordList, mask=None,
                  removeBadCells=False, badCellIndices=[]):
     """
     Return a list of bounds built from a list of coordinates
-    @param coordList coordinate list, should have getBounds()
-    @param mask avoid checking areas where mask is one
-    @param removeBadCells set to True if you want to the code to remove
-                bad cells, ie zero cells, butterfly cells, ...
-    @param maskCellIndices list of bad cell indices to mask out (output)
-    @return [latBounds, lonBounds]
+
+    Parameters
+    ----------
+
+       coordList
+          coordinate list, should have getBounds()
+
+       mask
+          avoid checking areas where mask is one
+
+       removeBadCells
+          set to True if you want to the code to remove bad cells, ie zero cells, butterfly cells, ...
+
+       maskCellIndices
+          list of bad cell indices to mask out (output)
+
+    Returns
+    -------
+
+       [latBounds, lonBounds]
     """
     cornerCoords = []
     for c in coordList:
@@ -217,7 +263,11 @@ bad cell coordinates:
 def _getCoordList(grid):
     """
     Return a CDMS coordinate list from a CDMS grid
-    @return lats, lons
+
+    Returns
+    -------
+
+       lats, lons
     """
 
     lats = grid.getLatitude()
@@ -239,10 +289,20 @@ def _getCoordList(grid):
 def _getDstDataShape(srcVar, dstGrid):
     """
     Get the shape of the dst data
-    @param srcVar the variable from which all axes other than lat/lon
-                  will be taken from
-    @param dstGrid target, horizontal grid
-    @return list
+
+    Parameters
+    ----------
+
+       srcVar
+          the variable from which all axes other than lat/lon will be taken from
+
+       dstGrid
+          target, horizontal grid
+
+    Returns
+    -------
+
+       list
     """
 
     shp = srcVar.shape
@@ -275,11 +335,20 @@ def _getDstDataShape(srcVar, dstGrid):
 def _getAxisList(srcVar, dstGrid):
     """
     Get the list of axes from a variable and a grid
-    @param srcVar the variable from which all axes other than lat/lon
-                  will be taken from
-    @param dstGrid target, horizontal grid
-    @return variable with non-horizontal axes from srcVar and horizontal axes
-            from dstGrid
+
+    Parameters
+    ----------
+
+       srcVar
+          the variable from which all axes other than lat/lon will be taken from
+
+       dstGrid
+          target, horizontal grid
+
+    Returns
+    -------
+
+       variable with non-horizontal axes from srcVar and horizontal axes from dstGrid
     """
 
     shp = srcVar.shape
@@ -314,6 +383,43 @@ class CdmsRegrid:
     Regridding switchboard, handles CDMS variables before handing off to
     regridder. If a multidimensional variable is passed in, the apply step
     loops over the axes above the Lat (Y) -- Lon (X) coordinates
+
+  Establish which regridding method to use, handle CDMS variables before handing
+  off to regridder. See specific tool for more information.
+
+Parameters
+----------
+         srcGrid
+             CDMS source grid
+
+         dstGrid
+             CDMS destination grid
+
+         dtype
+             numpy data type for src and dst data
+
+         regridMethod
+             linear (all tools - bi, tri),
+             conserve (ESMF Only)
+             patch (ESMF Only)
+
+         regridTool
+             LibCF, ESMF, ...
+
+         srcGridMask
+             array source mask, interpolation coefficients will not be computed for masked
+             points/cells.
+
+         srcGridAreas
+             array destination cell areas, only needed for conservative regridding
+
+         dstGridMask
+             array destination mask, interpolation coefficients will not be computed for masked points/cells.
+
+         dstGridAreas
+             array destination cell areas, only needed for conservative regridding
+         **args
+             additional, tool dependent arguments
     """
 
     def __init__(self, srcGrid, dstGrid, dtype,
@@ -322,27 +428,7 @@ class CdmsRegrid:
                  dstGridMask=None, dstGridAreas=None,
                  **args):
         """
-        Establish which regridding method to use, handle CDMS variables before
-        handing off to regridder. See specific tool for more information.
 
-        @param srcGrid CDMS source grid
-        @param dstGrid CDMS destination grid
-        @param dtype numpy data type for src and dst data
-        @param regridMethod linear (all tools - bi, tri),
-                            conserve (ESMF Only)
-                            patch (ESMF Only)
-        @param regridTool LibCF, ESMF, ...
-        @param srcGridMask array source mask, interpolation
-                           coefficients will not be computed for masked
-                           points/cells.
-        @param srcGridAreas array destination cell areas, only needed for
-                            conservative regridding
-        @param dstGridMask array destination mask, interpolation
-                           coefficients will not be computed for masked
-                           points/cells.
-        @param dstGridAreas array destination cell areas, only needed for
-                            conservative regridding
-        @param **args additional, tool dependent arguments
         """
 
         srcBounds = None
@@ -431,9 +517,20 @@ coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
         """
         Interpolate, looping over additional (non-latitude/longitude) axes
            if need be
-        @param srcVar CDMS variable
-        @param **args Tool dependent arguments
-        @return CDMS interpolated variable
+
+        Parameters
+        ----------
+
+             srcVar
+                 CDMS variable
+
+             **args
+                 Tool dependent arguments
+
+        Returns
+        -------
+
+             CDMS interpolated variable
         """
 
         # initialize

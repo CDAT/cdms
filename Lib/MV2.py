@@ -113,11 +113,13 @@ class var_unary_operation_with_axis:
 
 def commonDomain(a, b, omit=None):
     """commonDomain(a,b) tests that the domains of variables/arrays a and b are equal,
-    and returns the common domain if equal, or None if not equal. The domains may
-    differ in that one domain may have leading axes not common
-    to the other; the result domain will contain those axes.
-    If <omit> is specified, as an integer i, skip comparison of the ith dimension
-    and return None for the ith (common) dimension.
+    and returns the common domain if equal, or None if not equal.
+
+       The domains may differ in that one domain may have leading axes not common
+       to the other; the result domain will contain those axes.
+
+       If <omit> is specified, as an integer i, skip comparison of the ith dimension
+       and return None for the ith (common) dimension.
     """
 
     if isinstance(b, AbstractVariable):
@@ -187,11 +189,11 @@ def commonGrid(a, b, axes):
     and consistent with the list of axes. If so, the common grid is returned, else None
     is returned. a and b can be numpy arrays, in which case the result is None.
 
-    The common grid is 'consistent' with axes if the grid axes (e.g., the axes of latitude and
-    longitude coordinate variables) are members of the list 'axes'.
+        The common grid is 'consistent' with axes if the grid axes (e.g., the axes of
+        latitude and longitude coordinate variables) are members of the list 'axes'.
 
-    If the grid(s) of a, b are rectilinear, the result is None, as the grids are implicitly
-    defined by the axes.
+        If the grid(s) of a, b are rectilinear, the result is None, as the grids
+        are implicitly defined by the axes.
     """
     if isinstance(b, AbstractVariable):
         gb = b.getGrid()
@@ -616,12 +618,15 @@ sort.__doc__ = numpy.ma.sort.__doc__ + \
 
 
 def choose(myindices, t):
-    """Returns an array shaped like indices containing elements chosen
-      from t.
-      If an element of t is the special element masked, any element
-      of the result that "chooses" that element is masked.
+    """
 
-      The result has only the default axes.
+    Returns
+    -------
+
+        an array shaped like indices containing elements chosen from t.
+        If an element of t is the special element masked, any element of
+        the result that "chooses" that element is masked. The result has
+        only the default axes.
     """
     maresult = numpy.ma.choose(myindices, list(map(_makeMaskedArg, t)))
     F = getattr(t, "fill_value", 1.e20)
@@ -640,8 +645,12 @@ def where(condition, x, y):
 
 
 def masked_where(condition, x, copy=1):
-    """Return x as an array masked where condition is true.
-       Also masked where x or condition masked.
+    """
+
+    Returns
+    -------
+
+         x as an array masked where condition is true. Also masked where x or condition masked.
     """
     tx = _makeMaskedArg(x)
     tcondition = _makeMaskedArg(condition)
@@ -826,6 +835,7 @@ def transpose(a, axes=None):
 
 
 class _minimum_operation:
+
     "Object to calculate minima"
 
     def __init__(self):
@@ -946,8 +956,13 @@ maximum = _maximum_operation()
 
 def asarray(data, typecode=None, dtype=None):
     """asarray(data, typecode=None, dtype=None) is equivalent to array(data, dtype=None, copy=0)
-       Returns data if dtype is None or data is a MaskedArray of the same dtype.
-       typecode arg is for backward compatibility.
+
+
+     Returns
+     -------
+
+          data if dtype is None or data is a MaskedArray of the same dtype.
+          typecode arg is for backward compatibility.
     """
     dtype = _convdtype(dtype, typecode)
     if isinstance(data, AbstractVariable) and (
@@ -999,7 +1014,8 @@ as_masked = numpy.ma.array
 
 
 def outerproduct(a, b):
-    """outerproduct(a,b) = {a[i]*b[j]}, has shape (len(a),len(b))"""
+    """outerproduct(a,b) = {a[i]*b[j]}, has shape (len(a),len(b))
+    """
     ta = asVariable(a, writeable=1)
     tb = asVariable(b, writeable=1)
     maresult = numpy.ma.outerproduct(ta, tb)

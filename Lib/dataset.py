@@ -4,11 +4,11 @@
 """ CDMS dataset and file objects"""
 from __future__ import print_function
 from .error import CDMSError
+import sys
 from . import Cdunif
 import numpy
 from . import cdmsNode
 import os
-import sys
 import string
 import urllib
 from urllib.parse import urlparse, urlunparse
@@ -342,36 +342,41 @@ def getNetcdfUseParallelFlag():
 
 
 def getNetcdf4Flag():
-    """Returns
-       -------
+    """
+    Returns
+    -------
             NetCDF4 flag value."""
     return Cdunif.CdunifGetNCFLAGS("netcdf4")
 
 
 def getNetcdfClassicFlag():
-    """Returns
-       -------
+    """
+    Returns
+    -------
             NetCDF classic flag value."""
     return Cdunif.CdunifGetNCFLAGS("classic")
 
 
 def getNetcdfShuffleFlag():
-    """Returns
-       -------
+    """
+    Returns
+    -------
             NetCDF shuffle flag value."""
     return Cdunif.CdunifGetNCFLAGS("shuffle")
 
 
 def getNetcdfDeflateFlag():
-    """Returns
-       -------
+    """
+    Returns
+   -------
             NetCDF deflate flag value. """
     return Cdunif.CdunifGetNCFLAGS("deflate")
 
 
 def getNetcdfDeflateLevelFlag():
-    """Returns
-       -------
+    """
+    Returns
+    -------
             NetCDF deflate level flag value."""
     return Cdunif.CdunifGetNCFLAGS("deflate_level")
 
@@ -379,8 +384,8 @@ def getNetcdfDeflateLevelFlag():
 def useNetcdf3():
     """ Turns off (0) NetCDF flags for shuffle/cuDa/deflatelevel
     Output files are generated as NetCDF3 Classic after that
-       Returns
-       -------
+    Returns
+    -------
             No return value.
     """
     setNetcdfShuffleFlag(0)
@@ -430,6 +435,7 @@ def createDataset(path, template=None):
        ----------
            path:
                is the XML file name, or netCDF filename for simple file creation.
+
            template:
                is a string template for the datafile(s), for dataset creation.
 
@@ -1163,7 +1169,11 @@ class Dataset(CdmsObj, cuDataset):
 
     def getLogicalCollectionDN(self, base=None):
         """Return the logical collection distinguished name of this dataset.
-        If <base> is defined, append it to the lc name.
+
+
+           Note
+           ----
+            If <base> is defined, append it to the lc name.
         """
         if hasattr(self, "lc"):
             dn = self.lc
@@ -1174,7 +1184,11 @@ class Dataset(CdmsObj, cuDataset):
         return dn
 
     def getVariable(self, id):
-        "Get the variable object with the given id. Returns None if not found."
+        """Get the variable object with the given id.
+
+         Returns
+         -------
+            None if not found."""
         return self.variables.get(id)
 
     def getVariables(self, spatial=0):
@@ -1191,11 +1205,19 @@ class Dataset(CdmsObj, cuDataset):
         return retval
 
     def getAxis(self, id):
-        "Get the axis object with the given id. Returns None if not found."
+        """Get the axis object with the given id.
+
+         Returns
+         -------
+            None if not found."""
         return self.axes.get(id)
 
     def getGrid(self, id):
-        "Get the grid object with the given id. Returns None if not found."
+        """Get the grid object with the given id.
+
+         Returns
+         -------
+            None if not found."""
         return self.grids.get(id)
 
     def __repr__(self):

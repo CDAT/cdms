@@ -8,6 +8,7 @@ from .variable import DatasetVariable
 from .error import CDMSError
 from .sliceut import reverseSlice
 from .Cdunif import CdunifError
+# import cdms2.Cdunif.CdunifError as CdunifError
 
 FileClosed = "Cannot read from closed file, variable: "
 FileClosedWrite = "Cannot write to a closed file, variable: "

@@ -1,7 +1,8 @@
 # Automatically adapted for numpy.oldnumeric Aug 02, 2007 by
 
 import cdms2
-from . import _scrip
+# from . import _scrip
+import regrid2._scrip as _scrip
 from .error import RegridError
 import numpy
 from functools import reduce
@@ -106,14 +107,29 @@ class ScripRegridder:
 
 
 class ConservativeRegridder(ScripRegridder):
-    """First-order conservative regrid. By default, the normalize option ="fracarea", and array 'normal'
-    is not specified. If 'normal' is specified, it should be a one-dimensional array of the same length
-    as the output grid size, with values:
-      1.0 for normalize="fracarea",
-      grid_frac for normalize="destarea", or
-      grid_frac*grid_area for normalize="none".
-    sourceArea is the area of the source grid cells
-    destArea is the area of the destination grid cells
+    """First-order conservative regrid.
+
+           By default, the normalize option ="fracarea", and array 'normal' is not specified.
+
+               If 'normal' is specified, it should be a one-dimensional array of the same length
+               as the output grid size, with values:
+
+                   1.0 for normalize="fracarea",
+
+                   grid_frac for normalize="destarea", or
+
+                   grid_frac*grid_area for normalize="none".
+
+       Parameters
+       ----------
+
+          sourceArea
+
+              is the area of the source grid cells
+
+          destArea
+
+              is the area of the destination grid cells
     """
 
     def __init__(self, outputGrid, remapMatrix, sourceAddress, destAddress, inputGrid=None,
@@ -141,6 +157,9 @@ class ConservativeRegridder(ScripRegridder):
         return self.destArea
 
     def regrid(self, input):
+        """
+        call regridder
+        """
         if self.normal is None:
             # print "On input, num_links = %d"%(len(self.sourceAddress))
             # print "On input, nextra = %d"%(input.shape[0])
@@ -194,7 +213,19 @@ class BilinearRegridder(ScripRegridder):
 
 
 class BicubicRegridder(ScripRegridder):
-    """Bicubic regrid."""
+    """Bicubic regrid.
+
+        Parameters
+        ----------
+            gradLat:
+                df/di
+
+            gradLon:
+                df/dj
+
+            gradLatlon:
+                d(df)/(di)(dj)
+    """
 
     def __init__(self, outputGrid, remapMatrix, sourceAddress,
                  destAddress, inputGrid=None, sourceFrac=None, destFrac=None):
@@ -209,10 +240,6 @@ class BicubicRegridder(ScripRegridder):
             destFrac=destFrac)
 
     def __call__(self, input, gradLat, gradLon, gradLatlon):
-        """gradLat = df/di
-        gradLon = df/dj
-        gradLatlon = d(df)/(di)(dj)
-        """
 
         import numpy.ma
         from cdms2 import isVariable
@@ -343,10 +370,16 @@ class DistwgtRegridder(ScripRegridder):
 
 def readRegridder(fileobj, mapMethod=None, checkGrid=1):
     """Read a regridder from an open fileobj.
-    mapMethod is one of "conservative", "bilinear", "bicubic", or "distwgt". If unspecified, it defaults to the method
-    defined in the file.
-    If 'checkGrid' is 1 (default), the grid cells are checked for convexity,
-    and 'repaired' if necessary.
+
+       **Parameters:**
+
+            mapMethod
+                is one of "conservative", "bilinear", "bicubic", or "distwgt".
+
+            If unspecified, it defaults to the method defined in the file.
+
+            If 'checkGrid' is 1 (default), the grid cells are checked for convexity, and 'repaired' if necessary.
+
     """
 
     if isinstance(fileobj, str):

@@ -443,8 +443,8 @@ def checkorder(positionIn):
         positionIn -- array with location of longitude, latitude. level and time
          respectively in the sense of the python shape of the data
 
-    **Returns:**
-
+    Returns
+    -------
         newOrder -- tuple to transpose data to the order (t,z,y,x)
 
         inverseOrder -- tuple to transpose data to back to the original order
@@ -490,9 +490,9 @@ def sendmsg(msg, value1=None, value2=None):
 
          value - the number associated with the string
 
-    **Returns:**
-
-         return
+    Returns
+    -------
+        return
 
    """
 

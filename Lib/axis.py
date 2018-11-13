@@ -608,16 +608,17 @@ def lookupArray(ar, value):
 
     Parameters
     ----------
-    ar:
-        Input array
-    value:
-        Value to search
+         ar:
+             Input array
+         value:
+             Value to search
+
     Returns
     -------
-        index:
-            * ar is monotonically increasing.
-                * value <= ar[index], index==0..len(ar)-1
-                * value > ar[index], index==len(ar)
+    index:
+        * ar is monotonically increasing.
+        * value <= ar[index], index==0..len(ar)-1
+            * value > ar[index], index==len(ar)
             * ar is monotonically decreasing:
                 * value >= ar[index], index==0..len(ar)-1
                 * value < ar[index], index==len(ar)
@@ -2699,12 +2700,14 @@ def concatenate(axes, id=None, attributes=None):
 
 def take(ax, indices):
     """Take elements form an array along an axis
+
     Parameters
     ----------
         ax:
             The source array.
         indices:
             The indices of the values to extract.
+
     Returns
     -------
     axis: TransientAxis

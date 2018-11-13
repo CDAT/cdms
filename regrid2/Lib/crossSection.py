@@ -545,21 +545,21 @@ class CrossSectionRegridder:
 def checkdimension(x, name):
     """
 
-    **Purpose:**
+    Purpose:
+    
+       dimension  checks
+           1. has a len method
+           2. data type is float32
+           3. monotonically increasing vectors
 
-        dimension  checks
-            1. has a len method
-            2. data type is float32
-            3. monotonically increasing vectors
+    Parameters
+    ----------
+        x - coordinate vector
 
-    **Parameters:**
+        name - coordinate vector ID
 
-       x - coordinate vector
-
-       name - coordinate vector ID
-
-    **Returns:**
-
+    Returns
+    -------
         x, xsize -- dimension vector and its size
     """
 
@@ -709,15 +709,15 @@ def get_latitude_wts_bnds(checklatpass):
 def latitude_bounds(lat_bnds):
     """
 
-       **Purpose:**
+      **Purpose:**
 
           set up the shape and bounds for use by maparea
 
        **Usage:**
 
-       **Returns:**
-
-          tuple ( bn,bs )
+       Returns
+       -------
+           tuple ( bn,bs )
 
     """
 
@@ -751,9 +751,9 @@ def get_region_latitude_wts_bnds(latRegionpass, latType, latSize):
           wts,bnds = get_region_latitude_wts_bnds(latRegion, latType, latSize)
           where latRegion is the regional grid to check
 
-       **Returns:**
-
-          wts, bnds - tuple with weights and bounds
+       Returns
+       -------
+           wts, bnds - tuple with weights and bounds
 
     """
 
@@ -837,9 +837,9 @@ def sectionmask(dataIn, positionIn, maskIn, missingValueIn, missingMatch):
 
           amskin = mask(dataIn, positionIn, maskIn, missingValueIn, missingValueOut, flag2D)
 
-       **Returns:**
-
-          amskin
+       Returns
+       -------
+           amskin
 
     """
     # Logic outline
@@ -1019,9 +1019,9 @@ def sendmsg(msg, value1=None, value2=None):
 
           value - the number associated with the string
 
-       **Returns:**
-
-          return
+       Returns
+       -------
+           return
 
     """
 
@@ -1048,9 +1048,9 @@ def section(latvals, levvals):
 
           the grid coordinate vectors
 
-       **Returns:**
-
-           xsection -- a temerature like cross section
+       Returns
+       -------
+            xsection -- a temerature like cross section
 
     """
 
@@ -1086,9 +1086,9 @@ def rmserror(data1, data2):
           the two data sets
 
 
-       **Returns:**
-
-          rms error
+       Returns
+       -------
+           rms error
 
    """
 

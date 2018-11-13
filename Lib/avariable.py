@@ -177,8 +177,8 @@ class AbstractVariable(CdmsObj, Slab):
         """
         Selection of a subregion using selectors.
 
-        **Parameters:**
-
+        Parameters
+        ----------
             raw:
                 if set to 1, return numpy.ma only
             squeeze:
@@ -188,8 +188,8 @@ class AbstractVariable(CdmsObj, Slab):
             order:
                 if given, result is permuted into this order
 
-        **Returns:**
-
+        Returns
+        -------
              Subregion selected
         """
         # separate options from selector specs
@@ -472,25 +472,24 @@ class AbstractVariable(CdmsObj, Slab):
         return False
 
     def getAxisListIndex(self, axes=None, omit=None, order=None):
-        """Return a list of indices of axis objects;
-
-           Note
-           ----
-           If axes is **not** `None`, include only certain axes.
-           less the ones specified in omit.
-
-           If axes is `None`, use all axes of this variable.
-
-           Other specificiations are as for axisMatchIndex.
-
+        """
         Returns
         -------
-           a list of indices of axis objects;
+            a list of indices of axis objects
+
+        Note
+        ----
+        If axes is **not** `None`, include only certain axes.
+        less the ones specified in omit.
+
+        If axes is `None`, use all axes of this variable.
+
+        Other specificiations are as for axisMatchIndex.
         """
         return axisMatchIndex(self.getAxisList(), axes, omit, order)
 
     def getAxisList(self, axes=None, omit=None, order=None):
-        """Get the list of axis objects;
+        """Get the list of axis objects
 
         Note
         ----
@@ -1176,9 +1175,10 @@ class AbstractVariable(CdmsObj, Slab):
 
     def getValue(self, squeeze=1):
         """Get the entire set of values.
+
         Returns
         -------
-            All values and elimite the 1-D dimension.
+        All values and elimite the 1-D dimension.
         """
         return self.getSlice(Ellipsis, squeeze=squeeze)
 

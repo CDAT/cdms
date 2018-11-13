@@ -299,9 +299,10 @@ class Cache:
     def get(self, filekey):
         """
         Get the path associated with <filekey>, or None if not present.
-Parameters
-----------
-        <filekey>
+
+        Parameters
+        ----------
+            <filekey>
             filekey for cache
         """
         filekey = str(filekey)
@@ -322,9 +323,10 @@ Parameters
     def put(self, filekey, path):
         """
         cache[filekey] = path
-Parameters
-----------
-        <filekey>
+    
+        Parameters
+        ----------
+            <filekey>
             filekey for cache
         """
 
@@ -373,8 +375,8 @@ Parameters
 
            For request manager transfers, lcpath is the logical collection path,
 
-Parameters
-----------
+        Parameters
+        ----------
 
            <userid>
                is the string user ID,
@@ -428,30 +430,32 @@ Parameters
 
 
         Parameters
-        ---------
+        ----------
             <naptime>
-               is the number of seconds between retries,
+                is the number of seconds between retries,
 
             <maxtries>
-               is the maximum number of retries. Otherwise, copy it from the remote file.
+                is the maximum number of retries. Otherwise, copy it from the remote file.
 
             <filekey>
-               is the cache index key. A good choice is (datasetDN, filename)
+                is the cache index key. A good choice is (datasetDN, filename)
         where datasetDN is the distinguished name of the dataset, and filename
         is the name of the file within the dataset.
 
             For request manager transfers,
 
             <lcpath>
-               is the logical collection path,
+                is the logical collection path,
 
             <userid>
-               is the user string ID,
+                is the user string ID,
 
              <useReplica>
-               is true iff the request manager should search the replica catalog for the actual file to transfer.
+                is true iff the request manager should search the replica catalog for the actual file to transfer.
 
-        Returns the path of a file in the cache.
+        Returns
+        -------
+            the path of a file in the cache.
 
         Note: The function does not guarantee that the file is still in the cache
         by the time it returns.

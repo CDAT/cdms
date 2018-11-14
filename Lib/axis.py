@@ -2678,16 +2678,17 @@ def concatenate(axes, id=None, attributes=None):
 
     Parameters
     ----------
-        axes:
-            Axes to concatenate
-        id:
-            New axis identification (default None)
-        attributes:
-            Attributes to attached to the new Axis
+    axes :
+        Axes to concatenate
+    id :
+        New axis identification (default None)
+    attributes :
+        Attributes to attached to the new Axis
 
     Returns
     -------
-        Transient axis."""
+    Transient axis.
+    """
 
     data = numpy.ma.concatenate([ax[:] for ax in axes])
     boundsArray = [ax.getBounds() for ax in axes]

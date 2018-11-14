@@ -382,24 +382,27 @@ class cuDataset():
 
     def getslab(self, vname, *args, **keys):
         """
+        Parameters
+        ----------
+            getslab ('name', arg1, arg2, ....)
 
 
-          getslab ('name', arg1, arg2, ....)
+        Returns
+        -------
+            a cdms variable containing the data.
 
-           returns a cdms variable containing the data.
+            Arguments for each dimension can be:
+                (1) : or None -- selected entire dimension
+                (2) Ellipsis -- select entire dimensions between the ones given.
+                (3) a pair of successive arguments giving an interval in
+                    world coordinates.
+                (4) a cdms-style tuple of world coordinates e.g. (start, stop, 'cc')
 
-           Arguments for each dimension can be:
-              (1) : or None -- selected entire dimension
-              (2) Ellipsis -- select entire dimensions between the ones given.
-              (3) a pair of successive arguments giving an interval in
-                  world coordinates.
-              (4) a cdms-style tuple of world coordinates e.g. (start, stop, 'cc')
+            Options
 
-        Options
-
-            args
-                (*tuple/*cdms2.selectors.Selector) () tuple of type (val1,val2,'cob')
-                for any given dimension or cdms selector
+                 args
+                     (*tuple/*cdms2.selectors.Selector) () tuple of type (val1,val2,'cob')
+                 for any given dimension or cdms selector
 
             Keys
                 squeeze

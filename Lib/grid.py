@@ -280,7 +280,7 @@ class AbstractGrid (CdmsObj):
         """
 
         Returns
-        ------
+        -------
 
              1 if g is 'close enough' to self to be considered equal, 0 if not."""
         return 0
@@ -1053,8 +1053,6 @@ def isGrid(grid):
 
          grid-cdms2:
             contruct to be examined
-
-         _: None
 
     """
     return isinstance(grid, AbstractGrid)

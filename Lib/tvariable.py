@@ -52,7 +52,7 @@ def convertJSON(jsn):
                 setattr(ax, k, v)
         axes.append(ax)
     D["_msk"] = numpy.array([numpy.ma.MaskType(x)
-                             for x in list(bytearray(str(D["_msk"])))])
+                             for x in list(bytearray(D["_msk"]))])
     attrs = {}
     for k, v in D.items():
         if k not in ["id", "_values", "_axes",
@@ -662,7 +662,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             axes.append(ax)
         J["_axes"] = axes
         J["_values"] = self[:].filled(self.fill_value).tolist()
-        J["_msk"] = numpy.ma.getmaskarray(self).tobytes('C')
+        J["_msk"] = list(numpy.ma.getmaskarray(self).tobytes('C'))
         J["_mask"] = numpy.array(self._mask).tolist()
         J["_fill_value"] = float(self.fill_value)
         J["_dtype"] = self.typecode()

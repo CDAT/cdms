@@ -324,8 +324,6 @@ external attributes are written, but not the internal attributes.
 
 .. doctest::
 
-Attributes Common to All CDMS Objects
--------------------------------------
 
 Attributes Common to All CDMS Objects
 -------------------------------------

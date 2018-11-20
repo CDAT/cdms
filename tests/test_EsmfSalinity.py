@@ -15,6 +15,8 @@ import unittest
 import ESMF
 from regrid2 import esmf
 import sys
+from numba import jit
+
 PLOT = False
 if PLOT:
     from matplotlib import pylab
@@ -25,7 +27,6 @@ try:
     HAS_MPI = True
 except BaseException:
     pass
-
 
 def _buildCorners(bounds):
     """
@@ -46,7 +47,6 @@ def _buildCorners(bounds):
         bnd[-1, :-1] = bounds[-1, :, 3]
 
     return bnd
-
 
 def _getCorners(coordBounds):
     """
@@ -71,7 +71,7 @@ class Test(unittest.TestCase):
         if HAS_MPI:
             self.pe = MPI.COMM_WORLD.Get_rank()
             self.nprocs = MPI.COMM_WORLD.Get_size()
-
+    @jit(nopython=True, parallel=True)
     def test0_ESMF(self):
 
         srcF = cdms2.open(
@@ -281,6 +281,7 @@ class Test(unittest.TestCase):
         srcGrid.destroy()
         dstGrid.destroy()
 
+    @jit(nopython=True, parallel=True)
     def test1_esmf(self):
         srcF = cdms2.open(cdat_info.get_sampledata_path() +
                           '/so_Omon_ACCESS1-0_historical_r1i1p1_185001-185412_2timesteps.nc')
@@ -363,6 +364,7 @@ class Test(unittest.TestCase):
             print('min/max value of dstDataM: %f %f' % (dstDataMMin, dstDataMMax))
             self.assertLess(dstDataMMax, so.max())
 
+    @jit(nopython=True, parallel=True)
     def test2_ESMFRegrid(self):
         srcF = cdms2.open(cdat_info.get_sampledata_path() +
                           '/so_Omon_ACCESS1-0_historical_r1i1p1_185001-185412_2timesteps.nc')
@@ -433,6 +435,7 @@ class Test(unittest.TestCase):
             print('min/max value of dstData: %f %f' % (dstDataMin, dstDataMax))
             self.assertLess(dstDataMax, so[0, 0, ...].max())
 
+    @jit(nopython=True, parallel=True)
     def test3_genericRegrid(self):
         srcF = cdms2.open(cdat_info.get_sampledata_path() +
                           '/so_Omon_ACCESS1-0_historical_r1i1p1_185001-185412_2timesteps.nc')
@@ -475,6 +478,7 @@ class Test(unittest.TestCase):
             print('min/max value of dstData: %f %f' % (dstDataMin, dstDataMax))
             self.assertLess(dstDataMax, so.max())
 
+    @jit(nopython=True, parallel=True)
     def test4_cdmsRegrid(self):
         srcF = cdms2.open(cdat_info.get_sampledata_path() +
                           '/so_Omon_ACCESS1-0_historical_r1i1p1_185001-185412_2timesteps.nc')
@@ -504,6 +508,7 @@ class Test(unittest.TestCase):
             print('min/max value of dstData: %f %f' % (dstDataMin, dstDataMax))
             self.assertLess(dstDataMax, so.max())
 
+    @jit(nopython=True, parallel=True)
     def test5_regrid(self):
         srcF = cdms2.open(cdat_info.get_sampledata_path() +
                           '/so_Omon_ACCESS1-0_historical_r1i1p1_185001-185412_2timesteps.nc')

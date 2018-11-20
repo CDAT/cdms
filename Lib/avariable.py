@@ -1742,7 +1742,7 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
                         x, list))]
             return self.data.take(index)
         # Note: raw=0 ensures that a TransientVariable is returned
-        return self.getSlice(numericSqueeze=1, raw=0, isitem=1, *speclist)
+        return self.getSlice(numericSqueeze=1, raw=0, isitem=1, *speclist).asma().filled(numpy.nan)
 
     def __getslice__(self, low, high):
 

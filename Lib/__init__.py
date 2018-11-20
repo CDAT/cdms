@@ -3,8 +3,8 @@ CDMS module-level API
 """
 
 import lazy_import
-cdat_info = lazy_import.lazy_module("cdat_info")
 # import cdat_info
+cdat_info = lazy_import.lazy_module("cdat_info")
 cdat_info.pingPCMDIdb("cdat", "cdms2")  # noqa
 # from . import myproxy_logon  # noqa
 myproxy_logon = lazy_import.lazy_module("cdms2.myproxy_logon")
@@ -145,7 +145,7 @@ except BaseException:
     pass
 
 # from .restApi import esgfConnection, esgfDataset, FacetConnection  # noqa
-
+MV2 = lazy_import.lazy_module("MV2")
 MV = MV2  # noqa
 # from .dask_protocol import serialize, deserialize  # noqa
 from . import dask_protocol  # noqa

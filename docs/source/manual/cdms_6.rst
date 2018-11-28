@@ -51,24 +51,18 @@ The CDML elements are:
 
 CDML Tags
 ^^^^^^^^^                   
+.. csv-table::                            
+   :header: "Tag", "Description"
+   :widths:  30,80
 
-+------------+---------------------------------------+
-| Tag        | Description                           |
-+============+=======================================+
-| attr       | Extra attribute                       |
-+------------+---------------------------------------+
-| axis       | Coordinate axis                       |
-+------------+---------------------------------------+
-| domain     | Axes on which a variable is defined   |
-+------------+---------------------------------------+
-| domElem    | Element of a variable domain          |
-+------------+---------------------------------------+
-| linear     | Linearly-spaced axis values           |
-+------------+---------------------------------------+
-| rectGrid   | Rectilinear Grid                      |
-+------------+---------------------------------------+
-| variable   | Variable                              |
-+------------+---------------------------------------+
+   "attr", "Extra attribute"
+   "axis", "Coordinate axis"
+   "domain", "Axes on which a variable is defined"
+   "domElem", "Element of a variable domain"
+   "linear", "Linearly-spaced axis values"
+   "rectGrid", "Rectilinear Grid"
+   "variable", "Variable"
+
 
 Special Characters
 ~~~~~~~~~~~~~~~~~~
@@ -78,8 +72,6 @@ they must be encoded to avoid confusion with markup:
 
 Special Character Encodings
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                                     
-
 +-------------+------------+
 | Character   | Encoding   |
 +=============+============+

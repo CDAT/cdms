@@ -384,11 +384,12 @@ class cuDataset():
         """
         Parameters
         ----------
-            getslab ('name', arg1, arg2, ....)
 
+            getslab ('name', arg1, arg2, ....)
 
         Returns
         -------
+
             a cdms variable containing the data.
 
             Arguments for each dimension can be:

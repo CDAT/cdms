@@ -429,12 +429,16 @@ class AbstractVariable(CdmsObj, Slab):
 # A child class may want to override this
     def getAxis(self, n):
         """Get the n-th axis.
+
         Parameters
         ----------
+
             n:
                Axis number
+
         Returns
         -------
+
             if n < 0: n = n + self.rank()
             self.getDomain()[n][0]"""
         if n < 0:
@@ -523,9 +527,10 @@ class AbstractVariable(CdmsObj, Slab):
                asarray :
                    '0' : scalar
                    '1' : numpy array
-           Return
-           ------
-               the missing value as a scalar, or as a numpy array if asarray==1"""
+
+           Returns
+           -------
+           the missing value as a scalar, or as a numpy array if asarray==1"""
 
         if hasattr(self, 'missing_value'):
             try:
@@ -694,16 +699,19 @@ class AbstractVariable(CdmsObj, Slab):
     # Get an order string, such as "tzyx"
     def getOrder(self, ids=0):
         """
-        parameters
+        Parameters
         ----------
-             id:
-                 0 or 1
-        returns
+
+            id:
+                0 or 1
+
+        Returns
         -------
-            the order string, such as t, z, y, x (time, level, lat, lon).
+
+        the order string, such as t, z, y, x (time, level, lat, lon).
 
         Note
-        ----
+        
         * if ids == 0 (the default) for an axis that is not t,z,x,y
           the order string will contain a (-) character in that location.
           The result string will be of the same length as the number

@@ -256,7 +256,7 @@ In general internal attributes should not be modified directly. One
 exception is the id attribute, the name of the variable. It is used in
 plotting and I/O, and can be set directly.
 
-Masked values
+Masked Values
 ^^^^^^^^^^^^^
 
 Optionally, variables have a mask that represents where data are
@@ -710,7 +710,7 @@ rmp_T42_to_POP43_conserv.nc:
 
 Regridding is discussed in `Chapter 4 <cdms_4.html>`__.
 
-Time types
+Time Types
 ^^^^^^^^^^
 
 CDMS provides extensive support for time values in the cdtime module.
@@ -791,7 +791,7 @@ or string representations can be used:
 
 Time types are described in Chapter 3.
 
-Plotting data
+Plotting Data
 ^^^^^^^^^^^^^
 
 Data read via the CDMS Python interface can be plotted using the vcs

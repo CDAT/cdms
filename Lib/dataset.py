@@ -149,10 +149,11 @@ def setCompressionWarnings(value=None):
 
 def setNetcdfUseNCSwitchModeFlag(value):
     """Tells cdms2 to switch constantly between netcdf define/write modes.
+
        Parameters
        ----------
-          value:
-              0/1, False/True.
+           value:
+               0/1, False/True.
 
        Returns
        -------
@@ -2346,6 +2347,7 @@ class CdmsFile(CdmsObj, cuDataset):
 
     def getVariables(self, spatial=0):
         """Get a list of variable objects.
+
         Parameters
         ----------
             spatial:

@@ -165,7 +165,7 @@ Dataset
 
 -  The function open is synonymous with openDataset.
 
-cdms module
+Cdms Module
 '''''''''''
 
 -  The following functions were added:

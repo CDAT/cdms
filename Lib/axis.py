@@ -1255,7 +1255,7 @@ class AbstractAxis(CdmsObj):
 
         Returns
         -------
-   
+
             The corresponding index interval (i,j), where i<j, indicating
         the half-open index interval [i,j), or None if the intersection is empty.
 

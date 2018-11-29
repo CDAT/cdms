@@ -204,7 +204,7 @@ class AbstractHorizontalGrid(AbstractGrid):
 
         Returns
         -------
- 
+
             value is a 1D array of indices of cells that cannot be repaired.
         """
 

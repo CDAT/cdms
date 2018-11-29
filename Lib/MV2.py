@@ -79,7 +79,7 @@ class var_unary_operation:
         """
         Parameters
         ----------
-               
+
             var_unary_operation(mafunc)
 
             mafunc is an numpy.ma masked_unary_function.
@@ -96,7 +96,7 @@ class var_unary_operation:
 
 class var_unary_operation_with_axis:
     def __init__(self, mafunc):
-        """ 
+        """
         Parameters
         ----------
 
@@ -124,7 +124,7 @@ def commonDomain(a, b, omit=None):
 
         commonDomain(a,b)
             tests that the domains of variables/arrays a and b are equal,
-            and 
+            and
 
     Returns
     -------
@@ -146,11 +146,11 @@ def commonDomain(a, b, omit=None):
 
 
 def commonAxes(a, bdom, omit=None):
-    """Helper function for commonDomain. 
+    """Helper function for commonDomain.
 
     Parameters
     ----------
-   
+
         'a' is a variable or array,
 
         'b' is an axislist or None.
@@ -215,7 +215,7 @@ def commonGrid(a, b, axes):
 
             tests if the grids associated with variables a, b are equal
             and consistent with the list of axes.
- 
+
         If so, the common grid is returned, else None is returned.
 
         a and b can be numpy arrays, in which case the result is None.
@@ -272,7 +272,7 @@ class var_binary_operation:
         ----------
 
             var_binary_operation(mafunc)
-       
+
             mafunc is an numpy.ma masked_binary_function.
         """
         self.mafunc = mafunc
@@ -1055,7 +1055,7 @@ reshape.__doc__ = "numpy doc: %s\naxes/attributes/grid are applied onto the new 
 
 
 def resize(a, new_shape, axes=None, attributes=None, id=None, grid=None):
-    """resize(a, new_shape) 
+    """resize(a, new_shape)
 
     Returns
     -------
@@ -1099,7 +1099,7 @@ def masked_values(data, value, rtol=1.e-5, atol=1.e-8, copy=1,
     """
     Parameters
     ----------
-    
+
         masked_values(data, value, rtol=1.e-5, atol=1.e-8)
 
         Create a masked array; mask is None if possible.
@@ -1131,10 +1131,10 @@ def isMaskedVariable(x):
 
 def set_default_fill_value(value_type, value):
     """Set the default fill value for value_type to value.
-    
+
     Parameters
     ----------
-        value_type is a string: 
+        value_type is a string:
             'real','complex','character','integer',or 'object'.
 
         value should be a scalar or single-element array.
@@ -1164,7 +1164,7 @@ def diagonal(a, offset=0, axis1=0, axis2=1):
 
     Returns
     -------
-    
+
         the given diagonals defined by the two dimensions of the array.
     """
     F = getattr(a, "fill_value", 1.e20)

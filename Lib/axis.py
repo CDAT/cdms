@@ -608,16 +608,17 @@ def lookupArray(ar, value):
 
     Parameters
     ----------
-    ar:
-        Input array
-    value:
-        Value to search
+         ar:
+             Input array
+         value:
+             Value to search
+
     Returns
     -------
-        index:
-            * ar is monotonically increasing.
-                * value <= ar[index], index==0..len(ar)-1
-                * value > ar[index], index==len(ar)
+    index:
+        * ar is monotonically increasing.
+        * value <= ar[index], index==0..len(ar)-1
+            * value > ar[index], index==len(ar)
             * ar is monotonically decreasing:
                 * value >= ar[index], index==0..len(ar)-1
                 * value < ar[index], index==len(ar)
@@ -1252,7 +1253,10 @@ class AbstractAxis(CdmsObj):
         same meaning for the right-hand point. Set cycle to a nonzero value
         to force wraparound.
 
-        Returns the corresponding index interval (i,j), where i<j, indicating
+        Returns
+        -------
+   
+            The corresponding index interval (i,j), where i<j, indicating
         the half-open index interval [i,j), or None if the intersection is empty.
 
         For an axis which is circular (self.topology == 'circular'), [i,j)
@@ -1262,11 +1266,12 @@ class AbstractAxis(CdmsObj):
         (2) if j>N, the interval wraps around, and is equivalent to the
             two consecutive intervals [i,N), [0,j-N)
 
-        For example, if the vector is [0,2,4,...,358] of length 180,
-        and the coordinate interval is [-5,5), the return index interval is
-        [178,183). This is equivalent to the two intervals [178,180) and [0,3).
+        Example:
+          if the vector is [0,2,4,...,358] of length 180,and the coordinate
+          interval is [-5,5), the return index interval is[178,183). This is
+          equivalent to the two intervals [178,180) and [0,3).
 
-.. note::
+         Note:
            if the interval is interior to the axis, but does not span any axis element,
            a singleton (i,i+1) indicating an adjacent index is returned.
         """
@@ -2677,16 +2682,17 @@ def concatenate(axes, id=None, attributes=None):
 
     Parameters
     ----------
-        axes:
-            Axes to concatenate
-        id:
-            New axis identification (default None)
-        attributes:
-            Attributes to attached to the new Axis
+    axes :
+        Axes to concatenate
+    id :
+        New axis identification (default None)
+    attributes :
+        Attributes to attached to the new Axis
 
     Returns
     -------
-        Transient axis."""
+    Transient axis.
+    """
 
     data = numpy.ma.concatenate([ax[:] for ax in axes])
     boundsArray = [ax.getBounds() for ax in axes]
@@ -2699,12 +2705,14 @@ def concatenate(axes, id=None, attributes=None):
 
 def take(ax, indices):
     """Take elements form an array along an axis
+
     Parameters
     ----------
         ax:
             The source array.
         indices:
             The indices of the values to extract.
+
     Returns
     -------
     axis: TransientAxis

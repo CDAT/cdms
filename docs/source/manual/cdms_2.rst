@@ -324,8 +324,6 @@ external attributes are written, but not the internal attributes.
 
 .. doctest::
 
-Attributes Common to All CDMS Objects
--------------------------------------
 
 Attributes Common to All CDMS Objects
 -------------------------------------
@@ -1031,7 +1029,7 @@ ResultEntry Methods
     "``CdmsObj``", "``getObject()``", "Return the CDMS object associated with this entry.
         **Note:** For many search applications it is unnecessary to access the associated CDMS object. For best performance this function should be used only when necessary, for example, to retrieve data associated with a variable."
 
-Accessing data
+Accessing Data
 --------------------
 
 To access data via CDMS:
@@ -1713,7 +1711,7 @@ Variable Methods
         * In ``(a)-(c)`` and (f), negative numbers are treated as offsets from the end of that dimension, as in normal Python indexing.
         * String ``typecode()`` The Numpy datatype identifier."
 
-Example Get a Region of Data.
+Example Get a Region of Data
 -----------------------------
 
 Variable ta is a function of (time, latitude, longitude). Read data

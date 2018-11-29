@@ -144,7 +144,10 @@ class AbstractHorizontalGrid(AbstractGrid):
 
     def checkConvex(self):
         """Check that each cell of the grid is convex in lon-lat space, with nodes defined counter-clockwise.
-        Return a 1D numpy array of cells that fail the cross-product test.
+
+        Returns
+        -------
+            a 1D numpy array of cells that fail the cross-product test.
         """
 
         from numpy import zeros, where, less, logical_or, compress
@@ -198,7 +201,11 @@ class AbstractHorizontalGrid(AbstractGrid):
         threshold, the cell is considered a cut cell.
 
         On return, the grid boundaries are modified.
-        Return value is a 1D array of indices of cells that cannot be repaired.
+
+        Returns
+        -------
+
+            value is a 1D array of indices of cells that cannot be repaired.
         """
 
         from numpy import take, array

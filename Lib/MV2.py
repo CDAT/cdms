@@ -935,13 +935,14 @@ maximum = _maximum_operation()
 
 
 def asarray(data, typecode=None, dtype=None):
-    """asarray(data, typecode=None, dtype=None) is equivalent to array(data, dtype=None, copy=0)
+    """
+    asarray(data, typecode=None, dtype=None) is equivalent to array(data, dtype=None, copy=0)
 
 
-     Returns
-     -------
+    Returns
+    -------
 
-          data if dtype is None or data is a MaskedArray of the same dtype.
+        data if dtype is None or data is a MaskedArray of the same dtype.
           typecode arg is for backward compatibility.
     """
     dtype = _convdtype(dtype, typecode)

@@ -85,7 +85,7 @@ class forecast():
            is used to get the forecast file from the forecast time.
 
     Example
-    -------
+    
 
           Each list item should look like this example:
        [None, None, None, None, 2006022200000L, 'file2006-02-22-00000.nc']
@@ -93,7 +93,7 @@ class forecast():
        cdms2.dataset.parseFileMap and fm[i][0] matches the variables of interest.
 
     Note
-    ----
+   
 
        N.B.  This is like a CdmsFile.  Creating a forecast means opening a file,
        so later on you should call forecast.close() to close it.

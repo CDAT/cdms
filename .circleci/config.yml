@@ -30,10 +30,6 @@ aliases:
        else
           conda create -n $PY_VER $CHANNELS $PKGS $CONDA_COMPILER "python>3" coverage coveralls
        fi
-       # ------------------------------------
-       # install lazy_import from pip for now
-       # ------------------------------------
-       pip install lazy_import
 
   - &setup_cdms
     name: setup_cdms
@@ -41,6 +37,10 @@ aliases:
        export PATH=$WORKDIR/miniconda/bin:$PATH
        export CDAT_ANONYMOUS_LOG=False
        source activate $PY_VER
+       # ------------------------------------
+       # install lazy_import from pip for now
+       # ------------------------------------
+       pip install lazy_import
        if [ $(uname) == "Linux" ];then
          export LDSHARED="$CC -shared -pthread"
          LDSHARED="$CC -shared -pthread" python setup.py install

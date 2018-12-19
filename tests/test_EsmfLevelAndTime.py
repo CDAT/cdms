@@ -48,7 +48,7 @@ class TestLevelRegridLibCfAndESMF(unittest.TestCase):
 
         ntot = numpy.array(self.soLevel.shape).prod()
         avgdiff = numpy.sum(self.soLevel - soInterpInterp) / float(ntot)
-        soInterp.toVisit('soInterpLevel.vsh5')
+        # soInterp.toVisit('soInterpLevel.vsh5')
         # soInterpInterp.toVisit('soInterpInterp.vsh5')
         # avgdiff.toVisit('soAvgDiff.vsh5')
         self.assertLess(abs(avgdiff), 2e18)

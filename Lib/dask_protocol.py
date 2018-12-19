@@ -1,4 +1,5 @@
 import lazy_import
+import zlib
 # from distributed.protocol import register_serialization
 # from cdms2.fvariable import FileVariable
 # from cdms2.tvariable import TransientVariable, createVariable
@@ -8,7 +9,6 @@ FileVariable = lazy_import.lazy_class("cdms2.fvariable.FileVariable")
 TransientVariable = lazy_import.lazy_function("cdms2.tvariable.TransientVariable")
 createVariable = lazy_import.lazy_function("cdms2.tvariable.createVariable")
 
-import zlib
 # from cdms2 import open
 open = lazy_import.lazy_function("cdms2.open")
 

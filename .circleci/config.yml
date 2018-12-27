@@ -18,7 +18,7 @@ aliases:
     name: create_conda_env
     environment:
        CHANNELS: "-c cdat/label/unstable -c cdat/label/nightly -c conda-forge -c cdat"
-       PKGS: "libcf distarray cdtime libcdms cdat_info testsrunner numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient lazy-object-proxy"
+       PKGS: "esmpy libcf distarray cdtime libcdms cdat_info testsrunner numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient lazy-object-proxy"
     command: |
        export PATH=$WORKDIR/miniconda/bin:$PATH
        conda config --set always_yes yes --set changeps1 no

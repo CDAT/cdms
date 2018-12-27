@@ -21,7 +21,7 @@ from .axis import createAxis, AbstractAxis
 from .grid import createRectGrid, AbstractRectGrid
 from .hgrid import AbstractCurveGrid
 from .gengrid import AbstractGenericGrid
-from six import string_types
+from six import string_types, PY2
 
 # dist array support
 HAVE_MPI = False
@@ -51,8 +51,12 @@ def convertJSON(jsn):
             if k not in ["_values", "id", "_dtype"]:
                 setattr(ax, k, v)
         axes.append(ax)
-    D["_msk"] = numpy.array([numpy.ma.MaskType(x)
-                             for x in list(bytearray(D["_msk"]))])
+    if PY2:
+        D["_msk"] = numpy.array([numpy.ma.MaskType(int(x.encode("hex")))
+  		                 for x in D["_msk"]])
+    else:
+        D["_msk"] = numpy.array([numpy.ma.MaskType(x)
+                                 for x in list(bytearray(D["_msk"]))])
     attrs = {}
     for k, v in D.items():
         if k not in ["id", "_values", "_axes",

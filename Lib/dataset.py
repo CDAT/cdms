@@ -10,8 +10,12 @@ import numpy
 from . import cdmsNode
 import os
 import string
-import urllib
-from urllib.parse import urlparse, urlunparse
+try:
+    from urllib.parse import urlparse, urlunparse
+    from urllib.request import urlopen
+except ImportError:
+    from urlparse import urlparse, urlunparse
+    from urllib import urlopen
 from . import cdmsobj
 import re
 from .CDMLParser import CDMLParser
@@ -415,7 +419,7 @@ def load(path):
 def loadURI(uri):
     (scheme, netloc, path, parameters, query, fragment) = urlparse(uri)
     uripath = urlunparse((scheme, netloc, path, '', '', ''))
-    fd = urllib.urlopen(uripath)
+    fd = urlopen(uripath)
     text = fd.read()
     fd.close()
     p = CDMLParser()

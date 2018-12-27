@@ -1,16 +1,13 @@
-import lazy_import
 import zlib
-# from distributed.protocol import register_serialization
-# from cdms2.fvariable import FileVariable
-# from cdms2.tvariable import TransientVariable, createVariable
+from . import tvariable
+from . import fvariable
+from cdms2 import open
+import distributed.protocol
 
-register_serialization = lazy_import.lazy_function("distributed.protocol.register_serialization")
-FileVariable = lazy_import.lazy_class("cdms2.fvariable.FileVariable")
-TransientVariable = lazy_import.lazy_function("cdms2.tvariable.TransientVariable")
-createVariable = lazy_import.lazy_function("cdms2.tvariable.createVariable")
-
-# from cdms2 import open
-open = lazy_import.lazy_function("cdms2.open")
+register_serialization = distributed.protocol.register_serialization
+FileVariable = fvariable.FileVariable
+TransientVariable = tvariable.TransientVariable
+createVariable = tvariable.createVariable
 
 
 def serialize_TV(tv):

@@ -53,7 +53,7 @@ def convertJSON(jsn):
         axes.append(ax)
     if PY2:
         D["_msk"] = numpy.array([numpy.ma.MaskType(int(x.encode("hex")))
-  		                 for x in D["_msk"]])
+                                 for x in D["_msk"]])
     else:
         D["_msk"] = numpy.array([numpy.ma.MaskType(x)
                                  for x in list(bytearray(D["_msk"]))])

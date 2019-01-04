@@ -330,10 +330,10 @@ SCRIP Regridder Constructor
    "``regridFunction = regrid.readRegridder(fileobj, mapMethod=None, checkGrid=1)``", "Read a regridder from an open CDMS file object.
       * ``fileobj`` is a CDMS file object, as returned from ``cdms.open``.
       * ``mapMethod`` is one of:
-      * ``'conservative'``: conservative remapper, suitable where area-integrated fields such as water or heat fluxes must be conserved.
-      * ``'bilinear'``: bilinear interpolation
-      * ``'bicubic'``: bicubic interpolation
-      * ``'distwgt'``: distance-weighted interpolation.
+           * ``'conservative'``: conservative remapper, suitable where area-integrated fields such as water or heat fluxes must be conserved.
+           * ``'bilinear'``: bilinear interpolation
+           * ``'bicubic'``: bicubic interpolation
+           * ``'distwgt'``: distance-weighted interpolation.
       * It is only necessary to specify the map method if it is not defined in the file.
       * If ``checkGrid`` is 1 (default), the grid cells are checked for convexity, and 'repaired' if necessary.
       * Grid cells may appear to be nonconvex if they cross a ``0 / 2pi`` boundary. 

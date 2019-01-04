@@ -701,13 +701,11 @@ class AbstractVariable(CdmsObj, Slab):
         """
         Parameters
         ----------
-
-            id:
-                0 or 1
+        id:
+          0 or 1
 
         Returns
         -------
-
         the order string, such as t, z, y, x (time, level, lat, lon).
 
         Note

@@ -55,7 +55,6 @@ def connect(uri=None, user="", password=""):
        Database instance
 
     Example
-    
         db = cdms.connect("ldap://dbhost.llnl.gov/database=CDMS,ou=PCMDI,o=LLNL,c=US")
     """
     if uri is None:
@@ -312,7 +311,11 @@ class LDAPDatabase(AbstractDatabase):
           Dataset instance.
 
         Example
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> master
           dset = db.openDataset('ncep_reanalysis_mo')
         """
         dn = "dataset=%s,%s" % (dsetid, self.path)
@@ -416,7 +419,11 @@ class LDAPDatabase(AbstractDatabase):
               Entries can be refined with searchPredicate().
 
         Example
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> master
         (1) Find all variables named "cli":
 
           result = db.searchFilter(filter="id=cli",tag="variable")
@@ -529,7 +536,11 @@ class LDAPSearchResult(AbstractSearchResult):
            Entries can be refined with searchPredicate().
 
         Example
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> master
             (1) Find all variables on a 73x96 grid
 
             newresult = result.searchPredicate(lambda obj: obj.getGrid().shape==(73,96),"variable")
@@ -561,11 +572,19 @@ class AbstractResultEntry:
     def getObject(self):
         """
         Method
+<<<<<<< HEAD
         
           getObject()
 
         Description
        
+=======
+
+          getObject()
+
+        Description
+
+>>>>>>> master
           Get the CDMS object associated with this entry.
 
         Returns

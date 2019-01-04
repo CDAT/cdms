@@ -79,7 +79,11 @@ class var_unary_operation:
         """
         Parameters
         ----------
+<<<<<<< HEAD
                
+=======
+
+>>>>>>> master
             var_unary_operation(mafunc)
 
             mafunc is an numpy.ma masked_unary_function.
@@ -96,7 +100,11 @@ class var_unary_operation:
 
 class var_unary_operation_with_axis:
     def __init__(self, mafunc):
+<<<<<<< HEAD
         """ 
+=======
+        """
+>>>>>>> master
         Parameters
         ----------
 
@@ -124,6 +132,7 @@ def commonDomain(a, b, omit=None):
 
         commonDomain(a,b)
             tests that the domains of variables/arrays a and b are equal,
+<<<<<<< HEAD
             and 
 
     Returns
@@ -134,6 +143,18 @@ def commonDomain(a, b, omit=None):
         The domains may differ in that one domain may have leading
         axes not common to the other; the result domain will contain those axes.
 
+=======
+            and
+
+    Returns
+    -------
+
+        the common domain if equal, or None if not equal.
+
+        The domains may differ in that one domain may have leading
+        axes not common to the other; the result domain will contain those axes.
+
+>>>>>>> master
          If <omit> is specified, as an integer i, skip comparison of the ith dimension
         and return None for the ith (common) dimension.
     """
@@ -146,11 +167,19 @@ def commonDomain(a, b, omit=None):
 
 
 def commonAxes(a, bdom, omit=None):
+<<<<<<< HEAD
     """Helper function for commonDomain. 
 
     Parameters
     ----------
    
+=======
+    """Helper function for commonDomain.
+
+    Parameters
+    ----------
+
+>>>>>>> master
         'a' is a variable or array,
 
         'b' is an axislist or None.
@@ -215,7 +244,11 @@ def commonGrid(a, b, axes):
 
             tests if the grids associated with variables a, b are equal
             and consistent with the list of axes.
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> master
         If so, the common grid is returned, else None is returned.
 
         a and b can be numpy arrays, in which case the result is None.
@@ -272,7 +305,11 @@ class var_binary_operation:
         ----------
 
             var_binary_operation(mafunc)
+<<<<<<< HEAD
        
+=======
+
+>>>>>>> master
             mafunc is an numpy.ma masked_binary_function.
         """
         self.mafunc = mafunc
@@ -1056,7 +1093,11 @@ reshape.__doc__ = "numpy doc: %s\naxes/attributes/grid are applied onto the new 
 
 
 def resize(a, new_shape, axes=None, attributes=None, id=None, grid=None):
+<<<<<<< HEAD
     """resize(a, new_shape) 
+=======
+    """resize(a, new_shape)
+>>>>>>> master
 
     Returns
     -------
@@ -1100,7 +1141,11 @@ def masked_values(data, value, rtol=1.e-5, atol=1.e-8, copy=1,
     """
     Parameters
     ----------
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> master
         masked_values(data, value, rtol=1.e-5, atol=1.e-8)
 
         Create a masked array; mask is None if possible.
@@ -1132,10 +1177,17 @@ def isMaskedVariable(x):
 
 def set_default_fill_value(value_type, value):
     """Set the default fill value for value_type to value.
+<<<<<<< HEAD
     
     Parameters
     ----------
         value_type is a string: 
+=======
+
+    Parameters
+    ----------
+        value_type is a string:
+>>>>>>> master
             'real','complex','character','integer',or 'object'.
 
         value should be a scalar or single-element array.
@@ -1165,7 +1217,11 @@ def diagonal(a, offset=0, axis1=0, axis2=1):
 
     Returns
     -------
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> master
         the given diagonals defined by the two dimensions of the array.
     """
     F = getattr(a, "fill_value", 1.e20)

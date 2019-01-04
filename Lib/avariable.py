@@ -711,7 +711,7 @@ class AbstractVariable(CdmsObj, Slab):
         the order string, such as t, z, y, x (time, level, lat, lon).
 
         Note
-        
+        ----
         * if ids == 0 (the default) for an axis that is not t,z,x,y
           the order string will contain a (-) character in that location.
           The result string will be of the same length as the number

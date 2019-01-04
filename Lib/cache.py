@@ -323,11 +323,11 @@ class Cache:
     def put(self, filekey, path):
         """
         cache[filekey] = path
-    
+
         Parameters
         ----------
-            <filekey>
-            filekey for cache
+        filekey:
+             for cache
         """
 
         filekey = str(filekey)

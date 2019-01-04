@@ -189,11 +189,10 @@ class AbstractHorizontalGrid(AbstractGrid):
 
         Parameters
         ----------
-
-        nonConvexCells
+        nonConvexCells:
                   1D numpy array of indices of nonconvex cells, as returned from
                   checkConvex.
-        threshold
+        threshold:
                   positive floating-point value in degrees.
 
 
@@ -203,8 +202,7 @@ class AbstractHorizontalGrid(AbstractGrid):
 
         Returns
         -------
- 
-            value is a 1D array of indices of cells that cannot be repaired.
+        value is a 1D array of indices of cells that cannot be repaired.
         """
 
         from numpy import take, array

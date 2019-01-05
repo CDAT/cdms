@@ -126,7 +126,7 @@ Time Methods
    :widths: 20, 75, 80
    :align: left
 
-   "Comptime or Reltime", "``t.add(value,intervalUnits, cdtime.Default-Calendar)``", "Add an interval of time to a time type t.  
+   "Comptime or Reltime", "``t.add(value,intervalUnits, cdtime.DefaultCalendar)``", "Add an interval of time to a time type t.  
      Returns the same type of time.
        * ``value`` is the   Float number of interval units.
        * ``intervalUnits`` is ``cdtime.

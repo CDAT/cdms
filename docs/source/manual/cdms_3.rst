@@ -141,7 +141,7 @@ Time Methods
        * ``value`` is the Float number of interval units.
        * ``intervalUnits`` is cdtime.[Second (s) | Minute(s) | Hour(s) | Day(s) | Week(s) | Month(s) | Season(s) | Year(s)]
        * ``calendar`` is the calendar type. "
-   "Comptime", "``t.tocomp(calendar = cdtime.DefaultCalendar)``", "Convert to component time.  
+   "Comptime", "``t.tocomp(cdtime.DefaultCalendar)``", "Convert to component time.  
      Returns the equivalent component time.
        * ``calendar`` is the calendar type."
    "Reltime", "``t.torel(units, cdtime.DefaultCalendar)``", "Convert to relative time.  
@@ -166,7 +166,7 @@ Examples
 .. 
 
    >>> c = comptime(1979,8,31)      
-   >>> c.add(1,Month)               
+   >>> c.add(1, cdtime.Month)               
    1979-9-1 0:0:0.0                 
                     
 
@@ -175,7 +175,7 @@ In other words, the day component of c was ignored in the addition, and the day/
 ..                     
 
    >>> c = comptime(1979,8,31)      
-   >>> c.add(2,Years)               
+   >>> c.add(2, cdtime.Years)               
    1981-8-1 0:0:0.0                 
 
 Compare time values.

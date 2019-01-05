@@ -22,11 +22,7 @@ def two_times_from_one(t):
               cdscan script, or a string in the format "2010-08-25 15:26:00", or
               as a cdtime comptime (component time) object.
 
-<<<<<<< HEAD
          Output 
-=======
-         Output
->>>>>>> master
              is the same time, both as a long _and_ as a comptime.
     """
     if t == 0:
@@ -143,11 +139,6 @@ def available_forecasts(dataset_file, path="."):
           through the specified cdscan-generated dataset xml file.
 
     Note
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> master
          The forecasts are given in 64-bit integer format, but can be converted
          to component times with the function two_times_from_one.
          This function may help in choosing the right arguments for initializing
@@ -163,16 +154,8 @@ def available_forecasts(dataset_file, path="."):
 class forecasts():
     """
     Represents a set of forecasts
-<<<<<<< HEAD
 
     Example
-      
-=======
-
-    Example
-
->>>>>>> master
-
              Creates a set of forecasts.  Normally you do it by something like
              f = forecasts( 'file.xml', (min_time, max_time) )
              or
@@ -380,11 +363,6 @@ class forecasts():
              a tuple (axis,start,length,true_length) where axis is in the forecast direction.
 
         Note
-<<<<<<< HEAD
-        
-=======
-
->>>>>>> master
              If a list of forecasts be specified, the axis' data will be limited to them."""
         if fcss is None:
             fcss = self.fcs

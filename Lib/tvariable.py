@@ -934,11 +934,7 @@ def asVariable(s, writeable=1):
     """
     Returns
     -------
-<<<<<<< HEAD
         s if s is a Variable; if writeable is 1, 
-=======
-        s if s is a Variable; if writeable is 1,
->>>>>>> master
         return s if s is a TransientVariable.
 
         If s is not a variable of

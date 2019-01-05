@@ -582,8 +582,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         Returns
         -------
 
-            a copy of self as a transient variable. 
-      
+            a copy of self as a transient variable.
             If copyData is 1 (default), make a separate copy of the data.
         """
         result = createVariable(self, copy=copyData)
@@ -934,7 +933,7 @@ def asVariable(s, writeable=1):
     """
     Returns
     -------
-        s if s is a Variable; if writeable is 1, 
+        s if s is a Variable; if writeable is 1,
         return s if s is a TransientVariable.
 
         If s is not a variable of

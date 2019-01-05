@@ -196,7 +196,7 @@ class AbstractHorizontalGrid(AbstractGrid):
                   positive floating-point value in degrees.
 
 
-        If the difference in longitude values of consecutive boundaries nodes 
+        If the difference in longitude values of consecutive boundaries nodes
         exceeds the threshold, the cell is considered a cut cell. On return,
         the grid boundaries are modified.
 

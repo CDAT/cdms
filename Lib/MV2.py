@@ -95,7 +95,7 @@ class var_unary_operation:
 
 class var_unary_operation_with_axis:
     def __init__(self, mafunc):
-        """ 
+        """
         Parameters
         ----------
 
@@ -145,7 +145,7 @@ def commonDomain(a, b, omit=None):
 
 def commonAxes(a, bdom, omit=None):
     """
-    Helper function for commonDomain. 
+    Helper function for commonDomain.
 
     Parameters
     ----------
@@ -1054,13 +1054,14 @@ reshape.__doc__ = "numpy doc: %s\naxes/attributes/grid are applied onto the new 
 
 
 def resize(a, new_shape, axes=None, attributes=None, id=None, grid=None):
-    """resize(a, new_shape) 
+    """resize(a, new_shape)
 
     Returns
     -------
          a new array with the specified shape.
 
-    The original array's total size can be any size."""
+    The original array's total size can be any size.
+    """
     ignore, attributes, id, ignore = _extractMetadata(a, axes, attributes, id)
     if axes is not None:
         axesshape = [len(item) for item in axes]

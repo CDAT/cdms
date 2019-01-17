@@ -79,7 +79,6 @@ class var_unary_operation:
         """
         Parameters
         ----------
-
             var_unary_operation(mafunc)
 
             mafunc is an numpy.ma masked_unary_function.
@@ -124,7 +123,6 @@ def commonDomain(a, b, omit=None):
 
         commonDomain(a,b)
             tests that the domains of variables/arrays a and b are equal,
-            and
 
     Returns
     -------
@@ -146,14 +144,15 @@ def commonDomain(a, b, omit=None):
 
 
 def commonAxes(a, bdom, omit=None):
-    """Helper function for commonDomain.
+    """
+    Helper function for commonDomain.
 
     Parameters
     ----------
-
-        'a' is a variable or array,
-
-        'b' is an axislist or None.
+    'a':
+        is a variable or array,
+    'b':
+        is an axislist or None.
     """
     if isinstance(a, AbstractVariable) and bdom is not None:
         adom = a.getAxisList()
@@ -272,7 +271,6 @@ class var_binary_operation:
         ----------
 
             var_binary_operation(mafunc)
-
             mafunc is an numpy.ma masked_binary_function.
         """
         self.mafunc = mafunc
@@ -935,13 +933,14 @@ maximum = _maximum_operation()
 
 
 def asarray(data, typecode=None, dtype=None):
-    """asarray(data, typecode=None, dtype=None) is equivalent to array(data, dtype=None, copy=0)
+    """
+    asarray(data, typecode=None, dtype=None) is equivalent to array(data, dtype=None, copy=0)
 
 
-     Returns
-     -------
+    Returns
+    -------
 
-          data if dtype is None or data is a MaskedArray of the same dtype.
+        data if dtype is None or data is a MaskedArray of the same dtype.
           typecode arg is for backward compatibility.
     """
     dtype = _convdtype(dtype, typecode)
@@ -1061,7 +1060,8 @@ def resize(a, new_shape, axes=None, attributes=None, id=None, grid=None):
     -------
          a new array with the specified shape.
 
-    The original array's total size can be any size."""
+    The original array's total size can be any size.
+    """
     ignore, attributes, id, ignore = _extractMetadata(a, axes, attributes, id)
     if axes is not None:
         axesshape = [len(item) for item in axes]
@@ -1099,7 +1099,6 @@ def masked_values(data, value, rtol=1.e-5, atol=1.e-8, copy=1,
     """
     Parameters
     ----------
-
         masked_values(data, value, rtol=1.e-5, atol=1.e-8)
 
         Create a masked array; mask is None if possible.
@@ -1131,7 +1130,6 @@ def isMaskedVariable(x):
 
 def set_default_fill_value(value_type, value):
     """Set the default fill value for value_type to value.
-
     Parameters
     ----------
         value_type is a string:
@@ -1164,7 +1162,6 @@ def diagonal(a, offset=0, axis1=0, axis2=1):
 
     Returns
     -------
-
         the given diagonals defined by the two dimensions of the array.
     """
     F = getattr(a, "fill_value", 1.e20)

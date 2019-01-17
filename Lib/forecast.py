@@ -85,15 +85,13 @@ class forecast():
            is used to get the forecast file from the forecast time.
 
     Example
-    -------
 
-          Each list item should look like this example:
+       Each list item should look like this example:
        [None, None, None, None, 2006022200000L, 'file2006-02-22-00000.nc']
        Normally dataset_list = fm[i][1] where fm is the output of
        cdms2.dataset.parseFileMap and fm[i][0] matches the variables of interest.
 
     Note
-    ----
 
        N.B.  This is like a CdmsFile.  Creating a forecast means opening a file,
        so later on you should call forecast.close() to close it.
@@ -139,7 +137,6 @@ def available_forecasts(dataset_file, path="."):
           through the specified cdscan-generated dataset xml file.
 
     Note
-
          The forecasts are given in 64-bit integer format, but can be converted
          to component times with the function two_times_from_one.
          This function may help in choosing the right arguments for initializing
@@ -157,8 +154,6 @@ class forecasts():
     Represents a set of forecasts
 
     Example
-
-
              Creates a set of forecasts.  Normally you do it by something like
              f = forecasts( 'file.xml', (min_time, max_time) )
              or
@@ -256,7 +251,7 @@ class forecasts():
     def reduce_inplace(self, min_time, max_time, openclosed='co'):
         """
         Example
-
+        =======
 
              For a forecasts object f, f( min_time, max_time ) will reduce the
              scope of f, to forecasts whose start time t has min_time<=t<max_time.
@@ -366,7 +361,6 @@ class forecasts():
              a tuple (axis,start,length,true_length) where axis is in the forecast direction.
 
         Note
-
              If a list of forecasts be specified, the axis' data will be limited to them."""
         if fcss is None:
             fcss = self.fcs

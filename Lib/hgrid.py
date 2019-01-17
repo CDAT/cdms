@@ -189,7 +189,6 @@ class AbstractHorizontalGrid(AbstractGrid):
 
         Parameters
         ----------
-
         nonConvexCells:
                   1D numpy array of indices of nonconvex cells, as returned from
                   checkConvex.
@@ -197,15 +196,13 @@ class AbstractHorizontalGrid(AbstractGrid):
                   positive floating-point value in degrees.
 
 
-        If the difference in longitude values of consecutive boundaries nodes exceeds the
-        threshold, the cell is considered a cut cell.
-
-        On return, the grid boundaries are modified.
+        If the difference in longitude values of consecutive boundaries nodes
+        exceeds the threshold, the cell is considered a cut cell. On return,
+        the grid boundaries are modified.
 
         Returns
         -------
-
-            value is a 1D array of indices of cells that cannot be repaired.
+        value is a 1D array of indices of cells that cannot be repaired.
         """
 
         from numpy import take, array
@@ -583,7 +580,7 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         file.close()
 
     def write_gridspec(self, filename):
-        """writes this grid to a Gridspec-compliant file, or does nothing if there is
+        """Writes this grid to a Gridspec-compliant file, or does nothing if there is
         already a known file corresponding to this grid.  The filename should be a
         complete path."""
         # This method was never completed because the libCF functionality I had planned to
@@ -600,7 +597,7 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
                 'The libCF/Gridspec API does not provide for writing CurveGrids<<<')
 
     def init_from_gridspec(self, filename):
-        """reads to grid from a Gridspec-compliant file.  The filename should be a
+        """Reads to grid from a Gridspec-compliant file.  The filename should be a
         complete path.  The contents of the file may overwrite data in the existing
         grid object."""
         # - This is really a kind of init function.  The __init__ function should
@@ -618,7 +615,7 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         f.close()
 
     def init_from_gridspec_file(self, f):
-        """reads to grid from a Gridspec-compliant file, f.  This f should be a
+        """Reads to grid from a Gridspec-compliant file, f.  This f should be a
         CdmsFile object, already open for reading.  The contents of the file may
         overwrite data in the existing grid object."""
         # As for the above init_from_gridspec method, this is really a kind of

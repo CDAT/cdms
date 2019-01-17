@@ -544,9 +544,7 @@ class CrossSectionRegridder:
 
 def checkdimension(x, name):
     """
-
     Purpose:
-
        dimension  checks
            1. has a len method
            2. data type is float32

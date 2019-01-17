@@ -326,8 +326,8 @@ class Cache:
 
         Parameters
         ----------
-            <filekey>
-            filekey for cache
+        filekey:
+             for cache
         """
 
         filekey = str(filekey)

@@ -2138,8 +2138,8 @@ class CdmsFile(CdmsObj, cuDataset):
 
         Parameters
         ----------
-          var:
-              variable to copy.
+            var:
+                variable to copy.
           attributes:
               The attribute dictionary for the variable. The default is var.attributes.
           axes:
@@ -2160,6 +2160,7 @@ class CdmsFile(CdmsObj, cuDataset):
               The numpy dtype.
           typecode:
               Deprecated, for backward compatibility only
+
         Returns
         -------
             File variable
@@ -2316,9 +2317,11 @@ class CdmsFile(CdmsObj, cuDataset):
            ----------
               obj:
                  object containing `writeg`, `writeToFile` or `write` method.
+
            Returns
            -------
-              Nothig is returned. """
+              Nothing is returned.
+       """
         # This method was formerly called writeg and just wrote an
         # AbstractCurveGrid.
         if (hasattr(obj, 'writeg') and callable(getattr(obj, 'writeg'))):

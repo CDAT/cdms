@@ -583,8 +583,8 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         -------
 
             a copy of self as a transient variable.
-
-            If copyData is 1 (default), make a separate copy of the data."""
+            If copyData is 1 (default), make a separate copy of the data.
+        """
         result = createVariable(self, copy=copyData)
         return result
 

@@ -16,20 +16,22 @@ requirements:
   host:
     - python
     - setuptools
-    - libcdms
     - cdat_info
     - numpy
+    - libcdms
     - libdrs_f
+    - lazy-object-proxy
   run:
+    - {{ pin_compatible('numpy') }}
     - python
     - libcf
     - distarray
     - cdtime
-    - libcdms
     - cdat_info
-    - {{ pin_compatible('numpy') }}
-    - esmf >=7.1.*
-    - esmpy >=7.1.*
+    - esmf
+    - esmpy
+    - lazy-object-proxy
+    - libcdms
     - libdrs_f
     - pyopenssl
 

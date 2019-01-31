@@ -177,8 +177,8 @@ class AbstractVariable(CdmsObj, Slab):
         """
         Selection of a subregion using selectors.
 
-        **Parameters:**
-
+        Parameters
+        ----------
             raw:
                 if set to 1, return numpy.ma only
             squeeze:
@@ -188,8 +188,8 @@ class AbstractVariable(CdmsObj, Slab):
             order:
                 if given, result is permuted into this order
 
-        **Returns:**
-
+        Returns
+        -------
              Subregion selected
         """
         # separate options from selector specs
@@ -429,12 +429,16 @@ class AbstractVariable(CdmsObj, Slab):
 # A child class may want to override this
     def getAxis(self, n):
         """Get the n-th axis.
+
         Parameters
         ----------
+
             n:
                Axis number
+
         Returns
         -------
+
             if n < 0: n = n + self.rank()
             self.getDomain()[n][0]"""
         if n < 0:
@@ -472,25 +476,24 @@ class AbstractVariable(CdmsObj, Slab):
         return False
 
     def getAxisListIndex(self, axes=None, omit=None, order=None):
-        """Return a list of indices of axis objects;
-
-           Note
-           ----
-           If axes is **not** `None`, include only certain axes.
-           less the ones specified in omit.
-
-           If axes is `None`, use all axes of this variable.
-
-           Other specificiations are as for axisMatchIndex.
-
+        """
         Returns
         -------
-           a list of indices of axis objects;
+            a list of indices of axis objects
+
+        Note
+        ----
+        If axes is **not** `None`, include only certain axes.
+        less the ones specified in omit.
+
+        If axes is `None`, use all axes of this variable.
+
+        Other specificiations are as for axisMatchIndex.
         """
         return axisMatchIndex(self.getAxisList(), axes, omit, order)
 
     def getAxisList(self, axes=None, omit=None, order=None):
-        """Get the list of axis objects;
+        """Get the list of axis objects
 
         Note
         ----
@@ -524,9 +527,10 @@ class AbstractVariable(CdmsObj, Slab):
                asarray :
                    '0' : scalar
                    '1' : numpy array
-           Return
-           ------
-               the missing value as a scalar, or as a numpy array if asarray==1"""
+
+           Returns
+           -------
+           the missing value as a scalar, or as a numpy array if asarray==1"""
 
         if hasattr(self, 'missing_value'):
             try:
@@ -695,13 +699,14 @@ class AbstractVariable(CdmsObj, Slab):
     # Get an order string, such as "tzyx"
     def getOrder(self, ids=0):
         """
-        parameters
+        Parameters
         ----------
-             id:
-                 0 or 1
-        returns
+        id:
+          0 or 1
+
+        Returns
         -------
-            the order string, such as t, z, y, x (time, level, lat, lon).
+        the order string, such as t, z, y, x (time, level, lat, lon).
 
         Note
         ----
@@ -1176,9 +1181,10 @@ class AbstractVariable(CdmsObj, Slab):
 
     def getValue(self, squeeze=1):
         """Get the entire set of values.
+
         Returns
         -------
-            All values and elimite the 1-D dimension.
+        All values and elimite the 1-D dimension.
         """
         return self.getSlice(Ellipsis, squeeze=squeeze)
 

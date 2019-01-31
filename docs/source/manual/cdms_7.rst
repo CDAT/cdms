@@ -1,7 +1,7 @@
 CDMS Utilities
 --------------
 
-CdScan: Importing datasets into CDMS
+CdScan: Importing Datasets into CDMS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Overview

@@ -179,8 +179,9 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         ----------
 
             createVariable
-                (self, data, typecode=None, copy=0, savespace=0, mask=None, fill_value=None, grid=None,
-                axes=None, attributes=None, id=None, dtype=None, order='C') The savespace argument is ignored,
+                (self, data, typecode=None, copy=0, savespace=0, mask=None,
+                fill_value=None, grid=None, axes=None, attributes=None, id=None,
+                dtype=None, order='C') The savespace argument is ignored,
                 for backward compatibility only.
         """
         try:
@@ -639,7 +640,9 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         Returns
         -------
 
-            a copy of self as a transient variable. If copyData is 1 (default), make a separate copy of the data."""
+            a copy of self as a transient variable.
+            If copyData is 1 (default), make a separate copy of the data.
+        """
         result = createVariable(self, copy=copyData)
         return result
 
@@ -1013,10 +1016,16 @@ def isVariable(s):
 
 
 def asVariable(s, writeable=1):
-    """Returns s if s is a Variable; if writeable is 1, return
-       s if s is a TransientVariable. If s is not a variable of
-       the desired type, attempt to make it so and return that.
-       If we fail raise CDMSError
+    """
+    Returns
+    -------
+        s if s is a Variable; if writeable is 1,
+        return s if s is a TransientVariable.
+
+        If s is not a variable of
+        the desired type, attempt to make it so and return that.
+
+        If we fail raise CDMSError
     """
     target_class = AbstractVariable
     if writeable:

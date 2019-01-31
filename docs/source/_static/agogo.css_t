@@ -19,10 +19,11 @@ table {
 }
 
 tr:nth-child(even){background-color: #f2f2f2}
+tr  td:first-child { font-weight: bold }
 
-th {
-    background-color: #4CAF50;
-    color: white;
+th {    
+    background-color: #01796F;
+    color: #f8f8ba;
 }
 
 body {
@@ -98,7 +99,7 @@ h2 {
 
 a.headerlink {
   visibility: hidden;
-  color: #dddddd;
+   color: #dddddd; 
   padding-left: .3em;
 }
 
@@ -143,6 +144,7 @@ table.field-list th.field-name {
     display: inline-block;
     padding: 1px 8px 1px 5px;
     white-space: nowrap;
+    color: darkblue;
     background-color: rgb(238, 238, 238);
 }
 
@@ -212,7 +214,8 @@ div.header .headertitle {
 }
 
 div.header .headertitle a {
-  color: white;
+  color: #f8f8ba;
+/*  color: white; */
 }
 
 div.header div.rel {
@@ -361,8 +364,9 @@ div.sidebar a:hover, div.header a:hover {
 }
 
 div.sidebar h3 {
-  color: #2e3436;
+  color: #2e3436; 
   text-transform: uppercase;
+  font-weight: bold;
   font-size: 130%;
   letter-spacing: .1em;
 }
@@ -375,14 +379,17 @@ div.sidebar li.toctree-l1 a {
   display: block;
   padding: 1px;
   border: 1px solid #dddddd;
-  background-color: #eeeeec;
+/*  background-color: #eeeeec; */
+  background-color: #01796F;
   margin-bottom: .4em;
   padding-left: 3px;
-  color: #2e3436;
+  /* color: #2e3436; */
+  color: #f8f8ba;
 }
 
 div.sidebar li.toctree-l2 a {
   background-color: transparent;
+  color: #01796F;
   border: none;
   margin-left: 1em;
   border-bottom: 1px solid #dddddd;
@@ -390,6 +397,7 @@ div.sidebar li.toctree-l2 a {
 
 div.sidebar li.toctree-l3 a {
   background-color: transparent;
+  color: #01796F;
   border: none;
   margin-left: 2em;
   border-bottom: 1px solid #dddddd;

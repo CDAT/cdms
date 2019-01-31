@@ -126,25 +126,25 @@ Time Methods
    :widths: 20, 75, 80
    :align: left
 
-   "Comptime or Reltime", "``t.add(value,intervalUnits, calendar=cdtime.Default-Calendar)``", "Add an interval of time to a time type t.  
+   "Comptime or Reltime", "``t.add(value,intervalUnits, cdtime.DefaultCalendar)``", "Add an interval of time to a time type t.  
      Returns the same type of time.
        * ``value`` is the   Float number of interval units.
        * ``intervalUnits`` is ``cdtime.
        * [Second (s) | Minute(s) Hour(s) | Day(s) |  Week(s) | Month(s) | Season(s) | Year(s) ]``
        * ``calendar`` is the calendar type."
-   "Integer", "``t.cmp(t2, calendar=cdtime.DefaultCalendar)``", "Compare time values t and t2. 
+   "Integer", "``t.cmp(t2, cdtime.DefaultCalendar)``", "Compare time values t and t2. 
      Returns -1, 0, 1 as t is less than, equal to, or greater than t2 respectively.
        * ``t2`` is the time to compare.
        * ``calendar`` is the calendar type."
-   "Comptime or Reltime", "``t.sub(value,intervalUnits, calendar=cdtime.DefaultCalendar)``", "Subtract an interval of time from a time type t. 
+   "Comptime or Reltime", "``t.sub(value,intervalUnits, cdtime.DefaultCalendar)``", "Subtract an interval of time from a time type t. 
      Returns the same type of time.
        * ``value`` is the Float number of interval units.
        * ``intervalUnits`` is cdtime.[Second (s) | Minute(s) | Hour(s) | Day(s) | Week(s) | Month(s) | Season(s) | Year(s)]
        * ``calendar`` is the calendar type. "
-   "Comptime", "``t.tocomp(calendar = cdtime.DefaultCalendar)``", "Convert to component time.  
+   "Comptime", "``t.tocomp(cdtime.DefaultCalendar)``", "Convert to component time.  
      Returns the equivalent component time.
        * ``calendar`` is the calendar type."
-   "Reltime", "``t.torel(units, calendar=cdtime.DefaultCalendar)``", "Convert to relative time.  
+   "Reltime", "``t.torel(units, cdtime.DefaultCalendar)``", "Convert to relative time.  
      Returns the equivalent relative time."
    
 
@@ -152,12 +152,12 @@ Examples
 ^^^^^^^^
 :: 
 
-   >>> from cdtime import *
-   >>> c = comptime(1996,2,28)
-   >>> r = reltime(28,"days since 1996-1-1")          
-   >>> print r.add(1,Day)
+   >>> import cdtime
+   >>> c = cdtime.comptime(1996,2,28)
+   >>> r = cdtime.reltime(28,"days since 1996-1-1")          
+   >>> print r.add(1, cdtime.Day)
    29.000000 days since 1996-1-1
-   >>> print c.add(36,Hours)
+   >>> print c.add(36, cdtime.Hours)
    1996-2-29 12:0:0.0 
 
 
@@ -166,7 +166,7 @@ Examples
 .. 
 
    >>> c = comptime(1979,8,31)      
-   >>> c.add(1,Month)               
+   >>> c.add(1, cdtime.Month)               
    1979-9-1 0:0:0.0                 
                     
 
@@ -175,16 +175,16 @@ In other words, the day component of c was ignored in the addition, and the day/
 ..                     
 
    >>> c = comptime(1979,8,31)      
-   >>> c.add(2,Years)               
+   >>> c.add(2, cdtime.Years)               
    1981-8-1 0:0:0.0                 
 
 Compare time values.
                     
 .. 
 
-   >>> from cdtime import *         
+   >>> import cdtime
    >>> r = cdtime.reltime(28,"days since 1996-1-1")   
-   >>> c = comptime(1996,2,28)      
+   >>> c = cdtime.comptime(1996,2,28)      
    >>> print c.cmp(r)               
    1
 
@@ -197,12 +197,12 @@ Subtract an interval of time.
 
 .. 
 
-   >>> from cdtime import *         
-   >>> r = cdtime.reltime(28,"days since 1996-1-1")   
-   >>> c = comptime(1996,2,28)      
-   >>> print r.sub(10,Days)         
+   >>> import cdtime
+   >>> r = cdtime.reltime(28, "days since 1996-1-1")   
+   >>> c = cdtime.comptime(1996, 2, 28)      
+   >>> print r.sub(10, cdtime.Days)         
    18.000000 days since 1996-1-1        
-   >>> print c.sub(30,Days)         
+   >>> print c.sub(30, cditme.Days)         
    1996-1-29 0:0:0.0                
 
                     

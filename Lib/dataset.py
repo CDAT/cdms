@@ -153,10 +153,11 @@ def setCompressionWarnings(value=None):
 
 def setNetcdfUseNCSwitchModeFlag(value):
     """Tells cdms2 to switch constantly between netcdf define/write modes.
+
        Parameters
        ----------
-          value:
-              0/1, False/True.
+           value:
+               0/1, False/True.
 
        Returns
        -------
@@ -272,6 +273,7 @@ def setNetcdfShuffleFlag(value):
        ----------
           value:
               0/1, False/True.
+
        Returns
        -------
            No return value.
@@ -291,6 +293,7 @@ def setNetcdfDeflateFlag(value):
        ----------
           value:
               0/1, False/True.
+
        Returns
        -------
            No return value.
@@ -337,7 +340,8 @@ def getNetcdfUseParallelFlag():
        Parameters
        ----------
           value:
-              0/1, False/True.
+              0/1, False/True
+
        Returns
        -------
            No return value.
@@ -388,9 +392,10 @@ def getNetcdfDeflateLevelFlag():
 def useNetcdf3():
     """ Turns off (0) NetCDF flags for shuffle/cuDa/deflatelevel
     Output files are generated as NetCDF3 Classic after that
+
     Returns
     -------
-            No return value.
+        No return value.
     """
     setNetcdfShuffleFlag(0)
     setNetcdfDeflateFlag(0)
@@ -470,6 +475,7 @@ def openDataset(uri, mode='r', template=None,
             Default set to 1
         dpath: (str)
             Destination path.
+
     Returns
     -------
          file handle.
@@ -583,6 +589,7 @@ def parselist(text, f):
                Input String.
            f:
                function which parses A and returns (A, nconsumed).
+
        Returns
        -------
            Parser results.
@@ -622,10 +629,11 @@ def parseIndexList(text):
          text:
             i,j,k,l,... are indices or '-', and path is a filename.
             Coerce the indices to integers.
+
     Returns
     -------
-           Parser results.
-           n number of matches.
+        Parser results.
+        n number of matches.
     """
     m = _IndexList4.match(text)
     nindices = 4
@@ -1722,14 +1730,16 @@ class CdmsFile(CdmsObj, cuDataset):
 
         Parameters
         ----------
-            newname: (str/None)
-                new name for grid (default None)
-            grid:
-                file grid (cdms2.grid.FileRectGrid/cdms2.hgrid.FileCurveGrid/cdms2.gengrid.FileGenericGrid)
+             newname: (str/None)
+                  new name for grid (default None)
+
+             grid: file grid
+                 (cdms2.grid.FileRectGrid/cdms2.hgrid.FileCurveGrid/cdms2.gengrid.FileGenericGrid)
 
         Returns
         -------
-            file grid (cdms2.grid.FileRectGrid/cdms2.hgrid.FileCurveGrid/cdms2.gengrid.FileGenericGrid)
+            file grid
+                (cdms2.grid.FileRectGrid/cdms2.hgrid.FileCurveGrid/cdms2.gengrid.FileGenericGrid)
 
         """
         if newname is None:
@@ -2134,8 +2144,8 @@ class CdmsFile(CdmsObj, cuDataset):
 
         Parameters
         ----------
-          var:
-              variable to copy.
+            var:
+                variable to copy.
           attributes:
               The attribute dictionary for the variable. The default is var.attributes.
           axes:
@@ -2156,6 +2166,7 @@ class CdmsFile(CdmsObj, cuDataset):
               The numpy dtype.
           typecode:
               Deprecated, for backward compatibility only
+
         Returns
         -------
             File variable
@@ -2312,9 +2323,11 @@ class CdmsFile(CdmsObj, cuDataset):
            ----------
               obj:
                  object containing `writeg`, `writeToFile` or `write` method.
+
            Returns
            -------
-              Nothig is returned. """
+              Nothing is returned.
+       """
         # This method was formerly called writeg and just wrote an
         # AbstractCurveGrid.
         if (hasattr(obj, 'writeg') and callable(getattr(obj, 'writeg'))):
@@ -2343,6 +2356,7 @@ class CdmsFile(CdmsObj, cuDataset):
 
     def getVariables(self, spatial=0):
         """Get a list of variable objects.
+
         Parameters
         ----------
             spatial:
@@ -2370,6 +2384,7 @@ class CdmsFile(CdmsObj, cuDataset):
         ----------
             id:
                 id of the axis to get
+
         Returns
         --------
             file axis

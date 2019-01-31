@@ -280,7 +280,7 @@ class AbstractGrid (CdmsObj):
         """
 
         Returns
-        ------
+        -------
 
              1 if g is 'close enough' to self to be considered equal, 0 if not."""
         return 0
@@ -752,10 +752,10 @@ class AbstractRectGrid(AbstractGrid):
 
         Parameters
         ----------
-             cufile:
+             cufile
                  is a Cdunif file, NOT a CDMS file.
 
-             gridtitle:
+             gridtitle
                  is a string identifying the grid.
 
         """
@@ -768,10 +768,8 @@ class AbstractRectGrid(AbstractGrid):
 
         Parameters
         ----------
-              gridid:
+              gridid
                  is the string identifier of the resulting curvilinear grid object.
-
-              _: None
 
         """
 
@@ -1053,8 +1051,6 @@ def isGrid(grid):
 
          grid-cdms2:
             contruct to be examined
-
-         _: None
 
     """
     return isinstance(grid, AbstractGrid)

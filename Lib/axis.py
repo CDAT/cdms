@@ -198,10 +198,11 @@ def mapLinearIntersection(xind, yind, iind,
     Parameters
     ----------
     xind:
-       'c' if (a,b) is closed on the left, 'o' if open,
+       'c' if (a,b) is closed on the left, 
+       'o' if open,
     yind:
-        same for right endpoint
-j
+        same for right endpoint j
+
     Returns
     -------
     True if the coordinate interval (a,b) intersects the node nodeSubI or cell

@@ -522,7 +522,7 @@ Axis Methods, Additional to CoordinateAxis
           * ``(x,y,indicator)``
           * ``(x,y,indicator,cycle)``
           * ``None or ':'``
-      where ``x`` and ``y`` are coordinates indicating the interval ``[x,y]``, and:
+      Where ``x`` and ``y`` are coordinates indicating the interval ``[x,y]``, and:
           * ``indicator`` is a two or three-character string, where the first character is ``'c'`` if the interval is closed on the left, ``'o'`` if open, and the second character has the same meaning for the right-hand point. If present, the third character specifies how the interval should be intersected with the axis
           * ``'n'`` - select node values which are contained in the interval
           * ``'b'`` -select axis elements for which the corresponding cell boundary intersects the interval
@@ -537,7 +537,7 @@ Axis Methods, Additional to CoordinateAxis
           * If ``0 <= i < n`` and ``0 <= j <= n``, the interval does not wrap around the axis endpoint.
           * Otherwise the interval wraps around the axis endpoint.
           * See also: ``mapinterval``, ``variable.subregion()``"
-   "``transientaxis``", "``subaxis(i,j,k=1)``", "create an axis associated with the integer range ``[i:j:k]``. 
+   "``transientaxis``", "``subaxis(i,j,k=1)``", "Create an axis associated with the integer range ``[i:j:k]``. 
           * The stride ``k`` can be positive or negative.
           * Wraparound is supported for longitude dimensions or those with a modulus attribute." 
 
@@ -548,13 +548,13 @@ Axis Slice Operators
    :header:  "Slice", "Definition"
    :widths:  50, 110
 
-   "``[i]``", "the ``ith`` element, starting with index ``0``"
-   "``[i:j]``", "the ``ith`` element through, but not including, element ``j``"
-   "``[i:]``", "the ``ith`` element through and including the end"
-   "``[:j]``", "the beginning element through, but not including, element ``j``"
-   "``[:]``", "the entire array"
-   "``[i:j:k]``", "every ``kth`` element, starting at ``i``, through but not including ``j``"
-   "``[-i]``", "the ``ith`` element from the end. ``-1`` is the last element.
+   "``[i]``", "The ``ith`` element, starting with index ``0``"
+   "``[i:j]``", "The ``ith`` element through, but not including, element ``j``"
+   "``[i:]``", "The ``ith`` element through and including the end"
+   "``[:j]``", "The beginning element through, but not including, element ``j``"
+   "``[:]``", "The entire array"
+   "``[i:j:k]``", "Every ``kth`` element, starting at ``i``, through but not including ``j``"
+   "``[-i]``", "The ``ith`` element from the end. ``-1`` is the last element.
      **Example:** a longitude axis has value
       * ``[0.0, 2.0, ..., 358.0]``
       *   of length ``180``
@@ -1249,12 +1249,12 @@ The command
     >>> from MV import *
 
 
-allows use of MV commands without any prefix.
+Allows use of MV commands without any prefix.
 
 Table `Variable Constructors in module MV <#table-variable-constructors-in-module-mv>`_,  lists the constructors in MV. All functions return
 a transient variable. In most cases the keywords axes, attributes, and
-id are available. axes is a list of axis objects which specifies the
-domain of the variable. attributes is a dictionary. id is a special
+id are available. Axes is a list of axis objects which specifies the
+domain of the variable. Attributes is a dictionary. id is a special
 attribute string that serves as the identifier of the variable, and
 should not contain blanks or non-printing characters. It is used when
 the variable is plotted or written to a file. Since the id is just an
@@ -1426,10 +1426,10 @@ HorizontalGrid Methods
     "Axis", "``getAxis(Integer n)``", "Get the n-th axis.n is either 0 or 1."
     "Tuple", "``getBounds()``", "Get the grid boundary arrays.
          Returns a tuple ``(latitudeArray, longitudeArray)``, where latitudeArray is a Numpy array of latitude bounds, and similarly for longitudeArray.The shape of latitudeArray and longitudeArray depend on the type of grid:
-           * for rectangular grids with shape (nlat, nlon), the boundary arrays have shape (nlat,2) and (nlon,2).
-           * for curvilinear grids with shape (nx, ny), the boundary arrays each have shape (nx, ny, 4).
-           * for generic grids with shape (ncell,), the boundary arrays each have shape (ncell, nvert) where nvert is the maximum number of vertices per cell.
-           * for rectilinear grids: If no boundary arrays are explicitly defined (in the file or dataset), the result depends on the auto- Bounds mode (see ``cdms.setAutoBounds``) and the grid classification mode (see ``cdms.setClassifyGrids``).
+           * For rectangular grids with shape (nlat, nlon), the boundary arrays have shape (nlat,2) and (nlon,2).
+           * For curvilinear grids with shape (nx, ny), the boundary arrays each have shape (nx, ny, 4).
+           * For generic grids with shape (ncell,), the boundary arrays each have shape (ncell, nvert) where nvert is the maximum number of vertices per cell.
+           * For rectilinear grids: If no boundary arrays are explicitly defined (in the file or dataset), the result depends on the auto- Bounds mode (see ``cdms.setAutoBounds``) and the grid classification mode (see ``cdms.setClassifyGrids``).
         By default, autoBounds mode is enabled, in which case the boundary arrays are generated based on the type of grid. 
            * If disabled, the return value is (None,None).For rectilinear grids:
            * The grid classification mode specifies how the grid type is to be determined. 
@@ -1772,7 +1772,7 @@ Index and Coordinate Intervals
     "``(x,y,'co')``", "``x ≤ axis[i] < y``. The third item is defined as in mapInterval.", "``(-90,90,'cc')``"
     "``(x,y,'co',cycle)``", "``x ≤ axis[i]< y``, with wraparound", "``( 180, 180, 'co', 360.0)``
     **Note:** It is not necesary to specify the cycle of a circular longitude axis, that is, for which ``axis.isCircular()`` is true."
-    "``slice(i,j,k)``", " slice object, equivalent to i:j:k in a slice operator. Refers to the indices i, i+k, i+2k, … up to but not including index j. If i is not specified or is None it defaults to 0. If j is not specified or is None it defaults to the length of the axis. The stride k defaults to 1. k may be negative.","``slice(1,10)``
+    "``slice(i,j,k)``", "slice object, equivalent to i:j:k in a slice operator. Refers to the indices i, i+k, i+2k, … up to but not including index j. If i is not specified or is None it defaults to 0. If j is not specified or is None it defaults to the length of the axis. The stride k defaults to 1. k may be negative.","``slice(1,10)``
      ``slice(,,-1)`` reverses the direction of the axis."
     "``':'``", "all axis values of one dimension",
     "``Ellipsis``", "all values of all intermediate axes",
@@ -1871,7 +1871,7 @@ example:
     >>> x9 = hus(('1979-1-1','1979-2-1'),1000.0)
 
 
-reads data for the range (‘1979-1-1’,’1979-2-1’) of the first axis, and
+Reads data for the range (‘1979-1-1’,’1979-2-1’) of the first axis, and
 coordinate value 1000.0 of the second axis. Non-keyword arguments of the
 form(s) listed in `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_ are treated as positional. Such
 selectors are more concise, but not as general or flexible as the other

@@ -106,10 +106,10 @@ latitude, longitude).
            * Variables can be sliced like arrays.
            * The slice operator [0::12] means take every 12th slice from dimension 0, starting at index 0 and ending at the last index.
            * If the stride 12 were omitted, it would default to 1. 
-         **Note:** that the variable is actually 3-dimensional. 
+         **Note:** That the variable is actually 3-dimensional. 
            * Since no slice is specified for the second or third dimensions, all values of those 2,3 dimensions are retrieved. 
            * The slice operation could also have been written [0::12, : , :].
-          **Also Note:** that the same script works for multi-file datasets. 
+          **Also Note:** That the same script works for multi-file datasets. 
            * CDMS opens the needed data files, extracts the appropriate slices, and concatenates them into the result array."
    "7", "Reads all July data into a masked array julys."
    "8", "Calculate the average January value for each grid zone. Any missing data is handled automatically."
@@ -119,7 +119,7 @@ latitude, longitude).
    "15", "Write the January average values to the output file.
            * The variable will have id “tas\_jan” in the file. ``write`` is a utility function which creates the variable in the file, then writes data to the variable. 
            * A more general method of data output is first to create a variable, then set a slice of the variable. 
-           **Note:** that janavg and julavg have the same latitude and longitude information as tasvar. It is carried along with the computations."
+           **Note:** That janavg and julavg have the same latitude and longitude information as tasvar. It is carried along with the computations."
    "17", "Set the global attribute ‘comment’."
    "18", "Close the output file."
 
@@ -480,7 +480,7 @@ CoordinateAxis Methods
             * ``cdtime.NoLeapCalendar``: a year is 365 days
             * ``cdtime.Calendar360``: a year is 360 days
             * ``None``: no calendar can be identified
-            **Note**  If the axis is not a time axis, the global, file-related calendar is returned."
+            **Note:**  If the axis is not a time axis, the global, file-related calendar is returned."
    "``Array``", "``getValue()``", "Get the entire axis vector."
    "``Integer``", "``isLatitude()``", "Returns true iff the axis is a latitude axis."
    "``Integer``", "``isLevel()``", "Returns true iff the axis is a level axis."
@@ -533,10 +533,10 @@ Axis Methods, Additional to CoordinateAxis
           * By default, if ``axis.isCircular()`` is true, the axis is treated as circular with a default modulus of ``360.0``.
           * An interval of ``None`` or ``':'`` returns the full index interval of the axis.
           * The method returns the corresponding index interval as a 3tuple ``(i,j,k)``, where ``k`` is the integer stride, and ``[i.j)`` is the half-open index interval ``i <= k < j`` ``(i >= k > j if k < 0)``, or ``none`` if the intersection is empty.
-          * for an axis which is circular (``axis.topology == 'circular'``), ``[i,j)`` is interpreted as follows, where ``n = len(axis)``
-          * if ``0 <= i < n`` and ``0 <= j <= n``, the interval does not wrap around the axis endpoint.
-          * otherwise the interval wraps around the axis endpoint.
-          * see also: ``mapinterval``, ``variable.subregion()``"
+          * For an axis which is circular (``axis.topology == 'circular'``), ``[i,j)`` is interpreted as follows, where ``n = len(axis)``
+          * If ``0 <= i < n`` and ``0 <= j <= n``, the interval does not wrap around the axis endpoint.
+          * Otherwise the interval wraps around the axis endpoint.
+          * See also: ``mapinterval``, ``variable.subregion()``"
    "``transientaxis``", "``subaxis(i,j,k=1)``", "create an axis associated with the integer range ``[i:j:k]``. 
           * The stride ``k`` can be positive or negative.
           * Wraparound is supported for longitude dimensions or those with a modulus attribute." 
@@ -699,7 +699,7 @@ CdmsFile Methods
            * The default is ``None``, in which case the first dimension is extensible if it is ``time.Set`` to ``0`` to turn off this behaviour.
            * ``fill_value`` is the missing value flag.
            * ``index`` is the extended dimension index to write to. The default index is determined by lookup relative to the existing extended dimension.
-           **Note:** data can also be written by setting a slice of a file variable, and attributes can be written by setting an attribute of a file variable."
+           **Note:** Data can also be written by setting a slice of a file variable, and attributes can be written by setting an attribute of a file variable."
 
 CDMS Datatypes
 --------------
@@ -1293,10 +1293,10 @@ Variable  Constructors in Module MV
     "``masked_array(a, mask=None, fill_value=None, axes=None, attributes=None, id=None)``", "Same as MV2.masked_array but creates a variable instead. If no axes are specified, the result has default axes, otherwise axes is a list of axis objects matching a.shape."
     "``masked_object(data,value, copy=1,savespace=0,axes=None, attributes=None, id=None)``", "Create variable masked where exactly data equal to value. Create the variable with the given list of axis objects, attribute dictionary, and string id."
     "``masked_values(data,value, rtol=1e-05, atol=1e-08, copy=1, savespace=0, axes=None, attributes=None, id=None)``", "Constructs a variable with the given list of axes and attribute dictionary, whose mask is set at those places where ``abs(data - value) > atol + rtol * abs(data)``. This is a careful way of saying that those elements of the data that have value = value (to within a tolerance) are to be treated as invalid. If data is not of a floating point type, calls masked_object instead."
-    "``ones(shape, typecode='l',savespace=0,axes=none, attributes=none, id=none)``", "return an array of all ones of the given length or shape."
-    "``reshape(a,newshape, axes=none, attributes=none, id=none)``", "copy of a with a new shape."
-    "``resize(a,newshape, axes=none, attributes=none, id=none)``", "return a new array with the specified shape. the original arrays total size can be any size."
-    "``zeros(shape,typecode='l',savespace=0, axes=none, attributes=none, id=none)``", "an array of all zeros of the given length or shape"
+    "``ones(shape, typecode='l',savespace=0,axes=none, attributes=none, id=none)``", "Return an array of all ones of the given length or shape."
+    "``reshape(a,newshape, axes=none, attributes=none, id=none)``", "Copy of a with a new shape."
+    "``resize(a,newshape, axes=none, attributes=none, id=none)``", "Return a new array with the specified shape. the original arrays total size can be any size."
+    "``zeros(shape,typecode='l',savespace=0, axes=none, attributes=none, id=none)``", "An array of all zeros of the given length or shape"
 
 
 

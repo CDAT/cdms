@@ -1017,8 +1017,7 @@ def readScripCurveGrid(fileobj, dims, whichType, whichGrid):
     nj = dims[0]
     gridshape = (ni, nj)
     boundsshape = (ni, nj, ncorners)
-    if hasattr(cornerLat, 'units') and string.lower(
-            cornerLat.units)[0:6] == 'radian':
+    if hasattr(cornerLat, 'units') and cornerLat.units[0:6].lower() == 'radian':
         cornerLat = (cornerLat * (180.0 / numpy.pi)).reshape(boundsshape)
         cornerLon = (cornerLon * (180.0 / numpy.pi)).reshape(boundsshape)
     else:
@@ -1039,7 +1038,7 @@ def readScripCurveGrid(fileobj, dims, whichType, whichGrid):
     if gridCenterLatName in vardict:
         centerLat = fileobj(gridCenterLatName).reshape(gridshape)
         gclat = fileobj[gridCenterLatName]
-        if hasattr(gclat, "units") and string.lower(gclat.units) == 'radians':
+        if hasattr(gclat, "units") and gclat.units.lower() == 'radians':
             centerLat *= (180.0 / numpy.pi)
     else:
         centerLat = cornerLat[:, :, 0]
@@ -1047,14 +1046,14 @@ def readScripCurveGrid(fileobj, dims, whichType, whichGrid):
     if gridCenterLonName in vardict:
         centerLon = fileobj(gridCenterLonName).reshape(gridshape)
         gclon = fileobj[gridCenterLonName]
-        if hasattr(gclon, "units") and string.lower(gclon.units) == 'radians':
+        if hasattr(gclon, "units") and gclon.units.lower() == 'radians':
             centerLon *= (180.0 / numpy.pi)
     else:
         centerLon = cornerLon[:, :, 0]
 
     if hasattr(fileobj, titleName):
         gridid = getattr(fileobj, titleName)
-        gridid = string.replace(string.strip(gridid), ' ', '_')
+        gridid = gridid.strip().replace(' ', '_')
     else:
         gridid = "<None>"
 

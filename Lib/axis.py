@@ -822,8 +822,8 @@ class AbstractAxis(CdmsObj):
             return True
         except ImportError:
             import warnings
-            warnings.warn(
-                "genutil module not present, was not able to determine if axis is level based on units")
+#            warnings.warn(
+#                "genutil module not present, was not able to determine if axis is level based on units")
             pass
         except Exception:
             pass

@@ -307,7 +307,7 @@ def combineKeys(mydict, typedict, timeIsLinear=0,
         if name0 is None:
             name0 = name
         values, units, dummy = typedict[(path, name)]
-        if firstunits is "":
+        if firstunits == "":
             firstunits = units
         if prevend is not None and prevend >= i0:
             if prevend >= i1:
@@ -620,15 +620,15 @@ def initialize_filemap(filemap, timedict, levdict, timeid, extendDset, splitOnTi
                        referenceTime, timeIsLinear, referenceDelta, splitOnLevel,
                        dirlen, overrideCalendar):
     # This function was formerly part of the body of "main".
-        # Initialize filemap : varid => (tc0, tc1, lc0, lc1, path, timeid, levid)
-        # where tc0 is the first time index relative to the reference time, tc1 the last,
-        # lc0 is the first level, lc1 the last, path is the filename, timeid is the id
-        # of the time dimension of the variable, levid is the id of the level dimension
-        #
-        # timedict : (path, timeid) => (timearray, timeunits, calendar)
-        #
-        # levdict : (path, levelid) => (levelarray, levelunits, None)
-        #
+    # Initialize filemap : varid => (tc0, tc1, lc0, lc1, path, timeid, levid)
+    # where tc0 is the first time index relative to the reference time, tc1 the last,
+    # lc0 is the first level, lc1 the last, path is the filename, timeid is the id
+    # of the time dimension of the variable, levid is the id of the level dimension
+    #
+    # timedict : (path, timeid) => (timearray, timeunits, calendar)
+    #
+    # levdict : (path, levelid) => (levelarray, levelunits, None)
+    #
     initfilemap = cdms2.dataset.parseFileMap(extendDset.cdms_filemap)
     dsetdirec = extendDset.directory
     for namelist, slicelist in initfilemap:

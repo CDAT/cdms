@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 PKG_NAME=cdms2
 USER=cdat
-export VERSION="3.1.0"
+export VERSION="3.1.1"
 echo "Trying to upload to conda"
 echo ""
 echo "Activating base env"
 source activate base
 echo "Making sure conda-build is installed"
-conda install "conda-build<3.10"
+conda install conda-build
 echo "Updating conda"
 conda update -y -q conda
 if [ `uname` == "Linux" ]; then

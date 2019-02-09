@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 PKG_NAME=cdms2
 USER=cdat
-export VERSION="3.1.1"
+export VERSION="3.1.2"
 echo "Trying to upload to conda"
 echo ""
 echo "Activating base env"

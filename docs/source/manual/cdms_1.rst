@@ -62,11 +62,16 @@ File I/O
 ^^^^^^^^
 
 A variable can be obtained from a file or collection of files, or can be
-generated as the result of a computation. Files can be in any of the
-self- describing formats netCDF, HDF, GrADS/GRIB (GRIB with a GrADS
-control file), or PCMDI DRS. (HDF and DRS support is optional, and is
-configured at the time CDAT is installed.) For instance, to read data
-from file sample.nc into variable u:
+generated as the result of a computation. 
+
+Files can be in any of theself- describing formats:
+
+    netCDF, HDF, GrADS/GRIB (GRIB with a GrADS control file),
+    or PCMDI DRS.
+
+**Note:**    (HDF and DRS support is optional, and is configured at the time CDAT is installed.) 
+
+For instance, to read datafrom file sample.nc into variable u:
 
 .. testsetup:: *
 
@@ -313,7 +318,7 @@ variables in CDMS:
 
 -  *file variable* is a variable associated with a single data file.
    Setting or referencing a file variable generates I/O operations.
--  A *dataset variable* is a variable associated with a collection of
+-  *dataset variable* is a variable associated with a collection of
    files. Reference to a dataset variable reads data, possibly from
    multiple files. Dataset variables are read-only.
 -  *transient variable* is an in-memory object not associated with a
@@ -324,7 +329,9 @@ Typical use of a file variables is to inquire information about the
 variable in a file without actually reading the data for the variables.
 A file variable is obtained by applying the slice operator [] to a file,
 passing the name of the variable, or by calling the getVariable
-function. Note that obtaining a file variable does not actually read the
+function.
+
+**Note:** That obtaining a file variable does not actually read the
 data array:
 
 ..
@@ -502,7 +509,7 @@ grid. Note that:
    >>> # The associated grid g is curvilinear
    >>> g = sample.getGrid()
    >>> 
-   >>> # The domain of the variable consfigists of index axes
+   >>> # The domain of the variable consists of index axes
    >>> sample.getAxisIds() 
    ['y', 'x']
    >>> 

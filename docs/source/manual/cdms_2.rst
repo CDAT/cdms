@@ -504,7 +504,7 @@ Axis Methods, Additional to CoordinateAxis
           * Returns a ``List`` of component times."
    "List of relative times", "``asRelativeTime()``", "``Array`` version of ``cdtime torel``.
           * Returns a ``List`` of relative times."
-   "``None``", "``designateCircular(modulo, persistent=0)``", "Designate the axis to be circular. 
+   "None", "``designateCircular(modulo, persistent=0)``", "Designate the axis to be circular. 
           * ``modulo`` is the modulus value.
           * Any given axis value ``x`` is treated as equivalent to ``x + modulus``.
           * If ``persistent`` is ``True``, the external file or dataset (if any) is modified.
@@ -618,7 +618,7 @@ CdmsFile Methods
 
 .. csv-table:: 
    :header:  "Type", "Method", "Definition"
-   :widths:  30, 30, 80
+   :widths:  35, 30, 80
    :align: left
 
 
@@ -631,13 +631,13 @@ CdmsFile Methods
    "Variable, Axis, or Grid", "``fileobj['id']``", "Get the persistent variable, axis or grid object having the string identifier.
         This does not read the data for a variable.
           **Example:** The following gets the persistent variable
-             >>> ``v``, equivalent to
-             >>> ``v = f.variables['prc']``.
+             >>> v, equivalent to
+             >>> v = f.variables['prc']
              >>> f = cdms.open('sample.nc')
              >>> v = f['prc']
           **Example:** The following gets the axis named time, equivalent to
-             >>> ``t = f.axes['time']``.
-             >>> ``t = f['time']``"
+             >>> t = f.axes['time']
+             >>> t = f['time']"
    "None", "``close()``", "Close the file."
    "Axis", "``copyAxis(axis, newname=None)``", "Copy ``axis`` values and attributes to a new axis in the file. 
          The returned object is persistent: it can be used to write axis data to or read axis data from the file.
@@ -1191,15 +1191,17 @@ Dataset Methods
 
     "Transient-Variable", "``datasetobj(varname, selector)``", "Calling a Dataset object as a function reads the region of data defined by the selector. The result is a transient variable, unless ``raw = 1`` is specified. See 'Selectors'.
         **Example:** The following reads data for variable 'prc', year 1980:
-          * f = cdms.open('test.  xml')
-          * x = f('prc', time=('1980-1','1981-1'))"
+          >>> f = cdms.open('test.  xml')
+          >>> x = f('prc', time=('1980-1','1981-1'))"
     "Variable, Axis, or Grid", "``datasetobj['id']``", "The square bracket operator applied to a dataset gets the persistent variable, axis or grid object having the string identifier. This does not read the data for a variable. Returns ``None`` if not found.
         **Example:**
-           * f = cdms.open('sampl e.xml')
-           * v = f['prc']
+           >>> f = cdms.open('sampl e.xml')
+           >>> v = f['prc']
            * gets the persistent variable v, equivalent to ``v =f.variab les['prc']``.
+       
         **Example:**
-           ``t = f['time']`` gets the axis named 'time', equivalent to ``t = f.axes['time']``"
+           >>> t = f['time'] gets the axis named 'time', equivalent to 
+           >>> t = f.axes['time']"
     "None", "``close()``", "Close the dataset."
     "RectGrid", "``createRectGrid(id, lat, lon,order, type='generic', mask=None)``", "Create a RectGrid in the dataset. This is not a persistent object: the order, type, and mask are not written to the dataset. However, the grid may be used for regridding operations.
            * ``lat`` is a latitude axis in the dataset.
@@ -1428,10 +1430,10 @@ HorizontalGrid Methods
     "Axis", "``getAxis(Integer n)``", "Get the n-th axis.n is either 0 or 1."
     "Tuple", "``getBounds()``", "Get the grid boundary arrays.
          Returns a tuple ``(latitudeArray, longitudeArray)``, where latitudeArray is a Numpy array of latitude bounds, and similarly for longitudeArray.The shape of latitudeArray and longitudeArray depend on the type of grid:
-           * for rectangular grids with shape (nlat, nlon), the boundary arrays have shape (nlat,2) and (nlon,2).
-           * for curvilinear grids with shape (nx, ny), the boundary arrays each have shape (nx, ny, 4).
-           * for generic grids with shape (ncell,), the boundary arrays each have shape (ncell, nvert) where nvert is the maximum number of vertices per cell.
-           * for rectilinear grids: If no boundary arrays are explicitly defined (in the file or dataset), the result depends on the auto- Bounds mode (see ``cdms.setAutoBounds``) and the grid classification mode (see ``cdms.setClassifyGrids``).
+           * For rectangular grids with shape (nlat, nlon), the boundary arrays have shape (nlat,2) and (nlon,2).
+           * For curvilinear grids with shape (nx, ny), the boundary arrays each have shape (nx, ny, 4).
+           * For generic grids with shape (ncell,), the boundary arrays each have shape (ncell, nvert) where nvert is the maximum number of vertices per cell.
+           * For rectilinear grids: If no boundary arrays are explicitly defined (in the file or dataset), the result depends on the auto- Bounds mode (see ``cdms.setAutoBounds``) and the grid classification mode (see ``cdms.setClassifyGrids``).
         By default, autoBounds mode is enabled, in which case the boundary arrays are generated based on the type of grid. 
            * If disabled, the return value is (None,None).For rectilinear grids:
            * The grid classification mode specifies how the grid type is to be determined. 
@@ -1497,7 +1499,7 @@ RectGrid Methods, Additional to HorizontalGrid Methods
           For a global grid, the weight arrays are normalized such that the sum of the weights is 1.0
             **Example:**
               * Generate the 2-D weights array, such that ``weights[i.j]`` is the fractional area of grid zone ``[i,j]``.
-              * from cdms import MV
+              * From cdms import MV
               * latwts, lonwts = gri d.getWeights()
               * weights = MV.outerproduct(latwts, lonwts)
               *  Also see the function ``area_weights`` in module ``pcmdi.weighting``."
@@ -1518,9 +1520,9 @@ Variable
 
 A Variable is a multidimensional data object, consisting of:
 
--  a multidimensional data array, possibly masked,
--  a collection of attributes
--  a domain, an ordered tuple of CoordinateAxis objects.
+-  A multidimensional data array, possibly masked,
+-  A collection of attributes
+-  A domain, an ordered tuple of CoordinateAxis objects.
 
 A Variable which is contained in a Dataset or CdmsFile is called a
 persistent variable. Setting a slice of a persistent Variable writes
@@ -1569,7 +1571,7 @@ Variable Constructors
        * ``id`` is the name of the variable. 
        * ``datatype`` is the MV2 or Numpy | typecode, for example, MV2.Float. 
        * ``axesOrGrids`` is a list of Axis and/or Grid objects, on which the variable is defined. Specifying a rectilinear grid is equivalent to listing the grid latitude and longitude axes, in the order defined for the grid. 
-       **Note:** this argument can either be a list or a tuple. If the tuple form is used, and there is only one element, it must have a following comma, e.g.: ``(axisobj,)``."
+       **Note:** This argument can either be a list or a tuple. If the tuple form is used, and there is only one element, it must have a following comma, e.g.: ``(axisobj,)``."
     "``cdms.createVariable(array, typecode=None, copy=0, savespace=0,mask=None, fill_value=None, grid=None, axes=None,attributes=None, id=None)``", "Create a transient variable, not associated with a file or dataset.  
        * ``array`` is the data values: a Variable, masked array, or Numpy array.
        * ``typecode`` is the MV2 typecode of the array. Defaults to the typecode of array. 

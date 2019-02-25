@@ -1628,18 +1628,18 @@ Variable Methods
        * If ``omit`` is not ``None``, omit those specified by an integer dimension number.  Otherwise omit is a list of specifications as described below.  
        * ``order`` is an optional string determining the output order.
       Specifications for the axes or omit keywords are a list, each element having one of the following forms:
-        * an integer dimension index, starting at 0.
-        * a string representing an axis id or one of the strings 'time', 'latitude', 'lat', 'longitude', 'lon', 'lev' or 'level'.
-        * a function that takes an axis as an argument and returns a value. If the value returned is true, the axis matches.
+        * An integer dimension index, starting at 0.
+        * A string representing an axis id or one of the strings 'time', 'latitude', 'lat', 'longitude', 'lon', 'lev' or 'level'.
+        * A function that takes an axis as an argument and returns a value. If the value returned is true, the axis matches.
         *  an axis object; will match if it is the same object as axis.
         * ``order`` can be a string containing the characters t,x,y,z, or * .
         * If a dash ('-') is given, any elements of the result not chosen otherwise are filled in from left to right with remaining candidates."
     "List", "``getAxisListIndex(axes=None, omit=None, order=None)``", "Return a list of indices of axis objects.  Arguments are as for getAxisList."
     "List", "``getDomain()``", "Get the domain. 
       Each element of the list is itself a tuple of the form ``(axis,start,length,tru e_length)``
-        * where axis is an axis object,
-        * start is the start index of the domain relative to the axis object,
-        * length is the length of the axis, and true\_length is the actual number of (defined) points in the domain.
+        * Where axis is an axis object,
+        * Start is the start index of the domain relative to the axis object,
+        * Length is the length of the axis, and true\_length is the actual number of (defined) points in the domain.
        * See also: ``getAxisList``."
     "Horizontal-Grid", "``getGrid()``", "Return the associated grid, or ``None`` if the variable is not gridded."
     "Axis", "``getLatitude()``", "Get the latitude axis, or ``None`` if not found."
@@ -1705,12 +1705,12 @@ Variable Methods
      This is a functional form of the slice operator [] with the squeeze option turned off.
         * ``specs`` is an argument list, each element of which specifies a slice of the corresponding dimension. 
      There can be zero or more positional arguments, each of the form:
-        *  a single integer n, meaning ``slice(n, n+1)``
-        *  an instance of the slice class
-        *  a tuple, which will be used as arguments to create a slice
+        *  A single integer n, meaning ``slice(n, n+1)``
+        *  An instance of the slice class
+        *  A tuple, which will be used as arguments to create a slice
         *  ':', which means a slice covering that entire dimension
         *  Ellipsis (...), which means to fill the slice list with ':' leaving only enough room at the end for the remaining positional arguments
-        *  a Python slice object, of the form ``slice(i,j,k)``
+        *  A Python slice object, of the form ``slice(i,j,k)``
         * If there are fewer slices than corresponding dimensions, all values of the trailing dimensions are read.
         * The keyword arguments are defined as in subRegion.
         * There must be no conflict between the positional arguments and the keywords.
@@ -1769,17 +1769,17 @@ Index and Coordinate Intervals
    :header:  "Interval Definition", "Example Interval Definition", "Example"
    :widths:  30, 80, 80
 
-    "``x``", "single point, such that axis[i]==x In general x is a scalar. If the axis is a time axis, x may also be a cdtime relative time type, component time type, or string of the form ‘yyyy-mm-dd hh:mi:ss’ (where trailing fields of the string may be omitted.", "``180.0``
+    "``x``", "Single point, such that axis[i]==x In general x is a scalar. If the axis is a time axis, x may also be a cdtime relative time type, component time type, or string of the form ‘yyyy-mm-dd hh:mi:ss’ (where trailing fields of the string may be omitted.", "``180.0``
      ``cdtime.reltime(48,'hour s since 1980-1')``
      ``'1980-1-3'``"
-    "``(x,y)``", "indices i such that x ≤ axis[i] ≤ y", "``(-180,180)``"
+    "``(x,y)``", "Indices i such that x ≤ axis[i] ≤ y", "``(-180,180)``"
     "``(x,y,'co')``", "``x ≤ axis[i] < y``. The third item is defined as in mapInterval.", "``(-90,90,'cc')``"
     "``(x,y,'co',cycle)``", "``x ≤ axis[i]< y``, with wraparound", "``( 180, 180, 'co', 360.0)``
     **Note:** It is not necesary to specify the cycle of a circular longitude axis, that is, for which ``axis.isCircular()`` is true."
-    "``slice(i,j,k)``", " slice object, equivalent to i:j:k in a slice operator. Refers to the indices i, i+k, i+2k, … up to but not including index j. If i is not specified or is None it defaults to 0. If j is not specified or is None it defaults to the length of the axis. The stride k defaults to 1. k may be negative.","``slice(1,10)``
+    "``slice(i,j,k)``", "Slice object, equivalent to i:j:k in a slice operator. Refers to the indices i, i+k, i+2k, … up to but not including index j. If i is not specified or is None it defaults to 0. If j is not specified or is None it defaults to the length of the axis. The stride k defaults to 1. k may be negative.","``slice(1,10)``
      ``slice(,,-1)`` reverses the direction of the axis."
-    "``':'``", "all axis values of one dimension",
-    "``Ellipsis``", "all values of all intermediate axes",
+    "``':'``", "All axis values of one dimension",
+    "``Ellipsis``", "All values of all intermediate axes",
 
 
 
@@ -1794,7 +1794,7 @@ variable. For example, the statement:
     >>> x = v(time='1979-1-1', level=(1000.0,100.0))
 
 
-means ‘select the values of variable v for time ‘1979-1-1’ and levels
+Means ‘select the values of variable v for time ‘1979-1-1’ and levels
 1000.0 to 100.0 inclusive, setting x to the result.’ Selectors are
 generally used to represent regions of space and time.
 
@@ -1806,14 +1806,14 @@ The form for using a selector is:
     >>> result = v(s)
 
 
-where v is a variable and s is the selector. An equivalent form is:
+Where v is a variable and s is the selector. An equivalent form is:
 
 ::
 
      >>> result = f('varid', s)
 
 
-where f is a file or dataset, and ‘varid’ is the string ID of a
+Where f is a file or dataset, and ‘varid’ is the string ID of a
 variable.
 
 A selector consists of a list of selector components. For example, the
@@ -1825,7 +1825,7 @@ selector:
     >>> time='1979-1-1', level=(1000.0,100.0)
 
 
-has two components: time=’1979-1-1’, and level=(1000.0,100.0). This
+Has two components: time=’1979-1-1’, and level=(1000.0,100.0). This
 illustrates that selector components can be defined with keywords, using
 the form:
 
@@ -1875,7 +1875,7 @@ example:
     >>> x9 = hus(('1979-1-1','1979-2-1'),1000.0)
 
 
-reads data for the range (‘1979-1-1’,’1979-2-1’) of the first axis, and
+Reads data for the range (‘1979-1-1’,’1979-2-1’) of the first axis, and
 coordinate value 1000.0 of the second axis. Non-keyword arguments of the
 form(s) listed in `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_ are treated as positional. Such
 selectors are more concise, but not as general or flexible as the other
@@ -1919,7 +1919,7 @@ and
 
 
 
-are equivalent. Additionally, the predefined selectors
+Are equivalent. Additionally, the predefined selectors
 ``latitudeslice``, ``longitudeslice``, ``levelslice``, and ``timeslice``
 take arguments ``(startindex, stopindex[, stride])``:
 

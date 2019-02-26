@@ -1,8 +1,6 @@
 import os
 import sys
 import shutil
-import pdb
-pdb.set_trace()
 import cdat_info
 import socket
 

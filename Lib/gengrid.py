@@ -439,7 +439,6 @@ def readScripGenericGrid(fileobj, dims, whichType, whichGrid):
     ----
         if whichType is "mapping", whichGrid is the choice of grid, either "source" or "destination"
     """
-    import string
     from .auxcoord import TransientAuxAxis1D
     from .coord import TransientVirtualAxis
 

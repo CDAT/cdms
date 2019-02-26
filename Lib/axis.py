@@ -198,7 +198,7 @@ def mapLinearIntersection(xind, yind, iind,
     Parameters
     ----------
     xind :
-       'c' if (a,b) is closed on the left, 
+       'c' if (a,b) is closed on the left,
        'o' if open,
     yind :
         same for right endpoint j
@@ -218,7 +218,6 @@ def mapLinearIntersection(xind, yind, iind,
     See Also
     --------
     mapLinearExt
-
     """
 
     if(iind == 'n' or iind == 'e'):
@@ -820,9 +819,9 @@ class AbstractAxis(CdmsObj):
             p.to(units)
             return True
         except ImportError:
-            import warnings
-#            warnings.warn(
-#                "genutil module not present, was not able to determine if axis is level based on units")
+            # import warnings
+            # warnings.warn(
+            #     "genutil module not present, was not able to determine if axis is level based on units")
             pass
         except Exception:
             pass

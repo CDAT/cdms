@@ -1,20 +1,23 @@
+{% set name = "cdms2" %}
+
 package:
-    name: cdms2
-    version: @VERSION@
+  name: {{ name|lower }}
+  version: @VERSION@
 
 source:
-    git_rev: @UVCDAT_BRANCH@
-    git_url: git://github.com/CDAT/cdms.git
+  git_rev: @UVCDAT_BRANCH@
+  git_url: git://github.com/CDAT/cdms.git
 
 build:
   number: @BUILD_NUMBER@
- 
+  skip: True  # [win] 
+
 requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('fortran') }}
   host:
-    - python
+    - python {{ python }}
     - setuptools
     - cdat_info
     - numpy
@@ -36,7 +39,6 @@ requirements:
     - pyopenssl
 
 about:
-
   home: https://cdms.readthedocs.io/en/latest
   license: '3-Clause BSD'
   license_file: 'bsd-3-clause.txt'
@@ -48,5 +50,7 @@ about:
     analysis and simulation.
   dev_url: http://github.com/CDAT/cdms2
 
-
-
+extra:
+  recipe-maintainers:
+    - dnadeau4
+    - doutriaux1

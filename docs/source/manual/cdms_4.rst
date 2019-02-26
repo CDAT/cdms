@@ -7,10 +7,10 @@ Overview
 
 CDMS provides several methods for interpolating gridded data:
 
--  from one rectangular, lat-lon grid to another (CDMS regridder)
--  between any two lat-lon grids (SCRIP regridder)
--  from one set of pressure levels to another
--  from one vertical (lat/level) cross-section to another vertical
+-  From one rectangular, lat-lon grid to another (CDMS regridder)
+-  Between any two lat-lon grids (SCRIP regridder)
+-  From one set of pressure levels to another
+-  From one vertical (lat/level) cross-section to another vertical
    cross-section.
 
 CDMS Horizontal Regrider

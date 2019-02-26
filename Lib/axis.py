@@ -197,10 +197,10 @@ def mapLinearIntersection(xind, yind, iind,
     """
     Parameters
     ----------
-    xind:
+    xind :
        'c' if (a,b) is closed on the left, 
        'o' if open,
-    yind:
+    yind :
         same for right endpoint j
 
     Returns
@@ -609,10 +609,8 @@ def lookupArray(ar, value):
 
     Parameters
     ----------
-         ar:
-             Input array
-         value:
-             Value to search
+    ar : Input array
+    value : Value to search
 
     Returns
     -------
@@ -671,11 +669,11 @@ def isOverlapVector(vec1, vec2, atol=1.e-8):
     """
     Parameters
     ----------
-    vec1:
+    vec1 :
         Input arrays to compare
-    vec2:
+    vec2 :
         Input arrays to compare
-    atol: float, optional
+    atol : float, optional
         Absolute tolerance, The absolute differenc is equal to **atol** Default is 1e-8
 
     Returns
@@ -704,7 +702,7 @@ def allclose(ax1, ax2, rtol=1.e-5, atol=1.e-8):
     """
     Parameters
     ----------
-    ax1, ax2:  array_like
+    ax1, ax2 :  array_like
 
     Returns
     -------
@@ -2443,19 +2441,19 @@ def axisMatchAxis(axes, specifications=None, omit=None, order=None):
 
      Parameters
      ----------
-     specifications:
+     specifications :
          *  is None, include all axes less the omitted ones.
 
          *  Individual specifications must be integer indices into axes or
             matching criteria as detailed in axisMatches.
 
-     omit:
+     omit :
          *  is None, do not omit any axis.
 
          *  Individual specifications must be integer indices into axes or
             matching criteria as detailed in axisMatches.
 
-     order:
+     order :
          *  A string containing the symbols `t,x,y,z` or `-`.  If a `-` is
             given, any elements of the result not chosen otherwise are filled
             in from left to right with remaining candidates.
@@ -2478,19 +2476,19 @@ def axisMatchIndex(axes, specifications=None, omit=None, order=None):
 
      Parameters
      ----------
-     specifications:
+     specifications :
          *  is None, include all axes less the omitted ones.
 
          *  Individual specifications must be integer indices into axes or
             matching criteria as detailed in axisMatches.
 
-     omit:
+     omit :
          *  is None, do not omit any axis.
 
          *  Individual specifications must be integer indices into axes or
             matching criteria as detailed in axisMatches.
 
-     order:
+     order :
          *  A string containing the symbols `t,x,y,z` or `-`.  If a `-` is
             given, any elements of the result not chosen otherwise are filled
             in from left to right with remaining candidates.
@@ -2614,9 +2612,9 @@ def axisMatches(axis, specification):
     """
        Parameters
        ----------
-       axis:
+       axis :
            See note below
-       specifications:
+       specifications :
            See note below
 
        Returns

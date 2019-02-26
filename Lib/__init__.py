@@ -46,9 +46,6 @@ setDebugMode = Proxy(lambda: cdmsobj.setDebugMode)
 
 
 # Axis functions and classes
-#from .axis import AbstractAxis, axisMatches, axisMatchAxis, axisMatchIndex  # noqa
-#from .axis import createAxis, createEqualAreaAxis, createGaussianAxis, createUniformLatitudeAxis, createUniformLongitudeAxis, setAutoBounds, getAutoBounds  # noqa
-
 AbstractAxis = Proxy(lambda: axis.AbstractAxis)
 axisMatches = Proxy(lambda: axis.axisMatches)
 axisMatchIndex = Proxy(lambda: axis.axisMatchIndex)
@@ -61,7 +58,6 @@ setAutoBounds = Proxy(lambda: axis.setAutoBounds)
 getAutoBounds = Proxy(lambda: axis.getAutoBounds)
 
 # Grid functions
-# from .grid import createGenericGrid, createGlobalMeanGrid, createRectGrid, createUniformGrid, createZonalGrid, setClassifyGrids, createGaussianGrid, writeScripGrid, isGrid  # noqa
 createGenericGrid = Proxy(lambda: grid.createGenericGrid)
 createGlobalMeanGrid = Proxy(lambda: grid.createGlobalMeanGrid)
 createRectGrid = Proxy(lambda: grid.createRectGrid)
@@ -73,14 +69,6 @@ writeScripGrid = Proxy(lambda: grid.writeScripGrid)
 isGrid = Proxy(lambda: grid.isGrid)
 
 # Dataset functions
-# from .dataset import createDataset, openDataset, useNetcdf3   # noqa
-# from .dataset import setNetcdfClassicFlag, setNetcdfShuffleFlag, setNetcdfDeflateFlag, setNetcdfDeflateLevelFlag  # noqa
-# from .dataset import setNetcdfUseNCSwitchModeFlag, getNetcdfUseNCSwitchModeFlag  # noqa
-# from .dataset import setCompressionWarnings  # noqa
-# from .dataset import setNetcdf4Flag, getNetcdf4Flag  # noqa
-# from .dataset import setNetcdfUseParallelFlag, getNetcdfUseParallelFlag  # noqa
-# from .dataset import getMpiRank, getMpiSize  # noqa
-
 openDataset = Proxy(lambda: dataset.openDataset)
 createDataset = Proxy(lambda: dataset.createDataset)
 useNetcdf3 = Proxy(lambda: dataset.useNetcdf3)
@@ -105,12 +93,7 @@ getMpiSize = Proxy(lambda: dataset.getMpiSize)
 
 open = openDataset
 
-# Database functions
-# from .database import connect, Base, Onelevel, Subtree  # noqa
-
 # Selectors
-# from .selectors import longitude, latitude, time, level, required  # noqa
-# from .selectors import longitudeslice, latitudeslice, levelslice, timeslice  # noqa
 longitude = Proxy(lambda: selectors.longitude)
 latitude = Proxy(lambda: selectors.latitude)
 time = Proxy(lambda: selectors.time)
@@ -122,25 +105,16 @@ latitudeslice = Proxy(lambda: selectors.latitudeslice)
 levelslice = Proxy(lambda: selectors.levelslice)
 timeslice = Proxy(lambda: selectors.timeslice)
 
-# from .avariable import order2index, orderparse, setNumericCompatibility, getNumericCompatibility  # noqa
 order2index = Proxy(lambda: avariable.order2index)
 orderparse = Proxy(lambda: avariable.orderparse)
 setNumericCompatibility = Proxy(lambda: avariable.setNumericCompatibility)
 getNumericCompatibility = Proxy(lambda: avariable.getNumericCompatibility)
 
 # TV
-# from .tvariable import asVariable, createVariable, isVariable, fromJSON  # noqa
 asVariable = Proxy(lambda: tvariable.asVariable)
 createVariable = Proxy(lambda: tvariable.createVariable)
 isVariable = Proxy(lambda: tvariable.isVariable)
 fromJSON = Proxy(lambda: tvariable.fromJSON)
-
-# from .mvSphereMesh import SphereMesh  # noqa
-# from .mvBaseWriter import BaseWriter  # noqa
-# from .mvVsWriter import VsWriter  # noqa
-# from .mvVTKSGWriter import VTKSGWriter  # noqa
-# from .mvVTKUGWriter import VTKUGWriter  # noqa
-# from .mvCdmsRegrid import CdmsRegrid  # noqa
 
 SphereMesh = Proxy(lambda: mvSphereMesh.SphereMesh)
 BaseWriter = Proxy(lambda: mvBaseWriter.BaseWriter)
@@ -156,7 +130,5 @@ try:
 except BaseException:
     pass
 
-# from .restApi import esgfConnection, esgfDataset, FacetConnection  # noqa
 MV = MV2  # noqa
-# from .dask_protocol import serialize, deserialize  # noqa
 from . import dask_protocol  # noqa

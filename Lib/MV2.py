@@ -19,8 +19,6 @@ from cdms2.grid import AbstractRectGrid
 from cdms2.error import CDMSError
 # from numpy.ma import *
 from cdms2.axis import allclose as axisAllclose, TransientAxis, concatenate as axisConcatenate, take as axisTake
-# import dask.array as da
-# import dask
 
 create_mask = make_mask_none
 e = numpy.e
@@ -506,62 +504,6 @@ def product(a, axis=0, dtype=None):
 def average(a, axis=None, weights=None, returned=False):
     axis = _conv_axis_arg(axis)
     ta = _makeMaskedArg(a)
-    # ta = da.ma.masked_array(a.asma())
-    # daweights = None
-    # if weights is not None:
-    #     daweights = da.ma.masked_array(weights.asma())
-    # datatocompute = da.average(ta, axis, weights, returned)
-    # if (returned == 1):
-    #     maresult = (datatocompute[0].compute(scheduler='processes'),
-    #                 datatocompute[1].compute(scheduler='processes'))
-    # else:
-    #     maresult = (datatocompute.compute(scheduler='processes'))
-
-    maresult = numpy.ma.average(ta, axis, weights, returned)
-    axes, attributes, id, grid = _extractMetadata(
-        a, omit=axis, omitall=(axis is None))
-    if returned:
-        if isinstance(maresult, tuple):
-            maresult, wresult = maresult
-        else:
-            # ok it's masked constant need to return both things by hand
-            wresult = numpy.ma.masked
-    F = getattr(a, "fill_value", 1.e20)
-    r1 = TransientVariable(
-        maresult,
-        axes=axes,
-        attributes=attributes,
-        grid=grid,
-        id=id,
-        no_update_from=True,
-        fill_value=F)
-    if returned:
-        F = getattr(a, "fill_value", 1.e20)
-        w1 = TransientVariable(
-            wresult,
-            axes=axes,
-            grid=grid,
-            id=id,
-            no_update_from=True,
-            fill_value=F)
-        return r1, w1
-    else:
-        return r1
-
-
-def average2(a, axis=None, weights=None, returned=False):
-    axis = _conv_axis_arg(axis)
-    ta = _makeMaskedArg(a)
-    # ta = da.ma.masked_array(numpy.ma.MaskedArray(a))
-    # daweights = None
-    # if weights is not None:
-    #     daweights = da.ma.masked_array(numpy.ma.MaskedArray(weights))
-    # datatocompute = da.average(ta, axis, weights, returned)
-    # if (returned == 1):
-    #     maresult = (datatocompute[0].compute(), datatocompute[1].compute())
-    # else:
-    #     maresult = (datatocompute.compute())
-
     maresult = numpy.ma.average(ta, axis, weights, returned)
     axes, attributes, id, grid = _extractMetadata(
         a, omit=axis, omitall=(axis is None))

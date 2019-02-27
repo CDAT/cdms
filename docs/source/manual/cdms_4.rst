@@ -355,10 +355,10 @@ CDMS Regridder Functions
 
 A CDMS regridder function is an instance of the CDMS ``Regridder``
 class. The function is associated with rectangular input and output
-grids. Typically its use is straightforward: the function is passed an
-input array and returns the regridded array. However, when the array has
-missing data, or the input and/or output grids are masked, the logic
-becomes more complicated.
+grids. Typically its use is straightforward:
+  * The function is passed an input array and returns the regridded array.
+    However, when the array has missing data, or the input and/or output 
+    grids are masked, the logic becomes more complicated.
 
 Step 1
 ~~~~~~
@@ -412,7 +412,7 @@ CDMS Regridder Function
    :align: left
 
    "Array or Transient-Variable", "``regridFunction(array, missing=None, order=None, mask=None)``", "Interpolate a gridded data array to a new grid.
-     The interpolation preserves the area-weighted mean on each horizontal slice. If array is a Variable, a TransientVariable of  the same rank as the inputarrayisreturned, otherwiseamaskedarray is returned.
+     The interpolation preserves the area-weighted mean on each horizontal slice. If array is a Variable, a TransientVariable of  the same rank as the input array is returned, otherwise a masked array is returned.
        * ``array`` is a Variable, masked array, or Numpy array of rank 2, 3, or 4.
        *  For example, the string 'tzyx' indicates that the dimension order of ``array`` is (time, level, latitude, longitude).
        * If unspecified, the function assumes that the last two dimensions of ``array`` match the input grid.
@@ -573,11 +573,11 @@ Get a mask from a separate file, and set as the input grid mask.
    "10", "Get the output grid."
    "11", "Create the regridder function."
    "14", "Get the mask."
-   "15", "Regrid with a user mask. The subslice call returns a transient variable corresponding to variable sof at time 0."
+   "15", "Regrid with a user mask. The subslice call returns a transient variable corresponding to variables of at time 0."
 
 
 **Note:** Although it cannot be determined from the code, both mask and
-the input array sof are four-dimensional. This is the n-dimensional
+the input arrays of are four-dimensional. This is the n-dimensional
 case.
 
 
@@ -587,13 +587,14 @@ Generate an array of zonal mean values.
 
 
 ::
-     >>> f = cdms.open(‘rls_ccc_per.nc’)
-     >>> rlsf = f.variables[‘rls’]
-     >>> ingrid = rlsf.getGrid()
-     >>> outgrid = cdms.createZonalGrid(ingrid)
-     >>> regridFunc = Regridder(ingrid,outgrid)
-     >>> mean = regridFunc(rlsf)
-     >>> f.close()
+
+    >>> f = cdms.open(‘rls_ccc_per.nc’)
+    >>> rlsf = f.variables[‘rls’]
+    >>> ingrid = rlsf.getGrid()
+    >>> outgrid = cdms.createZonalGrid(ingrid)
+    >>> regridFunc = Regridder(ingrid,outgrid)
+    >>> mean = regridFunc(rlsf)
+    >>> f.close()
 
 
 .. csv-table::

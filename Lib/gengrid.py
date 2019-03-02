@@ -439,7 +439,6 @@ def readScripGenericGrid(fileobj, dims, whichType, whichGrid):
     ----
         if whichType is "mapping", whichGrid is the choice of grid, either "source" or "destination"
     """
-    import string
     from .auxcoord import TransientAuxAxis1D
     from .coord import TransientVirtualAxis
 
@@ -501,8 +500,7 @@ def readScripGenericGrid(fileobj, dims, whichType, whichGrid):
         ni = dims[0]
 
     boundsshape = (ni, ncorners)
-    if hasattr(cornerLat, 'units') and string.lower(
-            cornerLat.units)[0:6] == 'radian':
+    if hasattr(cornerLat, 'units') and cornerLat.units[0:6].lower() == 'radian':
         cornerLat = (cornerLat * (180.0 / numpy.pi)).reshape(boundsshape)
         cornerLon = (cornerLon * (180.0 / numpy.pi)).reshape(boundsshape)
 
@@ -517,23 +515,21 @@ def readScripGenericGrid(fileobj, dims, whichType, whichGrid):
 
     if gridCenterLatName in vardict:
         centerLat = fileobj(gridCenterLatName)
-        if hasattr(centerLat, "units") and string.lower(
-                centerLat.units) == 'radians':
+        if hasattr(centerLat, "units") and centerLat.units.lower() == 'radians':
             centerLat *= (180.0 / numpy.pi)
     else:
         centerLat = cornerLat[:, :, 0]
 
     if gridCenterLonName in vardict:
         centerLon = fileobj(gridCenterLonName)
-        if hasattr(centerLon, "units") and string.lower(
-                centerLon.units) == 'radians':
+        if hasattr(centerLon, "units") and centerLon.units.lower() == 'radians':
             centerLon *= (180.0 / numpy.pi)
     else:
         centerLon = cornerLon[:, :, 0]
 
     if hasattr(fileobj, titleName):
         gridid = getattr(fileobj, titleName)
-        gridid = string.replace(string.strip(gridid), ' ', '_')
+        gridid = gridid.strip().replace(' ', '_')
     else:
         gridid = "<None>"
 

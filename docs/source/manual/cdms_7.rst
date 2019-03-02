@@ -71,13 +71,13 @@ CDScan Command Options
    :widths: 20, 80
 
    "``-a alias_file``", "Change variable names to the aliases defined in an alias file. 
-     - Each line of the alias file consists of two blank separated fields: 
+     Each line of the alias file consists of two blank separated fields: 
       * ``variable_id alias``. 
       * ``variable_id`` is the ID of the variable in the file, and
       * ``alias`` is the name that will be substituted for it in the output dataset. 
       * Only variables with entries in the ``alias_file`` are renamed."
    "``-c calendar``", "Specify the dataset calendar attribute. 
-     - One of:
+      One of:
       * gregorian (default)
       * julian
       * noleap
@@ -88,7 +88,7 @@ CDScan Command Options
        * Should not contain blanks or non-printing characters.
        * Default: 'None'"
    "``-e newattr``", "Add or modify attributes of a file, variable, or axis. 
-      - The form of ``newattr`` is either:
+      The form of ``newattr`` is either:
        * ``var.attr = value`` to modify a variable or attribute, or
        * ``.attr = value`` to modify a global (file) attribute.
        * In either case, value may be quoted to preserve spaces or force the attribute to be treated as a string.
@@ -99,7 +99,7 @@ CDScan Command Options
    "``-f file_list``", "File containing a list of absolute data file names, one per line."
    "``-h``", "Print a help message."
    "``-i time_delta``", "Causes the time dimension to be represented as linear, producing a more compact representation.
-     - This is useful if the time dimension is very long. 
+     This is useful if the time dimension is very long. 
       * ``time_delta`` is a float or integer. 
       * For example, if the time delta is 6 hours, and the reference units are ``hours since xxxx`` , set the time delta to 6.  See the ``-r`` option. See Note 2."
    "``--include var,var,...``", "Only include specified variables in the output.

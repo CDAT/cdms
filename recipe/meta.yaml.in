@@ -21,7 +21,7 @@ requirements:
     - setuptools
     - libcdms
     - cdat_info
-    - numpy {{ numpy }}
+    - numpy
     - libdrs_f 
   run:
     - python {{ python }}

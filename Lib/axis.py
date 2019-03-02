@@ -197,6 +197,7 @@ def mapLinearIntersection(xind, yind, iind,
     """
     Parameters
     ----------
+
     xind :
        'c' if (a,b) is closed on the left,
        'o' if open,

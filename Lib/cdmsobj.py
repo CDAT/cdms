@@ -713,7 +713,7 @@ class CdmsObj (object):
             result = []
         return result
 
-    def dump(self, path=None, format=1):
+    def dumpXML(self, path=None, format=1):
         """ dump(self,path=None,format=1)
 
         Dump an XML representation of this object to a file.

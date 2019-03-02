@@ -18,14 +18,14 @@ aliases:
     name: create_conda_env
     environment:
        CHANNELS: "-c cdat/label/unstable -c cdat/label/nightly -c conda-forge -c cdat"
-       PKGS: "libcf distarray cdtime libcdms cdat_info testsrunner numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient"
+       PKGS: "pytest esmpy libcf distarray cdtime libcdms cdat_info testsrunner numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient lazy-object-proxy"
     command: |
        export PATH=$WORKDIR/miniconda/bin:$PATH
        conda config --set always_yes yes --set changeps1 no
        conda update -y -q conda
        conda config --set anaconda_upload no
        if [[ $PY_VER = 'py2' ]]; then
-          conda create -n $PY_VER -c conda-forge/label/gcc7 "python<3"
+          conda create -n $PY_VER "python<3"
           conda install -n $PY_VER $CHANNELS $PKGS $CONDA_COMPILER 
        else
           conda create -n $PY_VER $CHANNELS $PKGS $CONDA_COMPILER "python>3" coverage coveralls

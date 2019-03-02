@@ -20,13 +20,15 @@ from cdms2.error import CDMSError
 # from numpy.ma import *
 from cdms2.axis import allclose as axisAllclose, TransientAxis, concatenate as axisConcatenate, take as axisTake
 
-
 create_mask = make_mask_none
 e = numpy.e
 pi = numpy.pi
 # NewAxis = numpy.oldnumeric.NewAxis
 newaxis = numpy.newaxis
 counter = 0
+
+load = numpy.load
+dump = numpy.ndarray.dump
 
 
 def fill_value(ar):

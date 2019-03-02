@@ -15,6 +15,7 @@ import unittest
 import ESMF
 from regrid2 import esmf
 import sys
+
 PLOT = False
 if PLOT:
     from matplotlib import pylab
@@ -25,7 +26,6 @@ try:
     HAS_MPI = True
 except BaseException:
     pass
-
 
 def _buildCorners(bounds):
     """
@@ -46,7 +46,6 @@ def _buildCorners(bounds):
         bnd[-1, :-1] = bounds[-1, :, 3]
 
     return bnd
-
 
 def _getCorners(coordBounds):
     """
@@ -71,7 +70,6 @@ class Test(unittest.TestCase):
         if HAS_MPI:
             self.pe = MPI.COMM_WORLD.Get_rank()
             self.nprocs = MPI.COMM_WORLD.Get_size()
-
     def test0_ESMF(self):
 
         srcF = cdms2.open(

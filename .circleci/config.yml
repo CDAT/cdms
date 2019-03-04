@@ -12,7 +12,7 @@ aliases:
       mkdir -p workspace
       git clone -b validateNightly --depth 1 git@github.com:CDAT/cdat workspace/cdat
       ls workspace/cdat
-      python workspace/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py3'
+      python workspace/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py3.7'
       
   - &create_conda_env
     name: create_conda_env

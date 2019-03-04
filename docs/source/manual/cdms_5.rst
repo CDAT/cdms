@@ -211,6 +211,15 @@ Plot Keywords
     "time", "cdtime relative or absolute", "Time associated with the data.
        Example:
           * ``cdtime.reltime(30.0, 'days since 1978-1-1').``"
+
+Plot Keywords(cont'd)
+^^^^^^^^^^^^^^^^^^^^^
+
+.. csv-table::
+    :header: "Key", "Type", "Value"
+    :widths: 20, 20, 80
+
+
     "units", "string",  "Data units.
           * Defaults to ``variable.units``"
     "variable", "CDMS variable object", "Variable associated with the data. 

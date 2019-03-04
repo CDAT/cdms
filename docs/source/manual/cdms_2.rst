@@ -166,12 +166,16 @@ Cdms Module Functions
                 * ``data`` is a one-dimensional, monotonic Numpy array.
                 * ``bounds`` is an array of shape ``(len(data),2)``, such that for all ``i``
                 * ``data[i]`` is in the range ``[bounds[i,0],bounds[i,1] ]``.
-              **Note:** If ``bounds`` is not specified, the default boundaries are generated at the midpoints between the consecutive data values, provided that the autobounds mode is 'on' (the default).
+              **Note:** 
+                   - If ``bounds`` is not specified, the default boundaries are generated at
+                     the midpoints between the consecutive data values, provided that the 
+                     autobounds mode is 'on' (the default).
                   * See ``setAutoBounds``. 
                   * Also see: ``CdmsFile.createAxis``"
    "Axis", "``createEqualAreaAxis(nlat)``: 
             Create an equal-area latitude axis.  
-              The latitude values range from north to south, and for all axis values ``x[i]``, ``sin(x[i])sin(x[i+1])`` is constant.
+              The latitude values range from north to south, and for all axis values ``x[i]``,
+              ``sin(x[i])sin(x[i+1])`` is constant.
                  * ``nlat`` is the axis length. 
               **Note:** The axis is not associated with a file or dataset."
    "Axis", "``createGaussianAxis(nlat)``: 
@@ -184,8 +188,19 @@ Cdms Module Functions
                  * ``nlats`` is the number of latitudes. 
                  * ``xorigin`` is the origin of the longitude axis. 
                  * ``order`` is either 'yx' (lat-lon, default) or 'xy' (lon-lat)"
-   "RectGrid", "``createGenericGrid(latArray, lonArray, latBounds=None, lonBounds=None, order='yx', mask=None)``:
-            Create a generic grid, that is, a grid which is not typed as Gaussian, uniform, or equal-area. 
+  
+           
+Cdms Module Functions(cont'd)
+-----------------------------
+
+.. csv-table::  
+   :header:  "Type", "Definition"
+   :widths:  10, 80
+   :align: left
+
+
+   "RectGrid", "``createGenericGrid(latArray, lonArray, latBounds=None, lonBounds=None, order='yx', mask=None)``:  
+           Create a generic grid, that is, a grid which is not typed as Gaussian, uniform, or equal-area. 
               The grid is not associated with a file or dataset. 
                  * ``latArray`` is a NumPy array of latitude values.
                  * ``lonArray`` is a NumPy array of longitude values. 
@@ -219,6 +234,15 @@ Cdms Module Functions
                   * ``deltaLon`` is the increment between longitudes. 
                   * ``order`` is a string with value 'yx. (the first grid dimension is latitude) or .xy. (the first grid dimension is longitude).
                   **Note:** If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
+
+Cdms Module Functions(cont'd)
+-----------------------------
+
+.. csv-table::  
+   :header:  "Type", "Definition"
+   :widths:  10, 80
+   :align: left
+
    "Axis", "``createUniformLatitudeAxis(startLat , nlat, deltaLat)``:
             Create a uniform latitude axis. 
                The axis boundaries are at the midpoints of the axis values. 
@@ -246,6 +270,15 @@ Cdms Module Functions
    "Integer", "``isVariable(s)``: 
                      * Return ``1`` if ``s`` is a variable, ``0`` otherwise. 
                      * See also: ``asVariable``."
+  
+Cdms Module Functions(cont'd)
+-----------------------------
+
+.. csv-table::  
+   :header:  "Type", "Definition"
+   :widths:  10, 80
+   :align: left
+
    "Dataset", "``open(url,mode='r')``: 
                Open or create a ``Dataset`` or ``CdmsFile``. 
                  * ``url`` is a Uniform Resource Locator, referring to a cdunif or XML file.
@@ -272,7 +305,17 @@ Cdms Module Functions
                   * Dash (-) meaning insert the next available axis here.
                   * The ellipsis ... meaning fill these positions with any remaining axes.
                   * (name) meaning an axis whose id is name"
-   "None", "``setAutoBounds(mode)``: 
+  
+Cdms Module Functions(cont'd)
+-----------------------------
+
+.. csv-table::  
+   :header:  "Type", "Definition"
+   :widths:  10, 80
+   :align: left
+
+
+    "None", "``setAutoBounds(mode)``: 
              Set autobounds mode.
                In some circumstances CDMS can generate boundaries for 1-D axes and rectilinear grids, when the bounds are not explicitly defined.
                  The autobounds mode determines how this is done:
@@ -382,7 +425,8 @@ CoordinateAxis Types
                  * Has subtypes ``DatasetAxis``, ``FileAxis``, and ``TransientAxis``. 
                  * May be an index axis, mapping a range of integers to the equivalent floating point value. 
                  * If a latitude or longitude axis, may be associated with a ``RectGrid``."
-   "Axis2D", "A two-dimensional coordinate axis, typically a latitude or longitude axis related to a ``CurvilinearGrid``. 
+   "Axis2D", "A two-dimensional coordinate axis, typically a latitude or longitude axis related to
+              a ``CurvilinearGrid``. 
                  * Has subtypes ``DatasetAxis2D``, ``FileAxis2D``, and ``TransientAxis2D``."
    "AuxAxis1D", "A one-dimensional coordinate axis whose values need not be monotonic.
                  * Typically a latitude or longitude axis associated with a ``GenericGrid``.
@@ -463,13 +507,25 @@ CoordinateAxis Methods
             * If ``persistent`` is true, the external file or dataset (if any) is modified.
             * By default, the designation is temporary. 
             * ``calendar`` is defined as in ``getCalendar()``."
+
+
+CoordinateAxis Methods(cont'd)
+------------------------------
+
+.. csv-table:: 
+   :header:  "Type", "Method", "Definition"
+   :widths:  20, 20, 80
+   :align: left
+
+
    "Array", "``getBounds()``", "Get the associated boundary array. 
          The shape of the return array depends on the type of axis:
             * ``Axis``: ``(n,2)``
             * ``Axis2D``: ``(i,j,4)``
             * ``AuxAxis1D``: ``(ncell, nvert)`` where nvert is the maximum number of vertices of a cell.
          If the boundary array of a latitude or longitude 
-            * ``Axis`` is not explicitly defined, and ``autoBounds`` mode is on, a default array is generated by calling ``genGenericBounds``. 
+            * ``Axis`` is not explicitly defined, and ``autoBounds`` mode is on,
+                       a default array is generated by calling ``genGenericBounds``. 
             * Otherwise if auto-Bounds mode is off, the return value is ``None``.
             * See ``setAutoBounds``."
    "Integer", "``getCalendar()``", "Returns the calendar associated with the ``(time)``\ axis.
@@ -480,7 +536,8 @@ CoordinateAxis Methods
             * ``cdtime.NoLeapCalendar``: a year is 365 days
             * ``cdtime.Calendar360``: a year is 360 days
             * ``None``: no calendar can be identified
-            **Note:**  If the axis is not a time axis, the global, file-related calendar is returned."
+            **Note:**  If the axis is not a time axis, the global, file-related calendar
+                       is returned."
    "Array", "``getValue()``", "Get the entire axis vector."
    "Integer", "``isLatitude()``", "Returns true iff the axis is a latitude axis."
    "Integer", "``isLevel()``", "Returns true iff the axis is a level axis."
@@ -515,7 +572,17 @@ Axis Methods, Additional to CoordinateAxis
           * ``axis.topology`` is undefined, and the axis is a longitude. 
           * The default cycle for circular axes is 360.0"
    "Integer", "``isLinear()``", "Returns ``True`` if the axis has a linear representation."
-   "Tuple", "``mapInterval(interval)``", "Same as ``mapIntervalExt``, but returns only the tuple ``(i,j)``, and ``wraparound`` is restricted to one cycle."
+   "Tuple", "``mapInterval(interval)``", "Same as ``mapIntervalExt``, but returns only the tuple ``(i,j)``,
+    and ``wraparound`` is restricted to one cycle."
+
+Axis Methods, Additional to CoordinateAxis(cont'd)
+--------------------------------------------------
+
+.. csv-table::  
+   :header:  "Type", "Method", "Definition"
+   :widths:  20, 20, 80
+   :align: left
+
    "(i,j,k)", "``mapIntervalExt(interval)``", "Map a coordinate interval to an index
       ``interval``. ``interval`` is a tuple having one of the forms:
           * ``(x,y)``
@@ -646,6 +713,15 @@ CdmsFile Methods
             * ``axis`` is the axis object to be copied. 
             * ``newname``, if specified, is the string identifier of the new axis object. 
             * If not specified, the identifier of the input axis is used."
+  
+CdmsFile Methods(cont'd)
+------------------------
+
+.. csv-table:: 
+   :header:  "Type", "Method", "Definition"
+   :widths:  35, 30, 80
+   :align: left
+
    "Grid", "``copyGrid(grid, newname=None)``", "Copy grid values and attributes to a new grid in the file. 
           The returned grid is persistent.
             * If a grid already exists in the file, having the same name and axes, it is returned.
@@ -665,6 +741,15 @@ CdmsFile Methods
             * ``order`` is a string with value ``'yx'`` (the latitude) or ``'xy'`` (the first grid dimension is longitude). 
             * ``type`` is one of ``'gaussian'``,\ ``'unif orm'``,\ ``'equalarea'`` , or ``'generic'``.
             * If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
+  
+CdmsFile Methods(cont'd)
+------------------------
+
+.. csv-table:: 
+   :header:  "Type", "Method", "Definition"
+   :widths:  35, 30, 80
+   :align: left
+
    "Variable", "``createVariable(Stringid,String datatype,Listaxes,fill_value=None)``", "Create a new Variable. 
          This is a persistent object which can be used to read or write variable data to the file.
            * ``id`` is a String name which is unique with respect to all other objects in the file.
@@ -683,7 +768,16 @@ CdmsFile Methods
            * If ``checkGrid`` is ``1`` (default), the grid cells are checked for convexity, and 'repaired' if necessary.  
            * Grid cells may appear to be nonconvex if they cross a ``0 / 2pi`` boundary. 
            * The repair consists of shifting the cell vertices to the same side modulo 360 degrees."
-    "None", "``sync()``", "Writes any pending changes to the file."
+  
+CdmsFile Methods(cont'd)
+----------------
+
+.. csv-table:: 
+   :header:  "Type", "Method", "Definition"
+   :widths:  35, 30, 80
+   :align: left
+
+   "None", "``sync()``", "Writes any pending changes to the file."
     "Variable", "``write(var,attributes=None,axes=None, extbounds=None,id=None,extend=None, fill_value=None, index=None, typecode=None)``","Write a variable or array to the file. 
          The return value is the associated file variable.
            * If the variable does not exist in the file, it is first defined and all attributes written, then the data is written. 
@@ -1183,7 +1277,7 @@ Open Modes
 
 
 Dataset Methods
----------------
+--------------_
 
 .. csv-table::  
    :header:  "Type", "Definition", "Description"
@@ -1209,6 +1303,16 @@ Dataset Methods
            * ``order`` is a string with value 'yx' (the first grid dimension is latitude) or 'xy' (the first grid dimension is longitude).
            * ``type`` is one of 'gaussian','uniform','eq ualarea',or 'generic'
            * If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one) with the same shape as the grid."
+   
+Dataset Methods(Cont'd)
+-----------------------
+
+.. csv-table::  
+   :header:  "Type", "Definition", "Description"
+   :widths:  30, 30, 80
+
+
+
     "Axis", "``getAxis(id)``", "Get an axis object from the file or dataset.
            * ``id`` is the string axis identifier."
     "Grid", "``getGrid(id)``", "Get a grid object from a file or dataset.
@@ -1339,6 +1443,15 @@ MV Functions
     "``masked_where(condition, x, copy=1)``", "Return ``x`` as a variable masked where condition is true.
        * Also masked where ``x`` or ``condition`` masked. 
        * ``condition`` is a masked array having the same shape as ``x``."
+  
+MV Functions(cont'd)
+--------------------
+.. csv-table::   
+   :header:  "Function", "Description"
+   :widths:  50,  80
+   :align: left
+
+
     "``maximum(a, b=None)``", "Compute the maximum valid values of ``x`` if ``y`` is ``None``; with two arguments, return the element-wise larger of valid values, and mask the result where either ``x`` or ``y`` is masked."
     "``minimum(a, b=None)``", "Compute the minimum valid values of ``x`` if ``y`` is None; with two arguments, return the element-wise smaller of valid values, and mask the result where either ``x`` or ``y`` is masked."
     "``outerproduct(a, b)``", "Return a variable such that ``result[i, j] = a[i] * b[j]``. The result will be masked where ``a[i]`` or ``b[j]`` is masked."
@@ -1441,6 +1554,16 @@ HorizontalGrid Methods
            * If the mode is 'off' grid.getType is used instead."
     "Axis", "``getLatitude()``", "Get the latitude axis of this grid."
     "Axis", "``getLongitude()``", "Get the latitude axis of this grid."
+  
+HorizontalGrid Methods(cont'd)
+------------------------------
+
+
+.. csv-table:: 
+   :header:  "Type", "Method", "Description"
+   :widths:  30, 30, 80
+
+
     "Axis", "``getMask()``", "Get the mask array of this grid, if any.
            * Returns a 2-D Numpy array, having the same shape as the grid. 
            * If the mask is not explicitly defined, the return value is ``None``."
@@ -1454,6 +1577,16 @@ HorizontalGrid Methods
            * If ``persistent == 1``, the mask values are written to the associated file, if any. 
            * Otherwise, the mask is associated with the grid, but no I/O is generated. 
            * ``mask`` is a two-dimensional, Boolean-valued Numpy array, having the same shape as the grid."
+
+HorizontalGrid Methods(cont'd)
+------------------------------
+
+
+.. csv-table:: 
+   :header:  "Type", "Method", "Description"
+   :widths:  30, 30, 80
+
+
     "Horizontal-Grid", "``subGridRegion(latInterval, lonInterval)``", "Create a new grid corresponding to the coordinate region defined by ``latInterval, lonInterv al.``
            * ``latInterval`` and ``lonInterval`` are the coordinate intervals for latitude and longitude, respectively.
            * Each interval is a tuple having one of the forms:
@@ -1598,7 +1731,7 @@ Variable Methods
     "Variable", "``tvar = var[ i:j, m:n]``", "Read a slice of data from the file or dataset, resulting in a transient variable. 
         * Singleton dimensions are 'squeezed' out. 
         * Data is returned in the physical ordering defined in the dataset. 
-        * The forms of the slice operator are listed in `Variable Slice Operators <#table-variable-slice-operators>`_ "
+        * The forms of the slice operator are listed in `Variable Slice Operators <#table-variable-slice-operators>`_"
     "None", "``var[ i:j, m:n] = array``", "Write a slice of data to the external dataset. 
         * The forms of the slice operator are listed in `Result Entry Methods <#table-resultentry-methods>`_ .  (Variables in CdmsFiles only)"
     "Variable", "``tvar = var(selector)``", "Calling a variable as a function reads the region of data defined by the selector. 
@@ -1610,7 +1743,18 @@ Variable Methods
     "Variable", "``clone(copyData=1)``", "Return a copy of a transient variable.
         * If copyData is 1 (the default) the variable data is copied as well. 
         * If copyData is 0, the result transient variable shares the original transient variables data array."
-    "Transient Variable", "``crossSectionRegrid(newLevel, newLatitude, method='log', missing=None, order=None)``", "Return a lat/level vertical cross-section regridded to a new set of latitudes newLatitude and levels newLevel. 
+
+Variable Methods(cont'd)
+------------------------
+
+.. csv-table::  
+   :header:  "Type", "Method", "Definition"
+   :widths:  30, 30, 180
+   :align: left
+
+
+    "Transient Variable", "``crossSectionRegrid(newLevel, newLatitude, method='log', missing=None, order=None)``", "Return a lat/level vertical
+     cross-section regridded to a new set of latitudes newLatitude and levels newLevel. 
         * The variable should be a function of latitude, level, and (optionally) time.
         * ``newLevel`` is an axis of the result pressure levels.
         * ``newLatitude`` is an axis of the result latitudes.
@@ -1624,7 +1768,8 @@ Variable Methods
     "Integer", "``getAxisIndex(axis_spec)``", "Return the index of the axis specificed by axis\_spec. Return -1 if no match.
         * ``axis_spec`` is a specification as defined for getAxisList"
     "List", "``getAxisList(axes=None, omit=None, order=None)``", "Get an ordered list of axis objects in the domain of the variable.
-       * If ``axes`` is not ``None``, include only certain axes. Otherwise axes is a list of specifications as described below. Axes are returned in the order specified unless the order keyword is given.
+       * If ``axes`` is not ``None``, include only certain axes. Otherwise axes is a list of specifications as described below. Axes are returned
+         in the order specified unless the order keyword is given.
        * If ``omit`` is not ``None``, omit those specified by an integer dimension number.  Otherwise omit is a list of specifications as described below.  
        * ``order`` is an optional string determining the output order.
       Specifications for the axes or omit keywords are a list, each element having one of the following forms:
@@ -1634,6 +1779,16 @@ Variable Methods
         *  an axis object; will match if it is the same object as axis.
         * ``order`` can be a string containing the characters t,x,y,z, or * .
         * If a dash ('-') is given, any elements of the result not chosen otherwise are filled in from left to right with remaining candidates."
+
+Variable Methods(cont'd)
+------------------------
+
+.. csv-table::  
+   :header:  "Type", "Method", "Definition"
+   :widths:  30, 30, 180
+   :align: left
+
+
     "List", "``getAxisListIndex(axes=None, omit=None, order=None)``", "Return a list of indices of axis objects.  Arguments are as for getAxisList."
     "List", "``getDomain()``", "Get the domain. 
       Each element of the list is itself a tuple of the form ``(axis,start,length,tru e_length)``
@@ -1645,10 +1800,11 @@ Variable Methods
     "Axis", "``getLatitude()``", "Get the latitude axis, or ``None`` if not found."
     "Axis", "``getLevel()``", "Get the vertical level axis, or ``None`` if not found."
     "Axis", "``getLongitude()``", "Get the longitude axis, or ``None`` if not found."
-    "Various", "``getMissing()``", "Get the missing data value, or ``None`` if not found.
-       String ``getOrder()`` Get the order string of a spatio-temporal variable. 
+    "Various", "``getMissing()``", "Get the missing data value, or ``None`` if not found."
+    "String","``getOrder()``", "Get the order string of a spatio-temporal variable. 
         * The order string specifies the physical ordering of the data. 
-        * It is a string of characters with length equal to the rank of the variable, indicating the order of the variable's time, level, latitude, and/or longitude axes. 
+        * It is a string of characters with length equal to the rank of the variable, indicating the order of the variable's time, level, latitude, 
+          and/or longitude axes. 
        Each character is one of:
         * 't': time
         * 'z': vertical level
@@ -1656,17 +1812,28 @@ Variable Methods
         * 'x': longitude
         * '-': the axis is not spatio-temporal.
         **Example:** A variable with ordering 'tzyx' is 4-dimensional, where the ordering of axes is (time, level, latitude, longitude).
-
       **Note:** The order string is of the form required for the order argument of a regridder function.
         * ``intervals`` is a list of scalars, 2-tuples representing [i,j), slices, and/or Ellipses. 
         * If no ``argument(s)`` are present, all file paths associated with the variable are returned.
-        * Returns a list of tuples of the form (path,slicetuple), where path is the path of a file, and slicetuple is itself a tuple of slices, of the same length as the rank of the variable, representing the portion of the variable in the file corresponding to intervals.
-      **Note:** This function is not defined for transient variables."
+        * Returns a list of tuples of the form (path,slicetuple), where path is the path of a file, and slicetuple is itself a tuple of slices, 
+          of the same length as the rank of the variable, representing the portion of the variable in the file corresponding to intervals.
+      **Note:** This function is not defined for transient various."
+
+Variable Methods(cont'd)
+------------------------
+
+.. csv-table::  
+   :header:  "Type", "Method", "Definition"
+   :widths:  30, 30, 180
+   :align: left
+
+
     "Axis", "``getTime()``", "Get the time axis, or ``None`` if not found."
     "List", "``getPaths(*intervals)``", "Get the file paths associated with the index region specified by intervals."
     "Integer", "``len(var)``", "The length of the first dimension of the variable. If the variable is zero-dimensional (scalar), a length of 0 is returned.
-    **Note:** ``size()`` returns the total number of elements."
-    "Transient Variable", "``pressureRegrid (newLevel, method='log', missin=None, order=None)``", "Return the variable regridded to a new set of pressure levels newLevel.
+     **Note:** ``size()`` returns the total number of elements."
+    "Transient Variable", "``pressureRegrid (newLevel, method='log', missin=None, order=None)``", "Return the variable regridded to a new set of 
+     pressure levels newLevel.
      The variable must be a function of latitude, longitude, pressure level, and (optionally) time.
         * ``newLevel`` is an axis of the result pressure levels.
         * ``method`` is optional, either 'log' to interpolate in the log of pressure (default), or 'linear' for linear interpolation.
@@ -1679,16 +1846,29 @@ Variable Methods
         * ``order`` is a string indicating the order of dimensions of the array.  It has the form returned from ``variable.getOrder()``.  
         * For example, the string 'tzyx' indicates that the dimension order of array is (time, level, latitude, longitude). 
         * If unspecified, the function assumes that the last two dimensions of array match the input grid.
-        * ``mask`` is a Numpy array, of datatype Integer or Float, consisting of ones and zeros. A value of 0 or 0.0 indicates that the corresponding data value is to be ignored for purposes of regridding.  
+        * ``mask`` is a Numpy array, of datatype Integer or Float, consisting of ones and zeros. A value of 0 or 0.0 indicates that the corresponding 
+          data value is to be ignored for purposes of regridding.  
         * If mask is two-dimensional of the same shape as the input grid, it overrides the mask of the input grid. 
         * If the mask has more than two dimensions, it must have the same shape as array. In this case, the missing data value is also ignored. 
         * Such an n-dimensional mask is useful if the pattern of missing data varies with level (e.g., ocean data) or time. 
         **Note:** If neither missing or mask is set, the default mask is obtained from the mask of the array if any.
       See also: ``crossSectionRegrid``, ``pressureRegrid``."
+
+
+Variable Methods(cont'd)
+------------------------
+
+.. csv-table::  
+   :header:  "Type", "Method", "Definition"
+   :widths:  30, 30, 180
+   :align: left
+
+
     "None", "``setAxis(n, axis)``", "Set the n-th axis (0-origin index) of to a copy of axis."
     "None", "``setAxisList(axislist)``", "Set all axes of the variable. axislist is a list of axis objects."
     "None", "``setMissing(value)``", "Set the missing value.  Integer ``size()`` Number of elements of the variable."
-    "Variable", "``subRegion(* region, time=None, level=None, latitude=None, longitude=None, squeeze=0, raw=0)``", "Read a coordinate region of data, returning a transient variable.
+    "Variable", "``subRegion(* region, time=None, level=None, latitude=None, longitude=None, squeeze=0, raw=0)``", "Read a coordinate region of data, returning
+     a transient variable.
       A region is a hyperrectangle in coordinate space.
         * ``region`` is an argument list, each item of which specifies an interval of a coordinate axis. The intervals are listed in the order of the variable axes.
         *  If trailing dimensions are omitted, all values of those dimensions are retrieved. 
@@ -1696,11 +1876,14 @@ Variable Methods
         *  Only one axis may be read with wraparound.
         *  A coordinate interval has one of the forms listed in `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_ . 
         * Also see ``axis.mapIntervalExt``.
-        * The optional keyword arguments ``time``, ``level``, ``latitude``, and ``longitude`` may also be used to specify the dimension for which the interval applies.  This is particularly useful if the order of dimensions is not known in advance. 
+        * The optional keyword arguments ``time``, ``level``, ``latitude``, and ``longitude`` may also be used to specify the dimension for which the interval applies.
+          This is particularly useful if the order of dimensions is not known in advance. 
         *  An exception is raised if a keyword argument conflicts with a positional region argument.
-        * The optional keyword argument ``squeeze`` determines whether or not the shape of the returned array contains dimensions whose length is 1; by default this argument is 0, and such dimensions are not 'squeezed out'.
+        * The optional keyword argument ``squeeze`` determines whether or not the shape of the returned array contains dimensions whose length is 1; by default this 
+          argument is 0, and such dimensions are not 'squeezed out'.
         * The optional keyword argument ``raw`` specifies whether the return object is a variable or a masked array. 
-        * By default, a transient variable is returned, having the axes and attributes corresponding to2,3 the region read. If raw=1, an MV2 masked array is returned, equivalent to the transient variable without the axis and attribute information."
+        * By default, a transient variable is returned, having the axes and attributes corresponding to2,3 the region read. If raw=1, an MV2 masked array is returned,
+          equivalent to the transient variable without the axis and attribute information."
     "Variable", "``subSlice(* specs, time=None, level=None, latitude=None, longitude=None, squeeze=0, raw=0)``", "Read a slice of data, returning a transient variable. 
      This is a functional form of the slice operator [] with the squeeze option turned off.
         * ``specs`` is an argument list, each element of which specifies a slice of the corresponding dimension. 

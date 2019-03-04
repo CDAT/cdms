@@ -159,9 +159,10 @@ Dataset Attributes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. csv-table::                            
    :header: "Attribute", "Required", "CF", "GDT", "Notes"
-   :widths:  10,5,5,5,80
+   :widths:  10,  5,  5,  5,80
 
-    "appendices", "N", "N", "Y", "Version number"
+
+    "appendices",  "N",  "N",  "Y", "Version number"
     "calendar", "N", "N", "Y", "Calendar used for encoding time axes.
        * ``gregorian`` \| ``julian`` \| ``noleap`` \|\ ``360_day`` \| ``proleptic_gregorian`` \| ``standard``
        **Note:** for the CF convention, the calendar attribute is placed on the time axis."

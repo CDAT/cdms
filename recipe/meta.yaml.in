@@ -35,6 +35,7 @@ requirements:
     - esmpy 
     - libdrs_f
     - pyopenssl
+    - lazy-object-proxy
 
 about:
   home: https://cdms.readthedocs.io/en/latest

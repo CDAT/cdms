@@ -51,7 +51,7 @@ aliases:
        export CDAT_ANONYMOUS_LOG=False
        source activate $PY_VER
        python run_tests.py --subdir -v2 $COVERAGE
-       python run_tests.py --subdir -v2 $COVERAGE --dask
+       python run_tests.py -n1 --subdir -v2 $COVERAGE --dask
        RESULT=$?
        echo "*** $PY_VER test result: "${RESULT}
        exit $RESULT

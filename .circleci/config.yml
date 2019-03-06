@@ -172,11 +172,11 @@ workflows:
   cdms_test:
     jobs:
       - macos_cdms_py2
-      - macos_cdms_py3:
-           requires:
-              - macos_cdms_py2
+      - macos_cdms_py3
+#           requires:
+#              - macos_cdms_py2
       - linux_cdms_py2
-      - linux_cdms_py3:
-           requires:
-              - linux_cdms_py2
+      - linux_cdms_py3
+#           requires:
+#              - linux_cdms_py2
 

@@ -94,14 +94,13 @@ class CDMSTestRunner(cdat_info.TestRunnerBase):
             opt += ["-A",  "cdms_dask"]
         else:
             opt += ["-A",  "not cdms_dask"]
-        print("OPT:", opt)
         return opt
 
 
 test_suite_name = 'cdms'
 
 this_dir = os.path.abspath(os.path.dirname(__file__))
-runner = CDMSTestRunner(test_suite_name, options=["--subdir", "--no-dask"],
+runner = CDMSTestRunner(test_suite_name, options=["--subdir", "--dask"],
                         options_files=["tests/cdms_runtests.json"],
                         get_sample_data=True,
                         test_data_files_info="share/test_data_files.txt")

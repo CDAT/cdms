@@ -88,11 +88,20 @@ class CDMSTestRunner(cdat_info.TestRunnerBase):
 
         return ret_code
 
+    def _prep_nose_options(self):
+        opt = super(CDMSTestRunner, self)._prep_nose_options()
+        if self.args.dask:
+            opt += ["-A",  "cdms_dask"]
+        else:
+            opt += ["-A",  "not cdms_dask"]
+        print("OPT:", opt)
+        return opt
+
 
 test_suite_name = 'cdms'
 
 this_dir = os.path.abspath(os.path.dirname(__file__))
-runner = CDMSTestRunner(test_suite_name, options=["--subdir"],
+runner = CDMSTestRunner(test_suite_name, options=["--subdir", "--no-dask"],
                         options_files=["tests/cdms_runtests.json"],
                         get_sample_data=True,
                         test_data_files_info="share/test_data_files.txt")

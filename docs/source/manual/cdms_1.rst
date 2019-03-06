@@ -679,12 +679,12 @@ separately from the CDAT/CDMS installation.
 
 The steps to regrid a variable are:
 
-(external to CDMS)
+(External to CDMS)
 
 1. Obtain or generate the grids, in SCRIP netCDF format.
 2. Run SCRIP to generate a *remapping* file.
 
-(in CDMS)
+(In CDMS)
 
 1. Read the regridder from the SCRIP remapping file.
 2. Call the regridder with the source data, returning data on the target

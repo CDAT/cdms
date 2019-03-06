@@ -179,18 +179,18 @@ class AbstractVariable(CdmsObj, Slab):
 
         Parameters
         ----------
-            raw:
+        raw :
                 if set to 1, return numpy.ma only
-            squeeze:
+        squeeze :
                 if set to 1, eliminate any dimension of length 1
-            grid:
-                if given, result is regridded ont this grid.
-            order:
+        grid :
+                if given, result is regridded ont this grid
+        order :
                 if given, result is permuted into this order
 
         Returns
         -------
-             Subregion selected
+        Subregion selected
         """
         # separate options from selector specs
         d = kwargs.copy()
@@ -476,13 +476,14 @@ class AbstractVariable(CdmsObj, Slab):
         return False
 
     def getAxisListIndex(self, axes=None, omit=None, order=None):
-        """
+        """Get Axis List Index
+
         Returns
         -------
-            a list of indices of axis objects
+           a list of indices of axis objects
 
-        Note
-        ----
+        Note :
+
         If axes is **not** `None`, include only certain axes.
         less the ones specified in omit.
 
@@ -495,8 +496,8 @@ class AbstractVariable(CdmsObj, Slab):
     def getAxisList(self, axes=None, omit=None, order=None):
         """Get the list of axis objects
 
-        Note
-        ----
+        Note :
+
         If axes is **not** `None`, include only certain axes.
         If omit is **not** `None`, omit those specified by omit.
 
@@ -521,15 +522,16 @@ class AbstractVariable(CdmsObj, Slab):
         return self._grid_
 
     def getMissing(self, asarray=0):
-        """
-           Parameters
-           ----------
+        """Get Missing
+
+        Parameters :
+        ----------
                asarray :
                    '0' : scalar
                    '1' : numpy array
 
-           Returns
-           -------
+        Returns
+        -------
            the missing value as a scalar, or as a numpy array if asarray==1"""
 
         if hasattr(self, 'missing_value'):
@@ -699,7 +701,7 @@ class AbstractVariable(CdmsObj, Slab):
     # Get an order string, such as "tzyx"
     def getOrder(self, ids=0):
         """
-        Parameters
+        Parameters :
         ----------
         id:
           0 or 1
@@ -1705,8 +1707,10 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
             return ar
 
     def getGridIndices(self):
-        """Return
-           ------
+        """
+
+        Return :
+        ------
            a tuple of indices corresponding to the variable grid."""
         grid = self.getGrid()
         result = []

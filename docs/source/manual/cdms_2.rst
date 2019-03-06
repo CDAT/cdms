@@ -373,7 +373,7 @@ external attributes are written, but not the internal attributes.
 Attributes Common to All CDMS Objects
 -------------------------------------
 
-.. csv-table:: Attributes common to all CDMS objects
+.. csv-table:: 
    :header:  "Type", "Name", "Definition"
    :widths:  20, 20, 50
 
@@ -425,8 +425,8 @@ CoordinateAxis Types
                  * Has subtypes ``DatasetAxis``, ``FileAxis``, and ``TransientAxis``. 
                  * May be an index axis, mapping a range of integers to the equivalent floating point value. 
                  * If a latitude or longitude axis, may be associated with a ``RectGrid``."
-   "Axis2D", "A two-dimensional coordinate axis, typically a latitude or longitude axis related to
-              a ``CurvilinearGrid``. 
+   "Axis2D", "A two-dimensional coordinate axis, typically a latitude or longitude axis related
+                   to a ``CurvilinearGrid``. 
                  * Has subtypes ``DatasetAxis2D``, ``FileAxis2D``, and ``TransientAxis2D``."
    "AuxAxis1D", "A one-dimensional coordinate axis whose values need not be monotonic.
                  * Typically a latitude or longitude axis associated with a ``GenericGrid``.
@@ -479,11 +479,11 @@ CoordinateAxis Methods
 
 .. csv-table:: 
    :header:  "Type", "Method", "Definition"
-   :widths:  20, 20, 80
+   :widths:  15, 30, 80
    :align: left
  
 
-   "Array", "``array = axis[i:j]``", "Read a slice of data from the external file or dataset.
+   "Array", "array = axis[i:j]", "Read a slice of data from the external file or dataset.
             * Data is returned in the physical ordering defined in the dataset. 
             * See `Variable Slice Operators <#table-variable-slice-operators>`_ for a description of slice operators."
    "None", "``axis[i:j] = array``", "Write a slice of data to the external file. 
@@ -1277,7 +1277,7 @@ Open Modes
 
 
 Dataset Methods
---------------_
+---------------
 
 .. csv-table::  
    :header:  "Type", "Definition", "Description"

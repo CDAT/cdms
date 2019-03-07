@@ -8,7 +8,9 @@ from distributed.utils_test import gen_cluster
 # import dask.array.ma as dam
 import dask.array as da
 import pickle
+from nose.plugins.attrib import attr
 
+@attr("cdms_dask")
 @gen_cluster(client=True)
 def testDaskArrayFV(c, s, a, b):
     f = cdms2.open(cdat_info.get_sampledata_path()+"/clt.nc")
@@ -19,6 +21,7 @@ def testDaskArrayFV(c, s, a, b):
     assert MV2.allclose(myResult, dataFV)==True
     f.close()
 
+@attr("cdms_dask")
 @gen_cluster(client=True)
 def testDaskArrayTV(c, s, a, b):
     f = cdms2.open(cdat_info.get_sampledata_path()+"/clt.nc")
@@ -45,6 +48,7 @@ class TestDask(basetest.CDMSBaseTest):
         newvar=cdms2.fromJSON(TVstate)
         self.assertTrue(MV2.allclose(self.dataTV, newvar))
 
+    @attr("cdms_dask")
     def testTVSerializeDeserialize(self):
         #
         # make sure that JSON is uncomporessed since
@@ -54,6 +58,7 @@ class TestDask(basetest.CDMSBaseTest):
         newvar=cdms2.fromJSON(TVstate)
         self.assertTrue(MV2.allclose(self.dataTV, newvar))
 
+    @attr("cdms_dask")
     def testSerializeDeserialize(self):
         result = deserialize(*serialize(self.dataFV))
         self.assertTrue(MV2.allclose(result, self.dataFV))

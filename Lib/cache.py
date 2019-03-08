@@ -27,15 +27,17 @@ def lock(filename):
     """
     Acquire a file-based lock with the given name.
 
-        Usage:
-            lock(filename)
+    Usage
+    -----
+    lock(filename)
+    If the function returns, the lock was acquired successfully.
 
-        If the function returns, the lock was acquired successfully.
 
+    Notes
+    -----
+    This function is UNIX-specific.
 
-    Note: This function is UNIX-specific.
-
-    Note: It is important to delete the lock via unlock() if the process is
+    It is important to delete the lock via unlock() if the process is
     interrupted, otherwise subsequent locks will fail.
     """
 

@@ -331,7 +331,7 @@ A file variable is obtained by applying the slice operator [] to a file,
 passing the name of the variable, or by calling the getVariable
 function.
 
-**Note:** That obtaining a file variable does not actually read the
+**Note** That obtaining a file variable does not actually read the
 data array:
 
 ..

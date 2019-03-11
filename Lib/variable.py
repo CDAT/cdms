@@ -29,8 +29,12 @@ FileClosed = "Cannot read from closed file or dataset, variable: "
 
 def timeindex(value, units, basetime, delta, delunits, calendar):
     """ Calculate (t - basetime)/delu
-    where t = reltime(value, units)
-    and delu is the time interval (delta, delunits) (e.g., 1 month).
+
+    Parameters
+    ----------
+    where t :  = reltime(value, units) and
+
+    delu :  is the time interval (delta, delunits) (e.g., 1 month).
     """
     tval = cdtime.reltime(value, units)
     tounits = "%s since %s" % (delunits, basetime)
@@ -41,13 +45,11 @@ def timeindex(value, units, basetime, delta, delunits, calendar):
 class DatasetVariable(AbstractVariable):
     """Variable (parent, variableNode=None)
 
-        Parameters
-        ----------
-           variableNode
-              is the variable tree node, if any.
+       Parameters
+       ----------
+       variableNode : is the variable tree node, if any.
 
-           parent
-              is the containing dataset instance.
+       parent : is the containing dataset instance.
 
     """
 
@@ -229,18 +231,14 @@ class DatasetVariable(AbstractVariable):
         Parameters
         ----------
 
-            axis
-                is a partitioned axis, either time or vertical level or forecast.
+        axis : is a partitioned axis, either time or vertical level or forecast.
 
-            interval
-                is an index interval (istart, iend).
+        interval : is an index interval (istart, iend).
 
-            matchnames
-                is a partially filled list [id, timestart, timeend, levstart, levend, fc] If a filemap
+        matchnames : is a partially filled list [id, timestart, timeend, levstart, levend, fc] If a filemap
                 is used, matchnames has indices, otherwise has coordinates.
 
-            Function
-                modifies matchnames based on axis and interval, returns the modified matchnames tuple.
+        Function : modifies matchnames based on axis and interval, returns the modified matchnames tuple.
         """
         if axis.isTime():
             if hasattr(self.parent, 'cdms_filemap'):
@@ -294,13 +292,10 @@ class DatasetVariable(AbstractVariable):
 
         Parameters
         ----------
-           axis:
-              is either a time or level axis. If cdms_filemap is being used, get the
+
+        axis : is either a time or level axis. If cdms_filemap is being used, get the
               partition from the _varpart_ attribute, otherwise (for templating) use
               axis.partition.
-
-           _: None
-
         """
         if hasattr(self.parent, 'cdms_filemap'):
             if axis.isTime():
@@ -318,46 +313,34 @@ class DatasetVariable(AbstractVariable):
 
         Parameters
         ----------
-            expertPaths
-               (self, slicelist) takes a list of slices,
 
-            _: None
+        expertPaths : (self, slicelist) takes a list of slices
+
 
         Returns
         -------
-            a 3-tuple
-               (npart, dimensionlist, partitionSlices)
+        a 3-tuple (npart, dimensionlist, partitionSlices)
 
-          Where:
+        Where
+        npart : is the number of partitioned dimensions: 0, 1, or 2;
+        dimensionlist : is a tuple of length npart, having the dimension numbers of the partitioned dimensions;
+        partitionSlices : is the list of file-specific (filename, slice) corresponding to the paths and slices within the files to be read.
 
-              npart
-                    is the number of partitioned dimensions: 0, 1, or 2;
+        The exact form of partitionSlices depends on the value of npart
 
-               dimensionlist
-                   is a tuple of length npart, having the dimension numbers of the partitioned dimensions;
+        npart : partitionSlices
 
-               partitionSlices
-                   is the list of file-specific (filename, slice) corresponding to the paths and slices
-                   within the files to be read.
+        0 : (filename,slicelist)
+        1 : [(filename,slicelist),...,(filename,slicelist)]
+        2 : [[(filename,slicelist),...,(filename,slicelist)] 
+            [(filename,slicelist),...,(filename,slicelist)]
+            [(filename,slicelist),...,(filename,slicelist)]]
 
-            The exact form of partitionSlices depends on the value of npart:
-
-
-                 npart           partitionSlices
-
-                      0             (filename,slicelist)
-
-                      1             [(filename,slicelist),...,(filename,slicelist)]
-
-                      2             [[(filename,slicelist),...,(filename,slicelist)]
-                                    [(filename,slicelist),...,(filename,slicelist)]
-                                    ...
-                                    [(filename,slicelist),...,(filename,slicelist)]]
-
-        Note:
-          - A filename of None indicates that no file was found with data corresponding to the slicelist.
-          - If partitionSlices is None, the slicelist does not intersect the domain.
-          - An empty partitionSlices [] means that the variable is zero-dimensional.
+        Notes
+        -----
+        - A filename of None indicates that no file was found with data corresponding to the slicelist.
+        - If partitionSlices is None, the slicelist does not intersect the domain.
+        - An empty partitionSlices [] means that the variable is zero-dimensional.
         """
 
         # slicelist gets modified, slist doesn't

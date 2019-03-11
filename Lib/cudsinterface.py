@@ -66,11 +66,12 @@ class cuDataset():
 
         Options
 
-            vname
-                (str/None) (None) variable name
+        Parameters
+        ----------
 
-            all
-                (None/True/False/int) (None) include axes information
+        vname : (str/None) (None) variable name
+
+        all : (None/True/False/int) (None) include axes information
 
         """
         if vname is None:
@@ -110,8 +111,10 @@ class cuDataset():
 
         Options
 
-            vname
-                (str/None) (None) variable name
+        Parameters
+        ----------
+
+        vname : (str/None) (None) variable name
 
         """
         if vname is None:
@@ -121,18 +124,21 @@ class cuDataset():
 
     def listdimension(self, vname=None):
         """
+        List Dimension
 
         Returns
         -------
 
-           a list of the dimension names associated with a variable.
-           If no argument, return the file.axes.keys()
+        a list of the dimension names associated with a variable.
+        If no argument, return the file.axes.keys()
 
 
         Options
 
-            vname
-                (str/None) (None) variable name
+        Parameters
+        ----------
+
+        vname : (str/None) (None) variable name
 
         """
         if vname is None:
@@ -144,27 +150,24 @@ class cuDataset():
 
     def listglobal(self):
         """
+        List Global
 
         Returns
         -------
 
-           a list of the global attributes in the file.
-           _None_
-
-
+        a list of the global attributes in the file.
+        
         """
         return list(self.attributes.keys())
 
     def listvariable(self):
         """
+        List Variable
 
         Returns
         -------
 
-           a list of the variables in the file.
-
-           _None_
-
+        a list of the variables in the file.
 
         """
         return list(self.variables.keys())
@@ -176,8 +179,7 @@ class cuDataset():
 
         Options
 
-            device
-                (None/file) (None) output device
+        device : (None/file) (None) output device
 
         """
         if device is None:
@@ -193,9 +195,7 @@ class cuDataset():
 
         Options
 
-
-            device
-               (None/file) (None) output device
+        device : (None/file) (None) output device
 
         """
         if device is None:
@@ -211,10 +211,9 @@ class cuDataset():
 
         Options
 
-            vname
-                (str/None) (None) variable name
-            device
-                (None/file) (None) output device
+        vname : (str/None) (None) variable name
+
+        device : (None/file) (None) output device
 
         """
         if device is None:
@@ -234,11 +233,9 @@ class cuDataset():
 
         Options
 
-            vname
-                (str/None) (None) variable name
+        vname : (str/None) (None) variable name
 
-            device
-                (None/file) (None) output device
+        device : (None/file) (None) output device
 
         """
         if device is None:
@@ -258,12 +255,11 @@ class cuDataset():
 
            Options
 
-              vname
-                 (str/None) (None) variable name
-              all
-                 (None/True/False/int) (None) include axes information
-              device
-                 (None/file) (None) output device
+           vname : (str/None) (None) variable name
+            
+           all : (None/True/False/int) (None) include axes information
+              
+           device : (None/file) (None) output device
 
         """
         if device is None:
@@ -279,16 +275,13 @@ class cuDataset():
 
            Options
 
-             vname
-                (str/None) (None) variable name
+           vname : (str/None) (None) variable name
 
-             Input
-                 dname
-                     (str) (0) dimension name
+           Input
+           dname : (str) (0) dimension name
 
-             Output
-                 axis
-                    (cdms2.axis.FileAxis) (0) file axis whose id is vname
+           Output
+           axis : (cdms2.axis.FileAxis) (0) file axis whose id is vname
 
         """
         if vname is None:
@@ -312,16 +305,13 @@ class cuDataset():
 
         Options
 
-            vname
-                (str/None) (None) variable name
+        vname : (str/None) (None) variable name
 
         Input
-            dname
-               (str) (0) dimension name
+        dname : (str) (0) dimension name
 
         Output
-            axisvalues
-               (numpy.ndarray) (0) array with values of axis whose id is vname
+        axisvalues : (numpy.ndarray) (0) array with values of axis whose id is vname
        """
         return self.dimensionobject(dname, vname).getValue()
 
@@ -330,16 +320,13 @@ class cuDataset():
 
         Options
 
-            vname
-                (str/None) (None) variable name
+        vname : (str/None) (None) variable name
 
-            Input
-                dname
-                   (str) (0) dimension name
+        Input
+        dname : (str) (0) dimension name
 
-            Output
-                units
-                   (str) (0) units of axis whose id is vname
+        Output
+        units : (str) (0) units of axis whose id is vname
 
         """
         x = self.dimensionobject(dname, vname)
@@ -349,12 +336,10 @@ class cuDataset():
         """Get the value of the global attribute.
 
            Input
-               attribute
-                   (str) (0) global attribute name
+           attribute : (str) (0) global attribute name
 
            Output
-               attribute_value
-                  (str/int/float/numpy.ndarray) (0) value of requested global attribute
+           attribute_value : (str/int/float/numpy.ndarray) (0) value of requested global attribute
 
         """
         try:
@@ -366,15 +351,12 @@ class cuDataset():
         """Get the value of attribute for variable vname
 
         Input
-            vname
-                (str/None) (0) variable name
+        vname : (str/None) (0) variable name
 
-            attribute
-               (str) (1) attribute name
+        attribute : (str) (1) attribute name
 
         Output
-            attribute_value
-               (str/int/float/numpy.ndarray) (0) value of requested attribute
+        attribute_value : (str/int/float/numpy.ndarray) (0) value of requested attribute
 
         """
         v = self._v(vname)
@@ -382,50 +364,45 @@ class cuDataset():
 
     def getslab(self, vname, *args, **keys):
         """
+        Get Slab
+
         Parameters
         ----------
 
-            getslab ('name', arg1, arg2, ....)
+        getslab : ('name', arg1, arg2, ....)
 
         Returns
         -------
 
-            a cdms variable containing the data.
+        a cdms variable containing the data.
 
-            Arguments for each dimension can be:
+        Arguments for each dimension can be:
                 (1) : or None -- selected entire dimension
                 (2) Ellipsis -- select entire dimensions between the ones given.
                 (3) a pair of successive arguments giving an interval in
                     world coordinates.
                 (4) a cdms-style tuple of world coordinates e.g. (start, stop, 'cc')
 
-            Options
+        Options
 
-                 args
-                     (*tuple/*cdms2.selectors.Selector) () tuple of type (val1,val2,'cob')
+        args : (*tuple/*cdms2.selectors.Selector) () tuple of type (val1,val2,'cob')
                  for any given dimension or cdms selector
 
-            Keys
-                squeeze
-                    (int/True/False) (0) squeezes (removes) dimensions of length 1
+        Keys
+       
+        squeeze : (int/True/False) (0) squeezes (removes) dimensions of length 1
 
-                order
-                    (str) ('...') reorder the dimensions, can use numbers or xyzt or dim
-                    names in between paranthesis
+        order : (str) ('...') reorder the dimensions, can use numbers or xyzt or dim names in between paranthesis
 
-                raw
-                    (int/True/False) (0) return a numpy.ma instead of a transient variable
+        raw : (int/True/False) (0) return a numpy.ma instead of a transient variable
 
-                grid
-                    (cdms2.grid.AbstractGrid) (None) regrid the result to the grid passed
+        grid : (cdms2.grid.AbstractGrid) (None) regrid the result to the grid passed
 
-            Input
-                vname
-                    (str/None) (0) variable name
+        Input
+        vname : (str/None) (0) variable name
 
-            Output
-                variable
-                    (cdms2.tvariable.TransientVariable) (0) variable requested
+        Output
+        variable : (cdms2.tvariable.TransientVariable) (0) variable requested
 
         """
         nargs = len(args)
@@ -474,24 +451,21 @@ class cuDataset():
     def readScripGrid(self, whichGrid="destination", checkGrid=1):
         """Read a SCRIP curvilinear or generic grid from the dataset.
 
-              The dataset can be a SCRIP grid file or mapping file. If a mapping file, 'whichGrid'
-              chooses the grid to read, either "source" or "destination".
+       The dataset can be a SCRIP grid file or mapping file. If a mapping file, 'whichGrid'
+       chooses the grid to read, either "source" or "destination".
 
-              If 'checkGrid' is 1 (default), the grid cells are checked for convexity, and 'repaired'
-              if necessary.
+       If 'checkGrid' is 1 (default), the grid cells are checked for convexity, and 'repaired'
+       if necessary.
 
-              Returns the grid object.
+       Returns the grid object.
 
-                  Options
+       Options
 
-                      whichGrid
-                         (str) ('destination') grid to read
+       whichGrid : (str) ('destination') grid to read
 
-                     checkGrid
-                         (int) (1) if 1 the grid cells are checked for convexity
+       checkGrid : (int) (1) if 1 the grid cells are checked for convexity
 
-                     Output grid
-                        (cdms2.hgrid.TransientCurveGrid/cdms2.gengrid.TransientGenericGrid) (0) variable requested
+       Output grid : (cdms2.hgrid.TransientCurveGrid/cdms2.gengrid.TransientGenericGrid) (0) variable requested
 
         """
 

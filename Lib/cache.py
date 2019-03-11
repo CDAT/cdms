@@ -27,8 +27,8 @@ def lock(filename):
     """
     Acquire a file-based lock with the given name.
 
-    Usage
-    -----
+    Usage :
+    
     lock(filename)
     If the function returns, the lock was acquired successfully.
 
@@ -89,13 +89,14 @@ def unlock(filename):
     """
     Delete a file-based lock with the given name.
 
-        Usage:
-            unlock(filename)
+    Usage : unlock(filename)
 
-        If the function returns, the lock was successfully deleted.
+    If the function returns, the lock was successfully deleted.
 
 
-    Note: This function is UNIX-specific.
+    Notes
+    -----
+    This function is UNIX-specific.
     """
 
     path = lockpath(filename)
@@ -109,8 +110,7 @@ def lockpath(filename):
     Generate the pathname of a lock. Creates the directory containing the lock
     if necessary.
 
-        Usage:
-            lockpath(filename)
+        Usage : lockpath(filename)
     """
     global _cache_tempdir
 
@@ -135,8 +135,11 @@ _transferMethod = _pythonTransfer       # Method of transferring files
 
 def useWindow():
     """
-    Specify that dialog windows should be used if possible. Do not call this directly, use
-    gui.setProgressParent instead. See useTTY.
+    Specify that dialog windows should be used if possible. 
+
+    Do not call this directly, use gui.setProgressParent instead.
+
+    See useTTY.
     """
     global _useWindow
     _useWindow = 1
@@ -187,13 +190,10 @@ def copyFile(fromURL, toURL, callback=None,
 
     Parameters
     ----------
+    <userid> : is the string user ID,
 
-       <userid>
-          is the string user ID,
-
-       <useReplica>
-          is true if the request manager should search the replica catalog for the actual
-          file to transfer.
+    <useReplica> : is true if the request manager should search the replica catalog for the
+                   actual file to transfer.
     """
     if callback is None:
         if _useWindow:
@@ -304,8 +304,7 @@ class Cache:
 
         Parameters
         ----------
-            <filekey>
-            filekey for cache
+        <filekey> : filekey for cache
         """
         filekey = str(filekey)
         lock("index_lock")
@@ -328,8 +327,7 @@ class Cache:
 
         Parameters
         ----------
-        filekey:
-             for cache
+        filekey : for cache
         """
 
         filekey = str(filekey)
@@ -354,10 +352,9 @@ class Cache:
         """
         Delete a cache index entry.
 
-Parameters
-----------
-        <filekey>
-            filekey for cache
+        Parameters
+        ----------
+        <filekey> : filekey for cache
         """
         filekey = str(filekey)
 
@@ -375,17 +372,15 @@ Parameters
         """
         Copy the file <fromURL> into the cache. Return the result path.
 
-           For request manager transfers, lcpath is the logical collection path,
+        For request manager transfers, lcpath is the logical collection path,
 
         Parameters
         ----------
 
-           <userid>
-               is the string user ID,
+        <userid> : is the string user ID,
 
-
-           <useReplica>
-               is true iff the request manager should search the replica catalog for the actual file to transfer.
+        <useReplica> : is true iff the request manager should search the replica
+                       catalog for the actual file to transfer.
         """
 
         # Put a notification into the cache, that this file is being read.
@@ -425,41 +420,38 @@ Parameters
         """
         Get the file with <fileURL>.
 
-           If the file is in the cache, read it.
+        If the file is in the cache, read it.
 
-           If another process is transferring it into the cache, wait for the
+        If another process is transferring it into the cache, wait for the
         transfer to complete.
 
 
         Parameters
         ----------
-            <naptime>
-                is the number of seconds between retries,
+        <naptime> : is the number of seconds between retries,
 
-            <maxtries>
-                is the maximum number of retries. Otherwise, copy it from the remote file.
+        <maxtries> : is the maximum number of retries. Otherwise, copy it from the remote file.
 
-            <filekey>
-                is the cache index key. A good choice is (datasetDN, filename)
-        where datasetDN is the distinguished name of the dataset, and filename
-        is the name of the file within the dataset.
+        <filekey> : is the cache index key. A good choice is (datasetDN, filename) where
 
-            For request manager transfers,
+        datasetDN : is the distinguished name of the dataset, and filename is the name of the file 
+                    within the dataset.
 
-            <lcpath>
-                is the logical collection path,
+        For request manager transfers,
 
-            <userid>
-                is the user string ID,
+        <lcpath> : is the logical collection path,
 
-             <useReplica>
-                is true iff the request manager should search the replica catalog for the actual file to transfer.
+        <userid> : is the user string ID,
+
+        <useReplica> : is true iff the request manager should search the replica catalog 
+                       for the actual file to transfer.
 
         Returns
         -------
-            the path of a file in the cache.
+        the path of a file in the cache.
 
-        Note: The function does not guarantee that the file is still in the cache
+        Notes:
+        The function does not guarantee that the file is still in the cache
         by the time it returns.
         """
         # If the file is being read into the cache, just wait for it

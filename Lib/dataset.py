@@ -114,12 +114,11 @@ def setCompressionWarnings(value=None):
 
     Parameters
     ----------
-      value:
-          *  0/1 False/True 'no'/'yes' or None (which sets it to the opposite
+    value : *  0/1 False/True 'no'/'yes' or None (which sets it to the opposite
 
     Returns
     -------
-         Return set value.
+    Return set value.
     """
     global _showCompressWarnings
     if value is None:
@@ -152,12 +151,11 @@ def setNetcdfUseNCSwitchModeFlag(value):
 
        Parameters
        ----------
-           value:
-               0/1, False/True.
+       value : 0/1, False/True.
 
        Returns
        -------
-           No return value.
+       No return value.
     """
 
     if value not in [True, False, 0, 1]:
@@ -174,12 +172,11 @@ def setNetcdfUseParallelFlag(value):
 
        Parameters
        ----------
-          value:
-              0/1, False/True.
+       value : 0/1, False/True.
 
        Returns
        -------
-           No return value.
+       No return value.
     """
     global CdMpi
     if value not in [True, False, 0, 1]:
@@ -195,11 +192,11 @@ def setNetcdfUseParallelFlag(value):
 
 
 def getMpiRank():
-    """ Return number of processor available.
+    """Return number of processor available.
 
        Returns
        -------
-           rank or 0 if MPI is not enabled.
+       rank or 0 if MPI is not enabled.
     """
     if CdMpi:
         rk = MPI.COMM_WORLD.Get_rank()
@@ -213,7 +210,7 @@ def getMpiSize():
 
        Returns
        -------
-           MPI size or 0 if MPI is not enabled.
+       MPI size or 0 if MPI is not enabled.
     """
     if CdMpi:
         sz = MPI.COMM_WORLD.Get_size()
@@ -227,12 +224,11 @@ def setNetcdf4Flag(value):
 
        Parameters
        ----------
-          value:
-              0/1, False/True.
+       value : 0/1, False/True.
 
        Returns
        -------
-           No return value.
+       No return value.
     """
     if value not in [True, False, 0, 1]:
         raise CDMSError("Error NetCDF4 flag must be 1/0 or true/False")
@@ -247,12 +243,11 @@ def setNetcdfClassicFlag(value):
 
        Parameters
        ----------
-          value:
-              0/1, False/True.
+       value : 0/1, False/True.
 
        Returns
        -------
-           No return value.
+       No return value.
     """
     if value not in [True, False, 0, 1]:
         raise CDMSError("Error NetCDF Classic flag must be 1/0 or true/False")
@@ -267,12 +262,11 @@ def setNetcdfShuffleFlag(value):
 
        Parameters
        ----------
-          value:
-              0/1, False/True.
+       value : 0/1, False/True.
 
        Returns
        -------
-           No return value.
+       No return value.
     """
     if value not in [True, False, 0, 1]:
         raise CDMSError("Error NetCDF Shuffle flag must be 1/0 or true/False")
@@ -287,12 +281,11 @@ def setNetcdfDeflateFlag(value):
 
        Parameters
        ----------
-          value:
-              0/1, False/True.
+       value : 0/1, False/True.
 
        Returns
        -------
-           No return value.
+       No return value.
     """
     if value not in [True, False, 0, 1]:
         raise CDMSError("Error NetCDF deflate flag must be 1/0 or true/False")
@@ -307,12 +300,11 @@ def setNetcdfDeflateLevelFlag(value):
 
        Parameters
        ----------
-          value:
-              Deflation Level 1-9.
+       value : Deflation Level 1-9.
 
        Returns
        -------
-           No return value.
+       No return value.
     """
     if value not in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]:
         raise CDMSError(
@@ -325,7 +317,7 @@ def getNetcdfUseNCSwitchModeFlag():
 
        Returns
        -------
-            NetCDF define mode .
+       NetCDF define mode .
     """
     return Cdunif.CdunifGetNCFLAGS("use_define_mode")
 
@@ -335,53 +327,61 @@ def getNetcdfUseParallelFlag():
 
        Parameters
        ----------
-          value:
-              0/1, False/True
+       value : 0/1, False/True
 
        Returns
        -------
-           No return value.
+       No return value.
     """
     return Cdunif.CdunifGetNCFLAGS("use_parallel")
 
 
 def getNetcdf4Flag():
+    """Get Net CD 4 Flag
+       Returns
+       -------
+       NetCDF4 flag value.
     """
-    Returns
-    -------
-            NetCDF4 flag value."""
     return Cdunif.CdunifGetNCFLAGS("netcdf4")
 
 
 def getNetcdfClassicFlag():
+    """Get Net CDF Classic Flag
+
+       Returns
+       -------
+       NetCDF classic flag value.
     """
-    Returns
-    -------
-            NetCDF classic flag value."""
     return Cdunif.CdunifGetNCFLAGS("classic")
 
 
 def getNetcdfShuffleFlag():
+    """Get Net CDF Shuffle Flag
+
+       Returns
+       -------
+       NetCDF shuffle flag value.
     """
-    Returns
-    -------
-            NetCDF shuffle flag value."""
     return Cdunif.CdunifGetNCFLAGS("shuffle")
 
 
 def getNetcdfDeflateFlag():
+    """Get Net CDF Deflate Flag
+
+       Returns
+       -------
+       NetCDF deflate flag value.
     """
-    Returns
-   -------
-            NetCDF deflate flag value. """
     return Cdunif.CdunifGetNCFLAGS("deflate")
 
 
 def getNetcdfDeflateLevelFlag():
+    """Get Net CDF Deflate Level Flag
+
+       Returns
+       -------
+       NetCDF deflate level flag value.
     """
-    Returns
-    -------
-            NetCDF deflate level flag value."""
     return Cdunif.CdunifGetNCFLAGS("deflate_level")
 
 
@@ -391,7 +391,7 @@ def useNetcdf3():
 
     Returns
     -------
-        No return value.
+    No return value.
     """
     setNetcdfShuffleFlag(0)
     setNetcdfDeflateFlag(0)

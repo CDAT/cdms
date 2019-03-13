@@ -131,4 +131,7 @@ except BaseException:
     pass
 
 MV = MV2  # noqa
-from . import dask_protocol  # noqa
+try:
+    from . import dask_protocol  # noqa
+except BaseException:
+    pass

@@ -310,7 +310,8 @@ class DatasetVariable(AbstractVariable):
 
     def expertPaths(self, slist):
         """
-
+        Expert Paths
+    
         Parameters
         ----------
 

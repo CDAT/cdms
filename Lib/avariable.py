@@ -680,6 +680,8 @@ class AbstractVariable(CdmsObj, Slab):
     # Get an order string, such as "tzyx"
     def getOrder(self, ids=0):
         """
+        Get Order
+
         Parameters
         ----------
         id : 0 or 1
@@ -1665,7 +1667,8 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
 
     def getGridIndices(self):
         """
-
+        Get Grid Indices
+ 
         Returns
         -------
         a tuple of indices corresponding to the variable grid."""

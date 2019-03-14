@@ -33,6 +33,7 @@ __all__ = ["cdmsobj", "axis", "coord", "grid", "hgrid", "avariable",
 
 # CDMS datatypes
 from .cdmsobj import CdArray, CdChar, CdByte, CdDouble, CdFloat, CdFromObject, CdInt, CdLong, CdScalar, CdShort, CdString  # noqa
+from .axis import AbstractAxis   # noqa 
 
 # Functions which operate on all objects or groups of objects
 # from .cdmsobj import Unlimited, getPathFromTemplate, matchPattern, matchingFiles, searchPattern, searchPredicate, setDebugMode  # noqa
@@ -46,7 +47,6 @@ setDebugMode = Proxy(lambda: cdmsobj.setDebugMode)
 
 
 # Axis functions and classes
-AbstractAxis = Proxy(lambda: axis.AbstractAxis)
 axisMatches = Proxy(lambda: axis.axisMatches)
 axisMatchIndex = Proxy(lambda: axis.axisMatchIndex)
 createAxis = Proxy(lambda: axis.createAxis)

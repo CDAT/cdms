@@ -41,8 +41,7 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
 
            Parameters
            ----------
-              'transpose'
-                  is for compatibility with other grid types, is ignored.
+           'transpose' : is for compatibility with other grid types, is ignored.
         """
 
         from . import MV2 as MV
@@ -87,10 +86,9 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
 
         Parameters
         ----------
-             cufile
-                  is a Cdunif file, NOT a CDMS file.
-             gridtitle
-                  is a string identifying the grid.
+        cufile : is a Cdunif file, NOT a CDMS file.
+         
+        gridtitle : is a string identifying the grid.
         """
 
         lat = numpy.ma.filled(self._lataxis_)
@@ -166,23 +164,21 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
         Parameters
         ---------
 
-             domainlist
-                  is a list of axes of a variable.
-             newaxislist
-                  is a list of result axes after the slicelist is applied to domainlist.
-             slicelist
-                  is a list of slices.
+        domainlist : is a list of axes of a variable.
+     
+        newaxislist : is a list of result axes after the slicelist is applied to domainlist.
+             
+        slicelist : is a list of slices.
 
         All lists are of equal length.
 
-             Return value
-                  is (newslicelist, gridaxislist) where
-             newslicelist
-                  is the elements of slicelist that correspond to the grid, in the
-                  preferred order of the grid.
-             gridaxislist
-                  is the elements of newaxislist that correspond to the grid, in the
-                  preferred order of the grid.
+        Return value : is (newslicelist, gridaxislist) where
+      
+        newslicelist : is the elements of slicelist that correspond to the grid, in the
+                      preferred order of the grid.
+        
+        gridaxislist : is the elements of newaxislist that correspond to the grid, in the
+                      preferred order of the grid.
         """
 
         iaxis = self._lataxis_.getAxis(0)
@@ -215,15 +211,15 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
 
        Parameters
        ----------
-            'spec'
-                 region specification of the form defined in the grid module.
+      
+      'spec' : region specification of the form defined in the grid module.
 
        Returns
        -------
-            (mask, indexspecs) where'mask' is the mask of the result grid AFTER self
-            and region spec are interested.
-            'indexspecs' is a dictionary of index specifications suitable for slicing a
-            variable with the given grid.
+       (mask, indexspecs) where'mask' is the mask of the result grid AFTER self
+       and region spec are interested.
+       'indexspecs' is a dictionary of index specifications suitable for slicing a
+       variable with the given grid.
         """
 
         ncell = self.shape
@@ -261,16 +257,17 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
 
     def isClose(self, g):
         """
-
+        Is Close
+       
         Returns
         -------
 
-             1 iff g is a grid of the same type and shape.
+        1 iff g is a grid of the same type and shape.
 
 
-        Note
-        ----
-             A real element-by-element comparison would be too expensive here."""
+        Notes
+        -----
+        A real element-by-element comparison would be too expensive here."""
         if g is None:
             return 0
         elif self.shape != g.shape:
@@ -282,11 +279,12 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
 
     def checkAxes(self, axes):
         """
-
+        Check Axes
+        
         Returns
         -------
 
-             1 iff every element of self.getAxisList() is in the list 'axes'."""
+        1 iff every element of self.getAxisList() is in the list 'axes'."""
         for item in self.getAxisList():
             if item not in axes:
                 result = 0
@@ -298,16 +296,17 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
 
     def reconcile(self, axes):
         """
-
+        Reconcile
+       
         Returns
         -------
 
-             a grid that is consistent with the axes, or None.
+        a grid that is consistent with the axes, or None.
 
-        Note
-        ----
-             For curvilinear grids this means that the grid-related axes are
-             contained in the 'axes' list.
+        Notes
+        -----
+        For curvilinear grids this means that the grid-related axes are
+        contained in the 'axes' list.
         """
         result = self
         selfaxes = self.getAxisList()
@@ -335,16 +334,17 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
 
     def flatAxes(self):
         """
-
+        Flat Axes
+    
         Returns
         -------
 
-             (flatlat, flatlon) where flatlat is a 1D NumPy array
+        (flatlat, flatlon) where flatlat is a 1D NumPy array
 
-       Note
-       ----
-             having the same length as the number of cells in the grid, similarly
-        for flatlon."""
+       Notes
+       -----
+       having the same length as the number of cells in the grid, similarly
+       for flatlon."""
         if self._flataxes_ is None:
             from . import MV2 as MV
             alat = MV.filled(self.getLatitude())
@@ -424,20 +424,19 @@ class TransientGenericGrid(AbstractGenericGrid):
 def readScripGenericGrid(fileobj, dims, whichType, whichGrid):
     """Read a 'native' SCRIP grid file, returning a transient generic grid.
 
-    Parameters
-    ----------
+       Parameters
+       ----------
 
-         fileobj
-              is an open CDMS dataset or file object.
-         dims
-              is the grid shape.
-         whichType
-              is the type of file, either "grid" or "mapping"
+       fileobj : is an open CDMS dataset or file object.
+       
+       dims : is the grid shape.
+         
+       whichType : is the type of file, either "grid" or "mapping"
 
 
-    Note
-    ----
-        if whichType is "mapping", whichGrid is the choice of grid, either "source" or "destination"
+       Notes
+       -----
+       if whichType is "mapping", whichGrid is the choice of grid, either "source" or "destination"
     """
     import string
     from .auxcoord import TransientAuxAxis1D

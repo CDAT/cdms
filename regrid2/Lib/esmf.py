@@ -41,11 +41,9 @@ class EsmfUnstructGrid:
 
     Parameters
     ----------
-    numTopoDims
-        number of topological dimensions
+    numTopoDims :  number of topological dimensions
 
-    numSpaceDims
-        number of space dimensions
+    numSpaceDims : number of space dimensions
     """
 
     def __init__(self, numTopoDims, numSpaceDims):
@@ -76,14 +74,13 @@ class EsmfUnstructGrid:
 
         **Parameters**
 
-        cellIndices : any
-            0-based.
-        cellTypes : any
-            one of ESMF_MESHELEMTYPE_{TRI,QUAD,TETRA,HEX}.
-        connectivityNode: any
-            connectivity array, see below for node ordering.
-        cellMask : any
-            cellAreas area (volume) of each cell.
+        cellIndices : any 0-based.
+
+        cellTypes : any one of ESMF_MESHELEMTYPE_{TRI,QUAD,TETRA,HEX}.
+
+        connectivityNode : any connectivity array, see below for node ordering.
+
+        cellMask : any cellAreas area (volume) of each cell.
 
 
 
@@ -136,14 +133,11 @@ class EsmfUnstructGrid:
 
         Parameters
         ----------
-        indices :
-            Ids of the nodes (0-based)
+        indices : Ids of the nodes (0-based)
 
-        coords :
-            nodal coordinates
+        coords : nodal coordinates
 
-        peOwners :
-            processor ranks where the coordinates reside (0-based)
+        peOwners : processor ranks where the coordinates reside (0-based)
         """
         n = len(indices)
         if not self.nodesAdded:
@@ -160,8 +154,7 @@ class EsmfUnstructGrid:
 
         Parameters
         ----------
-        filename :
-            VTK file name
+        filename : VTK file name
 
         """
         self.grid.write(filename)
@@ -179,27 +172,22 @@ class EsmfStructGrid:
     Parameters
     ----------
 
-    shape :
-        Tuple of cell sizes along each axis
+    shape : Tuple of cell sizes along each axis
 
-    coordSys :
-        coordinate system
-        ESMF.CoordSys.CART Cartesian
-        ESMF.CoordSys.SPH_DEG (default) Degrees
-        ESMF.CoordSys.SPH_RAD Radians
+    coordSys : coordinate system
+               ESMF.CoordSys.CART Cartesian
+               ESMF.CoordSys.SPH_DEG (default) Degrees
+               ESMF.CoordSys.SPH_RAD Radians
 
-    periodicity :
-        Does the grid have a periodic coordinate
-        0 No periodicity
-        1 Periodic in x (1st) axis
-        2 Periodic in x, y axes
+    periodicity : Does the grid have a periodic coordinate
+                  0 No periodicity
+                  1 Periodic in x (1st) axis
+                  2 Periodic in x, y axes
 
-    staggerloc :
-        ESMF stagger location. ESMF.StaggerLoc.XXXX
-        The stagger constants are listed at the top
+    staggerloc : ESMF stagger location. ESMF.StaggerLoc.XXXX
+                 The stagger constants are listed at the top
 
-    hasBounds :
-        If the grid has bounds, Run AddCoords for the bounds
+    hasBounds : If the grid has bounds, Run AddCoords for the bounds
     """
 
     def __init__(self, shape, coordSys=ESMF.CoordSys.SPH_DEG,
@@ -263,13 +251,12 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
 
         Parameters
         -----------
-            staggerloc :
-                (e.g. ESMF.StaggerLoc.CENTER)
+        staggerloc : (e.g. ESMF.StaggerLoc.CENTER)
 
 
         Returns
         -------
-             tuple of slices.
+        tuple of slices.
         """
         lo, hi = self.getLoHiBounds(staggerloc)
         return tuple([slice(lo[i], hi[i], None)
@@ -277,17 +264,17 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
 
     def getLoHiBounds(self, staggerloc):
         """
-        Get the local lo/hi index values for the coordinates (per processor) (hi is not inclusive, lo <= index < hi)
+        Get the local lo/hi index values for the coordinates (per processor)
+        (hi is not inclusive, lo <= index < hi)
 
         Parameters
         ----------
-            staggerloc :
-                (e.g. ESMF.StaggerLoc.CENTER)
+        staggerloc : (e.g. ESMF.StaggerLoc.CENTER)
 
 
         Returns
         -------
-             lo, hi lists.
+        lo, hi lists.
         """
         lo = self.grid.lower_bounds[staggerloc]
         hi = self.grid.upper_bounds[staggerloc]
@@ -299,13 +286,12 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
 
         Parameters
         ----------
-            staggerloc:
-                (e.g. ESMF.StaggerLoc.CENTER)
+        staggerloc : (e.g. ESMF.StaggerLoc.CENTER)
 
 
         Returns
         -------
-            tuple
+        tuple
         """
         lo, hi = self.getLoHiBounds(staggerloc)
         return tuple([hi[i] - lo[i] for i in range(self.ndims)])[::-1]
@@ -316,19 +302,19 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
 
         Parameters
         ----------
-        coords :
-            The curvilinear coordinates of the grid. List of numpy arrays. Must exist on all procs.
+        coords : The curvilinear coordinates of the grid. List of numpy arrays. 
+                 Must exist on all procs.
 
-        staggerloc :
-                The stagger location ESMF.StaggerLoc.CENTER (default) ESMF.StaggerLoc.CORNER
+        staggerloc : The stagger location ESMF.StaggerLoc.CENTER (default) ESMF.StaggerLoc.CORNER
 
-        globalIndexing:
-                if True array was allocated over global index space, otherwise array was allocated
-                over local index space on this processor. This is only relevant if rootPe is None
+        globalIndexing : if True array was allocated over global index space, otherwise array was 
+                         allocated over local index space on this processor. This is only relevant
+                         if rootPe is None
 
-        Note
-        ----
-        coord dims in cdms2 are ordered in y, x, but ESMF expects x, y, hence the dimensions are reversed here.
+        Notes
+        -----
+        coord dims in cdms2 are ordered in y, x, but ESMF expects x, y, hence the dimensions are 
+        reversed here.
         """
         # allocate space for coordinates, can only add coordinates once
         for i in range(self.ndims):

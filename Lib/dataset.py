@@ -10,8 +10,12 @@ import numpy
 from . import cdmsNode
 import os
 import string
-import urllib
-from urllib.parse import urlparse, urlunparse
+try:
+    from urllib.parse import urlparse, urlunparse
+    from urllib.request import urlopen
+except ImportError:
+    from urlparse import urlparse, urlunparse
+    from urllib import urlopen
 from . import cdmsobj
 import re
 from .CDMLParser import CDMLParser
@@ -420,7 +424,7 @@ def load(path):
 def loadURI(uri):
     (scheme, netloc, path, parameters, query, fragment) = urlparse(uri)
     uripath = urlunparse((scheme, netloc, path, '', '', ''))
-    fd = urllib.urlopen(uripath)
+    fd = urlopen(uripath)
     text = fd.read()
     fd.close()
     p = CDMLParser()
@@ -455,7 +459,6 @@ def createDataset(path, template=None):
 # 'uri' is a Uniform Resource Identifier, referring to a cdunif file, XML file,
 #   or LDAP URL of a catalog dataset entry.
 # 'mode' is 'r', 'r+', 'a', or 'w'
-
 
 def openDataset(uri, mode='r', template=None,
                 dods=1, dpath=None, hostObj=None):
@@ -1233,6 +1236,7 @@ class Dataset(CdmsObj, cuDataset):
         return "<Dataset: '%s', URI: '%s', mode: '%s', status: %s>" % (
             self.id, self.uri, self.mode, self._status_)
 
+
 # internattr.add_internal_attribute (Dataset, 'datapath',
 # 'variables',
 # 'axes',
@@ -1549,22 +1553,22 @@ class CdmsFile(CdmsObj, cuDataset):
             raise CDMSError(FileWasClosed + self.id)
         cufile = self._file_
         if ar is None or (unlimited == 1 and getNetcdfUseParallelFlag() == 0):
-            cufile.createDimension(name, None)
+            cufile.createDimension(str(name), None)
             if ar is None:
                 typecode = numpy.dtype(numpy.float).char
             else:
                 typecode = ar.dtype.char
         else:
-            cufile.createDimension(name, len(ar))
+            cufile.createDimension(str(name), len(ar))
             typecode = ar.dtype.char
 
         # Compatibility: revert to old typecode for cdunif
 #        typecode = typeconv.oldtypecodes[typecode]
-        cuvar = cufile.createVariable(name, typecode, (name,))
+        cuvar = cufile.createVariable(str(name), typecode, (str(name),))
 
         # Cdunif should really create this extra dimension info:
         #   (units,typecode,filename,varname_local,dimension_type,ncid)
-        cufile.dimensioninfo[name] = ('', typecode, name, '', 'global', -1)
+        cufile.dimensioninfo[str(name)] = ('', typecode, str(name), '', 'global', -1)
 
         # Note: like netCDF-3, cdunif does not support 64-bit integers.
         # If ar has dtype int64 on a 64-bit machine, cuvar will be a 32-bit int,
@@ -1604,10 +1608,10 @@ class CdmsFile(CdmsObj, cuDataset):
         if self._status_ == "closed":
             raise CDMSError(FileWasClosed + self.id)
         cufile = self._file_
-        cufile.createDimension(name, axislen)
-        cufile.dimensioninfo[name] = ('', 'f', name, '', 'global', -1)
-        axis = FileVirtualAxis(self, name, axislen)
-        self.axes[name] = axis
+        cufile.createDimension(str(name), axislen)
+        cufile.dimensioninfo[str(name)] = ('', 'f', str(name), '', 'global', -1)
+        axis = FileVirtualAxis(self, str(name), axislen)
+        self.axes[str(name)] = axis
         return axis
 
     # Copy axis description and data from another axis
@@ -1818,10 +1822,10 @@ class CdmsFile(CdmsObj, cuDataset):
         dimensions = []
         for obj in axesOrGrids:
             if isinstance(obj, FileAxis):
-                dimensions.append(obj.id)
+                dimensions.append(str(obj.id))
             elif isinstance(obj, FileRectGrid):
                 dimensions = dimensions + \
-                    [obj.getAxis(0).id, obj.getAxis(1).id]
+                    [str(obj.getAxis(0).id), str(obj.getAxis(1).id)]
             else:
                 raise InvalidDomain
 
@@ -1829,7 +1833,7 @@ class CdmsFile(CdmsObj, cuDataset):
             # Compatibility: revert to old typecode for cdunif
             #            numericType = typeconv.oldtypecodes[numericType]
             numericType = numpy.dtype(numericType).char
-            cuvar = cufile.createVariable(name, numericType, tuple(dimensions))
+            cuvar = cufile.createVariable(str(name), numericType, tuple(dimensions))
         except Exception as err:
             print(err)
             raise CDMSError("Creating variable " + name)
@@ -2113,10 +2117,12 @@ class CdmsFile(CdmsObj, cuDataset):
 
         # Create the new variable
         datatype = cdmsNode.NumericToCdType.get(var.typecode())
-        newvar = self.createVariable(newname, datatype, axislist)
+        newvar = self.createVariable(str(newname), datatype, axislist)
         for attname, attval in list(attributes.items()):
             if attname not in ["id", "datatype", "parent"]:
-                setattr(newvar, attname, attval)
+                if isinstance(attval, string_types):
+                    attval = str(attval)
+                setattr(newvar, str(attname), attval)
                 if (attname == "_FillValue") or (attname == "missing_value"):
                     setattr(newvar, "_FillValue", attval)
                     setattr(newvar, "missing_value", attval)

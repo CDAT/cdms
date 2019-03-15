@@ -51,7 +51,7 @@ aliases:
        export CDAT_ANONYMOUS_LOG=False
        source activate $PY_VER
        python run_tests.py --subdir -v2 $COVERAGE
-       python run_tests.py -n1 --subdir -v2 $COVERAGE --dask
+       python run_tests.py -n 4 --subdir -v2 $COVERAGE --dask
        RESULT=$?
        echo "*** $PY_VER test result: "${RESULT}
        exit $RESULT
@@ -103,7 +103,8 @@ jobs:
 
   macos_cdms_py3:
     macos:
-      xcode: "9.2.0"
+      xcode: "10.2.0"
+    resource_class: medium
     environment:
       WORKDIR: "test_macos_cdms_py3"
       PY_VER: "py3"
@@ -123,8 +124,11 @@ jobs:
           destination: tests_png
 
   linux_cdms_py2:
-    machine:
-      image: circleci/classic:latest
+    #machine:
+    #  image: circleci/classic:latest
+    docker:
+      - image: circleci/python:latest
+    resource_class: medium
     environment:
       WORKDIR: "test_linux_cdms_py2"
       PY_VER: "py2"
@@ -143,8 +147,11 @@ jobs:
           destination: tests_png
 
   linux_cdms_py3:
-    machine:
-      image: circleci/classic:latest
+    #machine:
+    #  image: circleci/classic:latest
+    docker:
+      - image: circleci/python:latest
+    resource_class: medium
     environment:
       WORKDIR: "test_linux_cdms_py3"
       PY_VER: "py3"

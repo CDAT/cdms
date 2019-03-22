@@ -24,12 +24,12 @@ def guessPeriodicity(srcBounds):
 
     Parameters
     ----------
-        srcBounds
-            the nodal src set of coordinates
+    srcBounds : the nodal src set of coordinates
 
     Returns
     -------
-        1 if periodic, warp around, 0 otherwise
+
+    1 if periodic, warp around, 0 otherwise
     """
     res = 0
     if srcBounds is not None:
@@ -56,8 +56,7 @@ class GenericRegrid:
     Parameters
     ----------
 
-            srcGrid
-                list of numpy arrays, source horizontal coordinates
+    srcGrid : list of numpy arrays, source horizontal coordinates
 
             dstGrid
                 list of numpy arrays, destination horizontal coordinate
@@ -198,18 +197,15 @@ valid choices are: 'libcf', 'esmf'""" % regridTool
 
         Parameters
         ----------
-            srcData
-                array (input)
+       
+        srcData : array (input)
 
-                dstData
-                    array (output)
+        dstData : array (output)
 
-                rootPe
-                    if other than None, then results will be MPI gathered
+        rootPe : if other than None, then results will be MPI gathered
 
-                missingValue
-                    if not None, then data mask will be interpolated
-                    and data value set to missingValue when masked
+        missingValue : if not None, then data mask will be interpolated
+                       and data value set to missingValue when masked
         """
 
         # assuming the axes are the slowly varying indices
@@ -345,7 +341,7 @@ valid choices are: 'libcf', 'esmf'""" % regridTool
 
         Returns
         -------
-            local grid on this processor
+        local grid on this processor
         """
         return self.tool.getDstGrid()
 
@@ -355,10 +351,9 @@ valid choices are: 'libcf', 'esmf'""" % regridTool
 
         Parameters
         ----------
-            diag
-                a dictionary whose entries, if present, will be filled entries are tool dependent
+        
+        diag : a dictionary whose entries, if present, will be filled entries are tool dependent
 
-            rootPe
-                root processor where data should be gathered (or None if local areas are to be returned)
+        rootPe : root processor where data should be gathered (or None if local areas are to be returned)
         """
         self.tool.fillInDiagnosticData(diag, rootPe=rootPe)

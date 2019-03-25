@@ -421,7 +421,18 @@ CDMS Regridder Function
        * ``mask`` is a Numpy array, of datatype Integer or Float, consisting of a fractional number between 0 and 1.
        * A value of 1 or 1.0 indicates that the corresponding data value is to be ignored for purposes of regridding.
        * A value of 0 or 0.0 indicates that the corresponding data value is valid. This is consistent with the convention for masks used by the MV2 module. 
-       * A fractional value between 0.0 and 1.0 indicates the fraction of the data value (e.g., the corresponding cell) to be ignored when regridding. This is useful if a variable is regridded first to grid A and then to another grid B; the mask when regridding from A to B would be (1.0 - f) where f is the maskArray returned from the initial grid operation using the ``returnTuple`` argument.
+       * A fractional value between 0.0 and 1.0 indicates the fraction of the data value (e.g., the corresponding cell) to be ignored when regridding. This is useful if a variable is regridded first to grid A and then to another grid B; the mask when regridding from A to B would be (1.0 - f) where f is the maskArray returned from the initial grid operation using the ``returnTuple`` argument."
+
+DMS Regridder Function(cont'd)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. csv-table:: 
+   :header:  "Type", "Function", "Description"
+   :widths:  40, 40, 80
+   :align: left
+
+   "Array or Transient-Variable", "``regridFunction(array, missing=None, order=None, mask=None)``", "Interpolate a gridded data array to a new grid.
+     The interpolation preserves the area-weighted mean on each horizontal slice. If array is a Variable, a TransientVariable of  the same rank as the input array is returned, otherwise a masked array is returned.
        * If ``mask`` is two-dimensional of the same shape as the input grid, it overrides the mask of the input grid.  
        * If the ``mask`` has more than two dimensions, it must have the same shape as ``array``. In this case, the ``missing`` data value is also ignored. Such an ndimensional mask is useful if the pattern of missing data varies with level (e.g., ocean data) or time. 
        **Note:** If neither ``missing`` or ``mask`` is set, the default mask is obtained from the mask of the array if any."
@@ -493,6 +504,16 @@ SCRIP Regridder Functions
        * ``gradientLat``: df/di (see the SCRIP documentation). Same shape as ``array``.
        * ``gradientLon``: df/dj. Same shape as ``array``.
        * ``gradientLatLon``: d(df)/(di)(dj). Same shape as array."
+
+SCRIP Regridder Functions(con'td)
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. csv-table:: 
+   :header:  "Return Type", "Method", "Description"
+   :widths:  40, 40, 80
+   :align: left
+
+
     "Numpy array", "``getDestinationArea()`` [conservative regridders only]", "Return the area of the destination (output) grid cell. 
        * The array is 1-D, with length equal to the number of cells in the output grid."
     "Numpy array", "``getDestinationFraction()``", "Return the area fraction of the destination (output) grid cell that participates in the regridding. 

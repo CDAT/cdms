@@ -1897,9 +1897,9 @@ class TransientAxis(AbstractAxis):
 
     def __init__(self, data, bounds=None, id=None,
                  attributes=None, copy=0, genericBounds=False):
-        '''
+        """
         genericBounds specify if bounds were generated (True) or read from a file (False)
-        '''
+        """
         AbstractAxis.__init__(self, None, None)
         if id is None:
             TransientAxis.axis_count = TransientAxis.axis_count + 1

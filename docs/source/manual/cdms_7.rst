@@ -96,6 +96,14 @@ CDScan Command Options
    "``--exclude var,var,...``", "Exclude specified variables.
        * The argument is a comma-separated list of variables containing no blanks. 
        * Also see ``--include``."
+
+CDScan Command Options(cont'd)
+^^^^^^^^^^^^^^^^^^^^^^                               
+
+.. csv-table::
+   :header: "Option:, "Description"
+   :widths: 20, 80
+
    "``-f file_list``", "File containing a list of absolute data file names, one per line."
    "``-h``", "Print a help message."
    "``-i time_delta``", "Causes the time dimension to be represented as linear, producing a more compact representation.
@@ -114,6 +122,15 @@ CDScan Command Options
    "``-m levelid``", "Name of the vertical level dimension.
       * The default is the vertical dimension as determined by CDMS. 
       * See Note 3."
+
+CDScan Command Options(cont'd)
+^^^^^^^^^^^^^^^^^^^^^^                               
+
+.. csv-table::
+   :header: "Option:, "Description"
+   :widths: 20, 80
+
+
    "``-p template``", "Add a file template string, for compatibility with pre-V3.0 datasets.  
       * ``cdimport -h`` describes template strings."
    "``-q``", "Quiet mode."

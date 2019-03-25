@@ -999,7 +999,8 @@ as_masked = numpy.ma.array
 
 
 def outerproduct(a, b):
-    """outerproduct(a,b) = {a[i]*b[j]}, has shape (len(a),len(b))
+    """
+    outerproduct(a,b) = {a[i]*b[j]}, has shape (len(a),len(b))
     """
     ta = asVariable(a, writeable=1)
     tb = asVariable(b, writeable=1)

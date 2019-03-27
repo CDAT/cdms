@@ -475,10 +475,10 @@ Axis Constructors
    :header:  "Constructor", "Description"
    :widths:  20, 80
 
-   "``cdms.createAxis(data, bounds=None)``", "Create an axis which is not associated with a dataset or file. 
+   "``cdms.createAxis (data, bounds=None)``", "Create an axis which is not associated with a dataset or file. 
          * See `A First Example <#a-first-example>`_."
-   "``Dataset.createAxis(name,ar)``", "Create an ``Axis`` in a ``Dataset``. (This function is not yet implemented.)"
-   "``CdmsFile.createAxis(name,ar,unlimited=0)``", "Create an Axis in a ``CdmsFile``.
+   "``Dataset.createAxis (name,ar)``", "Create an ``Axis`` in a ``Dataset``. (This function is not yet implemented.)"
+   "``CdmsFile.createAxis (name,ar,unlimited=0)``", "Create an Axis in a ``CdmsFile``.
          * ``name`` is the string ``name`` of the ``Axis``. 
          * ``ar`` is a 1-D data array which defines the ``Axis`` values.
          * It may have the value ``None`` if an unlimited axis is being defined.
@@ -574,7 +574,7 @@ Axis Methods, Additional to CoordinateAxis
 
 .. csv-table::  
    :header:  "Type", "Method", "Definition"
-   :widths:  15, 30, 80
+   :widths:  30, 42, 80
    :align: left
 
 
@@ -593,24 +593,25 @@ Axis Methods, Additional to CoordinateAxis
           * ``axis.topology`` is undefined, and the axis is a longitude. 
           * The default cycle for circular axes is 360.0"
    "Integer", "``isLinear()``", "Returns ``True`` if the axis has a linear representation."
-   "Tuple", "``mapInterval (interval)``", "Same as ``mapIntervalExt``, but returns only the tuple ``(i,j)``,
-    and ``wraparound`` is restricted to one cycle."
+   "Tuple", "``mapInterval (interval)``", "Same as ``mapIntervalExt``, but returns only the tuple
+   ``(i,j)``, and ``wraparound`` is restricted to one cycle."
 
 Axis Methods, Additional to CoordinateAxis(cont'd)
 --------------------------------------------------
 
 .. csv-table::  
    :header:  "Type", "Method", "Definition"
-   :widths:  20, 20, 80
+   :widths:  30, 42, 80
    :align: left
 
-   "(i,j,k)", "``mapIntervalExt(interval)``", "Map a coordinate interval to an index
-      ``interval``. ``interval`` is a tuple having one of the forms:
+   "(i,j,k)", "``mapIntervalExt (interval)``", "Map a coordinate interval to an index
+   ``interval``. ``interval`` is a tuple having one of the forms:
           * ``(x,y)``
           * ``(x,y,indicator)``
           * ``(x,y,indicator,cycle)``
           * ``None or ':'``
-   Where ``x`` and ``y`` are coordinates indicating the interval ``[x,y]``, and:
+   Where ``x`` and ``y`` are coordinates indicating the
+   interval ``[x,y]``, and:
           * ``indicator`` is a two or three-character string, where the first character is ``'c'`` if
             the interval is closed on the left, ``'o'`` if open, and the second character has the same 
             meaning for the right-hand point. If present, the third character specifies how the interval 
@@ -630,7 +631,8 @@ Axis Methods, Additional to CoordinateAxis(cont'd)
           * If ``0 <= i < n`` and ``0 <= j <= n``, the interval does not wrap around the axis endpoint.
           * Otherwise the interval wraps around the axis endpoint.
           * See also: ``mapinterval``, ``variable.subregion()``"
-   "transient axis", "``subaxis(i,j,k=1)``", "Create an axis associated with the integer range ``[i:j:k]``. 
+   "transient axis", "``subaxis(i,j,k=1)``", "Create an axis associated with the integer range
+   ``[i:j:k]``. 
           * The stride ``k`` can be positive or negative.
           * Wraparound is supported for longitude dimensions or those with a modulus attribute." 
 
@@ -715,11 +717,12 @@ CdmsFile Methods
    :align: left
 
 
-   "Transient-Variable", "``fileobj(varname, selector)``", "Calling a ``CdmsFile`` object as a 
-    function reads the region of data specified by the ``selector``.
+   "Transient-Variable", "``fileobj(varname, selector)``", "Calling a ``CdmsFile`` object as a function reads the
+   region of data specified by the ``selector``.
        The result is a transient variable, unless ``raw = 1`` is specified. 
        See `Selectors <#selectors>`_.
-    **Example:** The following reads data for variable 'prc', year 1980:
+    **Example:** The following reads data for variable 'prc',
+    year 1980:
               >>> f = cdms.open('test.nc')
               >>> x = f('prc', time=('1980-1','1981-1'))"
    "Variable, Axis, or Grid", "``fileobj['id']``", "Get the persistent variable, axis or grid object
@@ -730,7 +733,8 @@ CdmsFile Methods
              >>> v = f.variables['prc']
              >>> f = cdms.open('sample.nc')
              >>> v = f['prc']
-    **Example:** The following gets the axis named time, equivalent to
+    **Example:** The following gets the axis named time, 
+    equivalent to
              >>> t = f.axes['time']
              >>> t = f['time']"
    "None", "``close()``", "Close the file."
@@ -764,7 +768,7 @@ CdmsFile Methods(cont'd)
             * ``id`` is an alphanumeric string identifier, containing no blanks.  
             * ``ar`` is the one-dimensional axis array.
             * Set ``unlimited`` to ``cdms.Unlimited`` to indicate that the axis is extensible."
-   "RectGrid", "``createRectGrid(id,lat, lon,order,type='generic', mask=None)``", "Create a ``RectGrid``
+   "RectGrid", "``createRectGrid (id,lat, lon,order,type='generic', mask=None)``", "Create a ``RectGrid``
    in the file.
          This is not a persistent object: the order, type, and mask are not written to the file. However,
          the grid may be used for regridding operations.  
@@ -781,17 +785,17 @@ CdmsFile Methods(cont'd)
 
 .. csv-table:: 
    :header:  "Type", "Method", "Definition"
-   :widths:  30, 30, 80
+   :widths:  20, 35, 80
    :align: left
 
-   "Variable", "``createVariable(Stringid,String datatype,Listaxes,fill_value=None)``", "Create a new Variable. 
+   "Variable", "``createVariable (Stringid,String datatype,Listaxes,fill_value=None)``", "Create a new Variable. 
          This is a persistent object which can be used to read 
          or write variable data to the file.
            * ``id`` is a String name which is unique with respect to all other objects in the file.
            * ``datatype`` is an ``MV2`` typecode, e.g., ``MV2.Float``, ``MV2.Int``. 
            * ``axes`` is a list of Axis and/or Grid objects. 
            * ``fill_value`` is the missing value (optional)."
-   "Variable", "``createVariableCopy(var, newname=None)``", "Create a new ``Variable``, with the   same name, 
+   "Variable", "``createVariableCopy (var, newname=None)``", "Create a new ``Variable``, with the   same name, 
                axes, and attributes as the input variable.
         An error is raised if a variable of the same name exists
         in the file. 
@@ -799,7 +803,7 @@ CdmsFile Methods(cont'd)
            * ``newname``, if specified is the name of the new variable. 
            * If unspecified, the returned variable has the same name as ``var``.
         **Note:** Unlike copyAxis, the actual data is not copied to the new variable."
-   "CurveGrid or Generic-Grid", "``readScripGrid(self,whichGrid='destination',check-Grid=1)``", "Read a curvilinear or generic
+   "CurveGrid or Generic-Grid", "``readScripGrid (self,whichGrid= 'destination',check-Grid=1)``", "Read a curvilinear or generic
               grid from a SCRIP netCDF file. 
          The file can be a SCRIP grid file or remapping file. 
            * If a mapping file, ``whichGrid`` chooses the grid to read, either ``'source'`` or ``'destination'``. 
@@ -812,7 +816,7 @@ CdmsFile Methods(cont'd)
 
 .. csv-table:: 
    :header:  "Type", "Method", "Definition"
-   :widths:  35, 30, 80
+   :widths:  30, 42, 80
    :align: left
 
    "None", "``sync()``", "Writes any pending changes to the file."
@@ -955,7 +959,8 @@ Database Constructors
        * ``uri`` is the Universal Resource Indentifier of the database. 
        * The form of the URI depends on the implementation of the database.
        * For a Lightweight Directory Access Protocol (LDAP) database, the form is: ``ldap://host[:port]/dbname``.
-       For example, if the database is located on host dbhost.llnl.gov, and is named ``'database=CDMS,ou=PCMDI,o=LLNL,c=US'``, the URI is: 
+       For example, if the database is located on host dbhost.llnl.gov, and is
+       named ``'database=CDMS,ou=PCMDI,o=LLNL,c=US'``, the URI is: 
           * ``ldap://dbhost.llnl.gov/database=CDMS,ou=PCMDI,o=LLNL,c=US``.
           * If unspecified, the URI defaults to the value of environment variable CDMSROOT. 
           * ``user`` is the user ID. If unspecified, an anonymous connection is made. 
@@ -967,7 +972,7 @@ Database Methods
 
 .. csv-table::  
    :header:  "Type", "Method", "Definition"
-   :widths:  20, 30, 80
+   :widths:  20, 32, 90
 
     "None", "``close()``", "Close a database"
     "List", "``listDatasets()``", "Return a list of the dataset IDs in this database. A dataset ID can be passed to the ``open`` command."
@@ -975,21 +980,23 @@ Database Methods
           * ``dsetid`` is the string dataset identifier
           * ``mode`` is the open mode, 'r' - read-only, 'r+' - read-write, 'w' - create.
           * ``openDataset`` is a synonym for ``open``."
-    "SearchResult","``searchFilter(filter=None, tag=None, relbase=None, scope=Subtree, attnames=None, timeout=None)``","Search a CDMS database.
+    "SearchResult","``searchFilter (filter=None, tag=None, relbase=None, scope=Subtree, attnames=None, timeout=None)``","Search a CDMS database.
           * ``filter`` is the string search filter.
           *  Simple filters have the form 'tag = value'. 
           * Simple filters can be combined using logical operators '&', '\|', '!' in prefix notation.
-          **Example:**
-             * The filter ``'(&(objec)(id=cli))'`` finds all variables named 'cli'.
-             * A formal definition of search filters is provided in the following section.
-             * ``tag`` restricts the search to objects with that tag ('dataset' | 'variable' | 'database' | 'axis' | 'grid').
-             * ``relbase`` is the relative name of the base object of the search. The search is restricted to the base object and all objects below it in the hierarchy.
-          **Example:**
-              To search only dataset 'ncep_reanalysis_mo', specify:
-               * ``relbase='dataset=ncep_reanalysis_mo'``
-              o search only variable 'ua' in 'ncep_reanalysis_mo', use:
-               * ``relbase='variable=ua, dataset=ncep_reanalysis_mo'``
-         If no base is specified, the entire database is searched. See the ``scope`` argument also.
+        **Example:**
+          * The filter ``'(&(objec)(id=cli))'`` finds all variables named 'cli'.
+          * A formal definition of search filters is provided in the following section.
+          * ``tag`` restricts the search to objects with that tag ('dataset' | 'variable' | 'database' | 'axis' | 'grid').
+          * ``relbase`` is the relative name of the base object of the search. The search is restricted to the base object and all objects 
+          below it in the hierarchy.
+        **Example:**      
+          To search only dataset 'ncep_reanalysis_mo', specify:
+            * ``relbase='dataset=ncep_reanalysis_mo'``
+            o search only variable 'ua' in 'ncep_reanalysis_mo', use:
+            * ``relbase='variable=ua, dataset=ncep_reanalysis_mo'``
+            If no base is specified, the entire database is searched.
+            See the ``scope`` argument also.
             * ``scope`` is the search scope (**Subtree** | **Onelevel** | **Base**).
             *  **Subtree** searches the base object and its descendants.
             *  **Onelevel** searches the base object and its immediate descendants.
@@ -1000,11 +1007,6 @@ Database Methods
             * Attributes 'id' and 'objectclass' are always included in the list.
             * ``timeout``: integer number of seconds before timeout. The default is no timeout."
 
-
-------------
-
-.. highlight:: python
-   :linenothreshold: 0
 
 Searching a Database
 --------------------------
@@ -1127,7 +1129,7 @@ SearchResult Methods
 
     "ResultEntry", "``[i]``", "Return the i-th search result. Results can also be returned in a for loop: ``for entry in db.searchResult(tag='dataset'):``"
     "Integer", "``len()``", "Number of entries in the result."
-    "SearchResult", "``searchPredicate(predicate, tag=None)``", "Refine a search result, with a predicate search. 
+    "SearchResult", "``searchPredicate (predicate, tag=None)``", "Refine a search result, with a predicate search. 
         * ``predicate`` is a function which takes a single CDMS object and returns true (1) if the object satisfies the predicate, 0 if not. 
         * ``tag`` restricts the search to objects of the class denoted by the tag.
         **Note:**: In the current implementation, ``searchPredicate`` is much less efficient than ``searchFilter``. For best performance, use ``searchFilter`` to narrow the scope of the search, then use ``searchPredicate`` for more general searches."
@@ -1257,8 +1259,8 @@ This defaults to the database defined in environment variable
 **Example:** Find the total number of each type of object in the database:
 
 ::
-    >>> f = cdms.open('test.  xml')
-    >>> x = f('prc', time=('1980-1','1981-1'))"
+   >>> f = cdms.open('test.  xml')
+   >>> x = f('prc', time=('1980-1','1981-1'))"
 
     "Variable, Axis, or Grid", "``datasetobj['id']``", "The square bracket operator applied to a dataset gets the persistent variable, axis or grid object having the string identifier. This does not read the data for a variable. Returns ``None`` if not found.
 
@@ -1319,13 +1321,18 @@ Dataset Methods
 
 .. csv-table::  
    :header:  "Type", "Definition", "Description"
-   :widths:  30, 30, 80
+   :widths:  30, 42, 80
 
-    "Transient-Variable", "``datasetobj(varname, selector)``", "Calling a Dataset object as a function reads the region of data defined by the selector. The result is a transient variable, unless ``raw = 1`` is specified. See 'Selectors'.
-        **Example:** The following reads data for variable 'prc', year 1980:
+    "Transient-Variable", "``datasetobj(varname, selector)``", "Calling a Dataset object as a function
+     reads the region of data defined by the selector. The result is a transient variable, unless
+     ``raw = 1`` is specified. See 'Selectors'.
+        **Example:** The following reads data for variable
+        'prc', year 1980:
           >>> f = cdms.open('test.  xml')
           >>> x = f('prc', time=('1980-1','1981-1'))"
-    "Variable, Axis, or Grid", "``datasetobj['id']``", "The square bracket operator applied to a dataset gets the persistent variable, axis or grid object having the string identifier. This does not read the data for a variable. Returns ``None`` if not found.
+    "Variable, Axis, or Grid", "``datasetobj['id']``", "The square bracket operator applied to a dataset gets
+    the persistent variable, axis or grid object having the string identifier. This does not read the data for
+    a variable. Returns ``None`` if not found.
         **Example:**
            >>> f = cdms.open('sampl e.xml')
            >>> v = f['prc']
@@ -1335,7 +1342,9 @@ Dataset Methods
            >>> t = f['time'] gets the axis named 'time', equivalent to 
            >>> t = f.axes['time']"
     "None", "``close()``", "Close the dataset."
-    "RectGrid", "``createRectGrid(id, lat, lon,order, type='generic', mask=None)``", "Create a RectGrid in the dataset. This is not a persistent object: the order, type, and mask are not written to the dataset. However, the grid may be used for regridding operations.
+    "RectGrid", "``createRectGrid(id, lat, lon,order, type='generic', mask=None)``", "Create a RectGrid in the dataset. 
+    This is not a persistent object: the order, type, and mask are not written to the dataset. However, the grid may
+    be used for regridding operations.
            * ``lat`` is a latitude axis in the dataset.
            * ``lon`` is a longitude axis in the dataset.
            * ``order`` is a string with value 'yx' (the first grid dimension is latitude) or 'xy' (the first grid dimension is longitude).
@@ -1347,7 +1356,7 @@ Dataset Methods(Cont'd)
 
 .. csv-table::  
    :header:  "Type", "Definition", "Description"
-   :widths:  30, 30, 80
+   :widths:  30, 42, 80
 
 
 
@@ -1358,7 +1367,8 @@ Dataset Methods(Cont'd)
     "List", "``getPaths()``", "Get a sorted list of pathnames of datafiles which comprise the dataset. This does not include the XML metafile path, which is stored in the .uri attribute."
     "Variable", "``getVariable(id)``", "Get a variable object from a file or dataset.
            * ``id`` is the string variable identifier."
-    "CurveGrid or GenericGrid", "``readScripGrid(self, whichGrid='destination', check-orGeneric-Grid=1)``", "Read a curvilinear orgeneric grid from a SCRIP dataset. The dataset can be a SCRIP grid file or remappingfile.
+    "CurveGrid or GenericGrid", "``readScripGrid(self, whichGrid=' destination', check-orGeneric -Grid=1)``", "Read a curvilinear orgeneric grid from a SCRIP dataset.
+           * The dataset can be a SCRIP grid file or remappingfile.
            * If a mapping file, ``whichGrid`` chooses the grid to read, either ``'source'`` or ``'destination'``.
            * If ``checkGrid`` is 1 (default), the grid cells are checked for convexity, and 'repaired' if necessary.  Grid cells may appear to be nonconvex if they cross a ``0 / 2pi`` boundary. The repair consists of shifting the cell vertices to the same side modulo 360 degrees."
     "None", "``sync()``", "Write any pending changes to the dataset."
@@ -1426,9 +1436,6 @@ http://numpy.sourceforge.net for a description of these functions.
 
 Variable  Constructors in Module MV
 -----------------------------------
-
-.. tabularcolumns:: |l|r|
-
 
 .. csv-table:: 
    :header:  "Constructor", "Description"

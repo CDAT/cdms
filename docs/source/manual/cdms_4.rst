@@ -308,7 +308,8 @@ CDMS Regridder Constructor
    :widths:  50, 90
    :align: left
 
-   "``regridFunction = Regridder(inputGrid, outputGrid)``", "Create a regridder function which interpolates a data array from input to output grid.
+   "``regridFunction = Regridder(inputGrid, outputGrid)``", "Create a regridder function which interpolates a data array from
+    input to output grid.
        * `CDMS regridder functions`_ describes the calling sequence of this function. 
        * ``inputGrid`` and ``outputGrid`` are CDMS grid objects.
        **Note:** To set the mask associated with inputGrid or outputGrid, use the grid setMask function."
@@ -411,8 +412,12 @@ CDMS Regridder Function
    :widths:  40, 40, 80
    :align: left
 
-   "Array or Transient-Variable", "``regridFunction(array, missing=None, order=None, mask=None)``", "Interpolate a gridded data array to a new grid.
-     The interpolation preserves the area-weighted mean on each horizontal slice. If array is a Variable, a TransientVariable of  the same rank as the input array is returned, otherwise a masked array is returned.
+   "Array or Transient-Variable", "``regridFunction (array, missing=None, order=None, mask=None)``", "Interpolate a gridded data array to a new grid.
+     The interpolation preserves the area-weighted
+     mean on each horizontal slice. If array is a
+     Variable, a TransientVariable of  the same rank
+     as the input array is returned, otherwise a masked
+     array is returned.
        * ``array`` is a Variable, masked array, or Numpy array of rank 2, 3, or 4.
        *  For example, the string 'tzyx' indicates that the dimension order of ``array`` is (time, level, latitude, longitude).
        * If unspecified, the function assumes that the last two dimensions of ``array`` match the input grid.
@@ -431,12 +436,17 @@ DMS Regridder Function(cont'd)
    :widths:  40, 40, 80
    :align: left
 
-   "Array or Transient-Variable", "``regridFunction(array, missing=None, order=None, mask=None)``", "Interpolate a gridded data array to a new grid.
-     The interpolation preserves the area-weighted mean on each horizontal slice. If array is a Variable, a TransientVariable of  the same rank as the input array is returned, otherwise a masked array is returned.
+   "Array or Transient-Variable", "``regridFunction (array, missing=None, order=None, mask=None)``", "Interpolate a gridded data array to a new grid.
+     The interpolation preserves the area-weighted
+     mean on each horizontal slice. If array is a
+     Variable, a TransientVariable of  the same
+     rank as the input array is returned, otherwise
+     a masked array is returned.
        * If ``mask`` is two-dimensional of the same shape as the input grid, it overrides the mask of the input grid.  
        * If the ``mask`` has more than two dimensions, it must have the same shape as ``array``. In this case, the ``missing`` data value is also ignored. Such an ndimensional mask is useful if the pattern of missing data varies with level (e.g., ocean data) or time. 
        **Note:** If neither ``missing`` or ``mask`` is set, the default mask is obtained from the mask of the array if any."
-   "Array, Array",  "``regridFunction(ar, missing=None, order=None, mask=None, returnTuple=1)``", "If called with the optional ``returnTuple`` argument equal to 1, the function returns a tuple ``dataArray``, ``maskArray``).
+   "Array, Array",  "``regridFunction (ar, missing=None, order=None, mask=None, returnTuple=1)``", "If called with the optional ``returnTuple`` 
+   argument equal to 1, the function returns a tuple ``dataArray``, ``maskArray``).
        * ``dataArray`` is the result data array.
        * ``maskArray`` is a Float32 array of the same shape as ``dataArray``, such that ``maskArray[i,j]`` is fraction of the output grid cell [i,j] overlapping a non-missing cell of the grid."
 
@@ -486,7 +496,7 @@ SCRIP Regridder Functions
 
 .. csv-table:: 
    :header:  "Return Type", "Method", "Description"
-   :widths:  40, 40, 80
+   :widths:  30, 42, 80
    :align: left
 
     "Array or Transient-Variable", "[conservative, bilinear, and distance-weighted regridders] ``regridFunction(array)``", "Interpolate a gridded data array to a new grid. 
@@ -495,7 +505,8 @@ SCRIP Regridder Functions
        * The rank of the array may be greater than the rank of the input grid, in which case the input grid shape must match a trailing portion of the array shape. 
        * For example, if the input grid is curvilinear with shape (64,128), the last two dimensions of the array must match. 
        * Similarly, if the input grid is generic with shape (2560,), the last dimension of the array must have that length."
-    "Array or Transient-Variable", "[bicubic regridders] ``regridFunction(array, gradientLat, gradientLon, gradientLatLon)``", "Interpolate a gridded data array to a new grid, using a bicubic regridder. 
+    "Array or Transient-Variable", "[bicubic regridders] ``regridFunction(array, gradientLat, gradientLon, gradientLatLon)``", "Interpolate a gridded data array to a new grid,
+    using a bicubic regridder. 
     The return value is the regridded data variable.
        * ``array`` is a Variable, MaskedArray, or Numpy array. 
        * The rank of the array may be greater than the rank of the input grid, in which case the input grid shape must match a trailing portion of the array shape. 
@@ -510,17 +521,19 @@ SCRIP Regridder Functions(con'td)
 
 .. csv-table:: 
    :header:  "Return Type", "Method", "Description"
-   :widths:  40, 40, 80
+   :widths:  30, 42, 80
    :align: left
 
 
     "Numpy array", "``getDestinationArea()`` [conservative regridders only]", "Return the area of the destination (output) grid cell. 
        * The array is 1-D, with length equal to the number of cells in the output grid."
-    "Numpy array", "``getDestinationFraction()``", "Return the area fraction of the destination (output) grid cell that participates in the regridding. 
+    "Numpy array", "``getDestination Fraction()``", "Return the area fraction of the destination (output)
+    grid cell that participates in the regridding. 
        * The array is 1-D, with length equal to the number of cells in the output grid."
     "CurveGrid or Generic-Grid", "``getInputGrid()``", "Return the input grid, or None if no input grid is associated with the regridder."
     "CurveGrid or Generic-Grid", "``getOutputGrid()``", "Return the output grid."
-    "Numpy array", "``getSourceFraction()``", "Return the area fraction of the source (input) grid cell that participates in the regridding. 
+    "Numpy array", "``getSourceFraction()``", "Return the area fraction of the source (input)
+    grid cell that participates in the regridding. 
        * The array is 1-D, with length equal to the number of cells in the input grid"
 
 Examples

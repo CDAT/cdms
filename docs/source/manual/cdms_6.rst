@@ -158,9 +158,8 @@ defined.
 Dataset Attributes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. csv-table::                            
-   :header: "Attribute", "Required", "CF", "GDT", "Notes"
-   :widths:  10,  5,  5,  5,80
-
+   :header: "Attribute", "Req?", "CF", "GDT", "Notes"
+   :widths:  18, 9, 7, 7, 80
 
     "appendices",  "N",  "N",  "Y", "Version number"
     "calendar", "N", "N", "Y", "Calendar used for encoding time axes.
@@ -232,8 +231,8 @@ Axis Elements
 ^^^^^^^^^^^^^
 
 .. csv-table::
-   :header: "Attribute", "Required?", "CF", "GDT", "Notes"
-   :widths: 18,1,1,1,80
+   :header: "Attribute", "Req?", "CF", "GDT", "Notes"
+   :widths: 22, 9, 7, 7, 80
 
      "associate", "N", "N", "Y", "IDs of variables containing alternative sets of coordinates."
      "axis", "N", "Y", "Y", "The spatial type of the axis:
@@ -367,8 +366,8 @@ Variable Attributes
 
 
 .. csv-table::
-   :header: "Attribute", "Required?", "CF", "GDT", "Notes"
-   :widths: 15,1,1,1,80
+   :header: "Attribute", "Req?", "CF", "GDT", "Notes"
+   :widths: 23, 9, 7, 7, 80
 
      "``id``", "Y", "N", "N", "Variable identifier. Also, the name of the variable in the underlying file(s), if name_in_file is undefined."
      "``ad_offset``", "N", "Y", "Y", "Additive offset for packing data. See scale_factor."

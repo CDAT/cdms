@@ -108,7 +108,7 @@ this example selects and plots a time-latitude slice:
     <vcs.displayplot.Dp object ...>
 
 
-.. csv-table:: Line Notes
+.. csv-table:: 
   :header:  "Line", "Notes"
   :widths:  10, 90
 
@@ -217,7 +217,7 @@ Plot Keywords(cont'd)
 
 .. csv-table::
     :header: "Key", "Type", "Value"
-    :widths: 20, 20, 80
+    :widths: 30, 30, 80
 
 
     "units", "string",  "Data units.
@@ -237,7 +237,8 @@ Plot Keywords(cont'd)
     "xname (``[y|z|t|w]name``)", "string", "*Rectangular grids only*. 
        Axis name. 
           * Defaults to ``xaxis.id`` (``[y|z|t|w]axis.id``)"
-    "xrev (``yrev``)", "0 or 1", "If ``xrev`` (``yrev``) is 1, reverse the direction of the ``x-axis (y-axis)``.
+    "xrev (``yrev``)", "0 or 1", "If ``xrev`` (``yrev``) is 1, reverse the direction of the
+    ``x-axis (y-axis)``.
           * Defaults to 0, with the following exceptions:
           * If the ``y-axis`` is latitude, and has decreasing values, ``yrev`` defaults to 1
           * If the ``y-axis`` is a vertical level, and has increasing pressure levels, ``yrev`` defaults to 1."

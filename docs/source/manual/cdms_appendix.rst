@@ -251,7 +251,9 @@ Table Slab Methods
       *  If ``flag`` is nonzero, dimension values, weights, and bounds are also printed.  Output is sent to ``device``."
    "List", "``listall(all=None)``", "Print slab information. 
       *  If ``all`` is nonzero, dimension values, weights, and bounds are also printed."
-   "List", "``listdimattributes(dim, field)``", "List dimension attributes.  Returns a list of string attribute names which can be input to ``getdimattribute``. 
+   "List", "``listdimattributes(dim, field)``", "List dimension attributes.  Returns a list of string
+    attribute names which can be input to
+    ``getdimattribute``. 
       * ``dim`` is the dimension number, an integer in the range 0..rank-1.  
       * ``field`` is a string, one of: 'name', 'values', 'length', 'units', 'weights', 'bounds'."
    "None", "``setattribute(name, value)``", "Set an attribute.  
@@ -315,7 +317,8 @@ Table cuDataset Methods(cont'd)
    "List", "``listattribute (vname=None )``", "Return a list of attribute names.
        * ``vname`` is the name of the variable. 
        **Note:** The default is the variable name set by default_variable."
-   "List", "``listdimension (vname=None)``", "Return a list of the dimension names associated with a variable. 
+   "List", "``listdimension (vname=None)``", "Return a list of the dimension names associated with
+    a variable. 
        * ``vname`` is the name of the variable. 
        **Note:** The default is the variable name set by default_variable."
    "List", "``listglobal ()``", "Return a list of the global attribute names."

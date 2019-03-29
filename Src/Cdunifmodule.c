@@ -3093,8 +3093,7 @@ static int PyCdunifVariableObject_ass_subscript(PyCdunifVariableObject *self,
 			Py_ssize_t slicelen;
 			int length;
             length = INT_MAX;
- 			if( self->dimids[0]== self->file->recdim &&
-			        self->dimensions[0] == 0){
+ 			if( self->dimids[0]== self->file->recdim){
 			    length = INT_MAX;
 			} else {
 			    length = self->dimensions[0];

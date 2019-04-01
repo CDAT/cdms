@@ -19,7 +19,6 @@ class TestCDMSFileIO(basetest.CDMSBaseTest):
         super(TestCDMSFileIO, self).tearDown()
 
     def testZSS(self):
-        print("im am here")
         out_file=cdms2.open('temp.nc', 'w')
         out_file.write(self.clt[0:10,:])
         out_file.write(self.clt[10:20,:])

@@ -951,7 +951,6 @@ def readScripCurveGrid(fileobj, dims, whichType, whichGrid):
     -------
 
     """
-    import string
     from .coord import TransientAxis2D
 
     if 'S' in list(fileobj.variables.keys()):

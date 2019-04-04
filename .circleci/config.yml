@@ -12,20 +12,20 @@ aliases:
       mkdir -p workspace
       git clone -b validateNightly --depth 1 git@github.com:CDAT/cdat workspace/cdat
       ls workspace/cdat
-      python workspace/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py3'
+      python workspace/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py3.7'
       
   - &create_conda_env
     name: create_conda_env
     environment:
        CHANNELS: "-c cdat/label/unstable -c cdat/label/nightly -c conda-forge -c cdat"
-       PKGS: "libcf distarray cdtime libcdms cdat_info testsrunner numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient"
+       PKGS: "pytest esmpy libcf distarray cdtime libcdms cdat_info testsrunner numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient lazy-object-proxy"
     command: |
        export PATH=$WORKDIR/miniconda/bin:$PATH
        conda config --set always_yes yes --set changeps1 no
        conda update -y -q conda
        conda config --set anaconda_upload no
        if [[ $PY_VER = 'py2' ]]; then
-          conda create -n $PY_VER -c conda-forge/label/gcc7 "python<3"
+          conda create -n $PY_VER "python<3"
           conda install -n $PY_VER $CHANNELS $PKGS $CONDA_COMPILER 
        else
           conda create -n $PY_VER $CHANNELS $PKGS $CONDA_COMPILER "python>3" coverage coveralls
@@ -51,6 +51,7 @@ aliases:
        export CDAT_ANONYMOUS_LOG=False
        source activate $PY_VER
        python run_tests.py --subdir -v2 $COVERAGE
+       python run_tests.py -n1 --subdir -v2 $COVERAGE --dask
        RESULT=$?
        echo "*** $PY_VER test result: "${RESULT}
        exit $RESULT
@@ -93,7 +94,6 @@ jobs:
       - run: *create_conda_env
       - run: *setup_cdms
       - run: *run_cdms_tests
-      - run: *conda_upload
       - store_artifacts:
           path: tests_html
           destination: tests_html
@@ -135,7 +135,6 @@ jobs:
       - run: *create_conda_env
       - run: *setup_cdms
       - run: *run_cdms_tests
-      - run: *conda_upload
       - store_artifacts:
           path: tests_html
           destination: tests_html
@@ -173,11 +172,11 @@ workflows:
   cdms_test:
     jobs:
       - macos_cdms_py2
-      - macos_cdms_py3:
-           requires:
-              - macos_cdms_py2
+      - macos_cdms_py3
+#           requires:
+#              - macos_cdms_py2
       - linux_cdms_py2
-      - linux_cdms_py3:
-           requires:
-              - linux_cdms_py2
+      - linux_cdms_py3
+#           requires:
+#              - linux_cdms_py2
 

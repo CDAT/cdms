@@ -627,7 +627,6 @@ Axis Methods, Additional to CoordinateAxis(cont'd)
           * The method returns the corresponding index interval as a 3tuple ``(i,j,k)``, where ``k`` is the integer stride,
             and ``[i.j)`` is the half-open index interval ``i <= k < j`` ``(i >= k > j if k < 0)``, or ``none`` if the 
             intersection is empty.
-          * For an axis which is circular (``axis.topology == 'circular'``), ``[i,j)`` is interpreted as follows, where ``n = len(axis)``
           * If ``0 <= i < n`` and ``0 <= j <= n``, the interval does not wrap around the axis endpoint.
           * Otherwise the interval wraps around the axis endpoint.
           * See also: ``mapinterval``, ``variable.subregion()``"
@@ -1408,8 +1407,8 @@ Allows use of MV commands without any prefix.
 
 Table `Variable Constructors in module MV <#table-variable-constructors-in-module-mv>`_,  lists the constructors in MV. All functions return
 a transient variable. In most cases the keywords axes, attributes, and
-id are available. axes is a list of axis objects which specifies the
-domain of the variable. attributes is a dictionary. id is a special
+id are available. Axes is a list of axis objects which specifies the
+domain of the variable. Attributes is a dictionary. id is a special
 attribute string that serves as the identifier of the variable, and
 should not contain blanks or non-printing characters. It is used when
 the variable is plotted or written to a file. Since the id is just an

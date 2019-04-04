@@ -154,7 +154,7 @@ class FileVariable(DatasetVariable):
             raise CDMSError(FileClosedWrite + self.id)
         if (name not in self.__cdms_internals__) and (value is not None):
             try:
-                setattr(self._obj_, name, value)
+                setattr(self._obj_, str(name), value)
             except Exception:
                 raise CDMSError(
                     "Setting %s.%s=%s" %

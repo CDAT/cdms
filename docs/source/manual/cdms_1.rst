@@ -327,7 +327,7 @@ variables in CDMS:
 
 Typical use of a file variables is to inquire information about the
 variable in a file without actually reading the data for the variables.
-A file variable is obtained by applying the slice operator [] to a file,
+A file variable is obtained by applying the slice operator ``[]``  to a file,
 passing the name of the variable, or by calling the getVariable
 function.
 

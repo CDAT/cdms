@@ -18,8 +18,8 @@ sys.path.append(os.environ.get('BUILD_DIR',"build"))
 
 
 MAJOR = 3
-MINOR = 0
-PATCH = 0
+MINOR = 1
+PATCH = 3
 Version = "%s.%s.%s" % (MAJOR,MINOR,PATCH)
 
 import cdat_info

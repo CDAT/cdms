@@ -1,4 +1,10 @@
 {
+    "--dask": {
+        "action": "store_true", 
+        "default": false, 
+        "help": "do not run dask tests", 
+        "type": null
+    }, 
     "--subdir": {
         "action": "store_true",
         "default": true,

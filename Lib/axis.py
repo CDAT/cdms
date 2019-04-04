@@ -217,7 +217,6 @@ def mapLinearIntersection(xind, yind, iind,
     See Also
     --------
     mapLinearExt
-
     """
 
     if(iind == 'n' or iind == 'e'):
@@ -819,9 +818,9 @@ class AbstractAxis(CdmsObj):
             p.to(units)
             return True
         except ImportError:
-            import warnings
-            warnings.warn(
-                "genutil module not present, was not able to determine if axis is level based on units")
+            # import warnings
+            # warnings.warn(
+            #     "genutil module not present, was not able to determine if axis is level based on units")
             pass
         except Exception:
             pass
@@ -2440,19 +2439,19 @@ def axisMatchAxis(axes, specifications=None, omit=None, order=None):
 
      Parameters
      ----------
-     specifications:
+     specifications :
          *  is None, include all axes less the omitted ones.
 
          *  Individual specifications must be integer indices into axes or
             matching criteria as detailed in axisMatches.
 
-     omit:
+     omit :
          *  is None, do not omit any axis.
 
          *  Individual specifications must be integer indices into axes or
             matching criteria as detailed in axisMatches.
 
-     order:
+     order :
          *  A string containing the symbols `t,x,y,z` or `-`.  If a `-` is
             given, any elements of the result not chosen otherwise are filled
             in from left to right with remaining candidates.
@@ -2475,19 +2474,19 @@ def axisMatchIndex(axes, specifications=None, omit=None, order=None):
 
      Parameters
      ----------
-     specifications:
+     specifications :
          *  is None, include all axes less the omitted ones.
 
          *  Individual specifications must be integer indices into axes or
             matching criteria as detailed in axisMatches.
 
-     omit:
+     omit :
          *  is None, do not omit any axis.
 
          *  Individual specifications must be integer indices into axes or
             matching criteria as detailed in axisMatches.
 
-     order:
+     order :
          *  A string containing the symbols `t,x,y,z` or `-`.  If a `-` is
             given, any elements of the result not chosen otherwise are filled
             in from left to right with remaining candidates.

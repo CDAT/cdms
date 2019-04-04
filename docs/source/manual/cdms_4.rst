@@ -496,7 +496,7 @@ SCRIP Regridder Functions
 
 .. csv-table:: 
    :header:  "Return Type", "Method", "Description"
-   :widths:  30, 42, 80
+   :widths:  30, 45, 80
    :align: left
 
     "Array or Transient-Variable", "[conservative, bilinear, and distance-weighted regridders] ``regridFunction(array)``", "Interpolate a gridded data array to a new grid. 
@@ -521,7 +521,7 @@ SCRIP Regridder Functions(con'td)
 
 .. csv-table:: 
    :header:  "Return Type", "Method", "Description"
-   :widths:  30, 42, 80
+   :widths:  30, 45, 80
    :align: left
 
 

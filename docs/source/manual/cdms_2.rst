@@ -502,7 +502,7 @@ CoordinateAxis Methods
 
 .. csv-table:: 
    :header:  "Type", "Method", "Definition"
-   :widths:  15, 30, 80
+   :widths:  15, 32, 80
    :align: left
  
 
@@ -713,7 +713,7 @@ CdmsFile Methods
 
 .. csv-table:: 
    :header:  "Type", "Method", "Definition"
-   :widths:  35, 30, 80
+   :widths:  35, 32, 80
    :align: left
 
 
@@ -803,8 +803,7 @@ CdmsFile Methods(cont'd)
            * ``newname``, if specified is the name of the new variable. 
            * If unspecified, the returned variable has the same name as ``var``.
         **Note:** Unlike copyAxis, the actual data is not copied to the new variable."
-   "CurveGrid or Generic-Grid", "``readScripGrid (self,whichGrid= 'destination',check-Grid=1)``", "Read a curvilinear or generic
-              grid from a SCRIP netCDF file. 
+   "CurveGrid or Generic-Grid", "``readScripGrid (self,whichGrid= 'destination',check-Grid=1)``", "Read a curvilinear or generic grid from a SCRIP netCDF file. 
          The file can be a SCRIP grid file or remapping file. 
            * If a mapping file, ``whichGrid`` chooses the grid to read, either ``'source'`` or ``'destination'``. 
            * If ``checkGrid`` is ``1`` (default), the grid cells are checked for convexity, and 'repaired' if necessary.  
@@ -1588,11 +1587,11 @@ HorizontalGrid Methods
 
     "Horizontal-Grid", "``clone()``", "Return a transient copy of the grid."
     "Axis", "``getAxis(Integer n)``", "Get the n-th axis.n is either 0 or 1."
-    "Tuple", "``getBounds()``", "Get the grid boundary arrays.
-    Returns a tuple ``(latitudeArray, longitudeArray)``,
+    "Tuple", "``getBounds()``", "Get the grid boundary arrays. Returns a tuple
+    ``(latitudeArray, longitudeArray)``,
     where latitudeArray is a Numpy array of latitude bounds, and similarly for longitudeArray.
         The shape of latitudeArray and longitudeArray
-        depend on the type of grid:
+    depend on the type of grid:
            * For rectangular grids with shape (nlat, nlon), the boundary arrays have shape (nlat,2) and (nlon,2).
            * For curvilinear grids with shape (nx, ny), the boundary arrays each have shape (nx, ny, 4).
            * For generic grids with shape (ncell,), the boundary arrays each have shape (ncell, nvert) where nvert is the maximum number of vertices per cell.
@@ -1816,7 +1815,7 @@ Variable Methods(cont'd)
 
 .. csv-table::  
    :header:  "Type", "Method", "Definition"
-   :widths:  30, 42, 80
+   :widths:  30, 45, 80
    :align: left
 
 
@@ -1949,7 +1948,7 @@ Variable Methods(cont'd)
         **Note:** If neither missing or mask is set, the default mask is obtained from the mask of the array if any.
       See also: ``crossSectionRegrid``, ``pressureRegrid``."
     "None", "``setAxis(n, axis)``", "Set the n-th axis (0-origin index) of to a copy of axis."
-    "None", "``setAxisList(axislist)``", "Set all axes of the variable. axislist is a list of axis objects."
+    "None", "``setAxisList (axislist)``", "Set all axes of the variable. axislist is a list of axis objects."
     "None", "``setMissing(value)``", "Set the missing value.  Integer ``size()`` Number of elements of the variable."
     "Variable", "``subRegion (*region, time=None, level=None, latitude=None, longitude=None, squeeze=0, raw=0)``", "Read a coordinate region of data, returning a
     transient variable. A region is a hyperrectangle

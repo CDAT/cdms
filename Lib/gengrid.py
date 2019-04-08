@@ -87,7 +87,7 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
         Parameters
         ----------
         cufile : is a Cdunif file, NOT a CDMS file.
-         
+
         gridtitle : is a string identifying the grid.
         """
 
@@ -165,18 +165,18 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
         ---------
 
         domainlist : is a list of axes of a variable.
-     
+
         newaxislist : is a list of result axes after the slicelist is applied to domainlist.
-             
+
         slicelist : is a list of slices.
 
         All lists are of equal length.
 
         Return value : is (newslicelist, gridaxislist) where
-      
+
         newslicelist : is the elements of slicelist that correspond to the grid, in the
                       preferred order of the grid.
-        
+
         gridaxislist : is the elements of newaxislist that correspond to the grid, in the
                       preferred order of the grid.
         """
@@ -211,7 +211,7 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
 
        Parameters
        ----------
-      
+
       'spec' : region specification of the form defined in the grid module.
 
        Returns
@@ -258,7 +258,7 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
     def isClose(self, g):
         """
         Is Close
-       
+
         Returns
         -------
 
@@ -280,7 +280,7 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
     def checkAxes(self, axes):
         """
         Check Axes
-        
+
         Returns
         -------
 
@@ -297,7 +297,7 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
     def reconcile(self, axes):
         """
         Reconcile
-       
+
         Returns
         -------
 
@@ -335,7 +335,7 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
     def flatAxes(self):
         """
         Flat Axes
-    
+
         Returns
         -------
 
@@ -428,9 +428,9 @@ def readScripGenericGrid(fileobj, dims, whichType, whichGrid):
        ----------
 
        fileobj : is an open CDMS dataset or file object.
-       
+
        dims : is the grid shape.
-         
+
        whichType : is the type of file, either "grid" or "mapping"
 
 

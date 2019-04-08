@@ -461,8 +461,8 @@ def createDataset(path, template=None):
 def openDataset(uri, mode='r', template=None,
                 dods=1, dpath=None, hostObj=None):
     """
-    Open Dataset  
- 
+    Open Dataset
+
     Parameters
     ----------
     uri : (str) Filename to open
@@ -681,13 +681,13 @@ def parseFileMap(text):
        Parameters
        ----------
        filemap : list [ varmap, varmap, ...]
-       
+
        varmap : list [ namelist, slicelist ]
-       
+
        namelist : list [name, name, ...]
-           
+
        slicelist : list [indexlist, indexlist, ,,,]
-         
+
        indexlist : list [i,j,k,l,path]
 
        Returns
@@ -1531,7 +1531,7 @@ class CdmsFile(CdmsObj, cuDataset):
         name : str is the string name of the Axis
 
         ar :  numpy.ndarray/None is the 1-D data array, or None for an unlimited axis
-       
+
         unlimited : (int/True/False) True/0 designate that the axis as unlimited.
 
         Returns
@@ -1578,7 +1578,7 @@ class CdmsFile(CdmsObj, cuDataset):
         Parameters
         ----------
         name : is the string name of the axis.
-         
+
         axislen : is the integer length of the axis.
 
         Returns
@@ -1609,13 +1609,13 @@ class CdmsFile(CdmsObj, cuDataset):
         Parameters
         ----------
         axis : axis to copy (cdms2.axis.FileAxis/cdms2.axis.FileVirtualAxis)
-            
+
         newname : (None/str) new name for axis (default None)
-           
+
         unlimited : (int/True/False) unlimited dimension (default 0)
-           
+
         index : (int/None) (default None)
-            
+
         extbounds : (numpy.ndarray) new bounds to use bounds (default None)
 
         Returns
@@ -1685,15 +1685,15 @@ class CdmsFile(CdmsObj, cuDataset):
         Parameters
         ----------
         id : (str) grid name (default 0)
-        
+
         lat : (numpy.ndarray) latitude array (default 1)
-            
+
         lon : (numpy.ndarray) longitude array (default 2)
-           
+
         order : (str) order (default 3)
-           
+
         type : (str) grid type (defalut `generic`)
-        
+
         mask : (None/numpy.ndarray) mask (default None)
 
         Returns
@@ -1776,13 +1776,13 @@ class CdmsFile(CdmsObj, cuDataset):
 
         Parameters
         ----------
-        
+
         name : The string name of the Variable
-        
+
         datatype : A CDMS datatype or numpy typecode
-        
+
         axesOrGrids : is a list of axes, grids.
-        
+
         fill_value : fill_value (cast into data type).
 
         Notes
@@ -1840,11 +1840,11 @@ class CdmsFile(CdmsObj, cuDataset):
 
         Parameters
         ----------
-        
+
         pattern : expression pattern
-         
+
         attribute : attribute name
-          
+
         tag : node tag
 
         Returns
@@ -1883,9 +1883,9 @@ class CdmsFile(CdmsObj, cuDataset):
         Parameters
         ----------
         pattern : String expression.
-       
+
         attribute : Attribute Name. If `None` search all attributre.
-       
+
         tag : node tag, if `cdmsFile` only match the current dataset otherwise match
               all object matching the tag.
 
@@ -1927,7 +1927,7 @@ class CdmsFile(CdmsObj, cuDataset):
         Parameters
         ----------
         predicate : function use as predicate
-        
+
         tag : node tag.
 
         Returns
@@ -1975,25 +1975,25 @@ class CdmsFile(CdmsObj, cuDataset):
         Parameters
         ----------
         var : variable to copy (cdms2.tvariable.TransientVariable or cdms2.fvariable.FileVariable)
-       
+
         attributes : A dictionary of attributes. Default is var.attributes.
-        
+
         axes : The list of axis objects. Default is var.getAxisList()
-        
+
         extbounds : Bounds of the (portion of) the extended dimension being written.
-        
+
         id or newname : String identifier of the new variable.
-        
+
         extend :
             * 1 define the first dimension as the unlimited dimension.
             * 0 do not define an unlimited dimension. The default is the define
                 the first dimension as unlimited only if it is a time dimension.
-        
+
         fill_value : The missing value flag.
-       
+
         index : The extended dimension index for writting. The default index is determined
                 by lookup relative to the existing extended dimension.
-       
+
         grid : The variable grid.  `none` the value of var.getGrid() will used.
 
         Returns
@@ -2127,30 +2127,30 @@ class CdmsFile(CdmsObj, cuDataset):
 
         Parameters
         ----------
-        
+
         var : variable to copy.
-       
+
         attributes : The attribute dictionary for the variable. The default is var.attributes.
-   
-        axes : The list of file axes comprising the domain of the variable. The default is to 
+
+        axes : The list of file axes comprising the domain of the variable. The default is to
                copy var.getAxisList().
-         
+
         extbounds : The extended dimension bounds. Defaults to var.getAxis(0).getBounds().
-   
+
         id : The variable name in the file. Default is var.id.
-     
+
         extend :
-              * 1 causes the first dimension to be `extensible` iteratively writeable. 
+              * 1 causes the first dimension to be `extensible` iteratively writeable.
                 The default is None, in which case the first dimension is extensible if it is time.
               * 0 to turn off this behaviour.
-     
+
         fill_value : is the missing value flag.
-    
+
         index : The extended dimension index to write to. The default index is determined b
                 lookup relative to the existing extended dimension.
-          
+
         dtype : The numpy dtype.
-          
+
         typecode : Deprecated, for backward compatibility only
 
         Returns

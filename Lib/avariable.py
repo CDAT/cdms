@@ -15,7 +15,6 @@ from .axis import axisMatchIndex, axisMatchAxis, axisMatches, unspecified, Cdtim
 from . import selectors
 import copy
 from .mvCdmsRegrid import CdmsRegrid, getBoundList, _getCoordList
-
 from regrid2.mvGenericRegrid import guessPeriodicity
 # import PropertiedClasses
 from .convention import CF1
@@ -421,7 +420,7 @@ class AbstractVariable(CdmsObj, Slab):
 
         Returns
         -------
-        if n < 0: n = n + self.rank() 
+        if n < 0: n = n + self.rank()
         self.getDomain()[n][0]"""
         if n < 0:
             n = n + self.rank()
@@ -826,9 +825,9 @@ class AbstractVariable(CdmsObj, Slab):
            isitem : if given, result is return as a scaler for 0-D data
 
            Notes
- 
+
            There can be zero or more positional arguments, each of the form:
-           
+
            #. a single integer n, meaning slice(n, n+1)
            #. an instance of the slice class
            #. a tuple, which will be used as arguments to create a slice
@@ -885,7 +884,7 @@ class AbstractVariable(CdmsObj, Slab):
         None, colon : Represents the full range of one dimension.
 
         Notes
-        
+
         Only one dimension may be wrapped.
 
 
@@ -895,7 +894,7 @@ class AbstractVariable(CdmsObj, Slab):
 
             >>> getRegion((10, 20), 850, Ellipsis,(-180, 180))
 
-            retrieves : 
+            retrieves :
                 * all times t such that 10.<=t<20.
                 * level 850.
                 * all values of all dimensions between level and lon (namely, lat).
@@ -1187,7 +1186,7 @@ class AbstractVariable(CdmsObj, Slab):
         One can use the regrid2.Regridder optional arguments as well.
 
         Example
-        
+
         >>> new_cdmsVar = cdmsVar.regrid(newGrid)  # uses libcf
         >>> new_cdmsVar = cdmsVar.regrid(newGrid, regridMethod = 'conserve', coordSys = 'cart')
 
@@ -1668,7 +1667,7 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
     def getGridIndices(self):
         """
         Get Grid Indices
- 
+
         Returns
         -------
         a tuple of indices corresponding to the variable grid."""

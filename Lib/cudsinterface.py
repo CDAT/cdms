@@ -156,7 +156,7 @@ class cuDataset():
         -------
 
         a list of the global attributes in the file.
-        
+
         """
         return list(self.attributes.keys())
 
@@ -256,9 +256,9 @@ class cuDataset():
            Options
 
            vname : (str/None) (None) variable name
-            
+
            all : (None/True/False/int) (None) include axes information
-              
+
            device : (None/file) (None) output device
 
         """
@@ -389,7 +389,7 @@ class cuDataset():
                  for any given dimension or cdms selector
 
         Keys
-       
+
         squeeze : (int/True/False) (0) squeezes (removes) dimensions of length 1
 
         order : (str) ('...') reorder the dimensions, can use numbers or xyzt or dim names in between paranthesis

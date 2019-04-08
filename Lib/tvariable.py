@@ -635,7 +635,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
 
         clone : (self, copyData=1)
 
-       
+
         Returns
         -------
 

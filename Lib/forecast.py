@@ -15,7 +15,7 @@ from six import string_types
 
 def two_times_from_one(t):
     """
-    Two Times from One 
+    Two Times from One
 
     Parameters
     ----------
@@ -130,7 +130,7 @@ class forecast():
 def available_forecasts(dataset_file, path="."):
     """
     Available Forecasts
-    
+
     Returns
     -------
           a list of forecasts (as their generating times) which are available
@@ -154,9 +154,9 @@ class forecasts():
     Represents a set of forecasts
 
     Example
-    -------    
+    -------
     Creates a set of forecasts.  Normally you do it by something like
-   
+
     f = forecasts( 'file.xml', (min_time, max_time) )
              or
     f = forecasts( 'file.xml', (min_time, max_time), '/home/me/data/' )
@@ -256,10 +256,10 @@ class forecasts():
 
     def reduce_inplace(self, min_time, max_time, openclosed='co'):
         """
-        Reduce Inplace        
+        Reduce Inplace
 
         Example
-        
+
         For a forecasts object f, f( min_time, max_time ) will reduce the
         scope of f, to forecasts whose start time t has min_time<=t<max_time.
         This is done in place, i.e. any other forecasts in f will be discarded.
@@ -290,7 +290,7 @@ class forecasts():
         """
 
         Example
-       
+
         Reads the specified variable for all the specified forecasts.
         Creates and returns a new variable which is dimensioned by forecast
         as well as the original variable's dimensions.
@@ -415,7 +415,7 @@ class forecasts():
     def __getitem__(self, varname, fccs=None):
         """
         Get Item
-        
+
         Returns
         -------
 

@@ -16,10 +16,10 @@ class Slab:
 
     Parameters
     ----------
-    
+
     Slab : is the cu api
 
-    
+
     Notes
     -----
     This is an abstract class to inherit in AbstractVariable About axes:

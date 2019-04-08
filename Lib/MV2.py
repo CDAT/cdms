@@ -81,7 +81,7 @@ class var_unary_operation:
         """
         Parameters
         ----------
-       
+
         var_unary_operation(mafunc)
 
         mafunc is an numpy.ma masked_unary_function.
@@ -273,7 +273,7 @@ class var_binary_operation:
         ----------
 
         var_binary_operation(mafunc)
-        
+
         mafunc is an numpy.ma masked_binary_function.
         """
         self.mafunc = mafunc
@@ -939,9 +939,9 @@ maximum = _maximum_operation()
 
 def asarray(data, typecode=None, dtype=None):
     """
-    
+
     asarray(data, typecode=None, dtype=None) is equivalent to array(data, dtype=None, copy=0)
-    
+
     Assarray
 
     Returns
@@ -1109,7 +1109,7 @@ def masked_array(a, mask=None, fill_value=None,
 def masked_values(data, value, rtol=1.e-5, atol=1.e-8, copy=1,
                   savespace=0, axes=None, attributes=None, id=None):
     """
-    Masked Values   
+    Masked Values
 
     Parameters
     ----------
@@ -1169,7 +1169,7 @@ def fromfunction(f, dimensions):
 
 def diagonal(a, offset=0, axis1=0, axis2=1):
     """
-    Diagonal    
+    Diagonal
 
     Parameters
     ----------

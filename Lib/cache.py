@@ -28,7 +28,7 @@ def lock(filename):
     Acquire a file-based lock with the given name.
 
     Usage :
-    
+
     lock(filename)
     If the function returns, the lock was acquired successfully.
 
@@ -135,7 +135,7 @@ _transferMethod = _pythonTransfer       # Method of transferring files
 
 def useWindow():
     """
-    Specify that dialog windows should be used if possible. 
+    Specify that dialog windows should be used if possible.
 
     Do not call this directly, use gui.setProgressParent instead.
 
@@ -434,7 +434,7 @@ class Cache:
 
         <filekey> : is the cache index key. A good choice is (datasetDN, filename) where
 
-        datasetDN : is the distinguished name of the dataset, and filename is the name of the file 
+        datasetDN : is the distinguished name of the dataset, and filename is the name of the file
                     within the dataset.
 
         For request manager transfers,
@@ -443,7 +443,7 @@ class Cache:
 
         <userid> : is the user string ID,
 
-        <useReplica> : is true iff the request manager should search the replica catalog 
+        <useReplica> : is true iff the request manager should search the replica catalog
                        for the actual file to transfer.
 
         Returns

@@ -164,7 +164,7 @@ def setRegionSpecs(grid, coordSpec, coordType, resultSpec):
     ----------
 
     grid : is the grid object to be associated with the region.
-      
+
     coordSpec : is a coordinate specification, having one of the forms:
 
                 x
@@ -186,9 +186,9 @@ def setRegionSpecs(grid, coordSpec, coordType, resultSpec):
                  in the canonical form (x,y,'co',cycle). A CDMSError exception
                  is raised if the entry in resultSpec is not None.
 
-    Notes  
+    Notes
     -----
- 
+
     That time coordinate types are not permitted.
     """
 
@@ -280,7 +280,7 @@ class AbstractGrid (CdmsObj):
     def isClose(self, g):
         """
         Is Close
-     
+
         Returns
         -------
 

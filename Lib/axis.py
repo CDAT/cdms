@@ -671,7 +671,7 @@ def isOverlapVector(vec1, vec2, atol=1.e-8):
     ----------
     vec1 : Input arrays to compare
     vec2 : Input arrays to compare
-    atol : float, optional 
+    atol : float, optional
     Absolute tolerance, The absolute differenc is equal to **atol** Default is 1e-8
 
     Returns
@@ -2620,7 +2620,7 @@ def axisMatches(axis, specification):
        1 or 0 depending on whether axis matches the specification.
 
        Notes
-       
+
        Specification must be one of:
 
        #. a string representing an axis id or one of the keywords time,

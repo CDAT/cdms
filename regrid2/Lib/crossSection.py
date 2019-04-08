@@ -826,7 +826,7 @@ def sectionmask(dataIn, positionIn, maskIn, missingValueIn, missingMatch):
 
     Returns
     -------
-   
+
     amskin
 
     """
@@ -1001,14 +1001,14 @@ def sendmsg(msg, value1=None, value2=None):
 
     Passed : msg - the string
 
-    
+
     Parmeters
     ---------
     value : the number associated with the string
 
     Returns
     -------
-    
+
     return
 
     """
@@ -1034,7 +1034,7 @@ def section(latvals, levvals):
 
     Returns
     -------
-    
+
     xsection : a temerature like cross section
 
     """
@@ -1069,7 +1069,7 @@ def rmserror(data1, data2):
 
     Returns
     -------
-    
+
     rms error
 
    """

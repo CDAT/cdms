@@ -311,7 +311,7 @@ class DatasetVariable(AbstractVariable):
     def expertPaths(self, slist):
         """
         Expert Paths
-    
+
         Parameters
         ----------
 
@@ -325,7 +325,8 @@ class DatasetVariable(AbstractVariable):
         Where
         npart : is the number of partitioned dimensions: 0, 1, or 2;
         dimensionlist : is a tuple of length npart, having the dimension numbers of the partitioned dimensions;
-        partitionSlices : is the list of file-specific (filename, slice) corresponding to the paths and slices within the files to be read.
+        partitionSlices : is the list of file-specific (filename, slice) corresponding
+        to the paths and slices within the files to be read.
 
         The exact form of partitionSlices depends on the value of npart
 
@@ -333,7 +334,7 @@ class DatasetVariable(AbstractVariable):
 
         0 : (filename,slicelist)
         1 : [(filename,slicelist),...,(filename,slicelist)]
-        2 : [[(filename,slicelist),...,(filename,slicelist)] 
+        2 : [[(filename,slicelist),...,(filename,slicelist)]
             [(filename,slicelist),...,(filename,slicelist)]
             [(filename,slicelist),...,(filename,slicelist)]]
 

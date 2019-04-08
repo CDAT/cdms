@@ -197,7 +197,7 @@ valid choices are: 'libcf', 'esmf'""" % regridTool
 
         Parameters
         ----------
-       
+
         srcData : array (input)
 
         dstData : array (output)
@@ -351,7 +351,7 @@ valid choices are: 'libcf', 'esmf'""" % regridTool
 
         Parameters
         ----------
-        
+
         diag : a dictionary whose entries, if present, will be filled entries are tool dependent
 
         rootPe : root processor where data should be gathered (or None if local areas are to be returned)

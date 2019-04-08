@@ -36,11 +36,11 @@ class AbstractHorizontalGrid(AbstractGrid):
     Parameters
     ----------
     latAxis
-   
+
     lonAxis
-   
+
     id - Default None
- 
+
     maskvar - Default None
 
     tempmask - Default None
@@ -196,7 +196,7 @@ class AbstractHorizontalGrid(AbstractGrid):
         Parameters
         ----------
         nonConvexCells : 1D numpy array of indices of nonconvex cells, as returned from checkConvex.
-        
+
         threshold : positive floating-point value in degrees.
 
 
@@ -807,7 +807,7 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
     def reconcile(self, axes):
         """
        Reconcile
-    
+
         Returns
         -------
 
@@ -844,7 +844,7 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
 
     def flatAxes(self):
         """
-        Flat Axes        
+        Flat Axes
 
         Returns
         -------

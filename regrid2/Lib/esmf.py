@@ -304,13 +304,13 @@ esmf.EsmfStructGrid.__init__: ERROR periodic dimensions %d > 1 not permitted.
         Parameters
         ----------
 
-        coords : The curvilinear coordinates of the grid. List of numpy arrays. 
+        coords : The curvilinear coordinates of the grid. List of numpy arrays.
                  Must exist on all procs.
 
-        staggerloc : The stagger location ESMF.StaggerLoc.CENTER (default) 
+        staggerloc : The stagger location ESMF.StaggerLoc.CENTER (default)
                      ESMF.StaggerLoc.CORNER
 
-        globalIndexing : if True array was allocated over global index space, otherwise array was 
+        globalIndexing : if True array was allocated over global index space, otherwise array was
                          allocated over local index space on this processor. This is only relevant
                          if rootPe is None
 

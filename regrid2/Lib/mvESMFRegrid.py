@@ -401,7 +401,7 @@ staggerLoc = %s!""" % self.staggerLoc
         ----------
         rootPe : root processor where data should be gathered (or None if local areas are to be returned)
 
-       
+
         Returns
         -------
         areas or None if non-conservative interpolation
@@ -421,7 +421,7 @@ staggerLoc = %s!""" % self.staggerLoc
 
         rootPe : root processor where data should be gathered (or None if local areas are to be returned)
 
-        
+
         Returns
         -------
 
@@ -442,7 +442,7 @@ staggerLoc = %s!""" % self.staggerLoc
 
         rootPe : root processor where data should be gathered (or None if local areas are to be returned)
 
-        
+
         Returns
         -------
 
@@ -462,7 +462,7 @@ staggerLoc = %s!""" % self.staggerLoc
 
         rootPe : root processor where data should be gathered (or None if local areas are to be returned)
 
-        
+
         Returns
         -------
 
@@ -482,7 +482,7 @@ staggerLoc = %s!""" % self.staggerLoc
 
         staggerLoc : (e.g. 'center' or 'corner')
 
-         
+
         Returns
         -------
 
@@ -506,7 +506,7 @@ staggerLoc = %s!""" % self.staggerLoc
 
         staggerLoc : (e.g. 'center' or 'corner')
 
-        
+
         Returns
         -------
 
@@ -531,7 +531,7 @@ staggerLoc = %s!""" % self.staggerLoc
 
         staggerLoc : (e.g. 'center'):
 
-        
+
 
         Returns
         -------
@@ -557,7 +557,7 @@ staggerLoc = %s!""" % self.staggerLoc
 
         staggerLoc : (e.g. 'center')
 
-        
+
         Returns
         -------
 

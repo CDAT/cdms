@@ -108,7 +108,7 @@ this example selects and plots a time-latitude slice:
     <vcs.displayplot.Dp object ...>
 
 
-.. csv-table:: Line Notes
+.. csv-table:: 
   :header:  "Line", "Notes"
   :widths:  10, 90
 
@@ -191,48 +191,58 @@ Plot Keywords
     :header: "Key", "Type", "Value"
     :widths: 20, 20, 80
 
-    "``comment1``", "string", "Comment plotted above ``file_comment``"
-    "``comment2``", "string", "Comment plotted above ``comment1``"
-    "``comment3``", "string", "Comment plotted above ``comment2``"
-    "``continents``", "0 or 1", "if ``1``, plot continental outlines (default:plot if
+    "comment1", "string", "Comment plotted above ``file_comment``"
+    "comment2", "string", "Comment plotted above ``comment1``"
+    "comment3", "string", "Comment plotted above ``comment2``"
+    "continents", "0 or 1", "if ``1``, plot continental outlines (default:plot if
         * ``xaxis`` is longitude, 
         * ``yaxis`` is latitude -or- ``xname`` is 'longitude' and ``yname`` is 'latitude'"
-    "``file_comment``", "string", "Comment,
+    "file_comment", "string", "Comment,
         * Defaults to ``variable.parent.comment``"
-    "``grid``", "CDMS grid object", "Grid associated with the data. 
+    "grid", "CDMS grid object", "Grid associated with the data. 
         * Defaults to ``variable.getGrid()``"
-    "``hms``", "string", "Hour, minute, second"
-    "``long_name``", "string", "Descriptive variable name, 
+    "hms", "string", "Hour, minute, second"
+    "long_name", "string", "Descriptive variable name, 
         * Defaults to ``variable.long_name``."
-    "``missing_value``", "same type as array", "Missing data value, 
+    "missing_value", "same type as array", "Missing data value, 
         * Defaults to ``variable.getMissing()``"
     "``name``", "string", "Variable name, 
         * Defaults to ``variable.id``"
-    "``time``", "cdtime relative or absolute", "Time associated with the data.
+    "time", "cdtime relative or absolute", "Time associated with the data.
        Example:
           * ``cdtime.reltime(30.0, 'days since 1978-1-1').``"
-    "``units``", "string",  "Data units.
+
+Plot Keywords(cont'd)
+^^^^^^^^^^^^^^^^^^^^^
+
+.. csv-table::
+    :header: "Key", "Type", "Value"
+    :widths: 30, 30, 80
+
+
+    "units", "string",  "Data units.
           * Defaults to ``variable.units``"
-    "``variable``", "CDMS variable object", "Variable associated with the data. 
+    "variable", "CDMS variable object", "Variable associated with the data. 
           * The variable grid must have the same shape as the data array."
-    "``xarray`` (``[y|z|t|w]array``)", "1-D Numpy array", "*Rectangular grids only*.
+    "xarray (``[y|z|t|w]array``)", "1-D Numpy array", "*Rectangular grids only*.
           * Array of coordinate values, having the same length as the corresponding dimension.
           * Defaults to ``xaxis[:\] (y|z|t|waxis[:])``"
-    "``xaxis`` (``[y|z|t|w]axis``)", "CDMS axis object", "*Rectangular grids only*. 
+    "xaxis (``[y|z|t|w]axis``)", "CDMS axis object", "*Rectangular grids only*. 
        Axis object.
           * ``xaxis`` defaults to ``grid.getAxis(0)`` 
           * ``yaxis`` defaults to ``grid.getAxis(1)``"
-    "``xbounds`` (``ybounds``)", "2-D Numpy array",  "*Rectangular grids only*. 
+    "xbounds (``ybounds``)", "2-D Numpy array",  "*Rectangular grids only*. 
           * Boundary array of shape ``(n,2)`` where ``n`` is the axis length. 
           * Defaults to ``xaxis.getBounds()``, or ``xaxis.genGenericBounds()`` if ``None``, similarly for ``ybounds``."
-    "``xname`` (``[y|z|t|w]name``)", "string", "*Rectangular grids only*. 
+    "xname (``[y|z|t|w]name``)", "string", "*Rectangular grids only*. 
        Axis name. 
           * Defaults to ``xaxis.id`` (``[y|z|t|w]axis.id``)"
-    "``xrev`` (``yrev``)", "0 or 1", "If ``xrev`` (``yrev``) is 1, reverse the direction of the ``x-axis (y-axis)``.
+    "xrev (``yrev``)", "0 or 1", "If ``xrev`` (``yrev``) is 1, reverse the direction of the
+    ``x-axis (y-axis)``.
           * Defaults to 0, with the following exceptions:
           * If the ``y-axis`` is latitude, and has decreasing values, ``yrev`` defaults to 1
           * If the ``y-axis`` is a vertical level, and has increasing pressure levels, ``yrev`` defaults to 1."
-    "``xunits`` (``[y|z|t|w]units``)", "string", "*Rectangular grids only*. Axis units. 
+    "xunits (``[y|z|t|w]units``)", "string", "*Rectangular grids only*. Axis units. 
           * Defaults to ``xaxis.units`` (``[y|z|t|w]axis.units``)."
 
 

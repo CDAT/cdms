@@ -429,25 +429,25 @@ class PressureRegridder:
 
 def checkorder(positionIn):
     """
-    **Purpose:**
+    Purpose :
 
         construct the tuples for transposing the data to standard dimension
         order and the inverse for transposing it back to the original dimension order
 
-    **Usage:**
+    Usage :
 
         newOrder, inverseOrder = checkorder(positionIn)
 
-    **Passed:**
+    Passed :
 
         positionIn -- array with location of longitude, latitude. level and time
-         respectively in the sense of the python shape of the data
+        respectively in the sense of the python shape of the data
 
     Returns
     -------
-        newOrder -- tuple to transpose data to the order (t,z,y,x)
+    newOrder : tuple to transpose data to the order (t,z,y,x)
 
-        inverseOrder -- tuple to transpose data to back to the original order
+   inverseOrder : tuple to transpose data to back to the original order
 
     """
 
@@ -480,11 +480,11 @@ def checkorder(positionIn):
 
 def sendmsg(msg, value1=None, value2=None):
     """
-    **Purpose:**
+    Purpose :
 
          send the same message to the screen
 
-    **Passed:**
+    Passed :
 
          msg - the string
 
@@ -492,7 +492,7 @@ def sendmsg(msg, value1=None, value2=None):
 
     Returns
     -------
-        return
+    return
 
    """
 

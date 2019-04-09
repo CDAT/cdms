@@ -116,19 +116,16 @@ def createGenericGrid(latArray, lonArray, latBounds=None,
 
 
 def createGaussianGrid(nlats, xorigin=0.0, order="yx"):
-    """ createGaussianGrid(nlats, xorigin=0.0)
+    """
     Create a Gaussian grid, with shape (nlats, 2*nlats).
 
     Parameters
     ----------
-         nlats:
-              is the number of latitudes.
+    nlats : is the number of latitudes.
 
-         xorigin:
-              is the origin of the longitude axis
+    xorigin : is the origin of the longitude axis
 
-         order:
-              is either "yx" or "xy"
+    order : is either "yx" or "xy"
     """
     lat = createGaussianAxis(nlats)
     nlons = 2 * nlats
@@ -149,48 +146,50 @@ CoordTypeToLoc = {LongitudeType: 0, LatitudeType: 1, VerticalType: 2}
 
 def defaultRegion():
     """
+    Default Region
+
     Returns
     -------
 
-         a specification for a default (full) region."""
+    a specification for a default (full) region."""
     return [None] * 3
 
 
 def setRegionSpecs(grid, coordSpec, coordType, resultSpec):
-    """Modify a list of coordinate specifications, given a coordinate type and
+    """
+    Modify a list of coordinate specifications, given a coordinate type and
     a specification for that coordinate.
 
     Parameters
     ----------
 
-        grid:
-            is the grid object to be associated with the region.
-        coordSpec:
-            is a coordinate specification, having one of the forms:
+    grid : is the grid object to be associated with the region.
 
-            x
+    coordSpec : is a coordinate specification, having one of the forms:
 
-           (x,y)
+                x
 
-           (x,y,'co')
+               (x,y)
 
-           (x,y,'co',cycle)
+               (x,y,'co')
 
-           ':'
+               (x,y,'co',cycle)
 
-           None
+               ':'
+               None
 
-        coordType:
-            is one of CoordinateTypes
+    coordType : is one of CoordinateTypes
 
-        resultSpec:
-            is a list of 4-tuples of the form (x,y,'co',cycle), or None
-            if no spec for the corresponding dimension type.
-            The function sets the appropriate coordinate in resultSpec,
-            in the canonical form (x,y,'co',cycle). A CDMSError exception
-            is raised if the entry in resultSpec is not None.
+    resultSpec : is a list of 4-tuples of the form (x,y,'co',cycle), or None
+                 if no spec for the corresponding dimension type.
+                 The function sets the appropriate coordinate in resultSpec,
+                 in the canonical form (x,y,'co',cycle). A CDMSError exception
+                 is raised if the entry in resultSpec is not None.
 
-    Note:   that time coordinate types are not permitted.
+    Notes
+    -----
+
+    That time coordinate types are not permitted.
     """
 
     if (coordSpec is None) or (coordSpec == ':'):
@@ -260,10 +259,12 @@ class AbstractGrid (CdmsObj):
 
     def hasCoordType(self, coordType):
         """
+        Has CoordType
+
         Returns
         -------
 
-            1 iff self has the coordinate type.
+        1 iff self has the coordinate type.
         """
         return 0
 
@@ -278,27 +279,32 @@ class AbstractGrid (CdmsObj):
 
     def isClose(self, g):
         """
+        Is Close
 
         Returns
         -------
 
-             1 if g is 'close enough' to self to be considered equal, 0 if not."""
+        1 if g is 'close enough' to self to be considered equal, 0 if not."""
         return 0
 
     def checkAxes(self, axes):
         """
+        Check Axes
+
         Returns
         -------
 
-             1 iff self.getAxisList and axes are consistent."""
+        1 iff self.getAxisList and axes are consistent."""
         return 1
 
     def reconcile(self, axes):
         """
+        Reconcile
+
         Returns
         -------
 
-             a grid that is consistent with the axes, or None."""
+        a grid that is consistent with the axes, or None."""
         return self
 
     def clone(self, copyData=1):
@@ -307,11 +313,13 @@ class AbstractGrid (CdmsObj):
 
     def flatAxes(self):
         """
+        Flat Axes
+
         Returns
         -------
-             (flatlat, flatlon) where flatlat is a raveled NumPy array
-             having the same length as the number of cells in the grid, similarly
-             for flatlon."""
+        (flatlat, flatlon) where flatlat is a raveled NumPy array
+         having the same length as the number of cells in the grid, similarly
+         for flatlon."""
         raise CDMSError(MethodNotImplemented)
 
     def size(self):
@@ -325,14 +333,14 @@ class AbstractGrid (CdmsObj):
 
 class AbstractRectGrid(AbstractGrid):
     """
+    Abstract Rect Grid
+
     Parameters
     ----------
 
-       AbstractRectGrid:
-              defines the interface for rectilinear grids
+    AbstractRectGrid : defines the interface for rectilinear grids
 
-       grids:
-              which can be decomposed into 1-D latitude and longitude axes
+    grids : which can be decomposed into 1-D latitude and longitude axes
 
     """
     gridtypes = ['gaussian', 'uniform', 'equalarea', 'generic']
@@ -729,10 +737,12 @@ class AbstractRectGrid(AbstractGrid):
 
     def flatAxes(self):
         """
+        Flat Axes
+
         Returns
         -------
-            (flatlat, flatlon) where flatlat is a 1D NumPy array having the same
-            length as the number of cells in the grid, similarly for flatlon."""
+        flatlat, flatlon) where flatlat is a 1D NumPy array having the same
+        length as the number of cells in the grid, similarly for flatlon."""
 
         if self._flataxes_ is None:
             alat = self.getLatitude()[:]
@@ -752,11 +762,9 @@ class AbstractRectGrid(AbstractGrid):
 
         Parameters
         ----------
-             cufile
-                 is a Cdunif file, NOT a CDMS file.
+        cufile : is a Cdunif file, NOT a CDMS file.
 
-             gridtitle
-                 is a string identifying the grid.
+        gridtitle : is a string identifying the grid.
 
         """
         cgrid = self.toCurveGrid()
@@ -768,8 +776,7 @@ class AbstractRectGrid(AbstractGrid):
 
         Parameters
         ----------
-              gridid
-                 is the string identifier of the resulting curvilinear grid object.
+        gridid : is the string identifier of the resulting curvilinear grid object.
 
         """
 
@@ -1049,8 +1056,7 @@ def isGrid(grid):
     Parameters
     ----------
 
-         grid-cdms2:
-            contruct to be examined
+    grid-cdms2 : contruct to be examined
 
     """
     return isinstance(grid, AbstractGrid)
@@ -1063,14 +1069,11 @@ def writeScripGrid(path, grid, gridTitle=None):
     Parameters
     ----------
 
-           path:
-              is the path of the SCRIP file to be created.
+    path : is the path of the SCRIP file to be created.
 
-           grid:
-              is a CDMS grid object.
+    grid : is a CDMS grid object.
 
-           gridTitle:
-              is a string ID for the grid.
+    gridTitle : is a string ID for the grid.
 
     """
 

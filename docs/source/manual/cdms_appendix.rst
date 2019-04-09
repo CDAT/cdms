@@ -251,7 +251,9 @@ Table Slab Methods
       *  If ``flag`` is nonzero, dimension values, weights, and bounds are also printed.  Output is sent to ``device``."
    "List", "``listall(all=None)``", "Print slab information. 
       *  If ``all`` is nonzero, dimension values, weights, and bounds are also printed."
-   "List", "``listdimattributes(dim, field)``", "List dimension attributes.  Returns a list of string attribute names which can be input to ``getdimattribute``. 
+   "List", "``listdimattributes(dim, field)``", "List dimension attributes.  Returns a list of string
+    attribute names which can be input to
+    ``getdimattribute``. 
       * ``dim`` is the dimension number, an integer in the range 0..rank-1.  
       * ``field`` is a string, one of: 'name', 'values', 'length', 'units', 'weights', 'bounds'."
    "None", "``setattribute(name, value)``", "Set an attribute.  
@@ -291,6 +293,16 @@ Table cuDataset Methods
       **Note:** The default is the variable name set by default_variable."
    "Various", "``getglobal (attribute)``", "Get the value of the global attribute. 
       * ``attribute`` is the string attribute name."
+
+Table cuDataset Methods(cont'd)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. csv-table:: 
+   :header: "Type", "Method", "Definition"
+   :widths: 20, 50, 80
+   :align: left
+
+
    "Variable", "``getslab (vname, \*args)``", "Read data for a variable.
        * ``vname`` is the string name of the variable.
        * ``args`` is an argument list corresponding to the dimensions of the variable. 
@@ -305,11 +317,21 @@ Table cuDataset Methods
    "List", "``listattribute (vname=None )``", "Return a list of attribute names.
        * ``vname`` is the name of the variable. 
        **Note:** The default is the variable name set by default_variable."
-   "List", "``listdimension (vname=None)``", "Return a list of the dimension names associated with a variable. 
+   "List", "``listdimension (vname=None)``", "Return a list of the dimension names associated with
+    a variable. 
        * ``vname`` is the name of the variable. 
        **Note:** The default is the variable name set by default_variable."
    "List", "``listglobal ()``", "Return a list of the global attribute names."
    "List", "``listvariable ()``", "Return a list of the variables in the file."
+
+Table cuDataset Methods(cont'd)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. csv-table:: 
+   :header: "Type", "Method", "Definition"
+   :widths: 20, 50, 80
+   :align: left
+
    "None", "``showall (vname=None, all=None, device=sys.stdout)``", "Print a description of the variable. 
        * ``vname`` is the string name of the variable.
        **Note:** If all is non-zero, dimension values, weights, and bounds are returned as well. Output is sent to device."

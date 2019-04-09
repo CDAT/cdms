@@ -92,5 +92,6 @@ dependencies:
   - sphinx_rtd_theme=0.4.3=py_0
   - sphinxcontrib=1.0=py37_1
   - sphinxcontrib-websupport=1.1.0=py37_1
+  - easydev=0.9.36=py_1
 prefix: /home/docs/.conda/envs/docstanya
 

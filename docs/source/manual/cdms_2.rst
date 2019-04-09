@@ -344,15 +344,16 @@ Cdms Module Functions(cont'd)
                      NOT be generated; the ``getBounds`` method will return ``None`` for the boundaries. 
                    **Note:** In versions of CDMS prior to V4.0, the default ``mode`` was ``'on'``."
    "None", "``setClassifyGrids(mode)``:
-             Set the grid classification mode. 
-             This affects how grid type is determined, for the purpose of generating grid boundaries.
-                  * If ``mode`` is ``'on'`` (the default), grid type is determined by a grid classification method, 
+            Set the grid classification mode. 
+             This affects how grid type is determined, for the purpose of generating grid
+             boundaries.
+                   * If ``mode`` is ``'on'`` (the default), grid type is determined by a grid classification method, 
                     regardless of the value of ``grid.get-Type()``.
-                  * If ``mode`` is ``'off'``, the value of ``grid.getType()`` determines the grid type." 
+                   * If ``mode`` is ``'off'``, the value of ``grid.getType()`` determines the grid type." 
    "None", "``writeScripGrid(path, grid, gridTitle=None)``:
              Write a grid to a SCRIP grid file. 
-                * ``path`` is a string, the path of the SCRIP file to be created. 
-                * ``grid`` is a CDMS grid object. It may be rectangular. ``gridTitle`` is a string ID for the grid."
+                   * ``path`` is a string, the path of the SCRIP file to be created. 
+                   * ``grid`` is a CDMS grid object. It may be rectangular. ``gridTitle`` is a string ID for the grid."
 
 
 
@@ -794,16 +795,16 @@ CdmsFile Methods(cont'd)
            * ``datatype`` is an ``MV2`` typecode, e.g., ``MV2.Float``, ``MV2.Int``. 
            * ``axes`` is a list of Axis and/or Grid objects. 
            * ``fill_value`` is the missing value (optional)."
-   "Variable", "``createVariableCopy (var, newname=None)``", "Create a new ``Variable``, with the   same name, 
-               axes, and attributes as the input variable.
-        An error is raised if a variable of the same name exists
-        in the file. 
+   "Variable", "``createVariableCopy (var, newname=None)``", "Create a new ``Variable``, with the same name, axes, and
+    attributes as the input variable. An error is raised if a 
+    variable of the same name exists in the file.
            * ``var`` is the ``Variable`` to be copied. 
            * ``newname``, if specified is the name of the new variable. 
            * If unspecified, the returned variable has the same name as ``var``.
         **Note:** Unlike copyAxis, the actual data is not copied to the new variable."
-   "CurveGrid or Generic-Grid", "``readScripGrid (self,whichGrid= 'destination',check-Grid=1)``", "Read a curvilinear or generic grid from a SCRIP netCDF file. 
-         The file can be a SCRIP grid file or remapping file. 
+   "CurveGrid or Generic-Grid", "``readScripGrid (self,whichGrid= 'destination',check-Grid=1)``", "Read a curvilinear or generic grid from a SCRIP netCDF file.
+           The file can be a SCRIP grid file or remapping file.  
+
            * If a mapping file, ``whichGrid`` chooses the grid to read, either ``'source'`` or ``'destination'``. 
            * If ``checkGrid`` is ``1`` (default), the grid cells are checked for convexity, and 'repaired' if necessary.  
            * Grid cells may appear to be nonconvex if they cross a ``0 / 2pi`` boundary. 

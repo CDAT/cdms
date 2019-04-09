@@ -31,9 +31,8 @@ import glob
 sys.path.insert(0,os.path.join(sys.prefix,"lib","python3.7","site-packages"))
 sys.path.insert(0,os.path.join(sys.prefix,"lib","python2.7","site-packages"))
 print(os.path.join(sys.prefix,"lib","python3.7","site-packages"))
-os.system("ls "+os.path.join(sys.prefix,"lib","python3.7","site-packages"))
-os.system("ls "+os.path.join(sys.prefix,"lib","python2.7","site-packages"))
 os.environ['UVCDAT_ANONYMOUS_LOG']="False"
+import MV2
 
 
 

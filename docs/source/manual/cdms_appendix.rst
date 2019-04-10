@@ -48,7 +48,7 @@ Quick Start (Cheat Sheet)
    :scale: 25%
    :alt: cheat sheet
 
-:download:`cdms quick start <docs/cdms_quick_start.pdf>`
+:download:`https://cdms.readthedocs.io/en/latest/_downloads/793595691d2eefda847bfe76ce04238e/cdms_quick_start.pdf <docs/cdms_quick_start.pdf>`
 
 
 VCS Quick Reference (Cheat Sheet)
@@ -58,7 +58,7 @@ VCS Quick Reference (Cheat Sheet)
    :scale: 25%
    :alt:  VCS Cheat Sheet
 
-
+:download:`https://cdms.readthedocs.io/en/latest/_images/vcs_quick_ref.jpg`
 
 Release Notes
 ~~~~~~~~~~~~~

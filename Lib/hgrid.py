@@ -35,12 +35,17 @@ class AbstractHorizontalGrid(AbstractGrid):
 
     Parameters
     ----------
-        latAxis
-        lonAxis
-        id - Default None
-        maskvar - Default None
-        tempmask - Default None
-        node - Default None
+    latAxis
+
+    lonAxis
+
+    id - Default None
+
+    maskvar - Default None
+
+    tempmask - Default None
+
+    node - Default None
 
     """
 
@@ -107,12 +112,13 @@ class AbstractHorizontalGrid(AbstractGrid):
 
     def getWeightsArray(self):
         """
+        Get Weights Array
 
         Returns
         -------
 
-             normalized area weights, as an array of the same
-             shape as the grid.
+        normalized area weights, as an array of the same
+        shape as the grid.
         """
         raise CDMSError(MethodNotImplemented)
 
@@ -147,7 +153,7 @@ class AbstractHorizontalGrid(AbstractGrid):
 
         Returns
         -------
-            a 1D numpy array of cells that fail the cross-product test.
+        a 1D numpy array of cells that fail the cross-product test.
         """
 
         from numpy import zeros, where, less, logical_or, compress
@@ -189,11 +195,9 @@ class AbstractHorizontalGrid(AbstractGrid):
 
         Parameters
         ----------
-        nonConvexCells:
-                  1D numpy array of indices of nonconvex cells, as returned from
-                  checkConvex.
-        threshold:
-                  positive floating-point value in degrees.
+        nonConvexCells : 1D numpy array of indices of nonconvex cells, as returned from checkConvex.
+
+        threshold : positive floating-point value in degrees.
 
 
         If the difference in longitude values of consecutive boundaries nodes
@@ -352,11 +356,9 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         Parameter
         ---------
 
-             cufile
-                is a Cdunif file, NOT a CDMS file.
+        cufile : is a Cdunif file, NOT a CDMS file.
 
-             gridtitle
-                is a string identifying the grid.
+        gridtitle : is a string identifying the grid.
         """
 
         lat = numpy.ma.filled(self._lataxis_[:])
@@ -654,30 +656,24 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
         Parameters
         ----------
 
-             domainlist
-                 is a list of axes of a variable.
+        domainlist : is a list of axes of a variable.
 
-             newaxislist
-                 is a list of result axes after the slicelist is applied to domainlist.
+        newaxislist : is a list of result axes after the slicelist is applied to domainlist.
 
-             slicelist
-                 is a list of slices.
+        slicelist : is a list of slices.
 
         All lists are of equal length.
 
         Returns
         -------
 
-            value
-               is (newslicelist, gridaxislist) where
-            newslicelist
+        value : is (newslicelist, gridaxislist) where
 
-               is the elements of slicelist that correspond to the grid, in the
-          preferred order of the grid.
+        newslicelist : is the elements of slicelist that correspond to the grid, in the
+                       preferred order of the grid.
 
-             gridaxislist
-               is the elements of newaxislist that correspond to the grid, in the
-          preferred order of the grid.
+        gridaxislist : is the elements of newaxislist that correspond to the grid, in the
+                       preferred order of the grid.
         """
 
         iaxis = self._lataxis_.getAxis(0)
@@ -722,23 +718,20 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
     def intersect(self, spec):
         """Intersect with the region specification.
 
-       Parameters
-       ----------
+        Parameters
+        ----------
 
-            'spec'
-                is a region specification of the form defined in the grid module.
+        'spec' : is a region specification of the form defined in the grid module.
 
-       Returns
-       -------
+        Returns
+        -------
 
-            (mask, indexspecs) where
-            'mask'
-                is the mask of the result grid AFTER self and region spec are interested.
+        (mask, indexspecs) where
 
-            'indexspecs'
-                is a list of index specifications suitable for slicing a
+        'mask' : is the mask of the result grid AFTER self and region spec are interested.
 
-             variable with the given grid.
+        'indexspecs' : is a list of index specifications suitable for slicing a
+                      variable with the given grid.
         """
         ni, nj = self.shape
         index = self.getIndex()
@@ -777,12 +770,12 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
 
     def isClose(self, g):
         """
+        Is Close
 
         Returns
         -------
 
-            1 if g
-                is a grid of the same type and shape. A real element-by-element
+        1 if g : is a grid of the same type and shape. A real element-by-element
             comparison would be too expensive here."""
         if g is None:
             return 0
@@ -795,12 +788,12 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
 
     def checkAxes(self, axes):
         """
+        Check Axes
 
         Returns
         -------
 
-             1 iff every element of self.getAxisList()
-                  is in the list 'axes'."""
+        1 iff every element of self.getAxisList() is in the list 'axes'."""
         for item in self.getAxisList():
             # if all [False, False, ....] result=0
             if not any([allclose(item[:], axis[:]) for axis in axes]):
@@ -813,14 +806,15 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
 
     def reconcile(self, axes):
         """
+       Reconcile
+
         Returns
         -------
 
-             a grid that
-                  is consistent with the axes, or None.
+        a grid that is consistent with the axes, or None.
 
-             For curvilinear grids this means that the grid-related axes are
-             contained in the 'axes' list.
+        For curvilinear grids this means that the grid-related axes are
+        contained in the 'axes' list.
         """
         result = self
         selfaxes = self.getAxisList()
@@ -850,14 +844,14 @@ class AbstractCurveGrid(AbstractHorizontalGrid):
 
     def flatAxes(self):
         """
+        Flat Axes
+
         Returns
         -------
 
-            (flatlat, flatlon) where flatlat
-                 is a 1D NumPy array
+        (flatlat, flatlon) where flatlat is a 1D NumPy array
 
-            having the same length as the number of cells in the grid, similarly
-            for flatlon.
+        having the same length as the number of cells in the grid, similarly for flatlon.
         """
         if self._flataxes_ is None:
             from . import MV2 as MV
@@ -945,17 +939,13 @@ def readScripCurveGrid(fileobj, dims, whichType, whichGrid):
     Parameters
     ----------
 
-         fileobj
-             is an open CDMS dataset or file object.
+    fileobj : is an open CDMS dataset or file object.
 
-         dims
-             is the grid shape.
+    dims : is the grid shape.
 
-         whichType
-             is the type of file, either "grid" or "mapping"
+    whichType : is the type of file, either "grid" or "mapping"
 
-         if whichType
-             is "mapping", whichGrid is the choice of grid, either "source" or "destination"
+    f whichType  is "mapping", whichGrid is the choice of grid, either "source" or "destination"
 
     Returns
     -------

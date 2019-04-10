@@ -40,22 +40,23 @@ _Att = re.compile('([a-zA-Z_:][-a-zA-Z0-9._:]*)=(.*)', re.DOTALL)
 def connect(uri=None, user="", password=""):
     """
 
-    Method:  connect(uri=None, user="", password="")
+    Method :  connect(uri=None, user="", password="")
 
-    Description:  Open a CDMS database connection.
+    Description :  Open a CDMS database connection.
 
-    Arguments
+    Arguments : uri: Universal Resource Identifier. If unspecified, defaults to the environment variable CDMSROOT.
 
-       uri: Universal Resource Identifier. If unspecified, defaults to the environment variable CDMSROOT.
-       user: user id
-       password: password
+    user: user id
+    password: password
 
     Returns
     -------
-       Database instance
+
+    Database instance
 
     Example
-        db = cdms.connect("ldap://dbhost.llnl.gov/database=CDMS,ou=PCMDI,o=LLNL,c=US")
+
+    db = cdms.connect("ldap://dbhost.llnl.gov/database=CDMS,ou=PCMDI,o=LLNL,c=US")
     """
     if uri is None:
         try:
@@ -104,17 +105,16 @@ def connect(uri=None, user="", password=""):
 def loadString(text, uri, parent=None, datapath=None):
     """ Create a dataset from a text string.
 
-            <text>
-                is the string in CDML format.
+        Parameters
+        ----------
 
-            <uri>
-                is the URL of the dataset in a catalog or file.
+        <text> : is the string in CDML format.
 
-            <parent>
-                is the containing database object, if any.
+        <uri> :  is the URL of the dataset in a catalog or file.
 
-            <datapath>
-                is the location of data files relative to the parent database URL.
+        <parent> : is the containing database object, if any.
+
+        <datapath> : is the location of data files relative to the parent database URL.
     """
     p = CDMLParser()
     p.feed(text)
@@ -210,7 +210,7 @@ class LDAPDatabase(AbstractDatabase):
 
         Returns
         -------
-          None
+        None
 
         """
         if self.db is not None:
@@ -516,14 +516,14 @@ class LDAPSearchResult(AbstractSearchResult):
 
         Returns
         -------
-           SearchResult instance. Entries can be accessed sequentially. For each entry, entry.name is the
-           name of the entry, entry.attributes is a dictionary of the attributes returned by the search,
-           entry.getObject() returns the CDMS object associated with the entry:
+        SearchResult instance. Entries can be accessed sequentially. For each entry, entry.name is the
+        name of the entry, entry.attributes is a dictionary of the attributes returned by the search,
+        entry.getObject() returns the CDMS object associated with the entry:
 
-           for entry in result:
-               print entry.name, entry.attributes["id"]
+          for entry in result:
+            print entry.name, entry.attributes["id"]
 
-           Entries can be refined with searchPredicate().
+        Entries can be refined with searchPredicate().
 
         Example
             (1) Find all variables on a 73x96 grid
@@ -564,7 +564,7 @@ class AbstractResultEntry:
 
         Returns
         -------
-          Instance of a CDMS object.
+        Instance of a CDMS object.
 
         """
 

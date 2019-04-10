@@ -123,7 +123,7 @@ Time Methods
 ~~~~~~~~~~~~
 .. csv-table:: 
    :header: "Type", "Method", "Definition"
-   :widths: 20, 75, 80
+   :widths: 35, 42, 80
    :align: left
 
    "Comptime or Reltime", "``t.add(value,intervalUnits, cdtime.DefaultCalendar)``", "Add an interval of time to a time type t.  
@@ -133,7 +133,8 @@ Time Methods
        * [Second (s) | Minute(s) Hour(s) | Day(s) |  Week(s) | Month(s) | Season(s) | Year(s) ]``
        * ``calendar`` is the calendar type."
    "Integer", "``t.cmp(t2, cdtime.DefaultCalendar)``", "Compare time values t and t2. 
-     Returns -1, 0, 1 as t is less than, equal to, or greater than t2 respectively.
+     Returns -1, 0, 1 as t is less than, equal to,
+     or greater than t2 respectively.
        * ``t2`` is the time to compare.
        * ``calendar`` is the calendar type."
    "Comptime or Reltime", "``t.sub(value,intervalUnits, cdtime.DefaultCalendar)``", "Subtract an interval of time from a time type t. 

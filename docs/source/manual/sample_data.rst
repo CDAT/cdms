@@ -1,6 +1,14 @@
 CDMS Sample Dataset
 -------------------
 
+THREDDS Data Server (TDS)
+'''''''''''''''''''''''''
+
+* https://aims3.llnl.gov/thredds/catalog/esgcet/254/CDAT-sample.v1.html
+
+Direct https donwload
+'''''''''''''''''''''
+
 * https://cdat.llnl.gov/cdat/sample_data/161122_RobertPincus_multiple_input4MIPs_radiation_RFMIP_UColorado-RFMIP-20161122_none.nc
 * https://cdat.llnl.gov/cdat/sample_data/20160520.A_WCYCL1850.ne30_oEC.edison.alpha6_01_ANN_climo_Q.nc
 * https://cdat.llnl.gov/cdat/sample_data/area_weights.nc

@@ -11,11 +11,19 @@ class TestCDMSFileIO(basetest.CDMSBaseTest):
     def setUp(self):
         super(TestCDMSFileIO, self).setUp()
         self.readOnly = self.getDataFile("readonly.nc")
+        self.clt = self.getDataFile("clt.nc")['clt']
         self.u = self.readOnly["u"]
         self.u_masked = self.readOnly["umasked"]
 
     def tearDown(self):
         super(TestCDMSFileIO, self).tearDown()
+
+    def testZSS(self):
+        out_file=cdms2.open('temp.nc', 'w')
+        out_file.write(self.clt[0:10,:])
+        out_file.write(self.clt[10:20,:])
+        out_file.close()
+
 
     def testSize(self):
         self.assertEqual(self.u.size(), 512)

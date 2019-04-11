@@ -116,7 +116,7 @@ SCRIP Horizontal Regridder
 
 To interpolate between grids where one or both grids is non-rectangular,
 CDMS provides an interface to the SCRIP regridder package developed at
-Los Alamos National Laboratory (https://oceans11.lanl.gov/trac/SCRIP). 
+Los Alamos National Laboratory (https://oceans11.lanl.gov/trac/SCRIP).
 
 Figure 3 illustrates the process:
 
@@ -159,12 +159,12 @@ In this example:
 
     >>> &remap_inputs
     >>> num_maps = 1
-    >>> 
+    >>>
     >>> grid1_file = 'remap_grid_T42.nc'
     >>> grid2_file = 'remap_grid_POP43.nc'
     >>> interp_file1 = 'rmp_T42_to_POP43_conserv.nc'
     >>> interp_file2 = 'rmp_POP43_to_T42_conserv.nc'
-    >>> map1_name = 'T42 to POP43 Conservative Mapping'           
+    >>> map1_name = 'T42 to POP43 Conservative Mapping'
     >>> map2_name = 'POP43 to T42 Conservative Mapping'
     >>> map_method = 'conservative'
     >>> normalize_opt = 'frac'
@@ -303,14 +303,14 @@ input to output grids.
 CDMS Regridder Constructor
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. csv-table:: 
+.. csv-table::
    :header:  "Constructor", "Description"
    :widths:  50, 90
    :align: left
 
    "``regridFunction = Regridder(inputGrid, outputGrid)``", "Create a regridder function which interpolates a data array from
     input to output grid.
-       * `CDMS regridder functions`_ describes the calling sequence of this function. 
+       * `CDMS regridder functions`_ describes the calling sequence of this function.
        * ``inputGrid`` and ``outputGrid`` are CDMS grid objects.
        **Note:** To set the mask associated with inputGrid or outputGrid, use the grid setMask function."
 
@@ -323,7 +323,7 @@ function:
 SCRIP Regridder Constructor
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. csv-table:: 
+.. csv-table::
    :header:  "Constructor", "Description"
    :widths:  80, 90
    :align: left
@@ -337,7 +337,7 @@ SCRIP Regridder Constructor
            * ``'distwgt'``: distance-weighted interpolation.
       * It is only necessary to specify the map method if it is not defined in the file.
       * If ``checkGrid`` is 1 (default), the grid cells are checked for convexity, and 'repaired' if necessary.
-      * Grid cells may appear to be nonconvex if they cross a ``0 / 2pi`` boundary. 
+      * Grid cells may appear to be nonconvex if they cross a ``0 / 2pi`` boundary.
       * The repair consists of shifting the cell vertices to the same side modulo 360 degrees."
 
 Regridder Functions
@@ -358,7 +358,7 @@ A CDMS regridder function is an instance of the CDMS ``Regridder``
 class. The function is associated with rectangular input and output
 grids. Typically its use is straightforward:
   * The function is passed an input array and returns the regridded array.
-    However, when the array has missing data, or the input and/or output 
+    However, when the array has missing data, or the input and/or output
     grids are masked, the logic becomes more complicated.
 
 Step 1
@@ -407,7 +407,7 @@ grid cells which completely overlap input grid cells with missing values
 CDMS Regridder Function
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-.. csv-table:: 
+.. csv-table::
    :header:  "Type", "Function", "Description"
    :widths:  40, 40, 80
    :align: left
@@ -425,13 +425,13 @@ CDMS Regridder Function
        * ``order`` is a string indicating the order of dimensions of the array.  It has the form returned from ``variable.getOrder().``
        * ``mask`` is a Numpy array, of datatype Integer or Float, consisting of a fractional number between 0 and 1.
        * A value of 1 or 1.0 indicates that the corresponding data value is to be ignored for purposes of regridding.
-       * A value of 0 or 0.0 indicates that the corresponding data value is valid. This is consistent with the convention for masks used by the MV2 module. 
+       * A value of 0 or 0.0 indicates that the corresponding data value is valid. This is consistent with the convention for masks used by the MV2 module.
        * A fractional value between 0.0 and 1.0 indicates the fraction of the data value (e.g., the corresponding cell) to be ignored when regridding. This is useful if a variable is regridded first to grid A and then to another grid B; the mask when regridding from A to B would be (1.0 - f) where f is the maskArray returned from the initial grid operation using the ``returnTuple`` argument."
 
 DMS Regridder Function(cont'd)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-.. csv-table:: 
+.. csv-table::
    :header:  "Type", "Function", "Description"
    :widths:  40, 40, 80
    :align: left
@@ -442,10 +442,10 @@ DMS Regridder Function(cont'd)
      Variable, a TransientVariable of  the same
      rank as the input array is returned, otherwise
      a masked array is returned.
-       * If ``mask`` is two-dimensional of the same shape as the input grid, it overrides the mask of the input grid.  
-       * If the ``mask`` has more than two dimensions, it must have the same shape as ``array``. In this case, the ``missing`` data value is also ignored. Such an ndimensional mask is useful if the pattern of missing data varies with level (e.g., ocean data) or time. 
+       * If ``mask`` is two-dimensional of the same shape as the input grid, it overrides the mask of the input grid.
+       * If the ``mask`` has more than two dimensions, it must have the same shape as ``array``. In this case, the ``missing`` data value is also ignored. Such an ndimensional mask is useful if the pattern of missing data varies with level (e.g., ocean data) or time.
        **Note:** If neither ``missing`` or ``mask`` is set, the default mask is obtained from the mask of the array if any."
-   "Array, Array",  "``regridFunction (ar, missing=None, order=None, mask=None, returnTuple=1)``", "If called with the optional ``returnTuple`` 
+   "Array, Array",  "``regridFunction (ar, missing=None, order=None, mask=None, returnTuple=1)``", "If called with the optional ``returnTuple``
    argument equal to 1, the function returns a tuple ``dataArray``, ``maskArray``).
        * ``dataArray`` is the result data array.
        * ``maskArray`` is a Float32 array of the same shape as ``dataArray``, such that ``maskArray[i,j]`` is fraction of the output grid cell [i,j] overlapping a non-missing cell of the grid."
@@ -494,23 +494,23 @@ for source and target grids.
 SCRIP Regridder Functions
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. csv-table:: 
+.. csv-table::
    :header:  "Return Type", "Method", "Description"
    :widths:  30, 45, 80
    :align: left
 
-    "Array or Transient-Variable", "[conservative, bilinear, and distance-weighted regridders] ``regridFunction(array)``", "Interpolate a gridded data array to a new grid. 
-    The return value is the regridded data variable. 
+    "Array or Transient-Variable", "[conservative, bilinear, and distance-weighted regridders] ``regridFunction(array)``", "Interpolate a gridded data array to a new grid.
+    The return value is the regridded data variable.
        * ``array`` is a Variable, MaskedArray, or Numpy array.
-       * The rank of the array may be greater than the rank of the input grid, in which case the input grid shape must match a trailing portion of the array shape. 
-       * For example, if the input grid is curvilinear with shape (64,128), the last two dimensions of the array must match. 
+       * The rank of the array may be greater than the rank of the input grid, in which case the input grid shape must match a trailing portion of the array shape.
+       * For example, if the input grid is curvilinear with shape (64,128), the last two dimensions of the array must match.
        * Similarly, if the input grid is generic with shape (2560,), the last dimension of the array must have that length."
     "Array or Transient-Variable", "[bicubic regridders] ``regridFunction(array, gradientLat, gradientLon, gradientLatLon)``", "Interpolate a gridded data array to a new grid,
-    using a bicubic regridder. 
+    using a bicubic regridder.
     The return value is the regridded data variable.
-       * ``array`` is a Variable, MaskedArray, or Numpy array. 
-       * The rank of the array may be greater than the rank of the input grid, in which case the input grid shape must match a trailing portion of the array shape. 
-       * For example, if the input grid is curvilinear with shape (64,128), the last two dimensions of the array must match. 
+       * ``array`` is a Variable, MaskedArray, or Numpy array.
+       * The rank of the array may be greater than the rank of the input grid, in which case the input grid shape must match a trailing portion of the array shape.
+       * For example, if the input grid is curvilinear with shape (64,128), the last two dimensions of the array must match.
        * Simiarly, if the input grid is generic with shape (2560,), the last dimension of the array must have that length.
        * ``gradientLat``: df/di (see the SCRIP documentation). Same shape as ``array``.
        * ``gradientLon``: df/dj. Same shape as ``array``.
@@ -519,21 +519,21 @@ SCRIP Regridder Functions
 SCRIP Regridder Functions(con'td)
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. csv-table:: 
+.. csv-table::
    :header:  "Return Type", "Method", "Description"
    :widths:  30, 45, 80
    :align: left
 
 
-    "Numpy array", "``getDestinationArea()`` [conservative regridders only]", "Return the area of the destination (output) grid cell. 
+    "Numpy array", "``getDestinationArea()`` [conservative regridders only]", "Return the area of the destination (output) grid cell.
        * The array is 1-D, with length equal to the number of cells in the output grid."
     "Numpy array", "``getDestination Fraction()``", "Return the area fraction of the destination (output)
-    grid cell that participates in the regridding. 
+    grid cell that participates in the regridding.
        * The array is 1-D, with length equal to the number of cells in the output grid."
     "CurveGrid or Generic-Grid", "``getInputGrid()``", "Return the input grid, or None if no input grid is associated with the regridder."
     "CurveGrid or Generic-Grid", "``getOutputGrid()``", "Return the output grid."
     "Numpy array", "``getSourceFraction()``", "Return the area fraction of the source (input)
-    grid cell that participates in the regridding. 
+    grid cell that participates in the regridding.
        * The array is 1-D, with length equal to the number of cells in the input grid"
 
 Examples
@@ -548,7 +548,7 @@ Regrid data to a uniform output grid.
 
 ::
 
-    
+
     >>> import cdms2
     >>> from regrid2 import Regridder
     >>> f = cdms2.open('clt.nc')
@@ -645,7 +645,7 @@ Generate an array of zonal mean values.
 Regrid an array with missing data, and calculate the area-weighted mean
 of the result.
 
-:: 
+::
 
    >>> import cdms2
    >>> from cdms2.MV2 import *

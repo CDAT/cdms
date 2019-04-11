@@ -28,9 +28,11 @@ import glob
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0,os.path.join(sys.prefix,"lib","python3.7","site-packages"))
 sys.path.insert(0,os.path.join(sys.prefix,"lib","python2.7","site-packages"))
-print os.path.join(sys.prefix,"lib","python2.7","site-packages")
+print(os.path.join(sys.prefix,"lib","python3.7","site-packages"))
 os.environ['UVCDAT_ANONYMOUS_LOG']="False"
+import MV2
 
 
 

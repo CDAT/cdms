@@ -1327,13 +1327,13 @@ Dataset Methods
      ``raw = 1`` is specified. See 'Selectors'.
         **Example:** The following reads data for variable
         'prc', year 1980:
-          >>> f = cdms.open('test.  xml')
+          >>> f = cdms.open('test.xml')
           >>> x = f('prc', time=('1980-1','1981-1'))"
     "Variable, Axis, or Grid", "``datasetobj['id']``", "The square bracket operator applied to a dataset gets
     the persistent variable, axis or grid object having the string identifier. This does not read the data for
     a variable. Returns ``None`` if not found.
         **Example:**
-           >>> f = cdms.open('sampl e.xml')
+           >>> f = cdms.open('sample.xml')
            >>> v = f['prc']
            * gets the persistent variable v, equivalent to ``v =f.variab les['prc']``.
        

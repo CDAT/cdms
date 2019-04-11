@@ -23,6 +23,7 @@ class CDMSTestRunner(cdat_info.TestRunnerBase):
         cacert_pem = ""
         if hostname.endswith('.llnl.gov'):
             cmd = "curl https://access.llnl.gov/cspca.cer -o {h}/cspca.cer".format(h=home)
+            cmd = "curl -k https://www-csp.llnl.gov/content/assets/csoc/cspca.crt -o {h}/cspca.cer".format(h=home)
             ret_code, out = run_command(cmd)
             if ret_code != SUCCESS:
                 return ret_code

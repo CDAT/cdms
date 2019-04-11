@@ -387,10 +387,6 @@ to the internal, non-persistent attributes of an object, which are
 built-in and predefined. When a CDMS object is written to a file, the
 external attributes are written, but not the internal attributes.
 
-**Example**: Get a list of all external attributes of obj.
-
-.. doctest::
-
 
 Attributes Common to All CDMS Objects
 -------------------------------------
@@ -803,7 +799,7 @@ CdmsFile Methods(cont'd)
            * If unspecified, the returned variable has the same name as ``var``.
         **Note:** Unlike copyAxis, the actual data is not copied to the new variable."
    "CurveGrid or Generic-Grid", "``readScripGrid (self,whichGrid= 'destination',check-Grid=1)``", "Read a curvilinear or generic grid from a SCRIP netCDF file.
-           The file can be a SCRIP grid file or remapping file.  
+    The file can be a SCRIP grid file or remapping file.  
            * If a mapping file, ``whichGrid`` chooses the grid to read, either ``'source'`` or ``'destination'``. 
            * If ``checkGrid`` is ``1`` (default), the grid cells are checked for convexity, and 'repaired' if necessary.  
            * Grid cells may appear to be nonconvex if they cross a ``0 / 2pi`` boundary. 
@@ -1257,6 +1253,7 @@ This defaults to the database defined in environment variable
 **Example:** Find the total number of each type of object in the database:
 
 ::
+
    >>> f = cdms.open('test.  xml')
    >>> x = f('prc', time=('1980-1','1981-1'))"
 

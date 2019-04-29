@@ -21,15 +21,12 @@ the `Python Foundation's homepage <https://python.org>`__.
 Variables
 ^^^^^^^^^
 
-The basic unit of computation in CDMS is the variable. A variable is
-essentially a multidimensional data array, augmented with a domain, a
-set of attributes, and optionally a spatial and/or temporal coordinate
-system (see `Coordinate Axes <#coordinate-axes>`__). As a data array, a variable can
-be sliced to obtain a portion of the data, and can be used in arithmetic
-computations. For example, if ``u`` and ``v`` are variables representing
-the eastward and northward components of wind speed, respectively, and
-both variables are functions of time, latitude, and longitude, then the
-velocity for time 0 (first index) can be calculated as:
+The basic unit of computation in CDMS is the variable. A variable is essentially a multidimensional data  array,
+augmented with a domain, a set of attributes, and optionally a spatial and/or temporal coordinate system
+(see `Coordinate Axes <#coordinate-axes>`__). As a data array, a variable can be sliced to obtain a portion of the 
+data, and can be used in arithmetic computations. For example, if ``u`` and ``v`` are variables representing
+the eastward and northward components of wind speed, respectively, and both variables are functions of time,
+latitude, and longitude, then the velocity for time 0 (first index) can be calculated as:
 
 ::
 
@@ -707,7 +704,7 @@ Time Types
 ^^^^^^^^^^
 
 CDMS provides extensive support for time values in the cdtime module.
-cdtime also defines a set of calendars , specifying the number of days
+cdtime also defines a set of calendars, specifying the number of days
 in a given month.
 
 Two time types are available: relative time and component time .

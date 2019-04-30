@@ -772,7 +772,7 @@ CdmsFile Methods(cont'd)
             * ``lon`` is a longitude axis in the file.
             * ``order`` is a string with value ``'yx'`` (the latitude) or ``'xy'`` (the first grid dimension
               is longitude).
-            * ``type`` is one of ``'gaussian'``,\ ``'unif orm'``,\ ``'equalarea'`` , or ``'generic'``.
+            * ``type`` is one of ``'gaussian'``,\ ``'uniform'``,\ ``'equalarea'`` , or ``'generic'``.
             * If specified, ``mask`` is a two-dimensional, logical Numpy array (all values are zero or one)
               with the same shape as the grid."
 
@@ -1257,10 +1257,9 @@ RectGrid Methods, Additional to HorizontalGrid Methods
     "String", "``getOrder()``",  "Get the grid ordering, either 'yx' if latitude is the first axis,
     or 'xy' if longitude is the first axis.
           String ``getType()``
-            * Get the grid type, either 'gaussian', 'uniform', 'equalarea', or 'generic'.
-            * (Array,Array) ``getWeights()``
-            * Get the normalized area weight arrays, as a tuple ``(latWeights, lonWeights)``.
-            * It is assumed that the latitude and longitude axes are defined in degrees.
+            * Get the grid type, either 'gaussian', 'uniform', 'equalarea', or 'generic'."
+    "(Array,Array)", "``getWeights()``", "Get the normalized area weight arrays, as a tuple ``(latWeights, lonWeights)``.
+    It is assumed that the latitude and longitude axes are defined in degrees.
           The latitude weights are defined as:
             * ``latWeights[i] = 0.5 * abs(sin(latBounds[i+1]) - sin(latBounds[i]))``
           The longitude weights are defined as:
@@ -1273,7 +1272,7 @@ RectGrid Methods, Additional to HorizontalGrid Methods
               * latwts, lonwts = gri d.getWeights()
               * weights = MV.outerproduct(latwts, lonwts)
               *  Also see the function ``area_weights`` in module ``pcmdi.weighting``."
-        "None", "``setType (gridtype)``", "Set the grid type.
+    "None", "``setType (gridtype)``", "Set the grid type.
               * ``gridtype`` is one of 'gaussian', 'uniform', 'equalarea', or 'generic'."
 
 RectGrid Methods, Additional to HorizontalGrid Methods(cont'd)

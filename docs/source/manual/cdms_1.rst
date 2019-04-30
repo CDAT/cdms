@@ -728,7 +728,7 @@ units=" days since 1996-1-1". To create a relative time type:
    'days since 1996-1-1'
 
 A component time consists of the integer fields year, month, day, hour,
-minute , and the floating-point field second . For example:
+minute, and the floating-point field second. For example:
 
 ::
 
@@ -742,7 +742,7 @@ minute , and the floating-point field second . For example:
 
 The conversion functions tocomp and torel convert between the two
 representations. For instance, suppose that the time axis of a variable
-is represented in units " days since 1979" . To find the coordinate
+is represented in units " days since 1979". To find the coordinate
 value corresponding to January 1, 1990:
 
 ::

@@ -21,6 +21,11 @@ table {
 tr:nth-child(even){background-color: #f2f2f2}
 tr  td:first-child { font-weight: bold }
 
+td[rowspan] {
+  vertical-align: top;
+  text-align: left;
+}
+
 th {    
     background-color: #01796F;
     color: #f8f8ba;

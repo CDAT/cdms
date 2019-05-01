@@ -21,15 +21,12 @@ the `Python Foundation's homepage <https://python.org>`__.
 Variables
 ^^^^^^^^^
 
-The basic unit of computation in CDMS is the variable. A variable is
-essentially a multidimensional data array, augmented with a domain, a
-set of attributes, and optionally a spatial and/or temporal coordinate
-system (see `Coordinate Axes <#coordinate-axes>`__). As a data array, a variable can
-be sliced to obtain a portion of the data, and can be used in arithmetic
-computations. For example, if ``u`` and ``v`` are variables representing
-the eastward and northward components of wind speed, respectively, and
-both variables are functions of time, latitude, and longitude, then the
-velocity for time 0 (first index) can be calculated as:
+The basic unit of computation in CDMS is the variable. A variable is essentially a multidimensional data  array,
+augmented with a domain, a set of attributes, and optionally a spatial and/or temporal coordinate system
+(see `Coordinate Axes <#coordinate-axes>`__). As a data array, a variable can be sliced to obtain a portion of the 
+data, and can be used in arithmetic computations. For example, if ``u`` and ``v`` are variables representing
+the eastward and northward components of wind speed, respectively, and both variables are functions of time,
+latitude, and longitude, then the velocity for time 0 (first index) can be calculated as:
 
 ::
 
@@ -303,7 +300,7 @@ variables ``missing_value`` attribute. The data and ``missing_value``
 attribute are then written to the file.
 
 Masking is covered in `Section 2.9 <cdms_2.html#id3>`__. See also the
-documentation of the Python Numpy and MA modules, on which ``cdms.MV``
+documentation of the Python Numpy and MA modules, on which ``cdms2.MV2``
 is based, at
 
 `https://www.numpy.org/ <https://www.numpy.org/>`__.
@@ -707,7 +704,7 @@ Time Types
 ^^^^^^^^^^
 
 CDMS provides extensive support for time values in the cdtime module.
-cdtime also defines a set of calendars , specifying the number of days
+cdtime also defines a set of calendars, specifying the number of days
 in a given month.
 
 Two time types are available: relative time and component time .
@@ -731,7 +728,7 @@ units=" days since 1996-1-1". To create a relative time type:
    'days since 1996-1-1'
 
 A component time consists of the integer fields year, month, day, hour,
-minute , and the floating-point field second . For example:
+minute, and the floating-point field second. For example:
 
 ::
 
@@ -745,7 +742,7 @@ minute , and the floating-point field second . For example:
 
 The conversion functions tocomp and torel convert between the two
 representations. For instance, suppose that the time axis of a variable
-is represented in units " days since 1979" . To find the coordinate
+is represented in units " days since 1979". To find the coordinate
 value corresponding to January 1, 1990:
 
 ::

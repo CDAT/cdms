@@ -300,7 +300,7 @@ variables ``missing_value`` attribute. The data and ``missing_value``
 attribute are then written to the file.
 
 Masking is covered in `Section 2.9 <cdms_2.html#id3>`__. See also the
-documentation of the Python Numpy and MA modules, on which ``cdms.MV``
+documentation of the Python Numpy and MA modules, on which ``cdms2.MV2``
 is based, at
 
 `https://www.numpy.org/ <https://www.numpy.org/>`__.

@@ -299,7 +299,7 @@ Cdms Module Functions(cont'd)
                    a ``CdmsFile`` is returned.
                  * If the URL protocol is 'http', the file must be a '.xml' or '.cdml' file, and the mode must be 'r'.
                  * If the protocol is 'file' or is omitted, a local file or dataset is opened.
-                 * ``mode`` is the open mode.  See `Open Modes <#table-open-modes>`__
+                 * ``mode`` is the open mode.  See `Open Modes <#id7>`__
                 **Example:**
                        Open an existing dataset: ``f = cdms.open('sampleset.xml')``
 
@@ -424,9 +424,9 @@ It may be contained in a file or dataset, or may be transient
 file, and referencing a file CoordinateAxis slice reads data from the
 file. Axis objects are also used to define the domain of a Variable.
 
-CDMS defines several different types of CoordinateAxis objects. See `MV module <#id3>`_
+CDMS defines several different types of CoordinateAxis objects. See `MV module <#id8>`_
 documents methods that are common to all CoordinateAxis
-types. See `HorizontalGrid <#id4>`_ specifies methods that are unique to 1D
+types. See `HorizontalGrid <#id10>`_ specifies methods that are unique to 1D
 Axis objects.
 
 CoordinateAxis Types
@@ -504,7 +504,7 @@ CoordinateAxis Methods
 
    "Array", ``array = axis[i:j]``", "Read a slice of data from the external file or dataset.
             * Data is returned in the physical ordering defined in the dataset.
-            * See `Variable Slice Operators <#table-variable-slice-operators>`_ for a description of slice operators."
+            * See `Variable Slice Operators <#id22>`_ for a description of slice operators."
    "None", "``axis[i:j] = array``", "Write a slice of data to the external file.
             * Dataset axes are read-only."
    "None", "``assignValue(array)``", "Set the entire value of the axis.
@@ -701,7 +701,7 @@ CdmsFile Constructors
    "Constructor", "Description"
    "``fileobj = cdms.open(path, mode)``", "Open the file specified by path returning a CdmsFile object.
          * ``path`` is the file pathname, a string.
-         * ``mode`` is the open mode indicator, as listed in `Open Modes <#table-open-modes>`_."
+         * ``mode`` is the open mode indicator, as listed in `Open Modes <#id7>`_."
    "``fileobj = cdms.createDataset(path)``", "Create the file specified by path, a string."
 
 CdmsFile Methods
@@ -716,7 +716,7 @@ CdmsFile Methods
    "Transient-Variable", "``fileobj(varname, selector)``", "Calling a ``CdmsFile`` object as a function reads the
    region of data specified by the ``selector``.
        The result is a transient variable, unless ``raw = 1`` is specified.
-       See `Selectors <#selectors>`_.
+       See `Selectors <#id24>`_.
     **Example:** The following reads data for variable 'prc',
     year 1980:
               >>> f = cdms.open('test.nc')
@@ -799,7 +799,7 @@ CdmsFile Methods(cont'd)
            * If unspecified, the returned variable has the same name as ``var``.
         **Note:** Unlike copyAxis, the actual data is not copied to the new variable."
    "CurveGrid or Generic-Grid", "``readScripGrid (self,whichGrid= 'destination',check-Grid=1)``", "Read a curvilinear or generic grid from a SCRIP netCDF file.
-           The file can be a SCRIP grid file or remapping file.
+        The file can be a SCRIP grid file or remapping file.
            * If a mapping file, ``whichGrid`` chooses the grid to read, either ``'source'`` or ``'destination'``.
            * If ``checkGrid`` is ``1`` (default), the grid cells are checked for convexity, and 'repaired' if necessary.
            * Grid cells may appear to be nonconvex if they cross a ``0 / 2pi`` boundary.
@@ -880,7 +880,7 @@ Dataset Constructors
    :widths:  50, 80
    :align: left
 
-    "``datasetobj = cdms.open(String uri, String mode='r')``", "Open the dataset specified by the Universal Resource Indicator, a CDML file. Returns a Dataset object. mode is one of the indicators listed in `Open Modes <#table-open-modes>`__ . ``openDataset`` is a synonym for ``open``"
+    "``datasetobj = cdms.open(String uri, String mode='r')``", "Open the dataset specified by the Universal Resource Indicator, a CDML file. Returns a Dataset object. mode is one of the indicators listed in `Open Modes <#id7>`__ . ``openDataset`` is a synonym for ``open``"
 
 
 Open Modes
@@ -906,7 +906,7 @@ Dataset Methods
 
     "Transient-Variable", "``datasetobj(varname, selector)``", "Calling a Dataset object as a function
      reads the region of data defined by the selector. The result is a transient variable, unless
-     ``raw = 1`` is specified. See 'Selectors'.
+     ``raw = 1`` is specified. See <#selectors>`_.
         **Example:** The following reads data for variable
         'prc', year 1980:
           >>> f = cdms.open('test.xml')
@@ -988,7 +988,7 @@ The command
 Allows use of MV commands without any prefix.
 
 
-Table `Variable Constructors in module MV <#table-variable-constructors-in-module-mv>`_,  lists the constructors in MV. All functions return
+Table `Variable Constructors in module MV <#id9>`_,  lists the constructors in MV. All functions return
 a transient variable. In most cases the keywords axes, attributes, and
 id are available. Axes is a list of axis objects which specifies the
 domain of the variable. Attributes is a dictionary. id is a special
@@ -1148,8 +1148,8 @@ RectGrid Constructors
 
 
     "``cdms.createRectGrid(lat, lon, order, type='generic', mask=None)``", "Create a grid not associated with a file or dataset. See `A First Example`_"
-    "``CdmsFile.createRectGrid(id, lat, lon, order, type='generic', mask=None)``", "Create a grid associated with a file. See `CdmsFile Constructors <#table-cdmsfile-constructors>`_"
-    "``Dataset.createRectGrid(id, lat, lon, order, type='generic', mask=None)``", "Create a grid associated with a dataset. See `Dataset Constructors <#table-dataset-constructors>`_ "
+    "``CdmsFile.createRectGrid(id, lat, lon, order, type='generic', mask=None)``", "Create a grid associated with a file. See `CdmsFile Constructors <#cdmsfile-constructors>`_"
+    "``Dataset.createRectGrid(id, lat, lon, order, type='generic', mask=None)``", "Create a grid associated with a dataset. See `Dataset Constructors <#dataset-constructors>`_ "
     "``cdms.createGaussianGrid (nlats, xorigin=0.0, order='yx')``", "See `A First Example`_"
     "``cdms.createGenericGrid (latArray, lonArray, latBounds=None, lonBounds=None, order='yx', mask=None)``", "See `A First Example`_"
     "``cdms.createGlobalMeanGrid (grid)``", "See `A First Example`_"
@@ -1254,10 +1254,8 @@ RectGrid Methods, Additional to HorizontalGrid Methods
    :header:  "Type", "Method", "Description"
    :widths:  30, 30, 80
 
-    "String", "``getOrder()``",  "Get the grid ordering, either 'yx' if latitude is the first axis,
-    or 'xy' if longitude is the first axis.
-          String ``getType()``
-            * Get the grid type, either 'gaussian', 'uniform', 'equalarea', or 'generic'."
+    "String", "``getOrder()``",  "Get the grid ordering, either 'yx' if latitude is the first axis, or 'xy' if longitude is the first axis."
+    "String", "``getType()``", "Get the grid type, either 'gaussian', 'uniform', 'equalarea', or 'generic'."
     "(Array,Array)", "``getWeights()``", "Get the normalized area weight arrays, as a tuple ``(latWeights, lonWeights)``.
     It is assumed that the latitude and longitude axes are defined in degrees.
           The latitude weights are defined as:
@@ -1377,13 +1375,13 @@ Variable Methods
     in a transient variable.
         * Singleton dimensions are 'squeezed' out.
         * Data is returned in the physical ordering defined in the dataset.
-        * The forms of the slice operator are listed in `Variable Slice Operators <#table-variable-slice-operators>`_"
+        * The forms of the slice operator are listed in `Variable Slice Operators <#id22>`_"
     "None", "``var[ i:j, m:n] = array``", "Write a slice of data to the external dataset.
         * The forms of the slice operator are listed in `Result Entry Methods <#table-resultentry-methods>`_ .  (Variables in CdmsFiles only)"
     "Variable", "``tvar = var(selector)``", "Calling a variable as a function reads the region of
     data defined by the selector.
         * The result is a transient variable, unless raw=1 keyword is specified.
-        * See `Selectors' <#selectors>`_ ."
+        * See `Selectors <#id24>`_ ."
     "None", "``assignValue(Array ar)``", "Write the entire data array. Equivalent to ``var[:] = ar``.  (Variables in CdmsFiles only)."
     "Variable", "``astype(typecode)``", "Cast the variable to a new datatype.
         * Typecodes are as for MV, MV2, and Numpy modules."
@@ -1538,7 +1536,7 @@ Variable Methods(cont'd)
         *  If trailing dimensions are omitted, all values of those dimensions are retrieved.
         * If an axis is circular (axis.isCircular() is true) or cycle is specified (see below), then data will be read with wraparound in that dimension.
         *  Only one axis may be read with wraparound.
-        *  A coordinate interval has one of the forms listed in `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_ .
+        *  A coordinate interval has one of the forms listed in `Index and Coordinate Intervals <#id23>`_ .
         * Also see ``axis.mapIntervalExt``."
 
 Variable Methods(cont'd)
@@ -1710,7 +1708,7 @@ selector can be used with any variable. If the corresponding axis is not
 found, the selector component is ignored. This is very useful for
 writing general purpose scripts. The required keyword overrides this
 behavior. These keywords take values that are coordinate ranges or index
-ranges as defined in See `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_.
+ranges as defined in See `Index and Coordinate Intervals <#id23>`_.
 
 The following keywords are available: Another form of selector
 components is the positional form, where the component order corresponds
@@ -1724,16 +1722,16 @@ Selector Keywords
    :header:  "Keyword", "Description", "Value"
    :widths:  30, 80, 80
 
-    "axisid", "Restrict the axis with ID axisid to a value or range of values.",  See `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_
+    "axisid", "Restrict the axis with ID axisid to a value or range of values.",  See `Index and Coordinate Intervals <#id23>`_
     "grid", "Regrid the result to the grid.", "Grid object"
-    "latitude", "Restrict latitude values to a value or range. Short form: lat", See `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_
-    "level", "Restrict vertical levels to a value or range. Short form: lev",See `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_
-    "longitude", "Restrict longitude values to a value or range. Short form: lon", See `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_
+    "latitude", "Restrict latitude values to a value or range. Short form: lat", See `Index and Coordinate Intervals <#id23>`_
+    "level", "Restrict vertical levels to a value or range. Short form: lev",See `Index and Coordinate Intervals <#id23>`_
+    "longitude", "Restrict longitude values to a value or range. Short form: lon", See `Index and Coordinate Intervals <#id23>`_
     "order", "Reorder the result.", "Order string, e.g., 'tzyx'"
     "raw", "Return a masked array (MV2.array) rather than a transient variable.", "0: return a transient variable (default);  =1: return a masked array."
     "required", "Require that the axis IDs be present.", "List of axis identifiers."
     "squeeze", "Remove singleton dimensions from the result.", "0: leave singleton dimensions (default);    1: remove singleton dimensions."
-    "time", "Restrict time values to a value or range.", See `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_
+    "time", "Restrict time values to a value or range.", See `Index and Coordinate Intervals <#id23>`_
 
 Another form of selector components is the positional form, where the
 component order corresponds to the axis order of a variable. For
@@ -1747,7 +1745,7 @@ example:
 
 Reads data for the range (‘1979-1-1’,’1979-2-1’) of the first axis, and
 coordinate value 1000.0 of the second axis. Non-keyword arguments of the
-form(s) listed in `Index and Coordinate Intervals <#table-index-and-coordinate-intervals>`_ are treated as positional. Such
+form(s) listed in `Index and Coordinate Intervals <#id23>`_ are treated as positional. Such
 selectors are more concise, but not as general or flexible as the other
 types described in this section.
 

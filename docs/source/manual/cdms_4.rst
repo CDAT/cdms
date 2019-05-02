@@ -622,10 +622,10 @@ Generate an array of zonal mean values.
 
 ::
 
-    >>> f = cdms.open(‘rls_ccc_per.nc’)
+    >>> f = cdms2.open(‘rls_ccc_per.nc’)
     >>> rlsf = f.variables[‘rls’]
     >>> ingrid = rlsf.getGrid()
-    >>> outgrid = cdms.createZonalGrid(ingrid)
+    >>> outgrid = cdms2.createZonalGrid(ingrid)
     >>> regridFunc = Regridder(ingrid,outgrid)
     >>> mean = regridFunc(rlsf)
     >>> f.close()

@@ -53,7 +53,7 @@ PythonTypes used in CDMS
    :widths:  10, 80
    :align:  left
 
-   "Array",  "Numpy or masked multidimensional data array. All elements of the array are of the same type. Defined in the Numpy and MV2 modules."
+   "Array",  "Numpy or masked multidimensional data array. All elements of the array are of the same type. Defined in the Numpy and MV modules."
    "Comptime", "Absolute time value, a time with representation (year, month, day, hour, minute, second). Defined in the cdtime module. cf. reltime"
    "Dictionary","An unordered 2,3 collection of objects, indexed by key. All dictionaries in CDMS are indexed by strings, e.g.: ``axes['time']``"
    "Float", "Floating-point value."
@@ -174,7 +174,7 @@ Cdms Module Functions
                      the midpoints between the consecutive data values, provided that the
                      autobounds mode is 'on' (the default).
                   * See ``setAutoBounds``.
-                  * Also see: ``CdmsFile.createAxis``"
+                  * Also see: ``Cdms2File.createAxis``"
    "Axis", "``createEqualAreaAxis(nlat)``:
             Create an equal-area latitude axis.
               The latitude values range from north to south, and for all axis values
@@ -293,10 +293,10 @@ Cdms Module Functions(cont'd)
    :align: left
 
    "Dataset", "``open(url,mode='r')``:
-               Open or create a ``Dataset`` or ``CdmsFile``.
+               Open or create a ``Dataset`` or ``Cdms2File``.
                  * ``url`` is a Uniform Resource Locator, referring to a cdunif or XML file.
                  * If the URL has the extension '.xml' or '.cdml', a ``Dataset`` is returned, otherwise
-                   a ``CdmsFile`` is returned.
+                   a ``Cdms2File`` is returned.
                  * If the URL protocol is 'http', the file must be a '.xml' or '.cdml' file, and the mode must be 'r'.
                  * If the protocol is 'file' or is omitted, a local file or dataset is opened.
                  * ``mode`` is the open mode.  See `Open Modes <#id7>`__
@@ -448,9 +448,9 @@ CoordinateAxis Types
    "AuxAxis1D", "A one-dimensional coordinate axis whose values need not be monotonic.
                  * Typically a latitude or longitude axis associated with a ``GenericGrid``.
                  * Has subtypes ``DatasetAuxAxis1D``, ``FileAuxAxis1D``, and ``TransientAuxAxis1D``.
-                 * An axis in a ``CdmsFile`` may be designated the unlimited axis, meaning that it can
+                 * An axis in a ``Cdms2File`` may be designated the unlimited axis, meaning that it can
                    be extended in length after the initial definition.
-                 * There can be at most one unlimited axis associated with a ``CdmsFile``."
+                 * There can be at most one unlimited axis associated with a ``Cdms2File``."
 
 CoordinateAxis Internal Attributes
 ----------------------------------
@@ -471,25 +471,25 @@ Axis Constructors
    :header:  "Constructor", "Description"
    :widths:  20, 80
 
-   "``cdms.createAxis (data, bounds=None)``", "Create an axis which is not associated with a dataset or file.
+   "``cdms2.createAxis (data, bounds=None)``", "Create an axis which is not associated with a dataset or file.
          * See `A First Example <#a-first-example>`_."
    "``Dataset.createAxis (name,ar)``", "Create an ``Axis`` in a ``Dataset``. (This function is not yet implemented.)"
-   "``CdmsFile.createAxis (name,ar,unlimited=0)``", "Create an Axis in a ``CdmsFile``.
+   "``Cdms2File.createAxis (name,ar,unlimited=0)``", "Create an Axis in a ``Cdms2File``.
          * ``name`` is the string ``name`` of the ``Axis``.
          * ``ar`` is a 1-D data array which defines the ``Axis`` values.
          * It may have the value ``None`` if an unlimited axis is being defined.
-         * At most one ``Axis`` in a ``CdmsFile`` may be designated as being unlimited, meaning that it may
+         * At most one ``Axis`` in a ``Cdms2File`` may be designated as being unlimited, meaning that it may
            be extended in length.
            To define an axis as unlimited, either:
              * A) set ``ar`` to ``None``, and leave ``unlimited`` undefined, or
-             * B) set ``ar`` to the initial 1-D array, and set ``unlimited`` to ``cdms.Unlitmited``
-                * ``cdms.createEqualAreaAxis(nlat)``
+             * B) set ``ar`` to the initial 1-D array, and set ``unlimited`` to ``cdms2.Unlitmited``
+                * ``cdms2.createEqualAreaAxis(nlat)``
                 * See `A First Example`_.
-                * ``cdms.createGaussianAxis(nlat)``
+                * ``cdms2.createGaussianAxis(nlat)``
                 * See `A First Example`_.
-                * ``cdms.createUniformLatitudeAxis(startlat, nlat, deltalat)``
+                * ``cdms2.createUniformLatitudeAxis(startlat, nlat, deltalat)``
                 * See `A First Example`_.
-                * ``cdms.createUniformLongitudeAxis(startlon, nlon, deltalon)``
+                * ``cdms2.createUniformLongitudeAxis(startlon, nlon, deltalon)``
                 * See `A First Example`_ ."
 
 
@@ -502,7 +502,7 @@ CoordinateAxis Methods
    :align: left
 
 
-   "Array", ``array = axis[i:j]``", "Read a slice of data from the external file or dataset.
+   "Array", ``array = axis[i:j]``, "Read a slice of data from the external file or dataset.
             * Data is returned in the physical ordering defined in the dataset.
             * See `Variable Slice Operators <#id22>`_ for a description of slice operators."
    "None", "``axis[i:j] = array``", "Write a slice of data to the external file.
@@ -699,10 +699,10 @@ CdmsFile Constructors
    :align: left
 
    "Constructor", "Description"
-   "``fileobj = cdms.open(path, mode)``", "Open the file specified by path returning a CdmsFile object.
+   "``fileobj = cdms2.open(path, mode)``", "Open the file specified by path returning a CdmsFile object.
          * ``path`` is the file pathname, a string.
          * ``mode`` is the open mode indicator, as listed in `Open Modes <#id7>`_."
-   "``fileobj = cdms.createDataset(path)``", "Create the file specified by path, a string."
+   "``fileobj = cdms2.createDataset(path)``", "Create the file specified by path, a string."
 
 CdmsFile Methods
 ----------------
@@ -763,7 +763,7 @@ CdmsFile Methods(cont'd)
          or write axis data to the file.
             * ``id`` is an alphanumeric string identifier, containing no blanks.
             * ``ar`` is the one-dimensional axis array.
-            * Set ``unlimited`` to ``cdms.Unlimited`` to indicate that the axis is extensible."
+            * Set ``unlimited`` to ``cdms2.Unlimited`` to indicate that the axis is extensible."
    "RectGrid", "``createRectGrid (id,lat, lon,order,type='generic', mask=None)``", "Create a ``RectGrid``
    in the file.
          This is not a persistent object: the order, type, and mask are not written to the file. However,
@@ -880,7 +880,7 @@ Dataset Constructors
    :widths:  50, 80
    :align: left
 
-    "``datasetobj = cdms.open(String uri, String mode='r')``", "Open the dataset specified by the Universal Resource Indicator, a CDML file. Returns a Dataset object. mode is one of the indicators listed in `Open Modes <#id7>`__ . ``openDataset`` is a synonym for ``open``"
+    "``datasetobj = cdms2.open(String uri, String mode='r')``", "Open the dataset specified by the Universal Resource Indicator, a CDML file. Returns a Dataset object. mode is one of the indicators listed in `Open Modes <#id7>`__ . ``openDataset`` is a synonym for ``open``"
 
 
 Open Modes
@@ -961,15 +961,15 @@ MV Module
 The fundamental CDMS data object is the variable. A variable is
 comprised of:
 
--  a masked data array, as defined in the NumPy MV2 module.
+-  a masked data array, as defined in the NumPy MV module.
 -  a domain: an ordered list of axes and/or grids.
 -  an attribute dictionary.
 
-The MV module is a work-alike replacement for the MV2 module, that
+The MV module is a work-alike replacement for the MV module, that
 carries along the domain and attribute information where appropriate. MV
 provides the same set of functions as MV2. However, MV functions generate
 transient variables as results. Often this simplifies scripts that
-perform computation. MV2 is part of the Python Numpy package,
+perform computation. MV is part of the Python Numpy package,
 documented at http://www.numpy.org.
 
 MV can be imported with the command:
@@ -1003,7 +1003,7 @@ attribute, it can also be set like any attribute:
 
 For completeness MV provides access to all the MV2 functions. The
 functions not listed in the following tables are identical to the
-corresponding MV2 function: ``allclose``, ``allequal``,
+corresponding MV function: ``allclose``, ``allequal``,
 ``common_fill_value``, ``compress``, ``create_mask``, ``dot``, ``e``,
 ``fill_value``, ``filled``, ``get_print_limit``, ``getmask``,
 ``getmaskarray``, ``identity``, ``indices``, ``innerproduct``, ``isMV2``,
@@ -1046,7 +1046,7 @@ MV Functions
    :align: left
 
     "``argsort(x, axis=-1, fill_value=None)``", "Return a Numpy array of indices for sorting along a given axis."
-    "``asarray(data, typecode=None)``", "Same as ``cdms.createVariable``
+    "``asarray(data, typecode=None)``", "Same as ``cdms2.createVariable``
      ``(data, typecode, copy=0)``.
         * This is a short way of ensuring that something is an instance of a variable of a given type before proceeding, as in ``data = asarray(data)``.
         *  Also see the variable ``astype()`` function."
@@ -1147,15 +1147,15 @@ RectGrid Constructors
    :align: left
 
 
-    "``cdms.createRectGrid(lat, lon, order, type='generic', mask=None)``", "Create a grid not associated with a file or dataset. See `A First Example`_"
-    "``CdmsFile.createRectGrid(id, lat, lon, order, type='generic', mask=None)``", "Create a grid associated with a file. See `CdmsFile Constructors <#cdmsfile-constructors>`_"
+    "``cdms2.createRectGrid(lat, lon, order, type='generic', mask=None)``", "Create a grid not associated with a file or dataset. See `A First Example`_"
+    "``Cdms2File.createRectGrid(id, lat, lon, order, type='generic', mask=None)``", "Create a grid associated with a file. See `CdmsFile Constructors <#cdms2file-constructors>`_"
     "``Dataset.createRectGrid(id, lat, lon, order, type='generic', mask=None)``", "Create a grid associated with a dataset. See `Dataset Constructors <#dataset-constructors>`_ "
-    "``cdms.createGaussianGrid (nlats, xorigin=0.0, order='yx')``", "See `A First Example`_"
-    "``cdms.createGenericGrid (latArray, lonArray, latBounds=None, lonBounds=None, order='yx', mask=None)``", "See `A First Example`_"
-    "``cdms.createGlobalMeanGrid (grid)``", "See `A First Example`_"
-    "``cdms.createRectGrid(lat, lon, order, type='generic', mask=None)``", "See `A First Example`_"
-    "``cdms.createUniformGrid (startLat, nlat, deltaLat, startLon, nlon, deltaLon, order='yx', mask=None)``", "See `A First Example`_"
-    "``cdms.createZonalGrid(grid)``", "See `A First Example`_"
+    "``cdms2.createGaussianGrid (nlats, xorigin=0.0, order='yx')``", "See `A First Example`_"
+    "``cdms2.createGenericGrid (latArray, lonArray, latBounds=None, lonBounds=None, order='yx', mask=None)``", "See `A First Example`_"
+    "``cdms2.createGlobalMeanGrid (grid)``", "See `A First Example`_"
+    "``cdms2.createRectGrid(lat, lon, order, type='generic', mask=None)``", "See `A First Example`_"
+    "``cdms2.createUniformGrid (startLat, nlat, deltaLat, startLon, nlon, deltaLon, order='yx', mask=None)``", "See `A First Example`_"
+    "``cdms2.createZonalGrid(grid)``", "See `A First Example`_"
 
 
 
@@ -1177,7 +1177,7 @@ HorizontalGrid Methods
            * For rectangular grids with shape (nlat, nlon), the boundary arrays have shape (nlat,2) and (nlon,2).
            * For curvilinear grids with shape (nx, ny), the boundary arrays each have shape (nx, ny, 4).
            * For generic grids with shape (ncell,), the boundary arrays each have shape (ncell, nvert) where nvert is the maximum number of vertices per cell.
-           * For rectilinear grids: If no boundary arrays are explicitly defined (in the file or dataset), the result depends on the auto- Bounds mode (see ``cdms.setAutoBounds``) and the grid classification mode (see ``cdms.setClassifyGrids``).
+           * For rectilinear grids: If no boundary arrays are explicitly defined (in the file or dataset), the result depends on the auto- Bounds mode (see ``cdms2.setAutoBounds``) and the grid classification mode (see ``cdms2.setClassifyGrids``).
         By default, autoBounds mode is enabled, in which
         case the boundary arrays are generated based on
         the type of grid.
@@ -1266,7 +1266,7 @@ RectGrid Methods, Additional to HorizontalGrid Methods
           such that the sum of the weights is 1.0
             **Example:**
               * Generate the 2-D weights array, such that ``weights[i.j]`` is the fractional area of grid zone ``[i,j]``.
-              * From cdms import MV
+              * From cdms2 import MV
               * latwts, lonwts = gri d.getWeights()
               * weights = MV.outerproduct(latwts, lonwts)
               *  Also see the function ``area_weights`` in module ``pcmdi.weighting``."
@@ -1343,14 +1343,14 @@ Variable Constructors
 
 
     "``Dataset.createVariable (String id, String datatype, List axes)``", "Create a Variable in a Dataset. This function is not yet implemented."
-    "``CdmsFile.createVariable (String id, String datatype, List axes or Grids)``", "Create a Variable in a CdmsFile.
+    "``Cdms2File.createVariable (String id, String datatype, List axes or Grids)``", "Create a Variable in a CdmsFile.
        * ``id`` is the name of the variable.
-       * ``datatype`` is the MV2 or Numpy | typecode, for example, MV2.Float.
+       * ``datatype`` is the MV or Numpy | typecode, for example, MV.Float.
        * ``axesOrGrids`` is a list of Axis and/or Grid objects, on which the variable is defined. Specifying a rectilinear grid is equivalent to listing the grid latitude and longitude axes, in the order defined for the grid.
        **Note:** This argument can either be a list or a tuple. If the tuple form is used, and there is only one element, it must have a following comma, e.g.: ``(axisobj,)``."
-    "``cdms.createVariable (array, typecode=None, copy=0, savespace=0,mask=None, fill_value=None, grid=None, axes=None,attributes=None, id=None)``", "Create a transient variable, not associated with a file or dataset.
+    "``cdms2.createVariable (array, typecode=None, copy=0, savespace=0,mask=None, fill_value=None, grid=None, axes=None,attributes=None, id=None)``", "Create a transient variable, not associated with a file or dataset.
        * ``array`` is the data values: a Variable, masked array, or Numpy array.
-       * ``typecode`` is the MV2 typecode of the array. Defaults to the typecode of array.
+       * ``typecode`` is the MV typecode of the array. Defaults to the typecode of array.
        * ``copy`` is an integer flag: if 1, the variable is created with a copy of the array, if 0 the variable data is shared with array.
        * ``savespace`` is an integer flag: if set to 1, internal Numpy operations will attempt to avoid silent upcasting.
        * ``mask`` is an array of integers with value 0 or 1, having the same shape as array.  array elements with a corresponding mask value of 1 are considered invalid, and are not used for subsequent Numpy operations. The default mask is obtained from array if present, otherwise is None.
@@ -1384,7 +1384,7 @@ Variable Methods
         * See `Selectors <#id24>`_ ."
     "None", "``assignValue(Array ar)``", "Write the entire data array. Equivalent to ``var[:] = ar``.  (Variables in CdmsFiles only)."
     "Variable", "``astype(typecode)``", "Cast the variable to a new datatype.
-        * Typecodes are as for MV, MV2, and Numpy modules."
+        * Typecodes are as for MV, MV, and Numpy modules."
     "Variable", "``clone(copyData=1)``", "Return a copy of a transient variable.
         * If copyData is 1 (the default) the variable data is copied as well.
         * If copyData is 0, the result transient variable shares the original transient variables data array."
@@ -1556,7 +1556,7 @@ Variable Methods(cont'd)
         * The optional keyword argument ``squeeze`` determines whether or not the shape of the returned array contains dimensions whose length is 1; by default this
           argument is 0, and such dimensions are not 'squeezed out'.
         * The optional keyword argument ``raw`` specifies whether the return object is a variable or a masked array.
-        * By default, a transient variable is returned, having the axes and attributes corresponding to2,3 the region read. If raw=1, an MV2 masked array is returned,
+        * By default, a transient variable is returned, having the axes and attributes corresponding to2,3 the region read. If raw=1, an MV masked array is returned,
           equivalent to the transient variable without the axis and attribute information."
 
 Variable Methods(cont'd)
@@ -1728,7 +1728,7 @@ Selector Keywords
     "level", "Restrict vertical levels to a value or range. Short form: lev",See `Index and Coordinate Intervals <#id23>`_
     "longitude", "Restrict longitude values to a value or range. Short form: lon", See `Index and Coordinate Intervals <#id23>`_
     "order", "Reorder the result.", "Order string, e.g., 'tzyx'"
-    "raw", "Return a masked array (MV2.array) rather than a transient variable.", "0: return a transient variable (default);  =1: return a masked array."
+    "raw", "Return a masked array (MV.array) rather than a transient variable.", "0: return a transient variable (default);  =1: return a masked array."
     "required", "Require that the axis IDs be present.", "List of axis identifiers."
     "squeeze", "Remove singleton dimensions from the result.", "0: leave singleton dimensions (default);    1: remove singleton dimensions."
     "time", "Restrict time values to a value or range.", See `Index and Coordinate Intervals <#id23>`_
@@ -1751,7 +1751,7 @@ types described in this section.
 
 Selectors are objects in their own right. This means that a selector can
 be defined and reused, independent of a particular variable. Selectors
-are constructed using the cdms.selectors.Selector class. The constructor
+are constructed using the ``cdms2.selectors`` Selector class. The constructor
 takes an argument list of selector components. For example:
 
 
@@ -1930,9 +1930,9 @@ results are written to a netCDF file. For brevity, the functions
     >>>        # Allocate result arrays
     >>>        newaxes = taObj.getAxisList(omit='time')
     >>>        newshape = tuple([len(a) for a in newaxes])
-    >>>        cc = MV.zeros(newshape, typecode=MV.Float, axes=newaxes, id='correlation')
-    >>>        b = MV.zeros(newshape, typecode=MV.Float, axes=newaxes, id='slope')
-    >>>        v = MV.zeros(newshape, typecode=MV.Float, axes=newaxes, id='variance')
+    >>>        cc = MV2.zeros(newshape, typecode=MV2.Float, axes=newaxes, id='correlation')
+    >>>        b = MV2.zeros(newshape, typecode=MV2.Float, axes=newaxes, id='slope')
+    >>>        v = MV2.zeros(newshape, typecode=MV2.Float, axes=newaxes, id='variance')
     >>>
     >>>        # Remove seasonal cycle from surface air temperature
     >>>        tas = removeSeasonalCycle(tas)
@@ -1965,7 +1965,7 @@ results are written to a netCDF file. For brevity, the functions
 **Notes:**
 ::
 
- 1.   Two modules are imported, "cdms", and "MV". "MV" implements
+ 1.   Two modules are imported, "cdms2", and "MV". "MV" implements
       arithmetic functions.
  15.  "taObj" is a file (persistent) variable. At this point, no data has
       actually been read. This happens when the file variable is sliced, or
@@ -2000,7 +2000,7 @@ the vcs module.
          >>> # from an array of interest
          >>> #
          >>>
-         >>> import cdms
+         >>> import cdms2
          >>> from MV2 import *
          >>>
          >>> # Wait for return in an interactive window

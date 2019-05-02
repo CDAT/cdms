@@ -368,7 +368,7 @@ file. Specifically:
 
 For transient variables, the data is printed only if the size of the array is less
 than the print limit . This value can be set with the function
-MV.set_print_limit to force the data to be printed:
+MV2.set_print_limit to force the data to be printed:
 
 ::
 

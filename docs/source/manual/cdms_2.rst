@@ -74,15 +74,15 @@ latitude, longitude).
 ::
 
    >>> import cdms2, cdat_info
-   >>> from cdms2 import MV
+   >>> from cdms2 import MV2
    >>> jones = cdms2.open(cdat_info.get_sampledata_path()+'/tas_mo.nc')
    >>> tasvar = jones['tas']
    >>> jans = tasvar[0::12]
    >>> julys = tasvar[6::12]
-   >>> janavg = MV.average(jans)
+   >>> janavg = MV2.average(jans)
    >>> janavg.id = "tas_jan"
    >>> janavg.long_name = "mean January surface temperature"
-   >>> julyavg = MV.average(julys)
+   >>> julyavg = MV2.average(julys)
    >>> julyavg.id = "tas_jul"
    >>> julyavg.long_name = "mean July surface temperature"
    >>> out = cdms2.open('janjuly.nc','w')
@@ -223,8 +223,8 @@ Cdms Module Functions(cont'd)
    "RectGrid", "``createRectGrid(lat, lon, order, type='generic', mask=None)``:
             Create a rectilinear grid, not associated with a file or dataset.
                This might be used as the target grid for a regridding operation.
-                 * ``lat`` is a latitude axis, created by ``cdms.createAxis``.
-                 * ``lon`` is a longitude axis, created by ``cdms.createAxis``.
+                 * ``lat`` is a latitude axis, created by ``cdms2.createAxis``.
+                 * ``lon`` is a longitude axis, created by ``cdms2.createAxis``.
                  * ``order`` is a string with value 'yx' (the first grid dimension is latitude) or 'xy'
                    (the first grid dimension is longitude).
                  * ``type`` is one of 'gaussian','uniform','equalarea',or 'generic'.
@@ -301,10 +301,10 @@ Cdms Module Functions(cont'd)
                  * If the protocol is 'file' or is omitted, a local file or dataset is opened.
                  * ``mode`` is the open mode.  See `Open Modes <#id7>`__
                 **Example:**
-                       Open an existing dataset: ``f = cdms.open('sampleset.xml')``
+                       Open an existing dataset: ``f = cdms2.open('sampleset.xml')``
 
                 **Example:**
-                       Create a netCDF file: ``f = cdms.open('newfile.nc','w')``"
+                       Create a netCDF file: ``f = cdms2.open('newfile.nc','w')``"
    "List", "``order2index (axes, orderstring)``:
                 Find the index permutation of axes to match order.
                    * Return a list of indices.
@@ -719,7 +719,7 @@ CdmsFile Methods
        See `Selectors <#id24>`_.
     **Example:** The following reads data for variable 'prc',
     year 1980:
-              >>> f = cdms.open('test.nc')
+              >>> f = cdms2.open('test.nc')
               >>> x = f('prc', time=('1980-1','1981-1'))"
    "Variable, Axis, or Grid", "``fileobj['id']``", "Get the persistent variable, axis or grid object
     having the string identifier.
@@ -727,7 +727,7 @@ CdmsFile Methods
     **Example:** The following gets the persistent variable
              >>> v, equivalent to
              >>> v = f.variables['prc']
-             >>> f = cdms.open('sample.nc')
+             >>> f = cdms2.open('sample.nc')
              >>> v = f['prc']
     **Example:** The following gets the axis named time,
     equivalent to
@@ -909,13 +909,13 @@ Dataset Methods
      ``raw = 1`` is specified. See <#selectors>`_.
         **Example:** The following reads data for variable
         'prc', year 1980:
-          >>> f = cdms.open('test.xml')
+          >>> f = cdms2.open('test.xml')
           >>> x = f('prc', time=('1980-1','1981-1'))"
     "Variable, Axis, or Grid", "``datasetobj['id']``", "The square bracket operator applied to a dataset gets
     the persistent variable, axis or grid object having the string identifier. This does not read the data for
     a variable. Returns ``None`` if not found.
         **Example:**
-           >>> f = cdms.open('sample.xml')
+           >>> f = cdms2.open('sample.xml')
            >>> v = f['prc']
            * gets the persistent variable v, equivalent to ``v =f.variab les['prc']``.
 
@@ -976,13 +976,13 @@ MV can be imported with the command:
 
 ::
 
-    >>> import MV
+    >>> import MV2
 
 The command
 
 ::
 
-    >>> from MV import *
+    >>> from MV2 import *
 
 
 Allows use of MV commands without any prefix.
@@ -1757,12 +1757,12 @@ takes an argument list of selector components. For example:
 
 ::
 
-   >>> from cdms.selectors import Selector
+   >>> from cdms2.selectors import Selector
    >>> sel = Selector(time=('1979-1-1','1979-2-1'), level=1000.)
    >>> x1 = v1(sel)
    >>> x2 = v2(sel)
 
-   >>> from cdms.selectors import Selector
+   >>> from cdms2.selectors import Selector
    >>> sel = Selector(time=('1979-1-1','1979-2-1'), level=1000.)
    >>> x1 = v1(sel)
    >>> x2 = v2(sel)
@@ -1776,7 +1776,7 @@ to their keyword counterparts. For example:
 
 ::
 
-    >>> from cdms import time, level
+    >>> from cdms2 import time, level
     >>> x = hus(time('1979-1-1','1979-2-1'), level(1000.))
 
 
@@ -1794,7 +1794,7 @@ take arguments ``(startindex, stopindex[, stride])``:
 
 ::
 
-   >>> from cdms import timeslice, levelslice
+   >>> from cdms2 import timeslice, levelslice
    >>> x = v(timeslice(0,2), levelslice(16,17))
 
 
@@ -1816,8 +1816,8 @@ the call:
 
 ::
 
-    >>> from cdms.selectors import Selector
-    >>> from cdms import level
+    >>> from cdms2.selectors import Selector
+    >>> from cdms2 import level
     >>> sel2 = Selector(time=('1979-1-1','1979-2-1'))
     >>> sel3 = sel2 & level(1000.0)
     >>> x1 = hus(sel3)
@@ -1838,8 +1838,8 @@ remove the singleton level dimension from the result array.
 
 ::
 
-    >>> import cdms
-    >>> f = cdms.open('sample.nc')
+    >>> import cdms2
+    >>> f = cdms2.open('sample.nc')
     >>> hus = f.variables['hus']
     >>>
     >>> # Keyword selection
@@ -1855,10 +1855,10 @@ remove the singleton level dimension from the result array.
     >>> x9 = hus(('1979-1-1','1979-2-1'),1000.0)
     >>>
     >>> # Predefined selectors
-    >>> from cdms import time, level
+    >>> from cdms2 import time, level
     >>> x = hus(time('1979-1-1','1979-2-1'), level(1000.))
     >>>
-    >>> from cdms import timeslice, levelslice
+    >>> from cdms2 import timeslice, levelslice
     >>> x = hus(timeslice(0,2), levelslice(16,17))
     >>>
     >>> # Call file as a function
@@ -1868,7 +1868,7 @@ remove the singleton level dimension from the result array.
     >>> x = hus(time=slice(0,2), level=slice(16,17))
     >>>
     >>> # Selector objects
-    >>> from cdms.selectors import Selector
+    >>> from cdms2.selectors import Selector
     >>> sel = Selector(time=('1979-1-1','1979-2-1'), level=1000.)
     >>> x = hus(sel)
     >>>
@@ -1906,8 +1906,8 @@ results are written to a netCDF file. For brevity, the functions
 
 ::
 
-    >>> 1.  import cdms
-    >>>    import MV
+    >>> 1.  import cdms2
+    >>>    import MV2
     >>>
     >>>    # Calculate variance, slope, and correlation of
     >>>    # surface air temperature with upper air temperature
@@ -1917,8 +1917,8 @@ results are written to a netCDF file. For brevity, the functions
     >>>    def ccSlopeVarianceBySeasonFiltNet(pathTa,pathTas,month1,month2):
     >>>
     >>>        # Open the files for ta and tas
-    >>>        fta = cdms.open(pathTa)
-    >>>        ftas = cdms.open(pathTas)
+    >>>        fta = cdms2.open(pathTa)
+    >>>        ftas = cdms2.open(pathTas)
     >>>
     >>> 2.      #Get upper air temperature
     >>>        taObj = fta['ta']
@@ -1945,10 +1945,10 @@ results are written to a netCDF file. For brevity, the functions
     >>>                       level=slice(ilev, ilev+1), squeeze=1)
     >>>            ta = removeSeasonalCycle(ta)
     >>>            cc[ilev], b[ilev] = corrCoefSlope(tas ,ta)
-    >>>            v[ilev] = MV.sum( ta**2 )/(1.0*ta.shape[0])
+    >>>            v[ilev] = MV2.sum( ta**2 )/(1.0*ta.shape[0])
     >>>
     >>>        # Write slope, correlation, and variance variables
-    >>> 6.      f = cdms.open('CC_B_V_ALL.nc','w')
+    >>> 6.      f = cdms2.open('CC_B_V_ALL.nc','w')
     >>>        f.title = filtered
     >>>        f.write(b)
     >>>        f.write(cc)
@@ -1956,8 +1956,8 @@ results are written to a netCDF file. For brevity, the functions
     >>>        f.close()
     >>>
     >>> 7.  if __name__=='__main__':
-    >>>        pathTa = '/pcmdi/cdms/sample/ccmSample_ta.xml'
-    >>>        pathTas = '/pcmdi/cdms/sample/ccmSample_tas.xml'
+    >>>        pathTa = '/pcmdi/cdms2/sample/ccmSample_ta.xml'
+    >>>        pathTas = '/pcmdi/cdms2/sample/ccmSample_tas.xml'
     >>>        # Process Jan80 through Dec81
     >>>        ccSlopeVarianceBySeasonFiltNet(pathTa,pathTas,'80-1','81-12')
 
@@ -2001,7 +2001,7 @@ the vcs module.
          >>> #
          >>>
          >>> import cdms
-         >>> from MV import *
+         >>> from MV2 import *
          >>>
          >>> # Wait for return in an interactive window
          >>>
@@ -2028,12 +2028,12 @@ the vcs module.
          >>>   if __name__=='__main__':
          >>>     import vcs, sys
          >>>
-         >>>     print 'Enter dataset path [/pcmdi/cdms/obs/erbs_mo.xml]: ',
+         >>>     print 'Enter dataset path [/pcmdi/cdms2/obs/erbs_mo.xml]: ',
          >>>     path = string.strip(sys.stdin.readline())
-         >>>     if path=='': path='/pcmdi/cdms/obs/erbs_mo.xml'
+         >>>     if path=='': path='/pcmdi/cdms2/obs/erbs_mo.xml'
          >>>
          >>> 2.  # Open the dataset
-         >>>     dataset = cdms.open(path)
+         >>>     dataset = cdms2.open(path)
          >>>
          >>>     # Select a variable from the dataset
          >>>     print 'Variables in file:',path
@@ -2077,9 +2077,9 @@ The result of running this script is as follows:
 ::
 
     >>> % calcVar.py
-    >>> Enter dataset path [/pcmdi/cdms/sample/obs/erbs_mo.xml]:
+    >>> Enter dataset path [/pcmdi/cdms2/sample/obs/erbs_mo.xml]:
     >>>
-    >>> Variables in file: /pcmdi/cdms/sample/obs/erbs_mo.xml
+    >>> Variables in file: /pcmdi/cdms2/sample/obs/erbs_mo.xml
     >>> albt    : Albedo TOA [%]
     >>> albtcs : Albedo TOA clear sky [%]
     >>> rlcrft  : LW Cloud Radiation Forcing TOA [W/m^2]

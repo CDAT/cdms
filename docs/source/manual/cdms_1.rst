@@ -34,8 +34,8 @@ latitude, and longitude, then the velocity for time 0 (first index) can be calcu
    >>> f1=cdms2.open("clt.nc")
    >>> u = f1('u')
    >>> v = f1('v')
-   >>> from cdms2 import MV
-   >>> vel = MV.sqrt(u[0]**2 + v[0]**2)
+   >>> from cdms2 import MV2
+   >>> vel = MV2.sqrt(u[0]**2 + v[0]**2)
 
 This illustrates several points:
 

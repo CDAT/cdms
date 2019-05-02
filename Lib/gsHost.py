@@ -32,10 +32,8 @@ def open(hostfile, mode='r'):
 
     Parameters
     ----------
-
-         hostfile host file
-
-         mode valid cdms2 open file mode
+    hostfile : host file
+    mode : valid cdms2 open file mode
     """
 
     outHostFile = Host(hostfile, mode)
@@ -59,9 +57,8 @@ class Host:
         Parameters
         ----------
 
-             hostfile path to the host
-
-             mode read only at the moment
+        hostfile : path to the host
+        mode : read only at the moment
         """
 
         self.__initialize()
@@ -270,8 +267,7 @@ class Host:
 
         Returns
         -------
-
-             mfn Mosaic filename
+        mfn : Mosaic filename
         """
         from .gsMosaic import Mosaic
         mfn = Mosaic(self.mosaicFilename, "r")
@@ -308,11 +304,11 @@ class Host:
 
     def getStatFilenames(self, varName=None):
         """
-		Get a list of static variable filenames
+                Get a list of static variable filenames
 
         Parameters
         ----------
-		varName variable name (or None if all the static file names are to 
+                varName variable name (or None if all the static file names are to
         be returned)
 
 
@@ -332,11 +328,11 @@ class Host:
 
         Parameters
         ----------
-	    varName variable name. None for all variables
+        varName : variable name. None for all variables
 
         Returns
         -------
-		filename for input variable name only
+        filename : for input variable name only
 
         """
         if varName is not None:
@@ -529,7 +525,7 @@ class Host:
         -----------
         varName variable name
 
-             * all include axes information 
+             * all include axes information
 
         Returns
         -------

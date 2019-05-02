@@ -12,7 +12,7 @@ class PressureRegridder:
     PURPOSE: To perform all the tasks required to regrid the input data into the ouput data along
              the pressure dimension only.
 
-    PROCEDURE: 
+    PROCEDURE:
         Step One:
            Make an instance of class PressureRegridder passing it input and output grid information
         Step Two:
@@ -159,16 +159,17 @@ class PressureRegridder:
 
         missingValueIn : the missing data value to use in setting missing in the mask. It is required.
           * None -- there is no missing data
-          * A number -- if  the value to use in the search for possible missing data.  
+          * A number -- if  the value to use in the search for possible missing data.
             The presence of missing data at a grid point leads to recording 0.0 in the mask.
 
-        missingMatch : the comparison scheme used in searching for missing data in dataIn using the value passed in as missingValueIn. 
+        missingMatch : the comparison scheme used in searching for missing data in dataIn using the value
+        passed in as missingValueIn.
           * None -- used if None is the entry for missingValueIn
           * exact -- used if missingValue is the exact value from the file
           * greater -- the missing data value is equal to or greater than missingValueIn
           * less -- the missing data value is equal to or less than missingValueIn
 
-        logYes : choose the level regrid as linear in log of level or linear in level. 
+        logYes : choose the level regrid as linear in log of level or linear in level.
           * Set to 'yes' for log. Anything else is linear in level.
 
         positionIn : a tuple with the numerical position of the dimensions
@@ -187,7 +188,7 @@ class PressureRegridder:
             If the c order shape of 4D data is
               * (number of longitudes, number of times, number of levels, number of latitudes)
             submit
-			  * (0, 3, 2, 1).
+                          * (0, 3, 2, 1).
 
             If the c order shape of 3D data is
               * (number of longitudes, number of times, number of latitudes)
@@ -199,8 +200,8 @@ class PressureRegridder:
                 * 3D -- code assumes (2,1,0,None)
                 * 4D -- code assumes (3,2,1,0)
 
-        missingValueOut : the value for the missing data used in writing the output data. 
-            * If left at the default entry, None, the code uses missingValueIn 
+        missingValueOut : the value for the missing data used in writing the output data.
+            * If left at the default entry, None, the code uses missingValueIn
             * If present or as a last resort 1.0e20
 
         Returns

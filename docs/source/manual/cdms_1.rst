@@ -12,7 +12,7 @@ system, specialized for organizing multidimensional, gridded data used
 in climate analysis and simulation.
 
 CDMS is implemented as part of the Climate Data
-Analysis Tool (CDAT), which uses the Python language. The examples in
+Analysis Tool [CDAT](https://cdat.llnl.gov/), which uses the Python language. The examples in
 this chapter assume some familiarity with the language and the Python
 Numpy module (http://www.numpy.org). A number of excellent tutorials
 on Python are available in books or on the Internet. For example, see

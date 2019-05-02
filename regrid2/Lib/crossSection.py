@@ -14,7 +14,7 @@ class CrossSectionRegridder:
         PURPOSE: To perform all the tasks required to regrid the input data into the ouput data in the
                  latitude-level plane for all times
 
-        PROCEDURE: 
+        PROCEDURE:
             Step One:
                   Make an instance of class CrossSectionRegridder passing it input and output grid information
             Step Two:
@@ -27,7 +27,7 @@ class CrossSectionRegridder:
                  latTypeOut=None, latSizeOut=None):
         """
         To make an instance which entails setting up the input and output grids
-        
+
         Parameters
         ----------
         latIn : the axis specifying the latitude grid for the input data
@@ -49,12 +49,12 @@ class CrossSectionRegridder:
 
         latSizeIn : for input latitude, the size of the goblal grid used in selecting the region
         latTypeOut : for output latitude, one of the following:
-		   * 'gaussian'
-		   * 'equalarea'
-		   * 'uniform'
-		   * 'generic'
+           * 'gaussian'
+           * 'equalarea'
+           * 'uniform'
+           * 'generic'
         latSizeOut : for output latitude, the size of the goblal grid used in selecting the region
-        
+
         Note
         ----
         To  make an instance preparing for a global to global regrid, type
@@ -238,16 +238,17 @@ class CrossSectionRegridder:
 
         missingValueIn : the missing data value to use in setting missing in the mask. It is required.
           * None -- there is no missing data
-          * A number -- if  the value to use in the search for possible missing data.  
+          * A number -- if  the value to use in the search for possible missing data.
             The presence of missing data at a grid point leads to recording 0.0 in the mask.
 
-        missingMatch : the comparison scheme used in searching for missing data in dataIn using the value passed in as missingValueIn. 
+        missingMatch : the comparison scheme used in searching for missing data in dataIn using the value
+                       passed in as missingValueIn.
           * None -- used if None is the entry for missingValueIn
           * exact -- used if missingValue is the exact value from the file
           * greater -- the missing data value is equal to or greater than missingValueIn
           * less -- the missing data value is equal to or less than missingValueIn
 
-        logYes : choose the level regrid as linear in log of level or linear in level. 
+        logYes : choose the level regrid as linear in log of level or linear in level.
           * Set to 'yes' for log. Anything else is linear in level.
 
         positionIn : a tuple with the numerical position of the dimensions
@@ -263,7 +264,7 @@ class CrossSectionRegridder:
             positionIn[2] contains the position of time in dataIn or None
 
             If the c order shape of 3D data is
-    		(number of times, number of levels, number of latitudes)
+            (number of times, number of levels, number of latitudes)
             submit
             (2, 1, 0).
 
@@ -274,10 +275,10 @@ class CrossSectionRegridder:
 
             Send in None if the shape is a subset of (time, level, latitude) which is evaluated
             as follows:
-    			* 2D -- code assumes (1,0,None)
-    			* 3D -- code assumes (2,1,0)
+                * 2D -- code assumes (1,0,None)
+                * 3D -- code assumes (2,1,0)
 
-        maskIn : an array of 1.0 and 0.0 values where the 0.0 value is used to mask the input data. 
+        maskIn : an array of 1.0 and 0.0 values where the 0.0 value is used to mask the input data.
           This mask only works on the latitude grid. It is not possible to mask out a region in the level
           plane. The 0.0 value removes the data from correponding grid point. The user can supply the
           following choices:
@@ -291,8 +292,8 @@ class CrossSectionRegridder:
               and missingMatch to supply the 0.0s for grid points with missing data in the input
               data array, dataIn.
 
-        missingValueOut : the value for the missing data used in writing the output data. 
-            * If left at the default entry, None, the code uses missingValueIn 
+        missingValueOut : the value for the missing data used in writing the output data.
+            * If left at the default entry, None, the code uses missingValueIn
             * If present or as a last resort 1.0e20
 
         Returns
@@ -304,7 +305,7 @@ class CrossSectionRegridder:
 
         To regrid dataIn into dataOut using all the defaults where None, None signifies no
         missing data.
-			* dataOut = x.rgrd(dataIn, None, None)
+            * dataOut = x.rgrd(dataIn, None, None)
 
         To regrid dataIn into dataOut using 1.0e20 and greater as the missing data
             * dataOut = x.rgrd(dataIn, 1.e20, 'greater')

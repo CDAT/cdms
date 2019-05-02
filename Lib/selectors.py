@@ -316,7 +316,13 @@ class requiredComponent (SelectorComponent):
         self.ids = ids
 
     def specify(self, slab, axes, specifications, confined_by, aux):
-        """Doesn't confine but checks for existance."""
+        """
+        Doesn't confine but checks for existance
+
+        Returns
+        -------
+        0
+        """
         for id in self.ids:
             for i in range(len(axes)):
                 if axisMatches(axes[i], id):

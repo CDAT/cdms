@@ -14,73 +14,58 @@ class CrossSectionRegridder:
         PURPOSE: To perform all the tasks required to regrid the input data into the ouput data in the
                  latitude-level plane for all times
 
-        PROCEDURE: Step One:
-                      Make an instance of class CrossSectionRegridder passing it input and output grid information
-                   Step Two:
-                      Pass the input data with some descriptive parameters and get the output data
-                      in return
+        PROCEDURE: 
+            Step One:
+                  Make an instance of class CrossSectionRegridder passing it input and output grid information
+            Step Two:
+                  Pass the input data with some descriptive parameters and get the output data
+                  in return
 
     """
 
     def __init__(self, latIn, latOut, levIn, levOut, latTypeIn=None, latSizeIn=None,
                  latTypeOut=None, latSizeOut=None):
-        """        #-----------------------------------------------------------------------------------------------
-        #
-        #    PURPOSE: To make an instance which entails setting up the input and output grids
-        #
-        #    DEFINITION:
-        #
-        #             def __init__(self, latIn, latOut, levIn, levOut, latTypeIn = None, latSizeIn = None,
-        #                                                     latTypeOut = None, latSizeOut = None):
-        #
-        #    PROCEDURE:
-        #
-        #        The user must assemble at least the following four pieces of information:
-        #
-        #            latIn -  the axis specifying the latitude grid for the input data
-        #
-        #            latOut -  the axis specifying the latitude grid for the output data
-        #
-        #            levIn -  the axis specifying the pressure grid for the input data
-        #
-        #            levOut -  the axis specifying the pressure grid for the output data
-        #
-        #
-        #        Additional information is required if a latitude grid is not global. It may be generic.
-        #        Otherwise it is a subset of one of the standard global grids. Correspondingly, the choice
-        #        for the grid type must be 'gaussian', 'equalarea', 'uniform' or 'generic'. In addition, the
-        #        computation requires the size of the global grid from which the subset was choosen. Consequently,
-        #        the user must assemble:
-        #
-        #              latTypeIn -- for input latitude, one of the following:
-        #                                   'gaussian'
-        #                                   'equalarea'
-        #                                   'uniform'
-        #                                   'generic'
-        #
-        #              latSizeIn -- for input latitude, the size of the goblal grid used in selecting the region
-        #
-        #              latTypeOut -- for output latitude, one of the following:
-        #                                   'gaussian'
-        #                                   'equalarea'
-        #                                   'uniform'
-        #                                   'generic'
-        #
-        #              latSizeOut  -- for output latitude, the size of the goblal grid used in selecting the region
-        #
-        #    USAGE:
-        #
-        #          To  make an instance preparing for a global to global regrid, type
-        #
-        #             r = CrossSectionRegridder(latIn, latOut, levIn, levOut)
-        #
-        #          To  make an instance preparing for a global to a regional grid which, for example, is a subset of
-        #          a global gaussian grid of size 64, type
-        #
-        #             r = CrossSectionRegridder(latIn, latOut, levIn, levOut, latTypeOut = 'gaussian', latSizeOut = 64)
-        #
-        #          where the latOut axis must have been selected from the global 64 length gaussian grid
-        #------------------------------------------------------------------------------------------------"""
+        """
+        To make an instance which entails setting up the input and output grids
+        
+        Parameters
+        ----------
+        latIn : the axis specifying the latitude grid for the input data
+        latOut : the axis specifying the latitude grid for the output data
+        levIn : the axis specifying the pressure grid for the input data
+        levOut : the axis specifying the pressure grid for the output data
+
+        * Additional information is required if a latitude grid is not global. It may be generic.
+        Otherwise it is a subset of one of the standard global grids. Correspondingly, the choice
+        for the grid type must be 'gaussian', 'equalarea', 'uniform' or 'generic'. In addition, the
+        computation requires the size of the global grid from which the subset was choosen. Consequently,
+        the user must assemble:
+
+        latTypeIn : for input latitude, one of the following:
+           * 'gaussian'
+           * 'equalarea'
+           * 'uniform'
+           * 'generic'
+
+        latSizeIn : for input latitude, the size of the goblal grid used in selecting the region
+        latTypeOut : for output latitude, one of the following:
+		   * 'gaussian'
+		   * 'equalarea'
+		   * 'uniform'
+		   * 'generic'
+        latSizeOut : for output latitude, the size of the goblal grid used in selecting the region
+        
+        Note
+        ----
+        To  make an instance preparing for a global to global regrid, type
+           * r = CrossSectionRegridder(latIn, latOut, levIn, levOut)
+
+        To  make an instance preparing for a global to a regional grid which, for example, is a subset of
+        a global gaussian grid of size 64, type
+
+           * r = CrossSectionRegridder(latIn, latOut, levIn, levOut, latTypeOut = 'gaussian', latSizeOut = 64)
+                * where the latOut axis must have been selected from the global 64 length gaussian grid
+        """
 
         # ---  set the instance grid data attributes used to describe input and output grid sizes
 
@@ -243,101 +228,89 @@ class CrossSectionRegridder:
 
     def rgrd(self, dataIn, missingValueIn, missingMatch, logYes='yes',
              positionIn=None, maskIn=None, missingValueOut=None):
-        """        #---------------------------------------------------------------------------------
-        #
-        # PURPOSE: To perform all the tasks required to regrid the input data, dataIn, into the ouput data, dataout in
-        #     the latitude-level plane.
-        #
-        # DEFINITION:
-        #
-        #     def rgrd(self, dataIn, missingValueIn, missingMatch, positionIn = None, maskIn = None,
-        #                                                                               missingValueOut = None):
-        #
-        #
-        # PASSED :  dataIn -- data to regrid
-        #
-        #     missingValueIn -- the missing data value to use in setting missing in the mask. It is required
-        #                       and there are two choices:
-        #                             None -- there is no missing data
-        #                             A number -- the value to use in the search for possible missing data.
-        #                       The presence of missing data at a grid point leads to recording 0.0 in the mask.
-        #
-        #     missingMatch -- the comparison scheme used in searching for missing data in dataIn using the value passed
-        #                     in as missingValueIn. The choices are:
-        #                          None -- used if None is the entry for missingValueIn
-        #                          exact -- used if missingValue is the exact value from the file
-        #                          greater -- the missing data value is equal to or greater than missingValueIn
-        #                          less -- the missing data value is equal to or less than missingValueIn
-        #
-        #     logYes -- choose the level regrid as linear in log of level or linear in level. Set to
-        #               'yes' for log. Anything else is linear in level.
-        #
-        #
-        #      positionIn -- a tuple with the numerical position of the dimensions
-        #                    in C or Python order specified in the sequence latitude,
-        #                    level and time. Latitude and level are required. If time is missing submit None in its
-        #                    slot in the tuple. Notice that the length of the tuple is
-        #                    always three.
-        #
-        #                    Explicitly, in terms of the shape of dataIn as returned by python's shape function
-        #
-        #                         positionIn[0] contains the position of latitude in dataIn
-        #                         positionIn[1] contains the position of level in dataIn or None
-        #                         positionIn[2] contains the position of time in dataIn or None
-        #
-        #                    As  examples:
-        #                         If the c order shape of 3D data is
-        #                             (number of times, number of levels, number of latitudes)
-        #                         submit
-        #                              (2, 1, 0).
-        #
-        #                         If the c order shape of 2D data is
-        #                             (number of times, number of latitudes)
-        #                         submit
-        #                             (1, None, 0).
-        #
-        #                    Send in None if the shape is a subset of (time, level, latitude) which is evaluated
-        #                    as follows:
-        #                       2D -- code assumes (1,0,None)
-        #                       3D -- code assumes (2,1,0)
-        #
-        #      maskIn -- an array of 1.0 and 0.0 values where the 0.0 value is used to mask the input data. This
-        #                mask only works on the latitude grid. It is not possible to mask out a region in the level
-        #                plane. The 0.0 value removes the data from correponding grid point. The user can supply the
-        #                following choices:
-        #
-        #                None -- an array of 1.0s is created followed by substituting 0.0s for grid points with missing
-        #                        data in the input data array, dataIn
-        #
-        #                array -- an array of 1.0s or 0.0s which must be either 2D or the actual size of the input data,
-        #                         dataIn. This user supplied mask might be used to mask a latitude region. It is not
-        #                         required to account for missing data in the input data. The code uses missingValueIn
-        #                         and missingMatch to supply the 0.0s for grid points with missing data in the input
-        #                         data array, dataIn.
-        #
-        #
-        #      missingValueOut -- the value for the missing data used in writing the output data. If left at the
-        #                         default entry, None, the code uses missingValueIn if present or as a last resort
-        #                         1.0e20
-        #
-        #
-        #    RETURNED : dataOut -- the regridded data
-        #
-        #
-        #    USAGE:
-        #
-        #          Example 1.  To regrid dataIn into dataOut using all the defaults where None, None signifies no
-        #                      missing data.
-        #              dataOut = x.rgrd(dataIn, None, None)
-        #
-        #          Example 2.  To regrid dataIn into dataOut using 1.0e20 and greater as the missing data
-        #
-        #                      dataOut = x.rgrd(dataIn, 1.e20, 'greater')
-        #
-        #    WARNING: This code does not regrid cross sections which have a single dummy longitude value!
-        #
-        #
-        #-----------------------------------------------------------------------------------------------------------"""
+        """
+        To perform all the tasks required to regrid the input data, dataIn, into the ouput data, dataout in
+        the latitude-level plane.
+
+        Parameters
+        ----------
+        dataIn : data to regrid
+
+        missingValueIn : the missing data value to use in setting missing in the mask. It is required.
+          * None -- there is no missing data
+          * A number -- if  the value to use in the search for possible missing data.  
+            The presence of missing data at a grid point leads to recording 0.0 in the mask.
+
+        missingMatch : the comparison scheme used in searching for missing data in dataIn using the value passed in as missingValueIn. 
+          * None -- used if None is the entry for missingValueIn
+          * exact -- used if missingValue is the exact value from the file
+          * greater -- the missing data value is equal to or greater than missingValueIn
+          * less -- the missing data value is equal to or less than missingValueIn
+
+        logYes : choose the level regrid as linear in log of level or linear in level. 
+          * Set to 'yes' for log. Anything else is linear in level.
+
+        positionIn : a tuple with the numerical position of the dimensions
+          * in C or Python order specified in the sequence latitude,
+            level and time. Latitude and level are required. If time is missing submit None in its
+            slot in the tuple. Notice that the length of the tuple is
+            always three.
+
+            Explicitly, in terms of the shape of dataIn as returned by python's shape function
+
+            positionIn[0] contains the position of latitude in dataIn
+            positionIn[1] contains the position of level in dataIn or None
+            positionIn[2] contains the position of time in dataIn or None
+
+            If the c order shape of 3D data is
+    		(number of times, number of levels, number of latitudes)
+            submit
+            (2, 1, 0).
+
+            If the c order shape of 2D data is
+            (number of times, number of latitudes)
+            submit
+            (1, None, 0).
+
+            Send in None if the shape is a subset of (time, level, latitude) which is evaluated
+            as follows:
+    			* 2D -- code assumes (1,0,None)
+    			* 3D -- code assumes (2,1,0)
+
+        maskIn : an array of 1.0 and 0.0 values where the 0.0 value is used to mask the input data. 
+          This mask only works on the latitude grid. It is not possible to mask out a region in the level
+          plane. The 0.0 value removes the data from correponding grid point. The user can supply the
+          following choices:
+
+            * None -- an array of 1.0s is created followed by substituting 0.0s for grid points with missing
+              data in the input data array, dataIn
+
+            * array -- an array of 1.0s or 0.0s which must be either 2D or the actual size of the input data,
+              dataIn. This user supplied mask might be used to mask a latitude region. It is not
+              required to account for missing data in the input data. The code uses missingValueIn
+              and missingMatch to supply the 0.0s for grid points with missing data in the input
+              data array, dataIn.
+
+        missingValueOut : the value for the missing data used in writing the output data. 
+            * If left at the default entry, None, the code uses missingValueIn 
+            * If present or as a last resort 1.0e20
+
+        Returns
+        -------
+        dataOut : the regridded data
+
+        Example
+        -------
+
+        To regrid dataIn into dataOut using all the defaults where None, None signifies no
+        missing data.
+			* dataOut = x.rgrd(dataIn, None, None)
+
+        To regrid dataIn into dataOut using 1.0e20 and greater as the missing data
+            * dataOut = x.rgrd(dataIn, 1.e20, 'greater')
+
+        Note:  This code does not regrid cross sections which have a single dummy longitude value!
+        """
 
         # check the required input -- dataIn, missingValueIn and  missingMatch
 

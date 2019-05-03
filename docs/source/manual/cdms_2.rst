@@ -799,7 +799,7 @@ CdmsFile Methods(cont'd)
            * If unspecified, the returned variable has the same name as ``var``.
         **Note:** Unlike copyAxis, the actual data is not copied to the new variable."
    "CurveGrid or Generic-Grid", "``readScripGrid (self,whichGrid= 'destination',check-Grid=1)``", "Read a curvilinear or generic grid from a SCRIP netCDF file.
-        The file can be a SCRIP grid file or remapping file.
+           The file can be a SCRIP grid file or remapping file.
            * If a mapping file, ``whichGrid`` chooses the grid to read, either ``'source'`` or ``'destination'``.
            * If ``checkGrid`` is ``1`` (default), the grid cells are checked for convexity, and 'repaired' if necessary.
            * Grid cells may appear to be nonconvex if they cross a ``0 / 2pi`` boundary.
@@ -1440,7 +1440,7 @@ Variable Methods(cont'd)
     "List", "``getAxisListIndex (axes=None, omit=None, order=None)``", "Return a list of indices of axis objects.  Arguments are as for getAxisList."
     "List", "``getDomain()``", "Get the domain.
     Each element of the list is itself a tuple of the
-    form ``(axis,start,length,tru e_length)``
+    form ``(axis,start, length, true_length)``
         * Where axis is an axis object,
         * Start is the start index of the domain relative to the axis object,
         * Length is the length of the axis, and true\_length is the actual number of (defined) points in the domain.
@@ -1475,9 +1475,9 @@ Variable Methods(cont'd)
         * ``intervals`` is a list of scalars, 2-tuples representing [i,j), slices, and/or Ellipses.
         * If no ``argument(s)`` are present, all file paths associated with the variable are returned.
         * Returns a list of tuples of the form (path,slicetuple), where path is the path of a file, and slicetuple is itself a tuple of slices, of the same length as the rank of the variable, representing the portion of the variable in the file corresponding to intervals.
-      **Note:** This function is not defined for transient various."
+      **Note:** This function is not defined for transient variable."
     "Axis", "``getTime()``", "Get the time axis, or ``None`` if not found."
-    "List", "``getPaths( *intervals)``", "Get the file paths associated with the index region specified by intervals."
+    "List", "``getPaths (*intervals)``", "Get the file paths associated with the index region specified by intervals."
 
 Variable Methods(cont'd)
 ------------------------
@@ -1492,7 +1492,7 @@ Variable Methods(cont'd)
     If the variable is zero-dimensional (scalar), a length
     of 0 is returned.
      **Note:** ``size()`` returns the total number of elements."
-    "Transient Variable", "``pressureRegrid (newLevel, method='log', missin=None, order=None)``", "Return the variable regridded to a new set of
+    "Transient Variable", "``pressureRegrid (newLevel, method='log', missing=None, order=None)``", "Return the variable regridded to a new set of
      pressure levels newLevel. The variable must be a function of latitude, longitude, pressure level, and (optionally) time.
 
         * ``newLevel`` is an axis of the result pressure levels.
@@ -1501,8 +1501,8 @@ Variable Methods(cont'd)
         * ``order`` is an order string such as 'tzyx' or 'zyx'. The default is ``var.getOrder()``
         * See also: ``regrid``, ``crossSectionRegrid``."
     "Integer", "``rank()``", "The number of dimensions of the variable."
-    "Transient", "``regrid (togrid, missing=None, order=None, Variable mask=None)``","Return the variable regridded to the horizontal
-    grid togrid.
+    "Transient", "``regrid (togrid, missing=None, order=None, mask=None)``",
+    "Return the variable regridded to the horizontal grid togrid.
         * ``missing`` is a Float specifying the missing data value. The default is 1.0e20.
         * ``order`` is a string indicating the order of dimensions of the array.  It has the form returned from ``variable.getOrder()``.
         * For example, the string 'tzyx' indicates that the dimension order of array is (time, level, latitude, longitude).
@@ -1519,8 +1519,8 @@ Variable Methods(cont'd)
    :widths:  30, 42, 80
    :align: left
 
-   "Transient(cont'd)", "``regrid (togrid, missing=None, order=None, Variable mask=None)``","Return the variable regridded to the horizontal
-    grid togrid.
+    "Transient(cont'd)", "``regrid (togrid, missing=None, order=None, mask=None)``",
+    "Return the variable regridded to the horizontal grid togrid.
         * If the mask has more than two dimensions, it must have the same shape as array. In this case, the missing data value is also ignored.
         * Such an n-dimensional mask is useful if the pattern of missing data varies with level (e.g., ocean data) or time.
 
@@ -1556,7 +1556,7 @@ Variable Methods(cont'd)
         * The optional keyword argument ``squeeze`` determines whether or not the shape of the returned array contains dimensions whose length is 1; by default this
           argument is 0, and such dimensions are not 'squeezed out'.
         * The optional keyword argument ``raw`` specifies whether the return object is a variable or a masked array.
-        * By default, a transient variable is returned, having the axes and attributes corresponding to2,3 the region read. If raw=1, an MV masked array is returned,
+        * By default, a transient variable is returned, having the axes and attributes corresponding to 2,3 the region read. If raw=1, an MV2 masked array is returned,
           equivalent to the transient variable without the axis and attribute information."
 
 Variable Methods(cont'd)
@@ -1600,8 +1600,7 @@ or equivalently:
 
 ::
 
-    >>> data = ta.subRegion(latitude=(-45.0,45.0,'co'), longitude=(0.0,
-    180.0)
+    >>> data = ta.subRegion(latitude=(-45.0,45.0,'co'), longitude=(0.0, 180.0)
 
 Read all data for March, 1980:
 
@@ -1637,15 +1636,15 @@ Index and Coordinate Intervals
    :header:  "Interval Definition", "Example Interval Definition", "Example"
    :widths:  30, 80, 80
 
-    "``x``", "Single point, such that axis[i]==x In general x is a scalar. If the axis is a time axis, x may also be a cdtime relative time type, component time type, or string of the form ‘yyyy-mm-dd hh:mi:ss’ (where trailing fields of the string may be omitted.", "``180.0``
-     ``cdtime.reltime(48,'hour s since 1980-1')``
+    "``x``", "Single point, such that axis[i]==x In general x is a scalar. If the axis is a time axis, x may also be a cdtime relative time type, component time type, or string of the form ‘yyyy-mm-dd hh:mi:ss’ (where trailing fields of the string may be omitted.", "``cdtime.reltime(48,'hours since 1980-1')`` 
      ``'1980-1-3'``"
     "``(x,y)``", "Indices i such that x ≤ axis[i] ≤ y", "``(-180,180)``"
     "``(x,y,'co')``", "``x ≤ axis[i] < y``. The third item is defined as in mapInterval.", "``(-90,90,'cc')``"
     "``(x,y,'co',cycle)``", "``x ≤ axis[i]< y``, with wraparound", "``( 180, 180, 'co', 360.0)``
     **Note:** It is not necesary to specify the cycle of a circular longitude axis, that is, for which ``axis.isCircular()`` is true."
-    "``slice(i,j,k)``", "Slice object, equivalent to i:j:k in a slice operator. Refers to the indices i, i+k, i+2k, … up to but not including index j. If i is not specified or is None it defaults to 0. If j is not specified or is None it defaults to the length of the axis. The stride k defaults to 1. k may be negative.","``slice(1,10)``
-     ``slice(,,-1)`` reverses the direction of the axis."
+    "``slice(i,j,k)``", "Slice object, equivalent to i:j:k in a slice operator. Refers to the indices i, i+k, i+2k, … up to but not including index j. If i is not specified or is None it defaults to 0. If j is not specified or is None it defaults to the length of the axis. The stride k defaults to 1. k may be negative.", "
+     * ``slice(1,10)``
+     * ``slice(,,-1)`` reverses the direction of the axis."
     "``':'``", "All axis values of one dimension",
     "``Ellipsis``", "All values of all intermediate axes",
 

@@ -12,7 +12,7 @@ system, specialized for organizing multidimensional, gridded data used
 in climate analysis and simulation.
 
 CDMS is implemented as part of the Climate Data
-Analysis Tool (CDAT), which uses the Python language. The examples in
+Analysis Tool [CDAT](https://cdat.llnl.gov/), which uses the Python language. The examples in
 this chapter assume some familiarity with the language and the Python
 Numpy module (http://www.numpy.org). A number of excellent tutorials
 on Python are available in books or on the Internet. For example, see
@@ -34,8 +34,8 @@ latitude, and longitude, then the velocity for time 0 (first index) can be calcu
    >>> f1=cdms2.open("clt.nc")
    >>> u = f1('u')
    >>> v = f1('v')
-   >>> from cdms2 import MV
-   >>> vel = MV.sqrt(u[0]**2 + v[0]**2)
+   >>> from cdms2 import MV2
+   >>> vel = MV2.sqrt(u[0]**2 + v[0]**2)
 
 This illustrates several points:
 
@@ -368,7 +368,7 @@ file. Specifically:
 
 For transient variables, the data is printed only if the size of the array is less
 than the print limit . This value can be set with the function
-MV.set_print_limit to force the data to be printed:
+MV2.set_print_limit to force the data to be printed:
 
 ::
 

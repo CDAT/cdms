@@ -1001,7 +1001,7 @@ attribute, it can also be set like any attribute:
 
     >>> var.id = 'temperature'
 
-For completeness MV provides access to all the MV2 functions. The
+For completeness MV provides access to all the MV functions. The
 functions not listed in the following tables are identical to the
 corresponding MV function: ``allclose``, ``allequal``,
 ``common_fill_value``, ``compress``, ``create_mask``, ``dot``, ``e``,
@@ -1266,7 +1266,7 @@ RectGrid Methods, Additional to HorizontalGrid Methods
           such that the sum of the weights is 1.0
             **Example:**
               * Generate the 2-D weights array, such that ``weights[i.j]`` is the fractional area of grid zone ``[i,j]``.
-              * From cdms2 import MV
+              * From cdms import MV
               * latwts, lonwts = gri d.getWeights()
               * weights = MV.outerproduct(latwts, lonwts)
               *  Also see the function ``area_weights`` in module ``pcmdi.weighting``."
@@ -1556,7 +1556,7 @@ Variable Methods(cont'd)
         * The optional keyword argument ``squeeze`` determines whether or not the shape of the returned array contains dimensions whose length is 1; by default this
           argument is 0, and such dimensions are not 'squeezed out'.
         * The optional keyword argument ``raw`` specifies whether the return object is a variable or a masked array.
-        * By default, a transient variable is returned, having the axes and attributes corresponding to 2,3 the region read. If raw=1, an MV2 masked array is returned,
+        * By default, a transient variable is returned, having the axes and attributes corresponding to 2,3 the region read. If raw=1, an MV masked array is returned,
           equivalent to the transient variable without the axis and attribute information."
 
 Variable Methods(cont'd)
@@ -1964,7 +1964,7 @@ results are written to a netCDF file. For brevity, the functions
 **Notes:**
 ::
 
- 1.   Two modules are imported, "cdms2", and "MV". "MV" implements
+ 1.   Two modules are imported, "cdms2", and "MV2". "MV2" implements
       arithmetic functions.
  15.  "taObj" is a file (persistent) variable. At this point, no data has
       actually been read. This happens when the file variable is sliced, or

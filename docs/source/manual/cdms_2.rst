@@ -1240,8 +1240,8 @@ HorizontalGrid Methods(cont'd)
            * If the grid is already curvilinear, a copy of the grid object is returned.
            * ``gridid`` is the string identifier of the resulting curvilinear grid object.
            *  If unspecified, the grid ID is copied.
-           **Note:** This method does not apply to generic grids.
-              * Transient-GenericGrid ``toGenericGrid(gridid=None)`` Convert to a generic grid.
+           **Note:** This method does not apply to generic grids."
+    "Transient-GenericGrid", "``toGenericGrid (gridid=None)``", "Convert to a generic grid.
               * If the grid is already generic, a copy of the grid is returned.
               * ``gridid`` is the string identifier of the resulting curvilinear grid object.
               * If unspecified, the grid ID is copied."

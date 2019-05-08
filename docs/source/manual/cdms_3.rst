@@ -4,7 +4,7 @@ Module: CdTime
 Time Types
 ^^^^^^^^^^
 .. highlight:: python
-   :linenothreshold: 3
+   :linenothreshold: 30
 
 .. testsetup:: *
 

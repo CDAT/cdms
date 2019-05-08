@@ -1550,7 +1550,7 @@ Variable Methods(cont'd)
         * The optional keyword argument ``squeeze`` determines whether or not the shape of the returned array contains dimensions whose length is 1; by default this
           argument is 0, and such dimensions are not 'squeezed out'.
         * The optional keyword argument ``raw`` specifies whether the return object is a variable or a masked array.
-        * By default, a transient variable is returned, having the axes and attributes corresponding to 2,3 the region read. If raw=1, an MV masked array is returned,
+        * By default, a transient variable is returned, having the axes and attributes corresponding to 2,3 the region read. If raw=1, an MV2 masked array is returned,
           equivalent to the transient variable without the axis and attribute information."
 
 Variable Methods(cont'd)

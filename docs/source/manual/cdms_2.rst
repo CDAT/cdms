@@ -7,7 +7,7 @@ Overview
 
 
 .. highlight:: python
-   :linenothreshold: 3
+   :linenothreshold: 5
 
 .. testsetup:: *
 
@@ -40,8 +40,7 @@ an application. This chapter documents the cdms, cdtime, and regrid
 modules.
 
 The chapter sections correspond to the CDMS classes. Each section
-contains table
-s base. If no parent, the datapath is absolute.describing
+contains tables base. If no parent, the datapath is absolute.describing
 the class internal (non-persistent) attributes, constructors (functions
 for creating an object), and class methods (functions). A method can
 return an instance of a CDMS class, or one of the Python types:
@@ -53,7 +52,7 @@ PythonTypes used in CDMS
    :widths:  10, 80
    :align:  left
 
-   "Array",  "Numpy or masked multidimensional data array. All elements of the array are of the same type. Defined in the Numpy and MV modules."
+   "Array",  "Numpy or masked multidimensional data array. All elements of the array are of the same type. Defined in the Numpy and MV2 modules."
    "Comptime", "Absolute time value, a time with representation (year, month, day, hour, minute, second). Defined in the cdtime module. cf. reltime"
    "Dictionary","An unordered 2,3 collection of objects, indexed by key. All dictionaries in CDMS are indexed by strings, e.g.: ``axes['time']``"
    "Float", "Floating-point value."
@@ -174,7 +173,7 @@ Cdms Module Functions
                      the midpoints between the consecutive data values, provided that the
                      autobounds mode is 'on' (the default).
                   * See ``setAutoBounds``.
-                  * Also see: ``Cdms2File.createAxis``"
+                  * Also see: ``CdmsFile.createAxis``"
    "Axis", "``createEqualAreaAxis(nlat)``:
             Create an equal-area latitude axis.
               The latitude values range from north to south, and for all axis values
@@ -293,10 +292,10 @@ Cdms Module Functions(cont'd)
    :align: left
 
    "Dataset", "``open(url,mode='r')``:
-               Open or create a ``Dataset`` or ``Cdms2File``.
+               Open or create a ``Dataset`` or ``CdmsFile``.
                  * ``url`` is a Uniform Resource Locator, referring to a cdunif or XML file.
                  * If the URL has the extension '.xml' or '.cdml', a ``Dataset`` is returned, otherwise
-                   a ``Cdms2File`` is returned.
+                   a ``CdmsFile`` is returned.
                  * If the URL protocol is 'http', the file must be a '.xml' or '.cdml' file, and the mode must be 'r'.
                  * If the protocol is 'file' or is omitted, a local file or dataset is opened.
                  * ``mode`` is the open mode.  See `Open Modes <#id7>`__
@@ -448,9 +447,9 @@ CoordinateAxis Types
    "AuxAxis1D", "A one-dimensional coordinate axis whose values need not be monotonic.
                  * Typically a latitude or longitude axis associated with a ``GenericGrid``.
                  * Has subtypes ``DatasetAuxAxis1D``, ``FileAuxAxis1D``, and ``TransientAuxAxis1D``.
-                 * An axis in a ``Cdms2File`` may be designated the unlimited axis, meaning that it can
+                 * An axis in a ``CdmsFile`` may be designated the unlimited axis, meaning that it can
                    be extended in length after the initial definition.
-                 * There can be at most one unlimited axis associated with a ``Cdms2File``."
+                 * There can be at most one unlimited axis associated with a ``CdmsFile``."
 
 CoordinateAxis Internal Attributes
 ----------------------------------
@@ -474,7 +473,7 @@ Axis Constructors
    "``cdms2.createAxis (data, bounds=None)``", "Create an axis which is not associated with a dataset or file.
          * See `A First Example <#a-first-example>`_."
    "``Dataset.createAxis (name,ar)``", "Create an ``Axis`` in a ``Dataset``. (This function is not yet implemented.)"
-   "``Cdms2File.createAxis (name,ar,unlimited=0)``", "Create an Axis in a ``Cdms2File``.
+   "``CdmsFile.createAxis (name,ar,unlimited=0)``", "Create an Axis in a ``Cdms2File``.
          * ``name`` is the string ``name`` of the ``Axis``.
          * ``ar`` is a 1-D data array which defines the ``Axis`` values.
          * It may have the value ``None`` if an unlimited axis is being defined.
@@ -661,9 +660,9 @@ Example 1
 ::
 
     >>> axis.isCircular()
-    >>> 1
+    1
     >>> axis.mapIntervalExt((-5.0,5.0,'co'))
-    >>> (-2,3,1)
+    (-2,3,1)
 
 
 
@@ -716,7 +715,7 @@ CdmsFile Methods
    "Transient-Variable", "``fileobj(varname, selector)``", "Calling a ``CdmsFile`` object as a function reads the
    region of data specified by the ``selector``.
        The result is a transient variable, unless ``raw = 1`` is specified.
-       See `Selectors <#id24>`_.
+       See `Selectors <#selectors>`_.
     **Example:** The following reads data for variable 'prc',
     year 1980:
               >>> f = cdms2.open('test.nc')
@@ -724,13 +723,11 @@ CdmsFile Methods
    "Variable, Axis, or Grid", "``fileobj['id']``", "Get the persistent variable, axis or grid object
     having the string identifier.
         This does not read the data for a variable.
-    **Example:** The following gets the persistent variable
-             >>> v, equivalent to
+    **Example:** The following gets the persistent variable v,  equivalent to
              >>> v = f.variables['prc']
              >>> f = cdms2.open('sample.nc')
              >>> v = f['prc']
-    **Example:** The following gets the axis named time,
-    equivalent to
+    **Example:** The following gets the axis named time, equivalent to
              >>> t = f.axes['time']
              >>> t = f['time']"
    "None", "``close()``", "Close the file."
@@ -988,7 +985,7 @@ The command
 Allows use of MV commands without any prefix.
 
 
-Table `Variable Constructors in module MV <#id9>`_,  lists the constructors in MV. All functions return
+Table `Variable Constructors in module MV2 <#id9>`_,  lists the constructors in MV. All functions return
 a transient variable. In most cases the keywords axes, attributes, and
 id are available. Axes is a list of axis objects which specifies the
 domain of the variable. Attributes is a dictionary. id is a special
@@ -1001,7 +998,7 @@ attribute, it can also be set like any attribute:
 
     >>> var.id = 'temperature'
 
-For completeness MV provides access to all the MV2 functions. The
+For completeness MV provides access to all the MV functions. The
 functions not listed in the following tables are identical to the
 corresponding MV function: ``allclose``, ``allequal``,
 ``common_fill_value``, ``compress``, ``create_mask``, ``dot``, ``e``,
@@ -1158,7 +1155,6 @@ RectGrid Constructors
     "``cdms2.createZonalGrid(grid)``", "See `A First Example`_"
 
 
-
 HorizontalGrid Methods
 ----------------------
 
@@ -1181,7 +1177,7 @@ HorizontalGrid Methods
         By default, autoBounds mode is enabled, in which
         case the boundary arrays are generated based on
         the type of grid.
-           * If disabled, the return value is (None,None).For rectilinear grids:
+           * If disabled, the return value is (None,None). For rectilinear grids:
            * The grid classification mode specifies how the grid type is to be determined.
            * By default, the grid type (Gaussian, uniform, etc.) is determined by calling grid.classifyInFamily.
            * If the mode is 'off' grid.getType is used instead."
@@ -1242,9 +1238,9 @@ HorizontalGrid Methods(cont'd)
            *  If unspecified, the grid ID is copied.
            **Note:** This method does not apply to generic grids."
     "Transient-GenericGrid", "``toGenericGrid (gridid=None)``", "Convert to a generic grid.
-              * If the grid is already generic, a copy of the grid is returned.
-              * ``gridid`` is the string identifier of the resulting curvilinear grid object.
-              * If unspecified, the grid ID is copied."
+           * If the grid is already generic, a copy of the grid is returned.
+           * ``gridid`` is the string identifier of the resulting curvilinear grid object.
+           * If unspecified, the grid ID is copied."
 
 
 RectGrid Methods, Additional to HorizontalGrid Methods
@@ -1266,7 +1262,7 @@ RectGrid Methods, Additional to HorizontalGrid Methods
           such that the sum of the weights is 1.0
             **Example:**
               * Generate the 2-D weights array, such that ``weights[i.j]`` is the fractional area of grid zone ``[i,j]``.
-              * From cdms2 import MV
+              * From cdms import MV
               * latwts, lonwts = gri d.getWeights()
               * weights = MV.outerproduct(latwts, lonwts)
               *  Also see the function ``area_weights`` in module ``pcmdi.weighting``."
@@ -1343,7 +1339,7 @@ Variable Constructors
 
 
     "``Dataset.createVariable (String id, String datatype, List axes)``", "Create a Variable in a Dataset. This function is not yet implemented."
-    "``Cdms2File.createVariable (String id, String datatype, List axes or Grids)``", "Create a Variable in a CdmsFile.
+    "``CdmsFile.createVariable (String id, String datatype, List axes or Grids)``", "Create a Variable in a CdmsFile.
        * ``id`` is the name of the variable.
        * ``datatype`` is the MV or Numpy | typecode, for example, MV.Float.
        * ``axesOrGrids`` is a list of Axis and/or Grid objects, on which the variable is defined. Specifying a rectilinear grid is equivalent to listing the grid latitude and longitude axes, in the order defined for the grid.
@@ -1501,8 +1497,7 @@ Variable Methods(cont'd)
         * ``order`` is an order string such as 'tzyx' or 'zyx'. The default is ``var.getOrder()``
         * See also: ``regrid``, ``crossSectionRegrid``."
     "Integer", "``rank()``", "The number of dimensions of the variable."
-    "Transient", "``regrid (togrid, missing=None, order=None, mask=None)``",
-    "Return the variable regridded to the horizontal grid togrid.
+    "Transient", "``regrid (togrid, missing=None, order=None, mask=None)``", "Return the variable regridded to the horizontal grid togrid.
         * ``missing`` is a Float specifying the missing data value. The default is 1.0e20.
         * ``order`` is a string indicating the order of dimensions of the array.  It has the form returned from ``variable.getOrder()``.
         * For example, the string 'tzyx' indicates that the dimension order of array is (time, level, latitude, longitude).
@@ -1519,8 +1514,7 @@ Variable Methods(cont'd)
    :widths:  30, 42, 80
    :align: left
 
-    "Transient(cont'd)", "``regrid (togrid, missing=None, order=None, mask=None)``",
-    "Return the variable regridded to the horizontal grid togrid.
+    "Transient(cont'd)", "``regrid (togrid, missing=None, order=None, mask=None)``", "Return the variable regridded to the horizontal grid togrid.
         * If the mask has more than two dimensions, it must have the same shape as array. In this case, the missing data value is also ignored.
         * Such an n-dimensional mask is useful if the pattern of missing data varies with level (e.g., ocean data) or time.
 
@@ -1964,7 +1958,7 @@ results are written to a netCDF file. For brevity, the functions
 **Notes:**
 ::
 
- 1.   Two modules are imported, "cdms2", and "MV". "MV" implements
+ 1.   Two modules are imported, "cdms2", and "MV2". "MV2" implements
       arithmetic functions.
  15.  "taObj" is a file (persistent) variable. At this point, no data has
       actually been read. This happens when the file variable is sliced, or

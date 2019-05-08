@@ -40,8 +40,7 @@ an application. This chapter documents the cdms, cdtime, and regrid
 modules.
 
 The chapter sections correspond to the CDMS classes. Each section
-contains table
-s base. If no parent, the datapath is absolute.describing
+contains tables base. If no parent, the datapath is absolute.describing
 the class internal (non-persistent) attributes, constructors (functions
 for creating an object), and class methods (functions). A method can
 return an instance of a CDMS class, or one of the Python types:
@@ -1181,7 +1180,7 @@ HorizontalGrid Methods
         By default, autoBounds mode is enabled, in which
         case the boundary arrays are generated based on
         the type of grid.
-           * If disabled, the return value is (None,None).For rectilinear grids:
+           * If disabled, the return value is (None,None). For rectilinear grids:
            * The grid classification mode specifies how the grid type is to be determined.
            * By default, the grid type (Gaussian, uniform, etc.) is determined by calling grid.classifyInFamily.
            * If the mode is 'off' grid.getType is used instead."
@@ -1501,8 +1500,7 @@ Variable Methods(cont'd)
         * ``order`` is an order string such as 'tzyx' or 'zyx'. The default is ``var.getOrder()``
         * See also: ``regrid``, ``crossSectionRegrid``."
     "Integer", "``rank()``", "The number of dimensions of the variable."
-    "Transient", "``regrid (togrid, missing=None, order=None, mask=None)``",
-    "Return the variable regridded to the horizontal grid togrid.
+    "Transient", "``regrid (togrid, missing=None, order=None, mask=None)``", "Return the variable regridded to the horizontal grid togrid.
         * ``missing`` is a Float specifying the missing data value. The default is 1.0e20.
         * ``order`` is a string indicating the order of dimensions of the array.  It has the form returned from ``variable.getOrder()``.
         * For example, the string 'tzyx' indicates that the dimension order of array is (time, level, latitude, longitude).
@@ -1519,8 +1517,7 @@ Variable Methods(cont'd)
    :widths:  30, 42, 80
    :align: left
 
-    "Transient(cont'd)", "``regrid (togrid, missing=None, order=None, mask=None)``",
-    "Return the variable regridded to the horizontal grid togrid.
+    "Transient(cont'd)", "``regrid (togrid, missing=None, order=None, mask=None)``", "Return the variable regridded to the horizontal grid togrid.
         * If the mask has more than two dimensions, it must have the same shape as array. In this case, the missing data value is also ignored.
         * Such an n-dimensional mask is useful if the pattern of missing data varies with level (e.g., ocean data) or time.
 

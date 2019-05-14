@@ -397,6 +397,11 @@ class AbstractVariable(CdmsObj, Slab):
                 "grid does not match axes for variable %s" %
                 self.id)
         self._grid_ = grid
+        try:
+            axes = grid.getAxisList()
+            self.initDomain(axes, copyaxes=0)
+        except:
+            pass
 
     def getDomain(self):
         "Get the list of axes"

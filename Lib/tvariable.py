@@ -220,8 +220,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
                 axes = [x[0] for x in data.getDomain()]
             if grid is None and not no_update_from:
                 grid = data.getGrid()
-                if (grid is not None) and (not isinstance(grid, AbstractRectGrid)) \
-                        and (not grid.checkAxes(axes)):
+                if (grid is not None) and (not isinstance(grid, AbstractRectGrid)): 
                     # Make sure grid and axes are consistent
                     grid = grid.reconcile(axes)
 

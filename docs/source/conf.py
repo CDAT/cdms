@@ -109,7 +109,7 @@ master_doc = 'index'
 # General information about the project.
 project = u'CDMS'
 copyright = u'2019'
-author = u'Denis Nadeau'
+author = u'Denis Nadeau-1'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -177,12 +177,12 @@ todo_include_todos = True
 #html_theme = 'alabaster'
 #html_theme = 'sphinxdoc'
 #html_theme = 'nature'
-html_theme = 'agogo'
+#html_theme = 'agogo'
 #html_theme = 'scipy'
 #html_theme = 'pyramid'
 #html_theme = 'epub'
 #html_theme = 'haiku'
-#html_theme = "sphinx_rtd_theme"
+html_theme = "sphinx_rtd_theme"
 #html_theme = 'classic'
 
 # Theme options are theme-specific and customize the look and feel of a theme

@@ -1674,10 +1674,10 @@ class AbstractAxis(CdmsObj):
                     # only for -180, 180 not needed if values are all positive
                     # (0-360)
                     if((retbnds[0, 0] * retbnds[-1, 1]) < 0):
-                        msg = "\nYour first bounds[0,0] %3.15lf will be corrected to %3.15lf\n"\
-                              "Your bounds bounds[-1,1] %3.15lf will be corrected to %3.15lf" \
-                            % (retbnds[0, 0], numpy.floor(retbnds[0, 0] + 0.5), retbnds[-1, 1],
-                               numpy.floor(retbnds[-1, 1] + 0.5))
+#                        msg = "\nYour first bounds[0,0] %3.15lf will be corrected to %3.15lf\n"\
+#                              "Your bounds bounds[-1,1] %3.15lf will be corrected to %3.15lf" \
+#                            % (retbnds[0, 0], numpy.floor(retbnds[0, 0] + 0.5), retbnds[-1, 1],
+#                               numpy.floor(retbnds[-1, 1] + 0.5))
 
                         warnings.warn(msg, UserWarning)
                         retbnds[0, 0] = numpy.floor(retbnds[0, 0] + 0.5)

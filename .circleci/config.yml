@@ -100,7 +100,7 @@ jobs:
       - run: *create_conda_env
       - save_cache:
           key: macos_py2-2019-05-29
-          path: /Users/distiller/miniconda
+          paths: /Users/distiller/miniconda
       - run: *setup_cdms
       - run: *run_cdms_tests
       - store_artifacts:
@@ -125,7 +125,7 @@ jobs:
       - run: *create_conda_env
       - save_cache:
           key: macos_py3-2019-05-29
-          path: /Users/distiller/miniconda
+          paths: /Users/distiller/miniconda
       - run: *setup_cdms
       - run: *run_cdms_tests
       - run: *conda_upload

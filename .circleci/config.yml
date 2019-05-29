@@ -133,6 +133,8 @@ jobs:
       PY_VER: "py2"
     steps:
       - checkout
+      - setup_remote_docker: 
+         docker_layer_caching: true 
       - run: *setup_cdms
       - run: *run_cdms_tests
       - store_artifacts:
@@ -150,6 +152,8 @@ jobs:
       COVERAGE: "-c /root/project/tests/coverage.json"
     steps:
       - checkout
+      - setup_remote_docker: 
+         docker_layer_caching: true 
       - run: pwd
       - run: ls -l
       - run: *setup_cdms

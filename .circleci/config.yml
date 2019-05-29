@@ -12,15 +12,15 @@ aliases:
       mkdir -p workspace
       git clone -b validateNightly --depth 1 git@github.com:CDAT/cdat workspace/cdat
       ls workspace/cdat
-      python workspace/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py3.7'
+      python workspace/cdat/scripts/install_miniconda.py -w $HOME -p 'py3.7'
       
   - &create_conda_env
     name: create_conda_env
     environment:
-       CHANNELS: "-c cdat/label/unstable -c cdat/label/nightly -c conda-forge -c cdat"
+       CHANNELS: "-c cdat/label/nightly -c conda-forge -c cdat"
        PKGS: "pytest esmpy libcf distarray cdtime libcdms cdat_info testsrunner numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient lazy-object-proxy"
     command: |
-       export PATH=$WORKDIR/miniconda/bin:$PATH
+       export PATH=$HOME/miniconda/bin:$PATH
        conda config --set always_yes yes --set changeps1 no
        conda update -y -q conda
        conda config --set anaconda_upload no
@@ -34,9 +34,9 @@ aliases:
   - &setup_cdms
     name: setup_cdms
     command: |
-       export PATH=$WORKDIR/miniconda/bin:$PATH
+       export PATH=$HOME/miniconda/bin:$PATH
        export CDAT_ANONYMOUS_LOG=False
-       source activate $PY_VER
+       source activate cdat
        if [ $(uname) == "Linux" ];then
          export LDSHARED="$CC -shared -pthread"
          LDSHARED="$CC -shared -pthread" python setup.py install
@@ -47,9 +47,9 @@ aliases:
   - &run_cdms_tests
     name: run_cdms_tests
     command: |
-       export PATH=$WORKDIR/miniconda/bin:$PATH
+       export PATH=$HOME/miniconda/bin:$PATH
        export CDAT_ANONYMOUS_LOG=False
-       source activate $PY_VER
+       source activate cdat
        python run_tests.py --subdir -v2 $COVERAGE
        python run_tests.py -n1 --subdir -v2 $COVERAGE --dask
        RESULT=$?
@@ -59,15 +59,15 @@ aliases:
   - &run_coveralls
     name: run_coveralls
     command: |
-       export PATH=$WORKDIR/miniconda/bin:$PATH
-       source activate $PY_VER
+       export PATH=$HOME/miniconda/bin:$PATH
+       source activate cdat
        coveralls
        source deactivate
 
   - &conda_upload
     name: conda_upload
     command: |
-       export PATH=$WORKDIR/miniconda/bin:$PATH
+       export PATH=$HOME/miniconda/bin:$PATH
        export LABEL="nightly";
        if [ $CIRCLE_BRANCH == "master" ]; then
           conda install -n root conda-build anaconda-client
@@ -124,15 +124,12 @@ jobs:
 
   linux_cdms_py2:
     machine:
-      image: circleci/classic:latest
+      image: cdoutrix:cdat/cdms-base-2
     environment:
-      WORKDIR: "test_linux_cdms_py2"
-      PY_VER: "py2"
       CONDA_COMPILER: "gcc_linux-64"
+      PY_VER: "py2"
     steps:
       - checkout
-      - run: *setup_miniconda
-      - run: *create_conda_env
       - run: *setup_cdms
       - run: *run_cdms_tests
       - store_artifacts:
@@ -144,18 +141,14 @@ jobs:
 
   linux_cdms_py3:
     machine:
-      image: circleci/classic:latest
+      image: cdoutrix:cdat/cdms-base-3
     environment:
-      WORKDIR: "test_linux_cdms_py3"
       PY_VER: "py3"
-      CONDA_COMPILER: "gcc_linux-64"
       COVERAGE: "-c /home/circleci/project/tests/coverage.json"
     steps:
       - checkout
       - run: pwd
       - run: ls -l
-      - run: *setup_miniconda
-      - run: *create_conda_env
       - run: *setup_cdms
       - run: *run_cdms_tests
       - run: *run_coveralls
@@ -171,11 +164,11 @@ workflows:
   version: 2
   cdms_test:
     jobs:
-      - macos_cdms_py2
-      - macos_cdms_py3
+#      - macos_cdms_py2
+#      - macos_cdms_py3
 #           requires:
 #              - macos_cdms_py2
-      - linux_cdms_py2
+#      - linux_cdms_py2
       - linux_cdms_py3
 #           requires:
 #              - linux_cdms_py2

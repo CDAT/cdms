@@ -147,7 +147,7 @@ jobs:
       - image: cdoutrix/cdat:cdms-devs-3
     environment:
       PY_VER: "py3"
-      COVERAGE: "-c ${HOME}/project/tests/coverage.json"
+      COVERAGE: "-c ${HOME}/tests/coverage.json"
     steps:
       - checkout
       - run: pwd

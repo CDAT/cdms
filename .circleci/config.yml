@@ -13,7 +13,7 @@ aliases:
        PKGS: "pytest esmpy libcf distarray cdtime libcdms cdat_info testsrunner numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient lazy-object-proxy"
     command: |
       if [ -d ${HOME}/miniconda ]; then
-        export PATH=$HOME/mininiconda/bin:$PATH
+        export PATH=$HOME/miniconda/bin:$PATH
         echo "Found miniconda directory"
       else
         echo "miniconda directory not found, installing conda"

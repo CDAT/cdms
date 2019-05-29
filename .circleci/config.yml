@@ -96,10 +96,10 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - macos_py2-{{ checksum ".circleci/cache_version.txt" }}
+            - macos_py2-2019-05-29
       - run: *create_conda_env
       - save_cache:
-          key: macos_py2_conda_{{ checksum ".circleci/cache_version.txt" }}
+          key: macos_py2-2019-05-29
           path: /Users/distiller/miniconda
       - run: *setup_cdms
       - run: *run_cdms_tests
@@ -121,10 +121,10 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - macos_py3-{{ checksum ".circleci/cache_version.txt" }}
+            - macos_py3-2019-05-29
       - run: *create_conda_env
       - save_cache:
-          key: macos_py3_conda_{{ checksum ".circleci/cache_version.txt" }}
+          key: macos_py3-2019-05-29
           path: /Users/distiller/miniconda
       - run: *setup_cdms
       - run: *run_cdms_tests

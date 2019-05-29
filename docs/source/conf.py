@@ -177,12 +177,12 @@ todo_include_todos = True
 #html_theme = 'alabaster'
 #html_theme = 'sphinxdoc'
 #html_theme = 'nature'
-#html_theme = 'agogo'
+html_theme = 'agogo'
 #html_theme = 'scipy'
 #html_theme = 'pyramid'
 #html_theme = 'epub'
 #html_theme = 'haiku'
-html_theme = "sphinx_rtd_theme"
+#html_theme = "sphinx_rtd_theme"
 #html_theme = 'classic'
 
 # Theme options are theme-specific and customize the look and feel of a theme
@@ -198,7 +198,7 @@ html_theme_options = { "headerbg" : "#01796F" }
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-html_title = "CDMS Documentation"
+html_title = " UV-CDAT Utilities Manual"
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #html_short_title = None
@@ -301,7 +301,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  (master_doc, 'cdms2.tex', u'cdms',
+  (master_doc, 'cdms2.tex', u'uv-cdat',
    u'Denis Nadeau', 'manual'),
 ]
 

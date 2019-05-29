@@ -8,15 +8,10 @@
 .. toctree::
    :numbered: 4
 
-   manual/cdms_1
-   manual/cdms_2
-   manual/cdms_3
-   manual/cdms_4
-   manual/cdms_6
-   manual/cdms_7
-   manual/cdms_appendix
-   manual/sample_data
-   TanyaTest
+   manual/uv-cdat_1
+   manual/uv-cdat_2
+   manual/uv-cdat_3
+   
 
 
 Indices and tables

@@ -124,7 +124,7 @@ jobs:
 
   linux_cdms_py2:
     docker:
-      image: cdoutrix:cdat/cdms-base-2
+      - image: cdoutrix:cdat/cdms-base-2
     environment:
       CONDA_COMPILER: "gcc_linux-64"
       PY_VER: "py2"
@@ -141,7 +141,7 @@ jobs:
 
   linux_cdms_py3:
     docker:
-      image: cdoutrix:cdat/cdms-base-3
+      - image: cdoutrix:cdat/cdms-base-3
     environment:
       PY_VER: "py3"
       COVERAGE: "-c /home/circleci/project/tests/coverage.json"

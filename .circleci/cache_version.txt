@@ -1,0 +1,2 @@
+# Stores date of the last time we cached
+2019-05-29

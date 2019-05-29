@@ -144,7 +144,7 @@ jobs:
       - image: cdoutrix/cdat:cdms-base-3
     environment:
       PY_VER: "py3"
-      COVERAGE: "-c /home/circleci/project/tests/coverage.json"
+      COVERAGE: "-c ${HOME}/project/tests/coverage.json"
     steps:
       - checkout
       - run: pwd

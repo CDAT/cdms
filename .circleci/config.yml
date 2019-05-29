@@ -74,10 +74,16 @@ aliases:
           bash ./ci-support/conda_upload.sh
        fi
        if [ $CIRCLE_BRANCH != "master" ]; then
+        first=$(git cherry master -v | head -n1)
+        current=$(git log -n1 --pretty=oneline)
+        if [[ $first == *"upload unstable"* || $current == *"upload unstable"* ]]; then
            export LABEL="unstable";
            echo "NOTE: upload LABEL="${LABEL}
            conda install -n root conda-build anaconda-client;
            bash ./ci-support/conda_upload.sh;
+        else
+           echo "Skipping upload to unstable since not specified in commit"
+        fi
        fi
 
 jobs:

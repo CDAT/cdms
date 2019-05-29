@@ -1,9 +1,5 @@
 version: 2
 
-checkout:
-  post:
-    - ./ci-support/checkout_merge_commit.sh
-        
 aliases:
 
   - &create_conda_env

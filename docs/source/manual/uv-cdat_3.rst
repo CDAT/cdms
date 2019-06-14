@@ -1,23 +1,18 @@
-Introduction
-------------
-
-Overview
-^^^^^^^^
 
 .. highlight:: python
 
-General Utilities: User Contributed Packages
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+User Contributed Packages
+-------------------------
 
 The packages described below are contributions submitted by users. They
 are provided “as-is” and may not be maintained in the future - unless
 they are extensively used and the user community considers them
 critical.
 
-Reading ASCII text files (package asciidata )
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Reading ASCII text files (package asciidata)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Package asciidata reads data from ASCII text files.
+Package ``asciidata`` reads data from ASCII text files.
 
 Reads text files written by such programs as spreadsheets, in which data
 has been written as comma, tab, or space-separated numbers with a header
@@ -30,34 +25,26 @@ Example:
 .. code:: ipython2
 
     >>> import asciidata
-    >>> time, pressure = asciidata.comma_separated(`myfile.txt')
-
-
-::
-
-
-      File "<ipython-input-8-10de02094391>", line 2
-        time, pressure = asciidata.comma_separated(`myfile.txt')
-                                                               ^
-    SyntaxError: EOL while scanning string literal
-
+    time, pressure = asciidata.comma_separated(`myfile.txt')
 
 
 For documentation type:
 
+.. code:: ipython2
 
+   % pydoc -w asciidata
 
-Scientific Python also contains a subpackage IO that contains other
+Scientific Python also contains a subpackage ``IO`` that contains other
 useful facilities of this type. In particular there is a useful package
 for reading Fortran-like formatted output.
 
-Reading binary data (package binaryio )
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Reading binary data (package ``binaryio``)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Read and write Fortran unformatted i/o files.
 
 These are the files that you read and write in Fortran with statements
-like read(7) or write(7). Such files have an unspecified format and are
+like ``read(7)`` or ``write(7)``. Such files have an unspecified format and are
 platform and compiler dependent. They are NOT portable. Contrary to
 popular opinion, they are NOT standard. The standard only specifies
 their existence and behavior, not the details of their implementation,
@@ -66,6 +53,10 @@ vary. We suggest writing netcdf files instead, using the facilities in
 cdms.
 
 For documentation type:
+
+.. code:: ipython2
+
+   % pydoc -w binaryio.
 
 
 
@@ -86,15 +77,6 @@ Example:
     >>> binaryio.binclose(iunit)
 
 
-::
-
-
-      File "<ipython-input-9-276b78a8bc63>", line 7
-        y = binaryio.binread(iunit, n, ...)
-                                       ^
-    SyntaxError: invalid syntax
-
-
 
 Note that reads and writes must be paired exactly. Errors will cause a
 Fortran STOP that cannot be recovered from. You must know (or have
@@ -102,13 +84,13 @@ written earlier in the file) the sizes of each array. All data is stored
 as 32-bit floats.
 
 Explicit Orthonormal Functions (package eof)
---------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Calculates Explicit Orthonormal Functions of either one variable or two
 variables jointly.
 
 Having selected some data, the key call is to create an instance of
-eof.Eof giving one or two arguments. In this example, a portion of the
+``eof.Eof`` giving one or two arguments. In this example, a portion of the
 variable u is analyzed. After the result is returned, it is an object
 with attributes containing such things as the principal components and
 the percent of variance explained. Optional arguments are available for
@@ -124,7 +106,9 @@ number of space points.
 
 For documentation type:
 
+.. code:: ipython2
 
+   % pydoc -w eof.Eof
 
 Example:
 
@@ -150,18 +134,10 @@ Example:
     >>> print "Percent explained", result.percent_explained
 
 
-::
-
-
-      File "<ipython-input-10-73f007246a01>", line 11
-        x.isofill(y)
-        ^
-    IndentationError: expected an indented block
-
 
 
 Computing L-moments (package lmoments)
---------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 An interface to an L-moments library by J. R. M. Hosking.
 
@@ -172,24 +148,31 @@ output arguments are returned as values of the function.
 
 For documentation type:
 
+.. code:: ipython2
 
+   % pydoc -w lmoments
 
 to see list of functions.
 
+.. code:: ipython2
 
+   % pydoc -w lmoments.pelexp
 
 or other function name, for the particular. See also documentation for
 Pyfort for further details on argument conventions. If built from
-source, a file flmoments.txt appears which gives the Python calling
+source, a file ``flmoments.txt`` appears which gives the Python calling
 sequences.
 
 Regridding using package regridpack
------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Interface to regridpack
+Interface to ``regridpack``
 
 For documentation type:
 
+.. code:: ipython2
+
+   % pydoc -w adamsregrid
 
 
 This package contains a Python interface to the subroutine library
@@ -200,13 +183,16 @@ http://pyfortran.sourceforge.net/ for further details on argument
 conventions.
 
 Using Spherepack (package sphere)
----------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Interface to Spherepack. This package contains a Python interface to the
 subroutine library Spherepack.
 
 For documentation type:
 
+.. code:: ipython2
+
+   % pydoc -w sphere
 
 
 to see list of functions.
@@ -216,7 +202,7 @@ http://pyfortran.sourceforge.net/ for further details on argument
 conventions.
 
 Computing Trends (package trends)
----------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Computes variance estimate taking auto-correlation into account.
 
@@ -224,9 +210,9 @@ Example:
 
 .. code:: ipython2
 
-    import reg_arl from trends
-    rneff, result, res, cxx, rxx = reg_arl (lag, x, y)
-    integer lag Max lag for autocorrelations.
+    >>> import reg_arl from trends
+    >>> rneff, result, res, cxx, rxx = reg_arl (lag, x, y)
+    >>> integer lag Max lag for autocorrelations.
     real x(n1) Independent variable
     real y(n1) Dependent variable
     real, intent(out):: rneff !Effective sample size
@@ -236,22 +222,12 @@ Example:
     real, intent(out):: rxx(1 + lag) !Autocorrelation function
 
 
-::
-
-
-      File "<ipython-input-6-a669a971db08>", line 1
-        import reg_arl from trends
-                          ^
-    SyntaxError: invalid syntax
-
-
-
 Reading data from an Oort file (package ort)
---------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Read data from an Oort file.
 
-Module ort contains one Fortran function, read1f:
+Module ``ort`` contains one Fortran function, ``read1f``:
 
 Calling sequence:
 
@@ -261,14 +237,6 @@ Calling sequence:
     >>> lon, lat, data, nr = ort.read1f(filename, maxsta,\ nvarbs, nlevels)
 
 
-
-::
-
-
-      File "<ipython-input-12-c8d6f8f553c3>", line 2
-        lon, lat, data, nr = ort.read1f(filename, maxsta,\ nvarbs, nlevels)
-                                                                           ^
-    SyntaxError: unexpected character after line continuation character
 
 
 
@@ -286,25 +254,27 @@ data(nvarbs, nlevels, maxsta) ! actual number of stations with data
 integer , intent(out):: nr
 
 A grads like interface (package grads)
---------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. code:: ipython2
-
-    The grads module supplies an interface to cdms that will be familiar to users of GrADS.
+    The ``grads`` module supplies an interface to cdms that will be familiar to users of GrADS.
     
     See the UV-CDAT website for documentation.
 
-Interface to the ngmath library. (package ngmath)
--------------------------------------------------
+Interface to the ngmath library (package ngmath)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The ngmath library is a collection of interpolators and approximators
+The ``ngmath`` library is a collection of interpolators and approximators
 for one-dimensional, two-dimensional and three-dimensional data. The
 packages, which were obtained from NCAR, are:
 
-::
 
-   natgrid - a two-dimensional random data interpolation package based on Dave Watson’s nngridr. NOT built by default in UV-CDAT due to compile problems on some platforms. Works on linux.
-   dsgrid - a three-dimensional random data interpolator based on a simple inverse distance weighting algorithm.
-   fitgrid - an interpolation package for one-dimensional and two-dimensional gridded data based on Alan Cline’s Fitpack. Fitpack uses splines under tension to interpolate in one and two dimensions. NOT IN UV-CDAT.
+   - ``natgrid``: a two-dimensional random data interpolation package based on Dave Watson’s nngridr. NOT built
+     by default in UV-CDAT due to compile problems on some platforms. Works on linux.
 
-   csagrid - an approximation package for one-dimensional, two-dimensional and three-dimensional random data based on David Fulker’s Splpack. csagrid uses cubic splines to calculate its approximation function.
+   - ``dsgrid``: a three-dimensional random data interpolator based on a simple inverse distance weighting algorithm.
+
+   - ``fitgrid``: an interpolation package for one-dimensional and two-dimensional gridded data based on Alan 
+     Cline’s Fitpack. Fitpack uses splines under tension to interpolate in one and two dimensions. NOT IN UV-CDAT.
+
+   - ``csagrid``: an approximation package for one-dimensional, two-dimensional and three-dimensional random data
+     based on David Fulker’s Splpack. csagrid uses cubic splines to calculate its approximation function.

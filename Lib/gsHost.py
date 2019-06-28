@@ -29,8 +29,11 @@ except BaseException:
 def open(hostfile, mode='r'):
     """
     Open host file
-    @param hostfile host file
-    @param mode valid cdms2 open file mode
+
+    Parameters
+    ----------
+    hostfile : host file
+    mode : valid cdms2 open file mode
     """
 
     outHostFile = Host(hostfile, mode)
@@ -50,8 +53,12 @@ class Host:
     def __init__(self, hostfile, mode='r'):
         """
         Constructor
-        @param hostfile path to the host
-        @param mode read only at the moment
+
+        Parameters
+        ----------
+
+        hostfile : path to the host
+        mode : read only at the moment
         """
 
         self.__initialize()
@@ -257,7 +264,10 @@ class Host:
     def getMosaic(self):
         """
         Get the mosaic filename
-        @return mfn Mosaic filename
+
+        Returns
+        -------
+        mfn : Mosaic filename
         """
         from .gsMosaic import Mosaic
         mfn = Mosaic(self.mosaicFilename, "r")
@@ -266,29 +276,46 @@ class Host:
 
     def getGridVarInfo(self):
         """
-        Return the dictionary associated with the grid containing grid names and files.
+        Returns
+        -------
+
+             the dictionary associated with the grid containing grid names and files.
         """
         return self.gridVars
 
     def getGridFilenames(self):
         """
-        Return a list of time filenames. Assumes each coordinate is in each file.
+        Returns
+        -------
+
+             a list of time filenames. Assumes each coordinate is in each file.
         """
         c = list(self.gridVars.keys())
         return self.gridVars[c[0]]
 
     def getGridNames(self):
         """
-        Return a list of grid names
+        Returns
+        -------
+
+             a list of grid names
         """
         return list(self.gridName.values())
 
     def getStatFilenames(self, varName=None):
         """
-        Return a list of static variable filenames
-        @param varName variable name (or None if all the static file names are to
-                       be returned)
-        @return list the file names corresponding to varName
+                Get a list of static variable filenames
+
+        Parameters
+        ----------
+                varName variable name (or None if all the static file names are to
+        be returned)
+
+
+        Returns
+        -------
+
+        list the file names corresponding to varName
         """
         if varName is not None:
             return self.statVars[varName]
@@ -297,9 +324,16 @@ class Host:
 
     def getTimeFilenames(self, varName=None):
         """
-        Return a list of time dependent variable filenames
-        @param varName variable name. None for all variables
-        @return filename for input variable name only
+        Get a list of time dependent variable filenames
+
+        Parameters
+        ----------
+        varName : variable name. None for all variables
+
+        Returns
+        -------
+        filename : for input variable name only
+
         """
         if varName is not None:
             return self.timeVars[varName]
@@ -309,14 +343,20 @@ class Host:
     def getCoordinates(self):
         """
         Coordinates variables contained within the host object
-        @return list of coordinate names
+
+        Returns
+        -------
+        list of coordinate names
         """
         return list(self.gridVars.keys())
 
     def getNumGrids(self):
         """
         Get number of grids (tiles)
-        @return number of grids
+
+        Returns
+        -------
+        number of grids
         """
         c = list(self.gridVars.keys())
         return len(list(self.gridVars[c[0]].values()))
@@ -324,21 +364,34 @@ class Host:
     def getNumStatDataFiles(self):
         """
         Get number of static data files
-        @return number static files
+
+        Returns
+        -------
+        number static files
         """
         return self.nStatDataFiles
 
     def getNumTimeDataFiles(self):
         """
         Get number of time dependent data files
-        @return number time data files
+
+        Returns
+        -------
+        number time data files
         """
         return self.nTimeDataFiles
 
     def listvariable(self, gstype=None):
         """
-        @param type Grid, Static, Time Dependent or None
-        @return list of all variables, including static and time dependent, Default = None
+        Get all variables
+
+        Parameters
+        ----------
+        type Grid, Static, Time Dependent or None
+
+        Returns
+        -------
+        list of all variables, including static and time dependent, Default = None
         """
         isNone = gstype is None
         isStr = isinstance(gstype, string_types)
@@ -362,16 +415,28 @@ class Host:
     def listvariables(self, type=None):
         """
         Synonymous to listvariable
-        @param type Grid, Static, Time Dependent or None
-        @return list of all variables, including static and time dependent
+
+        Parameters
+        ----------
+        type Grid, Static, Time Dependent or None
+
+        Returns
+        -------
+        list of all variables, including static and time dependent
         """
         return self.listvariable(type)
 
     def listattribute(self, varName):
         """
         List the given variables attributes
-        @param varName variable name
-        @return attributes list
+
+        Parameters
+        ----------
+        varName variable name
+
+        Returns
+        -------
+        attributes list
         """
         fName = ""
         if varName in self.statVars:
@@ -387,39 +452,64 @@ class Host:
     def listattributes(self, varName):
         """
         Synonymous to listattribute
-        @param varName variable name
-        @return attributes list
+
+        Parameters
+        ----------
+        varName variable name
+
+        Returns
+        -------
+        attributes list
         """
         return self.listattribute(varName)
 
     def listdimension(self):
         """
         List a variable's dimensions
-        @return [nGrids, (n0, n1, ...)]
+
+        Returns
+        -------
+        [nGrids, (n0, n1, ...)]
         """
         return list(self.dimensions.keys())
 
     def listglobal(self):
         """
         List global attributes of host file
-        @return a list of the global attributes in the file
+
+        Returns
+        -------
+        a list of the global attributes in the file
         """
         return list(self.attributes.keys())
 
     def getglobal(self, attName):
         """
         Get the value of the global attribute
-        @param [attName] - global attribute name
-        @return attribute value
+
+        Parameters
+        ----------
+        [attName] - global attribute name
+
+        Returns
+        -------
+        attribute value
         """
         return self.attributes[attName]
 
     def listall(self, varName=None, all=None):
         """
         Get info about data from the file.
-        @param varName variable name
-        @param all include axes information
-        @return information about file.
+
+        Parameters
+        ----------
+        varName variable name
+
+           * all include axes information
+
+        Returns
+        -------
+        information about file.
         """
 
         if varName is None:
@@ -430,10 +520,16 @@ class Host:
     def showall(self, varName=None, all=None, device=None):
         """
         Get info about data from the file.
-        @param varName variable name
-        @param all include axes information
-        @param device output device
-        @return information about file.
+
+        Paramenters
+        -----------
+        varName variable name
+
+             * all include axes information
+
+        Returns
+        -------
+        information about file.
         """
         import sys
         import string
@@ -456,7 +552,10 @@ class Host:
     def __repr__(self):
         """
         Python repr()
-        @return res Print statement
+
+        Returns
+        -------
+        res Print statement
         """
         res = "< '%s',  URI: '%s', MODE: '%s', STATUS: '%s',\n libcf: %s >" % \
             (self.__class__, self.uri, self.mode,
@@ -476,8 +575,14 @@ class Host:
     def __getitem__(self, varName):
         """
         Get a variable by name
-        @param varName variable name
-        @return list of cdms2 file variables, one for each grid
+
+        Parameters
+        ----------
+        varName variable name
+
+        Returns
+        -------
+        list of cdms2 file variables, one for each grid
         """
         # Static variables
         if varName in self.statVars:
@@ -492,15 +597,24 @@ class Host:
     def getVariable(self, varName):
         """
         Get a variable by name
-        @param varName variable name
-        @return list of cdms2 file variables, one for each grid
+
+        Parameters
+        ----------
+        varName variable name
+
+        Returns
+        -------
+        list of cdms2 file variables, one for each grid
         """
         return self[varName]
 
     def getVariables(self):
         """
         Get all variables
-        @return list of file variables
+
+        Returns
+        -------
+        list of file variables
         """
         statVars = [self[vn] for vn in self.statVars]
         timeVars = [self[vn] for vn in self.timeVars]
@@ -509,8 +623,14 @@ class Host:
     def getattribute(self, name):
         """
         Get the global attribute value by name
-        @param name attribute name
-        @return value
+
+        Parameters
+        ----------
+        name attribute name
+
+        Returns
+        -------
+        value
         """
         return self.attributes[name]
 

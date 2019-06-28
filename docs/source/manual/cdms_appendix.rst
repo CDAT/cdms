@@ -4,7 +4,7 @@ APPENDIX A
 CDMS Classes
 ~~~~~~~~~~~~
 
-Figure 1, "CDMS Classes", on page 175 illustrates the class inheritance
+Figure 1, "CDMS Classes", illustrates the class inheritance
 structure of CDMS. The classes may be categorized as abstract or
 concrete. Only concrete classes are meant to be used directly. In
 contrast an abstract class defines the common interface of its
@@ -30,10 +30,12 @@ applications to treat the behavior of, say a dataset axis and file axis,
 as identical.
 
 .. figure:: /images/cdms_classes.jpg
-   :alt: 
+   :scale: 95%
+   :alt:
 
 FIGURE 1. CDMS Classes
-                      
+
+
 
 
 
@@ -46,7 +48,7 @@ Quick Start (Cheat Sheet)
    :scale: 25%
    :alt: cheat sheet
 
-:download:`cdms quick start <docs/cdms_quick_start.pdf>`
+https://cdms.readthedocs.io/en/latest/_downloads/793595691d2eefda847bfe76ce04238e/cdms_quick_start.pdf
 
 
 VCS Quick Reference (Cheat Sheet)
@@ -56,6 +58,7 @@ VCS Quick Reference (Cheat Sheet)
    :scale: 25%
    :alt:  VCS Cheat Sheet
 
+https://cdms.readthedocs.io/en/latest/_images/vcs_quick_ref.jpg
 
 
 Release Notes
@@ -66,13 +69,28 @@ Release 4.0
 
 CDMS version 4.0 adds support for nonrectangular grids:
 
--  The following grid classes were added: AbstractHorizontalGrid,
-   AbstractCurve-Grid, AbstractGenericGrid, DatasetCurveGrid,
-   FileCurveGrid, TransientCurve-Grid, DatasetGenericGrid,
-   FileGenericGrid, and TransientGenericGrid.
--  The following axis classes were added: AbstractCoordinateAxis,
-   AbstractAuxAxis1D, AbstractAxis2D, DatasetAuxAxis1D, FileAuxAxis1D,
-   TransientAuxAxis1D, DatasetAxis2D, FileAxis2D, and TransientAxis2D.
+-  The following grid classes were added:
+      * AbstractHorizontalGrid
+      * AbstractCurve-Grid
+      * AbstractGenericGrid
+      * DatasetCurveGrid
+      * FileCurveGrid
+      * TransientCurve-Grid
+      * DatasetGenericGrid
+      * FileGenericGrid
+      * TransientGenericGrid.
+
+-  The following axis classes were added:
+      * AbstractCoordinateAxis
+      * AbstractAuxAxis1D
+      * AbstractAxis2D
+      * DatasetAuxAxis1D
+      * FileAuxAxis1D,
+      * TransientAuxAxis1D
+      * DatasetAxis2D
+      * FileAxis2D
+      * TransientAxis2D.
+
 -  The getMesh and clone methods were added for grids.
 -  An interface to the SCRIP package was added.
 
@@ -111,8 +129,6 @@ Details
 AbstractVariable
 ''''''''''''''''
 
--  Functions getDomain, getSlice, rank, regrid, setMissing, size,
-   subRegion, and subSlice were added.
 -  The functions getRegion, getSlice, getValue, and the slice operators
    all return an instance of MV, a masked array. Singleton dimensions
    are squeezed.
@@ -122,17 +138,18 @@ AbstractVariable
    latitude, and longitude.
 -  The input functions have the keyword squeeze.
 -  AbstractVariable inherits from class Slab. The following functions
-   previously available in module cu are Slab methods: getattribute,
-   setattribute, listdimattributes, getdimattribute, listall, and info.
+   previously available in module cu are Slab methods:
+      * getattribute
+      * setattribute
+      * listdimattributes
+      * getdimattribute
+      * listall, and info
 -  AbstractVariable implements arithmetic functions, astype.
 -  The write function was added.
 
 AbstractAxis
 ''''''''''''
 
--  The functions asComponentTime, asRelativeTime, clone, getAxisIds,
-   getAxis-Index, getAxisList, getAxisListIndex, mapIntervalExt were
-   added.
 -  subaxis was renamed subAxis for consistency.
 -  Generalized wraparound was implemented, to handle multiple cycles,
    reversing, and negative strides. By default, coordinate intervals are
@@ -149,10 +166,13 @@ Dataset
 
 -  The function open is synonymous with openDataset.
 
-cdms module
+Cdms Module
 '''''''''''
 
--  The functions asVariable, isVariable, and createVariable were added.
+-  The following functions were added:
+      * asVariable
+      * isVariable
+      * createVariable
 -  The function setAutoReshapeMode was removed. It is replaced by the
    squeeze option for all I/O functions.
 
@@ -176,9 +196,12 @@ AbstractRectGrid
 InternalAttributes
 ''''''''''''''''''
 
--  The class InternalAttributes was added. It has methods
-   add\_internal\_attribute, is\_internal\_attribute, and
-   replace\_external\_attributes.
+-  The class InternalAttributes was added.
+-  It has methods:
+
+   * add\_internal\_attribute
+   * is\_internal\_attribute
+   * replace\_external\_attributes
 
 TransientVariable
 '''''''''''''''''
@@ -213,17 +236,30 @@ Table Slab Methods
 ^^^^^^^^^^^^^^^^^^^^^^
 
 
-.. csv-table:: 
+.. csv-table::
    :header: "Type", "Method", "Definition"
    :widths: 20,50,80
    :align: left
 
-   "Various", "``getdimattribute(dim, field)``", "Get the value of a dimension attribute.  ``dim`` is the dimension number, an integer in the range 0..rank- 1.  ``field`` is a string, one of:  'name', 'values', 'length', 'units', 'weights', 'bounds'."
-   "Various", "``getattribute(name)``", "Get the value of an attribute.``name`` is the string name of the attribute. The following special names can always be used:  'filename', 'comments', 'grid_name', 'grid_type', 'time_statistic', 'long_name', 'units'."
-   "None", "``info(flag=None, device=sys.stdout)``", "Print slab information.  If ``flag`` is nonzero, dimension values, weights, and bounds are also printed.  Output is sent to ``device``."
-   "List", "``listall(all=None)``", "Print slab information.  If ``all`` is nonzero, dimension values, weights, and bounds are also printed."
-   "List", "``listdimattributes(dim, field)``", "List dimension attributes.  Returns a list of string attribute names which can be input to ``getdimattribute``.  ``dim`` is the dimension number, an integer in the range 0..rank-1.  ``field`` is a string, one of: 'name', 'values', 'length', 'units', 'weights', 'bounds'."
-   "None", "``setattribute(name, value)``", "Set an attribute.  ``name`` is the string name of the attribute.  ``value`` is the value of the attribute."
+   "Various", "``getdimattribute(dim, field)``", "Get the value of a dimension attribute.
+       * ``dim`` is the dimension number, an integer in the range 0..rank- 1.
+       * ``field`` is a string, one of:  'name', 'values', 'length', 'units', 'weights', 'bounds'."
+   "Various", "``getattribute(name)``", "Get the value of an attribute.
+       * ``name`` is the string name of the attribute.
+      The following special names can always be used:
+       * ``filename``, ``comments``, ``grid_name``, ``grid_type``, ``time_statistic``, ``long_name``, ``units``."
+   "None", "``info(flag=None, device=sys.stdout)``", "Print slab information.
+      *  If ``flag`` is nonzero, dimension values, weights, and bounds are also printed.  Output is sent to ``device``."
+   "List", "``listall(all=None)``", "Print slab information.
+      *  If ``all`` is nonzero, dimension values, weights, and bounds are also printed."
+   "List", "``listdimattributes(dim, field)``", "List dimension attributes.  Returns a list of string
+    attribute names which can be input to
+    ``getdimattribute``.
+      * ``dim`` is the dimension number, an integer in the range 0..rank-1.
+      * ``field`` is a string, one of: 'name', 'values', 'length', 'units', 'weights', 'bounds'."
+   "None", "``setattribute(name, value)``", "Set an attribute.
+        * ``name`` is the string name of the attribute.
+        * ``value`` is the value of the attribute."
 
 
 
@@ -234,40 +270,78 @@ cuDataset
 Table cuDataset Methods
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. csv-table:: 
+.. csv-table::
    :header: "Type", "Method", "Definition"
    :widths: 20, 50, 80
    :align: left
 
    "None", "``cleardefault()``", "Clear the default variable name."
-   "None", "``default_variable(vname``)", "Set the default variable name."
-   ,,"vname is the string variable name."
-   "Array", "``dimensionarray(dname, vname=None``)", "Values of the axis named dname."
-   ,,"dname is the string axis name."
-   ,,"vname is the string variable name. The default is the variable name set by default_variable."
-   "Axis", "``dimensionobject(dname, vname=None)``", "Get an axis. dname is the string name of an axis. vname is a string variable name. The default is the variable name set by default_variable."
-   "Various", "``getattribute (vname, attribute``)", "Get an attribute value. vname is a string variable name. attribute is the string attribute name."
-   "String", "``getdimensionunits (dname,vname=None``)", "Get the units for the given dimension."
-   ,,"dname is the string name of an axis."
-   ,,"vname is a string variable name. The default is the variable name set by default_variable."
-   "Various", "``getglobal (attribute)``", "Get the value of the global attribute. attribute is the string attribute name."
-   "Variable", "``getslab (vname, \*args)``", "Read data for a variable."
-   ,, "vname is the string name of the variable."
-   ,, "args is an argument list corresponding to the dimensions of the variable. Arguments for each dimension can be:"
-   ,, "- ':' or None -- select the entire dimension"
-   ,, "- Ellipsis -- select entire dimensions between the ones given."
-   ,, "- a pair of successive arguments giving an interval in world coordinates."
-   ,, "- a CDMS-style tuple of world coordinates e.g. (start, stop, 'cc')"
-   "List", "``listall (vname=None, all=None)``", "Get info about data from the file."
-   ,, "vname is the string name of the variable."
-   ,, "If all is non-zero, dimension values, weights, and bounds are returned as well"
-   "List", "``listattribute (vname=None )``", "Return a list of attribute names. vname is the name of the variable. The default is the variable name set by default_variable."
-   "List", "``listdimension (vname=None)``", "Return a list of the dimension names associated with a variable. vname is the name of the variable. The default is the variable name set by default_variable."
+   "None", "``default_variable(vname``)", "Set the default variable name.
+      * ``vname`` is the string variable name."
+   "Array", "``dimensionarray(dname, vname=None``)", "Values of the axis named dname.
+      * ``dname1`` is the string axis name.
+      * ``vname`` is the string variable name.
+      **Note**: The default is the variable name set by default_variable."
+   "Axis", "``dimensionobject(dname, vname=None)``", "Get an axis. dname is the string name of an axis.
+      * ``vname`` is a string variable name.
+      **Note:** The default is the variable name set by default_variable."
+   "Various", "``getattribute (vname, attribute``)", "Get an attribute value.
+      * ``vname`` is a string variable name.
+      * ``attribute`` is the string attribute name."
+   "String", "``getdimensionunits (dname,vname=None``)", "Get the units for the given dimension.
+      * ``dname`` is the string name of an axis.
+      * ``vname`` is a string variable name.
+      **Note:** The default is the variable name set by default_variable."
+   "Various", "``getglobal (attribute)``", "Get the value of the global attribute.
+      * ``attribute`` is the string attribute name."
+
+Table cuDataset Methods(cont'd)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. csv-table::
+   :header: "Type", "Method", "Definition"
+   :widths: 20, 50, 80
+   :align: left
+
+
+   "Variable", "``getslab (vname, \*args)``", "Read data for a variable.
+       * ``vname`` is the string name of the variable.
+       * ``args`` is an argument list corresponding to the dimensions of the variable.
+       Arguments for each dimension can be:
+          *  ':' or None -- select the entire dimension
+          *  Ellipsis -- select entire dimensions between the ones given.
+          *  a pair of successive arguments giving an interval in world coordinates.
+          *  a CDMS-style tuple of world coordinates e.g. (start, stop, 'cc')"
+   "List", "``listall (vname=None, all=None)``", "Get info about data from the file.
+       * ``vname`` is the string name of the variable.
+       **Note:** If all is non-zero, dimension values, weights, and bounds are returned as well"
+   "List", "``listattribute (vname=None )``", "Return a list of attribute names.
+       * ``vname`` is the name of the variable.
+       **Note:** The default is the variable name set by default_variable."
+   "List", "``listdimension (vname=None)``", "Return a list of the dimension names associated with
+    a variable.
+       * ``vname`` is the name of the variable.
+       **Note:** The default is the variable name set by default_variable."
    "List", "``listglobal ()``", "Return a list of the global attribute names."
    "List", "``listvariable ()``", "Return a list of the variables in the file."
-   "None", "``showall (vname=None, all=None, device=sys.stdout)``", "Print a description of the variable. vname is the string name of the variable. If all is non-zero, dimension values, weights, and bounds are returned as well. Output is sent to device."
-   "None", "``showattribute (vname=None, device=sys.stdout)``", "Print the attributes of a variable. vname is the string name of the variable. Output is sent to device."
-   "None", "``showdimension (vname=None, device=sys.stdout)``", "Print the dimension names associated with a variable. vname is the string name of the variable. Output is sent to device." 
+
+Table cuDataset Methods(cont'd)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. csv-table::
+   :header: "Type", "Method", "Definition"
+   :widths: 20, 50, 80
+   :align: left
+
+   "None", "``showall (vname=None, all=None, device=sys.stdout)``", "Print a description of the variable.
+       * ``vname`` is the string name of the variable.
+       **Note:** If all is non-zero, dimension values, weights, and bounds are returned as well. Output is sent to device."
+   "None", "``showattribute (vname=None, device=sys.stdout)``", "Print the attributes of a variable.
+      * ``vname`` is the string name of the variable.
+      **Note:** Output is sent to device."
+   "None", "``showdimension (vname=None, device=sys.stdout)``", "Print the dimension names associated with a variable.
+      * ``vname`` is the string name of the variable.
+      **Note:** Output is sent to device."
    "None", "``showglobal (device=sys.stdout)``", "Print the global file attributes. Output is sent to device."
    "None", "``showvariable (device=sys.stdout)``", "Print the list of variables in the file."
 

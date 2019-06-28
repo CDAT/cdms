@@ -20,13 +20,15 @@ from cdms2.error import CDMSError
 # from numpy.ma import *
 from cdms2.axis import allclose as axisAllclose, TransientAxis, concatenate as axisConcatenate, take as axisTake
 
-
 create_mask = make_mask_none
 e = numpy.e
 pi = numpy.pi
 # NewAxis = numpy.oldnumeric.NewAxis
 newaxis = numpy.newaxis
 counter = 0
+
+load = numpy.load
+dump = numpy.ndarray.dump
 
 
 def fill_value(ar):
@@ -76,7 +78,12 @@ def _extractMetadata(a, axes=None, attributes=None,
 
 class var_unary_operation:
     def __init__(self, mafunc):
-        """ var_unary_operation(mafunc)
+        """
+        Parameters
+        ----------
+
+        var_unary_operation(mafunc)
+
         mafunc is an numpy.ma masked_unary_function.
         """
         self.mafunc = mafunc
@@ -91,7 +98,12 @@ class var_unary_operation:
 
 class var_unary_operation_with_axis:
     def __init__(self, mafunc):
-        """ var_unary_operation(mafunc)
+        """
+        Parameters
+        ----------
+
+        var_unary_operation(mafunc)
+
         mafunc is an numpy.ma masked_unary_function.
         """
         self.mafunc = mafunc
@@ -108,12 +120,24 @@ class var_unary_operation_with_axis:
 
 
 def commonDomain(a, b, omit=None):
-    """commonDomain(a,b) tests that the domains of variables/arrays a and b are equal,
-    and returns the common domain if equal, or None if not equal. The domains may
-    differ in that one domain may have leading axes not common
-    to the other; the result domain will contain those axes.
-    If <omit> is specified, as an integer i, skip comparison of the ith dimension
-    and return None for the ith (common) dimension.
+    """
+    Common Domain
+
+    Parameters
+    ----------
+
+    commonDomain(a,b) : tests that the domains of variables/arrays a and b are equal,
+
+    Returns
+    -------
+
+    the common domain if equal, or None if not equal.
+
+    The domains may differ in that one domain may have leading
+    axes not common to the other; the result domain will contain those axes.
+
+     If <omit> is specified, as an integer i, skip comparison of the ith dimension
+     and return None for the ith (common) dimension.
     """
 
     if isinstance(b, AbstractVariable):
@@ -124,8 +148,13 @@ def commonDomain(a, b, omit=None):
 
 
 def commonAxes(a, bdom, omit=None):
-    """Helper function for commonDomain. 'a' is a variable or array,
-    'b' is an axislist or None.
+    """
+    Helper function for commonDomain.
+
+    Parameters
+    ----------
+    'a' : is a variable or array,
+    'b' : is an axislist or None.
     """
     if isinstance(a, AbstractVariable) and bdom is not None:
         adom = a.getAxisList()
@@ -179,15 +208,24 @@ def commonAxes(a, bdom, omit=None):
 
 
 def commonGrid(a, b, axes):
-    """commonGrid(a,b,axes) tests if the grids associated with variables a, b are equal,
-    and consistent with the list of axes. If so, the common grid is returned, else None
-    is returned. a and b can be numpy arrays, in which case the result is None.
+    """
+    Common Grid
 
-    The common grid is 'consistent' with axes if the grid axes (e.g., the axes of latitude and
-    longitude coordinate variables) are members of the list 'axes'.
+    Parameters
+    ----------
 
-    If the grid(s) of a, b are rectilinear, the result is None, as the grids are implicitly
-    defined by the axes.
+    commonGrid(a,b,axes) : tests if the grids associated with variables a, b are equal
+                           and consistent with the list of axes.
+
+    If so, the common grid is returned, else None is returned.
+
+    a and b can be numpy arrays, in which case the result is None.
+
+    The common grid is 'consistent' with axes if the grid axes (e.g., the axes of
+    latitude and longitude coordinate variables) are members of the list 'axes'.
+
+    If the grid(s) of a, b are rectilinear, the result is None, as the grids
+    are implicitly defined by the axes.
     """
     if isinstance(b, AbstractVariable):
         gb = b.getGrid()
@@ -230,7 +268,12 @@ def commonGrid1(a, gb, axes):
 
 class var_binary_operation:
     def __init__(self, mafunc):
-        """ var_binary_operation(mafunc)
+        """
+        Parameters
+        ----------
+
+        var_binary_operation(mafunc)
+
         mafunc is an numpy.ma masked_binary_function.
         """
         self.mafunc = mafunc
@@ -556,12 +599,16 @@ sort.__doc__ = numpy.ma.sort.__doc__ + \
 
 
 def choose(myindices, t):
-    """Returns an array shaped like indices containing elements chosen
-      from t.
-      If an element of t is the special element masked, any element
-      of the result that "chooses" that element is masked.
+    """
+    Choose
 
-      The result has only the default axes.
+    Returns
+    -------
+
+    an array shaped like indices containing elements chosen from t.
+    If an element of t is the special element masked, any element of
+    the result that "chooses" that element is masked. The result has
+    only the default axes.
     """
     maresult = numpy.ma.choose(myindices, list(map(_makeMaskedArg, t)))
     F = getattr(t, "fill_value", 1.e20)
@@ -580,8 +627,13 @@ def where(condition, x, y):
 
 
 def masked_where(condition, x, copy=1):
-    """Return x as an array masked where condition is true.
-       Also masked where x or condition masked.
+    """
+    Marked Where
+
+    Returns
+    -------
+
+    x as an array masked where condition is true. Also masked where x or condition masked.
     """
     tx = _makeMaskedArg(x)
     tcondition = _makeMaskedArg(condition)
@@ -766,6 +818,7 @@ def transpose(a, axes=None):
 
 
 class _minimum_operation:
+
     "Object to calculate minima"
 
     def __init__(self):
@@ -885,9 +938,18 @@ maximum = _maximum_operation()
 
 
 def asarray(data, typecode=None, dtype=None):
-    """asarray(data, typecode=None, dtype=None) is equivalent to array(data, dtype=None, copy=0)
-       Returns data if dtype is None or data is a MaskedArray of the same dtype.
-       typecode arg is for backward compatibility.
+    """
+
+    asarray(data, typecode=None, dtype=None) is equivalent to array(data, dtype=None, copy=0)
+
+    Assarray
+
+    Returns
+    -------
+
+    data if dtype is None or data is a MaskedArray of the same dtype.
+
+    typecode arg is for backward compatibility.
     """
     dtype = _convdtype(dtype, typecode)
     if isinstance(data, AbstractVariable) and (
@@ -939,7 +1001,9 @@ as_masked = numpy.ma.array
 
 
 def outerproduct(a, b):
-    """outerproduct(a,b) = {a[i]*b[j]}, has shape (len(a),len(b))"""
+    """
+    outerproduct(a,b) = {a[i]*b[j]}, has shape (len(a),len(b))
+    """
     ta = asVariable(a, writeable=1)
     tb = asVariable(b, writeable=1)
     maresult = numpy.ma.outerproduct(ta, tb)
@@ -999,8 +1063,16 @@ reshape.__doc__ = "numpy doc: %s\naxes/attributes/grid are applied onto the new 
 
 
 def resize(a, new_shape, axes=None, attributes=None, id=None, grid=None):
-    """resize(a, new_shape) returns a new array with the specified shape.
-    The original array's total size can be any size."""
+    """resize(a, new_shape)
+
+    Resize
+
+    Returns
+    -------
+    a new array with the specified shape.
+
+    The original array's total size can be any size.
+    """
     ignore, attributes, id, ignore = _extractMetadata(a, axes, attributes, id)
     if axes is not None:
         axesshape = [len(item) for item in axes]
@@ -1015,9 +1087,14 @@ def resize(a, new_shape, axes=None, attributes=None, id=None, grid=None):
 
 def masked_array(a, mask=None, fill_value=None,
                  axes=None, attributes=None, id=None):
-    """masked_array(a, mask=None) =
-       array(a, mask=mask, copy=0, fill_value=fill_value)
-       Use fill_value(a) if None.
+    """
+    Masked Array
+
+    Parameters
+    ----------
+    masked_array(a, mask=None) =  array(a, mask=mask, copy=0, fill_value=fill_value)
+
+    Use fill_value(a) if None.
     """
     maresult = numpy.ma.masked_array(
         _makeMaskedArg(a),
@@ -1032,10 +1109,15 @@ def masked_array(a, mask=None, fill_value=None,
 def masked_values(data, value, rtol=1.e-5, atol=1.e-8, copy=1,
                   savespace=0, axes=None, attributes=None, id=None):
     """
-       masked_values(data, value, rtol=1.e-5, atol=1.e-8)
-       Create a masked array; mask is None if possible.
-       May share data values with original array, but not recommended.
-       Masked where abs(data-value)<= atol + rtol * abs(value)
+    Masked Values
+
+    Parameters
+    ----------
+    masked_values(data, value, rtol=1.e-5, atol=1.e-8)
+
+    Create a masked array; mask is None if possible.
+    May share data values with original array, but not recommended.
+    Masked where abs(data-value)<= atol + rtol * abs(value)
     """
     maresult = numpy.ma.masked_values(_makeMaskedArg(
         data), value, rtol=rtol, atol=atol, copy=copy)
@@ -1062,7 +1144,10 @@ def isMaskedVariable(x):
 
 def set_default_fill_value(value_type, value):
     """Set the default fill value for value_type to value.
-    value_type is a string: 'real','complex','character','integer',or 'object'.
+    Parameters
+    ----------
+    value_type is a string : real','complex','character','integer',or 'object'.
+
     value should be a scalar or single-element array.
     """
     if value_type == 'real':
@@ -1083,8 +1168,16 @@ def fromfunction(f, dimensions):
 
 
 def diagonal(a, offset=0, axis1=0, axis2=1):
-    """diagonal(a, offset=0, axis1=0, axis2 = 1) returns the given
-       diagonals defined by the two dimensions of the array.
+    """
+    Diagonal
+
+    Parameters
+    ----------
+    diagonal(a, offset=0, axis1=0, axis2 = 1)
+
+    Returns
+    -------
+    The given diagonals defined by the two dimensions of the array.
     """
     F = getattr(a, "fill_value", 1.e20)
     return TransientVariable(numpy.ma.diagonal(_makeMaskedArg(a),

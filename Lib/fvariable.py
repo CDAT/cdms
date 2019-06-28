@@ -8,6 +8,7 @@ from .variable import DatasetVariable
 from .error import CDMSError
 from .sliceut import reverseSlice
 from .Cdunif import CdunifError
+# import cdms2.Cdunif.CdunifError as CdunifError
 
 FileClosed = "Cannot read from closed file, variable: "
 FileClosedWrite = "Cannot write to a closed file, variable: "
@@ -153,7 +154,7 @@ class FileVariable(DatasetVariable):
             raise CDMSError(FileClosedWrite + self.id)
         if (name not in self.__cdms_internals__) and (value is not None):
             try:
-                setattr(self._obj_, name, value)
+                setattr(self._obj_, str(name), value)
             except Exception:
                 raise CDMSError(
                     "Setting %s.%s=%s" %

@@ -12,14 +12,12 @@ def bindexHorizontalGrid(latlin, lonlin):
 
     Parameters
     ----------
-         latlin:
-            latlin is the raveled latitude values.
-         latlon:
-            lonlin is the raveled longitude values.
+    latlin : latlin is the raveled latitude values.
+    latlon : lonlin is the raveled longitude values.
 
     Returns
     -------
-         resulting index.
+    resulting index.
     """
     lonlin = numpy.mod(lonlin, 360)
     NI, NJ = _bindex.getLens()
@@ -36,16 +34,11 @@ def intersectHorizontalGrid(latspecs, lonspecs, latlin, lonlin, index):
 
     Parameters
     ----------
-        latspecs:
-            latitude specs as defined in the grid module.
-        lonspecs:
-            longitude specs as defined in the grid module.
-        latlin:
-            latlin is the raveled latitude array.
-        lonlin:
-            lonlin is the raveled longitude array.
-        index:
-            index is the bin index as returned from bindex.
+    latspecs : latitude specs as defined in the grid module.
+    lonspecs : longitude specs as defined in the grid module.
+    latlin : latlin is the raveled latitude array.
+    lonlin : lonlin is the raveled longitude array.
+    index : index is the bin index as returned from bindex.
 
     Returns
     -------

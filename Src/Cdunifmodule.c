@@ -524,6 +524,7 @@ static int cdopen(const char* controlpath, int ncmode, CuFileType *filetype) {
 	/* Check the filetype */
 	int saveopts;
 
+
 	saveopts = cuErrOpts;
 	cuseterropts(0);
 	cuseterropts(saveopts);
@@ -3092,16 +3093,25 @@ static int PyCdunifVariableObject_ass_subscript(PyCdunifVariableObject *self,
 			Py_ssize_t slicelen;
 			int length;
             length = INT_MAX;
- 			if( self->dimids[0]== self->file->recdim &&
-			        self->dimensions[0] == 0){
+ 		    if( self->dimids[0]== self->file->recdim &&
+ 		                    self->dimensions[self->file->recdim] == 0){
 			    length = INT_MAX;
 			} else {
 			    length = self->dimensions[0];
 			}
+ 		    /* extract indices */
 			PySlice_GetIndicesEx((PySliceObject *) index, length,
 					&indices->start, &indices->stop, &indices->stride,
 					&slicelen);
 
+			/* if indices star and stop are equal try to expand */
+			if(indices->start !=0 ){
+			    length = INT_MAX;
+	            PySlice_GetIndicesEx((PySliceObject *) index, length,
+	                    &indices->start, &indices->stop, &indices->stride,
+	                    &slicelen);
+			}
+			/* if they are still equals add 1 */
 			if(indices->stop == indices->start){
 			    indices->stop = indices->start + indices->stride;
 			}

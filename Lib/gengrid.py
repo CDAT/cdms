@@ -38,7 +38,12 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
 
     def getMesh(self, transpose=None):
         """Generate a mesh array for the meshfill graphics method.
-        'transpose' is for compatibility with other grid types, is ignored."""
+
+           Parameters
+           ----------
+           'transpose' : is for compatibility with other grid types, is ignored.
+        """
+
         from . import MV2 as MV
         if self._mesh_ is None:
             LAT = 0
@@ -78,8 +83,12 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
 
     def writeScrip(self, cufile, gridTitle=None):
         """Write a grid to a SCRIP file.
-        cufile is a Cdunif file, NOT a CDMS file.
-        gridtitle is a string identifying the grid.
+
+        Parameters
+        ----------
+        cufile : is a Cdunif file, NOT a CDMS file.
+
+        gridtitle : is a string identifying the grid.
         """
 
         lat = numpy.ma.filled(self._lataxis_)
@@ -151,17 +160,25 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
     def getGridSlices(self, domainlist, newaxislist, slicelist):
         """Determine which slices in slicelist correspond to the lat/lon elements
         of the grid.
-        domainlist is a list of axes of a variable.
-        newaxislist is a list of result axes after the slicelist is applied to domainlist.
-        slicelist is a list of slices.
+
+        Parameters
+        ---------
+
+        domainlist : is a list of axes of a variable.
+
+        newaxislist : is a list of result axes after the slicelist is applied to domainlist.
+
+        slicelist : is a list of slices.
 
         All lists are of equal length.
 
-        Return value is (newslicelist, gridaxislist) where
-        newslicelist is the elements of slicelist that correspond to the grid, in the
-          preferred order of the grid.
-        gridaxislist is the elements of newaxislist that correspond to the grid, in the
-          preferred order of the grid.
+        Return value : is (newslicelist, gridaxislist) where
+
+        newslicelist : is the elements of slicelist that correspond to the grid, in the
+                      preferred order of the grid.
+
+        gridaxislist : is the elements of newaxislist that correspond to the grid, in the
+                      preferred order of the grid.
         """
 
         iaxis = self._lataxis_.getAxis(0)
@@ -192,12 +209,17 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
     def intersect(self, spec):
         """Intersect with the region specification.
 
-        'spec' is a region specification of the form defined in the grid module.
+       Parameters
+       ----------
 
-        Returns (mask, indexspecs) where
-        'mask' is the mask of the result grid AFTER self and region spec are interested.
-        'indexspecs' is a dictionary of index specifications suitable for slicing a
-          variable with the given grid.
+      'spec' : region specification of the form defined in the grid module.
+
+       Returns
+       -------
+       (mask, indexspecs) where'mask' is the mask of the result grid AFTER self
+       and region spec are interested.
+       'indexspecs' is a dictionary of index specifications suitable for slicing a
+       variable with the given grid.
         """
 
         ncell = self.shape
@@ -234,8 +256,18 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
         return [self._lataxis_.getAxis(0), ]
 
     def isClose(self, g):
-        """Return 1 iff g is a grid of the same type and shape. A real element-by-element
-        comparison would be too expensive here."""
+        """
+        Is Close
+
+        Returns
+        -------
+
+        1 iff g is a grid of the same type and shape.
+
+
+        Notes
+        -----
+        A real element-by-element comparison would be too expensive here."""
         if g is None:
             return 0
         elif self.shape != g.shape:
@@ -246,7 +278,13 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
             return 1
 
     def checkAxes(self, axes):
-        """Return 1 iff every element of self.getAxisList() is in the list 'axes'."""
+        """
+        Check Axes
+
+        Returns
+        -------
+
+        1 iff every element of self.getAxisList() is in the list 'axes'."""
         for item in self.getAxisList():
             if item not in axes:
                 result = 0
@@ -257,7 +295,16 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
         return result
 
     def reconcile(self, axes):
-        """Return a grid that is consistent with the axes, or None.
+        """
+        Reconcile
+
+        Returns
+        -------
+
+        a grid that is consistent with the axes, or None.
+
+        Notes
+        -----
         For curvilinear grids this means that the grid-related axes are
         contained in the 'axes' list.
         """
@@ -275,7 +322,7 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
             for i in missing:
                 for item in axes:
                     if (len(selfaxes[i]) == len(item)) and \
-                         allclose(selfaxes[i], item):
+                            allclose(selfaxes[i], item):
                         result._lataxis_.setAxis(i, item)
                         result._lonaxis_.setAxis(i, item)
                         break
@@ -286,9 +333,18 @@ class AbstractGenericGrid(AbstractHorizontalGrid):
         return result
 
     def flatAxes(self):
-        """Return (flatlat, flatlon) where flatlat is a 1D NumPy array
-        having the same length as the number of cells in the grid, similarly
-        for flatlon."""
+        """
+        Flat Axes
+
+        Returns
+        -------
+
+        (flatlat, flatlon) where flatlat is a 1D NumPy array
+
+       Notes
+       -----
+       having the same length as the number of cells in the grid, similarly
+       for flatlon."""
         if self._flataxes_ is None:
             from . import MV2 as MV
             alat = MV.filled(self.getLatitude())
@@ -367,12 +423,21 @@ class TransientGenericGrid(AbstractGenericGrid):
 
 def readScripGenericGrid(fileobj, dims, whichType, whichGrid):
     """Read a 'native' SCRIP grid file, returning a transient generic grid.
-    fileobj is an open CDMS dataset or file object.
-    dims is the grid shape.
-    whichType is the type of file, either "grid" or "mapping"
-    if whichType is "mapping", whichGrid is the choice of grid, either "source" or "destination"
+
+       Parameters
+       ----------
+
+       fileobj : is an open CDMS dataset or file object.
+
+       dims : is the grid shape.
+
+       whichType : is the type of file, either "grid" or "mapping"
+
+
+       Notes
+       -----
+       if whichType is "mapping", whichGrid is the choice of grid, either "source" or "destination"
     """
-    import string
     from .auxcoord import TransientAuxAxis1D
     from .coord import TransientVirtualAxis
 
@@ -434,8 +499,7 @@ def readScripGenericGrid(fileobj, dims, whichType, whichGrid):
         ni = dims[0]
 
     boundsshape = (ni, ncorners)
-    if hasattr(cornerLat, 'units') and string.lower(
-            cornerLat.units)[0:6] == 'radian':
+    if hasattr(cornerLat, 'units') and cornerLat.units[0:6].lower() == 'radian':
         cornerLat = (cornerLat * (180.0 / numpy.pi)).reshape(boundsshape)
         cornerLon = (cornerLon * (180.0 / numpy.pi)).reshape(boundsshape)
 
@@ -450,23 +514,21 @@ def readScripGenericGrid(fileobj, dims, whichType, whichGrid):
 
     if gridCenterLatName in vardict:
         centerLat = fileobj(gridCenterLatName)
-        if hasattr(centerLat, "units") and string.lower(
-                centerLat.units) == 'radians':
+        if hasattr(centerLat, "units") and centerLat.units.lower() == 'radians':
             centerLat *= (180.0 / numpy.pi)
     else:
         centerLat = cornerLat[:, :, 0]
 
     if gridCenterLonName in vardict:
         centerLon = fileobj(gridCenterLonName)
-        if hasattr(centerLon, "units") and string.lower(
-                centerLon.units) == 'radians':
+        if hasattr(centerLon, "units") and centerLon.units.lower() == 'radians':
             centerLon *= (180.0 / numpy.pi)
     else:
         centerLon = cornerLon[:, :, 0]
 
     if hasattr(fileobj, titleName):
         gridid = getattr(fileobj, titleName)
-        gridid = string.replace(string.strip(gridid), ' ', '_')
+        gridid = gridid.strip().replace(' ', '_')
     else:
         gridid = "<None>"
 

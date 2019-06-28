@@ -24,6 +24,9 @@ _classifyGrids = 1
 
 
 def setClassifyGrids(mode):
+    """
+    Not documented
+    """
     global _classifyGrids
     if mode == 'on':
         _classifyGrids = 1
@@ -34,6 +37,10 @@ def setClassifyGrids(mode):
 
 
 def createRectGrid(lat, lon, order="yx", type="generic", mask=None):
+    """
+    Not documented
+    """
+
     return TransientRectGrid(lat, lon, order, type, mask)
 
 # Generate a uniform rectilinear grid
@@ -41,6 +48,10 @@ def createRectGrid(lat, lon, order="yx", type="generic", mask=None):
 
 def createUniformGrid(startLat, nlat, deltaLat, startLon,
                       nlon, deltaLon, order="yx", mask=None):
+    """
+    Not documented
+    """
+
     lat = createUniformLatitudeAxis(startLat, nlat, deltaLat)
     lon = createUniformLongitudeAxis(startLon, nlon, deltaLon)
     return createRectGrid(lat, lon, order, "uniform", mask)
@@ -50,6 +61,9 @@ def createUniformGrid(startLat, nlat, deltaLat, startLon,
 
 
 def createGlobalMeanGrid(grid):
+    """
+    Not documented
+    """
     inlat = grid.getLatitude()
     inlatBounds, inlonBounds = grid.getBounds()
     outlatArray = numpy.array([(inlat[0] + inlat[-1]) / 2.0])
@@ -70,6 +84,9 @@ def createGlobalMeanGrid(grid):
 
 
 def createZonalGrid(grid):
+    """
+    Not documented
+    """
     inlat = grid.getLatitude()
     outlatBounds, inlonBounds = grid.getBounds()
     outlat = createAxis(inlat[:], outlatBounds)
@@ -88,6 +105,9 @@ def createZonalGrid(grid):
 
 def createGenericGrid(latArray, lonArray, latBounds=None,
                       lonBounds=None, order="yx", mask=None):
+    """
+    Not documented
+    """
     lat = createAxis(latArray, latBounds)
     lat.units = "degrees_north"
     lon = createAxis(lonArray, lonBounds)
@@ -96,11 +116,17 @@ def createGenericGrid(latArray, lonArray, latBounds=None,
 
 
 def createGaussianGrid(nlats, xorigin=0.0, order="yx"):
-    """ createGaussianGrid(nlats, xorigin=0.0)
+    """
     Create a Gaussian grid, with shape (nlats, 2*nlats).
-    'nlats' is the number of latitudes.
-    'xorigin' is the origin of the longitude axis.
-    'order' is either "yx" or "xy" """
+
+    Parameters
+    ----------
+    nlats : is the number of latitudes.
+
+    xorigin : is the origin of the longitude axis
+
+    order : is either "yx" or "xy"
+    """
     lat = createGaussianAxis(nlats)
     nlons = 2 * nlats
     lon = createUniformLongitudeAxis(xorigin, nlons, 360.0 / float(nlons))
@@ -119,32 +145,51 @@ CoordTypeToLoc = {LongitudeType: 0, LatitudeType: 1, VerticalType: 2}
 
 
 def defaultRegion():
-    """Return a specification for a default (full) region."""
+    """
+    Default Region
+
+    Returns
+    -------
+
+    a specification for a default (full) region."""
     return [None] * 3
 
 
 def setRegionSpecs(grid, coordSpec, coordType, resultSpec):
-    """Modify a list of coordinate specifications, given a coordinate type and
+    """
+    Modify a list of coordinate specifications, given a coordinate type and
     a specification for that coordinate.
-    'grid' is the grid object to be associated with the region.
-    'coordSpec' is a coordinate specification, having one of the forms:
 
-        x
-        (x,y)
-        (x,y,'co')
-        (x,y,'co',cycle)
-        ':'
-        None
+    Parameters
+    ----------
 
-    'coordType' is one of CoordinateTypes
-    'resultSpec' is a list of 4-tuples of the form (x,y,'co',cycle), or None
-      if no spec for the corresponding dimension type.
+    grid : is the grid object to be associated with the region.
 
-    The function sets the appropriate coordinate in resultSpec,
-    in the canonical form (x,y,'co',cycle). A CDMSError exception
-    is raised if the entry in resultSpec is not None.
+    coordSpec : is a coordinate specification, having one of the forms:
 
-    Note that time coordinate types are not permitted.
+                x
+
+               (x,y)
+
+               (x,y,'co')
+
+               (x,y,'co',cycle)
+
+               ':'
+               None
+
+    coordType : is one of CoordinateTypes
+
+    resultSpec : is a list of 4-tuples of the form (x,y,'co',cycle), or None
+                 if no spec for the corresponding dimension type.
+                 The function sets the appropriate coordinate in resultSpec,
+                 in the canonical form (x,y,'co',cycle). A CDMSError exception
+                 is raised if the entry in resultSpec is not None.
+
+    Notes
+    -----
+
+    That time coordinate types are not permitted.
     """
 
     if (coordSpec is None) or (coordSpec == ':'):
@@ -179,6 +224,7 @@ def setRegionSpecs(grid, coordSpec, coordType, resultSpec):
 class AbstractGrid (CdmsObj):
 
     def __init__(self, node):
+
         CdmsObj.__init__(self, node)
         self.id = '<None>'  # String identifier
         if node is not None and hasattr(node, 'id'):
@@ -212,25 +258,53 @@ class AbstractGrid (CdmsObj):
         raise CDMSError(MethodNotImplemented)
 
     def hasCoordType(self, coordType):
-        """Return 1 iff self has the coordinate type."""
+        """
+        Has CoordType
+
+        Returns
+        -------
+
+        1 iff self has the coordinate type.
+        """
         return 0
 
     def getAxisList(self):
+        """
+        Not documented
+        """
         axes = []
         for i in range(len(self._order_)):
             axes.append(self.getAxis(i))
         return axes
 
     def isClose(self, g):
-        """Return 1 if g is 'close enough' to self to be considered equal, 0 if not."""
+        """
+        Is Close
+
+        Returns
+        -------
+
+        1 if g is 'close enough' to self to be considered equal, 0 if not."""
         return 0
 
     def checkAxes(self, axes):
-        """Return 1 iff self.getAxisList and axes are consistent."""
+        """
+        Check Axes
+
+        Returns
+        -------
+
+        1 iff self.getAxisList and axes are consistent."""
         return 1
 
     def reconcile(self, axes):
-        """Return a grid that is consistent with the axes, or None."""
+        """
+        Reconcile
+
+        Returns
+        -------
+
+        a grid that is consistent with the axes, or None."""
         return self
 
     def clone(self, copyData=1):
@@ -238,9 +312,14 @@ class AbstractGrid (CdmsObj):
         raise CDMSError(MethodNotImplemented)
 
     def flatAxes(self):
-        """Return (flatlat, flatlon) where flatlat is a raveled NumPy array
-        having the same length as the number of cells in the grid, similarly
-        for flatlon."""
+        """
+        Flat Axes
+
+        Returns
+        -------
+        (flatlat, flatlon) where flatlat is a raveled NumPy array
+         having the same length as the number of cells in the grid, similarly
+         for flatlon."""
         raise CDMSError(MethodNotImplemented)
 
     def size(self):
@@ -253,8 +332,16 @@ class AbstractGrid (CdmsObj):
 
 
 class AbstractRectGrid(AbstractGrid):
-    """AbstractRectGrid defines the interface for rectilinear grids:
-       grids which can be decomposed into 1-D latitude and longitude axes
+    """
+    Abstract Rect Grid
+
+    Parameters
+    ----------
+
+    AbstractRectGrid : defines the interface for rectilinear grids
+
+    grids : which can be decomposed into 1-D latitude and longitude axes
+
     """
     gridtypes = ['gaussian', 'uniform', 'equalarea', 'generic']
 
@@ -274,6 +361,7 @@ class AbstractRectGrid(AbstractGrid):
         return result
 
     def _getshape(self):
+
         if self._order_ == "yx":
             return (len(self._lataxis_), len(self._lonaxis_))
         else:
@@ -281,6 +369,9 @@ class AbstractRectGrid(AbstractGrid):
 
     # Get the n-th axis. naxis is 0 or 1.
     def getAxis(self, naxis):
+        """
+        Not documented
+        """
         ind = self._order_[naxis]
         if ind == 'x':
             axis = self.getLongitude()
@@ -289,6 +380,9 @@ class AbstractRectGrid(AbstractGrid):
         return axis
 
     def getBounds(self):
+        """
+        Not documented
+        """
         latbnds, lonbnds = (self._lataxis_.getExplicitBounds(),
                             self._lonaxis_.getExplicitBounds())
         if (latbnds is None or lonbnds is None) and getAutoBounds() in [1, 2]:
@@ -301,24 +395,45 @@ class AbstractRectGrid(AbstractGrid):
         return (latbnds, lonbnds)
 
     def getLatitude(self):
+        """
+        Not documented
+        """
         return self._lataxis_
 
     def getLongitude(self):
+        """
+        Not documented
+        """
         return self._lonaxis_
 
     def getMask(self):
+        """
+        Not documented
+        """
         raise CDMSError(MethodNotImplemented)
 
     def setMask(self, mask, permanent=0):
+        """
+        Not documented
+        """
         raise CDMSError(MethodNotImplemented)
 
     def getOrder(self):
+        """
+        Not documented
+        """
         return self._order_
 
     def getType(self):
+        """
+        Not documented
+        """
         return self._gridtype_
 
     def setType(self, gridtype):
+        """
+        Not documented
+        """
         if gridtype == 'linear':
             gridtype = 'uniform'
         if gridtype == 'unknown':
@@ -332,6 +447,9 @@ class AbstractRectGrid(AbstractGrid):
     #   lonWeights[i] = abs(lonBnds[i+1] - lonBnds[i])/360.0
     # Assumes that both axes are represented in degrees.
     def getWeights(self):
+        """
+        Not documented
+        """
 
         latBounds, lonBounds = self.getBounds()
         latBounds = (numpy.pi / 180.0) * latBounds
@@ -346,6 +464,9 @@ class AbstractRectGrid(AbstractGrid):
 
     # Create a transient grid for the index (tuple) intervals.
     def subGrid(self, latinterval, loninterval):
+        """
+        Not documented
+        """
         if latinterval is None:
             latinterval = (0, len(self._lataxis_))
         if loninterval is None:
@@ -369,12 +490,18 @@ class AbstractRectGrid(AbstractGrid):
 
     # Same as subGrid, for coordinates
     def subGridRegion(self, latRegion, lonRegion):
+        """
+        Not documented
+        """
         latInterval = self._lataxis_.mapInterval(latRegion)
         lonInterval = self._lonaxis_.mapInterval(lonRegion)
         return self.subGrid(latInterval, lonInterval)
 
     # Return a transient grid which is the transpose of this grid
     def transpose(self):
+        """
+        Not documented
+        """
         if self._order_ == "yx":
             neworder = "xy"
         else:
@@ -398,6 +525,9 @@ class AbstractRectGrid(AbstractGrid):
     #   isoffset is true iff this is a BOUNDARY grid, hence the bounds
     #     are the points wrt nlat, plus the poles.
     def classify(self):
+        """
+        Not documented
+        """
         import regrid2._regrid
 
         CLOSE_ENOUGH = 1.e-3
@@ -484,6 +614,9 @@ class AbstractRectGrid(AbstractGrid):
     #   basegrid is the full grid, if this is regional, or None
     #   latindex is index into basegrid latitude, or None
     def classifyInFamily(self, gridlist):
+        """
+        Not documented
+        """
         gridtype, nlats, isoffset = self.classify()
         coverage = 'global'
         basegrid = None
@@ -512,6 +645,9 @@ class AbstractRectGrid(AbstractGrid):
 
     # Generate default bounds
     def genBounds(self):
+        """
+        Not documented
+        """
         import regrid2._regrid
 
         if hasattr(self, "parent") and self.parent is not None:
@@ -565,6 +701,9 @@ class AbstractRectGrid(AbstractGrid):
         return (latbnds, lonbnds)
 
     def writeToFile(self, file):
+        """
+        Not documented
+        """
         return None
 
     def getMesh(self):
@@ -597,9 +736,13 @@ class AbstractRectGrid(AbstractGrid):
         return self._mesh_
 
     def flatAxes(self):
-        """Return (flatlat, flatlon) where flatlat is a 1D NumPy array
-        having the same length as the number of cells in the grid, similarly
-        for flatlon."""
+        """
+        Flat Axes
+
+        Returns
+        -------
+        flatlat, flatlon) where flatlat is a 1D NumPy array having the same
+        length as the number of cells in the grid, similarly for flatlon."""
 
         if self._flataxes_ is None:
             alat = self.getLatitude()[:]
@@ -614,16 +757,27 @@ class AbstractRectGrid(AbstractGrid):
         return ny * nx
 
     def writeScrip(self, cufile, gridTitle=None):
-        """Write a grid to a SCRIP file.
-        cufile is a Cdunif file, NOT a CDMS file.
-        gridtitle is a string identifying the grid.
+        """
+        Write a grid to a SCRIP file.
+
+        Parameters
+        ----------
+        cufile : is a Cdunif file, NOT a CDMS file.
+
+        gridtitle : is a string identifying the grid.
+
         """
         cgrid = self.toCurveGrid()
         cgrid.writeScrip(cufile, gridTitle)
 
     def toCurveGrid(self, gridid=None):
-        """Convert to a curvilinear grid.
-        'gridid' is the string identifier of the resulting curvilinear grid object.
+        """
+        Convert to a curvilinear grid.
+
+        Parameters
+        ----------
+        gridid : is the string identifier of the resulting curvilinear grid object.
+
         """
 
         from .coord import TransientVirtualAxis, TransientAxis2D
@@ -712,6 +866,9 @@ class AbstractRectGrid(AbstractGrid):
         return grid
 
     def toGenericGrid(self, gridid=None):
+        """
+        Not documented
+        """
         curvegrid = self.toCurveGrid()
         gengrid = curvegrid.toGenericGrid(gridid=gridid)
         return gengrid
@@ -736,6 +893,9 @@ class RectGrid(AbstractRectGrid):
 
     # Set pointers to related structural elements: lon, lat axes, order, mask
     def initDomain(self, axisdict, vardict):
+        """
+        Not documented
+        """
         if self.latitude not in axisdict:
             raise CDMSError('No such latitude: %s' % repr(self.latitude))
         if self.longitude not in axisdict:
@@ -752,6 +912,9 @@ class RectGrid(AbstractRectGrid):
             self._maskVar_ = None
 
     def getMask(self):
+        """
+        Not documented
+        """
         if self._maskVar_ is None:
             # return numpy.ones(self.shape)
             return None
@@ -759,6 +922,9 @@ class RectGrid(AbstractRectGrid):
             return self._maskVar_[:]
 
     def getMaskVar(self):
+        """
+        Not documented
+        """
         return self._maskVar_
 
 # internattr.add_internal_attribute(RectGrid)
@@ -784,11 +950,17 @@ class FileRectGrid(AbstractRectGrid):
     # Set bounds. If persistent==1, write to file, else just shadow any file
     # boundaries.
     def setBounds(self, latBounds, lonBounds, persistent=0):
+        """
+        Not documented
+        """
         self._lataxis_.setBounds(latBounds, persistent)
         self._lonaxis_.setBounds(lonBounds, persistent)
 
     # Return the mask array (NOT the mask variable).
     def getMask(self):
+        """
+        Not documented
+        """
         if self._tempMask_ is not None:
             return self._tempMask_
         elif self._maskVar_ is None:
@@ -800,6 +972,9 @@ class FileRectGrid(AbstractRectGrid):
     # Set the mask to array 'mask'. If persistent == 1, modify permanently
     # in the file, else set as a temporary mask.
     def setMask(self, mask, persistent=0):
+        """
+        Not documented
+        """
         if persistent != 0:
             raise CDMSError(MethodNotImplemented)
         if mask is None:
@@ -812,6 +987,9 @@ class FileRectGrid(AbstractRectGrid):
             self._tempMask_ = copy.copy(mask)
 
     def getMaskVar(self):
+        """
+        Not documented
+        """
         return self._maskVar_
 
 # internattr.add_internal_attribute(FileRectGrid)
@@ -839,6 +1017,9 @@ class TransientRectGrid(AbstractRectGrid):
         self.setMask(maskarray)        # numpy mask array
 
     def getMask(self):
+        """
+        Not documented
+        """
         if self._maskArray_ is None:
             # return numpy.ones(self.shape)
             return None
@@ -848,6 +1029,9 @@ class TransientRectGrid(AbstractRectGrid):
     # Set the mask. The persistent argument is provided for compatibility
     # with persistent versions, is ignored.
     def setMask(self, mask, persistent=0):
+        """
+        Not documented
+        """
         if mask is not None:
             if not isinstance(mask, numpy.ndarray):
                 raise CDMSError('Mask must be a numpy array')
@@ -856,6 +1040,9 @@ class TransientRectGrid(AbstractRectGrid):
         self._maskArray_ = copy.copy(mask)
 
     def setBounds(self, latBounds, lonBounds):
+        """
+        Not documented
+        """
         self._lataxis_.setBounds(latBounds)
         self._lonaxis_.setBounds(lonBounds)
 
@@ -865,16 +1052,29 @@ class TransientRectGrid(AbstractRectGrid):
 def isGrid(grid):
     """
     Is grid a grid?
-    @param grid cdms2 contruct to be examined
+
+    Parameters
+    ----------
+
+    grid-cdms2 : contruct to be examined
+
     """
     return isinstance(grid, AbstractGrid)
 
 
 def writeScripGrid(path, grid, gridTitle=None):
-    """Write a grid to a SCRIP grid file.
-    path is the path of the SCRIP file to be created.
-    grid is a CDMS grid object.
-    gridTitle is a string ID for the grid.
+    """
+    Write a grid to a SCRIP grid file.
+
+    Parameters
+    ----------
+
+    path : is the path of the SCRIP file to be created.
+
+    grid : is a CDMS grid object.
+
+    gridTitle : is a string ID for the grid.
+
     """
 
     import Cdunif

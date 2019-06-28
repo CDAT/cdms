@@ -6,7 +6,7 @@ Introduction
 
 The Climate Data Markup Language (CDML) is the markup language used to
 represent metadata in CDMS. CDML is based on the W3C XML standard
-(http://www.w3.org). This chapter defines the syntax of CDML. Read this
+(https://www.w3.org). This chapter defines the syntax of CDML. Read this
 section if you will be building or maintaining a CDMS database.
 
 XML, the eXtensible Markup Language, makes it possible to define
@@ -44,32 +44,25 @@ where
 -  ``element-content`` depends on the type of element. It is either a
    list of elements, or text which defines the element values. For
    example, the content of an axis element either is a list of axis
-   values, or is a linear element. For datasets, the content is the
-   blank-separated list of elements corresponding to the axes, grids,
-   and variables contained in the dataset.
+   values, or is a linear element.
+-  For datasets, the content is the blank-separated list of elements corresponding to the axes, grids, and variables contained in the dataset.
 
 The CDML elements are:
 
-Table CDML Tags
-^^^^^^^^^^^^^^^^^^^                   
+CDML Tags
+^^^^^^^^^
+.. csv-table::
+   :header: "Tag", "Description"
+   :widths:  30,80
 
-+------------+---------------------------------------+
-| Tag        | Description                           |
-+============+=======================================+
-| attr       | Extra attribute                       |
-+------------+---------------------------------------+
-| axis       | Coordinate axis                       |
-+------------+---------------------------------------+
-| domain     | Axes on which a variable is defined   |
-+------------+---------------------------------------+
-| domElem    | Element of a variable domain          |
-+------------+---------------------------------------+
-| linear     | Linearly-spaced axis values           |
-+------------+---------------------------------------+
-| rectGrid   | Rectilinear Grid                      |
-+------------+---------------------------------------+
-| variable   | Variable                              |
-+------------+---------------------------------------+
+   "attr", "Extra attribute"
+   "axis", "Coordinate axis"
+   "domain", "Axes on which a variable is defined"
+   "domElem", "Element of a variable domain"
+   "linear", "Linearly-spaced axis values"
+   "rectGrid", "Rectilinear Grid"
+   "variable", "Variable"
+
 
 Special Characters
 ~~~~~~~~~~~~~~~~~~
@@ -77,10 +70,8 @@ Special Characters
 XML reserves certain characters for markup. If they appear as content,
 they must be encoded to avoid confusion with markup:
 
-Table Special Character Encodings
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                                     
-
+Special Character Encodings
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 +-------------+------------+
 | Character   | Encoding   |
 +=============+============+
@@ -122,7 +113,7 @@ on the length of an identifier.
 CF Metadata Standard
 ~~~~~~~~~~~~~~~~~~~~
 
-`The CF metadata standard <http://cfconventions.org/>`__ defines a set
+`The CF metadata standard <https://cfconventions.org/>`__ defines a set
 of conventions for usage of netCDF. This standard is supported by CDML.
 The document defines names and usage for metadata attributes. CF
 supersedes the GDT 1.3 standard.
@@ -144,12 +135,12 @@ element.
 ``CDML-document ::= prolog dataset-element``
 
 The prolog defines the XML version, and the Document Type Definition
-(DTD), a formal specification of the document syntax. 
-See http://www.w3.org/TR/1998/REC-xml-19980210 for a formal definition of XML
+(DTD), a formal specification of the document syntax.
+See https://www.w3.org/TR/1998/REC-xml-19980210 for a formal definition of XML
 
 Version 1.0.
 
-``prolog ::= <?xml version="1.0"?> <!DOCTYPE dataset SYSTEM "http://www-pcmdi.llnl.gov/~drach/cdms/cdml.dtd">``
+``prolog ::= <?xml version="1.0"?> <!DOCTYPE dataset SYSTEM "https://www-pcmdi.llnl.gov/~drach/cdms/cdml.dtd">``
 
 Dataset Element
 ^^^^^^^^^^^^^^^
@@ -166,14 +157,14 @@ defined.
 
 Dataset Attributes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. csv-table::                            
-   :header: "Attribute", "Required", "CF", "GDT", "Notes"
-   :widths:  10,5,5,5,80
+.. csv-table::
+   :header: "Attribute", "Req?", "CF", "GDT", "Notes"
+   :widths:  18, 9, 7, 7, 80
 
-    "appendices", "N", "N", "Y", "Version number"
-    "calendar", "N", "N", "Y", "Calendar used for encoding time axes."
-    ,,,,"``gregorian`` \| ``julian`` \| ``noleap`` \|\ ``360_day`` \| ``proleptic_gregorian`` \| ``standard``"
-    ,,,,"Note: for the CF convention, the calendar attribute is placed on the time axis."
+    "appendices",  "N",  "N",  "Y", "Version number"
+    "calendar", "N", "N", "Y", "Calendar used for encoding time axes.
+       * ``gregorian`` \| ``julian`` \| ``noleap`` \|\ ``360_day`` \| ``proleptic_gregorian`` \| ``standard``
+       **Note:** for the CF convention, the calendar attribute is placed on the time axis."
     "comment", "N", "Y", "Y", "Additional dataset information"
     "conventions", "Y", "Y", "Y", "The netCDF metadata standard. Example: 'CF-1.0'"
     "cdms_filemap", "Y", "N", "N", "Map of partitioned axes to files. See note below."
@@ -184,7 +175,7 @@ Dataset Attributes
     "institution", "N", "Y", "Y", "Who made or supplied the data"
     "production", "N", "N", "Y", "How the data was produced (see source)"
     "project", "N", "N", "N", "Project associated with the data Example: 'CMIP 2'"
-    "references", "N", "Y", "N", "Published or web-based references that describe the data or methods used to produce it" 
+    "references", "N", "Y", "N", "Published or web-based references that describe the data or methods used to produce it"
     "source", "N", "Y", "N", "The method of production of the original data."
     "template", "N", "N", "N", "Filename template. This is an alternate mechanism, other than cdms_filemap, for describing the file mapping. See ‘cdimport -h’ for details."
     "title", "N", "Y", "N", "A succinct description of the data."
@@ -236,48 +227,48 @@ length).
 
 ``linear-element ::=`` **<linear delta=** ``"value”`` **length=** ``“Integer“`` **start=** ``“value“`` **> </linear>**
 
-Table Axis Elements
-^^^^^^^^^^^^^^^^^^^
+Axis Elements
+^^^^^^^^^^^^^
 
 .. csv-table::
-   :header: "Attribute", "Required?", "CF", "GDT", "Notes"
-   :widths: 18,1,1,1,80
+   :header: "Attribute", "Req?", "CF", "GDT", "Notes"
+   :widths: 22, 9, 7, 7, 80
 
-     "``associate``", "N", "N", "Y", "IDs of variables containing alternative sets of coordinates."
-     "``axis``", "N", "Y", "Y", "The spatial type of the axis:"
-     ,,,,"- 'T' - time"
-     ,,,,"- 'X' - longitude"
-     ,,,,"- 'Y' - latitude"
-     ,,,,"- 'Z' - vertical level"
-     ,,,,"- '-' - not spatiotemporal"
-     "``bounds``", "N", "Y", "Y", "ID of the boundary variable"
-     "``calendar``", "N", "Y", "N", "See dataset.calendar"
-     "``climatology``", "N", "Y", "N", "Range of dates to which climatological statistics apply."
-     "``comment``", "N", "Y", "N", "String comment"
-     "``compress``", "N", "Y", "Y", "Dimensions which have been compressed by gathering"
-     "``datatype``", "Y", "N", "N", "Char, Short, Long, Float, Double, or String"
-     "``dates``", "N", "Y", "N", "Range of dates to which statistics for a typical diurnal cycle apply."
-     "``expand``", "N", "N", "Y", "Coordinates prior to contraction"
-     "``formula_terms``", "N", "Y", "N", "Variables that correspond to the terms in a formula."
-     "``id``", "Y", "N", "N", "Axis identifier. Also the name of the axis in the underlying file(s), if name_in_file is undefined."  
-     "``isvar``", "N", "N", "N", "* 'true' | 'false'"
-     ,,,,"- 'false' if the axis does not have coordinate values explicitly defined in the underlying file(s)."
-     ,,,,"- Default: 'true'"
-     "``leap_month``", "N", "Y", "N", "For a user-defined calendar, the month which is lengthened by a day in leap years."
-     "``leap_year``", "N", "Y", "N", "An example of a leap year for a user-defined calendar. All years that differ from this year by a multiple of four are leap years."
-     "``length``", "N", "N", "N", "Number of axis values, including values for which no data is defined. Cf.  partition_length."
-     "``long_name``", "N", "Y", "Y", "Long description of a physical quantity"
-     "``modulo``", "N", "N", "Y", "Arithmetic modulo of an axis with circular topology."
-     "``month_lengths``", "N", "Y", "N", "Length of each month in a non-leap year for a user-defined calendar."
-     "``name_in_file``", "N", "N", "N", "Name of the axis in the underlying file(s). See id."
-     "``partition``", "N", "N", "N", "How the axis is split across files."
-     "``partition_length``", "N", "N", "N", "Number of axis points for which data is actually defined. If data is missing for some values, this will be smaller than the length."  
-     "``positive``", "N", "Y", "Y", "Direction of positive for a vertical axis"
-     "``standard_name``", "N", "Y", "N", "Reference to an entry in the standard name table."
-     "``topology``", "N", "N", "Y", "- Axis topology."
-     ,,,,"- 'circular' | 'linear'"
-     "``units``", "Y", "Y", "Y", "Units of a physical quantity"
-     "``weights``", "N", "N", "N", "Name of the weights array" 
+     "associate", "N", "N", "Y", "IDs of variables containing alternative sets of coordinates."
+     "axis", "N", "Y", "Y", "The spatial type of the axis:
+         * 'T' - time
+         * 'X' - longitude
+         * 'Y' - latitude
+         * 'Z' - vertical level
+         * '-' - not spatiotemporal"
+     "bounds", "N", "Y", "Y", "ID of the boundary variable"
+     "calendar", "N", "Y", "N", "See dataset.calendar"
+     "climatology", "N", "Y", "N", "Range of dates to which climatological statistics apply."
+     "comment", "N", "Y", "N", "String comment"
+     "compress", "N", "Y", "Y", "Dimensions which have been compressed by gathering"
+     "datatype", "Y", "N", "N", "Char, Short, Long, Float, Double, or String"
+     "dates", "N", "Y", "N", "Range of dates to which statistics for a typical diurnal cycle apply."
+     "expand", "N", "N", "Y", "Coordinates prior to contraction"
+     "formula_terms", "N", "Y", "N", "Variables that correspond to the terms in a formula."
+     "id", "Y", "N", "N", "Axis identifier. Also the name of the axis in the underlying file(s), if name_in_file is undefined."
+     "isvar", "N", "N", "N", "'true' | 'false'
+         * 'false' if the axis does not have coordinate values explicitly defined in the underlying file(s).
+         * Default: 'true'"
+     "leap_month", "N", "Y", "N", "For a user-defined calendar, the month which is lengthened by a day in leap years."
+     "leap_year", "N", "Y", "N", "An example of a leap year for a user-defined calendar. All years that differ from this year by a multiple of four are leap years."
+     "length", "N", "N", "N", "Number of axis values, including values for which no data is defined. Cf.  partition_length."
+     "long_name", "N", "Y", "Y", "Long description of a physical quantity"
+     "modulo", "N", "N", "Y", "Arithmetic modulo of an axis with circular topology."
+     "month_lengths", "N", "Y", "N", "Length of each month in a non-leap year for a user-defined calendar."
+     "name_in_file", "N", "N", "N", "Name of the axis in the underlying file(s). See id."
+     "partition", "N", "N", "N", "How the axis is split across files."
+     "partition_length", "N", "N", "N", "Number of axis points for which data is actually defined. If data is missing for some values, this will be smaller than the length."
+     "positive", "N", "Y", "Y", "Direction of positive for a vertical axis"
+     "standard_name", "N", "Y", "N", "Reference to an entry in the standard name table."
+     "topology", "N", "N", "Y", "Axis topology.
+         * 'circular' | 'linear'"
+     "units", "Y", "Y", "Y", "Units of a physical quantity"
+     "weights", "N", "N", "N", "Name of the weights array"
 
 Partition attribute
 ^^^^^^^^^^^^^^^^^^^
@@ -288,10 +279,10 @@ is split across files. It is a list of the start and end indices of each
 axis partition.
 
 FIGURE 4. Partitioned axis
-                          
+
 
 .. figure:: /images/timeLine.jpg
-   :alt: 
+   :alt:
 
 For example, Figure 4 shows a time axis, representing the 36 months,
 January 1980 through December 1982, with December 1981 missing. The
@@ -314,9 +305,9 @@ rectilinear in topology,
 ``grid-element ::=`` **<rectGrid** ``grid-attributes``\ **>**
 ``extra-attribute-element*`` **</rectGrid>**
 
-Table 6.5 RectGrid Attributes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                             
+6.5 RectGrid Attributes
+^^^^^^^^^^^^^^^^^^^^^^^
+
 
 .. raw:: html
 
@@ -333,7 +324,7 @@ Table 6.5 RectGrid Attributes
 ::
 
     <tr><td><code>id</code></td><td>Y</td><td>N</td><td>Grid identifier</td></tr>
-    <tr><td><code>type</code></td><td>Y</td><td>N</td><td><p>Grid classification</p><p>"gaussian" | "uniform" 
+    <tr><td><code>type</code></td><td>Y</td><td>N</td><td><p>Grid classification</p><p>"gaussian" | "uniform"
     | "equalarea" |"generic"</p><p>Default: "generic"</p></td></tr>
     <tr><td><code>latitude</code></td><td>Y</td><td>N</td><td>Latitude axis name</td></tr>
     <tr><td><code>longitude</code></td><td>Y</td><td>N</td><td>Longitude axis name</td></tr>
@@ -361,7 +352,7 @@ the length.
 ``variable-element ::=`` **<variable** ``variable-attributes``\ **>**
 ``variable-content`` **</variable>**
 
-``variable-content ::=`` variable-domain extra-attributeelement\*\`
+``variable-content ::=`` variable-domain extra-attributeelement\*``
 
 ``variable-domain ::=`` **<domain>** ``domain-element*`` **</domain>**
 
@@ -370,13 +361,13 @@ start=\ **"``Integer``" **\ length=\ **"``Integer``"
 **\ partition\_length=\ **"``Integer``"**/>\*\*
 
 
-Table Variable Attributes
-^^^^^^^^^^^^^^^^^^^^^^^^^
+Variable Attributes
+^^^^^^^^^^^^^^^^^^^
 
 
 .. csv-table::
-   :header: "Attribute", "Required?", "CF", "GDT", "Notes"
-   :widths: 15,1,1,1,80
+   :header: "Attribute", "Req?", "CF", "GDT", "Notes"
+   :widths: 23, 9, 7, 7, 80
 
      "``id``", "Y", "N", "N", "Variable identifier. Also, the name of the variable in the underlying file(s), if name_in_file is undefined."
      "``ad_offset``", "N", "Y", "Y", "Additive offset for packing data. See scale_factor."
@@ -389,7 +380,7 @@ Table Variable Attributes
      "``grid_name``", "N", "N", "N", "Id of the grid."
      "``grid_type``", "N", "N", "N", "gaussian, uniform, equalarea, generic"
      "``long_name``", "N", "Y", "Y", "Long description of a physical quantity."
-     "``missing_value``", "N", "Y", "Y", "Value used for data that are unknown or missing."  
+     "``missing_value``", "N", "Y", "Y", "Value used for data that are unknown or missing."
      "``name_in_file``", "N", "N", "N", "Name of the variable in the underlying file(s). See id."
      "``scale_factor``", "N", "Y", "Y", "Multiplicative factor for packing data. See add_offset."
      "``standard_name``", "N", "Y", "N", "Reference to an entry in the standard name table."
@@ -435,78 +426,76 @@ Dataset "sample" has two variables, and six axes.
    indicates that variable ``u`` is contained in file u\_2000.nc for
    time index 0, u\_2001.nc for time index 1, etc.
 
-{% highlight xml %}
 
 .. raw:: html
 
    <?xml version="1.0"?>
 
-.. raw:: html
+::
 
-   <!DOCTYPE dataset SYSTEM "http://www-pcmdi.llnl.gov/software/cdms/cdml.dtd">
+     <!DOCTYPE dataset SYSTEM "http://www-pcmdi.llnl.gov/software/cdms/cdml.dtd">
 
- [-90. -78. -66. -54. -42. -30. -18. -6. 6. 18. 30. 42. 54. 66. 78. 90.]
+     [-90. -78. -66. -54. -42. -30. -18. -6. 6. 18. 30. 42. 54. 66. 78. 90.]
 
 ::
 
-    <axis
-        id ="longitude"
-        length="32"
-        units="degrees_east"
-        datatype="Double"
-    >
+     <axis
+         id ="longitude"
+         length="32"
+         units="degrees_east"
+         datatype="Double"
+     >
 
-        [ 0. 11.25 22.5 33.75 45. 56.25 67.5 78.75 90.
+         [ 0. 11.25 22.5 33.75 45. 56.25 67.5 78.75 90.
 
-        101.25 112.5 123.75 135. 146.25 157.5 168.75 180. 191.25
+         101.25 112.5 123.75 135. 146.25 157.5 168.75 180. 191.25
 
-        202.5 213.75 225. 236.25 247.5 258.75 270. 281.25 292.5
+         202.5 213.75 225. 236.25 247.5 258.75 270. 281.25 292.5
 
-        303.75 315. 326.25 337.5 348.75]
-    </axis>
+         303.75 315. 326.25 337.5 348.75]
+         </axis>
 
-    <axis
-        id ="time"
-        partition="[0 1 1 2 2 3]"
-        calendar="gregorian"
-        units="days since 2000-1-1"
-        datatype="Double"
-        length="3"
-        name_in_file="time"
-    >
+     <axis
+         id ="time"
+         partition="[0 1 1 2 2 3]"
+         calendar="gregorian"
+         units="days since 2000-1-1"
+         datatype="Double"
+         length="3"
+         name_in_file="time"
+     >
 
         [ 0. 366. 731.]
-    </axis>
+     </axis>
 
-    <variable
+     <variable
         id ="u"
         missing_value="-99.9"
         units="m/s"
         datatype="Double"
-    >
+     >
         <domain>
             <domElem name="time" length="3" start="0"/>
             <domElem name="latitude" length="16" start="0"/>
             <domElem name="longitude" length="32" start="0"/>
         </domain>
-    </variable>
+     </variable>
 
-    <variable
+     <variable
         id ="v"
         missing_value="-99.9"
         units="m/s"
         datatype="Double"
-    >
+     >
         <domain>
             <domElem name="time" length="3" start="0"/>
             <domElem name="latitude" length="16" start="0"/>
             <domElem name="longitude" length="32" start="0"/>
         </domain>
-    </variable>
-
- {% endhighlight %}
+     </variable>
 
 
 
 
- 
+
+

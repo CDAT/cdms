@@ -1,3 +1,4 @@
+
 # Automatically adapted for numpy.oldnumeric Aug 01, 2007 by
 # Further modified to be pure new numpy June 24th 2008
 
@@ -10,6 +11,8 @@ import sys
 import json
 import re
 import numpy
+import zlib  # for pickling JSON
+
 from numpy import sctype2char
 from .error import CDMSError
 from .avariable import AbstractVariable
@@ -18,7 +21,7 @@ from .axis import createAxis, AbstractAxis
 from .grid import createRectGrid, AbstractRectGrid
 from .hgrid import AbstractCurveGrid
 from .gengrid import AbstractGenericGrid
-from six import string_types
+from six import string_types, PY2
 
 # dist array support
 HAVE_MPI = False
@@ -32,8 +35,8 @@ except BaseException:
 id_builtin = id  # built_in gets clobbered by keyword
 
 
-def fromJSON(jsn):
-    """ Recreate a TV from a dumped jsn object"""
+def convertJSON(jsn):
+    """ Extract Data axes and attributes from JSON string"""
     D = json.loads(jsn)
 
     # First recreates the axes
@@ -48,14 +51,31 @@ def fromJSON(jsn):
             if k not in ["_values", "id", "_dtype"]:
                 setattr(ax, k, v)
         axes.append(ax)
-    # Now prep the variable
-    V = createVariable(D["_values"], id=D["id"], typecode=D["_dtype"])
-    V.setAxisList(axes)
+    if PY2:
+        D["_msk"] = numpy.array([numpy.ma.MaskType(int(x.encode("hex")))
+                                 for x in D["_msk"]])
+    else:
+        D["_msk"] = numpy.array([numpy.ma.MaskType(x)
+                                 for x in list(bytearray(D["_msk"]))])
+    attrs = {}
     for k, v in D.items():
         if k not in ["id", "_values", "_axes",
-                     "_grid", "_fill_value", "_dtype", ]:
-            setattr(V, k, v)
-    V.set_fill_value(D["_fill_value"])
+                     "_grid", "_fill_value", "_dtype", "_msk", "_mask"]:
+            attrs[str(k)] = str(v)
+
+    return (D, axes, attrs)
+
+
+def fromJSON(jsn):
+    """ Recreate a TV from a dumped jsn object from dumps()"""
+    try:
+        jsn = zlib.decompress(jsn)
+    except BaseException:
+        pass
+
+    (D, axes, attrs) = convertJSON(jsn)
+    V = createVariable(D["_values"], id=D["id"], typecode=D["_dtype"],
+                       mask=D["_msk"], axes=axes, fill_value=D["_fill_value"], attributes=attrs)
     return V
 
 
@@ -86,6 +106,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
     ascontiguous = ascontiguousarray
 
     def asma(self):
+        "Convert a Transient Variable into a numpy masked array."
         return numpy.ma.array(self._data, mask=self._mask)
 
     def _update_from(self, obj):
@@ -153,10 +174,15 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
                  mask=numpy.ma.nomask, fill_value=None, grid=None,
                  axes=None, attributes=None, id=None, copyaxes=1, dtype=None,
                  order='C', no_update_from=False, **kargs):
-        """createVariable (self, data, typecode=None, copy=0, savespace=0,
-                 mask=None, fill_value=None, grid=None,
-                 axes=None, attributes=None, id=None, dtype=None, order='C')
-           The savespace argument is ignored, for backward compatibility only.
+        """
+        Parameters
+        ----------
+
+            createVariable
+                (self, data, typecode=None, copy=0, savespace=0, mask=None,
+                fill_value=None, grid=None, axes=None, attributes=None, id=None,
+                dtype=None, order='C') The savespace argument is ignored,
+                for backward compatibility only.
         """
         try:
             if data.fill_value is not None:
@@ -164,8 +190,13 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
                 fill_value = data.fill_value
         except BaseException:
             pass
+
         if fill_value is not None:
             self._setmissing(fill_value)
+        else:
+            fill_value = numpy.ma.MaskedArray(1).astype(dtype).item()
+            fill_value = numpy.ma.default_fill_value(fill_value)
+
         if attributes is not None and "_FillValue" in list(attributes.keys()):
             self._setmissing(attributes["_FillValue"])
 
@@ -254,13 +285,59 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
     _FillValue = property(_getmissing, _setmissing)
     missing_value = property(_getmissing, _setmissing)
 
+    # Pickling
+    def __getstate__(self):
+        """Return the internal state of the tvariable, for pickling
+        purposes.
+
+        """
+        myjson = self.dumps().encode("utf-8")
+        state = zlib.compress(myjson)
+        return(state)
+        # return(self.dumps().encode("utf-8"))
+
+    def __setstate__(self, state):
+        """Restore the internal state of the tvariable, for
+        pickling purposes.  ``state`` is typically the output of the
+        ``__getstate__`` output, and is a 5-tuple:
+
+        - json file from dumps()
+
+        """
+        state2 = zlib.decompress(state)
+        (D, axes, attrs) = convertJSON(state2)
+        newvar = createVariable(D["_values"], id=D["id"], typecode=D["_dtype"],
+                                mask=D["_msk"], axes=axes, fill_value=D["_fill_value"], attributes=attrs)
+
+        #
+        # Pickle has already create an empty variable by calling __new__()
+        # Reset the pickled Transient variable with the new data from nevar
+        #
+        (_, shp, typ, isf, raw) = newvar.data.__reduce__()[2]
+        state = (_, shp, typ, isf, raw,
+                 D["_msk"].tobytes('C'), D["_fill_value"])
+        super(TransientVariable, self).__setstate__(state)
+
+        self.__dict__.update(newvar.__dict__)
+        self.__dict__.update(newvar.__dict__)
+        self.setAxisList(newvar.getAxisList())
+        self.setGrid(newvar.getGrid())
+        axes = [x[0] for x in newvar.getDomain()]
+        if axes is not None:
+            self.initDomain(axes)
+
     def __new__(cls, data, typecode=None, copy=0, savespace=0,
                 mask=numpy.ma.nomask, fill_value=None, grid=None,
                 axes=None, attributes=None, id=None, copyaxes=1, dtype=None, order='C', **kargs):
-        """createVariable (self, data, typecode=None, copy=0, savespace=0,
-                 mask=None, fill_value=None, grid=None,
-                 axes=None, attributes=None, id=None, dtype=None, order='C')
-           The savespace argument is ignored, for backward compatibility only.
+        """
+
+        Parameters
+        ----------
+
+            createVariable
+               (self, data, typecode=None, copy=0, savespace=0, mask=None, fill_value=None,
+               grid=None, axes=None, attributes=None, id=None, dtype=None, order='C') The savespace
+               argument is ignored, for backward compatibility only.
         """
         # Compatibility: assuming old typecode, map to new
         if dtype is None and typecode is not None:
@@ -284,7 +361,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             try:
                 mask = data.mask
             except Exception:
-                mask = numpy.ma.nomask
+                mask = [numpy.ma.nomask]
 
         # Handle the case where ar[i:j] returns a single masked value
         if data is numpy.ma.masked:
@@ -294,19 +371,12 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         if dtype is None and data is not None:
             dtype = numpy.array(data).dtype
 
-        if any(x is 'N/A' for x in str(fill_value)):
+        if any(x == 'N/A' for x in str(fill_value)):
             fill_value = None
-
-        if fill_value is not None:
-            fill_value = numpy.array(fill_value).astype(dtype)
-        else:
-            fill_value = numpy.ma.MaskedArray(1).astype(dtype).item()
-            fill_value = numpy.ma.default_fill_value(fill_value)
 
         self = numpy.ma.MaskedArray.__new__(cls, data, dtype=dtype,
                                             copy=ncopy,
                                             mask=mask,
-                                            fill_value=fill_value,
                                             subok=False,
                                             order=order)
 
@@ -325,7 +395,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
     def expertSlice(self, slicelist):
         if slicelist == []:
             slicelist = ()
-        return numpy.ma.MaskedArray.__getitem__(self, slicelist)
+        return numpy.ma.MaskedArray.__getitem__(self, tuple(slicelist))
 
     def initDomain(self, axes, copyaxes=1):
         # lazy evaluation via getAxis to avoid creating axes that aren't ever
@@ -557,9 +627,21 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
             setattr(d, field, value)
 
     def clone(self, copyData=1):
-        """clone (self, copyData=1)
-        Return a copy of self as a transient variable.
-        If copyData is 1 (default), make a separate copy of the data."""
+        """
+        Clone
+
+        Parameters
+        ----------
+
+        clone : (self, copyData=1)
+
+
+        Returns
+        -------
+
+        a copy of self as a transient variable.
+        If copyData is 1 (default), make a separate copy of the data.
+        """
         result = createVariable(self, copy=copyData)
         return result
 
@@ -576,13 +658,18 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         for a in self.getAxisList():
             ax = {}
             for A, v in a.attributes.items():
-                ax[A] = v
+                if isinstance(v, numpy.ndarray):
+                    ax[A] = v.tolist()
+                else:
+                    ax[A] = v
             ax['id'] = a.id
             ax["_values"] = a[:].tolist()
             ax["_dtype"] = a[:].dtype.char
             axes.append(ax)
         J["_axes"] = axes
         J["_values"] = self[:].filled(self.fill_value).tolist()
+        J["_msk"] = list(numpy.ma.getmaskarray(self).tobytes('C'))
+        J["_mask"] = numpy.array(self._mask).tolist()
         J["_fill_value"] = float(self.fill_value)
         J["_dtype"] = self.typecode()
         J["_grid"] = None  # self.getGrid()
@@ -632,6 +719,29 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         Get the tile index (for mosaics)
         """
         return self.tileIndex
+
+    def to_dataframe(self):
+        """Convert a TransientVariable into a pandas.DataFrame.
+
+        Transient variable the column of the DataFrame.
+        The DataFrame is be indexed by the cartesian product of
+        this Transient variable dimensions
+        """
+        import pandas as pd
+        from collections import OrderedDict
+        columns = [self.id]
+        data = [self[:]._data.reshape(-1)]
+        axes = []
+        axes.append([str(i) for i in self.getTime().asComponentTime()])
+        if self.getLevel() is not None:
+            axes.append(self.getLevel()[:])
+        if self.getLatitude() is not None:
+            axes.append(self.getLatitude()[:])
+        if self.getLongitude() is not None:
+            axes.append(self.getLongitude()[:])
+        names = [axis.id for axis in self.getAxisList()]
+        index = pd.MultiIndex.from_product(axes, names=names)
+        return pd.DataFrame(OrderedDict(zip(columns, data)), index=index)
 
     def toVisit(self, filename, format='Vs', sphereRadius=1.0,
                 maxElev=0.1):
@@ -775,12 +885,18 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
         """
         Get the ellipsis for a given halo side.
 
-        side - a tuple of zeros and one +1 or -1.  To access
-               the "north" side for instance, set side=(1, 0),
-               (-1, 0) to access the south side, (0, 1) the east
-               side, etc. This does not involve any communication.
+        Parameters
+        ----------
 
-        Return none if halo was not exposed (see exposeHalo)
+           side:
+                a tuple of zeros and one +1 or -1.  To access the "north" side for instance, set side=(1, 0),
+                (-1, 0) to access the south side, (0, 1) the east side, etc. This does not involve any communication.
+
+           _:None
+
+        Returns
+        -------
+            none if halo was not exposed (see exposeHalo)
         """
         if HAVE_MPI and side in self.__mpiWindows:
             return self.__mpiWindows[side]['slab']
@@ -789,22 +905,22 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
 
     def fetchHaloData(self, pe, side):
         """
-        Fetch the halo data from another processor. The halo side
-        is a subdomain of the halo that is exposed to other
-        processors. It is an error to call this method when
-        MPI is not enabled. This is a collective method (must
-        be called by all processes), which involves synchronization
+        Fetch the halo data from another processor. The halo side is a subdomain of the halo that
+        is exposed to other processors. It is an error to call this method when MPI is not enabled.
+        This is a collective method (must be called by all processes), which involves synchronization
         of data among all processors.
 
-        pe       -  processor owning the halo data. This is a no
-                    operation when pe is None.
-        side     -  a tuple of zeros and one +1 or -1.  To access
-                    the "north" side for instance, set side=(1, 0),
-                    (-1, 0) to access the south side, (0, 1) the east
-                    side, etc.
+        Parameters
+        ----------
 
-        Note: collective, all procs must invoke this method. If some
-        processors should not fetch then pass None for pe.
+           pe:
+                processor owning the halo data. This is a no operation when pe is None.
+
+           side:
+               a tuple of zeros and one +1 or -1.  To access the "north" side for instance,
+               set side=(1, 0), (-1, 0) to access the south side, (0, 1) the east side, etc.
+
+        Note: collective, all procs must invoke this method. If some processors should not fetch then pass None for pe.
         """
         if HAVE_MPI:
             iw = self.__mpiWindows[side]
@@ -834,13 +950,22 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
 
     def __getSlab(self, dim, slce):
         """
-        Get slab. A slab is a multi-dimensional slice extending in
-        all directions except along dim where slce applies
+        Parameters
+        ----------
 
-        dim      - dimension (0=first index, 1=2nd index...)
-        slce     - python slice object along dimension dim
+            Get slab:
+                A slab is a multi-dimensional slice extending in all directions except along dim where slce applies
 
-        return slab
+            dim:
+                dimension (0=first index, 1=2nd index...)
+
+            slce:
+                python slice object along dimension dim
+
+        Returns
+        -------
+
+             slab
         """
         ndims = len(self.shape)
 
@@ -890,10 +1015,18 @@ def isVariable(s):
 
 
 def asVariable(s, writeable=1):
-    """Returns s if s is a Variable; if writeable is 1, return
-       s if s is a TransientVariable. If s is not a variable of
-       the desired type, attempt to make it so and return that.
-       If we fail raise CDMSError
+    """
+    As Variable
+
+    Returns
+    -------
+    s if s is a Variable; if writeable is 1,
+    return s if s is a TransientVariable.
+
+    If s is not a variable of
+    the desired type, attempt to make it so and return that.
+
+    If we fail raise CDMSError
     """
     target_class = AbstractVariable
     if writeable:

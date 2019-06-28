@@ -1,27 +1,28 @@
 # Automatically adapted for numpy.oldnumeric Aug 02, 2007 by
 import cdms2
 import numpy
-from . import _regrid
+# from . import _regrid
+import regrid2._regrid as _regrid
 from .error import RegridError
 import copy
 
 
 class PressureRegridder:
-    """    #-----------------------------------------------------------------------------------------------
-    #
-    #    PURPOSE: To perform all the tasks required to regrid the input data into the ouput data along
-    #             the pressure dimension only.
-    #
-    #    PROCEDURE: Step One:
-    #                  Make an instance of class PressureRegridder passing it input and output grid information
-    #               Step Two:
-    #                  Pass the input data with some descriptive parameters and get the output data
-    #                  in return
-    #
-    #------------------------------------------------------------------------------------------------"""
+    """
+    PURPOSE: To perform all the tasks required to regrid the input data into the ouput data along
+             the pressure dimension only.
+
+    PROCEDURE:
+        Step One:
+           Make an instance of class PressureRegridder passing it input and output grid information
+        Step Two:
+           Pass the input data with some descriptive parameters and get the output data
+           in return
+    """
 
     def __init__(self, axisIn, axisOut):
-        """        #-----------------------------------------------------------------------------------------------
+        """
+        #-----------------------------------------------------------------------------------------------
         #
         #    PURPOSE: To make an instance which entails setting up the input and output grids
         #
@@ -43,7 +44,8 @@ class PressureRegridder:
         #
         #             r = PressureRegridder(levIn, levOut)
         #
-        #------------------------------------------------------------------------------------------------"""
+        #------------------------------------------------------------------------------------------------
+        """
 
         # ---  set the instance grid data attributes used to describe input and output grid sizes
 
@@ -147,86 +149,77 @@ class PressureRegridder:
 
     def rgrd(self, dataIn, missingValueIn, missingMatch,
              logYes='yes', positionIn=None, missingValueOut=None):
-        """        #---------------------------------------------------------------------------------
-        #
-        # PURPOSE: To perform all the tasks required to regrid the input data, dataIn, into the ouput data,
-        #     dataout along the level dimension only.
-        #
-        # DEFINITION:
-        #
-        #     def rgrd(self, dataIn, missingValueIn, missingMatch, positionIn = None, missingValueOut = None):
-        #
-        #
-        # PASSED :  dataIn -- data to regrid
-        #
-        #     missingValueIn -- the missing data value to use in setting missing in the mask. It is required
-        #                       and there are two choices:
-        #                             None -- there is no missing data
-        #                             A number -- the value to use in the search for possible missing data.
-        #                       The presence of missing data at a grid point leads to recording 0.0 in the mask.
-        #
-        #             missingMatch -- the comparison scheme used in searching for missing data in dataIn using
-        #                             the value passed in as missingValueIn. The choices are:
-        #                          None -- used if None is the entry for missingValueIn
-        #                          exact -- used if missingValue is the exact value from the file
-        #                          greater -- the missing data value is equal to or greater than missingValueIn
-        #                          less -- the missing data value is equal to or less than missingValueIn
-        #
-        #             logYes -- choose the level regrid as linear in log of level or linear in level. Set to
-        #               'yes' for log. Anything else is linear in level.
-        #
-        #
-        #
-        #     positionIn -- a tuple with the numerical position of the dimensions
-        #                   in C or Python order specified in the sequence longitude,
-        #                   latitude, level and time. Longitude, latitude and level are
-        #                           required. If time is missing submit None in its slot in the
-        #                   tuple. Notice that the length of the tuple is always four.
-        #
-        #                   Explicitly, in terms of the shape of dataIn as returned by Python's shape function
-        #
-        #                                positionIn[0] contains the position of longitude in dataIn
-        #                                positionIn[1] contains the position of latitude in dataIn
-        #                                positionIn[2] contains the position of level in dataIn or None
-        #                                positionIn[3] contains the position of time in dataIn or None
-        #
-        #                   As  examples:
-        #                        If the C order shape of 4D data is
-        #                                    (number of longitudes, number of times, number of levels,
-        #                                     number of latitudes)
-        #                        submit
-        #                                     (0, 3, 2, 1)
-        #
-        #                                If the C order shape of 3D data is
-        #                    (number of longitudes, number of times, number oflatitudes)
-        #                        submit
-        #                                    (0, 2, 1, None)
-        #
-        #                   Send in None if the shape is a subset of (time, level,
-        #                   latitude, longitude) which is evaluated as follows:
-        #                      3D -- code assumes (2,1,0,None)
-        #                      4D -- code assumes (3,2,1,0)
-        #
-        #      missingValueOut -- the value for the missing data used in writing the output data. If left at the
-        #                                 default entry, None, the code uses missingValueIn if present or as a last
-        #                                 resort
-        #                         1.0e20
-        #
-        #
-        #    RETURNED : dataOut -- the regridded data
-        #
-        #
-        #    USAGE:
-        #
-        #          Example 1.  To regrid dataIn into dataOut using all the defaults where None, None signifies no
-        #                      missing data.
-        #              dataOut = x.rgrd(dataIn, None, None)
-        #
-        #          Example 2.  To regrid dataIn into dataOut using 1.0e20 and greater as the missing data
-        #
-        #                      dataOut = x.rgrd(dataIn, 1.e20, 'greater')
-        #
-        # ----------------------------------------------------------------------------------------------------------"""
+        """
+        To perform all the tasks required to regrid the input data, dataIn, into the ouput data,
+        dataout along the level dimension only.
+
+        Parameters
+        ----------
+        dataIn : data to regrid
+
+        missingValueIn : the missing data value to use in setting missing in the mask. It is required.
+          * None -- there is no missing data
+          * A number -- if  the value to use in the search for possible missing data.
+            The presence of missing data at a grid point leads to recording 0.0 in the mask.
+
+        missingMatch : the comparison scheme used in searching for missing data in dataIn using the value
+        passed in as missingValueIn.
+          * None -- used if None is the entry for missingValueIn
+          * exact -- used if missingValue is the exact value from the file
+          * greater -- the missing data value is equal to or greater than missingValueIn
+          * less -- the missing data value is equal to or less than missingValueIn
+
+        logYes : choose the level regrid as linear in log of level or linear in level.
+          * Set to 'yes' for log. Anything else is linear in level.
+
+        positionIn : a tuple with the numerical position of the dimensions
+          * in C or Python order specified in the sequence longitude, latitude,
+            level and time. Longitude and Latitude are required. If time is missing submit None in its
+            slot in the tuple. Notice that the length of the tuple is
+            always four.
+
+            Explicitly, in terms of the shape of dataIn as returned by python's shape function
+
+            positionIn[0] contains the position of longitude in dataIn
+            positionIn[1] contains the position of latitude in dataIn
+            positionIn[2] contains the position of level in dataIn or None
+            positionIn[3] contains the position of time in dataIn or None
+
+            If the c order shape of 4D data is
+              * (number of longitudes, number of times, number of levels, number of latitudes)
+            submit
+                          * (0, 3, 2, 1).
+
+            If the c order shape of 3D data is
+              * (number of longitudes, number of times, number of latitudes)
+            submit
+              * (0, 2, 1, None).
+
+            Send in None if the shape is a subset of (time, level, latitude, longitude) which is evaluated
+            as follows:
+                * 3D -- code assumes (2,1,0,None)
+                * 4D -- code assumes (3,2,1,0)
+
+        missingValueOut : the value for the missing data used in writing the output data.
+            * If left at the default entry, None, the code uses missingValueIn
+            * If present or as a last resort 1.0e20
+
+        Returns
+        -------
+        dataOut : the regridded data
+
+        Example
+        -------
+
+        To regrid dataIn into dataOut using all the defaults where None, None signifies no
+        missing data.
+            * dataOut = x.rgrd(dataIn, None, None)
+
+        To regrid dataIn into dataOut using 1.0e20 and greater as the missing data
+            * dataOut = x.rgrd(dataIn, 1.e20, 'greater')
+
+        Note:  This code does not regrid cross sections which have a single dummy longitude value!
+        """
 
         # check the required input -- dataIn, missingValueIn and  missingMatch
 
@@ -423,20 +416,28 @@ class PressureRegridder:
 
 
 def checkorder(positionIn):
-    """    #-----------------------------------------------------------------------------------------
-    #
-    #     purpose: construct the tuples for transposing the data to standard dimension order and the
-    #              inverse for transposing it back to the original dimension order
-    #
-    #     usage:   newOrder, inverseOrder = checkorder(positionIn)
-    #
-    #     passed:  positionIn -- array with location of longitude, latitude. level and time respectively
-    #                            in the sense of the python shape of the data
-    #
-    #     returned: newOrder -- tuple to transpose data to the order (t,z,y,x)
-    #               inverseOrder -- tuple to transpose data to back to the original order
-    #
-    #----------------------------------------------------------------------------------------------"""
+    """
+    Purpose :
+
+        construct the tuples for transposing the data to standard dimension
+        order and the inverse for transposing it back to the original dimension order
+
+    Usage :
+
+        newOrder, inverseOrder = checkorder(positionIn)
+
+    Passed :
+
+        positionIn -- array with location of longitude, latitude. level and time
+        respectively in the sense of the python shape of the data
+
+    Returns
+    -------
+    newOrder : tuple to transpose data to the order (t,z,y,x)
+
+   inverseOrder : tuple to transpose data to back to the original order
+
+    """
 
     # remove the None values from positionIn and reverse the order
 
@@ -466,16 +467,22 @@ def checkorder(positionIn):
 
 
 def sendmsg(msg, value1=None, value2=None):
-    """        #---------------------------------------------------------------------------------
-    #
-    #    purpose: send the same message to the screen
-    #
-    #    passed :  msg - the string
-    #              value - the number associated with the string
-    #
-    #    returned: return
-    #
-    #---------------------------------------------------------------------------------"""
+    """
+    Purpose :
+
+         send the same message to the screen
+
+    Passed :
+
+         msg - the string
+
+         value - the number associated with the string
+
+    Returns
+    -------
+    return
+
+   """
 
     print('*******************************************************************')
     if value1 is None:

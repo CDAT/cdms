@@ -30,7 +30,7 @@ Plotting a Gridded Variable
    import requests
    fnames = [ 'clt.nc', 'geos-sample', 'xieArkin-T42.nc', 'remap_grid_POP43.nc', 'remap_grid_T42.nc', 'rmp_POP43_to_T42_conserv.n', 'rmp_T42_to_POP43_conserv.nc', 'ta_ncep_87-6-88-4.nc', 'rmp_T42_to_C02562_conserv.nc' ]
    for file in fnames:
-      url = 'http://uvcdat.llnl.gov/cdat/sample_data/'+file
+      url = 'https://cdat.llnl.gov/cdat/sample_data/'+file
       r = requests.get(url)
       open(file, 'wb').write(r.content)
 
@@ -42,26 +42,28 @@ Plotting a Gridded Variable
       os.remove(file)
 
 
+**Example:**
+  Plotting a gridded variable
 
-.. doctest:: Example: plotting a gridded variable
+::
 
-    >>> import cdms2, vcs 
-    >>> f = cdms2.open("clt.nc") 
-    >>> clt = f.variables['clt'] 
-    >>> sample = clt[0,:] 
-    >>> w=vcs.init() 
-    >>> w.plot(sample) 
+    >>> import cdms2, vcs
+    >>> f = cdms2.open("clt.nc")
+    >>> clt = f.variables['clt']
+    >>> sample = clt[0,:]
+    >>> w=vcs.init()
+    >>> w.plot(sample)
     <vcs.displayplot.Dp object ...>
-    >>> f.close() 
+    >>> f.close()
 
 **Notes:**
 
-.. csv-table::  
+.. csv-table::
    :header:  "Line", "Notes"
    :widths:  10, 90
 
    "3","Get a horizontal slice, for the first time point."
-   "4","Create a VCS Canvas ``w``."   
+   "4","Create a VCS Canvas ``w``."
    "5", "Plot the data.  Because sample is a transient variable, it encapsulates all the time, latitude, longitude, and attribute information."
    "7", "Close the file.  This must be done after the reference to the persistent variable ``ps l``."
 
@@ -75,16 +77,16 @@ fill in the extra plot information.
 Using A Plot Keywords
 ^^^^^^^^^^^^^^^^^^^^^
 
-.. doctest::
+::
 
-    >>> import cdms2, vcs 
-    >>> f = cdms2.open("clt.nc") 
-    >>> clt = f.variables['clt'] 
-    >>> sample = clt[0,:] 
-    >>> w=vcs.init() 
-    >>> w.plot(sample, units='percent', file_comment='', long_name="Total Cloud", comment1="Example plot", hms="00:00:00", ymd="1979/01/01") 
+    >>> import cdms2, vcs
+    >>> f = cdms2.open("clt.nc")
+    >>> clt = f.variables['clt']
+    >>> sample = clt[0,:]
+    >>> w=vcs.init()
+    >>> w.plot(sample, units='percent', file_comment='', long_name="Total Cloud", comment1="Example plot", hms="00:00:00", ymd="1979/01/01")
     <vcs.displayplot.Dp object ...>
-    >>> f.close() 
+    >>> f.close()
 
 
 **Note:** Keyword arguments can be listed in any order.
@@ -95,18 +97,18 @@ Plotting a Time-Latitude Slice
 Assuming that variable ``clt`` has domain ``(time,latitude,longitude)``,
 this example selects and plots a time-latitude slice:
 
-.. doctest::
+::
 
-    >>> import cdms2, vcs 
-    >>> f = cdms2.open("clt.nc") 
-    >>> clt = f.variables['clt'] 
-    >>> samp = clt[:,:,0] 
-    >>> w = vcs.init() 
-    >>> w.plot(samp, name='Total Cloudiness') 
+    >>> import cdms2, vcs
+    >>> f = cdms2.open("clt.nc")
+    >>> clt = f.variables['clt']
+    >>> samp = clt[:,:,0]
+    >>> w = vcs.init()
+    >>> w.plot(samp, name='Total Cloudiness')
     <vcs.displayplot.Dp object ...>
 
 
-.. csv-table:: Line Notes
+.. csv-table::
   :header:  "Line", "Notes"
   :widths:  10, 90
 
@@ -119,9 +121,9 @@ Plotting Subsetted Data
 Calling the variable ``clt`` as a function reads a subset of the
 variable. The result variable ``samp`` can be plotted directly:
 
-.. doctest::
+::
 
-    >>> import cdms2, vcs 
+    >>> import cdms2, vcs
     >>> f = cdms2.open("clt.nc")
     >>> clt = f.variables['clt']
     >>> samp = clt(time = (0.0,100.0), longitude = 180.0, squeeze=1)
@@ -147,18 +149,23 @@ where:
 -  array is a variable, masked array, or Numpy array having between
    two and five dimensions. The last dimensions of the array is termed
    the 'x' dimension, the next-to-last the 'y' dimension, then 'z', 't',
-   and 'w'. For example, if array is three-dimensional, the axes are
-   (z,y,x), and if array is four-dimensional, the axes are (t,z,y,x).
-   (Note that the t dimension need have no connection with time; any
-   spatial axis can be mapped to any plot dimension. For a graphics
-   method which is two-dimensional, such as boxfill, the y-axis is
-   plotted on the horizontal, and the x-axis on the vertical.
+   and 'w'.
 
-   If array is a gridded variable on a rectangular grid, the plot
-   function uses a box-fill graphics method. If it is non-rectangular,
-   the meshfill graphics method is used.
+    - For example, if array is three-dimensional, the axes are
+      (z,y,x), and if array is four-dimensional, the axes are (t,z,y,x).
 
-   Note that some plot keywords apply only to rectangular grids only.
+        **Note:** that the t dimension need have no connection with time; any
+        spatial axis can be mapped to any plot dimension.)
+
+    - For a graphics method which is two-dimensional, such as boxfill,
+      the y-axis is plotted on the horizontal, and the x-axis on the vertical.
+
+    - If array is a gridded variable on a rectangular grid, the plot
+      function uses a box-fill graphics method.
+
+    - If it is non-rectangular, the meshfill graphics method is used.
+
+        **Note:** that some plot keywords apply only to rectangular grids only.
 
 -  args are optional positional arguments:
 
@@ -177,40 +184,68 @@ where:
 -  ``key=value``, ... are optional keyword/value pairs, listed in any
    order. These are defined in the table below.
 
-Table Plot Keywords
-^^^^^^^^^^^^^^^^^^^
+Plot Keywords
+^^^^^^^^^^^^^^
 
 .. csv-table::
     :header: "Key", "Type", "Value"
     :widths: 20, 20, 80
 
-    "``comment1``", "string", "Comment plotted above ``file_comment``"
-    "``comment2``", "string", "Comment plotted above ``comment1``"
-    "``comment3``", "string", "Comment plotted above ``comment2``"
-    "``continents``", "0 or 1", "if ``1``, plot continental outlines (default:plot if ``xaxis`` is longitude, ``yaxis`` is latitude -or- ``xname`` is 'longitude' and ``yname`` is 'latitude'"
-    "``file_comment``", "string", "Comment, defaults to ``variable.parent.comment``"
-    "``grid``", "CDMS grid object", "Grid associated with the data. Defaults to ``variable.getGrid()``"
-    "``hms``", "string", "Hour, minute, second"
-    "``long_name``", "string", "Descriptive variable name, defaults to ``variable.long_name``."
-    "``missing_value``", "same type as array", "Missing data value, defaults to ``variable.getMissing()``"
-    "``name``", "string", "Variable name, defaults to ``variable.id``"
-    "``time``", "cdtime relative or absolute", "Time associated with the data."
-    ,,"Example:"
-    ,,"- ``cdtime.reltime(30.0, 'days since 1978-1-1').``"
-    "``units``", "string",  "Data units. Defaults to ``variable.units``"
-    "``variable``", "CDMS variable object", "Variable associated with the data. The variable grid must have the same shape as the data array."
-    "``xarray`` (``[y|z|t|w]array``)", "1-D Numpy array", "*Rectangular grids only*. Array of coordinate values, having the same length as the corresponding dimension. Defaults to ``xaxis[:\] (y|z|t|waxis[:])``"
-    "``xaxis`` (``[y|z|t|w]axis``)", "CDMS axis object", "*Rectangular grids only*. Axis object. ``xaxis`` defaults to ``grid.getAxis(0)``, ``yaxis`` defaults to ``grid.getAxis(1)``"
-    "``xbounds`` (``ybounds``)", "2-D Numpy array",  "*Rectangular grids only*. Boundary array of shape ``(n,2)`` where ``n`` is the axis length. Defaults to ``xaxis.getBounds()``, or ``xaxis.genGenericBounds()`` if ``None``, similarly for ``ybounds``."
+    "comment1", "string", "Comment plotted above ``file_comment``"
+    "comment2", "string", "Comment plotted above ``comment1``"
+    "comment3", "string", "Comment plotted above ``comment2``"
+    "continents", "0 or 1", "if ``1``, plot continental outlines (default:plot if
+        * ``xaxis`` is longitude,
+        * ``yaxis`` is latitude -or- ``xname`` is 'longitude' and ``yname`` is 'latitude'"
+    "file_comment", "string", "Comment,
+        * Defaults to ``variable.parent.comment``"
+    "grid", "CDMS grid object", "Grid associated with the data.
+        * Defaults to ``variable.getGrid()``"
+    "hms", "string", "Hour, minute, second"
+    "long_name", "string", "Descriptive variable name,
+        * Defaults to ``variable.long_name``."
+    "missing_value", "same type as array", "Missing data value,
+        * Defaults to ``variable.getMissing()``"
+    "``name``", "string", "Variable name,
+        * Defaults to ``variable.id``"
+    "time", "cdtime relative or absolute", "Time associated with the data.
+       Example:
+          * ``cdtime.reltime(30.0, 'days since 1978-1-1').``"
 
-    "``xname`` (``[y|z|t|w]name``)", "string", "*Rectangular grids only*. Axis name. Defaults to ``xaxis.id`` (``[y|z|t|w]axis.id``)"
-    "``xrev`` (``yrev``)", "0 or 1", "If ``xrev`` (``yrev``) is 1, reverse the direction of the ``x-axis (y-axis)``. Defaults to 0, with the following exceptions:"
-    ,,"- If the ``y-axis`` is latitude, and has decreasing values, ``yrev`` defaults to 1"
-    ,,"- If the ``y-axis`` is a vertical level, and has increasing pressure levels, ``yrev`` defaults to 1."
+Plot Keywords(cont'd)
+^^^^^^^^^^^^^^^^^^^^^
 
-    "``xunits`` (``[y|z|t|w]units``)", "string", "*Rectangular grids only*. Axis units. Defaults to ``xaxis.units`` (``[y|z|t|w]axis.units``)."
-
-
+.. csv-table::
+    :header: "Key", "Type", "Value"
+    :widths: 30, 30, 80
 
 
-b
+    "units", "string",  "Data units.
+          * Defaults to ``variable.units``"
+    "variable", "CDMS variable object", "Variable associated with the data.
+          * The variable grid must have the same shape as the data array."
+    "xarray (``[y|z|t|w]array``)", "1-D Numpy array", "*Rectangular grids only*.
+          * Array of coordinate values, having the same length as the corresponding dimension.
+          * Defaults to ``xaxis[:\] (y|z|t|waxis[:])``"
+    "xaxis (``[y|z|t|w]axis``)", "CDMS axis object", "*Rectangular grids only*.
+       Axis object.
+          * ``xaxis`` defaults to ``grid.getAxis(0)``
+          * ``yaxis`` defaults to ``grid.getAxis(1)``"
+    "xbounds (``ybounds``)", "2-D Numpy array",  "*Rectangular grids only*.
+          * Boundary array of shape ``(n,2)`` where ``n`` is the axis length.
+          * Defaults to ``xaxis.getBounds()``, or ``xaxis.genGenericBounds()`` if ``None``, similarly for ``ybounds``."
+    "xname (``[y|z|t|w]name``)", "string", "*Rectangular grids only*.
+       Axis name.
+          * Defaults to ``xaxis.id`` (``[y|z|t|w]axis.id``)"
+    "xrev (``yrev``)", "0 or 1", "If ``xrev`` (``yrev``) is 1, reverse the direction of the
+    ``x-axis (y-axis)``.
+          * Defaults to 0, with the following exceptions:
+          * If the ``y-axis`` is latitude, and has decreasing values, ``yrev`` defaults to 1
+          * If the ``y-axis`` is a vertical level, and has increasing pressure levels, ``yrev`` defaults to 1."
+    "xunits (``[y|z|t|w]units``)", "string", "*Rectangular grids only*. Axis units.
+          * Defaults to ``xaxis.units`` (``[y|z|t|w]axis.units``)."
+
+
+
+
+

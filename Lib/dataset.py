@@ -4,14 +4,18 @@
 """ CDMS dataset and file objects"""
 from __future__ import print_function
 from .error import CDMSError
+import sys
 from . import Cdunif
 import numpy
 from . import cdmsNode
 import os
-import sys
 import string
-import urllib
-from urllib.parse import urlparse, urlunparse
+try:
+    from urllib.parse import urlparse, urlunparse
+    from urllib.request import urlopen
+except ImportError:
+    from urlparse import urlparse, urlunparse
+    from urllib import urlopen
 from . import cdmsobj
 import re
 from .CDMLParser import CDMLParser
@@ -114,12 +118,11 @@ def setCompressionWarnings(value=None):
 
     Parameters
     ----------
-      value:
-          *  0/1 False/True 'no'/'yes' or None (which sets it to the opposite
+    value : *  0/1 False/True 'no'/'yes' or None (which sets it to the opposite
 
     Returns
     -------
-         Return set value.
+    Return set value.
     """
     global _showCompressWarnings
     if value is None:
@@ -149,14 +152,14 @@ def setCompressionWarnings(value=None):
 
 def setNetcdfUseNCSwitchModeFlag(value):
     """Tells cdms2 to switch constantly between netcdf define/write modes.
+
        Parameters
        ----------
-          value:
-              0/1, False/True.
+       value : 0/1, False/True.
 
        Returns
        -------
-           No return value.
+       No return value.
     """
 
     if value not in [True, False, 0, 1]:
@@ -173,12 +176,11 @@ def setNetcdfUseParallelFlag(value):
 
        Parameters
        ----------
-          value:
-              0/1, False/True.
+       value : 0/1, False/True.
 
        Returns
        -------
-           No return value.
+       No return value.
     """
     global CdMpi
     if value not in [True, False, 0, 1]:
@@ -194,11 +196,11 @@ def setNetcdfUseParallelFlag(value):
 
 
 def getMpiRank():
-    """ Return number of processor available.
+    """Return number of processor available.
 
        Returns
        -------
-           rank or 0 if MPI is not enabled.
+       rank or 0 if MPI is not enabled.
     """
     if CdMpi:
         rk = MPI.COMM_WORLD.Get_rank()
@@ -212,7 +214,7 @@ def getMpiSize():
 
        Returns
        -------
-           MPI size or 0 if MPI is not enabled.
+       MPI size or 0 if MPI is not enabled.
     """
     if CdMpi:
         sz = MPI.COMM_WORLD.Get_size()
@@ -226,12 +228,11 @@ def setNetcdf4Flag(value):
 
        Parameters
        ----------
-          value:
-              0/1, False/True.
+       value : 0/1, False/True.
 
        Returns
        -------
-           No return value.
+       No return value.
     """
     if value not in [True, False, 0, 1]:
         raise CDMSError("Error NetCDF4 flag must be 1/0 or true/False")
@@ -246,12 +247,11 @@ def setNetcdfClassicFlag(value):
 
        Parameters
        ----------
-          value:
-              0/1, False/True.
+       value : 0/1, False/True.
 
        Returns
        -------
-           No return value.
+       No return value.
     """
     if value not in [True, False, 0, 1]:
         raise CDMSError("Error NetCDF Classic flag must be 1/0 or true/False")
@@ -266,11 +266,11 @@ def setNetcdfShuffleFlag(value):
 
        Parameters
        ----------
-          value:
-              0/1, False/True.
+       value : 0/1, False/True.
+
        Returns
        -------
-           No return value.
+       No return value.
     """
     if value not in [True, False, 0, 1]:
         raise CDMSError("Error NetCDF Shuffle flag must be 1/0 or true/False")
@@ -285,11 +285,11 @@ def setNetcdfDeflateFlag(value):
 
        Parameters
        ----------
-          value:
-              0/1, False/True.
+       value : 0/1, False/True.
+
        Returns
        -------
-           No return value.
+       No return value.
     """
     if value not in [True, False, 0, 1]:
         raise CDMSError("Error NetCDF deflate flag must be 1/0 or true/False")
@@ -304,12 +304,11 @@ def setNetcdfDeflateLevelFlag(value):
 
        Parameters
        ----------
-          value:
-              Deflation Level 1-9.
+       value : Deflation Level 1-9.
 
        Returns
        -------
-           No return value.
+       No return value.
     """
     if value not in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]:
         raise CDMSError(
@@ -322,7 +321,7 @@ def getNetcdfUseNCSwitchModeFlag():
 
        Returns
        -------
-            NetCDF define mode .
+       NetCDF define mode .
     """
     return Cdunif.CdunifGetNCFLAGS("use_define_mode")
 
@@ -332,56 +331,71 @@ def getNetcdfUseParallelFlag():
 
        Parameters
        ----------
-          value:
-              0/1, False/True.
+       value : 0/1, False/True
+
        Returns
        -------
-           No return value.
+       No return value.
     """
     return Cdunif.CdunifGetNCFLAGS("use_parallel")
 
 
 def getNetcdf4Flag():
-    """Returns
+    """Get Net CD 4 Flag
+       Returns
        -------
-            NetCDF4 flag value."""
+       NetCDF4 flag value.
+    """
     return Cdunif.CdunifGetNCFLAGS("netcdf4")
 
 
 def getNetcdfClassicFlag():
-    """Returns
+    """Get Net CDF Classic Flag
+
+       Returns
        -------
-            NetCDF classic flag value."""
+       NetCDF classic flag value.
+    """
     return Cdunif.CdunifGetNCFLAGS("classic")
 
 
 def getNetcdfShuffleFlag():
-    """Returns
+    """Get Net CDF Shuffle Flag
+
+       Returns
        -------
-            NetCDF shuffle flag value."""
+       NetCDF shuffle flag value.
+    """
     return Cdunif.CdunifGetNCFLAGS("shuffle")
 
 
 def getNetcdfDeflateFlag():
-    """Returns
+    """Get Net CDF Deflate Flag
+
+       Returns
        -------
-            NetCDF deflate flag value. """
+       NetCDF deflate flag value.
+    """
     return Cdunif.CdunifGetNCFLAGS("deflate")
 
 
 def getNetcdfDeflateLevelFlag():
-    """Returns
+    """Get Net CDF Deflate Level Flag
+
+       Returns
        -------
-            NetCDF deflate level flag value."""
+       NetCDF deflate level flag value.
+    """
     return Cdunif.CdunifGetNCFLAGS("deflate_level")
 
 
 def useNetcdf3():
     """ Turns off (0) NetCDF flags for shuffle/cuDa/deflatelevel
     Output files are generated as NetCDF3 Classic after that
-       Returns
-       -------
-            No return value.
+
+    Returns
+    -------
+    No return value.
     """
     setNetcdfShuffleFlag(0)
     setNetcdfDeflateFlag(0)
@@ -410,7 +424,7 @@ def load(path):
 def loadURI(uri):
     (scheme, netloc, path, parameters, query, fragment) = urlparse(uri)
     uripath = urlunparse((scheme, netloc, path, '', '', ''))
-    fd = urllib.urlopen(uripath)
+    fd = urlopen(uripath)
     text = fd.read()
     fd.close()
     p = CDMLParser()
@@ -428,14 +442,13 @@ def createDataset(path, template=None):
 
        Parameters
        ----------
-           path:
-               is the XML file name, or netCDF filename for simple file creation.
-           template:
-               is a string template for the datafile(s), for dataset creation.
+       path : is the XML file name, or netCDF filename for simple file creation.
+
+       template : is a string template for the datafile(s), for dataset creation.
 
        Returns
        -------
-           writing file handle.
+       writing file handle.
     """
     return openDataset(path, 'w', template)
 
@@ -445,25 +458,22 @@ def createDataset(path, template=None):
 #   or LDAP URL of a catalog dataset entry.
 # 'mode' is 'r', 'r+', 'a', or 'w'
 
-
 def openDataset(uri, mode='r', template=None,
                 dods=1, dpath=None, hostObj=None):
     """
+    Open Dataset
+
     Parameters
     ----------
-        uri: (str)
-            Filename to open
-        mode: (str)
-            Either `r`,`w`,`a` mode to open the file in read/write/append
-        template:
-            A string template for the datafile(s), for dataset creation
-        dods: (int)
-            Default set to 1
-        dpath: (str)
-            Destination path.
+    uri : (str) Filename to open
+    mode : (str) Either `r`,`w`,`a` mode to open the file in read/write/append
+    template : A string template for the datafile(s), for dataset creation
+    dods : (int) Default set to 1
+    dpath : (str) Destination path.
+
     Returns
     -------
-         file handle.
+    file handle.
     """
     uri = uri.strip()
     (scheme, netloc, path, parameters, query, fragment) = urlparse(uri)
@@ -570,14 +580,14 @@ def parselist(text, f):
 
        Parameters
        ----------
-           text:
-               Input String.
-           f:
-               function which parses A and returns (A, nconsumed).
+       text : Input String.
+
+       f : function which parses A and returns (A, nconsumed).
+
        Returns
        -------
-           Parser results.
-           n number of matches.
+       Parser results.
+       n number of matches.
     """
 
     n = 0
@@ -610,13 +620,12 @@ def parseIndexList(text):
 
     Parameters
     ----------
-         text:
-            i,j,k,l,... are indices or '-', and path is a filename.
-            Coerce the indices to integers.
+    text : i,j,k,l,... are indices or '-', and path is a filename. Coerce the indices to integers.
+
     Returns
     -------
-           Parser results.
-           n number of matches.
+    Parser results.
+    n number of matches.
     """
     m = _IndexList4.match(text)
     nindices = 4
@@ -671,20 +680,19 @@ def parseFileMap(text):
 
        Parameters
        ----------
-           filemap:
-               list [ varmap, varmap, ...]
-           varmap:
-               list [ namelist, slicelist ]
-           namelist:
-               list [name, name, ...]
-           slicelist:
-               list [indexlist, indexlist, ,,,]
-           indexlist:
-               list [i,j,k,l,path]
+       filemap : list [ varmap, varmap, ...]
+
+       varmap : list [ namelist, slicelist ]
+
+       namelist : list [name, name, ...]
+
+       slicelist : list [indexlist, indexlist, ,,,]
+
+       indexlist : list [i,j,k,l,path]
 
        Returns
        -------
-           Parsing results.
+       Parsing results.
     """
     result, n = parselist(text, parseVarMap)
     if n < len(text):
@@ -1164,7 +1172,10 @@ class Dataset(CdmsObj, cuDataset):
 
     def getLogicalCollectionDN(self, base=None):
         """Return the logical collection distinguished name of this dataset.
-        If <base> is defined, append it to the lc name.
+
+           Notes
+           -----
+           If <base> is defined, append it to the lc name.
         """
         if hasattr(self, "lc"):
             dn = self.lc
@@ -1175,7 +1186,11 @@ class Dataset(CdmsObj, cuDataset):
         return dn
 
     def getVariable(self, id):
-        "Get the variable object with the given id. Returns None if not found."
+        """Get the variable object with the given id.
+
+         Returns
+         -------
+         None if not found."""
         return self.variables.get(id)
 
     def getVariables(self, spatial=0):
@@ -1192,16 +1207,25 @@ class Dataset(CdmsObj, cuDataset):
         return retval
 
     def getAxis(self, id):
-        "Get the axis object with the given id. Returns None if not found."
+        """Get the axis object with the given id.
+
+         Returns
+         -------
+         None if not found."""
         return self.axes.get(id)
 
     def getGrid(self, id):
-        "Get the grid object with the given id. Returns None if not found."
+        """Get the grid object with the given id.
+
+         Returns
+         -------
+         None if not found."""
         return self.grids.get(id)
 
     def __repr__(self):
         return "<Dataset: '%s', URI: '%s', mode: '%s', status: %s>" % (
             self.id, self.uri, self.mode, self._status_)
+
 
 # internattr.add_internal_attribute (Dataset, 'datapath',
 # 'variables',
@@ -1504,37 +1528,36 @@ class CdmsFile(CdmsObj, cuDataset):
 
         Parameters
         ----------
-        name: str
-            is the string name of the Axis
-        ar:  numpy.ndarray/None
-            is the 1-D data array, or None for an unlimited axis
-        unlimited: (int/True/False)
-            True/0 designate that the axis as unlimited.
+        name : str is the string name of the Axis
+
+        ar :  numpy.ndarray/None is the 1-D data array, or None for an unlimited axis
+
+        unlimited : (int/True/False) True/0 designate that the axis as unlimited.
 
         Returns
         -------
-            an axis object (cdms2.axis.FileAxis).
+        an axis object (cdms2.axis.FileAxis).
         """
         if self._status_ == "closed":
             raise CDMSError(FileWasClosed + self.id)
         cufile = self._file_
         if ar is None or (unlimited == 1 and getNetcdfUseParallelFlag() == 0):
-            cufile.createDimension(name, None)
+            cufile.createDimension(str(name), None)
             if ar is None:
                 typecode = numpy.dtype(numpy.float).char
             else:
                 typecode = ar.dtype.char
         else:
-            cufile.createDimension(name, len(ar))
+            cufile.createDimension(str(name), len(ar))
             typecode = ar.dtype.char
 
         # Compatibility: revert to old typecode for cdunif
 #        typecode = typeconv.oldtypecodes[typecode]
-        cuvar = cufile.createVariable(name, typecode, (name,))
+        cuvar = cufile.createVariable(str(name), typecode, (str(name),))
 
         # Cdunif should really create this extra dimension info:
         #   (units,typecode,filename,varname_local,dimension_type,ncid)
-        cufile.dimensioninfo[name] = ('', typecode, name, '', 'global', -1)
+        cufile.dimensioninfo[str(name)] = ('', typecode, str(name), '', 'global', -1)
 
         # Note: like netCDF-3, cdunif does not support 64-bit integers.
         # If ar has dtype int64 on a 64-bit machine, cuvar will be a 32-bit int,
@@ -1554,18 +1577,16 @@ class CdmsFile(CdmsObj, cuDataset):
 
         Parameters
         ----------
-            name:
-                is the string name of the axis.
-            axislen:
-                is the integer length of the axis.
+        name : is the string name of the axis.
+
+        axislen : is the integer length of the axis.
 
         Returns
         -------
-            axis:
-                file axis whose id is name (cdms2.axis.FileVirtualAxis)
+        axis : file axis whose id is name (cdms2.axis.FileVirtualAxis)
 
-        Note
-        ----
+        Notes
+        -----
         For netCDF output, this just creates a dimension without
         the associated coordinate array. On reads the axis will look like
         an axis of type float with values [0.0, 1.0, ..., float(axislen-1)].
@@ -1574,10 +1595,10 @@ class CdmsFile(CdmsObj, cuDataset):
         if self._status_ == "closed":
             raise CDMSError(FileWasClosed + self.id)
         cufile = self._file_
-        cufile.createDimension(name, axislen)
-        cufile.dimensioninfo[name] = ('', 'f', name, '', 'global', -1)
-        axis = FileVirtualAxis(self, name, axislen)
-        self.axes[name] = axis
+        cufile.createDimension(str(name), axislen)
+        cufile.dimensioninfo[str(name)] = ('', 'f', str(name), '', 'global', -1)
+        axis = FileVirtualAxis(self, str(name), axislen)
+        self.axes[str(name)] = axis
         return axis
 
     # Copy axis description and data from another axis
@@ -1587,20 +1608,19 @@ class CdmsFile(CdmsObj, cuDataset):
 
         Parameters
         ----------
-            axis:
-                axis to copy (cdms2.axis.FileAxis/cdms2.axis.FileVirtualAxis)
-            newname: (None/str)
-                new name for axis (default None)
-            unlimited: (int/True/False)
-                unlimited dimension (default 0)
-            index: (int/None)
-                (default None)
-            extbounds: (numpy.ndarray)
-                new bounds to use bounds (default None)
+        axis : axis to copy (cdms2.axis.FileAxis/cdms2.axis.FileVirtualAxis)
+
+        newname : (None/str) new name for axis (default None)
+
+        unlimited : (int/True/False) unlimited dimension (default 0)
+
+        index : (int/None) (default None)
+
+        extbounds : (numpy.ndarray) new bounds to use bounds (default None)
 
         Returns
         --------
-            copy of input axis (cdms2.axis.FileAxis/cdms2.axis.FileVirtualAxis)
+        copy of input axis (cdms2.axis.FileAxis/cdms2.axis.FileVirtualAxis)
         """
         if newname is None:
             newname = axis.id
@@ -1662,25 +1682,23 @@ class CdmsFile(CdmsObj, cuDataset):
         """
         Create an implicit rectilinear grid. lat, lon, and mask are objects. order and type are strings.
 
-
         Parameters
         ----------
-            id: (str)
-                 grid name (default 0)
-            lat: (numpy.ndarray)
-                 latitude array (default 1)
-            lon: (numpy.ndarray)
-                 longitude array (default 2)
-            order: (str)
-                 order (default 3)
-            type: (str)
-                 grid type (defalut `generic`)
-            mask: (None/numpy.ndarray)
-                 mask (default None)
+        id : (str) grid name (default 0)
+
+        lat : (numpy.ndarray) latitude array (default 1)
+
+        lon : (numpy.ndarray) longitude array (default 2)
+
+        order : (str) order (default 3)
+
+        type : (str) grid type (defalut `generic`)
+
+        mask : (None/numpy.ndarray) mask (default None)
 
         Returns
         -------
-            grid (cdms2.grid.FileRectGrid)
+        grid (cdms2.grid.FileRectGrid)
 
         """
         grid = FileRectGrid(self, id, lat, lon, order, type, mask)
@@ -1696,14 +1714,15 @@ class CdmsFile(CdmsObj, cuDataset):
 
         Parameters
         ----------
-            newname: (str/None)
-                new name for grid (default None)
-            grid:
-                file grid (cdms2.grid.FileRectGrid/cdms2.hgrid.FileCurveGrid/cdms2.gengrid.FileGenericGrid)
+        newname : (str/None) new name for grid (default None)
+
+        grid : file grid
+               (cdms2.grid.FileRectGrid/cdms2.hgrid.FileCurveGrid/cdms2.gengrid.FileGenericGrid)
 
         Returns
         -------
-            file grid (cdms2.grid.FileRectGrid/cdms2.hgrid.FileCurveGrid/cdms2.gengrid.FileGenericGrid)
+        file grid
+        (cdms2.grid.FileRectGrid/cdms2.hgrid.FileCurveGrid/cdms2.gengrid.FileGenericGrid)
 
         """
         if newname is None:
@@ -1757,22 +1776,22 @@ class CdmsFile(CdmsObj, cuDataset):
 
         Parameters
         ----------
-        name:
-            The string name of the Variable
-        datatype:
-            A CDMS datatype or numpy typecode
-        axesOrGrids:
-            is a list of axes, grids.
-        fill_value:
-            fill_value (cast into data type).
 
-        Note
-        ----
-        This should be generalized to allow subintervals of axes and/or grids).
+        name : The string name of the Variable
+
+        datatype : A CDMS datatype or numpy typecode
+
+        axesOrGrids : is a list of axes, grids.
+
+        fill_value : fill_value (cast into data type).
+
+        Notes
+        -----
+        This should be generalized to allow subintervals of axes and/or grids.
 
         Returns
         -------
-            Return a variable object (cdms2.fvariable.FileVariable).
+        Return a variable object (cdms2.fvariable.FileVariable.
         """
         if self._status_ == "closed":
             raise CDMSError(FileWasClosed + self.id)
@@ -1786,10 +1805,10 @@ class CdmsFile(CdmsObj, cuDataset):
         dimensions = []
         for obj in axesOrGrids:
             if isinstance(obj, FileAxis):
-                dimensions.append(obj.id)
+                dimensions.append(str(obj.id))
             elif isinstance(obj, FileRectGrid):
                 dimensions = dimensions + \
-                    [obj.getAxis(0).id, obj.getAxis(1).id]
+                    [str(obj.getAxis(0).id), str(obj.getAxis(1).id)]
             else:
                 raise InvalidDomain
 
@@ -1797,7 +1816,7 @@ class CdmsFile(CdmsObj, cuDataset):
             # Compatibility: revert to old typecode for cdunif
             #            numericType = typeconv.oldtypecodes[numericType]
             numericType = numpy.dtype(numericType).char
-            cuvar = cufile.createVariable(name, numericType, tuple(dimensions))
+            cuvar = cufile.createVariable(str(name), numericType, tuple(dimensions))
         except Exception as err:
             print(err)
             raise CDMSError("Creating variable " + name)
@@ -1814,21 +1833,23 @@ class CdmsFile(CdmsObj, cuDataset):
     # is None, search the dataset and all objects contained in it.
     def searchPattern(self, pattern, attribute, tag):
         """
-        Search for a pattern in a string-valued attribute. If attribute is None, search all string attributes.
+        Search for a pattern in a string-valued attribute. If attribute is None, search all
+        string attributes.
+
         If tag is not None, it must match the internal node tag.
 
         Parameters
         ----------
-            pattern:
-                expression pattern
-            attribute:
-                attribute name
-            tag:
-                node tag
+
+        pattern : expression pattern
+
+        attribute : attribute name
+
+        tag : node tag
 
         Returns
         -------
-            list of match pattern
+        list of match pattern
         """
         resultlist = []
         if tag is not None:
@@ -1861,17 +1882,16 @@ class CdmsFile(CdmsObj, cuDataset):
 
         Parameters
         ----------
-        pattern:
-            String expression.
-        attribute:
-            Attribute Name. If `None` search all attributre.
-        tag:
-            node tag, if `cdmsFile` only match the current dataset otherwise match
-            all object matching the tag.
+        pattern : String expression.
+
+        attribute : Attribute Name. If `None` search all attributre.
+
+        tag : node tag, if `cdmsFile` only match the current dataset otherwise match
+              all object matching the tag.
 
         Returns
         -------
-            list of match patterns.
+        list of match patterns.
         """
         resultlist = []
         if tag is not None:
@@ -1906,17 +1926,16 @@ class CdmsFile(CdmsObj, cuDataset):
 
         Parameters
         ----------
-        predicate:
-             function use as predicate
-        tag:
-             node tag.
+        predicate : function use as predicate
+
+        tag : node tag.
 
         Returns
         -------
-           List containing a single instance
-               [self] if the predicate is true and either tag is None or matches the object node tag.
+        List containing a single instance [self] if the predicate is true and either
+        tag is None or matches the object node tag.
 
-           Empty list If the predicate returns false.
+        Empty list If the predicate returns false.
         """
         resultlist = []
         if tag is not None:
@@ -1955,31 +1974,31 @@ class CdmsFile(CdmsObj, cuDataset):
 
         Parameters
         ----------
-        var:
-            variable to copy (cdms2.tvariable.TransientVariable or cdms2.fvariable.FileVariable)
-        attributes:
-            A dictionary of attributes. Default is var.attributes.
-        axes:
-            The list of axis objects. Default is var.getAxisList()
-        extbounds:
-            Bounds of the (portion of) the extended dimension being written.
-        id or newname:
-            String identifier of the new variable.
-        extend:
+        var : variable to copy (cdms2.tvariable.TransientVariable or cdms2.fvariable.FileVariable)
+
+        attributes : A dictionary of attributes. Default is var.attributes.
+
+        axes : The list of axis objects. Default is var.getAxisList()
+
+        extbounds : Bounds of the (portion of) the extended dimension being written.
+
+        id or newname : String identifier of the new variable.
+
+        extend :
             * 1 define the first dimension as the unlimited dimension.
             * 0 do not define an unlimited dimension. The default is the define
                 the first dimension as unlimited only if it is a time dimension.
-        fill_value:
-            The missing value flag.
-        index:
-            The extended dimension index for writting. The default index is determined
-            by lookup relative to the existing extended dimension.
-        grid:
-            The variable grid.  `none` the value of var.getGrid() will used.
+
+        fill_value : The missing value flag.
+
+        index : The extended dimension index for writting. The default index is determined
+                by lookup relative to the existing extended dimension.
+
+        grid : The variable grid.  `none` the value of var.getGrid() will used.
 
         Returns
         -------
-            file variable (cdms2.fvariable.FileVariable)
+        file variable (cdms2.fvariable.FileVariable)
         """
         if newname is None:
             newname = var.id
@@ -2081,10 +2100,12 @@ class CdmsFile(CdmsObj, cuDataset):
 
         # Create the new variable
         datatype = cdmsNode.NumericToCdType.get(var.typecode())
-        newvar = self.createVariable(newname, datatype, axislist)
+        newvar = self.createVariable(str(newname), datatype, axislist)
         for attname, attval in list(attributes.items()):
             if attname not in ["id", "datatype", "parent"]:
-                setattr(newvar, attname, attval)
+                if isinstance(attval, string_types):
+                    attval = str(attval)
+                setattr(newvar, str(attname), attval)
                 if (attname == "_FillValue") or (attname == "missing_value"):
                     setattr(newvar, "_FillValue", attval)
                     setattr(newvar, "missing_value", attval)
@@ -2098,39 +2119,43 @@ class CdmsFile(CdmsObj, cuDataset):
               extend=None, fill_value=None, index=None, typecode=None, dtype=None, pack=False):
         """Write var to the file.
 
-        Note
-        ----
+        Notes
+        -----
         If the variable is not yet defined in the file, a definition is created.
         By default, the time dimension of the variable is defined as the
         `extended dimension` of the file. The function returns the corresponding file variable.
 
         Parameters
         ----------
-          var:
-              variable to copy.
-          attributes:
-              The attribute dictionary for the variable. The default is var.attributes.
-          axes:
-              The list of file axes comprising the domain of the variable. The default is to copy var.getAxisList().
-          extbounds:
-              The extended dimension bounds. Defaults to var.getAxis(0).getBounds().
-          id:
-              The variable name in the file. Default is var.id.
-          extend:
-              * 1 causes the first dimension to be `extensible` iteratively writeable.  The default is None,
-                in which case the first dimension is extensible if it is time.
+
+        var : variable to copy.
+
+        attributes : The attribute dictionary for the variable. The default is var.attributes.
+
+        axes : The list of file axes comprising the domain of the variable. The default is to
+               copy var.getAxisList().
+
+        extbounds : The extended dimension bounds. Defaults to var.getAxis(0).getBounds().
+
+        id : The variable name in the file. Default is var.id.
+
+        extend :
+              * 1 causes the first dimension to be `extensible` iteratively writeable.
+                The default is None, in which case the first dimension is extensible if it is time.
               * 0 to turn off this behaviour.
-          fill_value: is the missing value flag.
-          index:
-              The extended dimension index to write to. The default index is determined b
-              lookup relative to the existing extended dimension.
-          dtype:
-              The numpy dtype.
-          typecode:
-              Deprecated, for backward compatibility only
+
+        fill_value : is the missing value flag.
+
+        index : The extended dimension index to write to. The default index is determined b
+                lookup relative to the existing extended dimension.
+
+        dtype : The numpy dtype.
+
+        typecode : Deprecated, for backward compatibility only
+
         Returns
         -------
-            File variable
+        File variable
         """
         if _showCompressWarnings:
             if (Cdunif.CdunifGetNCFLAGS("shuffle") != 0) or (Cdunif.CdunifGetNCFLAGS(
@@ -2274,19 +2299,20 @@ class CdmsFile(CdmsObj, cuDataset):
         """Tell obj to write itself to self (already open for writing), using its
            writeg method (AbstractCurveGrid has such a method, for example).
 
-           Note
-           ----
+           Notes
+           -----
            If `writeg` is not available, writeToFile will be used.
            If `writeToFile` is also not available, then `self.write(obj)` will be called to try to write obj as
            a variable.
 
            Parameters
            ----------
-              obj:
-                 object containing `writeg`, `writeToFile` or `write` method.
+           obj : object containing `writeg`, `writeToFile` or `write` method.
+
            Returns
            -------
-              Nothig is returned. """
+           Nothing is returned.
+       """
         # This method was formerly called writeg and just wrote an
         # AbstractCurveGrid.
         if (hasattr(obj, 'writeg') and callable(getattr(obj, 'writeg'))):
@@ -2302,28 +2328,28 @@ class CdmsFile(CdmsObj, cuDataset):
 
         Parameters
         ----------
-        id: str
-            id of the variable to get
+        id : str id of the variable to get
 
         Returns
         -------
         variable  (cdms2.fvariable.FileVariable/None)
-            file variable
+
+        file variable
 
         """
         return self.variables.get(id)
 
     def getVariables(self, spatial=0):
         """Get a list of variable objects.
+
         Parameters
         ----------
-            spatial:
-                If spatial=1 or True, only return those axes defined on latitude
+        spatial : If spatial=1 or True, only return those axes defined on latitude
                 or longitude, excluding weights and bounds
 
         Returns
         -------
-            file variable.
+        file variable.
 """
         retval = list(self.variables.values())
         if spatial:
@@ -2340,11 +2366,11 @@ class CdmsFile(CdmsObj, cuDataset):
 
         Parameters
         ----------
-            id:
-                id of the axis to get
+        id : id of the axis to get
+
         Returns
         --------
-            file axis
+        file axis
         """
         return self.axes.get(id)
 
@@ -2354,12 +2380,11 @@ class CdmsFile(CdmsObj, cuDataset):
 
         Parameters
         ----------
-            id:
-                id of the grid to get
+        id : id of the grid to get
 
         Returns
         -------
-            file axis
+        file axis
         """
         return self.grids.get(id)
 
@@ -2368,12 +2393,11 @@ class CdmsFile(CdmsObj, cuDataset):
 
         Parameters
         ----------
-            n:
-               bound id (bound_%d)
+        n : bound id (bound_%d)
 
         Returns
         -------
-            bounds axis
+        bounds axis
         """
         if boundid is None:
             if n == 2:

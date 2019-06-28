@@ -195,13 +195,13 @@ def mapLinearIntersection(xind, yind, iind,
                           aMinusEps, aPlusEps, bPlusEps, bMinusEps,
                           boundLeft, nodeSubI, boundRight):
     """
+    Map Linear Intersection
+
     Parameters
     ----------
-    xind:
-       'c' if (a,b) is closed on the left, 'o' if open,
-    yind:
-        same for right endpoint
-j
+    xind : c' if (a,b) is closed on the left, 'o' if open,
+    yind : same for right endpoint j
+
     Returns
     -------
     True if the coordinate interval (a,b) intersects the node nodeSubI or cell
@@ -217,7 +217,6 @@ j
     See Also
     --------
     mapLinearExt
-
     """
 
     if(iind == 'n' or iind == 'e'):
@@ -608,16 +607,15 @@ def lookupArray(ar, value):
 
     Parameters
     ----------
-    ar:
-        Input array
-    value:
-        Value to search
+    ar : Input array
+    value : Value to search
+
     Returns
     -------
-        index:
-            * ar is monotonically increasing.
-                * value <= ar[index], index==0..len(ar)-1
-                * value > ar[index], index==len(ar)
+    index:
+        * ar is monotonically increasing.
+        * value <= ar[index], index==0..len(ar)-1
+            * value > ar[index], index==len(ar)
             * ar is monotonically decreasing:
                 * value >= ar[index], index==0..len(ar)-1
                 * value < ar[index], index==len(ar)
@@ -667,14 +665,14 @@ def isSubsetVector(vec1, vec2, tol):
 
 def isOverlapVector(vec1, vec2, atol=1.e-8):
     """
+    Is Overlap Vector
+
     Parameters
     ----------
-    vec1:
-        Input arrays to compare
-    vec2:
-        Input arrays to compare
-    atol: float, optional
-        Absolute tolerance, The absolute differenc is equal to **atol** Default is 1e-8
+    vec1 : Input arrays to compare
+    vec2 : Input arrays to compare
+    atol : float, optional
+    Absolute tolerance, The absolute differenc is equal to **atol** Default is 1e-8
 
     Returns
     -------
@@ -700,9 +698,11 @@ def isOverlapVector(vec1, vec2, atol=1.e-8):
 
 def allclose(ax1, ax2, rtol=1.e-5, atol=1.e-8):
     """
+    All close
+
     Parameters
     ----------
-    ax1, ax2:  array_like
+    ax1, ax2 : array_like
 
     Returns
     -------
@@ -710,9 +710,7 @@ def allclose(ax1, ax2, rtol=1.e-5, atol=1.e-8):
         True if all elements of axes ax1 and ax2 are close,
         in the sense of numpy.ma.allclose.
 
-    See Also
-    --------
-    all, any
+    See Also : all, any
 
     Examples
     --------
@@ -820,9 +818,9 @@ class AbstractAxis(CdmsObj):
             p.to(units)
             return True
         except ImportError:
-            import warnings
-            warnings.warn(
-                "genutil module not present, was not able to determine if axis is level based on units")
+            # import warnings
+            # warnings.warn(
+            #     "genutil module not present, was not able to determine if axis is level based on units")
             pass
         except Exception:
             pass
@@ -1067,7 +1065,6 @@ class AbstractAxis(CdmsObj):
 
         return iscircle
 
-
 # mfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmf
 #
 # mf 20010405 -- test if an transient Axis is REALLY circular
@@ -1078,8 +1075,8 @@ class AbstractAxis(CdmsObj):
     # An axis is defined as circular if:
     # (1) self.topology=='circular', or
     # (2) self.topology is undefined, and the axis is a longitude
-    def isCircular(self):
 
+    def isCircular(self):
         if hasattr(self, 'realtopology'):
             if self.realtopology == 'circular':
                 return True
@@ -1253,7 +1250,9 @@ class AbstractAxis(CdmsObj):
         same meaning for the right-hand point. Set cycle to a nonzero value
         to force wraparound.
 
-        Returns the corresponding index interval (i,j), where i<j, indicating
+        Returns
+        -------
+        The corresponding index interval (i,j), where i<j, indicating
         the half-open index interval [i,j), or None if the intersection is empty.
 
         For an axis which is circular (self.topology == 'circular'), [i,j)
@@ -1263,11 +1262,12 @@ class AbstractAxis(CdmsObj):
         (2) if j>N, the interval wraps around, and is equivalent to the
             two consecutive intervals [i,N), [0,j-N)
 
-        For example, if the vector is [0,2,4,...,358] of length 180,
-        and the coordinate interval is [-5,5), the return index interval is
-        [178,183). This is equivalent to the two intervals [178,180) and [0,3).
+        Example:
+          if the vector is [0,2,4,...,358] of length 180,and the coordinate
+          interval is [-5,5), the return index interval is[178,183). This is
+          equivalent to the two intervals [178,180) and [0,3).
 
-.. note::
+         Note:
            if the interval is interior to the axis, but does not span any axis element,
            a singleton (i,i+1) indicating an adjacent index is returned.
         """
@@ -1275,7 +1275,6 @@ class AbstractAxis(CdmsObj):
         j = min(j, i + len(self))
         # i=i-1
         return (i, j)
-
 
 # mfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmf
 #
@@ -1708,7 +1707,9 @@ class AbstractAxis(CdmsObj):
         else:
             mycopy = createAxis(self[:])
         mycopy.id = self.id
-        mycopy.__dict__.update(self.__dict__.copy())
+        mydict = self.__dict__
+        newdict = {k: mydict[k] for k in mydict if k not in ['_data_']}
+        mycopy.__dict__.update(newdict)
         mycopy._obj_ = None  # Erase Cdfile object if exist
         try:
             mycopy.setBounds(b, isGeneric=isGeneric[0])
@@ -1895,9 +1896,9 @@ class TransientAxis(AbstractAxis):
 
     def __init__(self, data, bounds=None, id=None,
                  attributes=None, copy=0, genericBounds=False):
-        '''
+        """
         genericBounds specify if bounds were generated (True) or read from a file (False)
-        '''
+        """
         AbstractAxis.__init__(self, None, None)
         if id is None:
             TransientAxis.axis_count = TransientAxis.axis_count + 1
@@ -2438,25 +2439,25 @@ def axisMatchAxis(axes, specifications=None, omit=None, order=None):
 
      Parameters
      ----------
-     specifications:
+     specifications :
          *  is None, include all axes less the omitted ones.
 
          *  Individual specifications must be integer indices into axes or
             matching criteria as detailed in axisMatches.
 
-     omit:
+     omit :
          *  is None, do not omit any axis.
 
          *  Individual specifications must be integer indices into axes or
             matching criteria as detailed in axisMatches.
 
-     order:
+     order :
          *  A string containing the symbols `t,x,y,z` or `-`.  If a `-` is
             given, any elements of the result not chosen otherwise are filled
             in from left to right with remaining candidates.
 
-     Return
-     ------
+     Returns
+     -------
      A list of axes that match the specification omitting any axes that matches
      an omit specification.
 
@@ -2473,25 +2474,25 @@ def axisMatchIndex(axes, specifications=None, omit=None, order=None):
 
      Parameters
      ----------
-     specifications:
+     specifications :
          *  is None, include all axes less the omitted ones.
 
          *  Individual specifications must be integer indices into axes or
             matching criteria as detailed in axisMatches.
 
-     omit:
+     omit :
          *  is None, do not omit any axis.
 
          *  Individual specifications must be integer indices into axes or
             matching criteria as detailed in axisMatches.
 
-     order:
+     order :
          *  A string containing the symbols `t,x,y,z` or `-`.  If a `-` is
             given, any elements of the result not chosen otherwise are filled
             in from left to right with remaining candidates.
 
-     Return
-     ------
+     Returns
+     -------
      A list of axis' indices which match the specification omitting any axes that matches an omit specification.
 
      Axes are returned in the order they occur in the axes argument unless order is given.
@@ -2607,19 +2608,19 @@ def axisMatchIndex(axes, specifications=None, omit=None, order=None):
 
 def axisMatches(axis, specification):
     """
+       Axis Matches
+
        Parameters
        ----------
-       axis:
-           See note below
-       specifications:
-           See note below
+       axis : See note below
+       specifications : See note below
 
        Returns
        -------
        1 or 0 depending on whether axis matches the specification.
 
-       Note
-       ----
+       Notes
+
        Specification must be one of:
 
        #. a string representing an axis id or one of the keywords time,
@@ -2677,16 +2678,14 @@ def concatenate(axes, id=None, attributes=None):
 
     Parameters
     ----------
-        axes:
-            Axes to concatenate
-        id:
-            New axis identification (default None)
-        attributes:
-            Attributes to attached to the new Axis
+    axes : Axes to concatenate
+    id : New axis identification (default None)
+    attributes : Attributes to attached to the new Axis
 
     Returns
     -------
-        Transient axis."""
+    Transient axis.
+    """
 
     data = numpy.ma.concatenate([ax[:] for ax in axes])
     boundsArray = [ax.getBounds() for ax in axes]
@@ -2699,15 +2698,15 @@ def concatenate(axes, id=None, attributes=None):
 
 def take(ax, indices):
     """Take elements form an array along an axis
+
     Parameters
     ----------
-        ax:
-            The source array.
-        indices:
-            The indices of the values to extract.
+    ax : The source array.
+    indices : The indices of the values to extract.
+
     Returns
     -------
-    axis: TransientAxis
+    axis : TransientAxis
         The return array has the same type of ax.
     """
 

@@ -35,10 +35,8 @@ charref = re.compile('&#(?P<char>[0-9]+[^0-9]|x[0-9a-fA-F]+[^0-9a-fA-F])')
 space = re.compile(_S + '$')
 newline = re.compile('\n')
 
-attrfind = re.compile(
-    _S + '(?P<name>' + _Name + ')'
-    '(' + _opS + '=' + _opS +
-    '(?P<value>' + _QStr + '|[-a-zA-Z0-9.:+*%?!\(\)_#=~]+))?')
+attrfind = re.compile(_S + '(?P<name>' + _Name + ')' '(' + _opS + '=' + _opS +
+                           '(?P<value>' + _QStr + '|[-a-zA-Z0-9.:+*%?!\(\)_#=~]+))?')
 starttagopen = re.compile('<' + _Name)
 starttagend = re.compile(_opS + '(?P<slash>/?)>')
 starttagmatch = re.compile('<(?P<tagname>' + _Name + ')'
@@ -145,6 +143,9 @@ class XMLParser:
 
     # Interface -- reset this instance.  Loses all unprocessed data
     def reset(self):
+        """
+        Reset this instance.  Loses all unprocessed data
+        """
         self.rawdata = ''
         self.stack = []
         self.nomoretags = 0

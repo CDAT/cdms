@@ -1918,9 +1918,9 @@ class TransientAxis(AbstractAxis):
                 self._data_ = numpy.array(data[:])
         elif isinstance(data, numpy.ma.MaskedArray):
             if numpy.ma.getmask(data) is not numpy.ma.nomask:
-                raise CDMSError(
-                    'Cannot construct an axis with a missing value.')
-            data = data.data
+                data = data.filled()
+            else:
+                data = data.data
             if copy == 0:
                 self._data_ = data
             else:

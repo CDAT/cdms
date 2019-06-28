@@ -33,6 +33,10 @@ class FileVariable(DatasetVariable):
                 self.attributes['missing_value'] = numpy.ma.default_fill_value(
                     self)
 
+        # needed for dask 2.0.0
+        self.__dict__['ndim'] = self.rank()
+        self.attributes['ndim'] = self.rank()
+
         val = self.__cdms_internals__ + ['name_in_file', ]
         self.___cdms_internals__ = val
 

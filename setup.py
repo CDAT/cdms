@@ -39,7 +39,6 @@ try:
     os.environ["CC"]=mpicc
     os.environ["CFLAGS"]="-w -g -O0"
 except:
-    os.environ["CFLAGS"]="-w -g -O0"
     pass
 
 libs_pth = os.path.join(sys.prefix,"lib")

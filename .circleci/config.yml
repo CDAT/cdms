@@ -98,10 +98,10 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - macos_py2-2019-05-29
+            - macos_py2-2019-07-03
       - run: *create_conda_env
       - save_cache:
-          key: macos_py2-2019-05-29
+          key: macos_py2-2019-07-03
           paths: /Users/distiller/miniconda
       - run: *setup_cdms
       - run: *run_cdms_tests

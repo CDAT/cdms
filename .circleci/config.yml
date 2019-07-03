@@ -93,15 +93,15 @@ jobs:
     environment:
       WORKDIR: "test_macos_cdms_py2"
       PY_VER: "py2"
-      CONDA_COMPILER: "gcc"
+      CONDA_COMPILER: "clang_osx-64"
     steps:
       - checkout
       - restore_cache:
           keys:
-            - macos_py2-2019-07-03
+            - macos_py2-2019-07-04
       - run: *create_conda_env
       - save_cache:
-          key: macos_py2-2019-07-03
+          key: macos_py2-2019-07-04
           paths: /Users/distiller/miniconda
       - run: *setup_cdms
       - run: *run_cdms_tests
@@ -118,15 +118,15 @@ jobs:
     environment:
       WORKDIR: "test_macos_cdms_py3"
       PY_VER: "py3"
-      CONDA_COMPILER: "gcc"
+      CONDA_COMPILER: "clang_osx-64"
     steps:
       - checkout
       - restore_cache:
           keys:
-            - macos_py3-2019-07-03
+            - macos_py3-2019-07-04
       - run: *create_conda_env
       - save_cache:
-          key: macos_py3-2019-07-03
+          key: macos_py3-2019-07-04
           paths: /Users/distiller/miniconda
       - run: *setup_cdms
       - run: *run_cdms_tests
@@ -161,6 +161,7 @@ jobs:
     docker:
       - image: cdoutrix/cdat:cdms-devs-3
     environment:
+      CONDA_COMPILER: "gcc_linux-64"
       PY_VER: "py3"
       COVERAGE: "-c /root/project/tests/coverage.json"
     steps:

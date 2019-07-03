@@ -6,7 +6,7 @@ aliases:
     name: create_conda_env
     environment:
        CHANNELS: "-c cdat/label/nightly -c conda-forge"
-       PKGS: "pytest esmpy libcf distarray cdtime libcdms cdat_info testsrunner numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient lazy-object-proxy"
+       PKGS: "pytest esmpy libcf distarray cdtime libcdms cdat_info testsrunner numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient lazy-object-proxy libblas libcblas"
     command: |
       if [ -d ${HOME}/miniconda ]; then
         export PATH=$HOME/miniconda/bin:$PATH

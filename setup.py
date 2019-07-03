@@ -39,7 +39,13 @@ try:
     os.environ["CC"]=mpicc
     os.environ["CFLAGS"]="-w -g -O0"
 except:
-    pass
+    # ------------------------------------------------------
+    # Only for circleci we need to reset the clang root path
+    # ------------------------------------------------------
+    if os.getenv("HOME") in ['/Users/distiller']:
+      os.environ["CFLAGS"]="-isysroot / -Wl,-syslibroot / -w -g -O0"
+    else:
+      pass
 
 libs_pth = os.path.join(sys.prefix,"lib")
 setup (name = "cdms2",

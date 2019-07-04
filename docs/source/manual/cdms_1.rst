@@ -4,12 +4,15 @@ Introduction
 Overview
 ^^^^^^^^
 
+.. highlight:: python
+
+
 The Community Data Management System is an object-oriented data management
 system, specialized for organizing multidimensional, gridded data used
-in climate analysis and simulation. 
+in climate analysis and simulation.
 
 CDMS is implemented as part of the Climate Data
-Analysis Tool (CDAT), which uses the Python language. The examples in
+Analysis Tool [CDAT](https://cdat.llnl.gov/), which uses the Python language. The examples in
 this chapter assume some familiarity with the language and the Python
 Numpy module (http://www.numpy.org). A number of excellent tutorials
 on Python are available in books or on the Internet. For example, see
@@ -18,28 +21,21 @@ the `Python Foundation's homepage <https://python.org>`__.
 Variables
 ^^^^^^^^^
 
-The basic unit of computation in CDMS is the variable. A variable is
-essentially a multidimensional data array, augmented with a domain, a
-set of attributes, and optionally a spatial and/or temporal coordinate
-system (see `Coordinate Axes <#coordinate-axes>`__). As a data array, a variable can
-be sliced to obtain a portion of the data, and can be used in arithmetic
-computations. For example, if ``u`` and ``v`` are variables representing
-the eastward and northward components of wind speed, respectively, and
-both variables are functions of time, latitude, and longitude, then the
-velocity for time 0 (first index) can be calculated as:
+The basic unit of computation in CDMS is the variable. A variable is essentially a multidimensional data  array,
+augmented with a domain, a set of attributes, and optionally a spatial and/or temporal coordinate system
+(see `Coordinate Axes <#coordinate-axes>`__). As a data array, a variable can be sliced to obtain a portion of the 
+data, and can be used in arithmetic computations. For example, if ``u`` and ``v`` are variables representing
+the eastward and northward components of wind speed, respectively, and both variables are functions of time,
+latitude, and longitude, then the velocity for time 0 (first index) can be calculated as:
 
-
-.. highlight:: python
-
-..
+::
 
    >>> # wget "http://cdat.llnl.gov/cdat/sample_data/clt.nc"
    >>> f1=cdms2.open("clt.nc")
    >>> u = f1('u')
    >>> v = f1('v')
-   >>> from cdms2 import MV
-
-   >>> vel = MV.sqrt(u[0]**2 + v[0]**2)
+   >>> from cdms2 import MV2
+   >>> vel = MV2.sqrt(u[0]**2 + v[0]**2)
 
 This illustrates several points:
 
@@ -62,11 +58,16 @@ File I/O
 ^^^^^^^^
 
 A variable can be obtained from a file or collection of files, or can be
-generated as the result of a computation. Files can be in any of the
-self- describing formats netCDF, HDF, GrADS/GRIB (GRIB with a GrADS
-control file), or PCMDI DRS. (HDF and DRS support is optional, and is
-configured at the time CDAT is installed.) For instance, to read data
-from file sample.nc into variable u:
+generated as the result of a computation.
+
+Files can be in any of theself- describing formats:
+
+    netCDF, HDF, GrADS/GRIB (GRIB with a GrADS control file),
+    or PCMDI DRS.
+
+**Note:**    (HDF and DRS support is optional, and is configured at the time CDAT is installed.)
+
+For instance, to read datafrom file sample.nc into variable u:
 
 .. testsetup:: *
 
@@ -78,7 +79,7 @@ from file sample.nc into variable u:
    f2 = cdms2.open(cdat_info.get_sampledata_path()+'/geos5-sample.nc')
    u = f('u')
    v = f('v')
-   smallvar=MV2.reshape(MV2.arange(20),(4,5),id='small variable').astype(MV2.float32) 
+   smallvar=MV2.reshape(MV2.arange(20),(4,5),id='small variable').astype(MV2.float32)
    largevar=MV2.reshape(MV2.arange(400),(20,20),id="large variable").astype(MV2.float32)
    fnames = [ 'clt.nc', 'geos-sample', 'xieArkin-T42.nc', 'remap_grid_POP43.nc', 'remap_grid_T42.nc', 'rmp_POP43_to_T42_conserv.n', 'rmp_T42_to_POP43_conserv.nc', 'ta_ncep_87-6-88-4.nc', 'rmp_T42_to_C02562_conserv.nc' ]
    for file in fnames:
@@ -94,7 +95,7 @@ from file sample.nc into variable u:
        os.remove(file)
 
 
-..
+::
 
     >>> # wget "http://cdat.llnl.gov/cdat/sample_data/clt.nc"
     >>> f = cdms2.open('clt.nc')
@@ -104,20 +105,20 @@ Data can be read by index or by world coordinate values. The following
 reads the n-th timepoint of u (the syntax slice(i,j) refers to indices k
 such that i <= k < j):
 
-..
+::
 
    >>> n = 0
    >>> u0 = f('u',time=slice(n,n+1))
 
 To read ``u`` at time 1.:
 
-..
+::
 
    >>> u1 = f('u',time=1.)
 
 A variable can be written to a file with the write function:
 
-..
+::
 
    >>> g = cdms2.open('sample2.nc','w')
    >>> g.write(u) # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
@@ -145,7 +146,7 @@ latitude, longitude). This indicates the order of the dimensions, with
 the slowest-varying dimension listed first (time). The domain may be
 accessed with the ``getAxisList()`` method:
 
-..
+::
 
    >>> u.getAxisList() # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
    [   id: time1
@@ -209,7 +210,7 @@ associated with a variable. The methods getLatitude, getLongitude,
 getLevel, and getTime return the associated coordinate axes. For
 example:
 
-..
+::
 
    >>> t = u.getTime()
    >>> print t[:]
@@ -224,10 +225,10 @@ As mentioned above, variables can have associated attributes ,
 name-value pairs. In fact, nearly all CDMS objects can have associated
 attributes, which are accessed using the Python dot notation:
 
-..
+::
 
   >>> u.units='m/s'
-  >>> print u.units 
+  >>> print u.units
   m/s
 
 Attribute values can be strings, scalars, or 1-D Numpy arrays.
@@ -240,14 +241,14 @@ written to an output file along with the variable. By default, when an
 attribute is set, it is treated as external. Every variable has a field
 attributes, a Python dictionary that defines the external attributes:
 
-..
+::
 
    >>> print u.attributes.keys()
    'name', 'title', 'tileIndex', 'date', 'source', 'time', 'units', 'type']
 
 The Python dir command lists the internal attribute names:
 
-..
+::
 
    >>> dir(u)
    ['T', '_FillValue', '_TransientVariable__domain', ..., 'view']
@@ -267,17 +268,17 @@ corresponding data array element is missing or invalid.
 Arithmetic operations in CDMS take missing data into account. The same
 is true of the functions defined in the cdms2.MV2 module. For example:
 
-..
+::
 
    >>> a = MV2.array([1,2,3]) # Create array a, with no mask
-   >>> b = MV2.array([4,5,6]) # Same for b  
+   >>> b = MV2.array([4,5,6]) # Same for b
    >>> a+b # variable_... array([5,7,9,]) # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
    variable_...
    masked_array(data = [5 7 9],
             mask = False,
-       fill_value = 999999)  
-   >>> 
-   >>> 
+       fill_value = 999999)
+   >>>
+   >>>
    >>> a[1]=MV2.masked # Mask the second value of a a.mask()
    >>> a.mask
    array([False,  True, False], dtype=bool)
@@ -286,8 +287,8 @@ is true of the functions defined in the cdms2.MV2 module. For example:
    masked_array(data = [5 -- 9],
             mask = [False  True False],
        fill_value = 999999)
-       
-       
+
+
 When data is read from a file, the result variable is masked if the file
 variable has a missing_value attribute. The mask is set to one for
 those elements equal to the missing value, zero elsewhere. If no such
@@ -299,7 +300,7 @@ variables ``missing_value`` attribute. The data and ``missing_value``
 attribute are then written to the file.
 
 Masking is covered in `Section 2.9 <cdms_2.html#id3>`__. See also the
-documentation of the Python Numpy and MA modules, on which ``cdms.MV``
+documentation of the Python Numpy and MA modules, on which ``cdms2.MV2``
 is based, at
 
 `https://www.numpy.org/ <https://www.numpy.org/>`__.
@@ -313,7 +314,7 @@ variables in CDMS:
 
 -  *file variable* is a variable associated with a single data file.
    Setting or referencing a file variable generates I/O operations.
--  A *dataset variable* is a variable associated with a collection of
+-  *dataset variable* is a variable associated with a collection of
    files. Reference to a dataset variable reads data, possibly from
    multiple files. Dataset variables are read-only.
 -  *transient variable* is an in-memory object not associated with a
@@ -324,13 +325,15 @@ Typical use of a file variables is to inquire information about the
 variable in a file without actually reading the data for the variables.
 A file variable is obtained by applying the slice operator ``[]``  to a file,
 passing the name of the variable, or by calling the getVariable
-function. Note that obtaining a file variable does not actually read the
+function.
+
+**Note** That obtaining a file variable does not actually read the
 data array:
 
-..
+::
 
    >>> u = f.getVariable('u') # or u=f['u']
-   >>> u.shape 
+   >>> u.shape
    (1, 2, 80, 97)
 
 File variables are also useful for fine-grained I/O. They behave like
@@ -344,8 +347,8 @@ file. Specifically:
 -  and calling a file variable like a function reads data associated
    with the variable:
 
-..
-  
+::
+
    >>> import os
    >>> os.system("cp clt.nc /tmp")
    0
@@ -353,7 +356,7 @@ file. Specifically:
    >>> uvar = f['u'] # Note square brackets
    >>> uvar.shape
    (1, 2, 80, 97)
-   >>> u0 = uvar[0] # Reads data from sample.nc 
+   >>> u0 = uvar[0] # Reads data from sample.nc
    >>> u0.shape
    (2, 80, 97)
    >>> uvar[1]=u0 # Writes data to sample.nc
@@ -365,26 +368,25 @@ file. Specifically:
 
 For transient variables, the data is printed only if the size of the array is less
 than the print limit . This value can be set with the function
-MV.set_print_limit to force the data to be printed:
+MV2.set_print_limit to force the data to be printed:
 
-..
-
+::
 
    >>> MV2.get_print_limit() # Current limit 1000
    1000
    >>> smallvar  # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
-    small variable
-    masked_array(data =
+   small variable
+   masked_array(data =
      [[  0.   1.   2.   3.   4.]
      [  5.   6.   7.   8.   9.]
      [ 10.  11.  12.  13.  14.]
      [ 15.  16.  17.  18.  19.]],
-                 mask =
+      mask =
      False,
            fill_value = 999999.0)
-   >>> MV2.set_print_limit(100) 
+   >>> MV2.set_print_limit(100)
    >>> largevar   # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
-   large variable  
+   large variable
    masked_array(data =
    [[   0.    1.    2. ...,   17.   18.   19.]
    [  20.   21.   22. ...,   37.   38.   39.]
@@ -398,10 +400,9 @@ MV.set_print_limit to force the data to be printed:
 
 The datatype of the variable is determined with the typecode function:
 
-..
+::
 
-
-  >>> u.typecode() 
+  >>> u.typecode()
   'f'
 
 Dataset Variables
@@ -430,7 +431,7 @@ A metafile can be generated with the command:
 
 The metafile **cdsample.xml** is then used like an ordinary data file:
 
-..
+::
 
    >>> import os
    >>> os.system("cdscan -x cdsample.xml [uv]*.nc")
@@ -441,7 +442,7 @@ The metafile **cdsample.xml** is then used like an ordinary data file:
    (3, 16, 32)
 
 Grids
-^^^^^^^^
+^^^^^
 
 A latitude-longitude grid represents the coordinate information
 associated with a variable. A grid encapsulates:
@@ -483,65 +484,56 @@ grid. Note that:
    lon ), each a two-dimensional coordinate axis.
 -  lat and lon each have domain ( y , x )
 
-..
+
+::
 
    >>> f = cdms2.open('sampleCurveGrid4.nc')
-   >>> 
-   >>>  
    >>> # lat and lon are coordinate axes, but are grouped with data variables
-   >>> f.variables.keys() 
-   ['lat', 'sample', 'bounds_lon', 'lon', 'bounds_lat']   
-   >>> 
+   >>> f.variables.keys()
+   ['lat', 'sample', 'bounds_lon', 'lon', 'bounds_lat']
    >>> # y and x are index coordinate axes
-   >>> f.axes.keys() 
-   ['nvert', 'x', 'y'] 
-   >>> 
+   >>> f.axes.keys()
+   ['nvert', 'x', 'y']
    >>> # Read data for variable sample
    >>> sample = f('sample')
-   >>> 
    >>> # The associated grid g is curvilinear
    >>> g = sample.getGrid()
-   >>> 
-   >>> # The domain of the variable consfigists of index axes
-   >>> sample.getAxisIds() 
+   >>> # The domain of the variable consists of index axes
+   >>> sample.getAxisIds()
    ['y', 'x']
-   >>> 
    >>> # Get the coordinate axes associated with the grid
    >>> lat = g.getLatitude() # or sample.getLatitude()
    >>> lon = g.getLongitude() # or sample.getLongitude()
-   >>> 
    >>> # lat and lon have the same domain, a subset of the domain of 'sample'
-   >>> lat.getAxisIds() 
+   >>> lat.getAxisIds()
    ['y', 'x']
-   >>> 
    >>> # lat and lon are variables ...
-   >>> lat.shape 
-   (32, 48) 
-   >>> 
+   >>> lat.shape
+   (32, 48)
    >>> lat  # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
-       lat
-    masked_array(data =
-     [[-76.08465554 -76.08465554 -76.08465554 ..., -76.08465554 -76.08465554
-      -76.08465554]
-     [-73.92641847 -73.92641847 -73.92641847 ..., -73.92641847 -73.92641847
-      -73.92641847]
-     [-71.44420823 -71.44420823 -71.44420823 ..., -71.44420823 -71.44420823
-      -71.44420823]
-     ..., 
-     [ 42.32854943  42.6582209   43.31990211 ...,  43.3199019   42.65822088
-       42.32854943]
-     [ 42.70106429  43.05731498  43.76927818 ...,  43.76927796  43.05731495
-       42.70106429]
-     [ 43.0307341   43.41264383  44.17234165 ...,  44.17234141  43.41264379
-       43.0307341 ]],
-                 mask =
-     False,
-           fill_value = 1e+20)
-   >>> 
+   lat
+   masked_array(data =
+   [[-76.08465554 -76.08465554 -76.08465554 ..., -76.08465554 -76.08465554
+   -76.08465554]
+   [-73.92641847 -73.92641847 -73.92641847 ..., -73.92641847 -73.92641847
+   -73.92641847]
+   [-71.44420823 -71.44420823 -71.44420823 ..., -71.44420823 -71.44420823
+   -71.44420823]
+   ...,
+   [ 42.32854943  42.6582209   43.31990211 ...,  43.3199019   42.65822088
+   42.32854943]
+   [ 42.70106429  43.05731498  43.76927818 ...,  43.76927796  43.05731495
+   42.70106429]
+   [ 43.0307341   43.41264383  44.17234165 ...,  44.17234141  43.41264379
+   43.0307341 ]],
+   mask = False, fill_value = 1e+20)
    >>> lat_in_radians = lat*MV2.pi/180.0
 
 
-  .. figure:: images/curvilinear_grid.jpg
+
+
+
+.. figure:: images/curvilinear_grid.jpg
    :alt: curvilinear grid
 
    Figure 1: Curvilinear Grid
@@ -554,11 +546,11 @@ Example: A Generic Grid
 In this example variable zs is defined on a generic grid. Figure 2
 illustrates the grid, in this case a geodesic grid:
 
-..
+::
 
    >>> f.variables.keys()
    ['lat', 'sample', 'bounds_lon', 'lon', 'bounds_lat']
-   >>> f.axes.keys() 
+   >>> f.axes.keys()
    ['nvert', 'x', 'y']
    >>> zs = f('sample')
    >>> g = zs.getGrid()
@@ -566,27 +558,25 @@ illustrates the grid, in this case a geodesic grid:
    <TransientCurveGrid, id: ..., shape: (32, 48)>
    >>> lat = g.getLatitude()
    >>> lon = g.getLongitude()
-   >>> lat.shape 
+   >>> lat.shape
    (32, 48)
    >>> lon.shape # variable zs is defined in terms of a single index coordinate
-   (32, 48) 
+   (32, 48)
    >>> # axis, 'cell'
-   >>> zs.shape 
-   (32, 48) 
-   >>> zs.getAxisIds() 
+   >>> zs.shape
+   (32, 48)
+   >>> zs.getAxisIds()
    ['y', 'x']
-   >>> 
    >>> # lat and lon are also defined in terms of the cell axis
-   >>> lat.getAxisIds() 
+   >>> lat.getAxisIds()
    ['y', 'x']
-   >>> 
-   >>> # lat and lon are one-dimensional, 'auxiliary' coordinate 
+   >>> # lat and lon are one-dimensional, 'auxiliary' coordinate
    >>> # axes: values are not monotonic
    >>> lat.__class__
    <class 'cdms2.coord.TransientAxis2D'>
 
-   
-   
+
+
 
 .. figure:: images/generic_grid.jpg
    :alt: generic grid
@@ -599,7 +589,7 @@ representation. Similarly, a rectangular grid can be represented as
 curvilinear. The method toCurveGrid is used to convert a non-generic
 grid to curvilinear representation:
 
-..
+::
 
    >>> f = cdms2.open(cdat_info.get_sampledata_path()+'/clt.nc')
    >>> clt = f('clt')
@@ -634,7 +624,7 @@ The built-in CDMS regridder is used to transform data from one
 rectangular grid to another. For example, to regrid variable ``u`` (from
 a rectangular grid) to a 96x192 rectangular Gaussian grid:
 
-..
+::
 
    >>> f = cdms2.open('clt.nc')
    >>> u = f('u')
@@ -647,8 +637,8 @@ a rectangular grid) to a 96x192 rectangular Gaussian grid:
 
 To regrid a variable ``uold`` to the same grid as variable ``vnew``:
 
-..
-  
+::
+
    >>> f = cdms2.open('clt.nc')
    >>> uold = f('u')
    >>> unew = f2('uwnd')
@@ -672,12 +662,12 @@ separately from the CDAT/CDMS installation.
 
 The steps to regrid a variable are:
 
-(external to CDMS)
+(External to CDMS)
 
 1. Obtain or generate the grids, in SCRIP netCDF format.
 2. Run SCRIP to generate a *remapping* file.
 
-(in CDMS)
+(In CDMS)
 
 1. Read the regridder from the SCRIP remapping file.
 2. Call the regridder with the source data, returning data on the target
@@ -690,21 +680,21 @@ For example, suppose the source data on a T42 grid is to be mapped to a
 POP curvilinear grid. Assume that SCRIP generated a remapping file named
 rmp_T42_to_POP43_conserv.nc:
 
-..
-  
+::
+
    >>> # Import regrid package for regridder functions
    >>> import regrid2, cdms2
-   
+
    >>> # Get the source variable
-   >>> f = cdms2.open('sampleT42Grid.nc') 
-   >>> dat = f('src_array') 
+   >>> f = cdms2.open('sampleT42Grid.nc')
+   >>> dat = f('src_array')
    >>> f.close()
-   
+
    >>> # Read the regridder from the remapper file
-   >>> remapf = cdms2.open('rmp_T42_to_POP43_conserv.nc') 
-   >>> regridf = regrid2.readRegridder(remapf) 
+   >>> remapf = cdms2.open('rmp_T42_to_POP43_conserv.nc')
+   >>> regridf = regrid2.readRegridder(remapf)
    >>> remapf.close()
-   
+
    >>> # Regrid the source variable
    >>> popdat = regridf(dat)
 
@@ -714,7 +704,7 @@ Time Types
 ^^^^^^^^^^
 
 CDMS provides extensive support for time values in the cdtime module.
-cdtime also defines a set of calendars , specifying the number of days
+cdtime also defines a set of calendars, specifying the number of days
 in a given month.
 
 Two time types are available: relative time and component time .
@@ -726,7 +716,7 @@ Relative time is time relative to a fixed base time. It consists of:
 For example, the time "28.0 days since 1996-1-1" has value= 28.0 , and
 units=" days since 1996-1-1". To create a relative time type:
 
-..
+::
 
    >>> import cdtime
    >>> rt = cdtime.reltime(28.0, "days since 1996-1-1")
@@ -738,10 +728,9 @@ units=" days since 1996-1-1". To create a relative time type:
    'days since 1996-1-1'
 
 A component time consists of the integer fields year, month, day, hour,
-minute , and the floating-point field second . For example:
+minute, and the floating-point field second. For example:
 
-
-..
+::
 
     >>> ct = cdtime.comptime(1996,2,28,12,10,30)
     >>> ct
@@ -753,10 +742,10 @@ minute , and the floating-point field second . For example:
 
 The conversion functions tocomp and torel convert between the two
 representations. For instance, suppose that the time axis of a variable
-is represented in units " days since 1979" . To find the coordinate
+is represented in units " days since 1979". To find the coordinate
 value corresponding to January 1, 1990:
 
-..
+::
 
     >>> ct = cdtime.comptime(1990,1)
     >>> rt = ct.torel("days since 1979")
@@ -767,8 +756,7 @@ Time values can be used to specify intervals of time to read. The syntax
 time=(c1,c2) specifies that data should be read for times t such that
 c1<=t<=c2:
 
-..
-
+::
 
     >>> fh = cdms2.open(cdat_info.get_sampledata_path() + "/tas_6h.nc")
     >>> c1 = cdtime.comptime(1980,1)
@@ -783,7 +771,7 @@ c1<=t<=c2:
 or string representations can be used:
 
 
-..
+::
 
     >>> fh = cdms2.open(cdat_info.get_sampledata_path() + "/tas_6h.nc")
     >>> tas = fh['tas']
@@ -806,15 +794,15 @@ To generate a plot:
 
 For example:
 
-..
+::
 
    >>> import cdms2, vcs, cdat_info
    >>> fh=cdms2.open(cdat_info.get_sampledata_path() + "/tas_cru_1979.nc")
    >>> fh['time'][:] # Print the time coordinates
    array([ 1476.,  1477.,  1478.,  1479.,  1480.,  1481.,  1482.,  1483.,
            1484.,  1485.,  1486.,  1487.])
-   >>> 
-   >>> tas = fh('tas', time=1479) 
+   >>>
+   >>> tas = fh('tas', time=1479)
    >>> tas.shape
    (1, 36, 72)
    >>> w = vcs.init() # Initialize a canvas
@@ -831,28 +819,4 @@ The plot routine has a number of options for producing different types
 of plots, such as isofill and x-y plots. See `Chapter 5 <cdms_5.html>`__
 for details.
 
-Databases
-^^^^^^^^^
 
-Datasets can be aggregated together into hierarchical collections,
-called databases . In typical usage, a program:
-
--  connects to a database
--  searches for data opens a dataset
--  accesses data
-
-Databases add the ability to search for data and metadata in a
-distributed computing environment. At present CDMS supports one
-particular type of database, based on the Lightweight Directory Access
-Protocol (LDAP).
-
-Here is an example of accessing data via a database:
-
-::
-   >>> db = cdms.connect() # Connect to the default database.
-   >>> f = db.open('ncep_reanalysis_mo') # Open a dataset.
-   >>> f.variables.keys() # List the variables in the dataset.
-..   ['ua', 'evs', 'cvvta', 'tauv', 'wap', 'cvwhusa', 'rss', 'rls', ... 'prc', 'ts', 'va']
-
-
-Databases are discussed further in `Section 2.7 <cdms_2.html#database>`__.

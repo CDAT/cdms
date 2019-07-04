@@ -245,7 +245,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
                     # ignore if fill value given explicitly
                     if fill_value is None:
                         self._setmissing(value)
-                elif key not in ['scale_factor', 'add_offset']:
+                elif key not in ['scale_factor', 'add_offset', 'ndim']:
                     setattr(self, key, value)
 
         # Sync up missing_value attribute and the fill value.
@@ -628,20 +628,19 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
 
     def clone(self, copyData=1):
         """
+        Clone
 
         Parameters
         ----------
 
-            clone
-               (self, copyData=1)
+        clone : (self, copyData=1)
 
-            _: None
 
         Returns
         -------
 
-            a copy of self as a transient variable.
-            If copyData is 1 (default), make a separate copy of the data.
+        a copy of self as a transient variable.
+        If copyData is 1 (default), make a separate copy of the data.
         """
         result = createVariable(self, copy=copyData)
         return result
@@ -1017,15 +1016,17 @@ def isVariable(s):
 
 def asVariable(s, writeable=1):
     """
+    As Variable
+
     Returns
     -------
-        s if s is a Variable; if writeable is 1,
-        return s if s is a TransientVariable.
+    s if s is a Variable; if writeable is 1,
+    return s if s is a TransientVariable.
 
-        If s is not a variable of
-        the desired type, attempt to make it so and return that.
+    If s is not a variable of
+    the desired type, attempt to make it so and return that.
 
-        If we fail raise CDMSError
+    If we fail raise CDMSError
     """
     target_class = AbstractVariable
     if writeable:

@@ -15,7 +15,6 @@ from .axis import axisMatchIndex, axisMatchAxis, axisMatches, unspecified, Cdtim
 from . import selectors
 import copy
 from .mvCdmsRegrid import CdmsRegrid, getBoundList, _getCoordList
-
 from regrid2.mvGenericRegrid import guessPeriodicity
 # import PropertiedClasses
 from .convention import CF1
@@ -41,18 +40,12 @@ def getMinHorizontalMask(var):
 
     Parameters
     ----------
-
-    var :
-       CDMS variable with a mask
-
-    N/A :
-       None
+    var : CDMS variable with a mask
+    N/A : None
 
     Returns
     -------
-
-    mask array or None :
-        if order 'x' and 'y' were not found
+    mask array or None : if order 'x' and 'y' were not found
 
     """
     from distarray import MultiArrayIter
@@ -179,18 +172,14 @@ class AbstractVariable(CdmsObj, Slab):
 
         Parameters
         ----------
-            raw:
-                if set to 1, return numpy.ma only
-            squeeze:
-                if set to 1, eliminate any dimension of length 1
-            grid:
-                if given, result is regridded ont this grid.
-            order:
-                if given, result is permuted into this order
+        raw : if set to 1, return numpy.ma only
+        squeeze : if set to 1, eliminate any dimension of length 1
+        grid : if given, result is regridded ont this grid
+        order : if given, result is permuted into this order
 
         Returns
         -------
-             Subregion selected
+        Subregion selected
         """
         # separate options from selector specs
         d = kwargs.copy()
@@ -283,10 +272,8 @@ class AbstractVariable(CdmsObj, Slab):
 
         Parameters
         ----------
-            convention:
-                Metadata convention class
-            vardict:
-                Variable metedata
+        convention : Metadata convention class
+        vardict : Variable metedata
 
         Returns
         -------
@@ -364,15 +351,12 @@ class AbstractVariable(CdmsObj, Slab):
 
            Parameters
            ----------
-               lat:
-                   latitude axis
-               lon:
-                   longitude axis
+           lat : latitude axis
+           lon : longitude axis
 
            Returns
            -------
-               (latname, lonname, order, maskname, class) if gridded,
-               None if not gridded."""
+           (latname, lonname, order, maskname, class) if gridded, None if not gridded."""
 
         ilat = ilon = -1
         k = 0
@@ -432,15 +416,12 @@ class AbstractVariable(CdmsObj, Slab):
 
         Parameters
         ----------
-
-            n:
-               Axis number
+        n : Axis number
 
         Returns
         -------
-
-            if n < 0: n = n + self.rank()
-            self.getDomain()[n][0]"""
+        if n < 0: n = n + self.rank()
+        self.getDomain()[n][0]"""
         if n < 0:
             n = n + self.rank()
         return self.getDomain()[n][0]
@@ -450,11 +431,11 @@ class AbstractVariable(CdmsObj, Slab):
 
         Parameters
         ----------
-            axis_spec:
+        axis_spec :
 
         Returns
         -------
-            the axis index or -1 if no match is found.
+        the axis index or -1 if no match is found.
         """
         for i in range(self.rank()):
             if axisMatches(self.getAxis(i), axis_spec):
@@ -468,7 +449,7 @@ class AbstractVariable(CdmsObj, Slab):
 
         Returns
         -------
-            True or False if axis has cell data.
+        True or False if axis has cell data.
         """
         for axis in self.getAxisList():
             if (axis.getExplicitBounds() is not None):
@@ -476,13 +457,14 @@ class AbstractVariable(CdmsObj, Slab):
         return False
 
     def getAxisListIndex(self, axes=None, omit=None, order=None):
-        """
+        """Get Axis List Index
+
         Returns
         -------
-            a list of indices of axis objects
+        a list of indices of axis objects
 
-        Note
-        ----
+        Notes
+        -----
         If axes is **not** `None`, include only certain axes.
         less the ones specified in omit.
 
@@ -495,8 +477,8 @@ class AbstractVariable(CdmsObj, Slab):
     def getAxisList(self, axes=None, omit=None, order=None):
         """Get the list of axis objects
 
-        Note
-        ----
+        Notes
+
         If axes is **not** `None`, include only certain axes.
         If omit is **not** `None`, omit those specified by omit.
 
@@ -521,16 +503,16 @@ class AbstractVariable(CdmsObj, Slab):
         return self._grid_
 
     def getMissing(self, asarray=0):
-        """
-           Parameters
-           ----------
-               asarray :
-                   '0' : scalar
-                   '1' : numpy array
+        """Get Missing
 
-           Returns
-           -------
-           the missing value as a scalar, or as a numpy array if asarray==1"""
+        Parameters
+        ----------
+        asarray : '0' : scalar
+        '1' : numpy array
+
+        Returns
+        -------
+        the missing value as a scalar, or as a numpy array if asarray==1"""
 
         if hasattr(self, 'missing_value'):
             try:
@@ -565,11 +547,10 @@ class AbstractVariable(CdmsObj, Slab):
 
         Parameters
         ----------
-            value
-                scalar, a single-valued numpy array, or None.
+        value : scalar, a single-valued numpy array, or None.
 
-        Note
-        ----
+        Note :
+
         The value is cast to the same type as the variable."""
 
         # Check for None first, so that constructors can
@@ -605,7 +586,7 @@ class AbstractVariable(CdmsObj, Slab):
 
         Returns
         -------
-            First Time dimension axis or `None`.
+        First Time dimension axis or `None`.
         """
         for k in range(self.rank()):
             axis = self.getAxis(k)
@@ -620,7 +601,7 @@ class AbstractVariable(CdmsObj, Slab):
 
         Returns
         -------
-            First forecast time dimension axis or `None`.
+        First forecast time dimension axis or `None`.
         """
         for k in range(self.rank()):
             axis = self.getAxis(k)
@@ -638,7 +619,7 @@ class AbstractVariable(CdmsObj, Slab):
 
         Returns
         -------
-            First vertical level dimension axis or `None`.
+        First vertical level dimension axis or `None`.
         """
         for k in range(self.rank()):
             axis = self.getAxis(k)
@@ -653,7 +634,7 @@ class AbstractVariable(CdmsObj, Slab):
 
         Returns
         -------
-            First latitude dimension axis or `None`.
+        First latitude dimension axis or `None`.
         """
         grid = self.getGrid()
         if grid is not None:
@@ -676,8 +657,7 @@ class AbstractVariable(CdmsObj, Slab):
 
         Returns
         -------
-            First longitude dimension axis or `None`.
-
+       First longitude dimension axis or `None`.
         """
 
         grid = self.getGrid()
@@ -699,17 +679,18 @@ class AbstractVariable(CdmsObj, Slab):
     # Get an order string, such as "tzyx"
     def getOrder(self, ids=0):
         """
+        Get Order
+
         Parameters
         ----------
-        id:
-          0 or 1
+        id : 0 or 1
 
         Returns
         -------
         the order string, such as t, z, y, x (time, level, lat, lon).
 
-        Note
-        ----
+        Notes
+
         * if ids == 0 (the default) for an axis that is not t,z,x,y
           the order string will contain a (-) character in that location.
           The result string will be of the same length as the number
@@ -834,24 +815,17 @@ class AbstractVariable(CdmsObj, Slab):
         """getSlice takes arguments of the following forms and produces
            a return array.
 
-           Parameter
-           ---------
-           raw:
-               if set to 1, return numpy.ma only
-           squeeze:
-               if set to 1, eliminate any dimension of length 1
-           grid:
-               if given, result is regridded ont this grid.
-           order:
-               if given, result is permuted into this order
-           numericSqueeze:
-               if index slice is given, eliminate that dimension.
-           isitem:
-               if given, result is return as a scaler for 0-D data
+           Parameters
+           ----------
+           raw : if set to 1, return numpy.ma only
+           squeeze : if set to 1, eliminate any dimension of length 1
+           grid : if given, result is regridded ont this grid.
+           order : if given, result is permuted into this order
+           numericSqueeze : if index slice is given, eliminate that dimension.
+           isitem : if given, result is return as a scaler for 0-D data
 
+           Notes
 
-           Note
-           ----
            There can be zero or more positional arguments, each of the form:
 
            #. a single integer n, meaning slice(n, n+1)
@@ -894,8 +868,7 @@ class AbstractVariable(CdmsObj, Slab):
 
         Parameters
         ----------
-        slice
-            is an argument list, each item of which has one of the following forms:
+        slice : is an argument list, each item of which has one of the following forms:
                 * x, where x is a scalar
                     * Map the scalar to the index of the closest coordinate value.
                 * (x, y)
@@ -907,24 +880,21 @@ class AbstractVariable(CdmsObj, Slab):
                 * (x, y, 'co', cycle)
                     * Map the coordinate interval with wraparound. If no cycle is
                       specified, wraparound will occur iff axis.isCircular() is true.
-        Ellipsis
-                 Represents the full range of all dimensions bracketed by non-Ellipsis items.
-        None, colon
-                 Represents the full range of one dimension.
+        Ellipsis : Represents the full range of all dimensions bracketed by non-Ellipsis items.
+        None, colon : Represents the full range of one dimension.
 
-        Note
-        ----
+        Notes
+
         Only one dimension may be wrapped.
 
 
         Example
-        -------
+
         Suppose the variable domain is `(time, level, lat, lon)`. Then
 
             >>> getRegion((10, 20), 850, Ellipsis,(-180, 180))
 
-            retrieves:
-
+            retrieves :
                 * all times t such that 10.<=t<20.
                 * level 850.
                 * all values of all dimensions between level and lon (namely, lat).
@@ -1196,8 +1166,7 @@ class AbstractVariable(CdmsObj, Slab):
 
         Parameters
         ----------
-             order: string
-                 can be "tzyx" with all possible axes permutation.
+        order : string can be "tzyx" with all possible axes permutation.
 
         Returns
         -------
@@ -1217,26 +1186,23 @@ class AbstractVariable(CdmsObj, Slab):
         One can use the regrid2.Regridder optional arguments as well.
 
         Example
-        -------
-            >>> new_cdmsVar = cdmsVar.regrid(newGrid)  # uses libcf
-            >>> new_cdmsVar = cdmsVar.regrid(newGrid, regridMethod = 'conserve', coordSys = 'cart')
+
+        >>> new_cdmsVar = cdmsVar.regrid(newGrid)  # uses libcf
+        >>> new_cdmsVar = cdmsVar.regrid(newGrid, regridMethod = 'conserve', coordSys = 'cart')
 
         Parameters
         ----------
-        togrid
-            togrid destination grid. CDMS grid
-        missing : Optional
-            missing missing values
-        order : Optional
-            order axis order
-        mask : Optional
-            mask grid/data mask
+        togrid : togrid destination grid. CDMS grid
+        missing : Optional missing missing values
+        order : Optional order axis order
+        mask : Optional mask grid/data mask
+
         **keyords
-            keywords optional keyword arguments dependent on regridTool
+        keywords optional keyword arguments dependent on regridTool
 
         Returns
         -------
-            regridded variable
+        regridded variable
         """
         # there is a circular dependency between cdms2 and regrid2. In
         # principle, cdms2 files should not import regrid2, we're bending
@@ -1389,13 +1355,10 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
 
         Parameters
         ----------
-        newLevel :
-             is an axis of the result pressure levels.
-        method :
-             is optional, either `log` to interpolate in the log of pressure (default),
-             or `linear` for linear interpolation.
-        missing and order :
-             are as for regrid.PressureRegridder.
+        newLevel : is an axis of the result pressure levels.
+        method : is optional, either `log` to interpolate in the log of pressure (default),
+                 or `linear` for linear interpolation.
+        missing and order : are as for regrid.PressureRegridder.
 
         """
         from regrid2 import PressureRegridder
@@ -1413,16 +1376,12 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
         The variable should be a function of lat, level, and (optionally) time.
 
         Parameters
-        -----------
-          newLevel :
-              is an axis of the result pressure levels.
-          newLatitude :
-              is an axis of latitude values.
-          method : Optional
-              either "log" to interpolate in the log of pressure (default),
-              or "linear" for linear interpolation.
-          missing and order:
-               are as for regrid.CrossSectionRegridder.
+        ----------
+        newLevel : is an axis of the result pressure levels.
+        newLatitude : is an axis of latitude values.
+        method : Optional either "log" to interpolate in the log of pressure (default),
+                 or "linear" for linear interpolation.
+        missing and order : are as for regrid.CrossSectionRegridder.
 
         """
         from regrid2 import CrossSectionRegridder
@@ -1442,10 +1401,10 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
         """Process the arguments for a getSlice, getRegion, etc.
            time, level, latitude, longitude keywords handled here
 
-           Return
-           ------
-               An array of specifications for all dimensions.
-               Any Ellipsis has been eliminated.
+           Returns
+           -------
+           An array of specifications for all dimensions.
+           Any Ellipsis has been eliminated.
         """
         myrank = self.rank()
         nsupplied = len(specs)
@@ -1675,9 +1634,10 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
     def decode(self, ar):
         """Decode compressed data.
 
-         Parameter
-         ---------
-             ar is a masked array, scalar, or numpy.ma.masked."""
+        Parameters
+        ----------
+        ar : is a masked array, scalar, or numpy.ma.masked.
+        """
 
         resulttype = self._decodedType()
         if hasattr(self, 'scale_factor'):
@@ -1705,9 +1665,12 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
             return ar
 
     def getGridIndices(self):
-        """Return
-           ------
-           a tuple of indices corresponding to the variable grid."""
+        """
+        Get Grid Indices
+
+        Returns
+        -------
+        a tuple of indices corresponding to the variable grid."""
         grid = self.getGrid()
         result = []
         if grid is not None:

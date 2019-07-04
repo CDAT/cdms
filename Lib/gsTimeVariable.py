@@ -457,15 +457,13 @@ class TimeFileVariable:
 
         Parameters
         ----------
-
-             all
-
-             device
+        all :
+        device :
 
         Returns
         -------
 
-             list
+        list :
         """
         return self[0][0][:].showall(all=all, device=device)
 

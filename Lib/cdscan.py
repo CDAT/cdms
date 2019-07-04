@@ -495,6 +495,8 @@ def cleanupAttrs(attrs):
                 attrs[attname] = str(attval)
     if 'missing_value' in attrs and attrs['missing_value'] is None:
         del attrs['missing_value']
+    if 'ndim' in attrs:
+        del attrs['ndim']
 
 
 def validateAttrs(node):

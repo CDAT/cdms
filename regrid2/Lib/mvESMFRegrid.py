@@ -224,26 +224,26 @@ dimensions. len(srcGridshape) = %d != len(dstGridshape) = %d""" % \
 
         Parameters
         ----------
-        srcGrid
-            list [[z], y, x] of source grid arrays
-        dstGrid
-            list [[z], y, x] of dstination grid arrays
-        srcGridMask
-            list [[z], y, x] of arrays
-        srcBounds
-            list [[z], y, x] of arrays
-        srcGridAreas
-            list [[z], y, x] of arrays
-        dstGridMask
-            list [[z], y, x] of array
-        dstBounds
-            list [[z], y, x] of arrays
-        dstGridAreas
-            list [[z], y, x] of arrays
-        globalIndexing
-            if True array was allocated over global index space,
-            otherwise array was allocated over local index space on
-            this processor. This is only relevant if rootPe is None
+
+        srcGrid : list [[z], y, x] of source grid arrays
+
+        dstGrid : list [[z], y, x] of dstination grid arrays
+
+        srcGridMask : list [[z], y, x] of arrays
+
+        srcBounds : list [[z], y, x] of arrays
+
+        srcGridAreas : list [[z], y, x] of arrays
+
+        dstGridMask : list [[z], y, x] of array
+
+        dstBounds : list [[z], y, x] of arrays
+
+        dstGridAreas : list [[z], y, x] of arrays
+
+        globalIndexing : if True array was allocated over global index space,
+                         otherwise array was allocated over local index space on
+                         this processor. This is only relevant if rootPe is None
         """
 
         # create esmf source Grid
@@ -300,10 +300,8 @@ staggerLoc = %s!""" % self.staggerLoc
         Parameters
         ----------
 
-            **args
-                (not used)
+        args : (not used)
 
-            _: None
         """
         self.regridObj = ESMF.Regrid(srcfield=self.srcFld.field,
                                      dstfield=self.dstFld.field,
@@ -321,31 +319,28 @@ staggerLoc = %s!""" % self.staggerLoc
 
         Source data mask:
 
-            . If you provide srcDataMask in args the source grid will be
+            - If you provide srcDataMask in args the source grid will be
               masked and weights will be recomputed.
 
-            . Subsequently, if you do not provide a srcDataMask the last weights will
+            - Subsequently, if you do not provide a srcDataMask the last weights will
               be used to regrid the source data array.
 
-            . By default, only the data are masked, but not the grid.
+            - By default, only the data are masked, but not the grid.
 
         Parameters
         ----------
 
-           srcData
-               array source data, shape should cover entire global index space
+        srcData : array source data, shape should cover entire global index space
 
-           dstData
-               array destination data, shape should cover entire global index space
+        dstData : array destination data, shape should cover entire global index space
 
-           rootPe
-               if other than None, then data will be MPI gathered on the specified rootPe processor
+        rootPe : if other than None, then data will be MPI gathered on the specified rootPe processor
 
-           globalIndexing
-               if True array was allocated over global index space, otherwise array was allocated
-               over local index space on this processor. This is only relevant if rootPe is None
+        globalIndexing : if True array was allocated over global index space, otherwise array was
+                         allocated over local index space on this processor. This is only relevant
+                         if rootPe is None
 
-            **args
+        args
         """
 
 #        if args.has_key('srcDataMask'):
@@ -393,7 +388,7 @@ staggerLoc = %s!""" % self.staggerLoc
 
         Returns
         -------
-            grid
+        grid
         """
         return [self.dstGrid.getCoords(i, staggerloc=self.staggerloc)
                 for i in range(self.ndims)]
@@ -402,17 +397,14 @@ staggerLoc = %s!""" % self.staggerLoc
         """
         Get the source grid cell areas
 
-Parameters
-----------
-            rootPe
-                root processor where data should be gathered (or None if local areas are to be returned)
+        Parameters
+        ----------
+        rootPe : root processor where data should be gathered (or None if local areas are to be returned)
 
-            _: None
 
-       Returns
-       -------
-           areas
-               or None if non-conservative interpolation
+        Returns
+        -------
+        areas or None if non-conservative interpolation
         """
         if self.regridMethod == CONSERVE:
             #            self.srcAreaField.field.get_area()
@@ -427,16 +419,13 @@ Parameters
         Parameters
         ----------
 
-            rootPe
-                root processor where data should be gathered (or None if local areas are to be returned)
-
-            _: None
+        rootPe : root processor where data should be gathered (or None if local areas are to be returned)
 
 
         Returns
         -------
 
-            areas or None if non-conservative interpolation
+        areas or None if non-conservative interpolation
         """
         if self.regridMethod == CONSERVE:
             #            self.dstAreaField.field.get_area()
@@ -448,19 +437,16 @@ Parameters
         """
         Get the source grid area fractions
 
-Parameters
-----------
+        Parameters
+        ----------
 
-            rootPe
-               root processor where data should be gathered (or None if local areas are to be returned)
-
-            _: None
+        rootPe : root processor where data should be gathered (or None if local areas are to be returned)
 
 
-       Returns
-       -------
+        Returns
+        -------
 
-           fractional areas or None (if non-conservative)
+        fractional areas or None (if non-conservative)
         """
         if self.regridMethod == CONSERVE:
             return self.srcFracField.field.data
@@ -474,16 +460,13 @@ Parameters
         Parameters
         ----------
 
-            rootPe
-               root processor where data should be gathered (or None if local areas are to be returned)
+        rootPe : root processor where data should be gathered (or None if local areas are to be returned)
 
-            _: None
 
         Returns
         -------
 
-            fractional areas
-                or None (if non-conservative)
+        fractional areas or None (if non-conservative)
         """
         if self.regridMethod == CONSERVE:
             return self.dstFracField.field.data
@@ -497,15 +480,13 @@ Parameters
         Parameters
         ----------
 
-            staggerLoc
-                (e.g. 'center' or 'corner')
+        staggerLoc : (e.g. 'center' or 'corner')
 
-            _: None
 
         Returns
         -------
 
-            tuple
+        tuple
         """
         stgloc = CENTER
         if re.match('corner', staggerLoc, re.I) or \
@@ -523,15 +504,13 @@ Parameters
         Parameters
         ----------
 
-            staggerLoc
-                (e.g. 'center' or 'corner')
+        staggerLoc : (e.g. 'center' or 'corner')
 
-            _: None
 
         Returns
         -------
 
-            tuple
+        tuple
         """
         stgloc = CENTER
         if re.match('corner', staggerLoc, re.I) or \
@@ -550,15 +529,14 @@ Parameters
         Parameters
         ----------
 
-            staggerLoc
-                (e.g. 'center'):
+        staggerLoc : (e.g. 'center'):
 
-            _: None
+
 
         Returns
         -------
 
-           tuple of slices
+        tuple of slices
         """
         stgloc = CENTER
         if re.match('corner', staggerLoc, re.I) or \
@@ -577,15 +555,13 @@ Parameters
         Parameters
         ----------
 
-            staggerLoc
-                (e.g. 'center')
+        staggerLoc : (e.g. 'center')
 
-            _: None
 
         Returns
         -------
 
-           tuple of slices
+        tuple of slices
         """
         stgloc = CENTER
         if re.match('corner', staggerLoc, re.I) or \
@@ -603,12 +579,10 @@ Parameters
         Parameters
         ----------
 
-            diag
-                a dictionary whose entries, if present, will be filled valid
-                entries are: 'srcAreaFractions', 'dstAreaFractions', srcAreas', 'dstAreas'
+        diag : a dictionary whose entries, if present, will be filled valid
+               entries are: 'srcAreaFractions', 'dstAreaFractions', srcAreas', 'dstAreas'
 
-            rootPe
-                root processor where data should be gathered (or None if local areas are to be returned)
+        rootPe : root processor where data should be gathered (or None if local areas are to be returned)
         """
         oldMethods = {}
         oldMethods['srcAreaFractions'] = 'getSrcAreaFractions'

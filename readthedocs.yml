@@ -10,6 +10,6 @@ conda:
 build:
   image: latest
 python:
-  version: 2.70
+  version: 3.70
   setup_py_install: true
 

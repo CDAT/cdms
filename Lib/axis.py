@@ -1,6 +1,3 @@
-# Automatically adapted for numpy.oldnumeric Aug 01, 2007 by
-# Further modified to be pure new numpy June 24th 2008
-
 """
 CDMS Axis objects
 """
@@ -18,7 +15,7 @@ from .cdmsobj import CdmsObj, Max32int
 from .sliceut import reverseSlice, splitSlice, splitSliceExt
 from .error import CDMSError
 from . import forecast
-import warnings
+# import warnings
 from six import string_types
 standard_library.install_aliases()
 from collections import UserList  # noqa
@@ -195,14 +192,12 @@ def mapLinearIntersection(xind, yind, iind,
                           aMinusEps, aPlusEps, bPlusEps, bMinusEps,
                           boundLeft, nodeSubI, boundRight):
     """
+    Map Linear Intersection
+
     Parameters
     ----------
-
-    xind :
-       'c' if (a,b) is closed on the left,
-       'o' if open,
-    yind :
-        same for right endpoint j
+    xind : c' if (a,b) is closed on the left, 'o' if open,
+    yind : same for right endpoint j
 
     Returns
     -------
@@ -667,14 +662,14 @@ def isSubsetVector(vec1, vec2, tol):
 
 def isOverlapVector(vec1, vec2, atol=1.e-8):
     """
+    Is Overlap Vector
+
     Parameters
     ----------
-    vec1 :
-        Input arrays to compare
-    vec2 :
-        Input arrays to compare
+    vec1 : Input arrays to compare
+    vec2 : Input arrays to compare
     atol : float, optional
-        Absolute tolerance, The absolute differenc is equal to **atol** Default is 1e-8
+    Absolute tolerance, The absolute differenc is equal to **atol** Default is 1e-8
 
     Returns
     -------
@@ -700,9 +695,11 @@ def isOverlapVector(vec1, vec2, atol=1.e-8):
 
 def allclose(ax1, ax2, rtol=1.e-5, atol=1.e-8):
     """
+    All close
+
     Parameters
     ----------
-    ax1, ax2 :  array_like
+    ax1, ax2 : array_like
 
     Returns
     -------
@@ -710,9 +707,7 @@ def allclose(ax1, ax2, rtol=1.e-5, atol=1.e-8):
         True if all elements of axes ax1 and ax2 are close,
         in the sense of numpy.ma.allclose.
 
-    See Also
-    --------
-    all, any
+    See Also : all, any
 
     Examples
     --------
@@ -1676,12 +1671,11 @@ class AbstractAxis(CdmsObj):
                     # only for -180, 180 not needed if values are all positive
                     # (0-360)
                     if((retbnds[0, 0] * retbnds[-1, 1]) < 0):
-                        msg = "\nYour first bounds[0,0] %3.15lf will be corrected to %3.15lf\n"\
-                              "Your bounds bounds[-1,1] %3.15lf will be corrected to %3.15lf" \
-                            % (retbnds[0, 0], numpy.floor(retbnds[0, 0] + 0.5), retbnds[-1, 1],
-                               numpy.floor(retbnds[-1, 1] + 0.5))
-
-                        warnings.warn(msg, UserWarning)
+                        # msg = "\nYour first bounds[0,0] %3.15lf will be corrected to %3.15lf\n"\
+                        #       "Your bounds bounds[-1,1] %3.15lf will be corrected to %3.15lf" \
+                        #     % (retbnds[0, 0], numpy.floor(retbnds[0, 0] + 0.5), retbnds[-1, 1],
+                        #        numpy.floor(retbnds[-1, 1] + 0.5))
+                        # warnings.warn(msg, UserWarning)
                         retbnds[0, 0] = numpy.floor(retbnds[0, 0] + 0.5)
                         retbnds[-1, 1] = numpy.floor(retbnds[-1, 1] + 0.5)
                 else:
@@ -1898,9 +1892,9 @@ class TransientAxis(AbstractAxis):
 
     def __init__(self, data, bounds=None, id=None,
                  attributes=None, copy=0, genericBounds=False):
-        '''
+        """
         genericBounds specify if bounds were generated (True) or read from a file (False)
-        '''
+        """
         AbstractAxis.__init__(self, None, None)
         if id is None:
             TransientAxis.axis_count = TransientAxis.axis_count + 1
@@ -2458,8 +2452,8 @@ def axisMatchAxis(axes, specifications=None, omit=None, order=None):
             given, any elements of the result not chosen otherwise are filled
             in from left to right with remaining candidates.
 
-     Return
-     ------
+     Returns
+     -------
      A list of axes that match the specification omitting any axes that matches
      an omit specification.
 
@@ -2493,8 +2487,8 @@ def axisMatchIndex(axes, specifications=None, omit=None, order=None):
             given, any elements of the result not chosen otherwise are filled
             in from left to right with remaining candidates.
 
-     Return
-     ------
+     Returns
+     -------
      A list of axis' indices which match the specification omitting any axes that matches an omit specification.
 
      Axes are returned in the order they occur in the axes argument unless order is given.
@@ -2610,19 +2604,19 @@ def axisMatchIndex(axes, specifications=None, omit=None, order=None):
 
 def axisMatches(axis, specification):
     """
+       Axis Matches
+
        Parameters
        ----------
-       axis :
-           See note below
-       specifications :
-           See note below
+       axis : See note below
+       specifications : See note below
 
        Returns
        -------
        1 or 0 depending on whether axis matches the specification.
 
-       Note
-       ----
+       Notes
+
        Specification must be one of:
 
        #. a string representing an axis id or one of the keywords time,
@@ -2680,12 +2674,9 @@ def concatenate(axes, id=None, attributes=None):
 
     Parameters
     ----------
-    axes :
-        Axes to concatenate
-    id :
-        New axis identification (default None)
-    attributes :
-        Attributes to attached to the new Axis
+    axes : Axes to concatenate
+    id : New axis identification (default None)
+    attributes : Attributes to attached to the new Axis
 
     Returns
     -------
@@ -2706,14 +2697,12 @@ def take(ax, indices):
 
     Parameters
     ----------
-        ax:
-            The source array.
-        indices:
-            The indices of the values to extract.
+    ax : The source array.
+    indices : The indices of the values to extract.
 
     Returns
     -------
-    axis: TransientAxis
+    axis : TransientAxis
         The return array has the same type of ax.
     """
 

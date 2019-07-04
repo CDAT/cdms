@@ -131,6 +131,5 @@ tvariable
    TransientVariable.trace
    TransientVariable.transpose
    TransientVariable.unshare_mask
-   TransientVariable.var
    TransientVariable.view
 

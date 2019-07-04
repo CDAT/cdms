@@ -35,7 +35,8 @@ requirements:
     - esmf 
     - esmpy 
     - libdrs_f
-    - pyopenssl
+    - libblas
+    - libcblas
     - lazy-object-proxy
 
 about:

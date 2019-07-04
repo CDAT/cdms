@@ -140,6 +140,7 @@ jobs:
           destination: tests_png
 
   linux_cdms_py2:
+    docker:
       - image: cdoutrix/cdat:cdms-devs-2
     environment:
       CONDA_COMPILER: "gcc_linux-64"

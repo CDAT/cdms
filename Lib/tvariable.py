@@ -244,7 +244,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
                     # ignore if fill value given explicitly
                     if fill_value is None:
                         self._setmissing(value)
-                elif key not in ['scale_factor', 'add_offset']:
+                elif key not in ['scale_factor', 'add_offset', 'ndim']:
                     setattr(self, key, value)
 
         # Sync up missing_value attribute and the fill value.

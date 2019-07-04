@@ -15,6 +15,7 @@ build:
 requirements:
   build:
     - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
     - {{ compiler('fortran') }}
   host:
     - python {{ python }}
@@ -34,7 +35,8 @@ requirements:
     - esmf 
     - esmpy 
     - libdrs_f
-    - pyopenssl
+    - libblas
+    - libcblas
     - lazy-object-proxy
 
 about:

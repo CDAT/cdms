@@ -1,42 +1,42 @@
 version: 2
 
-checkout:
-  post:
-    - ./ci-support/checkout_merge_commit.sh
-        
 aliases:
 
-  - &setup_miniconda
-    name: setup_miniconda
-    command: |
-      mkdir -p workspace
-      git clone -b validateNightly --depth 1 git@github.com:CDAT/cdat workspace/cdat
-      ls workspace/cdat
-      python workspace/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py3.7'
-      
   - &create_conda_env
     name: create_conda_env
     environment:
-       CHANNELS: "-c cdat/label/unstable -c cdat/label/nightly -c conda-forge -c cdat"
-       PKGS: "pytest esmpy libcf distarray cdtime libcdms cdat_info testsrunner numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient lazy-object-proxy"
+       CHANNELS: "-c cdat/label/nightly -c conda-forge"
+       PKGS: "pytest esmpy libcf distarray cdtime libcdms cdat_info testsrunner numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient lazy-object-proxy openblas libblas libcblas"
     command: |
-       export PATH=$WORKDIR/miniconda/bin:$PATH
-       conda config --set always_yes yes --set changeps1 no
-       conda update -y -q conda
-       conda config --set anaconda_upload no
-       if [[ $PY_VER = 'py2' ]]; then
-          conda create -n $PY_VER "python<3"
-          conda install -n $PY_VER $CHANNELS $PKGS $CONDA_COMPILER 
-       else
-          conda create -n $PY_VER $CHANNELS $PKGS $CONDA_COMPILER "python>3" coverage coveralls
-       fi
-
+      if [ -d ${HOME}/miniconda ]; then
+        export PATH=$HOME/miniconda/bin:$PATH
+        echo "Found miniconda directory"
+      else
+        echo "miniconda directory not found, installing conda"
+        mkdir -p workspace
+        git clone -b validateNightly --depth 1 git@github.com:CDAT/cdat workspace/cdat
+        ls workspace/cdat
+        python workspace/cdat/scripts/install_miniconda.py -w $HOME -p 'py3.7'
+        export PATH=$HOME/miniconda/bin:$PATH
+        conda config --set always_yes yes --set changeps1 no
+        conda update -y -q conda
+        conda config --set anaconda_upload no
+        if [[ $PY_VER = 'py2' ]]; then
+            conda create -n cdat "python<3"
+            conda install -n cdat $CHANNELS $PKGS $CONDA_COMPILER 
+        else
+            conda create -n cdat $CHANNELS $PKGS $CONDA_COMPILER "python>3" coverage coveralls
+        fi
+      fi
   - &setup_cdms
     name: setup_cdms
+    environment:
+       CHANNELS: "-c cdat/label/nightly -c conda-forge"
     command: |
-       export PATH=$WORKDIR/miniconda/bin:$PATH
+       export PATH=$HOME/miniconda/bin:$PATH
        export CDAT_ANONYMOUS_LOG=False
-       source activate $PY_VER
+       source activate cdat
+       conda update --all $CHANNELS
        if [ $(uname) == "Linux" ];then
          export LDSHARED="$CC -shared -pthread"
          LDSHARED="$CC -shared -pthread" python setup.py install
@@ -47,9 +47,9 @@ aliases:
   - &run_cdms_tests
     name: run_cdms_tests
     command: |
-       export PATH=$WORKDIR/miniconda/bin:$PATH
+       export PATH=$HOME/miniconda/bin:$PATH
        export CDAT_ANONYMOUS_LOG=False
-       source activate $PY_VER
+       source activate cdat
        python run_tests.py --subdir -v2 $COVERAGE
        python run_tests.py -n1 --subdir -v2 $COVERAGE --dask
        RESULT=$?
@@ -59,25 +59,31 @@ aliases:
   - &run_coveralls
     name: run_coveralls
     command: |
-       export PATH=$WORKDIR/miniconda/bin:$PATH
-       source activate $PY_VER
+       export PATH=$HOME/miniconda/bin:$PATH
+       source activate cdat
        coveralls
        source deactivate
 
   - &conda_upload
     name: conda_upload
     command: |
-       export PATH=$WORKDIR/miniconda/bin:$PATH
+       export PATH=$HOME/miniconda/bin:$PATH
        export LABEL="nightly";
        if [ $CIRCLE_BRANCH == "master" ]; then
           conda install -n root conda-build anaconda-client
           bash ./ci-support/conda_upload.sh
        fi
        if [ $CIRCLE_BRANCH != "master" ]; then
+        first=$(git cherry master -v | head -n1)
+        current=$(git log -n1 --pretty=oneline)
+        if [[ $first == *"upload unstable"* || $current == *"upload unstable"* ]]; then
            export LABEL="unstable";
            echo "NOTE: upload LABEL="${LABEL}
            conda install -n root conda-build anaconda-client;
            bash ./ci-support/conda_upload.sh;
+        else
+           echo "Skipping upload to unstable since not specified in commit"
+        fi
        fi
 
 jobs:
@@ -87,11 +93,16 @@ jobs:
     environment:
       WORKDIR: "test_macos_cdms_py2"
       PY_VER: "py2"
-      CONDA_COMPILER: "gcc"
+      CONDA_COMPILER: "clang_osx-64"
     steps:
       - checkout
-      - run: *setup_miniconda
+      - restore_cache:
+          keys:
+            - macos_py2-2019-07-06
       - run: *create_conda_env
+      - save_cache:
+          key: macos_py2-2019-07-06
+          paths: /Users/distiller/miniconda
       - run: *setup_cdms
       - run: *run_cdms_tests
       - store_artifacts:
@@ -107,11 +118,16 @@ jobs:
     environment:
       WORKDIR: "test_macos_cdms_py3"
       PY_VER: "py3"
-      CONDA_COMPILER: "gcc"
+      CONDA_COMPILER: "clang_osx-64"
     steps:
       - checkout
-      - run: *setup_miniconda
+      - restore_cache:
+          keys:
+            - macos_py3-2019-07-06
       - run: *create_conda_env
+      - save_cache:
+          key: macos_py3-2019-07-06
+          paths: /Users/distiller/miniconda
       - run: *setup_cdms
       - run: *run_cdms_tests
       - run: *conda_upload
@@ -123,16 +139,15 @@ jobs:
           destination: tests_png
 
   linux_cdms_py2:
-    machine:
-      image: circleci/classic:latest
+    docker:
+      - image: cdoutrix/cdat:cdms-devs-2
     environment:
-      WORKDIR: "test_linux_cdms_py2"
-      PY_VER: "py2"
       CONDA_COMPILER: "gcc_linux-64"
+      PY_VER: "py2"
     steps:
       - checkout
-      - run: *setup_miniconda
-      - run: *create_conda_env
+      - setup_remote_docker: 
+         docker_layer_caching: true 
       - run: *setup_cdms
       - run: *run_cdms_tests
       - store_artifacts:
@@ -143,19 +158,18 @@ jobs:
           destination: tests_png
 
   linux_cdms_py3:
-    machine:
-      image: circleci/classic:latest
+    docker:
+      - image: cdoutrix/cdat:cdms-devs-3
     environment:
-      WORKDIR: "test_linux_cdms_py3"
-      PY_VER: "py3"
       CONDA_COMPILER: "gcc_linux-64"
-      COVERAGE: "-c /home/circleci/project/tests/coverage.json"
+      PY_VER: "py3"
+      COVERAGE: "-c /root/project/tests/coverage.json"
     steps:
       - checkout
+      - setup_remote_docker: 
+         docker_layer_caching: true 
       - run: pwd
       - run: ls -l
-      - run: *setup_miniconda
-      - run: *create_conda_env
       - run: *setup_cdms
       - run: *run_cdms_tests
       - run: *run_coveralls
@@ -171,7 +185,7 @@ workflows:
   version: 2
   cdms_test:
     jobs:
-      - macos_cdms_py2
+#      - macos_cdms_py2
       - macos_cdms_py3
 #           requires:
 #              - macos_cdms_py2

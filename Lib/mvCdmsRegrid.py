@@ -12,6 +12,7 @@ import re
 import numpy
 import cdms2
 import regrid2
+from six import string_types
 from functools import reduce
 
 
@@ -579,7 +580,7 @@ coordMin = %7.2f, boundMin = %7.2f, coordMax = %7.2f, boundMax = %7.2f
         attrs = {}
         for a in srcVar.attributes:
             v = srcVar.attributes[a]
-            if isinstance(v, bytes):
+            if isinstance(v, string_types):
                 attrs[a] = v
 
         # create the transient variable. Note: it is unclear whether

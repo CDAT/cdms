@@ -24,6 +24,7 @@ requirements:
     - cdat_info
     - numpy
     - libdrs_f 
+    - openblas
   run:
     - python {{ python }}
     - libcf
@@ -35,8 +36,7 @@ requirements:
     - esmf 
     - esmpy 
     - libdrs_f
-    - libblas
-    - libcblas
+    - openblas
     - lazy-object-proxy
 
 about:

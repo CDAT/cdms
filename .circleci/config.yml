@@ -6,7 +6,7 @@ aliases:
     name: create_conda_env
     environment:
        CHANNELS: "-c cdat/label/nightly -c conda-forge"
-       PKGS: "pytest esmpy libcf distarray cdtime libcdms cdat_info testsrunner numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient lazy-object-proxy openblas libblas libcblas"
+       PKGS: "pytest esmpy libcf distarray cdtime libcdms cdat_info testsrunner numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient lazy-object-proxy openblas"
     command: |
       if [ -d ${HOME}/miniconda ]; then
         export PATH=$HOME/miniconda/bin:$PATH
@@ -98,10 +98,10 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - macos_py2-2019-07-06
+            - macos_py2-2019-07-05.2
       - run: *create_conda_env
       - save_cache:
-          key: macos_py2-2019-07-06
+          key: macos_py2-2019-07-05-2
           paths: /Users/distiller/miniconda
       - run: *setup_cdms
       - run: *run_cdms_tests
@@ -123,10 +123,10 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - macos_py3-2019-07-06
+            - macos_py3-2019-07-05-2
       - run: *create_conda_env
       - save_cache:
-          key: macos_py3-2019-07-06
+          key: macos_py3-2019-07-05-2
           paths: /Users/distiller/miniconda
       - run: *setup_cdms
       - run: *run_cdms_tests

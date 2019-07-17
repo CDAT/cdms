@@ -55,6 +55,24 @@ class TestCDMSFileIO(basetest.CDMSBaseTest):
         g = self.u.getGrid()
         self.assertEqual(g.id, "grid_16x32")
 
+    def testShuffleDeflateFlags(self):
+        cdms2.setNetcdfShuffleFlag(1)
+        cdms2.setNetcdfDeflateFlag(1)
+        cdms2.setNetcdfDeflateLevelFlag(4)
+        self.assertEqual(cdms2.getNetcdfShuffleFlag(), 1)
+        self.assertEqual(cdms2.getNetcdfDeflateFlag(), 1)
+        self.assertEqual(cdms2.getNetcdfDeflateLevelFlag(), 4)
+        cdms2.setNetcdfShuffleFlag(0)
+        cdms2.setNetcdfDeflateFlag(0)
+        self.assertEqual(cdms2.getNetcdfShuffleFlag(), 0)
+        self.assertEqual(cdms2.getNetcdfDeflateFlag(), 0)
+      
+    def testClassicFlags(self):
+        cdms2.setNetcdfClassicFlag(1)
+        self.assertEqual(cdms2.getNetcdfClassicFlag(), 1)
+        cdms2.setNetcdfClassicFlag(0)
+        self.assertEqual(cdms2.getNetcdfClassicFlag(), 0)
+
     def testFileAppend(self):
         # Just make sure we don't get any exceptions
         f = cdms2.open(os.path.join(self.tempdir, "junk.nc"), "a")

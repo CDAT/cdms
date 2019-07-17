@@ -106,7 +106,7 @@ class CDMSTestRunner(cdat_info.TestRunnerBase):
         if self.args.dask:
             opt += ["-A",  "cdms_dask"]
         else:
-            opt += ["-A",  "not cdms_dask"]
+            opt += ["-A",  "not_cdms_dask"]
         return opt
 
 

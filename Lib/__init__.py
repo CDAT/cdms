@@ -78,6 +78,11 @@ setNetcdfShuffleFlag = Proxy(lambda: dataset.setNetcdfShuffleFlag)
 setNetcdfDeflateFlag = Proxy(lambda: dataset.setNetcdfDeflateFlag)
 setNetcdfDeflateLevelFlag = Proxy(lambda: dataset.setNetcdfDeflateLevelFlag)
 setNetcdfUseNCSwitchModeFlag = Proxy(lambda: dataset.setNetcdfUseNCSwitchModeFlag)
+
+getNetcdfClassicFlag = Proxy(lambda: dataset.getNetcdfClassicFlag)
+getNetcdfShuffleFlag = Proxy(lambda: dataset.getNetcdfShuffleFlag)
+getNetcdfDeflateFlag = Proxy(lambda: dataset.getNetcdfDeflateFlag)
+getNetcdfDeflateLevelFlag = Proxy(lambda: dataset.getNetcdfDeflateLevelFlag)
 getNetcdfUseNCSwitchModeFlag = Proxy(lambda: dataset.getNetcdfUseNCSwitchModeFlag)
 
 setCompressionWarnings = Proxy(lambda: dataset.setCompressionWarnings)

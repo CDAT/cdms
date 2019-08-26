@@ -140,7 +140,7 @@ jobs:
 
   linux_cdms_py2:
     docker:
-      - image: cdoutrix/cdat:cdms-devs-2
+      - image: muryanto1/cdat:cdms-devs-2
     environment:
       CONDA_COMPILER: "gcc_linux-64"
       PY_VER: "py2"
@@ -159,7 +159,7 @@ jobs:
 
   linux_cdms_py3:
     docker:
-      - image: cdoutrix/cdat:cdms-devs-3
+      - image: muryanto1/cdat:cdms-devs-3
     environment:
       CONDA_COMPILER: "gcc_linux-64"
       PY_VER: "py3"

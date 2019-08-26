@@ -1,5 +1,5 @@
-# sudo docker build --build-arg python_version="3.7"  --build-arg coverage="coverage coveralls" --build-arg cdat_channel="cdat/label/nightly" -t cdoutrix/cdat:cdms-devs-3 .
-# docker push cdoutrix/cdat:cdms-base-3
+# sudo docker build --build-arg python_version="3.7"  --build-arg coverage="coverage coveralls" --build-arg cdat_channel="cdat/label/nightly" -t muryanto1/cdat:cdms-devs-3 .
+# docker push muryanto1/cdat:cdms-devs-3
 
 FROM ubuntu:18.04
 ARG cdat_channel="cdat/label/nightly"

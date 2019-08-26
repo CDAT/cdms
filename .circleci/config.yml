@@ -43,6 +43,7 @@ aliases:
        else
          python setup.py install
        fi
+       conda list
 
   - &run_cdms_tests
     name: run_cdms_tests

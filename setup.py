@@ -42,7 +42,7 @@ except:
     # ------------------------------------------------------
     # Only for circleci we need to reset the clang root path
     # ------------------------------------------------------
-    if os.getenv("HOME") in ['/Users/distiller']:
+    if sys.platform == 'darwin':
       os.environ["CFLAGS"]="-isysroot / -Wl,-syslibroot / -w -g -O0"
     else:
       pass

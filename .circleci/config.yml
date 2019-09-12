@@ -123,13 +123,13 @@ jobs:
       CONDA_COMPILER: "clang_osx-64"
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - macos_py3-2019-07-05-2
+      #- restore_cache:
+      #    keys:
+      #      - macos_py3-2019-07-05-2
       - run: *create_conda_env
-      - save_cache:
-          key: macos_py3-2019-07-05-2
-          paths: /Users/distiller/miniconda
+      #- save_cache:
+      #    key: macos_py3-2019-07-05-2
+      #    paths: /Users/distiller/miniconda
       - run: *setup_cdms
       - run: *run_cdms_tests
       - run: *conda_upload

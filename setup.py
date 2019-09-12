@@ -43,7 +43,8 @@ except:
     # Only for circleci we need to reset the clang root path
     # ------------------------------------------------------
     if os.getenv("HOME") in ['/Users/distiller']:
-        os.environ["CFLAGS"] = "-isysroot / -Wl,-syslibroot / -w -g -O0"
+        # os.environ["CFLAGS"] = "-sysroot / -Wl,-syslibroot / -w -g -O0"
+        os.environ["CFLAGS"] = "-w -g -O0"
     else:
         os.environ["CFLAGS"] = "-w -g -O0"
 

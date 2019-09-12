@@ -89,7 +89,7 @@ aliases:
 jobs:
   macos_cdms_py2:
     macos:
-      xcode: "10.2.1"
+      xcode: "10.1.0"
     environment:
       WORKDIR: "test_macos_cdms_py2"
       PY_VER: "py2"
@@ -114,7 +114,7 @@ jobs:
 
   macos_cdms_py3:
     macos:
-      xcode: "10.2.1"
+      xcode: "10.1.0"
     environment:
       WORKDIR: "test_macos_cdms_py3"
       PY_VER: "py3"

@@ -39,13 +39,6 @@ try:
     os.environ["CC"]=mpicc
     os.environ["CFLAGS"]="-w -g -O0"
 except:
-    # ------------------------------------------------------
-    # Only for circleci we need to reset the clang root path
-    # ------------------------------------------------------
-    # if os.getenv("HOME") in ['/Users/distiller']:
-    #     os.environ["CFLAGS"] = "-sysroot / -Wl,-syslibroot / -w -g -O0"
-    # else:
-    #     os.environ["CFLAGS"] = "-w -g -O0"
     os.environ["CFLAGS"] = "-w -g -O0"
 
 libs_pth = os.path.join(sys.prefix,"lib")
@@ -55,7 +48,7 @@ setup (name = "cdms2",
        url = "http://github.com/UV-CDAT/cdms",
        packages = ['cdms2'],
        package_dir = {'cdms2': 'Lib'},
-       include_dirs = ['Include', 'Include/py3c', numpy.lib.utils.get_include()] + cdat_info.cdunif_include_directories,
+       include_dirs = ['Include', 'Include/py3c', numpy.lib.utils.get_include()],
        scripts = ['Script/cdscan', 'Script/convertcdms.py',"Script/myproxy_logon"],
        data_files = [("share/cdms2",["share/test_data_files.txt"])],
        ext_modules = [Extension('cdms2.Cdunif',

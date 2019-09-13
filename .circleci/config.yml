@@ -153,10 +153,13 @@ jobs:
       WORKDIR: "test_linux_cdms_py3"
       CONDA_COMPILER: "gcc_linux-64"
       PY_VER: "py3"
-      COVERAGE: "-c ~/project/tests/coverage.json"
+      COVERAGE: "-c /home/circleci/project/tests/coverage.json"
     steps:
       - checkout
       - run: pwd
+      - run: ls
+      - run: ls /home/circleci/project
+      - run: ls /home/circleci/project/tests
       - run: *create_conda_env
       - run: *setup_cdms
       - run: *run_cdms_tests
@@ -173,11 +176,11 @@ workflows:
   version: 2
   cdms_test:
     jobs:
-      - macos_cdms_py2
-      - macos_cdms_py3
+#      - macos_cdms_py2
+#      - macos_cdms_py3
 #           requires:
 #              - macos_cdms_py2
-      - linux_cdms_py2
+#      - linux_cdms_py2
       - linux_cdms_py3
 #           requires:
 #              - linux_cdms_py2

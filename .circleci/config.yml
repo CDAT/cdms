@@ -91,7 +91,7 @@ jobs:
     macos:
       xcode: "10.2.0"
     environment:
-      WORKDIR: "${CIRCLE_WORKING_DIRECTORY}/workdir"
+      WORKDIR: "$CIRCLE_WORKING_DIRECTORY/workdir"
       PY_VER: "py2"
       CONDA_COMPILER: "clang_osx-64"
     steps:
@@ -130,7 +130,7 @@ jobs:
     machine:
       image: circleci/classic:latest
     environment:
-      WORKDIR: "${CIRCLE_WORKING_DIRECTORY}/workdir"
+      WORKDIR: "$CIRCLE_WORKING_DIRECTORY/workdir"
       CONDA_COMPILER: "gcc_linux-64"
       PY_VER: "py2"
     steps:
@@ -149,10 +149,10 @@ jobs:
     machine:
       image: circleci/classic:latest
     environment:
-      WORKDIR: "${CIRCLE_WORKING_DIRECTORY}/workdir"
+      WORKDIR: "$CIRCLE_WORKING_DIRECTORY/workdir"
       CONDA_COMPILER: "gcc_linux-64"
       PY_VER: "py3"
-      COVERAGE: "-c ${CIRCLE_WORKING_DIRECTORY}/tests/coverage.json"
+      COVERAGE: "-c $CIRCLE_WORKING_DIRECTORY/tests/coverage.json"
     steps:
       - checkout
       - run: *create_conda_env

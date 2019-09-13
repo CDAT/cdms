@@ -12,6 +12,7 @@ aliases:
         mkdir -p workspace
         git clone -b validateNightly --depth 1 git@github.com:CDAT/cdat workspace/cdat
         ls workspace/cdat
+        echo "mkdir $WORKDIR"
         mkdir $WORKDIR
         python workspace/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py3.7'
         export PATH=$WORKDIR/miniconda/bin:$PATH
@@ -130,7 +131,7 @@ jobs:
     machine:
       image: circleci/classic:latest
     environment:
-      WORKDIR: "$CIRCLE_WORKING_DIRECTORY/workdir"
+      WORKDIR: "test_linux_cdms_py2"
       CONDA_COMPILER: "gcc_linux-64"
       PY_VER: "py2"
     steps:
@@ -149,10 +150,10 @@ jobs:
     machine:
       image: circleci/classic:latest
     environment:
-      WORKDIR: "$CIRCLE_WORKING_DIRECTORY/workdir"
+      WORKDIR: "test_linux_cdms_py3"
       CONDA_COMPILER: "gcc_linux-64"
       PY_VER: "py3"
-      COVERAGE: "-c $CIRCLE_WORKING_DIRECTORY/tests/coverage.json"
+      COVERAGE: "-c ./tests/coverage.json"
     steps:
       - checkout
       - run: *create_conda_env

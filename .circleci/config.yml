@@ -68,13 +68,15 @@ aliases:
     command: |
        export PATH=$WORKDIR/miniconda/bin:$PATH
        export LABEL="nightly";
-       if [ $CIRCLE_BRANCH == "master" ]; then
+       if [ $CIRCLE_BRANCH == "fix_conda_upload" ]; then
+       #if [ $CIRCLE_BRANCH == "master" ]; then
        	  echo "conda install -n root conda-build anaconda-client"
           conda install -n root conda-build anaconda-client
           echo "bash ./ci-support/conda_upload.sh"
           bash ./ci-support/conda_upload.sh
        fi
-       if [ $CIRCLE_BRANCH != "master" ]; then
+       if [ $CIRCLE_BRANCH == "abc" ]; then
+       # if [ $CIRCLE_BRANCH != "master" ]; then
         first=$(git cherry master -v | head -n1)
         current=$(git log -n1 --pretty=oneline)
         if [[ $first == *"upload unstable"* || $current == *"upload unstable"* ]]; then

@@ -48,10 +48,8 @@ aliases:
        export PATH=$WORKDIR/miniconda/bin:$PATH
        export CDAT_ANONYMOUS_LOG=False
        source activate cdat
-       #python run_tests.py --subdir -v2 $COVERAGE
-       #python run_tests.py -n1 --subdir -v2 $COVERAGE --dask
-       python run_tests.py --subdir -v2
-       python run_tests.py -n1 --subdir -v2 --dask
+       python run_tests.py --subdir -v2 $COVERAGE
+       python run_tests.py -n1 --subdir -v2 $COVERAGE --dask
        RESULT=$?
        echo "*** $PY_VER test result: "${RESULT}
        exit $RESULT
@@ -96,7 +94,8 @@ jobs:
     macos:
       xcode: "10.2.0"
     environment:
-      WORKDIR: "/Users/distiller/project/workdir"
+      #WORKDIR: "/Users/distiller/project/workdir"
+      WORKDIR: "${CIRCLE_WORKING_DIRECTORY}/workdir"
       PY_VER: "py2"
       CONDA_COMPILER: "clang_osx-64"
     steps:
@@ -149,7 +148,7 @@ jobs:
     machine:
       image: circleci/classic:latest
     environment:
-      WORKDIR: "/home/circleci/project/workdir"
+      WORKDIR: "${CIRCLE_WORKING_DIRECTORY}/workdir"
       CONDA_COMPILER: "gcc_linux-64"
       PY_VER: "py2"
     steps:
@@ -172,10 +171,11 @@ jobs:
     machine:
       image: circleci/classic:latest
     environment:
-      WORKDIR: "/home/circleci/project/workdir"
+      # WORKDIR: "/home/circleci/project/workdir"
+      WORKDIR: "${CIRCLE_WORKING_DIRECTORY}/workdir"
       CONDA_COMPILER: "gcc_linux-64"
       PY_VER: "py3"
-      COVERAGE: "-c /root/project/tests/coverage.json"
+      COVERAGE: "-c ${CIRCLE_WORKING_DIRECTORY}/tests/coverage.json"
     steps:
       - checkout
       #- setup_remote_docker: 

@@ -8,16 +8,13 @@ aliases:
        CHANNELS: "-c cdat/label/nightly -c conda-forge"
        PKGS: "pytest esmpy libcf distarray cdtime libcdms cdat_info testsrunner numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient lazy-object-proxy libcblas libblas"
     command: |
-      if [ -d ${HOME}/miniconda ]; then
-        export PATH=$HOME/miniconda/bin:$PATH
-        echo "Found miniconda directory"
-      else
         echo "miniconda directory not found, installing conda"
         mkdir -p workspace
         git clone -b validateNightly --depth 1 git@github.com:CDAT/cdat workspace/cdat
         ls workspace/cdat
-        python workspace/cdat/scripts/install_miniconda.py -w $HOME -p 'py3.7'
-        export PATH=$HOME/miniconda/bin:$PATH
+	mkdir $WORKDIR
+        python workspace/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py3.7'
+        export PATH=$WORKDIR/miniconda/bin:$PATH
         conda config --set always_yes yes --set changeps1 no
         conda update -y -q conda
         conda config --set anaconda_upload no
@@ -27,14 +24,13 @@ aliases:
         else
             conda create -n cdat $CHANNELS $PKGS $CONDA_COMPILER "python>3" coverage coveralls
         fi
-      fi
 
   - &setup_cdms
     name: setup_cdms
     environment:
        CHANNELS: "-c cdat/label/nightly -c conda-forge"
     command: |
-       export PATH=$HOME/miniconda/bin:$PATH
+       export PATH=$WORKDIR/miniconda/bin:$PATH
        export CDAT_ANONYMOUS_LOG=False
        source activate cdat
        conda update --all $CHANNELS
@@ -49,7 +45,7 @@ aliases:
   - &run_cdms_tests
     name: run_cdms_tests
     command: |
-       export PATH=$HOME/miniconda/bin:$PATH
+       export PATH=$WORKDIR/miniconda/bin:$PATH
        export CDAT_ANONYMOUS_LOG=False
        source activate cdat
        python run_tests.py --subdir -v2 $COVERAGE
@@ -61,7 +57,7 @@ aliases:
   - &run_coveralls
     name: run_coveralls
     command: |
-       export PATH=$HOME/miniconda/bin:$PATH
+       export PATH=$WORKDIR/miniconda/bin:$PATH
        source activate cdat
        coveralls
        source deactivate
@@ -69,7 +65,7 @@ aliases:
   - &conda_upload
     name: conda_upload
     command: |
-       export PATH=$HOME/miniconda/bin:$PATH
+       export PATH=$WORKDIR/miniconda/bin:$PATH
        export LABEL="nightly";
        if [ $CIRCLE_BRANCH == "master" ]; then
           conda install -n root conda-build anaconda-client
@@ -93,7 +89,7 @@ jobs:
     macos:
       xcode: "10.2.0"
     environment:
-      WORKDIR: "test_macos_cdms_py2"
+      WORKDIR: "/Users/distiller/project/workdir"
       PY_VER: "py2"
       CONDA_COMPILER: "clang_osx-64"
     steps:
@@ -146,7 +142,7 @@ jobs:
     machine:
       image: circleci/classic:latest
     environment:
-      WORKDIR: "test_linux_cdms_py2"
+      WORKDIR: "/home/circleci/project/workdir"
       CONDA_COMPILER: "gcc_linux-64"
       PY_VER: "py2"
     steps:
@@ -169,7 +165,7 @@ jobs:
     machine:
       image: circleci/classic:latest
     environment:
-      WORKDIR: "test_linux_cdms_py3"
+      WORKDIR: "/home/circleci/project/workdir"
       CONDA_COMPILER: "gcc_linux-64"
       PY_VER: "py3"
       COVERAGE: "-c /root/project/tests/coverage.json"

@@ -48,8 +48,10 @@ aliases:
        export PATH=$WORKDIR/miniconda/bin:$PATH
        export CDAT_ANONYMOUS_LOG=False
        source activate cdat
-       python run_tests.py --subdir -v2 $COVERAGE
-       python run_tests.py -n1 --subdir -v2 $COVERAGE --dask
+       #python run_tests.py --subdir -v2 $COVERAGE
+       #python run_tests.py -n1 --subdir -v2 $COVERAGE --dask
+       python run_tests.py --subdir -v2
+       python run_tests.py -n1 --subdir -v2 --dask
        RESULT=$?
        echo "*** $PY_VER test result: "${RESULT}
        exit $RESULT
@@ -67,7 +69,8 @@ aliases:
     command: |
        export PATH=$WORKDIR/miniconda/bin:$PATH
        export LABEL="nightly";
-       if [ $CIRCLE_BRANCH == "master" ]; then
+       # if [ $CIRCLE_BRANCH == "master" ]; then
+       if [ $CIRCLE_BRANCH == "fix_conda_upload" ]; then
           conda install -n root conda-build anaconda-client
           bash ./ci-support/conda_upload.sh
        fi

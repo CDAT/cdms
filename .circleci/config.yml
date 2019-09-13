@@ -180,7 +180,7 @@ workflows:
       - macos_cdms_py3:
           requires:
             - macos_cdms_py2
-#      - linux_cdms_py2
-#      - linux_cdms_py3
+      - linux_cdms_py2
+      - linux_cdms_py3
 
 

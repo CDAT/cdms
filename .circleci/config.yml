@@ -141,8 +141,10 @@ jobs:
           destination: tests_png
 
   linux_cdms_py2:
-    docker:
-      - image: cdoutrix/cdat:cdms-devs-2
+    #docker:
+    #  - image: cdoutrix/cdat:cdms-devs-2
+    machine:
+      image: circleci/classic:latest
     environment:
       CONDA_COMPILER: "gcc_linux-64"
       PY_VER: "py2"
@@ -160,8 +162,10 @@ jobs:
           destination: tests_png
 
   linux_cdms_py3:
-    docker:
-      - image: cdoutrix/cdat:cdms-devs-3
+    #docker:
+    #  - image: cdoutrix/cdat:cdms-devs-3
+    machine:
+      image: circleci/classic:latest
     environment:
       CONDA_COMPILER: "gcc_linux-64"
       PY_VER: "py3"

@@ -92,7 +92,7 @@ jobs:
     macos:
       xcode: "10.2.0"
     environment:
-      WORKDIR: "$CIRCLE_WORKING_DIRECTORY/workdir"
+      WORKDIR: "test_macos_cdms_py2"
       PY_VER: "py2"
       CONDA_COMPILER: "clang_osx-64"
     steps:
@@ -153,9 +153,10 @@ jobs:
       WORKDIR: "test_linux_cdms_py3"
       CONDA_COMPILER: "gcc_linux-64"
       PY_VER: "py3"
-      COVERAGE: "-c ./tests/coverage.json"
+      COVERAGE: "-c ~/project/tests/coverage.json"
     steps:
       - checkout
+      - run: pwd
       - run: *create_conda_env
       - run: *setup_cdms
       - run: *run_cdms_tests
@@ -172,7 +173,7 @@ workflows:
   version: 2
   cdms_test:
     jobs:
-#      - macos_cdms_py2
+      - macos_cdms_py2
       - macos_cdms_py3
 #           requires:
 #              - macos_cdms_py2

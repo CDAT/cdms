@@ -71,10 +71,14 @@ aliases:
        export LABEL="nightly";
        # if [ $CIRCLE_BRANCH == "master" ]; then
        if [ $CIRCLE_BRANCH == "fix_conda_upload" ]; then
+       	  echo "xxx conda install -n root conda-build anaconda-client"
           conda install -n root conda-build anaconda-client
+	  echo "xxx bash ./ci-support/conda_upload.sh"
           bash ./ci-support/conda_upload.sh
        fi
-       if [ $CIRCLE_BRANCH != "master" ]; then
+       # TEMPORARY
+       # if [ $CIRCLE_BRANCH != "master" ]; then
+       if [ $CIRCLE_BRANCH == "abc" ]; then
         first=$(git cherry master -v | head -n1)
         current=$(git log -n1 --pretty=oneline)
         if [[ $first == *"upload unstable"* || $current == *"upload unstable"* ]]; then

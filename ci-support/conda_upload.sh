@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 PKG_NAME=cdms2
 USER=cdat
-export VERSION="3.1.2"
+export VERSION="3.1.3"
 echo "Trying to upload to conda"
 echo ""
 echo "Activating base env"
@@ -34,6 +34,8 @@ fi
 ln -s ../recipe cdms2
 export BRANCH=${CIRCLE_BRANCH}
 python ./prep_for_build.py  -b ${BRANCH}
-
+echo "conda build ${PKG_NAME} -c defaults -c cdat/label/unstable -c conda-forge"
 conda build ${PKG_NAME} -c defaults -c cdat/label/unstable -c conda-forge
+
+echo "anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l $LABEL $CONDA_BLD_PATH/$OS/${PKG_NAME}-$VERSION.`date +%Y*`0.tar.bz2 --force"
 anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l $LABEL $CONDA_BLD_PATH/$OS/${PKG_NAME}-$VERSION.`date +%Y*`0.tar.bz2 --force

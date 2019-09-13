@@ -73,7 +73,7 @@ aliases:
        if [ $CIRCLE_BRANCH == "fix_conda_upload" ]; then
        	  echo "xxx conda install -n root conda-build anaconda-client"
           conda install -n root conda-build anaconda-client
-	  echo "xxx bash ./ci-support/conda_upload.sh"
+          echo "xxx bash ./ci-support/conda_upload.sh"
           bash ./ci-support/conda_upload.sh
        fi
        # TEMPORARY

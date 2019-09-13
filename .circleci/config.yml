@@ -152,6 +152,7 @@ jobs:
       - checkout
       #- setup_remote_docker: 
       #   docker_layer_caching: true 
+      - run: *create_conda_env
       - run: *setup_cdms
       - run: *run_cdms_tests
       - store_artifacts:
@@ -174,8 +175,7 @@ jobs:
       - checkout
       #- setup_remote_docker: 
       #   docker_layer_caching: true 
-      - run: pwd
-      - run: ls -l
+      - run: *create_conda_env
       - run: *setup_cdms
       - run: *run_cdms_tests
       - run: *run_coveralls

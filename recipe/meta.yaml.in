@@ -40,8 +40,8 @@ requirements:
     - lazy-object-proxy
     - clang [osx]
     - clang_osx-64 [osx]
-    - libblas
-    - libcblas
+    - libblas [osx]
+    - libcblas [osx]
 
 about:
   home: https://cdms.readthedocs.io/en/latest

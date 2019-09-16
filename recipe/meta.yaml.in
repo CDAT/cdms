@@ -40,8 +40,6 @@ requirements:
     - lazy-object-proxy
     - clang [osx]
     - clang_osx-64 [osx]
-    - libgfortran<4
-
 
 about:
   home: https://cdms.readthedocs.io/en/latest

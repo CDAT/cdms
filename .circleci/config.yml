@@ -204,10 +204,10 @@ workflows:
   version: 2
   cdms_test:
     jobs:
-      - macos_cdms_py2
-      - macos_cdms_py36:
-          requires:
-            - macos_cdms_py2
+      #- macos_cdms_py2
+      - macos_cdms_py36
+      #    requires:
+      #      - macos_cdms_py2
       - macos_cdms_py37:
           requires:
             - macos_cdms_py36

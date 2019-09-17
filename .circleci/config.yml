@@ -14,11 +14,12 @@ aliases:
         ls workspace/cdat
         echo "mkdir $WORKDIR"
         mkdir $WORKDIR
-        if [[ $PY_VER == 'py2' ]]; then
-           python workspace/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py2'
-        else
-           python workspace/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py3'
-        fi
+        #if [[ $PY_VER == 'py2' ]]; then
+        #   python workspace/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py2'
+        #else
+        #   python workspace/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py3'
+        #fi
+        python workspace/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py3'
         export PATH=$WORKDIR/miniconda/bin:$PATH
         conda config --set always_yes yes --set changeps1 no
         conda update -y -q conda

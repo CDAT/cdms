@@ -117,7 +117,8 @@ jobs:
 
   macos_cdms_py36:
     macos:
-      xcode: "10.2.0"
+      xcode: "9.2.0"
+      #xcode: "10.2.0"
     environment:
       WORKDIR: "test_macos_cdms_py3"
       PY_VER: "py36"
@@ -137,7 +138,8 @@ jobs:
 
   macos_cdms_py37:
     macos:
-      xcode: "10.2.0"
+      xcode: "9.2.0"
+      #xcode: "10.2.0"
     environment:
       WORKDIR: "test_macos_cdms_py3"
       PY_VER: "py37"

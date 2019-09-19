@@ -14,19 +14,12 @@ aliases:
         ls workspace/cdat
         echo "mkdir $WORKDIR"
         mkdir $WORKDIR
-        #if [[ $PY_VER == 'py2' ]]; then
-        #   python workspace/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py2'
-        #else
-        #   python workspace/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py3'
-        #fi
         python workspace/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py3'
         export PATH=$WORKDIR/miniconda/bin:$PATH
         conda config --set always_yes yes --set changeps1 no
         conda update -y -q conda
         conda config --set anaconda_upload no
         if [[ $PY_VER == 'py2' ]]; then
-            #conda create -n cdat "python<3"
-            #conda install -n cdat $CHANNELS $PKGS $CONDA_COMPILER 
             conda create -n cdat $CHANNELS $PKGS $CONDA_COMPILER "python<3" 
         elif [[ $PY_VER == 'py36' ]]; then
             conda create -n cdat $CHANNELS $PKGS $CONDA_COMPILER "python=3.6"
@@ -206,13 +199,13 @@ workflows:
   cdms_test:
     jobs:
       - macos_cdms_py2
-      #- macos_cdms_py36:
+      - macos_cdms_py36
       #    requires:
       #      - macos_cdms_py2
-      #- macos_cdms_py37:
+      - macos_cdms_py37
       #    requires:
       #      - macos_cdms_py36
-      #- linux_cdms_py2
-      #- linux_cdms_py3
+      - linux_cdms_py2
+      - linux_cdms_py3
 
 

@@ -21,10 +21,8 @@ aliases:
         conda config --set anaconda_upload no
         if [[ $PY_VER == 'py2' ]]; then
             conda create -n cdat $CHANNELS $PKGS $CONDA_COMPILER "python<3" 
-        elif [[ $PY_VER == 'py36' ]]; then
-            conda create -n cdat $CHANNELS $PKGS $CONDA_COMPILER "python=3.6"
-        else
-            conda create -n cdat $CHANNELS $PKGS $CONDA_COMPILER "python=3.7" coverage coveralls
+        elif [[ $PY_VER == 'py3' ]]; then
+             conda create -n cdat $CHANNELS $PKGS $CONDA_COMPILER "python>3" coverage coveralls
         fi
 
   - &setup_cdms
@@ -70,7 +68,7 @@ aliases:
     command: |
        export PATH=$WORKDIR/miniconda/bin:$PATH
        export LABEL="nightly";
-       if [ $CIRCLE_BRANCH == "py36_py37" ]; then
+       if [ $CIRCLE_BRANCH == "master" ]; then
        	  echo "conda install -n root conda-build anaconda-client"
           conda install -n root conda-build anaconda-client
           echo "bash ./ci-support/conda_upload.sh"
@@ -109,32 +107,12 @@ jobs:
           path: tests_png
           destination: tests_png
 
-  macos_cdms_py36:
+  macos_cdms_py3:
     macos:
       xcode: "9.2.0"
     environment:
       WORKDIR: "test_macos_cdms_py3"
-      PY_VER: "py36"
-      CONDA_COMPILER: "clang_osx-64"
-    steps:
-      - checkout
-      - run: *create_conda_env
-      - run: *setup_cdms
-      - run: *run_cdms_tests
-      - run: *conda_upload
-      - store_artifacts:
-          path: tests_html
-          destination: tests_html
-      - store_artifacts:
-          path: tests_png
-          destination: tests_png
-
-  macos_cdms_py37:
-    macos:
-      xcode: "9.2.0"
-    environment:
-      WORKDIR: "test_macos_cdms_py3"
-      PY_VER: "py37"
+      PY_VER: "py3"
       CONDA_COMPILER: "clang_osx-64"
     steps:
       - checkout
@@ -199,12 +177,7 @@ workflows:
   cdms_test:
     jobs:
       - macos_cdms_py2
-      - macos_cdms_py36
-      #    requires:
-      #      - macos_cdms_py2
-      - macos_cdms_py37
-      #    requires:
-      #      - macos_cdms_py36
+      - macos_cdms_py3
       - linux_cdms_py2
       - linux_cdms_py3
 

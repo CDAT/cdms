@@ -118,7 +118,7 @@ jobs:
     steps:
       - checkout
       - run: *create_conda_env
-      #- run: *setup_cdms
+      - run: *setup_cdms
       #- run: *run_cdms_tests
       - run: *conda_upload
       - store_artifacts:

@@ -117,7 +117,7 @@ jobs:
       CONDA_COMPILER: "clang_osx-64"
     steps:
       - checkout
-      #- run: *create_conda_env
+      - run: *create_conda_env
       #- run: *setup_cdms
       #- run: *run_cdms_tests
       - run: *conda_upload

@@ -19,13 +19,12 @@ requirements:
     - {{ compiler('fortran') }}
   host:
     - python {{ python }}
-    - libcf
     - setuptools
     - cdat_info >=8.2
     - numpy
     - libcdms >=3.1.2
     - libdrs_f >=3.1.2
-    - libdrs >=3.1.2=ha6016fb_4
+    - libdrs >=3.1.2
     - cdtime >=3.1.2
     - openblas
     - lazy-object-proxy
@@ -33,7 +32,7 @@ requirements:
 
   run:
     - python {{ python }}
-    - libcf
+    - libcf =1.0.3=py37h00f410c_1
     - distarray
     - lazy-object-proxy
     - cdtime
@@ -43,7 +42,7 @@ requirements:
     - esmpy
     - six
     - libcdms >=3.1.2
-    - libdrs_f >=3.1.2=ha6016fb_4
+    - libdrs_f >=3.1.2
     - libdrs >=3.1.2
     - cdtime >=3.1.2
     - openblas

@@ -20,6 +20,7 @@ requirements:
   host:
     - python {{ python }}
     - setuptools
+    - libcf >=1.0.3
     - cdat_info >=8.2
     - numpy
     - libcdms >=3.1.2
@@ -32,7 +33,7 @@ requirements:
 
   run:
     - python {{ python }}
-    - libcf =1.0.3=py37h00f410c_1
+    - libcf >=1.0.3
     - distarray
     - lazy-object-proxy
     - cdtime
@@ -47,6 +48,7 @@ requirements:
     - cdtime >=3.1.2
     - openblas
     - libnetcdf
+    - {{ pin_compatible('libgfortran', min_pin='4.0.0') }} [osx]
 
 about:
   home: https://cdms.readthedocs.io/en/latest

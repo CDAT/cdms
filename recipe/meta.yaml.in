@@ -29,7 +29,7 @@ requirements:
     - openblas >=0.3.7
     - lazy-object-proxy
     - libnetcdf
-
+    - libgfortran >=4.0.0
   run:
     - python {{ python }}
     - libcf >=1.0.3
@@ -47,6 +47,7 @@ requirements:
     - cdtime >=3.1.2
     - openblas >=0.3.7
     - libnetcdf
+    - libgfortran >=4.0.0
 
 about:
   home: https://cdms.readthedocs.io/en/latest

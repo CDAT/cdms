@@ -29,7 +29,6 @@ requirements:
     - openblas
     - lazy-object-proxy
     - libnetcdf
-    - {{ pin_compatible('libgfortran', min_pin='4.0.0') }} [osx]
 
   run:
     - python {{ python }}
@@ -43,7 +42,7 @@ requirements:
     - esmpy
     - six
     - libcdms >=3.1.2
-    - libdrs_f >=3.1.2
+    - libdrs_f >=3.1.2=ha6016fb_4
     - libdrs >=3.1.2
     - cdtime >=3.1.2
     - openblas

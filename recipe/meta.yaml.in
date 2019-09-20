@@ -47,7 +47,7 @@ requirements:
     - cdtime >=3.1.2
     - openblas
     - libnetcdf
-    - libgfortran >=4.0.0 [osx]
+    - libgfortran >=4.0.0 # [osx]
 
 about:
   home: https://cdms.readthedocs.io/en/latest

@@ -24,11 +24,13 @@ requirements:
     - numpy
     - libcdms >=3.1.2
     - libdrs_f >=3.1.2
-    - libdrs >=3.1.2
+    - libdrs >=3.1.2=
     - cdtime >=3.1.2
     - openblas
     - lazy-object-proxy
     - libnetcdf
+    - {{ pin_compatible('libgfortran') }} [osx]
+
   run:
     - python {{ python }}
     - libcf

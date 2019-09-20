@@ -46,7 +46,7 @@ requirements:
     - cdtime >=3.1.2
     - openblas
     - libnetcdf
-    - {{ pin_subpackage('libgfortran', min_pin='4.0.0') }} [osx]
+    - {{ pin_compatible('libgfortran', min_pin='4.0.0') }} [osx]
 
 about:
   home: https://cdms.readthedocs.io/en/latest

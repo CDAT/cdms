@@ -21,7 +21,7 @@ requirements:
     - python {{ python }}
     - setuptools
     - cdat_info >=8.2
-    - numpy >=1.14
+    - {{ pin_compatible('numpy', min_py='1.14.6') }}
     - libcdms >=3.1.2
     - libcxx >=4.0.1
     - libdrs_f >=3.1.2
@@ -37,7 +37,7 @@ requirements:
     - lazy-object-proxy
     - cdtime
     - cdat_info >=8.2
-    - numpy >=1.14
+    - {{ pin_compatible('numpy', min_py='1.14.6') }}
     - esmf
     - esmpy
     - six

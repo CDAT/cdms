@@ -21,15 +21,15 @@ requirements:
     - python {{ python }}
     - setuptools
     - cdat_info >=8.2
-    - numpy
+    - numpy >= 1.14
     - libcdms >=3.1.2
+    - libcxx >=4.0.1
     - libdrs_f >=3.1.2
     - libdrs >=3.1.2
     - cdtime >=3.1.2
     - openblas >=0.3.7
     - lazy-object-proxy
     - libnetcdf
-    - libgfortran >=4.0.0
   run:
     - python {{ python }}
     - libcf >=1.0.3
@@ -37,7 +37,7 @@ requirements:
     - lazy-object-proxy
     - cdtime
     - cdat_info >=8.2
-    - {{ pin_compatible('numpy') }}
+    - numpy >= 1.14
     - esmf
     - esmpy
     - six
@@ -45,9 +45,8 @@ requirements:
     - libdrs_f >=3.1.2
     - libdrs >=3.1.2
     - cdtime >=3.1.2
-    - openblas >=0.3.7
+    - openblas >=0.3.6
     - libnetcdf
-    - libgfortran >=4.0.0
 
 about:
   home: https://cdms.readthedocs.io/en/latest

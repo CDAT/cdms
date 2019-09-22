@@ -22,6 +22,7 @@ requirements:
     - setuptools
     - cdat_info >=8.2
     - {{ pin_compatible('numpy', '1.14.6') }}
+    - {{ pin_compatible('libgfortran', min_pin='4.0.0') }}
     - libcdms >=3.1.2
     - libcxx >=4.0.1
     - libdrs_f >=3.1.2
@@ -38,6 +39,7 @@ requirements:
     - cdtime
     - cdat_info >=8.2
     - {{ pin_compatible('numpy', '1.14.6') }}
+    - {{ pin_compatible('libgfortran', min_pin='4.0.0') }}
     - esmf
     - esmpy
     - six

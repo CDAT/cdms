@@ -21,13 +21,13 @@ requirements:
     - python {{ python }}
     - setuptools
     - cdat_info >=8.2
-    - {{ pin_compatible('numpy', min_pin='1.14.6') }}
+    - {{ pin_compatible('numpy') }}
     - libcdms >=3.1.2
     - libcxx >=4.0.1
     - libdrs_f >=3.1.2
     - libdrs >=3.1.2
     - cdtime >=3.1.2
-    - openblas >=0.3.7
+    - openblas =0.3.6
     - lazy-object-proxy
     - libnetcdf
   run:
@@ -37,7 +37,7 @@ requirements:
     - lazy-object-proxy
     - cdtime
     - cdat_info >=8.2
-    - {{ pin_compatible('numpy', min_pin='1.14.6') }}
+    - {{ pin_compatible('numpy') }}
     - esmf
     - esmpy
     - six
@@ -45,7 +45,7 @@ requirements:
     - libdrs_f >=3.1.2
     - libdrs >=3.1.2
     - cdtime >=3.1.2
-    - openblas >=0.3.6
+    - openblas =0.3.6
     - libnetcdf
 
 about:

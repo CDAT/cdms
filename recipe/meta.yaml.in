@@ -20,12 +20,12 @@ requirements:
   host:
     - python {{ python }}
     - setuptools
-    - cdat_info >=8.2
+    - cdat_info
     - numpy
-    - libcdms >=3.1.2
-    - libdrs_f >=3.1.2
-    - libdrs >=3.1.2
-    - cdtime >=3.1.2
+    - libcdms
+    - libdrs_f
+    - libdrs
+    - cdtime
     - lazy-object-proxy
     - libnetcdf
     - libopenblas
@@ -35,15 +35,15 @@ requirements:
     - distarray
     - lazy-object-proxy
     - cdtime
-    - cdat_info >=8.2
+    - cdat_info
     - {{ pin_compatible('numpy') }}
     - esmf
     - esmpy
     - six
-    - libcdms >=3.1.2
-    - libdrs_f >=3.1.2
-    - libdrs >=3.1.2
-    - cdtime >=3.1.2
+    - libcdms
+    - libdrs_f
+    - libdrs
+    - cdtime
     - libnetcdf
     - libopenblas
 

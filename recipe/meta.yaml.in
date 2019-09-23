@@ -26,9 +26,9 @@ requirements:
     - libdrs_f >=3.1.2
     - libdrs >=3.1.2
     - cdtime >=3.1.2
-    - openblas =0.3.6,<0.3.7
     - lazy-object-proxy
     - libnetcdf
+    - libopenblas
   run:
     - python {{ python }}
     - libcf
@@ -44,8 +44,8 @@ requirements:
     - libdrs_f >=3.1.2
     - libdrs >=3.1.2
     - cdtime >=3.1.2
-    - openblas >=0.3.6,<0.3.7
     - libnetcdf
+    - libopenblas
 
 about:
   home: https://cdms.readthedocs.io/en/latest

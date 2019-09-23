@@ -21,24 +21,22 @@ requirements:
     - python {{ python }}
     - setuptools
     - cdat_info >=8.2
-    - {{ pin_compatible('numpy', '1.14.6') }}
-    - {{ pin_compatible('libgfortran', '4.0.0') }}
+    - numpy
     - libcdms >=3.1.2
-    - libcxx >=4.0.1
     - libdrs_f >=3.1.2
     - libdrs >=3.1.2
     - cdtime >=3.1.2
-    - openblas >=0.3.6,<0.3.7.0a0
+    - openblas
     - lazy-object-proxy
     - libnetcdf
   run:
     - python {{ python }}
-    - libcf >=1.0.3
+    - libcf
     - distarray
     - lazy-object-proxy
     - cdtime
     - cdat_info >=8.2
-    - {{ pin_compatible('numpy', '1.14.6') }}
+    - {{ pin_compatible('numpy') }}
     - esmf
     - esmpy
     - six
@@ -46,7 +44,7 @@ requirements:
     - libdrs_f >=3.1.2
     - libdrs >=3.1.2
     - cdtime >=3.1.2
-    - openblas >=0.3.6,<0.3.7.0a0
+    - openblas
     - libnetcdf
 
 about:

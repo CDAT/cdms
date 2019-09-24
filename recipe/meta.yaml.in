@@ -30,6 +30,7 @@ requirements:
     - libnetcdf
   run:
     - python {{ python }}
+    - {{ pin_compatible('libgfortran') }}  # [osx]
     - libcf
     - distarray
     - lazy-object-proxy
@@ -45,7 +46,7 @@ requirements:
     - cdtime
     - openblas
     - libnetcdf
-    - {{ pin_compatible('libgfortran') }}
+
 about:
   home: https://cdms.readthedocs.io/en/latest
   license: '3-Clause BSD'

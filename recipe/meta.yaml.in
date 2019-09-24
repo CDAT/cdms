@@ -45,7 +45,7 @@ requirements:
     - cdtime
     - openblas
     - libnetcdf
-    - {{ pin_compatible(‘libgfortran’) }}
+    - {{ pin_compatible('libgfortran') }}
 about:
   home: https://cdms.readthedocs.io/en/latest
   license: '3-Clause BSD'

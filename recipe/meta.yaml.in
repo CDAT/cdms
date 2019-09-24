@@ -28,7 +28,6 @@ requirements:
     - cdtime
     - lazy-object-proxy
     - libnetcdf
-    - libopenblas
   run:
     - python {{ python }}
     - libcf
@@ -44,9 +43,9 @@ requirements:
     - libdrs_f
     - libdrs
     - cdtime
+    - openblas
     - libnetcdf
-    - libopenblas
-
+    - {{ pin_compatible(‘libgfortran’) }}
 about:
   home: https://cdms.readthedocs.io/en/latest
   license: '3-Clause BSD'

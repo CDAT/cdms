@@ -40,7 +40,7 @@ ls -la cdms2
 cat cdms2/conda_build_config.yaml
 echo "conda build ${PKG_NAME} -c defaults -c cdat/label/unstable -c conda-forge"
 # conda build ${PKG_NAME} -c defaults -c cdat/label/unstable -c conda-forge
-conda build ${PKG_NAME} -c conda-forge
+conda build ${PKG_NAME} -c conda-forge -c cdat/label/nightly
 
 echo "anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l $LABEL $CONDA_BLD_PATH/$OS/${PKG_NAME}-$VERSION.`date +%Y*`0.tar.bz2 --force"
 anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l $LABEL $CONDA_BLD_PATH/$OS/${PKG_NAME}-$VERSION.`date +%Y*`0.tar.bz2 --force

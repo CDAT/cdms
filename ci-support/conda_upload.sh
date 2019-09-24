@@ -44,7 +44,7 @@ else
     conda build cdms2 -m ${x} -c conda-forge
   done
 fi
-echo "conda build ${PKG_NAME} -c defaults -c cdat/label/unstable -c conda-forge"
+# echo "conda build ${PKG_NAME} -c defaults -c cdat/label/unstable -c conda-forge"
 # conda build ${PKG_NAME} -c defaults -c cdat/label/unstable -c conda-forge
 # conda build ${PKG_NAME} -c conda-forge -c cdat/label/nightly
 

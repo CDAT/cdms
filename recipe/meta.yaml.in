@@ -30,7 +30,6 @@ requirements:
     - libnetcdf
   run:
     - python {{ python }}
-    - {{ pin_compatible('libgfortran') }}  # [osx]
     - libcf
     - distarray
     - lazy-object-proxy

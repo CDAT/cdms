@@ -68,8 +68,7 @@ aliases:
     command: |
        export PATH=$WORKDIR/miniconda/bin:$PATH
        export LABEL="nightly";
-       #if [ $CIRCLE_BRANCH == "master" ]; then
-       if [ $CIRCLE_BRANCH == "pin_libgfortran" ]; then
+       if [ $CIRCLE_BRANCH == "master" ]; then
        	  echo "conda install -n root conda-build anaconda-client"
           conda install -n root conda-build anaconda-client
           echo "bash ./ci-support/conda_upload.sh"
@@ -80,10 +79,10 @@ aliases:
        # first=$(git cherry master -v | head -n1)
        # current=$(git log -n1 --pretty=oneline)
        # if [[ $first == *"upload unstable"* || $current == *"upload unstable"* ]]; then
-       #    export LABEL="unstable";
-       #    echo "NOTE: upload LABEL="${LABEL}
-       #    conda install -n root conda-build anaconda-client;
-       #    bash ./ci-support/conda_upload.sh;
+           export LABEL="unstable";
+           echo "NOTE: upload LABEL="${LABEL}
+           conda install -n root conda-build anaconda-client;
+           bash ./ci-support/conda_upload.sh;
        # else
        #    echo "Skipping upload to unstable since not specified in commit"
        # fi

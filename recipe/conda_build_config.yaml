@@ -5,3 +5,4 @@ python:
 
 fortran_compiler_version:
     - 4
+    - 7

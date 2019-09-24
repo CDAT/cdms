@@ -35,15 +35,15 @@ requirements:
     - distarray
     - lazy-object-proxy
     - cdtime
-    - cdat_info
+    - cdat_info >=8.2
     - {{ pin_compatible('numpy') }}
     - esmf
     - esmpy
     - six
-    - libcdms
-    - libdrs_f
-    - libdrs
-    - cdtime
+    - libcdms >=3.1.2
+    - libdrs_f >=3.1.2
+    - libdrs >=3.1.2
+    - cdtime >=3.1.2
     - openblas
     - libnetcdf
 

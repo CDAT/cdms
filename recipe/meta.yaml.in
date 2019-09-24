@@ -46,6 +46,13 @@ requirements:
     - openblas
     - libnetcdf
 
+test:
+  commands:
+    - export CDAT_ANONYMOUS_LOG=false && python -c "import cdms2"
+    - export CDAT_ANONYMOUS_LOG=false && python -c "import cdms2; cdms2.open('test.nc')"
+    - export CDAT_ANONYMOUS_LOG=false && python -c "import cdms2; cdms2.open('test.nc', 'w')"
+    - export CDAT_ANONYMOUS_LOG=false && python -c "from cdms2 import MV2"
+
 about:
   home: https://cdms.readthedocs.io/en/latest
   license: '3-Clause BSD'

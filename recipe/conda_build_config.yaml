@@ -4,4 +4,4 @@ python:
     - 2.7
 
 fortran_compiler_version:
-4
+    - 4

@@ -36,6 +36,8 @@ export BRANCH=${CIRCLE_BRANCH}
 python ./prep_for_build.py  -b ${BRANCH}
 git clone https://github.com/conda-forge/conda-forge-pinning-feedstock
 cp conda-forge-pinning-feedstock/recipe/conda_build_config.yaml cdms2/
+ls -la cdms2
+cat cdms2/conda_build_config.yaml
 echo "conda build ${PKG_NAME} -c defaults -c cdat/label/unstable -c conda-forge"
 # conda build ${PKG_NAME} -c defaults -c cdat/label/unstable -c conda-forge
 conda build ${PKG_NAME} -c conda-forge

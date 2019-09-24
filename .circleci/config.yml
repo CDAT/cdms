@@ -73,6 +73,7 @@ aliases:
        	  echo "conda install -n root conda-build anaconda-client"
           conda install -n root conda-build anaconda-client
           echo "bash ./ci-support/conda_upload.sh"
+          cat ./ci-support/conda_upload.sh
           bash ./ci-support/conda_upload.sh
        fi
        #if [ $CIRCLE_BRANCH != "master" ]; then

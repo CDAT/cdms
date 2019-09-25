@@ -52,7 +52,7 @@ aliases:
        python run_tests.py --subdir -v2 $COVERAGE
        python run_tests.py -n1 --subdir -v2 $COVERAGE --dask
        RESULT=$?
-       echo "** $PY_VER test result: "${RESULT}
+       echo "*** $PY_VER test result: "${RESULT}
        exit $RESULT
 
   - &run_coveralls
@@ -177,7 +177,9 @@ workflows:
   cdms_test:
     jobs:
       - macos_cdms_py2
-      - macos_cdms_py3
+      - macos_cdms_py3:
+          requires:
+            - macos_cdms_py2
       - linux_cdms_py2
       - linux_cdms_py3
 

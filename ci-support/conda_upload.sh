@@ -34,8 +34,19 @@ fi
 ln -s ../recipe cdms2
 export BRANCH=${CIRCLE_BRANCH}
 python ./prep_for_build.py  -b ${BRANCH}
-echo "conda build ${PKG_NAME} -c defaults -c cdat/label/unstable -c conda-forge"
-conda build ${PKG_NAME} -c defaults -c cdat/label/unstable -c conda-forge
+git clone https://github.com/conda-forge/cdms2-feedstock
+if [ `uname` == "Linux" ]; then
+  for x in $(ls cdms2-feedstock/.ci_support/linux*.yaml); do
+    conda build cdms2 -m ${x} -c conda-forge
+  done
+else
+  for x in $(ls cdms2-feedstock/.ci_support/osx*.yaml); do
+    conda build cdms2 -m ${x} -c conda-forge
+  done
+fi
+# echo "conda build ${PKG_NAME} -c defaults -c cdat/label/unstable -c conda-forge"
+# conda build ${PKG_NAME} -c defaults -c cdat/label/unstable -c conda-forge
+# conda build ${PKG_NAME} -c conda-forge -c cdat/label/nightly
 
 echo "anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l $LABEL $CONDA_BLD_PATH/$OS/${PKG_NAME}-$VERSION.`date +%Y*`0.tar.bz2 --force"
 anaconda -t $CONDA_UPLOAD_TOKEN upload -u $USER -l $LABEL $CONDA_BLD_PATH/$OS/${PKG_NAME}-$VERSION.`date +%Y*`0.tar.bz2 --force

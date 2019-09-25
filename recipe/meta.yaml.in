@@ -20,13 +20,12 @@ requirements:
   host:
     - python {{ python }}
     - setuptools
-    - cdat_info >=8.2
+    - cdat_info
     - numpy
-    - libcdms >=3.1.2
-    - libdrs_f >=3.1.2
-    - libdrs >=3.1.2
-    - cdtime >=3.1.2
-    - openblas
+    - libcdms
+    - libdrs_f
+    - libdrs
+    - cdtime
     - lazy-object-proxy
     - libnetcdf
   run:
@@ -46,6 +45,13 @@ requirements:
     - cdtime >=3.1.2
     - openblas
     - libnetcdf
+
+test:
+  commands:
+    - export CDAT_ANONYMOUS_LOG=false && python -c "import cdms2"
+    - export CDAT_ANONYMOUS_LOG=false && python -c "import cdms2; cdms2.open('test.nc', 'w')"
+    - export CDAT_ANONYMOUS_LOG=false && python -c "import cdms2; cdms2.open('test.nc')"
+    - export CDAT_ANONYMOUS_LOG=false && python -c "from cdms2 import MV2"
 
 about:
   home: https://cdms.readthedocs.io/en/latest

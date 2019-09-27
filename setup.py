@@ -27,7 +27,7 @@ p = Popen(
     stderr=PIPE)
 
 descr = p.stdout.readlines()[0].strip().decode("utf-8")
-Version = "-".join(descr.split("-")[:-2])
+Version = "-".join(descr.split("-")[:-2])[1:]
 
 import cdat_info
 import numpy

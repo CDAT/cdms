@@ -18,16 +18,7 @@ sys.path.insert(0,os.path.join(target_prefix,'lib','python%i.%i' % sys.version_i
 
 sys.path.append(os.environ.get('BUILD_DIR',"build"))
 
-p = Popen(
-    ("git",
-     "describe",
-     "--tags"),
-    stdin=PIPE,
-    stdout=PIPE,
-    stderr=PIPE)
-
-descr = p.stdout.readlines()[0].strip().decode("utf-8")
-Version = "-".join(descr.split("-")[:-2])[1:]
+Version = "3.1.4"
 
 import cdat_info
 import numpy

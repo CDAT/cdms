@@ -3,6 +3,8 @@ from __future__ import print_function
 from numpy.distutils.core import setup, Extension
 import os, sys
 import subprocess,shutil
+from subprocess import Popen, PIPE
+
 target_prefix = sys.prefix
 for i in range(len(sys.argv)):
     a = sys.argv[i]
@@ -16,11 +18,16 @@ sys.path.insert(0,os.path.join(target_prefix,'lib','python%i.%i' % sys.version_i
 
 sys.path.append(os.environ.get('BUILD_DIR',"build"))
 
+p = Popen(
+    ("git",
+     "describe",
+     "--tags"),
+    stdin=PIPE,
+    stdout=PIPE,
+    stderr=PIPE)
 
-MAJOR = 3
-MINOR = 1
-PATCH = 3
-Version = "%s.%s.%s" % (MAJOR,MINOR,PATCH)
+descr = p.stdout.readlines()[0].strip().decode("utf-8")
+Version = "-".join(descr.split("-")[:-2])[1:]
 
 import cdat_info
 import numpy

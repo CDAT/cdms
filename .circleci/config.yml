@@ -49,9 +49,6 @@ aliases:
        export PATH=$WORKDIR/miniconda/bin:$PATH
        export CDAT_ANONYMOUS_LOG=False
        source activate cdat
-       # Temporarily turn off coverage -- should debug why it failed later after 8.2 release
-       # python run_tests.py --subdir -v2 $COVERAGE
-       # python run_tests.py -n1 --subdir -v2 $COVERAGE --dask
        python run_tests.py --subdir -v2 $COVERAGE
        python run_tests.py -n1 --subdir -v2 $COVERAGE --dask
        RESULT=$?

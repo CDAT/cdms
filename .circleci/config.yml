@@ -17,7 +17,9 @@ aliases:
         python workspace/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py3'
         export PATH=$WORKDIR/miniconda/bin:$PATH
         conda config --set always_yes yes --set changeps1 no
-        conda update -y -q conda
+        # temporarily skip updating to latest conda
+        # updating from 4.7.10 to 4.7.12 is failing - the update removes setuptools
+        # conda update -y -q conda
         conda config --set anaconda_upload no
         if [[ $PY_VER == 'py2' ]]; then
             conda create -n cdat $CHANNELS $PKGS $CONDA_COMPILER "python<3" 

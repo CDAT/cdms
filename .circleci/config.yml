@@ -2,27 +2,27 @@ version: 2
 
 aliases:
 
+  - &setup_miniconda
+    name: setup_miniconda
+    command: |
+      mkdir $WORKDIR
+      git clone -b validateNightly --depth 1 git@github.com:CDAT/cdat $WORKDIR/cdat
+      python $WORKDIR/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py3'
+
   - &create_conda_env
     name: create_conda_env
     environment:
        CHANNELS: "-c cdat/label/nightly -c conda-forge"
        PKGS: "pytest esmpy libcf distarray cdtime libcdms cdat_info testsrunner numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient lazy-object-proxy libcblas libblas"
     command: |
-        echo "miniconda directory not found, installing conda"
-        mkdir -p workspace
-        git clone -b validateNightly --depth 1 git@github.com:CDAT/cdat workspace/cdat
-        ls workspace/cdat
-        echo "mkdir $WORKDIR"
-        mkdir $WORKDIR
-        python workspace/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py3'
         export PATH=$WORKDIR/miniconda/bin:$PATH
         conda config --set always_yes yes --set changeps1 no
         conda update -y -q conda
         conda config --set anaconda_upload no
         if [[ $PY_VER == 'py2' ]]; then
-            conda create -n cdat $CHANNELS $PKGS $CONDA_COMPILER "python<3" 
+            conda create -n $PY_VER $CHANNELS $PKGS $CONDA_COMPILER "python<3" 
         elif [[ $PY_VER == 'py3' ]]; then
-             conda create -n cdat $CHANNELS $PKGS $CONDA_COMPILER "python>3" coverage coveralls
+             conda create -n $PY_VER $CHANNELS $PKGS $CONDA_COMPILER "python>3" coverage coveralls
         fi
 
   - &setup_cdms
@@ -32,7 +32,7 @@ aliases:
     command: |
        export PATH=$WORKDIR/miniconda/bin:$PATH
        export CDAT_ANONYMOUS_LOG=False
-       source activate cdat
+       source activate $PY_VER
        conda update --all $CHANNELS
        if [ $(uname) == "Linux" ];then
          export LDSHARED="$CC -shared -pthread"
@@ -48,7 +48,7 @@ aliases:
     command: |
        export PATH=$WORKDIR/miniconda/bin:$PATH
        export CDAT_ANONYMOUS_LOG=False
-       source activate cdat
+       source activate $PY_VER
        python run_tests.py --subdir -v2 $COVERAGE
        python run_tests.py -n1 --subdir -v2 $COVERAGE --dask
        RESULT=$?
@@ -59,7 +59,7 @@ aliases:
     name: run_coveralls
     command: |
        export PATH=$WORKDIR/miniconda/bin:$PATH
-       source activate cdat
+       source activate $PY_VER
        coveralls
        source deactivate
 
@@ -111,13 +111,14 @@ aliases:
 jobs:
   macos_cdms_py2:
     macos:
-      xcode: "9.2.0"
+      xcode: "11.2.0"
     environment:
       WORKDIR: "test_macos_cdms_py2"
       PY_VER: "py2"
       CONDA_COMPILER: "clang_osx-64"
     steps:
       - checkout
+      - run: *setup_miniconda
       - run: *create_conda_env
       - run: *setup_cdms
       - run: *run_cdms_tests
@@ -130,13 +131,14 @@ jobs:
 
   macos_cdms_py3:
     macos:
-      xcode: "9.2.0"
+      xcode: "11.2.0"
     environment:
       WORKDIR: "test_macos_cdms_py3"
       PY_VER: "py3"
       CONDA_COMPILER: "clang_osx-64"
     steps:
       - checkout
+      - run: *setup_miniconda
       - run: *create_conda_env
       - run: *setup_cdms
       - run: *run_cdms_tests
@@ -157,6 +159,7 @@ jobs:
       PY_VER: "py2"
     steps:
       - checkout
+      - run: *setup_miniconda
       - run: *create_conda_env
       - run: *setup_cdms
       - run: *run_cdms_tests
@@ -177,10 +180,7 @@ jobs:
       COVERAGE: "-c /home/circleci/project/tests/coverage.json"
     steps:
       - checkout
-      - run: pwd
-      - run: ls
-      - run: ls /home/circleci/project
-      - run: ls /home/circleci/project/tests
+      - run: *setup_miniconda
       - run: *create_conda_env
       - run: *setup_cdms
       - run: *run_cdms_tests

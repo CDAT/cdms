@@ -21,8 +21,8 @@ from . import grid
 import MV2
 
 
-import cdat_info
-cdat_info.pingPCMDIdb("cdat", "cdms2")  # noqa
+#import cdat_info
+#cdat_info.pingPCMDIdb("cdat", "cdms2")  # noqa
 #
 __all__ = ["cdmsobj", "axis", "coord", "grid", "hgrid", "avariable",
            "sliceut", "error", "variable", "fvariable", "tvariable", "dataset",

@@ -31,7 +31,6 @@ aliases:
        CHANNELS: "-c cdat/label/nightly -c conda-forge"
     command: |
        export PATH=$WORKDIR/miniconda/bin:$PATH
-       export CDAT_ANONYMOUS_LOG=False
        source activate cdat
        conda update --all $CHANNELS
        if [ $(uname) == "Linux" ];then
@@ -47,7 +46,6 @@ aliases:
     name: run_cdms_tests
     command: |
        export PATH=$WORKDIR/miniconda/bin:$PATH
-       export CDAT_ANONYMOUS_LOG=False
        source activate cdat
        python run_tests.py --subdir -v2 $COVERAGE
        python run_tests.py -n1 --subdir -v2 $COVERAGE --dask

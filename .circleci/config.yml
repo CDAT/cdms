@@ -27,6 +27,7 @@ aliases:
            echo "conda create -n cdat $CHANNELS $PKGS $CONDA_COMPILER 'python>=3.7,<3.8' coverage coveralls"
            conda create -n cdat $CHANNELS $PKGS $CONDA_COMPILER "python>=3.7,<3.8" coverage coveralls
         fi
+        conda activate cdat
 
   - &setup_cdms
     name: setup_cdms
@@ -177,11 +178,11 @@ workflows:
   version: 2
   cdms_test:
     jobs:
-      - macos_cdms_py2
-      - macos_cdms_py3:
-          requires:
-            - macos_cdms_py2
-      - linux_cdms_py2
+      #- macos_cdms_py2
+      #- macos_cdms_py3:
+      #    requires:
+      #      - macos_cdms_py2
+      #- linux_cdms_py2
       - linux_cdms_py3
 
 

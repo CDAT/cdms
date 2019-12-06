@@ -20,7 +20,7 @@ aliases:
         conda update -y -q conda
         conda config --set anaconda_upload no
         if [[ $PY_VER == 'py2' ]]; then
-	   conda create -n cdat $CHANNELS $PKGS $CONDA_COMPILER "python<3" 
+           conda create -n cdat $CHANNELS $PKGS $CONDA_COMPILER "python<3" 
         elif [[ $PY_VER == 'py3' ]]; then
            conda create -n cdat $CHANNELS $PKGS $CONDA_COMPILER "python>=3.7,<3.8" coverage coveralls
         fi

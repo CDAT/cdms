@@ -1,7 +1,6 @@
 import cdms2
 import os
 import numpy
-import cdat_info
 import basetest
 import MV2
 

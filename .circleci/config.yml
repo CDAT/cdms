@@ -12,16 +12,19 @@ aliases:
         mkdir -p workspace
         git clone -b validateNightly --depth 1 git@github.com:CDAT/cdat workspace/cdat
         ls workspace/cdat
-        echo "mkdir $WORKDIR"
         mkdir $WORKDIR
         python workspace/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py3'
+        source $WORKDIR/miniconda/etc/profile.d/conda.sh
+        conda activate base
         export PATH=$WORKDIR/miniconda/bin:$PATH
         conda config --set always_yes yes --set changeps1 no
+        conda config --set channel_priority strict
         conda update -y -q conda
         conda config --set anaconda_upload no
         if [[ $PY_VER == 'py2' ]]; then
            conda create -n cdat $CHANNELS $PKGS $CONDA_COMPILER "python<3" 
         elif [[ $PY_VER == 'py3' ]]; then
+           echo "conda create -n cdat $CHANNELS $PKGS $CONDA_COMPILER 'python>=3.7,<3.8' coverage coveralls"
            conda create -n cdat $CHANNELS $PKGS $CONDA_COMPILER "python>=3.7,<3.8" coverage coveralls
         fi
 

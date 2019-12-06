@@ -28,6 +28,7 @@ aliases:
            conda create -n cdat $CHANNELS $PKGS $CONDA_COMPILER "python>=3.7,<3.8" coverage coveralls
         fi
         conda activate cdat
+        conda list
 
   - &setup_cdms
     name: setup_cdms

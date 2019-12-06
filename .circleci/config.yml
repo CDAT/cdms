@@ -6,7 +6,7 @@ aliases:
     name: create_conda_env
     environment:
        CHANNELS: "-c cdat/label/nightly -c conda-forge"
-       PKGS: "pytest esmpy libcf distarray cdtime libcdms cdat_info testsrunner numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient lazy-object-proxy libcblas libblas 'libnetcdf=4.6.2'"
+       PKGS: "pytest esmpy libcf distarray cdtime libcdms cdat_info testsrunner numpy "esmf=7.1.0" esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient lazy-object-proxy libcblas libblas 'libnetcdf=4.6.2'"
     command: |
         echo "miniconda directory not found, installing conda"
         mkdir -p workspace

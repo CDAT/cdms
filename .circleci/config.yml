@@ -179,11 +179,11 @@ workflows:
   version: 2
   cdms_test:
     jobs:
-      #- macos_cdms_py2
-      #- macos_cdms_py3:
-      #    requires:
-      #      - macos_cdms_py2
-      #- linux_cdms_py2
+      - macos_cdms_py2
+      - macos_cdms_py3:
+          requires:
+            - macos_cdms_py2
+      - linux_cdms_py2
       - linux_cdms_py3
 
 

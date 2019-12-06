@@ -7,7 +7,7 @@ import sys
 from regrid2 import Horizontal
 import numpy
 import basetest
-
+import cdat_info
 
 class TestRegridding(basetest.CDMSBaseTest):
 

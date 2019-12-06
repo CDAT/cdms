@@ -5,7 +5,6 @@ import cdms2, os, numpy
 import cdms2.forecast
 import cdms2.tvariable
 from cdms2.cdscan import main as cdscan
-import cdat_info
 import basetest
 
 

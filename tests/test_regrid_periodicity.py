@@ -2,7 +2,6 @@ import requests
 import cdms2
 import os
 import sys
-import cdat_info
 import basetest
 import numpy as np
 import basetest

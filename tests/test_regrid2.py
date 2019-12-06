@@ -122,7 +122,7 @@ class TestRegridding(basetest.CDMSBaseTest):
 
 
     def testRegrid2Attributes(self):
-        f = cdms2.open(cdms2.cdat_info.get_sampledata_path()+"/clt.nc")
+        f = cdms2.open(cdat_info.get_sampledata_path()+"/clt.nc")
         s= f("clt")
         s.units = 'K'
         u = f("u")
@@ -133,7 +133,7 @@ class TestRegridding(basetest.CDMSBaseTest):
 
 
     def testRegrid2Unicode(self):
-        f = cdms2.open(cdms2.cdat_info.get_sampledata_path()+"/clt.nc")
+        f = cdms2.open(cdat_info.get_sampledata_path()+"/clt.nc")
         s = f("clt",slice(0,1),squeeze=True)
         g = f["u"].getGrid()
         # works

@@ -38,17 +38,17 @@ aliases:
        # conda activate base
        conda activate test_cdms
        echo "python -c 'import cdms2'"
-       python -c "import cdms2"
+       python -c "import cdms2; import sys; print(sys.path)"
        python run_tests.py -H -v2 --subdir
 
 jobs:
-   macos_cdms_py2:
-      macos:
-         xcode: "11.1.0"
+   linux_cdms_py37:
+      machine:
+         image: circleci/classic:latest
       environment:
-         WORKDIR: "/Users/distiller/project/workdir"
+         WORKDIR: "/home/circleci/project/workdir"
          LAST_STABLE: "3.1.4"
-         PY_VER: "python<3"
+         PY_VER: "python>=3.7,<3.8"
       steps:
          - checkout
          - run: *setup_miniconda
@@ -56,3 +56,8 @@ jobs:
          - run: *setup_run_tests
          - run: *run_tests
 
+workflows:
+   version: 2
+   cdms:
+      jobs:
+         - linux_cdms_py2

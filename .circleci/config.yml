@@ -21,7 +21,7 @@ aliases:
     name: setup_run_tests
     environment:
        PKGS: "testsrunner myproxyclient cdms2"
-       CHANNELS: "-c cdat/label/nightly -c conda-forge"
+       CHANNELS: "-c cdat/label/linatest -c cdat/label/nightly -c conda-forge"
     command: |
        source $WORKDIR/miniconda/etc/profile.d/conda.sh
        conda activate base

@@ -1,208 +1,58 @@
 version: 2
 
 aliases:
-
   - &setup_miniconda
     name: setup_miniconda
     command: |
-      mkdir $WORKDIR
-      git clone -b validateNightly --depth 1 git@github.com:CDAT/cdat $WORKDIR/cdat
-      python $WORKDIR/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py3'
+       mkdir -p workspace
+       git clone -b validateNightly git@github.com:CDAT/cdat workspace/cdat
+       # install_miniconda.py installs miniconda3 under $WORKDIR/miniconda
+       python workspace/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py3'
 
-  - &create_conda_env
-    name: create_conda_env
-    environment:
-       # REVISIT REVISIT
-       CHANNELS: "-c cdat/label/linatest -c cdat/label/nightly -c conda-forge"
-       PKGS: "pytest esmpy libcf distarray cdtime libcdms cdat_info testsrunner numpy esmf esmpy libdrs_f pyopenssl nose requests flake8 myproxyclient lazy-object-proxy libcblas libblas"
+  - &build_cdms
+    name: build_cdms
     command: |
-        export PATH=$WORKDIR/miniconda/bin:$PATH
-        conda config --set always_yes yes --set changeps1 no
-        conda update -y -q conda
-        conda config --set anaconda_upload no
-        if [[ $PY_VER == 'py2' ]]; then
-            conda create -n $PY_VER $CHANNELS $PKGS $CONDA_COMPILER "python<3" 
-        elif [[ $PY_VER == 'py3' ]]; then
-             conda create -n $PY_VER $CHANNELS $PKGS $CONDA_COMPILER "python>3" coverage coveralls
-        fi
+       git clone -b sync_recipe https://github.com/CDAT/conda-recipes.git $WORKDIR/conda-recipes 
+       source $WORKDIR/miniconda/etc/profile.d/conda.sh
+       conda activate base
+       python $WORKDIR/conda-recipes/build_tools/conda_build_upload.py -w $WORKDIR -l $LAST_STABLE -B 0 -p cdms2 -r cdms -b $CIRCLE_BRANCH
 
-  - &setup_cdms
-    name: setup_cdms
+  - &setup_run_tests
+    name: setup_run_tests
     environment:
+       PKGS: "testsrunner myproxyclient"
        CHANNELS: "-c cdat/label/nightly -c conda-forge"
     command: |
-       export PATH=$WORKDIR/miniconda/bin:$PATH
-       export CDAT_ANONYMOUS_LOG=False
-       source activate $PY_VER
-       conda update --all $CHANNELS
-       if [ $(uname) == "Linux" ];then
-         export LDSHARED="$CC -shared -pthread"
-         LDSHARED="$CC -shared -pthread" python setup.py install
-       else
-         python setup.py install
-       fi
-       python --version
+       source $WORKDIR/miniconda/etc/profile.d/conda.sh
+       conda activate base
+       conda create -y -n test_cdms --use-local $CHANNELS "$PY_VER" $PKGS
+       conda activate test_cdms
        conda list
+       echo "python -c 'import cdms2'"
+       python -c "import cdms2"
 
-  - &run_cdms_tests
-    name: run_cdms_tests
+  - &run_tests
+    name: run_tests
     command: |
-       export PATH=$WORKDIR/miniconda/bin:$PATH
-       export CDAT_ANONYMOUS_LOG=False
-       source activate $PY_VER
-       python run_tests.py --subdir -v2 $COVERAGE
-       python run_tests.py -n1 --subdir -v2 $COVERAGE --dask
-       RESULT=$?
-       echo "** $PY_VER test result: "${RESULT}
-       exit $RESULT
-
-  - &run_coveralls
-    name: run_coveralls
-    command: |
-       export PATH=$WORKDIR/miniconda/bin:$PATH
-       source activate $PY_VER
-       coveralls
-       source deactivate
-
-  - &conda_upload
-    name: conda_upload
-    command: |
-       export PATH=$WORKDIR/miniconda/bin:$PATH
-       export LABEL="nightly";
-       if [ $CIRCLE_BRANCH == "master" ]; then
-       	  echo "conda install -n root conda-build anaconda-client"
-          conda install -n root conda-build anaconda-client
-          echo "bash ./ci-support/conda_upload.sh"
-          bash ./ci-support/conda_upload.sh
-       fi
-       if [ $CIRCLE_BRANCH != "master" ]; then
-        first=$(git cherry master -v | head -n1)
-        current=$(git log -n1 --pretty=oneline)
-        if [[ $first == *"upload unstable"* || $current == *"upload unstable"* ]]; then
-           export LABEL="unstable";
-           echo "NOTE: upload LABEL="${LABEL}
-           conda install -n root conda-build anaconda-client;
-           bash ./ci-support/conda_upload.sh;
-        else
-           echo "Skipping upload to unstable since not specified in commit"
-        fi
-       fi
-
-  - &conda_build_upload
-    name: conda_build_upload
-    command: |
-       export PATH=$HOME/project/$WORKDIR/miniconda/bin:$PATH
-       # force loading conda gcc
-       source activate $PY_VER
-       export VERSION="3.1.4"
-       export LABEL="linatest"
-       export PKG_NAME="cdms2"
-       # REVISIT -- should upload only from 'master'
-       export CWD=`pwd`
-       echo "xxx cwd: $CWD"
-       git status
-       git clone -b sync_recipe https://github.com/CDAT/conda-recipes.git $WORKDIR/conda-recipes
-       CONDA_RECIPES_REPO=$CWD/$WORKDIR/conda-recipes
-       echo "CONDA_RECIPES_REPO: $CONDA_RECIPES_REPO"
-       python $CONDA_RECIPES_REPO/prepare_recipe.py -l $VERSION
-       cat recipe/meta.yaml
-       echo "bash $CONDA_RECIPES_REPO/conda_build_upload.sh $PKG_NAME $CWD/$WORKDIR $LABEL"
-       bash $CONDA_RECIPES_REPO/conda_build_upload.sh $PKG_NAME $CWD/$WORKDIR $LABEL
+       source $WORKDIR/miniconda/etc/profile.d/conda.sh
+       # conda activate base
+       conda activate test_cdms
+       echo "python -c 'import cdms2'"
+       python -c "import cdms2"
+       python run_tests.py -H -v2 --subdir
 
 jobs:
-  macos_cdms_py2:
-    macos:
-      xcode: "11.2.0"
-    environment:
-      WORKDIR: "test_macos_cdms_py2"
-      PY_VER: "py2"
-      CONDA_COMPILER: "clang_osx-64"
-    steps:
-      - checkout
-      - run: *setup_miniconda
-      - run: *create_conda_env
-      - run: *setup_cdms
-      - run: *run_cdms_tests
-      - store_artifacts:
-          path: tests_html
-          destination: tests_html
-      - store_artifacts:
-          path: tests_png
-          destination: tests_png
-
-  macos_cdms_py3:
-    macos:
-      xcode: "11.2.0"
-    environment:
-      WORKDIR: "test_macos_cdms_py3"
-      PY_VER: "py3"
-      CONDA_COMPILER: "clang_osx-64"
-    steps:
-      - checkout
-      - run: *setup_miniconda
-      - run: *create_conda_env
-      - run: *setup_cdms
-      - run: *run_cdms_tests
-      - run: *conda_build_upload
-      - store_artifacts:
-          path: tests_html
-          destination: tests_html
-      - store_artifacts:
-          path: tests_png
-          destination: tests_png
-
-  linux_cdms_py2:
-    machine:
-      image: circleci/classic:latest
-    environment:
-      WORKDIR: "test_linux_cdms_py2"
-      CONDA_COMPILER: "gcc_linux-64"
-      PY_VER: "py2"
-    steps:
-      - checkout
-      - run: *setup_miniconda
-      - run: *create_conda_env
-      - run: *setup_cdms
-      - run: *run_cdms_tests
-      - store_artifacts:
-          path: tests_html
-          destination: tests_html
-      - store_artifacts:
-          path: tests_png
-          destination: tests_png
-
-  linux_cdms_py3:
-    machine:
-      image: circleci/classic:latest
-    environment:
-      WORKDIR: "test_linux_cdms_py3"
-      CONDA_COMPILER: "gcc_linux-64"
-      PY_VER: "py3"
-      COVERAGE: "-c /home/circleci/project/tests/coverage.json"
-    steps:
-      - checkout
-      - run: *setup_miniconda
-      - run: *create_conda_env
-      - run: *setup_cdms
-      - run: *run_cdms_tests
-      #- run: *run_coveralls
-      - run: *conda_build_upload
-      - store_artifacts:
-          path: tests_html
-          destination: tests_html
-      - store_artifacts:
-          path: tests_png
-          destination: tests_png
-
-workflows:
-  version: 2
-  cdms_test:
-    jobs:
-      - macos_cdms_py2
-      - macos_cdms_py3:
-          requires:
-            - macos_cdms_py2
-      - linux_cdms_py2
-      - linux_cdms_py3
-
+   macos_cdms_py2:
+      macos:
+         xcode: "11.1.0"
+      environment:
+         WORKDIR: "/Users/distiller/project/workdir"
+         LAST_STABLE: "3.1.4"
+         PY_VER: "python<3"
+      steps:
+         - checkout
+         - run: *setup_miniconda
+         - run: *build_cdms
+         - run: *setup_run_tests
+         - run: *run_tests
 

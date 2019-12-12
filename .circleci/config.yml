@@ -12,7 +12,7 @@ aliases:
   - &build_cdms
     name: build_cdms
     command: |
-       git clone -b sync_recipe https://github.com/CDAT/conda-recipes.git $WORKDIR/conda-recipes 
+       git clone -b sync_recipe_TMP https://github.com/CDAT/conda-recipes.git $WORKDIR/conda-recipes 
        source $WORKDIR/miniconda/etc/profile.d/conda.sh
        conda activate base
        python $WORKDIR/conda-recipes/build_tools/conda_build_upload.py -w $WORKDIR -l $LAST_STABLE -B 0 -p cdms2 -r cdms -b $CIRCLE_BRANCH
@@ -60,4 +60,4 @@ workflows:
    version: 2
    cdms:
       jobs:
-         - linux_cdms_py2
+         - linux_cdms_py37

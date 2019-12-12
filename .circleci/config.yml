@@ -27,6 +27,7 @@ aliases:
        conda activate base
        conda config --add channels cdat/label/linatest --force
        conda config --add channels cdat/label/nightly --force
+       conda config set channel_priority false
        conda create -y -n test_cdms --use-local $CHANNELS "$PY_VER" $PKGS
        conda activate test_cdms
        conda list

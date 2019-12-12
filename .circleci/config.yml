@@ -20,7 +20,7 @@ aliases:
   - &setup_run_tests
     name: setup_run_tests
     environment:
-       PKGS: "testsrunner myproxyclient cdms2"
+       PKGS: "testsrunner pytest myproxyclient cdms2"
        CHANNELS: "-c cdat/label/linatest -c cdat/label/nightly -c conda-forge"
     command: |
        source $WORKDIR/miniconda/etc/profile.d/conda.sh
@@ -43,6 +43,7 @@ aliases:
        echo "python -c 'import cdms2'"
        python -c "import cdms2; import sys; print(sys.path)"
        python run_tests.py -H -v2 --subdir
+       python run_tests.py -H -v2 --subdir --dask
 
 jobs:
    linux_cdms_py37:

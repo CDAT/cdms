@@ -39,7 +39,7 @@ aliases:
        conda config --add channels cdat/label/linatest --force
        conda config --add channels cdat/label/nightly --force
        conda config --set channel_priority true
-       conda create -y -n test_cdms --use-local $CHANNELS "$PY_VER" $PKGS
+       conda create -y -n test_cdms --use-local $CHANNELS "$CONDA_PY_VER" $PKGS
        conda activate test_cdms
        conda list
        echo "python -c 'import cdms2'"
@@ -62,8 +62,13 @@ jobs:
          image: circleci/classic:latest
       environment:
          WORKDIR: "/home/circleci/project/workdir"
+         PKG_NAME: "cdms2"
+         ENV_NAME: "test_cdms"
          LAST_STABLE: "3.1.4"
-         PY_VER: "python>=3.7,<3.8"
+         CONDA_PY_VER: "python>=3.7,<3.8"
+         BUILD_VARIANT_VER: "noarch"
+         COVERAGE: "-c tests/coverage.json --coverage-from-egg"
+         COVERAGE_PKGS: "coverage coveralls"
       steps:
          - checkout
          - run: *setup_miniconda

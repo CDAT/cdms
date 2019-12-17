@@ -146,34 +146,6 @@ jobs:
               paths:
                  - macos_build/miniconda/conda-bld/osx-64/cdms*tar.bz2
 
-   macos_cdms_py38:
-      macos:
-         xcode: "11.1.0"
-      environment:
-         WORKDIR: /Users/distiller/project/macos_build
-         PKG_NAME: "cdms2"
-         ENV_NAME: "test_cdms"
-         LAST_STABLE: "3.1.4"
-         CONDA_PY_VER: "python>=3.8,<3.9"
-         BUILD_VARIANT_VER: "3.8"
-      steps:
-         - checkout
-         - attach_workspace:
-              at: .
-         - run: *conda_build
-         - run: *setup_run_tests
-         - run: *run_tests
-         - store_artifacts:
-              path: tests_html
-              destination: tests_html
-         - store_artifacts:
-             path: tests_png
-             destination: tests_png
-         - persist_to_workspace:
-              root: .
-              paths:
-                 - macos_build/miniconda/conda-bld/osx-64/cdms*tar.bz2
-
    linux_cdms_py2:
       machine:
          image: circleci/classic:latest
@@ -230,37 +202,6 @@ jobs:
               paths:
                  - linux_build/miniconda/conda-bld/linux-64/cdms*tar.bz2
 
-   linux_cdms_py38:
-      machine:
-         image: circleci/classic:latest
-      environment:
-         WORKDIR: /home/circleci/project/linux_build
-         PKG_NAME: "cdms2"
-         ENV_NAME: "test_cdms"
-         LAST_STABLE: "3.1.4"
-         CONDA_PY_VER: "python>=3.8,<3.9"
-         BUILD_VARIANT_VER: "3.8"
-         COVERAGE: "-c tests/coverage.json --coverage-from-egg"
-         COVERAGE_PKGS: "coverage coveralls"
-      steps:
-         - checkout
-         - attach_workspace:
-              at: .
-         - run: *conda_build
-         - run: *setup_run_tests
-         - run: *run_tests
-         - run: *run_coveralls
-         - store_artifacts:
-              path: tests_html
-              destination: tests_html
-         - store_artifacts:
-             path: tests_png
-             destination: tests_png
-         - persist_to_workspace:
-              root: .
-              paths:
-                 - linux_build/miniconda/conda-bld/linux-64/cdms*tar.bz2
-
    upload:
       machine:
          image: circleci/classic:latest
@@ -288,24 +229,15 @@ workflows:
          - macos_cdms_py37:
               requires:
                  - macos_setup
-         - macos_cdms_py38:
-              requires:
-                 - macos_setup
          - linux_cdms_py2:
               requires:
                  - linux_setup
          - linux_cdms_py37:
               requires:
                  - linux_setup
-         - linux_cdms_py38:
-              requires:
-                 - linux_setup
          - upload:
               requires:
                  - macos_cdms_py2
                  - macos_cdms_py37
-                 - macos_cdms_py38
                  - linux_cdms_py2
                  - linux_cdms_py37
-                 - linux_cdms_py38
-

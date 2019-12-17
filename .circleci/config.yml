@@ -67,7 +67,7 @@ jobs:
          ENV_NAME: "test_cdms"
          LAST_STABLE: "3.1.4"
          CONDA_PY_VER: "python>=3.7,<3.8"
-         BUILD_VARIANT_VER: "noarch"
+         BUILD_VARIANT_VER: "3.7"
          COVERAGE: "-c tests/coverage.json --coverage-from-egg"
          COVERAGE_PKGS: "coverage coveralls"
       steps:

@@ -26,7 +26,7 @@ aliases:
        conda config --add channels conda-forge --force
        conda config --set channel_priority strict
        BUILD_SCRIPT="$WORKDIR/conda-recipes/build_tools/conda_build.py"
-       python $BUILD_SCRIPT -w $WORKDIR -p $PKG_NAME --build_version $BUILD_VARIANT_VER --do_build
+       python $BUILD_SCRIPT -w $WORKDIR -p $PKG_NAME -r $REPO_NAME --build_version $BUILD_VARIANT_VER --do_build
 
   - &setup_run_tests
     name: setup_run_tests
@@ -75,6 +75,7 @@ jobs:
       environment:
          WORKDIR: /Users/distiller/project/macos_build
          PKG_NAME: "cdms2"
+         REPO_NAME: "cdms"
          LAST_STABLE: "3.1.4"
       steps:
          - run: *setup_miniconda
@@ -90,6 +91,7 @@ jobs:
       environment:
          WORKDIR: /home/circleci/project/linux_build
          PKG_NAME: "cdms2"
+         REPO_NAME: "cdms"
          LAST_STABLE: "3.1.4"
       steps:
          - attach_workspace:

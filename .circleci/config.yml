@@ -54,7 +54,7 @@ aliases:
        echo "python -c 'import cdms2'"
        python -c "import cdms2; import sys; print(sys.path)"
        python run_tests.py -H -v2 --subdir
-       python run_tests.py -H -v2 --subdir --dask
+       python run_tests.py -H -v2 --subdir -n 1 --dask
 
   - &conda_upload
     name: conda_upload

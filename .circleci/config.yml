@@ -32,11 +32,10 @@ aliases:
     name: setup_run_tests
     environment:
        PKGS: "testsrunner pytest myproxyclient"
-       CHANNELS: "-c cdat/label/linatest -c cdat/label/nightly -c conda-forge"
+       CHANNELS: "-c cdat/label/nightly -c conda-forge"
     command: |
        source $WORKDIR/miniconda/etc/profile.d/conda.sh
        conda activate base
-       conda config --add channels cdat/label/linatest --force
        conda config --add channels cdat/label/nightly --force
        conda config --set channel_priority true
        conda create -y -n test_cdms --use-local $CHANNELS "$CONDA_PY_VER" $PKG_NAME $PKGS $COVERAGE_PKGS
@@ -59,9 +58,9 @@ aliases:
   - &conda_upload
     name: conda_upload
     command: |
-       #if [[ $CIRCLE_BRANCH != "master" ]]; then
-       #   exit 0
-       #fi
+       if [[ $CIRCLE_BRANCH != "master" ]]; then
+          exit 0
+       fi
        source $WORKDIR/miniconda/etc/profile.d/conda.sh
        conda activate base
        UPLOAD_OPTIONS="-t $CONDA_UPLOAD_TOKEN upload -u $USER -l $LABEL"
@@ -238,7 +237,7 @@ jobs:
          PKG_NAME: "cdms2"
          VERSION: "3.1.4"
          USER: "cdat"
-         LABEL: "linatest"
+         LABEL: "nightly"
       steps:
          - attach_workspace:
               at: .

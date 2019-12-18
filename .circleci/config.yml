@@ -31,7 +31,7 @@ aliases:
   - &setup_run_tests
     name: setup_run_tests
     environment:
-       PKGS: "testsrunner pytest myproxyclient cdms2"
+       PKGS: "testsrunner pytest myproxyclient"
        CHANNELS: "-c cdat/label/linatest -c cdat/label/nightly -c conda-forge"
     command: |
        source $WORKDIR/miniconda/etc/profile.d/conda.sh
@@ -39,7 +39,7 @@ aliases:
        conda config --add channels cdat/label/linatest --force
        conda config --add channels cdat/label/nightly --force
        conda config --set channel_priority true
-       conda create -y -n test_cdms --use-local $CHANNELS "$CONDA_PY_VER" $PKGS
+       conda create -y -n test_cdms --use-local $CHANNELS "$CONDA_PY_VER" $PKG_NAME $PKGS $COVERAGE_PKGS
        conda activate test_cdms
        conda list
        echo "python -c 'import cdms2'"
@@ -53,7 +53,7 @@ aliases:
        conda activate test_cdms
        echo "python -c 'import cdms2'"
        python -c "import cdms2; import sys; print(sys.path)"
-       python run_tests.py -H -v2 --subdir
+       python run_tests.py -H -v2 --subdir $COVERAGE
        python run_tests.py -H -v2 --subdir -n 1 --dask
 
   - &conda_upload
@@ -67,6 +67,14 @@ aliases:
        UPLOAD_OPTIONS="-t $CONDA_UPLOAD_TOKEN upload -u $USER -l $LABEL"
        anaconda $UPLOAD_OPTIONS linux_build/miniconda/conda-bld/linux-64/$PKG_NAME-$VERSION.`date +%Y*`0.tar.bz2 --force
        anaconda $UPLOAD_OPTIONS macos_build/miniconda/conda-bld/osx-64/$PKG_NAME-$VERSION.`date +%Y*`0.tar.bz2 --force
+
+  - &run_coveralls
+    name: run_coveralls
+    command: |
+       source $WORKDIR/miniconda/etc/profile.d/conda.sh
+       conda activate $ENV_NAME
+       coveralls
+       conda deactivate
 
 jobs:
    macos_setup:
@@ -201,6 +209,8 @@ jobs:
          LAST_STABLE: "3.1.4"
          CONDA_PY_VER: "python>=3.7,<3.8"
          BUILD_VARIANT_VER: "3.7"
+         COVERAGE: "-c tests/coverage.json --coverage-from-egg"
+         COVERAGE_PKGS: "coverage coveralls"
       steps:
          - checkout
          - attach_workspace:
@@ -208,6 +218,7 @@ jobs:
          - run: *conda_build
          - run: *setup_run_tests
          - run: *run_tests
+         - run: *run_coveralls
          - store_artifacts:
               path: tests_html
               destination: tests_html

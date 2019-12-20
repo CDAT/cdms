@@ -28,7 +28,7 @@ requirements:
     - cdtime
     - openblas
     - lazy-object-proxy
-    - libnetcdf 4.6.2
+    - libnetcdf >=4.6.2,<4.6.3.0a0
   run:
     - python {{ python }}
     - libcf
@@ -45,7 +45,7 @@ requirements:
     - libdrs
     - cdtime
     - openblas
-    - libnetcdf 4.6.2
+    - libnetcdf >=4.6.2,<4.6.3.0a0
 
 test:
   commands:
@@ -55,7 +55,7 @@ test:
     - export CDAT_ANONYMOUS_LOG=false && python -c "from cdms2 import MV2"
 
 about:
-  home: https://cdms.readthedocs.io/en/latest
+  home: http://github.com/CDAT/cdms2
   license: '3-Clause BSD'
   license_file: 'bsd-3-clause.txt'
   summary: 'Community Data Management System'
@@ -64,9 +64,14 @@ about:
     data management system, specialized for organizing
     multidimensional, gridded data used in climate
     analysis and simulation.
+  doc_url: https://cdms.readthedocs.io/en/latest
   dev_url: http://github.com/CDAT/cdms2
 
 extra:
   recipe-maintainers:
     - dnadeau4
     - doutriaux1
+    - muryanto1
+    - downiec
+    - jasonb5
+    - xylar

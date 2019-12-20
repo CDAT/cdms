@@ -1,189 +1,264 @@
 version: 2
 
 aliases:
-
-  - &create_conda_env
-    name: create_conda_env
-    environment:
-       CHANNELS: "-c cdat/label/nightly -c conda-forge"
-       PKGS: "pytest esmpy libcf distarray cdtime libcdms cdat_info testsrunner numpy 'esmf=7.1.0' 'esmpy=7.1.0' libdrs_f pyopenssl nose requests flake8 myproxyclient lazy-object-proxy libcblas libblas 'libnetcdf=4.6.2'"
+  - &setup_miniconda
+    name: setup_miniconda
     command: |
-        echo "miniconda directory not found, installing conda"
-        mkdir -p workspace
-        git clone -b validateNightly --depth 1 git@github.com:CDAT/cdat workspace/cdat
-        ls workspace/cdat
-        mkdir $WORKDIR
-        python workspace/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py3'
-        source $WORKDIR/miniconda/etc/profile.d/conda.sh
-        conda activate base
-        export PATH=$WORKDIR/miniconda/bin:$PATH
-        conda config --set always_yes yes --set changeps1 no
-        conda config --set channel_priority strict
-        conda update -y -q conda
-        conda config --set anaconda_upload no
-        if [[ $PY_VER == 'py2' ]]; then
-           conda create -n cdat $CHANNELS $PKGS $CONDA_COMPILER "python<3" 
-        elif [[ $PY_VER == 'py3' ]]; then
-           echo "conda create -n cdat $CHANNELS $PKGS $CONDA_COMPILER 'python>=3.7,<3.8' coverage coveralls"
-           conda create -n cdat $CHANNELS $PKGS $CONDA_COMPILER "python>=3.7,<3.8" coverage coveralls
-        fi
-        conda activate cdat
-        conda list
+       mkdir -p workspace
+       git clone -b validateNightly git@github.com:CDAT/cdat workspace/cdat
+       # install_miniconda.py installs miniconda3 under $WORKDIR/miniconda
+       python workspace/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py3'
 
-  - &setup_cdms
-    name: setup_cdms
+  - &conda_rerender
+    name: conda_rerender
+    command: |
+       git clone -b conda_forge_pinning https://github.com/CDAT/conda-recipes.git $WORKDIR/conda-recipes 
+       source $WORKDIR/miniconda/etc/profile.d/conda.sh
+       conda activate base
+       BUILD_SCRIPT="$WORKDIR/conda-recipes/build_tools/conda_build.py"
+       python $BUILD_SCRIPT -w $WORKDIR -l $LAST_STABLE -B 0 -p $PKG_NAME -r $REPO_NAME -b $CIRCLE_BRANCH --do_rerender
+
+  - &conda_build
+    name: conda_build
+    command: |
+       source $WORKDIR/miniconda/etc/profile.d/conda.sh
+       conda activate base
+       conda config --add channels conda-forge --force
+       conda config --add channels cdat/label/nightly --force
+       conda config --set channel_priority strict
+       BUILD_SCRIPT="$WORKDIR/conda-recipes/build_tools/conda_build.py"
+       python $BUILD_SCRIPT -w $WORKDIR -p $PKG_NAME -r $REPO_NAME --build_version $BUILD_VARIANT_VER --do_build
+
+  - &setup_run_tests
+    name: setup_run_tests
     environment:
+       PKGS: "testsrunner pytest myproxyclient"
        CHANNELS: "-c cdat/label/nightly -c conda-forge"
     command: |
-       export PATH=$WORKDIR/miniconda/bin:$PATH
-       source activate cdat
-       # conda update --all $CHANNELS
-       if [ $(uname) == "Linux" ];then
-         export LDSHARED="$CC -shared -pthread"
-         LDSHARED="$CC -shared -pthread" python setup.py install
-       else
-         python setup.py install
-       fi
-       python --version
+       source $WORKDIR/miniconda/etc/profile.d/conda.sh
+       conda activate base
+       conda create -y -n test_cdms --use-local $CHANNELS "$CONDA_PY_VER" $PKG_NAME $PKGS $COVERAGE_PKGS
+       conda activate test_cdms
        conda list
 
-  - &run_cdms_tests
-    name: run_cdms_tests
+  - &run_tests
+    name: run_tests
     command: |
-       export PATH=$WORKDIR/miniconda/bin:$PATH
-       source activate cdat
-       python run_tests.py --subdir -v2 $COVERAGE
-       python run_tests.py -n1 --subdir -v2 $COVERAGE --dask
-       RESULT=$?
-       echo "** $PY_VER test result: "${RESULT}
-       exit $RESULT
-
-  - &run_coveralls
-    name: run_coveralls
-    command: |
-       export PATH=$WORKDIR/miniconda/bin:$PATH
-       source activate cdat
-       coveralls
-       source deactivate
+       source $WORKDIR/miniconda/etc/profile.d/conda.sh
+       conda activate test_cdms
+       python run_tests.py -H -v2 --subdir $COVERAGE
+       python run_tests.py -H -v2 --subdir -n 1 --dask
 
   - &conda_upload
     name: conda_upload
     command: |
-       export PATH=$WORKDIR/miniconda/bin:$PATH
-       export LABEL="nightly";
-       if [ $CIRCLE_BRANCH == "master" ]; then
-       	  echo "conda install -n root conda-build anaconda-client"
-          conda install -n root conda-build anaconda-client
-          echo "bash ./ci-support/conda_upload.sh"
-          bash ./ci-support/conda_upload.sh
+       if [[ $CIRCLE_BRANCH != "master" ]]; then
+          exit 0
        fi
-       if [ $CIRCLE_BRANCH != "master" ]; then
-        first=$(git cherry master -v | head -n1)
-        current=$(git log -n1 --pretty=oneline)
-        if [[ $first == *"upload unstable"* || $current == *"upload unstable"* ]]; then
-           export LABEL="unstable";
-           echo "NOTE: upload LABEL="${LABEL}
-           conda install -n root conda-build anaconda-client;
-           bash ./ci-support/conda_upload.sh;
-        else
-           echo "Skipping upload to unstable since not specified in commit"
-        fi
-       fi
+       source $WORKDIR/miniconda/etc/profile.d/conda.sh
+       conda activate base
+       UPLOAD_OPTIONS="-t $CONDA_UPLOAD_TOKEN upload -u $USER -l $LABEL"
+       anaconda $UPLOAD_OPTIONS linux_build/miniconda/conda-bld/linux-64/$PKG_NAME-$VERSION.`date +%Y*`0.tar.bz2 --force
+       anaconda $UPLOAD_OPTIONS macos_build/miniconda/conda-bld/osx-64/$PKG_NAME-$VERSION.`date +%Y*`0.tar.bz2 --force
+
+  - &run_coveralls
+    name: run_coveralls
+    command: |
+       source $WORKDIR/miniconda/etc/profile.d/conda.sh
+       conda activate $ENV_NAME
+       coveralls
+       conda deactivate
 
 jobs:
-  macos_cdms_py2:
-    macos:
-      xcode: "11.1.0"
-    environment:
-      WORKDIR: "test_macos_cdms_py2"
-      PY_VER: "py2"
-      CONDA_COMPILER: "clang_osx-64"
-    steps:
-      - checkout
-      - run: *create_conda_env
-      - run: *setup_cdms
-      - run: *run_cdms_tests
-      - store_artifacts:
-          path: tests_html
-          destination: tests_html
-      - store_artifacts:
-          path: tests_png
-          destination: tests_png
+   macos_setup:
+      macos:
+         xcode: "11.3.0"
+      environment:
+         WORKDIR: /Users/distiller/project/macos_build
+         PKG_NAME: "cdms2"
+         REPO_NAME: "cdms"
+         LAST_STABLE: "3.1.4"
+      steps:
+         - run: *setup_miniconda
+         - run: *conda_rerender
+         - persist_to_workspace:
+              root: .
+              paths: 
+                 - macos_build
 
-  macos_cdms_py3:
-    macos:
-      xcode: "11.1.0"
-    environment:
-      WORKDIR: "test_macos_cdms_py3"
-      PY_VER: "py3"
-      CONDA_COMPILER: "clang_osx-64"
-    steps:
-      - checkout
-      - run: *create_conda_env
-      - run: *setup_cdms
-      - run: *run_cdms_tests
-      - run: *conda_upload
-      - store_artifacts:
-          path: tests_html
-          destination: tests_html
-      - store_artifacts:
-          path: tests_png
-          destination: tests_png
+   linux_setup:
+      machine:
+         image: circleci/classic:latest
+      environment:
+         WORKDIR: /home/circleci/project/linux_build
+         PKG_NAME: "cdms2"
+         REPO_NAME: "cdms"
+         LAST_STABLE: "3.1.4"
+      steps:
+         - attach_workspace:
+              at: .
+         - run: *setup_miniconda
+         - run: *conda_rerender
+         - persist_to_workspace:
+              root: .
+              paths:
+                 - linux_build
 
-  linux_cdms_py2:
-    machine:
-      image: circleci/classic:latest
-    environment:
-      WORKDIR: "test_linux_cdms_py2"
-      CONDA_COMPILER: "gcc_linux-64"
-      PY_VER: "py2"
-    steps:
-      - checkout
-      - run: *create_conda_env
-      - run: *setup_cdms
-      - run: *run_cdms_tests
-      - store_artifacts:
-          path: tests_html
-          destination: tests_html
-      - store_artifacts:
-          path: tests_png
-          destination: tests_png
+   macos_cdms_py2:
+      macos:
+         xcode: "11.3.0"
+      environment:
+         WORKDIR: /Users/distiller/project/macos_build
+         PKG_NAME: "cdms2"
+         REPO_NAME: "cdms"
+         ENV_NAME: "test_cdms"
+         LAST_STABLE: "3.1.4"
+         CONDA_PY_VER: "python<3"
+         BUILD_VARIANT_VER: "2.7"
+      steps:
+         - checkout
+         - attach_workspace:
+              at: .
+         - run: *conda_build
+         - run: *setup_run_tests
+         - run: *run_tests
+         - store_artifacts:
+              path: tests_html
+              destination: tests_html
+         - store_artifacts:
+             path: tests_png
+             destination: tests_png
+         - persist_to_workspace:
+              root: .
+              paths:
+                 - macos_build/miniconda/conda-bld/osx-64/cdms*tar.bz2
 
-  linux_cdms_py3:
-    machine:
-      image: circleci/classic:latest
-    environment:
-      WORKDIR: "test_linux_cdms_py3"
-      CONDA_COMPILER: "gcc_linux-64"
-      PY_VER: "py3"
-      COVERAGE: "-c /home/circleci/project/tests/coverage.json"
-    steps:
-      - checkout
-      - run: pwd
-      - run: ls
-      - run: ls /home/circleci/project
-      - run: ls /home/circleci/project/tests
-      - run: *create_conda_env
-      - run: *setup_cdms
-      - run: *run_cdms_tests
-      #- run: *run_coveralls
-      - run: *conda_upload
-      - store_artifacts:
-          path: tests_html
-          destination: tests_html
-      - store_artifacts:
-          path: tests_png
-          destination: tests_png
+   macos_cdms_py37:
+      macos:
+         xcode: "11.3.0"
+      environment:
+         WORKDIR: /Users/distiller/project/macos_build
+         PKG_NAME: "cdms2"
+         REPO_NAME: "cdms"
+         ENV_NAME: "test_cdms"
+         LAST_STABLE: "3.1.4"
+         CONDA_PY_VER: "python>=3.7,<3.8"
+         BUILD_VARIANT_VER: "3.7"
+      steps:
+         - checkout
+         - attach_workspace:
+              at: .
+         - run: *conda_build
+         - run: *setup_run_tests
+         - run: *run_tests
+         - store_artifacts:
+              path: tests_html
+              destination: tests_html
+         - store_artifacts:
+             path: tests_png
+             destination: tests_png
+         - persist_to_workspace:
+              root: .
+              paths:
+                 - macos_build/miniconda/conda-bld/osx-64/cdms*tar.bz2
+
+   linux_cdms_py2:
+      machine:
+         image: circleci/classic:latest
+      environment:
+         WORKDIR: /home/circleci/project/linux_build
+         PKG_NAME: "cdms2"
+         REPO_NAME: "cdms"
+         ENV_NAME: "test_cdms"
+         LAST_STABLE: "3.1.4"
+         CONDA_PY_VER: "python<3"
+         BUILD_VARIANT_VER: "2.7"
+      steps:
+         - checkout
+         - attach_workspace:
+              at: .
+         - run: *conda_build
+         - run: *setup_run_tests
+         - run: *run_tests
+         - store_artifacts:
+              path: tests_html
+              destination: tests_html
+         - store_artifacts:
+             path: tests_png
+             destination: tests_png
+         - persist_to_workspace:
+              root: .
+              paths:
+                 - linux_build/miniconda/conda-bld/linux-64/cdms*tar.bz2
+
+   linux_cdms_py37:
+      machine:
+         image: circleci/classic:latest
+      environment:
+         WORKDIR: /home/circleci/project/linux_build
+         PKG_NAME: "cdms2"
+         REPO_NAME: "cdms"
+         ENV_NAME: "test_cdms"
+         LAST_STABLE: "3.1.4"
+         CONDA_PY_VER: "python>=3.7,<3.8"
+         BUILD_VARIANT_VER: "3.7"
+         COVERAGE: "-c /home/circleci/project/tests/coverage.json"
+         COVERAGE_PKGS: "coverage coveralls"
+      steps:
+         - checkout
+         - attach_workspace:
+              at: .
+         - run: *conda_build
+         - run: *setup_run_tests
+         - run: *run_tests
+         - run: *run_coveralls
+         - store_artifacts:
+              path: tests_html
+              destination: tests_html
+         - store_artifacts:
+             path: tests_png
+             destination: tests_png
+         - persist_to_workspace:
+              root: .
+              paths:
+                 - linux_build/miniconda/conda-bld/linux-64/cdms*tar.bz2
+
+   upload:
+      machine:
+         image: circleci/classic:latest
+      environment:
+         WORKDIR: /home/circleci/project/linux_build
+         PKG_NAME: "cdms2"
+         VERSION: "3.1.4"
+         USER: "cdat"
+         LABEL: "nightly"
+      steps:
+         - attach_workspace:
+              at: .
+         - run: pwd
+         - run: *conda_upload
 
 workflows:
-  version: 2
-  cdms_test:
-    jobs:
-      - macos_cdms_py2
-      - macos_cdms_py3:
-          requires:
-            - macos_cdms_py2
-      - linux_cdms_py2
-      - linux_cdms_py3
-
-
+   version: 2
+   cdms:
+      jobs:
+         - macos_setup
+         - linux_setup
+         - macos_cdms_py2:
+              requires:
+                 - macos_setup
+         - macos_cdms_py37:
+              requires:
+                 - macos_setup
+         - linux_cdms_py2:
+              requires:
+                 - linux_setup
+         - linux_cdms_py37:
+              requires:
+                 - linux_setup
+         - upload:
+              requires:
+                 - macos_cdms_py2
+                 - macos_cdms_py37
+                 - linux_cdms_py2
+                 - linux_cdms_py37

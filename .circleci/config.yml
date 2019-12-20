@@ -40,17 +40,12 @@ aliases:
        conda create -y -n test_cdms --use-local $CHANNELS "$CONDA_PY_VER" $PKG_NAME $PKGS $COVERAGE_PKGS
        conda activate test_cdms
        conda list
-       echo "python -c 'import cdms2'"
-       python -c "import cdms2"
 
   - &run_tests
     name: run_tests
     command: |
        source $WORKDIR/miniconda/etc/profile.d/conda.sh
-       # conda activate base
        conda activate test_cdms
-       echo "python -c 'import cdms2'"
-       python -c "import cdms2; import sys; print(sys.path)"
        python run_tests.py -H -v2 --subdir $COVERAGE
        python run_tests.py -H -v2 --subdir -n 1 --dask
 

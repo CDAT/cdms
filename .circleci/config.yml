@@ -37,7 +37,6 @@ aliases:
        source $WORKDIR/miniconda/etc/profile.d/conda.sh
        conda activate base
        conda config --add channels cdat/label/nightly --force
-       conda config --set channel_priority true
        conda create -y -n test_cdms --use-local $CHANNELS "$CONDA_PY_VER" $PKG_NAME $PKGS $COVERAGE_PKGS
        conda activate test_cdms
        conda list
@@ -58,9 +57,9 @@ aliases:
   - &conda_upload
     name: conda_upload
     command: |
-       if [[ $CIRCLE_BRANCH != "master" ]]; then
-          exit 0
-       fi
+       #if [[ $CIRCLE_BRANCH != "master" ]]; then
+       #   exit 0
+       #fi
        source $WORKDIR/miniconda/etc/profile.d/conda.sh
        conda activate base
        UPLOAD_OPTIONS="-t $CONDA_UPLOAD_TOKEN upload -u $USER -l $LABEL"
@@ -78,7 +77,7 @@ aliases:
 jobs:
    macos_setup:
       macos:
-         xcode: "11.1.0"
+         xcode: "11.3.0"
       environment:
          WORKDIR: /Users/distiller/project/macos_build
          PKG_NAME: "cdms2"
@@ -112,7 +111,7 @@ jobs:
 
    macos_cdms_py2:
       macos:
-         xcode: "11.1.0"
+         xcode: "11.3.0"
       environment:
          WORKDIR: /Users/distiller/project/macos_build
          PKG_NAME: "cdms2"
@@ -141,7 +140,7 @@ jobs:
 
    macos_cdms_py37:
       macos:
-         xcode: "11.1.0"
+         xcode: "11.3.0"
       environment:
          WORKDIR: /Users/distiller/project/macos_build
          PKG_NAME: "cdms2"

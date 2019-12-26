@@ -52,9 +52,9 @@ aliases:
   - &conda_upload
     name: conda_upload
     command: |
-       if [[ $CIRCLE_BRANCH != "master" ]]; then
-          exit 0
-       fi
+       #if [[ $CIRCLE_BRANCH != "master" ]]; then
+       #   exit 0
+       #fi
        source $WORKDIR/miniconda/etc/profile.d/conda.sh
        conda activate base
        UPLOAD_OPTIONS="-t $CONDA_UPLOAD_TOKEN upload -u $USER -l $LABEL"
@@ -79,6 +79,7 @@ jobs:
          REPO_NAME: "cdms"
          LAST_STABLE: "3.1.4"
       steps:
+         - checkout
          - run: *setup_miniconda
          - run: *conda_rerender
          - persist_to_workspace:
@@ -95,8 +96,7 @@ jobs:
          REPO_NAME: "cdms"
          LAST_STABLE: "3.1.4"
       steps:
-         - attach_workspace:
-              at: .
+         - checkout
          - run: *setup_miniconda
          - run: *conda_rerender
          - persist_to_workspace:

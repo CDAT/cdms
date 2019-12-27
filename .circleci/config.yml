@@ -23,6 +23,7 @@ aliases:
     command: |
        source $WORKDIR/miniconda/etc/profile.d/conda.sh
        conda activate base
+       python --version
        conda config --add channels conda-forge --force
        conda config --add channels cdat/label/nightly --force
        conda config --set channel_priority strict

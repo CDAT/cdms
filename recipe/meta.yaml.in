@@ -19,7 +19,8 @@ requirements:
     - {{ compiler('fortran') }}
 
   host:
-    - python {{ python }}
+    - python
+    - cython
     - setuptools
     - cdat_info
     - numpy
@@ -31,7 +32,7 @@ requirements:
     - lazy-object-proxy
     - libnetcdf >=4.6.2,<4.6.3.0a0
   run:
-    - python {{ python }}
+    - python
     - libcf
     - distarray
     - lazy-object-proxy

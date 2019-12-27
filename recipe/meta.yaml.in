@@ -22,6 +22,9 @@ requirements:
     - setuptools
     - cdat_info
     - numpy
+    - libcdms
+    - libdrs_f
+    - libdrs
     - cdtime
     - openblas
     - lazy-object-proxy

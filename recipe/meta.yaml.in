@@ -19,6 +19,7 @@ requirements:
     - {{ compiler('fortran') }}
   host:
     - python
+    - cython
     - setuptools
     - cdat_info
     - numpy
@@ -56,7 +57,7 @@ test:
 
 about:
   home: http://github.com/CDAT/cdms2
-  license: '3-Clause BSD'
+  license: 'BSD'
   license_file: 'bsd-3-clause.txt'
   summary: 'Community Data Management System'
   description: |

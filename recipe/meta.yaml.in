@@ -37,6 +37,7 @@ requirements:
     - esmpy
     - six
     - openblas
+    - lazy-object-proxy
     - libnetcdf >=4.6.2,<4.6.3.0a0
 
 test:

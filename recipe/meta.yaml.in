@@ -33,6 +33,7 @@ requirements:
     - libcf
     - distarray
     - cdat_info
+    - libcdms
     - esmf
     - esmpy
     - six

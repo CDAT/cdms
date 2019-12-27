@@ -17,9 +17,9 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - {{ compiler('fortran') }}
+
   host:
     - python {{ python }}
-    - cython
     - setuptools
     - cdat_info
     - numpy
@@ -34,6 +34,7 @@ requirements:
     - python {{ python }}
     - libcf
     - distarray
+    - lazy-object-proxy
     - cdtime
     - cdat_info
     - {{ pin_compatible('numpy') }}
@@ -45,7 +46,6 @@ requirements:
     - libdrs
     - cdtime
     - openblas
-    - lazy-object-proxy
     - libnetcdf >=4.6.2,<4.6.3.0a0
 
 test:

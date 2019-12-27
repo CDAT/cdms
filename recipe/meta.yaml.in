@@ -30,15 +30,21 @@ requirements:
     - lazy-object-proxy
     - libnetcdf >=4.6.2,<4.6.3.0a0
   run:
+    - python
     - libcf
     - distarray
+    - lazy-object-proxy
+    - cdtime
     - cdat_info
-    - libcdms
+    - {{ pin_compatible('numpy') }}
     - esmf
     - esmpy
     - six
+    - libcdms
+    - libdrs_f
+    - libdrs
+    - cdtime
     - openblas
-    - lazy-object-proxy
     - libnetcdf >=4.6.2,<4.6.3.0a0
 
 test:

@@ -40,7 +40,7 @@ aliases:
        conda create -y -n test_cdms --use-local $CHANNELS "$CONDA_PY_VER" $PKG_NAME $PKGS $COVERAGE_PKGS
        conda activate test_cdms
        conda list
-       conda list --version cdms2
+       conda list --verbose cdms2
 
   - &run_tests
     name: run_tests

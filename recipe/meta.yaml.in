@@ -22,9 +22,6 @@ requirements:
     - setuptools
     - cdat_info
     - numpy
-    - libcdms
-    - libdrs_f
-    - libdrs
     - cdtime
     - openblas
     - lazy-object-proxy
@@ -33,17 +30,11 @@ requirements:
     - python
     - libcf
     - distarray
-    - lazy-object-proxy
     - cdtime
     - cdat_info
-    - {{ pin_compatible('numpy') }}
     - esmf
     - esmpy
     - six
-    - libcdms
-    - libdrs_f
-    - libdrs
-    - cdtime
     - openblas
     - libnetcdf >=4.6.2,<4.6.3.0a0
 

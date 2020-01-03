@@ -20,8 +20,6 @@ set -x
 #python setup.py install
 if [ $(uname) == "Linux" ];then
     export LDSHARED="$CC -shared -pthread"
-    export CC="gcc -Wl,-rpath=${PREFIX}/lib"
-    export CXX="g++ -Wl,-rpath=${PREFIX}/lib"
     LDSHARED="$CC -shared -pthread" python setup.py install
 else
     if [ ${HOME} == "/Users/distiller" ]; then

@@ -475,6 +475,8 @@ def openDataset(uri, mode='r', template=None,
     -------
     file handle.
     """
+    print("xxx openDataset, mode: {m}".format(m=mode))
+    print("xxx uri: {u}".format(u=uri))
     uri = uri.strip()
     (scheme, netloc, path, parameters, query, fragment) = urlparse(uri)
     if scheme in ('', 'file'):
@@ -483,6 +485,7 @@ def openDataset(uri, mode='r', template=None,
             path = netloc + path
         path = os.path.expanduser(path)
         path = os.path.normpath(os.path.join(os.getcwd(), path))
+        print("xxx path: {p}".format(p=path))
 
         root, ext = os.path.splitext(path)
         if ext in ['.xml', '.cdml']:
@@ -494,12 +497,14 @@ def openDataset(uri, mode='r', template=None,
             # Ok mpi has issues with bellow we need to test this only with 1
             # rank
             if not os.path.exists(path):
+                print("xxx xxx going to CdmsFile()")
                 return CdmsFile(path, mode, mpiBarrier=CdMpi)
             elif mode == "w":
                 try:
                     os.remove(path)
                 except BaseException:
                     pass
+                print("xxx CdmsFile, path: {p}".format(p=path))
                 return CdmsFile(path, mode, mpiBarrier=CdMpi)
 
             # The file exists
@@ -569,6 +574,7 @@ def openDataset(uri, mode='r', template=None,
         else:
             dpath = head
 
+    print("xxxx xxx")
     dataset = Dataset(uri, mode, datanode, None, dpath)
     return dataset
 
@@ -1272,7 +1278,9 @@ class CdmsFile(CdmsObj, cuDataset):
                     os.remove(path)
                 except BaseException:
                     pass
+            print("xxx Cdunif.CdunifFile")
             _fileobj_ = Cdunif.CdunifFile(path, mode)
+            print("xxx returned from Cdunif.CdunifFile")
         except Exception as err:
             raise CDMSError('Cannot open file %s (%s)' % (path, err))
         self._file_ = _fileobj_   # Cdunif file object
@@ -1282,16 +1290,24 @@ class CdmsFile(CdmsObj, cuDataset):
         self.xlinks = {}
         self._gridmap_ = {}
 
+        print("xxx 0")
         # self.attributes returns the Cdunif file dictionary.
 # self.replace_external_attributes(self._file_.__dict__)
         for att in self._file_.__dict__.keys():
             self.__dict__.__setitem__(att, self._file_.__dict__[att])
             self.attributes[att] = self._file_.__dict__[att]
         self._boundAxis_ = None         # Boundary axis for cell vertices
+        print("xxx 1")
         if self._mode_ == 'w':
+            print("xxx 1 HERE HERE")
+            print("xxx current: {c}".format(c=convention.CFConvention.current))
             self.Conventions = convention.CFConvention.current
+            print("xxx 1 HERE HERE AFTER")
+
+        print("xxx 2")
         self._status_ = 'open'
         self._convention_ = convention.getDatasetConvention(self)
+
 
         try:
 

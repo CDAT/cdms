@@ -1244,6 +1244,7 @@ static int set_attribute(int fileid, int varid, PyObject *attributes,
 	if (value == Py_None) {
 		return 0;
 	}
+	printf("xxx set_attribute, name: %s", name)
 	/* Delete attribute */
 	if (value == NULL) {
 		int ret;
@@ -1330,7 +1331,7 @@ static int set_attribute(int fileid, int varid, PyObject *attributes,
 				if (array == NULL)
 					return -1;
 			}
-			fprintf(stderr, "HERE HERE HERE about to acquire_Cfunif_lock() xxx");
+			printf("HERE HERE HERE about to acquire_Cfunif_lock() xxx");
 			Py_BEGIN_ALLOW_THREADS
 			;
 			acquire_Cdunif_lock()

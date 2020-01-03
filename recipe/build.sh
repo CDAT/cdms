@@ -25,7 +25,5 @@ else
     if [ ${HOME} == "/Users/distiller" ]; then
         export  CFLAGS="-Wl,-syslibroot / -isysroot / ${CFLAGS}"
     fi
-    export CC="gcc"
-    export CXX="g++"
     python setup.py install
 fi

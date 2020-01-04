@@ -1244,7 +1244,7 @@ static int set_attribute(int fileid, int varid, PyObject *attributes,
 	if (value == Py_None) {
 		return 0;
 	}
-	fprintf(stdout, "xxx set_attribute, name: %s", name);
+	printf("xxx set_attribute, name: %s", name);
 	/* Delete attribute */
 	if (value == NULL) {
 		int ret;

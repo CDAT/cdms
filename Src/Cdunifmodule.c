@@ -2071,6 +2071,7 @@ static int PyCdunifFile_SetAttribute(PyCdunifFileObject *self, PyObject *nameobj
 			return -1;
 		}
 		define_mode(self, 1);
+		printf("xxx PyCdunifFile_SetAttribute, calling set_attribute, id: %s", self->id);
 		return set_attribute(self->id, NC_GLOBAL, self->attributes,
 		        name, value);
 	} else
@@ -2079,6 +2080,7 @@ static int PyCdunifFile_SetAttribute(PyCdunifFileObject *self, PyObject *nameobj
 
 static int PyCdunifFile_SetAttributeUnicode(PyCdunifFileObject *self, char *name,
 		char *value) {
+        print("xxx PyCdunifFile_SetAttributeUnicode...name: %s, value: %s", name, value);
 	PyObject *string = PyStr_FromString(value);
 	if (string != NULL)
 		return PyCdunifFile_SetAttribute(self, name, string);

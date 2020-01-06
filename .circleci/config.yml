@@ -213,7 +213,7 @@ jobs:
          - run: *conda_build
          - run: *setup_run_tests
          - run: *run_tests
-         - run: *run_coveralls
+         #- run: *run_coveralls
          - store_artifacts:
               path: tests_html
               destination: tests_html

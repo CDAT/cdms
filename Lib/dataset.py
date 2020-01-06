@@ -1289,7 +1289,9 @@ class CdmsFile(CdmsObj, cuDataset):
             self.attributes[att] = self._file_.__dict__[att]
         self._boundAxis_ = None         # Boundary axis for cell vertices
         if self._mode_ == 'w':
+            print("xxx CdmsFile __init__()")
             self.Conventions = convention.CFConvention.current
+            print("xxx self.Conventions: {c}".format(c=self.Conventions))
         self._status_ = 'open'
         self._convention_ = convention.getDatasetConvention(self)
 

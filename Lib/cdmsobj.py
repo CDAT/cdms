@@ -511,6 +511,7 @@ class CdmsObj (object):
     attributes = property(_listatts, _setatts)
 
     def __init__(self, node=None):
+        print("xxx CdmsObj.__init__()...")
         if not hasattr(self, '___cdms_internals__'):
             self.__dict__['___cdms_internals__'] = [
                 '__cdms_internals__', '___cdms_internals__',

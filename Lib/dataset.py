@@ -1245,9 +1245,11 @@ class CdmsFile(CdmsObj, cuDataset):
 
         if mpiBarrier:
             MPI.COMM_WORLD.Barrier()
-
+        print("xxx CdmsFile.__init__()")
         CdmsObj.__init__(self, None)
+        print("xxx returned from CdmsObj.__init__()")
         cuDataset.__init__(self)
+        print("xxx returned from cuDataset.__init__()")
         value = self.__cdms_internals__ + ['datapath',
                                            'variables',
                                            'axes',

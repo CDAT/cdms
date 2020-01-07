@@ -28,7 +28,7 @@ requirements:
     - cdtime
     - openblas
     - lazy-object-proxy
-    - libnetcdf >=4.6.2,<4.6.3.0a0
+    - libnetcdf
   run:
     - python {{ python }}
     - libcf
@@ -45,7 +45,7 @@ requirements:
     - libdrs
     - cdtime
     - openblas
-    - libnetcdf >=4.6.2,<4.6.3.0a0
+    - libnetcdf
 
 test:
   commands:

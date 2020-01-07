@@ -1245,11 +1245,9 @@ class CdmsFile(CdmsObj, cuDataset):
 
         if mpiBarrier:
             MPI.COMM_WORLD.Barrier()
-        print("xxx CdmsFile.__init__()")
+
         CdmsObj.__init__(self, None)
-        print("xxx returned from CdmsObj.__init__()")
         cuDataset.__init__(self)
-        print("xxx returned from cuDataset.__init__()")
         value = self.__cdms_internals__ + ['datapath',
                                            'variables',
                                            'axes',
@@ -1291,9 +1289,7 @@ class CdmsFile(CdmsObj, cuDataset):
             self.attributes[att] = self._file_.__dict__[att]
         self._boundAxis_ = None         # Boundary axis for cell vertices
         if self._mode_ == 'w':
-            print("xxx CdmsFile __init__()")
             self.Conventions = convention.CFConvention.current
-            print("xxx self.Conventions: {c}".format(c=self.Conventions))
         self._status_ = 'open'
         self._convention_ = convention.getDatasetConvention(self)
 

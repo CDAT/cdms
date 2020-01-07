@@ -1,29 +1,27 @@
 #!/bin/bash
-export CFLAGS="-Wall -g -m64 -pipe -O2  -fPIC ${CFLAGS}"
-export CXXLAGS="${CFLAGS} ${CXXFLAGS}"
-export CPPFLAGS="-I${PREFIX}/include ${CPPFLAGS}"
-export LDFLAGS="-L${PREFIX}/lib ${LDFLAGS}"
-export LFLAGS="-fPIC ${LFLAGS}"
-export FC=""
 
-set -x
+export CONDA_FORGE_CFLAGS="${CONDA_FORGE_CFLAGS} -Wall -g -m64 -pipe -O2  -fPIC ${CFLAGS}"
+export CONDA_FORGE_CXXFLAGS="${CONDA_FORGE_CXXFLAGS} ${CFLAGS} ${CXXFLAGS}"
+export CONDA_FORGE_CXXFLAGS="${CONDA_FORGE_CXXFLAGS} -stdlib=libc++"
+export CONDA_FORGE_LDFLAGS="${CONDA_FORGE_LDFLAGS} -L${PREFIX}/lib ${LDFLAGS}"
+export CONDA_FORGE_LDFLAGS="${CONDA_FORGE_LDFLAGS} -lc++"
+export CONDA_FORGE_LFLAGS="${CONDA_FORGE_LFLAGS} -fPIC ${LFLAGS}"
 
-#if [ `uname` == Linux ]; then
-#    # To make sure we get the correct g++
-#    export LD_LIBRARY_PATH=${PREFIX}/lib:${LIBRARY_PATH}
-#    export CC="gcc -Wl,-rpath=${PREFIX}/lib"
-#    export CXX="g++ -Wl,-rpath=${PREFIX}/lib"
-#else
-#    export CC="gcc"
-#    export CXX="g++"
-#fi
-#python setup.py install
-if [ $(uname) == "Linux" ];then
-    export LDSHARED="$CC -shared -pthread"
-    LDSHARED="$CC -shared -pthread" python setup.py install
-else
+if [ "$(uname)" == "Darwin" ]
+then
+    # for Mac OSX                                                                                                                          
+    export CC=clang
+    export CXX=clang++
     if [ ${HOME} == "/Users/distiller" ]; then
-        export  CFLAGS="-Wl,-syslibroot / -isysroot / ${CFLAGS}"
-    fi
-    python setup.py install
+        export CONDA_FORGE_CFLAGS="${CONDA_FORGE_CFLAGS} -Wl,-syslibroot / -isysroot /"
+    fi  
+
+elif [ "$(uname)" == "Linux" ]
+then
+    export CONDA_FORGE_LDSHARED="${CONDA_FORGE_LDSHARED} -shared -pthread"
+else
+    echo "This system is unsupported for cdms"
+    exit 1
 fi
+
+python setup.py install

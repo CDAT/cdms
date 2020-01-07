@@ -54,7 +54,7 @@ test:
 
 about:
   home: http://github.com/CDAT/cdms2
-  license: 'BSD'
+  license: '3-Clause BSD'
   license_file: 'bsd-3-clause.txt'
   summary: 'Community Data Management System'
   description: |

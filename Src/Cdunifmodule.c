@@ -1264,16 +1264,20 @@ static int set_attribute(int fileid, int varid, PyObject *attributes,
 		return 0;
 	}
 	if (PyStr_Check(value)) {
-	    int len;
-	    char * string = PyStr_AsUTF8AndSize(value, (Py_ssize_t *) &len);
-//		int len = PyStr_Size(value);
-//		char *string = PyStr_AsUTF8(value);
+    // PyStr_AsUTF8AndSize -> PyUnicode_AsUTF8AndSize for python 3
+    // When compiled with -fstack-protector-strong triggers abort trap 6 on mac os x
+    // int len;
+    // char * string = PyStr_AsUTF8AndSize(value, (Py_ssize_t *) &len);
+    const char* string = PyStr_AsUTF8(value);
+    // Old python 2 way
+    // int len = PyStr_Size(value);
+    // char *string = PyStr_AsUTF8(value);
 		int ret;
 		Py_BEGIN_ALLOW_THREADS
 		;
 		acquire_Cdunif_lock()
 		;
-		ret = cdms2_nc_put_att_text(fileid, varid, name, len, string);
+		ret = cdms2_nc_put_att_text(fileid, varid, name, strlen(string), string);
 		release_Cdunif_lock()
 		;
 		Py_END_ALLOW_THREADS

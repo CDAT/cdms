@@ -114,7 +114,6 @@ jobs:
          PKG_NAME: "cdms2"
          REPO_NAME: "cdms"
          ENV_NAME: "test_cdms"
-         LAST_STABLE: "3.1.4"
          CONDA_PY_VER: "python<3"
          BUILD_VARIANT_VER: "2.7"
       steps:
@@ -143,7 +142,6 @@ jobs:
          PKG_NAME: "cdms2"
          REPO_NAME: "cdms"
          ENV_NAME: "test_cdms"
-         LAST_STABLE: "3.1.4"
          CONDA_PY_VER: "python>=3.7,<3.8"
          BUILD_VARIANT_VER: "3.7"
       steps:
@@ -172,7 +170,6 @@ jobs:
          PKG_NAME: "cdms2"
          REPO_NAME: "cdms"
          ENV_NAME: "test_cdms"
-         LAST_STABLE: "3.1.4"
          CONDA_PY_VER: "python<3"
          BUILD_VARIANT_VER: "2.7"
       steps:
@@ -201,11 +198,10 @@ jobs:
          PKG_NAME: "cdms2"
          REPO_NAME: "cdms"
          ENV_NAME: "test_cdms"
-         LAST_STABLE: "3.1.4"
          CONDA_PY_VER: "python>=3.7,<3.8"
          BUILD_VARIANT_VER: "3.7"
-         #COVERAGE: "-c /home/circleci/project/tests/coverage.json"
-         #COVERAGE_PKGS: "coverage coveralls"
+         COVERAGE: "-c /home/circleci/project/tests/coverage.json"
+         COVERAGE_PKGS: "coverage coveralls"
       steps:
          - checkout
          - attach_workspace:
@@ -213,7 +209,7 @@ jobs:
          - run: *conda_build
          - run: *setup_run_tests
          - run: *run_tests
-         #- run: *run_coveralls
+         - run: *run_coveralls
          - store_artifacts:
               path: tests_html
               destination: tests_html
@@ -233,8 +229,7 @@ jobs:
          PKG_NAME: "cdms2"
          VERSION: "3.1.4"
          USER: "cdat"
-         #LABEL: "nightly"
-         LABEL: "abort6"
+         LABEL: "nightly"
       steps:
          - attach_workspace:
               at: .

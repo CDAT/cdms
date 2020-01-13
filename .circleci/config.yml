@@ -126,9 +126,6 @@ jobs:
          - store_artifacts:
               path: tests_html
               destination: tests_html
-         - store_artifacts:
-             path: tests_png
-             destination: tests_png
          - persist_to_workspace:
               root: .
               paths:
@@ -154,9 +151,6 @@ jobs:
          - store_artifacts:
               path: tests_html
               destination: tests_html
-         - store_artifacts:
-             path: tests_png
-             destination: tests_png
          - persist_to_workspace:
               root: .
               paths:
@@ -182,9 +176,6 @@ jobs:
          - store_artifacts:
               path: tests_html
               destination: tests_html
-         - store_artifacts:
-             path: tests_png
-             destination: tests_png
          - persist_to_workspace:
               root: .
               paths:
@@ -213,9 +204,6 @@ jobs:
          - store_artifacts:
               path: tests_html
               destination: tests_html
-         - store_artifacts:
-             path: tests_png
-             destination: tests_png
          - persist_to_workspace:
               root: .
               paths:

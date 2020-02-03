@@ -36,7 +36,6 @@ aliases:
        PKGS: "testsrunner pytest myproxyclient"
        CHANNELS: "-c cdat/label/nightly -c conda-forge"
     command: |
-       echo "XXX"
        source $WORKDIR/miniconda/etc/profile.d/conda.sh
        conda activate base
        conda create -y -n test_cdms --use-local $CHANNELS "$CONDA_PY_VER" $PKG_NAME $PKGS $COVERAGE_PKGS

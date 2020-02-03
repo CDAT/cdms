@@ -3,7 +3,6 @@
 
 "CDMS Variable objects, MaskedArray interface"
 import numpy
-import numpy.rank
 from numpy import character, float, float32, float64  # noqa
 from numpy import int, int8, int16, int32, int64, byte  # noqa
 from numpy import ubyte, uint8, uint16, uint32, uint64, long   # noqa

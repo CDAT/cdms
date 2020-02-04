@@ -43,7 +43,7 @@ class PredicateComponent (cdms.selectors.SelectorComponent):
         axis = fetchedaxes[index]
         m = numpy.zeros(fetched.shape,numpy.int32)
         if index <>0:
-            p = numpy.arange(numpy.ma.rank(fetched))
+            p = numpy.arange(numpy.rank(fetched))
             p[0] = index
             p[index] = 0
             m = numpy.transpose(m, p)

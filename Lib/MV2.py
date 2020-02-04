@@ -9,7 +9,7 @@ from numpy import ubyte, uint8, uint16, uint32, uint64, long   # noqa
 from numpy.ma import allclose, allequal, common_fill_value  # noqa
 from numpy.ma import make_mask_none, dot, filled  # noqa
 from numpy.ma import getmask, getmaskarray, identity  # noqa
-from numpy.ma import indices, innerproduct, masked, put, putmask, rank, ravel  # noqa
+from numpy.ma import indices, innerproduct, masked, put, putmask, ravel  # noqa
 from numpy.ma import set_fill_value, shape, size, isMA, isMaskedArray, is_mask, isarray  # noqa
 from numpy.ma import make_mask, mask_or, nomask   # noqa
 from numpy import sctype2char, get_printoptions, set_printoptions

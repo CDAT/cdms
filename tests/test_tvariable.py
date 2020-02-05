@@ -174,6 +174,25 @@ class TestTransientVariables(basetest.CDMSBaseTest):
         newlat.setBounds(None)
         samp = cdms2.axis.take(newlat, (2, 4, 6))
 
+    def test_setdimattribute1(self):
+        xaxis = cdms2.createAxis([0.1, 0.2], id='x')
+        taxis = cdms2.createAxis([10.0, 20.0], id='t')
+        taxis.units = 'seconds'
+        v1 = cdms2.tvariable.TransientVariable([[1.1, 1.2], [2.1, 2.1]], axes=[taxis, xaxis], id='var')
+        v2 = cdms2.tvariable.TransientVariable([[3.1, 3.2], [4.1, 4.1]], axes=[taxis, xaxis], id='var')
+        v2.setdimattribute(dim=0, field='bounds', value=v1)
+        v2_dim = v2.getdimattribute(0, 'bounds')
+        compare_arr = numpy.array([1.1, 2.1, 2.1])
+        self.assertTrue(numpy.array_equal(v2_dim, compare_arr))
+
+    def test_setdimattribute2(self):
+        f = cdms2.open('https://aims3.llnl.gov/thredds/dodsC/cmip5_css01_data/cmip5/output1/CNRM-CERFACS/CNRM-CM5/amip/3hr/atmos/cfSites/r1i1p1/v20120406/prw/prw_cfSites_CNRM-CM5_amip_r1i1p1_197901010300-200901010000.nc')
+        v = f('prw', time=slice(0, 10))
+        t = f('time_bnds')[:10]
+        t_bounds = t.getdimattribute(0, 'bounds')
+        v.setdimattribute(dim=0, field='bounds', value=t)
+        v_dim_attr = v.getdimattribute(0, 'bounds')
+        self.assertTrue(numpy.array_equal(v_dim_attr, t_bounds))
 
 if __name__ == "__main__":
     basetest.run()

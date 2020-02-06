@@ -613,9 +613,9 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
                 d.setBounds(None)
             else:
                 b = numpy.ma.filled(value)
-                if numpy.rank(b) == 2:
+                if numpy.ndim(b) == 2:
                     d.setBounds(b)
-                elif numpy.rank(b) == 1:
+                elif numpy.ndim(b) == 1:
                     b1 = numpy.zeros((len(b) - 1, 2), b.dtype.char)
                     b1[:, 0] = b[:-1]
                     b1[:, 1] = b[1:]

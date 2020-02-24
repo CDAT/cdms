@@ -2476,7 +2476,7 @@ PyCdunifVariable_ReadAsArray(PyCdunifVariableObject *self,
 	npy_intp *dims;
 	PyArrayObject *array;
 	int i, d;
-	int nitems;
+	unsigned long nitems;
 	int error = 0;
 	d = 0;
 	nitems = 1;

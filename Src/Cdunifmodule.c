@@ -2537,7 +2537,7 @@ PyCdunifVariable_ReadAsArray(PyCdunifVariableObject *self,
 	if (nitems > 0) {
 		if ((self->nd == 0) && (array != NULL)) {
 			long zero = 0;
-			int ret;
+			int ret = 0;
 			Py_BEGIN_ALLOW_THREADS
 			;
 			acquire_Cdunif_lock()
@@ -2565,7 +2565,7 @@ PyCdunifVariable_ReadAsArray(PyCdunifVariableObject *self,
 			count = (long *) malloc(self->nd * sizeof(long));
 			stride = (long *) malloc(self->nd * sizeof(long));
 			if (start != NULL && count != NULL && stride != NULL) {
-				int ret;
+				int ret = 0;
 				for (i = 0; i < self->nd; i++) {
 					start[i] = indices[i].start;
 					stride[i] = indices[i].stride;

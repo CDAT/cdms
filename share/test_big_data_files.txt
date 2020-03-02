@@ -1,0 +1,1 @@
+bb48c94069c4e413bc04ce2c172234f9  so_Omon_CESM2_historical_r1i1p1f1_gn_185001-201412.nc

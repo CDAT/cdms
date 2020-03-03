@@ -5,6 +5,7 @@ import cdms2
 import numpy as np
 import sys
 from testsrunner import Util
+from nose.plugins.attrib import attr
 
 class TestBigData(unittest.TestCase):
 
@@ -37,6 +38,7 @@ class TestBigData(unittest.TestCase):
         self.assertIsNot(max_val, 0)
         self.assertIsNot(mean_val, 0)
 
+    @attr("big_data")
     def test_read_large_slice(self):
         start = 1990
         end = 2014

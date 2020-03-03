@@ -13,7 +13,7 @@ class TestBigData(unittest.TestCase):
         if workdir is None:
             prefix = sys.prefix
         else:
-            prefix = os.path.join(wordir, "cdms")
+            prefix = os.path.join(workdir, "cdms")
         md5_files = os.path.join(prefix, "share/test_big_data_files.txt")
         test_file = "so_Omon_CESM2_historical_r1i1p1f1_gn_185001-201412.nc"
         path = Util.get_sampledata_path()

@@ -3,12 +3,18 @@ import unittest
 import cdat_info
 import cdms2
 import numpy as np
+import sys
 from testsrunner import Util
 
 class TestBigData(unittest.TestCase):
 
     def setUp(self):
-        md5_files = "share/test_big_data_files.txt"
+        workdir = os.environ.get("WORKDIR")
+        if workdir is None:
+            prefix = sys.prefix
+        else:
+            prefix = os.path.join(wordir, "cdms")
+        md5_files = os.path.join(prefix, "share/test_big_data_files.txt")
         test_file = "so_Omon_CESM2_historical_r1i1p1f1_gn_185001-201412.nc"
         path = Util.get_sampledata_path()
         Util.download_sample_data_files(md5_files, path)
@@ -35,7 +41,7 @@ class TestBigData(unittest.TestCase):
         start = 1990
         end = 2014
         self._get_var_info_for_time_frame(start, end)
-        
+
         start = 1989
         self._get_var_info_for_time_frame(start, end)
 

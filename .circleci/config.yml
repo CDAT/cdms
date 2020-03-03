@@ -50,6 +50,8 @@ aliases:
        conda activate test_cdms
        python run_tests.py -H -v2 --subdir $COVERAGE
 
+    no_output_timeout: 60m
+
   - &conda_upload
     name: conda_upload
     command: |

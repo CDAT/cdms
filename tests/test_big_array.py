@@ -5,7 +5,6 @@ import cdms2
 import numpy as np
 import sys
 from testsrunner import Util
-from nose.plugins.attrib import attr
 
 class TestBigData(unittest.TestCase):
 
@@ -14,7 +13,7 @@ class TestBigData(unittest.TestCase):
         if workdir is None:
             prefix = sys.prefix
         else:
-            prefix = os.path.join(workdir, "cdms")
+            prefix = os.path.join(wordir, "cdms")
         md5_files = os.path.join(prefix, "share/test_big_data_files.txt")
         test_file = "so_Omon_CESM2_historical_r1i1p1f1_gn_185001-201412.nc"
         path = Util.get_sampledata_path()
@@ -38,7 +37,6 @@ class TestBigData(unittest.TestCase):
         self.assertIsNot(max_val, 0)
         self.assertIsNot(mean_val, 0)
 
-    @attr("big_data")
     def test_read_large_slice(self):
         start = 1990
         end = 2014

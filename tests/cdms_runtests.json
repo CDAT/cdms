@@ -5,12 +5,6 @@
         "help": "do not run dask tests", 
         "type": null
     }, 
-    "--big-data": {
-        "action": "store_true",
-        "default": false,
-        "help": "run big data tests",
-        "type": null
-    },
     "--subdir": {
         "action": "store_true",
         "default": true,

@@ -9,9 +9,10 @@ class TestBigData(unittest.TestCase):
     def setUp(self):
         if not os.path.exists('large_array.nc'):
             data = np.random.randint(10, size=(66000,128,256), dtype=np.int8)
-            step = 180/128
+            step = 180.0/128.0
             lat = cdms2.createAxis(np.arange(-90+(step/2), 90, step), id='lat')
-            step = 360/256
+            print(lat.shape)
+            step = 360.0/256.0
             lon = cdms2.createAxis(np.arange(0+(step/2), 360, step), id='lon')
             time = cdms2.createAxis(np.arange(0, 66000), id='time')
             time.units = 'days since 1990'

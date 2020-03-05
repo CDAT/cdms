@@ -49,7 +49,8 @@ aliases:
        source $WORKDIR/miniconda/etc/profile.d/conda.sh
        conda activate test_cdms
        python run_tests.py -H -v2 --subdir $COVERAGE
-       python run_tests.py -H -v2 --subdir -n 1 $COVERAGE --dask
+
+    no_output_timeout: 60m
 
   - &conda_upload
     name: conda_upload

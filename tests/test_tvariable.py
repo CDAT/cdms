@@ -186,9 +186,9 @@ class TestTransientVariables(basetest.CDMSBaseTest):
         self.assertTrue(numpy.array_equal(v2_dim, compare_arr))
 
     def test_setdimattribute2(self):
-        f = cdms2.open('https://aims3.llnl.gov/thredds/dodsC/cmip5_css01_data/cmip5/output1/CNRM-CERFACS/CNRM-CM5/amip/3hr/atmos/cfSites/r1i1p1/v20120406/prw/prw_cfSites_CNRM-CM5_amip_r1i1p1_197901010300-200901010000.nc')
-        v = f('prw', time=slice(0, 10))
-        t = f('time_bnds')[:10]
+        f = self.getDataFile('tas_GFDL-ESM2G_Amon_historical_r1i1p1_198501-200512-clim.nc')
+        v = f('tas_ac', time=slice(0, 10))
+        t = f('lat_bnds')[:10]
         t_bounds = t.getdimattribute(0, 'bounds')
         v.setdimattribute(dim=0, field='bounds', value=t)
         v_dim_attr = v.getdimattribute(0, 'bounds')

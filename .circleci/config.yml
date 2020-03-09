@@ -48,7 +48,8 @@ aliases:
     command: |
        source $WORKDIR/miniconda/etc/profile.d/conda.sh
        conda activate test_cdms
-       python run_tests.py -H -v2 -n 1 `pwd`/other_tests/test_big_array.py
+       python run_tests.py -H -v2 -n 1 `pwd`/tests/test_big_array.py
+       mv tests/test_big_array.py $WORKDIR/
        python run_tests.py -H -v2 --subdir $COVERAGE
 
     no_output_timeout: 60m

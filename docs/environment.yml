@@ -113,5 +113,6 @@ dependencies:
   - zstd=1.4.4=h3b9ef0a_1
   - pip:
     - easydev
+    - numpydoc
     - regrid2==3.1.4
 prefix: /home/circleci/project/linux_build/miniconda/envs/cdms_docs

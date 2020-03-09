@@ -13,7 +13,7 @@ dependencies:
   - cdat_info=8.2.2020.03.06.00.18.g0d4779f=py_0
   - cdp=1.6.0=py_0
   - cdtime=3.1.2.2020.03.06.00.22.gbde8ded=py37h1ac8016_0
-  - cdms2=3.1.4.2020.03.09.19.55.gea0ec77=py37h34d3450_0
+  - cdms2=3.1.4.2020.03.06.18.03.gd32af17=py37h34d3450_0
   - certifi=2019.11.28=py37_0
   - cffi=1.14.0=py37hd463f26_0
   - chardet=3.0.4=py37_1003

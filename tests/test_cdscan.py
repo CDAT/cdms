@@ -56,14 +56,23 @@ class TestCDScan(basetest.CDMSBaseTest):
         '''
         retrieve value from cdscan 
         '''
-        argv = 'cdscan -x test_dap.xml https://dataserver.nccs.nasa.gov/thredds/dodsC/bypass/CREATE-IP/Reanalysis/NASA-GMAO/GEOS-5/MERRA/mon/atmos/zg.ncml'.split()
-        pth = cdat_info.get_sampledata_path()
+        data_file1 = "https://dpesgf03.nccs.nasa.gov/thredds/dodsC/CREATE-IP/reanalysis/NASA-GMAO/GEOS-5/MERRA/mon/atmos/cl/cl_Amon_reanalysis_MERRA_197901-197912.nc"
+        data_file2 = "https://dpesgf03.nccs.nasa.gov/thredds/dodsC/CREATE-IP/reanalysis/NASA-GMAO/GEOS-5/MERRA/mon/atmos/cl/cl_Amon_reanalysis_MERRA_198001-198012.nc"
+        f1 = cdms2.open(data_file1)
+        f2 = cdms2.open(data_file2)
+        cl1 = f1["cl"]
+        cl2 = f2["cl"]
 
+        argv = "cdscan -x test_dap.xml {f1} {f2}".format(f1=data_file1,
+                                                         f2=data_file2).split()
+        pth = cdat_info.get_sampledata_path()
         os.chdir(pth)
         cdscan(argv)
         f=cdms2.open("test_dap.xml")
-        s=f['zg']
-        self.assertAlmostEqual(s[0,0,0,0], -73.563,3)
+        s=f['cl']
+        self.assertEqual(cl1[5, 20, 80, 140], s[5, 20, 80, 140])
+        self.assertEqual(cl2[5, 20, 80, 140], s[17, 20, 80, 140])
+
         os.unlink("test_dap.xml")
 
 if __name__ == "__main__":

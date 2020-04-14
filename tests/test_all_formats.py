@@ -40,16 +40,6 @@ class TestFormats(basetest.CDMSBaseTest):
 
     # test disabled due to OSX issue
     def testESGF(self):
-        file = open(os.environ['HOME']+'/.dodsrc', 'w')
-        file.write("HTTP.VERBOSE=0\n")
-        file.write("HTTP.COOKIEJAR=" +
-                   os.environ['HOME']+"/.esg/.dods_cookies\n")
-        file.write("HTTP.SSL.CERTIFICATE=" +
-                   os.environ['HOME']+"/.esg/esgf.cert\n")
-        file.write("HTTP.SSL.KEY="+os.environ['HOME']+"/.esg/esgf.cert\n")
-        file.write("HTTP.SSL.CAPATH="+os.environ['HOME']+"/.esg/\n")
-        file.close()
-        f = None
         ESGFINFO = {"https://esg1.umr-cnrm.fr/thredds/dodsC/CMIP5_CNRM/output1/CNRM-CERFACS/CNRM-CM5/historical/day/atmos/day/r5i1p1/v20120703/huss/huss_day_CNRM-CM5_historical_r5i1p1_20050101-20051231.nc": "huss",
             "https://esgf-node.cmcc.it/thredds/dodsC/esg_dataroot/cmip5/output1/CMCC/CMCC-CM/decadal1960/6hr/atmos/6hrPlev/r1i1p1/v20170725/psl/psl_6hrPlev_CMCC-CM_decadal1960_r1i1p1_1990120100-1990123118.nc": "psl", "https://aims3.llnl.gov/thredds/dodsC/cmip5_css01_data/cmip5/output1/BCC/bcc-csm1-1-m/1pctCO2/day/ocean/day/r1i1p1/v20120910/tos/tos_day_bcc-csm1-1-m_1pctCO2_r1i1p1_02800101-02891231.nc": "tos"}
         passed = False

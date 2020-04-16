@@ -7,13 +7,20 @@
 """
 ESMF regridding class
 """
+import os
 import re
+import socket
 import numpy
 
 import ESMF
 from . import esmf
 from . import RegridError
 from .mvGenericRegrid import GenericRegrid
+
+try:
+    socket.gethostbyname(socket.gethostname())
+except Exception:
+    os.environ['MPICH_INTERFACE_HOSTNAME'] = 'localhost'
 
 ESMF.Manager(debug=False)
 HAVE_MPI = False

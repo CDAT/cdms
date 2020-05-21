@@ -2266,12 +2266,11 @@ class CdmsFile(CdmsObj, cuDataset):
                 if bounds1 is not None:
                     vec2.setBounds(bounds1, persistent=1, index=index)
             else:
-                raise CDMSError(
-                    'Cannot write variable %s: the values of dimension %s=%s, do not overlap the ' +
-                    'extended dimension %s values: %s' %
-                    (varid, vec1.id, repr(
-                        vec1[:]), vec2.id, repr(
-                        vec2[:])))
+                msg1 = "Cannot write variable {v_id}: ".format(v_id=varid)
+                msg2 = "the values of dimension {id}={val}".format(id=vec1.id, val=repr(vec1[:]))
+                msg3 = "do not overlap the extended dimension {id} values: {val}".format(id=vec2.id,
+                                                                                         val=repr(vec2[:]))
+                raise CDMSError("{m1} {m2} {m3}".format(m1=msg1, m2=msg2, m3=msg3))
 
         # pack implementation source:
         # https://www.unidata.ucar.edu/software/netcdf/docs/BestPractices.html

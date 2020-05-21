@@ -102,7 +102,8 @@ class forecast():
         """
         self.fctl, self.fct = two_times_from_one(tau0time)
 
-        filenames = [l[5] for l in dataset_list if l[4] == self.fctl]
+        filenames = [ds[5] for ds in dataset_list if ds[4] == self.fctl]
+
         if len(filenames) > 0:
             filename = filenames[0]
         else:

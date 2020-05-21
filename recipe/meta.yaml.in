@@ -28,7 +28,7 @@ requirements:
     - cdtime
     - openblas
     - lazy-object-proxy
-    - libnetcdf
+    - libnetcdf * nompi_*
   run:
     - python
     - libcf

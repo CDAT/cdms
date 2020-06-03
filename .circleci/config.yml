@@ -436,7 +436,8 @@ jobs:
          PKG_NAME: "cdms2"
          VERSION: "3.1.4"
          USER: "cdat"
-         LABEL: "nightly"
+         #LABEL: "nightly"
+         LABEL: "resolve_hostname"
       steps:
          - attach_workspace:
               at: .
@@ -506,7 +507,7 @@ workflows:
                  - linux_cdms_mpich_py36
                  - linux_cdms_mpich_py37
                  - linux_cdms_mpich_py38
-              filters:
-                 branches:
-                    only: master
+              #filters:
+              #   branches:
+              #      only: master
 

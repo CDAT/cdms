@@ -164,6 +164,7 @@ jobs:
       environment:
          USER: << pipeline.parameters.user >>
          LABEL: << pipeline.parameters.label >>
+         PY_VER: "3.7"
       steps:
          - checkout
          - attach_workspace:

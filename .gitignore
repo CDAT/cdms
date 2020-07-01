@@ -30,7 +30,6 @@ TAGS
 *.md5
 semantic.cache*
 build/
-Makefile
 .coverage
 covhtml
 git.py

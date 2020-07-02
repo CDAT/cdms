@@ -1,513 +1,200 @@
-version: 2
+version: 2.1
+
+parameters:
+   pkg_name:
+      type: string
+      default: "cdms2"
+   repo_name:
+      type: string
+      default: "cdms"
+   last_stable:
+      type: string
+      default: "3.1.4"
+   user:
+      type: string
+      default: "cdat"
+   label:
+      type: string
+      default: "nightly"
+   env_name:
+      type: string
+      default: "test_cdms"
 
 aliases:
+  - &setup_env
+    name: setup_env
+    command: |
+       if [[ `uname` == "Darwin" ]]; then
+          export PROJECT_DIR=/Users/distiller/project/workdir/macos
+       else
+          export PROJECT_DIR=/home/circleci/project/workdir/linux
+       fi
+       echo "export WORKDIR=$PROJECT_DIR/$PY_VER" >> $BASH_ENV
+       cat $BASH_ENV
+       source $BASH_ENV
+       mkdir -p $WORKDIR
+
   - &setup_miniconda
     name: setup_miniconda
     command: |
-       mkdir -p workspace
-       git clone -b validateNightlyNew git@github.com:CDAT/cdat workspace/cdat
+       source $BASH_ENV
+       mkdir -p $WORKDIR
+       git clone https://github.com/CDAT/cdat.git $WORKDIR/cdat
        # install_miniconda.py installs miniconda3 under $WORKDIR/miniconda
-       python workspace/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py3'
+       python $WORKDIR/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py3'
+
 
   - &conda_rerender
     name: conda_rerender
     command: |
-       git clone https://github.com/CDAT/conda-recipes.git $WORKDIR/conda-recipes 
+       source $BASH_ENV
        source $WORKDIR/miniconda/etc/profile.d/conda.sh
        conda activate base
-       BUILD_SCRIPT="$WORKDIR/conda-recipes/build_tools/conda_build.py"
-       python $BUILD_SCRIPT -w $WORKDIR -l $LAST_STABLE -B 0 -p $PKG_NAME -r $REPO_NAME -b $CIRCLE_BRANCH --do_rerender
+       make conda-rerender conda=$WORKDIR/miniconda/bin/conda workdir=$WORKDIR last_stable=$LAST_STABLE branch=$CIRCLE_BRANCH
 
   - &conda_build
     name: conda_build
     command: |
+       source $BASH_ENV
        source $WORKDIR/miniconda/etc/profile.d/conda.sh
        conda activate base
-       python --version
-       conda config --add channels conda-forge --force
-       conda config --add channels cdat/label/nightly --force
-       conda config --set channel_priority strict
-       BUILD_SCRIPT="$WORKDIR/conda-recipes/build_tools/conda_build.py"
-       python $BUILD_SCRIPT -w $WORKDIR -p $PKG_NAME -r $REPO_NAME --build_version $BUILD_VARIANT_VER --do_build
+       os=`uname`
+       artifacts_dir="artifacts/artifacts.${os}.py_${PY_VER}"
+       make conda-build conda=$WORKDIR/miniconda/bin/conda workdir=$WORKDIR artifact_dir=$PWD/$artifacts_dir build_version=$PY_VER
 
   - &setup_run_tests
     name: setup_run_tests
-    environment:
-       PKGS: "testsrunner pytest"
-       CHANNELS: "-c cdat/label/nightly -c conda-forge"
     command: |
+       source $BASH_ENV
        source $WORKDIR/miniconda/etc/profile.d/conda.sh
        conda activate base
-       echo "conda create -y -n test_cdms --use-local $CHANNELS \"$CONDA_PY_VER\" $PKG_NAME $PKGS $COVERAGE_PKGS \"$LIBNETCDF\""
-       conda create -y -n test_cdms --use-local $CHANNELS "$CONDA_PY_VER" $PKG_NAME $PKGS $COVERAGE_PKGS "$LIBNETCDF"
-       conda activate test_cdms
-       conda list
-       conda list --verbose cdms2
+       export CONDA_PY_VER="python=$PY_VER"
+       export LIBNETCDF_VER="libnetcdf=*=${LIBNETCDF}_*"
+
+       echo "make setup-tests conda=$WORKDIR/miniconda/bin/conda conda_env=$ENV_NAME extra_pkgs=\"$CONDA_PY_VER $LIBNETCDF_VER $COVERAGE_PKGS\""
+       make setup-tests conda=$WORKDIR/miniconda/bin/conda conda_env=$ENV_NAME extra_pkgs="$CONDA_PY_VER $LIBNETCDF_VER $COVERAGE_PKGS"
+
+       make conda-dump-env conda=$WORKDIR/miniconda/bin/conda conda_env=$ENV_NAME artifact_dir=$PWD/spec_artifacts conda_env_filename=$CIRCLE_JOB
 
   - &run_tests
     name: run_tests
     command: |
+       source $BASH_ENV
        source $WORKDIR/miniconda/etc/profile.d/conda.sh
-       conda activate test_cdms
-       python run_tests.py -H -v2 -n 1 `pwd`/tests/test_big_array.py
-       mv tests/test_big_array.py $WORKDIR/
-       python run_tests.py -H -v2 --subdir $COVERAGE
-    no_output_timeout: 60m
+       conda activate $ENV_NAME
+       make run-tests conda=$WORKDIR/miniconda/bin/conda conda_env=$ENV_NAME workdir=$WORKDIR
+    no_output_timeout: 10m
 
   - &conda_upload
     name: conda_upload
     command: |
+       source $BASH_ENV
        source $WORKDIR/miniconda/etc/profile.d/conda.sh
        conda activate base
-       UPLOAD_OPTIONS="-t $CONDA_UPLOAD_TOKEN upload -u $USER -l $LABEL"
-       anaconda $UPLOAD_OPTIONS linux_build_py*/miniconda/conda-bld/linux-64/$PKG_NAME-$VERSION.`date +%Y*`0.tar.bz2 --force
-       anaconda $UPLOAD_OPTIONS macos_build_py*/miniconda/conda-bld/osx-64/$PKG_NAME-$VERSION.`date +%Y*`0.tar.bz2 --force
+       UPLOAD_OPTIONS="conda_upload_token=$CONDA_UPLOAD_TOKEN user=$USER label=$LABEL"
+       make conda-upload $UPLOAD_OPTIONS conda=$WORKDIR/miniconda/bin/conda artifact_dir="$PWD/artifacts/*/"
 
-  - &run_coveralls
-    name: run_coveralls
-    command: |
-       source $WORKDIR/miniconda/etc/profile.d/conda.sh
-       conda activate $ENV_NAME
-       coveralls
-       conda deactivate
+executors:
+   linux:
+      machine:
+         image: circleci/classic:latest
+   macos:
+      macos:
+         xcode: "11.4.0"
 
 jobs:
-   #
-   # setup_miniconda, rerender and build
-   #
-   macos_cdms_py36:
-      macos:
-         xcode: "11.4.0"
+   build:
+      parameters:
+         os:
+            type: executor
+         py_ver: 
+            type: string
+      executor: << parameters.os >>
       environment:
-         WORKDIR: /Users/distiller/project/macos_build_py36
-         PKG_NAME: "cdms2"
-         REPO_NAME: "cdms"
-         BUILD_VARIANT_VER: "3.6"
-         LAST_STABLE: "3.1.4"
+         PKG_NAME: << pipeline.parameters.pkg_name >>
+         REPO_NAME: << pipeline.parameters.repo_name >>
+         LAST_STABLE: << pipeline.parameters.last_stable >>
+         PY_VER: << parameters.py_ver >>
       steps:
          - checkout
+         - attach_workspace:
+              at: .
+         - run: *setup_env
          - run: *setup_miniconda
          - run: *conda_rerender
          - run: *conda_build
          - persist_to_workspace:
               root: .
               paths:
-                 #- macos_build_py36/miniconda/conda-bld/osx-64/cdms*tar.bz2
-                 - macos_build_py36
+                 - workdir
+                 - artifacts
 
-   macos_cdms_py37:
-      macos:
-         xcode: "11.4.0"
+   test:
+      parameters:
+         os:
+            type: executor
+         py_ver: 
+            type: string
+         libnetcdf: 
+            type: string
+      executor: << parameters.os >>
       environment:
-         WORKDIR: /Users/distiller/project/macos_build_py37
-         PKG_NAME: "cdms2"
-         REPO_NAME: "cdms"
-         BUILD_VARIANT_VER: "3.7"
-         LAST_STABLE: "3.1.4"
-      steps:
-         - checkout
-         - run: *setup_miniconda
-         - run: *conda_rerender
-         - run: *conda_build
-         - persist_to_workspace:
-              root: .
-              paths:
-                 - macos_build_py37
-
-   macos_cdms_py38:
-      macos:
-         xcode: "11.4.0"
-      environment:
-         WORKDIR: /Users/distiller/project/macos_build_py38
-         PKG_NAME: "cdms2"
-         REPO_NAME: "cdms"
-         BUILD_VARIANT_VER: "3.8"
-         LAST_STABLE: "3.1.4"
-      steps:
-         - checkout
-         - run: *setup_miniconda
-         - run: *conda_rerender
-         - run: *conda_build
-         - persist_to_workspace:
-              root: .
-              paths:
-                 - macos_build_py38
-
-   linux_cdms_py36:
-      machine:
-         image: circleci/classic:latest
-      environment:
-         WORKDIR: /home/circleci/project/linux_build_py36
-         PKG_NAME: "cdms2"
-         REPO_NAME: "cdms"
-         BUILD_VARIANT_VER: "3.6"
-         LAST_STABLE: "3.1.4"
-      steps:
-         - checkout
-         - run: *setup_miniconda
-         - run: *conda_rerender
-         - run: *conda_build
-         - persist_to_workspace:
-              root: .
-              paths:
-                 #- linux_build_py36/miniconda/conda-bld/linux-64/cdms*tar.bz2
-                 - linux_build_py36
-
-   linux_cdms_py37:
-      machine:
-         image: circleci/classic:latest
-      environment:
-         WORKDIR: /home/circleci/project/linux_build_py37
-         PKG_NAME: "cdms2"
-         REPO_NAME: "cdms"
-         BUILD_VARIANT_VER: "3.7"
-         LAST_STABLE: "3.1.4"
-      steps:
-         - checkout
-         - run: *setup_miniconda
-         - run: *conda_rerender
-         - run: *conda_build
-         - persist_to_workspace:
-              root: .
-              paths:
-                 - linux_build_py37
-
-   linux_cdms_py38:
-      machine:
-         image: circleci/classic:latest
-      environment:
-         WORKDIR: /home/circleci/project/linux_build_py38
-         PKG_NAME: "cdms2"
-         REPO_NAME: "cdms"
-         BUILD_VARIANT_VER: "3.8"
-         LAST_STABLE: "3.1.4"
-      steps:
-         - checkout
-         - run: *setup_miniconda
-         - run: *conda_rerender
-         - run: *conda_build
-         - persist_to_workspace:
-              root: .
-              paths:
-                 - linux_build_py38
-
-   #
-   # run tests with libnetcdf nompi
-   #
-   macos_cdms_nompi_py36:
-      macos:
-         xcode: "11.4.0"
-      environment:
-         WORKDIR: /Users/distiller/project/macos_build_py36
-         PKG_NAME: "cdms2"
-         ENV_NAME: "test_cdms"
-         CONDA_PY_VER: "python>=3.6,<3.7"
-         LIBNETCDF: "libnetcdf=*=nompi_*"
+         PKG_NAME: << pipeline.parameters.pkg_name >>
+         ENV_NAME: << pipeline.parameters.env_name >>
+         PY_VER: << parameters.py_ver >>
+         LIBNETCDF: << parameters.libnetcdf >>
       steps:
          - checkout
          - attach_workspace:
               at: .
+         - run: echo "LIBNETCDF=$LIBNETCDF" >> $BASH_ENV
+         - run: *setup_env
          - run: *setup_run_tests
          - run: *run_tests
          - store_artifacts:
               path: tests_html
               destination: tests_html
-
-   macos_cdms_nompi_py37:
-      macos:
-         xcode: "11.4.0"
-      environment:
-         WORKDIR: /Users/distiller/project/macos_build_py37
-         PKG_NAME: "cdms2"
-         ENV_NAME: "test_cdms"
-         CONDA_PY_VER: "python>=3.7,<3.8"
-         LIBNETCDF: "libnetcdf=*=nompi_*"
-      steps:
-         - checkout
-         - attach_workspace:
-              at: .
-         - run: *setup_run_tests
-         - run: *run_tests
          - store_artifacts:
-              path: tests_html
-              destination: tests_html
-
-   macos_cdms_nompi_py38:
-      macos:
-         xcode: "11.4.0"
-      environment:
-         WORKDIR: /Users/distiller/project/macos_build_py38
-         PKG_NAME: "cdms2"
-         ENV_NAME: "test_cdms"
-         CONDA_PY_VER: "python>=3.8,<3.9"
-         LIBNETCDF: "libnetcdf=*=nompi_*"
-      steps:
-         - checkout
-         - attach_workspace:
-              at: .
-         - run: *setup_run_tests
-         - run: *run_tests
-         - store_artifacts:
-              path: tests_html
-              destination: tests_html
-
-   linux_cdms_nompi_py36:
-      machine:
-         image: circleci/classic:latest
-      environment:
-         WORKDIR: /home/circleci/project/linux_build_py36
-         PKG_NAME: "cdms2"
-         ENV_NAME: "test_cdms"
-         CONDA_PY_VER: "python>=3.6,<3.7"
-         LIBNETCDF: "libnetcdf=*=nompi_*"
-      steps:
-         - checkout
-         - attach_workspace:
-              at: .
-         - run: *setup_run_tests
-         - run: *run_tests
-         - store_artifacts:
-              path: tests_html
-              destination: tests_html
-
-   linux_cdms_nompi_py37:
-      machine:
-         image: circleci/classic:latest
-      environment:
-         WORKDIR: /home/circleci/project/linux_build_py37
-         PKG_NAME: "cdms2"
-         ENV_NAME: "test_cdms"
-         CONDA_PY_VER: "python>=3.7,<3.8"
-         LIBNETCDF: "libnetcdf=*=nompi_*"
-         #COVERAGE: "-c tests/coverage.json --coverage-from-egg"
-         #COVERAGE_PKGS: "coverage coveralls"
-      steps:
-         - checkout
-         - attach_workspace:
-              at: .
-         - run: *setup_run_tests
-         - run: *run_tests
-         #- run: *run_coveralls
-         - store_artifacts:
-              path: tests_html
-              destination: tests_html
-
-   linux_cdms_nompi_py38:
-      machine:
-         image: circleci/classic:latest
-      environment:
-         WORKDIR: /home/circleci/project/linux_build_py38
-         PKG_NAME: "cdms2"
-         ENV_NAME: "test_cdms"
-         CONDA_PY_VER: "python>=3.8,<3.9"
-         LIBNETCDF: "libnetcdf=*=nompi_*"
-      steps:
-         - checkout
-         - attach_workspace:
-              at: .
-         - run: *setup_run_tests
-         - run: *run_tests
-         - store_artifacts:
-              path: tests_html
-              destination: tests_html
-
-   #
-   # run tests with libnetcdf mpich
-   #
-   macos_cdms_mpich_py36:
-      macos:
-         xcode: "11.4.0"
-      environment:
-         WORKDIR: /Users/distiller/project/macos_build_py36
-         PKG_NAME: "cdms2"
-         ENV_NAME: "test_cdms"
-         CONDA_PY_VER: "python>=3.6,<3.7"
-         LIBNETCDF: "libnetcdf=*=mpi_mpich_*"
-      steps:
-         - checkout
-         - attach_workspace:
-              at: .
-         - run: *setup_run_tests
-         - run: *run_tests
-         - store_artifacts:
-              path: tests_html
-              destination: tests_html
-
-   macos_cdms_mpich_py37:
-      macos:
-         xcode: "11.4.0"
-      environment:
-         WORKDIR: /Users/distiller/project/macos_build_py37
-         PKG_NAME: "cdms2"
-         ENV_NAME: "test_cdms"
-         CONDA_PY_VER: "python>=3.7,<3.8"
-         LIBNETCDF: "libnetcdf=*=mpi_mpich_*"
-      steps:
-         - checkout
-         - attach_workspace:
-              at: .
-         - run: *setup_run_tests
-         - run: *run_tests
-         - store_artifacts:
-              path: tests_html
-              destination: tests_html
-
-   macos_cdms_mpich_py38:
-      macos:
-         xcode: "11.4.0"
-      environment:
-         WORKDIR: /Users/distiller/project/macos_build_py38
-         PKG_NAME: "cdms2"
-         ENV_NAME: "test_cdms"
-         CONDA_PY_VER: "python>=3.8,<3.9"
-         LIBNETCDF: "libnetcdf=*=mpi_mpich_*"
-      steps:
-         - checkout
-         - attach_workspace:
-              at: .
-         - run: *setup_run_tests
-         - run: *run_tests
-         - store_artifacts:
-              path: tests_html
-              destination: tests_html
-
-   linux_cdms_mpich_py36:
-      machine:
-         image: circleci/classic:latest
-      environment:
-         WORKDIR: /home/circleci/project/linux_build_py36
-         PKG_NAME: "cdms2"
-         ENV_NAME: "test_cdms"
-         CONDA_PY_VER: "python>=3.6,<3.7"
-         LIBNETCDF: "libnetcdf=*=mpi_mpich_*"
-      steps:
-         - checkout
-         - attach_workspace:
-              at: .
-         - run: *setup_run_tests
-         - run: *run_tests
-         - store_artifacts:
-              path: tests_html
-              destination: tests_html
-
-   linux_cdms_mpich_py37:
-      machine:
-         image: circleci/classic:latest
-      environment:
-         WORKDIR: /home/circleci/project/linux_build_py37
-         PKG_NAME: "cdms2"
-         ENV_NAME: "test_cdms"
-         CONDA_PY_VER: "python>=3.7,<3.8"
-         LIBNETCDF: "libnetcdf=*=mpi_mpich_*"
-      steps:
-         - checkout
-         - attach_workspace:
-              at: .
-         - run: *setup_run_tests
-         - run: *run_tests
-         - store_artifacts:
-              path: tests_html
-              destination: tests_html
-
-   linux_cdms_mpich_py38:
-      machine:
-         image: circleci/classic:latest
-      environment:
-         WORKDIR: /home/circleci/project/linux_build_py38
-         PKG_NAME: "cdms2"
-         ENV_NAME: "test_cdms"
-         CONDA_PY_VER: "python>=3.8,<3.9"
-         LIBNETCDF: "libnetcdf=*=mpi_mpich_*"
-      steps:
-         - checkout
-         - attach_workspace:
-              at: .
-         - run: *setup_run_tests
-         - run: *run_tests
-         - store_artifacts:
-              path: tests_html
-              destination: tests_html
+              path: spec_artifacts
+              destination: spec_artifacts
 
    upload:
       machine:
          image: circleci/classic:latest
       environment:
-         WORKDIR: /home/circleci/project/linux_build_py36
-         PKG_NAME: "cdms2"
-         VERSION: "3.1.4"
-         USER: "cdat"
-         #LABEL: "nightly"
-         LABEL: "resolve_hostname"
+         USER: << pipeline.parameters.user >>
+         LABEL: << pipeline.parameters.label >>
+         PY_VER: "3.7"
       steps:
+         - checkout
          - attach_workspace:
               at: .
+         - run: *setup_env
          - run: *conda_upload
 
 workflows:
-   version: 2
    cdms:
       jobs:
-         - macos_cdms_py36
-         - macos_cdms_py37
-         - macos_cdms_py38
-         - linux_cdms_py36
-         - linux_cdms_py37
-         - linux_cdms_py38
+         - build:
+              matrix:
+                 parameters:
+                    os: [ linux, macos ]
+                    py_ver: [ "3.6", "3.7", "3.8" ]
+              name: build-<< matrix.os >>-<< matrix.py_ver >>
 
-         - macos_cdms_mpich_py36:
+         - test:
+              matrix:
+                 parameters:
+                    os: [ linux, macos ]
+                    py_ver: [ "3.6", "3.7", "3.8" ]
+                    libnetcdf: [ "nompi", "mpi_mpich", "mpi_openmpi" ]
+              name: test-<< matrix.os >>-<< matrix.py_ver >>-<< matrix.libnetcdf >>
               requires:
-                 - macos_cdms_py36
-         - macos_cdms_mpich_py37:
-              requires:
-                 - macos_cdms_py37
-         - macos_cdms_mpich_py38:
-              requires:
-                 - macos_cdms_py38
-         - linux_cdms_mpich_py36:
-              requires:
-                 - linux_cdms_py36
-         - linux_cdms_mpich_py37:
-              requires:
-                 - linux_cdms_py37
-         - linux_cdms_mpich_py38:
-              requires:
-                 - linux_cdms_py38
-
-         - macos_cdms_nompi_py36:
-              requires:
-                 - macos_cdms_py36
-         - macos_cdms_nompi_py37:
-              requires:
-                 - macos_cdms_py37
-         - macos_cdms_nompi_py38:
-              requires:
-                 - macos_cdms_py38
-         - linux_cdms_nompi_py36:
-              requires:
-                 - linux_cdms_py36
-         - linux_cdms_nompi_py37:
-              requires:
-                 - linux_cdms_py37
-         - linux_cdms_nompi_py38:
-              requires:
-                 - linux_cdms_py38
+                 - build-<< matrix.os >>-<< matrix.py_ver >>
 
          - upload:
               requires:
-                 - macos_cdms_nompi_py36
-                 - macos_cdms_nompi_py37
-                 - macos_cdms_nompi_py38
-                 - linux_cdms_nompi_py36
-                 - linux_cdms_nompi_py37
-                 - linux_cdms_nompi_py38
-
-                 - macos_cdms_mpich_py36
-                 - macos_cdms_mpich_py37
-                 - macos_cdms_mpich_py38
-                 - linux_cdms_mpich_py36
-                 - linux_cdms_mpich_py37
-                 - linux_cdms_mpich_py38
-              #filters:
-              #   branches:
-              #      only: master
-
+                 - test
+              filters:
+                 branches:
+                    only: master

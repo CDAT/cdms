@@ -16,9 +16,6 @@ parameters:
    label:
       type: string
       default: "nightly"
-   env_name:
-      type: string
-      default: "test_cdms"
 
 aliases:
   - &setup_env
@@ -71,18 +68,17 @@ aliases:
        export CONDA_PY_VER="python=$PY_VER"
        export LIBNETCDF_VER="libnetcdf=*=${LIBNETCDF}_*"
 
-       echo "make setup-tests conda=$WORKDIR/miniconda/bin/conda conda_env=$ENV_NAME extra_pkgs=\"$CONDA_PY_VER $LIBNETCDF_VER $COVERAGE_PKGS\""
-       make setup-tests conda=$WORKDIR/miniconda/bin/conda conda_env=$ENV_NAME extra_pkgs="$CONDA_PY_VER $LIBNETCDF_VER $COVERAGE_PKGS"
+       echo "make setup-tests conda=$WORKDIR/miniconda/bin/conda extra_pkgs=\"$CONDA_PY_VER $LIBNETCDF_VER $COVERAGE_PKGS\""
+       make setup-tests conda=$WORKDIR/miniconda/bin/conda extra_pkgs="$CONDA_PY_VER $LIBNETCDF_VER $COVERAGE_PKGS"
 
-       make conda-dump-env conda=$WORKDIR/miniconda/bin/conda conda_env=$ENV_NAME artifact_dir=$PWD/spec_artifacts conda_env_filename=$CIRCLE_JOB
+       make conda-dump-env conda=$WORKDIR/miniconda/bin/conda artifact_dir=$PWD/spec_artifacts conda_env_filename=$CIRCLE_JOB
 
   - &run_tests
     name: run_tests
     command: |
        source $BASH_ENV
        source $WORKDIR/miniconda/etc/profile.d/conda.sh
-       conda activate $ENV_NAME
-       make run-tests conda=$WORKDIR/miniconda/bin/conda conda_env=$ENV_NAME workdir=$WORKDIR
+       make run-tests conda=$WORKDIR/miniconda/bin/conda workdir=$WORKDIR
     no_output_timeout: 10m
 
   - &conda_upload
@@ -140,7 +136,6 @@ jobs:
       executor: << parameters.os >>
       environment:
          PKG_NAME: << pipeline.parameters.pkg_name >>
-         ENV_NAME: << pipeline.parameters.env_name >>
          PY_VER: << parameters.py_ver >>
          LIBNETCDF: << parameters.libnetcdf >>
       steps:

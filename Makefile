@@ -122,9 +122,7 @@ conda-dump-env:
 	source $(conda_activate) $(conda_test_env); conda list --explicit > $(artifact_dir)/$(conda_env_filename).txt
 
 run-tests:
-	source $(conda_activate) $(conda_test_env); python run_tests.py -H -v2 -n 1 # `pwd`/tests/test_big_array.py
-	# mv `pwd`/tests/test_big_array.py $(workdir)/
-	# source $(conda_activate) $(conda_test_env); python run_tests.py -H -v2 --subdir
+	source $(conda_activate) $(conda_test_env); python run_tests.py -H -v2 -n 1 
 
 run-coveralls:
 	source $(conda_activate) $(conda_test_env); coveralls;

@@ -1080,7 +1080,7 @@ class Dataset(CdmsObj, cuDataset):
         for var in list(self.variables.values()):
             for path, stuple in var.getPaths():
                 pathdict[path] = 1
-        result = sorted(pathdict.keys())
+        result = sorted(list(pathdict.keys()))
         return result
 
     # Open a data file associated with this dataset.
@@ -1340,7 +1340,7 @@ class CdmsFile(CdmsObj, cuDataset):
                 else:
                     cdunifvar = None
                 self.axes[name] = FileAxis(self, name, cdunifvar)
-            self.axes = OrderedDict(sorted(self.axes.items()))
+            self.axes = OrderedDict(sorted(list(self.axes.items())))
 
             # Attach boundary variables
             for name in coordsaux:

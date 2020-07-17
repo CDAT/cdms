@@ -287,7 +287,7 @@ def combineKeys(mydict, typedict, timeIsLinear=0,
     global verbose
 
     # Sort the projected time, level indices
-    keys = OrderedDict(sorted(mydict.items())).keys()
+    keys = list(OrderedDict(sorted(mydict.items())).keys())
 
     axislist = []
     prevend = None
@@ -396,7 +396,7 @@ def useKeys(mydict, typedict, timeIsLinear=0,
     global verbose
 
     # Sort the projected time, level indices
-    keys = OrderedDict(sorted(mydict.items())).keys()
+    keys = list(OrderedDict(sorted(mydict.items())).keys())
 
     axislist = []
     name0 = None
@@ -1118,7 +1118,7 @@ def main(argv):
                 # was if axis.isTime() and hasattr(axis, 'bounds'):
                 if axis.isTime() and (axis.getBounds() is not None):
                     tmpdict[axis.bounds] = 1
-            boundsids = tmpdict.keys()
+            boundsids = list(tmpdict.keys())
 
         # For forecasts, get the time at which the forecast begins (tau=0) which
         # is nbdate,nbsec
@@ -1133,7 +1133,7 @@ def main(argv):
                 nbsec, cdtime.Seconds)  # fctau0 as type comptime
             fc_time_attrs = []
 
-        varnames = f.variables.keys()
+        varnames = list(f.variables.keys())
 
         # Try to force all axes to be included, but only small ones, length<100.
         # This section was motivated by a need to preserve the cloud axes isccp_prs,isccp_tau.
@@ -1377,7 +1377,7 @@ def main(argv):
     # identical varentry values.
     varindex = []
 #    varnames = sorted(filemap.keys())
-    varnames = OrderedDict(sorted(filemap.items())).keys()
+    varnames = list(OrderedDict(sorted(filemap.items())).keys())
 
     for varname in varnames:
         varentry = sorted(filemap[varname])
@@ -1663,7 +1663,7 @@ def main(argv):
             else:
                 newslicedict[(i0, i1, j0, j1, fctau0)] = path
 #        keys = sorted(newslicedict.keys())
-        keys = OrderedDict(sorted(newslicedict.items())).keys()
+        keys = list(OrderedDict(sorted(newslicedict.items())).keys())
 
         newslicelist = []
         for i0, i1, j0, j1, fctau0 in keys:
@@ -1715,7 +1715,7 @@ def main(argv):
     validateAttrs(datasetnode)
 
     timeWasOverridden = 0
-    keys = OrderedDict(sorted(axisdict.items())).keys()
+    keys = list(OrderedDict(sorted(axisdict.items())).keys())
     for key in keys:
         axis = axisdict[key]
         tcode = axis.typecode()
@@ -1776,7 +1776,7 @@ def main(argv):
 #    keys = sorted(vardict.keys())
 #    keys = vardict.keys()
 #    keys = list(keys).sort()
-    keys = OrderedDict(sorted(vardict.items())).keys()
+    keys = list(OrderedDict(sorted(vardict.items())).keys())
     for key in keys:
         if (includeList is not None) and (key not in includeList):
             continue

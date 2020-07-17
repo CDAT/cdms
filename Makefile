@@ -6,6 +6,10 @@ SHELL = /bin/bash
 os = $(shell uname)
 pkg_name = cdms2
 repo_name = cdms
+
+user ?= cdat
+label ?= nightly
+
 build_script = conda-recipes/build_tools/conda_build.py
 
 test_pkgs = testsrunner pytest 

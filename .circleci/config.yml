@@ -69,7 +69,9 @@ aliases:
        source $BASH_ENV
        source $WORKDIR/miniconda/etc/profile.d/conda.sh
        conda activate base
-       UPLOAD_OPTIONS="conda_upload_token=$CONDA_UPLOAD_TOKEN"
+       # REVISIT -- TODO
+       # UPLOAD_OPTIONS="conda_upload_token=$CONDA_UPLOAD_TOKEN"
+       UPLOAD_OPTIONS="conda_upload_token=$CONDA_UPLOAD_TOKEN label=linatest"
        make conda-upload workdir=$WORKDIR $UPLOAD_OPTIONS artifact_dir="$PWD/artifacts/*/"
 
 executors:
@@ -166,6 +168,6 @@ workflows:
          - upload:
               requires:
                  - test
-              filters:
-                 branches:
-                    only: master
+#              filters:
+#                 branches:
+#                    only: master

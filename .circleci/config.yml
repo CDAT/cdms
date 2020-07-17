@@ -39,7 +39,7 @@ aliases:
        conda activate base
        os=`uname`
        artifacts_dir="artifacts/artifacts.${os}.py_${PY_VER}"
-       make conda-build workdir=$WORKDIR artifact_dir=$PWD/$artifacts_dir build_version=$PY_VER
+       make conda-build workdir=$WORKDIR conda_build_env=base artifact_dir=$PWD/$artifacts_dir build_version=$PY_VER
 
   - &setup_run_tests
     name: setup_run_tests

@@ -9,9 +9,9 @@ repo_name = cdms
 build_script = conda-recipes/build_tools/conda_build.py
 
 test_pkgs = testsrunner pytest 
-last_stable ?= 8.2
+last_stable ?= 3.1.4
 
-conda_build_env = build-$(pkg_name)
+conda_build_env = base
 conda_test_env = test-$(pkg_name)
 branch ?= $(shell git rev-parse --abbrev-ref HEAD)
 extra_channels ?= cdat/label/nightly conda-forge

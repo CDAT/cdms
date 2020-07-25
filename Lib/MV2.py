@@ -595,7 +595,8 @@ def sort(a, axis=-1):
 
 
 # sort.__doc__ = numpy.ma.sort.__doc__ + "The sort axis is replaced with a dummy axis."
-sort.__doc__ = '\n'.join(numpy.ma.sort.__doc__ + ["The sort axis is replaced with a dummy axis."])
+sort.__doc__ = numpy.ma.sort.__doc__
+sort.__doc__.append("The sort axis is replaced with a dummy axis.")
 
 
 def choose(myindices, t):

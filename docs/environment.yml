@@ -19,8 +19,8 @@ dependencies:
   - ca-certificates=2020.6.20=hecda079_0
   - cdat=8.2.1.rc1=0
   - cdat_info=8.2.1.rc2=pyh9f0ad1d_0
-  - cdp=1.6.0=py_0
   - cdms2=3.1.5.rc3=py38h7d68d4a_0
+  - cdp=1.6.0=py_0
   - cdtime=3.1.4.rc1=py38hcc33cd0_1
   - cdutil=8.2.1.rc1=pyh9f0ad1d_0
   - certifi=2020.6.20=py38h32f6830_0
@@ -92,7 +92,7 @@ dependencies:
   - lame=3.100=h14c3975_1001
   - lazy-object-proxy=1.5.1=py38h1e0a361_0
   - lcms2=2.11=hbd6801e_0
-  - ld_impl_linux-64=2.34=h53a641e_7
+  - ld_impl_linux-64=2.34=hc38a660_8
   - libblas=3.8.0=11_openblas
   - libcblas=3.8.0=11_openblas
   - libcdms=3.1.2=h054cd8a_112
@@ -104,7 +104,7 @@ dependencies:
   - libedit=3.1.20191231=h46ee950_1
   - libffi=3.2.1=he1b5a44_1007
   - libgcc-ng=9.2.0=h24d8f2e_2
-  - libgfortran-ng=7.5.0=hdf63c60_6
+  - libgfortran-ng=7.5.0=hdf63c60_10
   - libgomp=9.2.0=h24d8f2e_2
   - libiconv=1.15=h516909a_1006
   - liblapack=3.8.0=11_openblas
@@ -133,13 +133,14 @@ dependencies:
   - nb_conda_kernels=2.2.3=py38_0
   - nbconvert=5.6.1=py38h32f6830_1
   - nbformat=5.0.7=py_0
+  - nbsphinx=0.7.1=pyh9f0ad1d_0
   - ncurses=6.2=he1b5a44_1
   - netcdf-fortran=4.5.3=nompi_hfef6a68_100
   - nettle=3.4.1=h1bed415_1002
   - notebook=6.0.3=py38h32f6830_1
   - nspr=4.27=he1b5a44_0
   - nss=3.47=he751ad9_0
-  - numpy=1.19.1=py38h8854b6b_0
+  - numpy=1.19.0=py38h8854b6b_0
   - numpydoc=1.1.0=pyh9f0ad1d_0
   - olefile=0.46=py_0
   - openblas=0.3.6=h6e990d7_6
@@ -233,5 +234,4 @@ dependencies:
     - pyqtwebengine==5.12.1
     - regrid2==3.1.4
 prefix: /home/circleci/project/workdir/linux/miniconda/envs/cdat
-
 

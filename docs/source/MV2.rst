@@ -74,6 +74,7 @@ MV2
    product
    putmask
    put
+   rank
    repeat
    reshape
    resize

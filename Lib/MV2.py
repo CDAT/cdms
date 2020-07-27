@@ -593,7 +593,7 @@ def sort(a, axis=-1):
     return TransientVariable(
         maresult, axes=axes, attributes=attributes, grid=grid, id=id, fill_value=F)
 
-sort.__doc__ = numpy.ma.sort.__doc__ + "The sort axis is replaced with a dummy axis."
+sort.__doc__ = "    The sort axis is replaced with a dummy axis.\n" + numpy.ma.sort.__doc__
 
 def choose(myindices, t):
     """

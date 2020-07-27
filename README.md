@@ -24,6 +24,7 @@ make dev-docker
 
 # Makefile targets
 
+- **build-docs**: Creates environment and builds docs.
 - **conda-info**: Runs `conda info` in the test environment.
 - **conda-list**: Runs `conda list` in the test environment.
 - **dev-docker**: Builds dev environment in a docker container.

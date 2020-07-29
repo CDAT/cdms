@@ -11,18 +11,20 @@
 [![Anaconda-Server Badge](https://anaconda.org/uvcdat/cdms2/badges/downloads.svg)](https://anaconda.org/uvcdat/cdms2)
 [![Anaconda-Server Badge](https://anaconda.org/uvcdat/cdms2/badges/installer/conda.svg)](https://conda.anaconda.org/uvcdat)
 
-# Building conda package
+# Development
+
+## Building conda package
 
 ```bash
 make dev-build
 ```
 
-## Build in docker container
+### Build in docker container
 ```bash
 make dev-docker
 ```
 
-# Makefile targets
+## Makefile targets
 
 - **build-docs**: Creates environment and builds docs.
 - **conda-info**: Runs `conda info` in the test environment.
@@ -39,3 +41,15 @@ make dev-docker
 - **conda-dump-env**: Dumps test environment using `conda list --explicit`, this generates a file with the specific files installed.
 - **run-tests**: Runs units tests in test environment.
 - **run-coveralls**: Runs coverage in test environment.
+
+## Bumping version
+
+We're using [bump2version](https://github.com/c4urself/bump2version) to manage versioning.
+
+This will update the following files:
+- setup.py
+- docs/source/conf.py
+
+```bash
+bumpversion <major,minor,patch>
+```

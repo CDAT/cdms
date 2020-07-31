@@ -1,13 +1,12 @@
 import basetest
 import os
+
 try:
-    os.unlink(os.environ['HOME']+'/.dodsrc')
-except:
+    os.unlink(os.environ["HOME"] + "/.dodsrc")
+except Exception:
     pass
-import cdms2
 from cdms2.cdscan import main as cdscan
 import os
-import sys
 import xml.etree.ElementTree as ET
 import cdat_info
 
@@ -40,7 +39,7 @@ def diffElements(el1, el2):
 
 class TestCDScan(basetest.CDMSBaseTest):
     def testScan(self):
-        argv = 'cdscan -q -d test -x some_junk.xml u_2000.nc u_2001.nc u_2002.nc v_2000.nc v_2001.nc v_2002.nc'.split()
+        argv = "cdscan -q -d test -x some_junk.xml u_2000.nc u_2001.nc u_2002.nc v_2000.nc v_2001.nc v_2002.nc".split()
         pth = cdat_info.get_sampledata_path()
         os.chdir(pth)
         cdscan(argv)
@@ -52,28 +51,6 @@ class TestCDScan(basetest.CDMSBaseTest):
         self.assertIsNone(results)
         os.unlink("some_junk.xml")
 
-    def testopenFile(self):
-        '''
-        retrieve value from cdscan 
-        '''
-        data_file1 = "https://dpesgf03.nccs.nasa.gov/thredds/dodsC/CREATE-IP/reanalysis/NASA-GMAO/GEOS-5/MERRA/mon/atmos/cl/cl_Amon_reanalysis_MERRA_197901-197912.nc"
-        data_file2 = "https://dpesgf03.nccs.nasa.gov/thredds/dodsC/CREATE-IP/reanalysis/NASA-GMAO/GEOS-5/MERRA/mon/atmos/cl/cl_Amon_reanalysis_MERRA_198001-198012.nc"
-        f1 = cdms2.open(data_file1)
-        f2 = cdms2.open(data_file2)
-        cl1 = f1["cl"]
-        cl2 = f2["cl"]
-
-        argv = "cdscan -x test_dap.xml {f1} {f2}".format(f1=data_file1,
-                                                         f2=data_file2).split()
-        pth = cdat_info.get_sampledata_path()
-        os.chdir(pth)
-        cdscan(argv)
-        f=cdms2.open("test_dap.xml")
-        s=f['cl']
-        self.assertEqual(cl1[5, 20, 80, 140], s[5, 20, 80, 140])
-        self.assertEqual(cl2[5, 20, 80, 140], s[17, 20, 80, 140])
-
-        os.unlink("test_dap.xml")
 
 if __name__ == "__main__":
     basetest.run()

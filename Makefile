@@ -74,6 +74,8 @@ dev-docker-run:
 	docker exec -it $(container) /bin/bash -l
 
 dev-environment: arch := $(if $(findstring $(os),Darwin),osx,linux)
+dev-environment: build_deps := $(shell cat dependencies.txt)
+dev-environment: run_deps := $(shell cat dependencies_run.txt)
 dev-environment: 
 	git clone https://github.com/conda-forge/cdms2-feedstock $(workdir)/cdms2-feedstock || exit 0
 
@@ -88,9 +90,9 @@ dev-environment:
 	cat dependencies.txt
 		
 	source $(conda_activate) base; \
-		conda create -n $(conda_test_env) -y -c conda-forge -c cdat/label/nightly $(shell cat dependencies.txt) $(test_pkgs); \
+		conda create -n $(conda_test_env) -y -c conda-forge -c cdat/label/nightly $(build_deps) $(test_pkgs); \
 		source $(conda_activate) $(conda_test_env); \
-		conda install -y -c conda-forge -c cdat/label/nightly $(shell cat dependencies_run.txt)
+		conda install -y -c conda-forge -c cdat/label/nightly $(run_deps)
 
 	$(MAKE) dev-install
 

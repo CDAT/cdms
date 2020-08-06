@@ -80,7 +80,49 @@ def fromJSON(jsn):
 
 
 class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
-    "An in-memory variable."
+    """Variable in-memory.
+
+    Parameters
+    ----------
+    data : numpy.ndarray
+        NDArray containing variable data.
+    typecode : (float, int, np.dtype)
+        Sets the dtype of the underlying masked array.
+    copy : int
+        0: Stores reference of data.
+        1: Stores copy of data.
+    savespace : int
+        Deprecated.
+    mask : numpy.ndarray
+        Mask passed to the underlying masked array.
+    fill_value : float
+        Sets the value to use when data is missing.
+    grid
+        Sets the grid of the variable.
+    axes : list of (cdms2.TransientAxis, cdms2.FileAxis)
+        Sets the list of axes associated with the variable.
+    attributes : dict
+        Mapping of attribute names and values.
+    id : str
+        Identifier for the variable.
+    copyaxes : int
+        0: Stores reference to axes.
+        1: Stores copies of axes.
+    dtype : (float, int, np.dtype)
+        Sets the dtype of the underlying masked array.
+    order : str
+        Sets the order for the underlying masked array (`Masked Array`_).
+    no_update_from : bool
+        If ``False`` and ``axes`` is None, then axes will be generated from ``data``.
+        If ``False`` and ``grid`` is None, then an attempt to get a grid from the ``data`` will be made.
+        Set to ``True`` will prevent the above behavior.
+    **kargs
+        Unused.
+
+    .. _Masked Array:
+        https://numpy.org/doc/stable/reference/generated/numpy.ma.array.html
+    """
+
     variable_count = 0
     _missing = numpy.ma.MaskedArray.fill_value
 
@@ -1003,6 +1045,55 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
 
 
 def createVariable(*args, **kargs):
+    """Creates variable in-memory.
+
+    >>> v1 = createVariable(np.random.random(size=(200,200)), typecode=float, fill_value=123)
+
+    >>> v2 = createVariable('data.json', fromJSON=True)
+
+    Parameters
+    ----------
+    data : numpy.ndarray
+        NDArray containing variable data.
+    typecode : (float, int, np.dtype)
+        Sets the dtype of the underlying masked array.
+    copy : int
+        0: Stores reference of data.
+        1: Stores copy of data.
+    savespace : int
+        Deprecated.
+    mask : numpy.ndarray
+        Mask passed to the underlying masked array.
+    fill_value : float
+        Sets the value to use when data is missing.
+    grid
+        Sets the grid of the variable.
+    axes : list of (cdms2.TransientAxis, cdms2.FileAxis)
+        Sets the list of axes associated with the variable.
+    attributes : dict
+        Mapping of attribute names and values.
+    id : str
+        Identifier for the variable.
+    copyaxes : int
+        0: Stores reference to axes.
+        1: Stores copies of axes.
+    dtype : (float, int, np.dtype)
+        Sets the dtype of the underlying masked array.
+    order : str
+        Sets the order for the underlying masked array (`Masked Array`_).
+    no_update_from : bool
+        If ``False`` and ``axes`` is None, then axes will be generated from ``data``.
+        If ``False`` and ``grid`` is None, then an attempt to get a grid from the ``data`` will be made.
+        Set to ``True`` will prevent the above behavior.
+    *args
+        Url to JSON file if ``fromJSON`` is in kwargs.
+    **kargs
+        - fromJSON : bool
+            Load variable from JSON.
+
+    .. _Masked Array:
+        https://numpy.org/doc/stable/reference/generated/numpy.ma.array.html
+    """
     if kargs.get("fromJSON", False):
         return fromJSON(*args)
     else:

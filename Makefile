@@ -83,7 +83,7 @@ dev-environment:
 		-c conda-forge conda-build
 
 	source $(conda_activate) $(conda_build_env); \
-		conda render -c conda-forge -m $(workdir)/cdms2-feedstock/.ci_support/$(arch)_python3.7*.yaml $(workdir)/cdms2-feedstock/recipe > dependencies.yaml; \
+		conda render -c conda-forge -m $(workdir)/cdms2-feedstock/.ci_support/$(arch)*_python3.7*.yaml $(workdir)/cdms2-feedstock/recipe > dependencies.yaml; \
 		python -c "import yaml;d=open('dependencies.yaml').read();d=d.split('\n');i=d.index('package:');d=d[i:];y=yaml.load('\n'.join(d),Loader=yaml.SafeLoader);print(' '.join([f'\"{x}\"' for x in y['requirements']['build']]))" > dependencies.txt; \
 		python -c "import yaml;d=open('dependencies.yaml').read();d=d.split('\n');i=d.index('package:');d=d[i:];y=yaml.load('\n'.join(d),Loader=yaml.SafeLoader);print(' '.join([f'\"{x}\"' for x in y['requirements']['run']]))" > dependencies_run.txt
 

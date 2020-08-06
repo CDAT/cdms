@@ -44,6 +44,16 @@ endif
 workdir := $(shell cat $(PWD)/.tempdir)
 endif
 
+build-docs:
+	source $(conda_activate) base; \
+		conda env create -n readthedocs-cdms2 -f docs/environment.yaml; \
+		source $(conda_activate) readthedocs-cdms2; \
+		conda install -y mock pillow sphinx sphinx_rtd_theme; \
+		python -m pip install -U --no-cache-dir recommonmark readthedocs-sphinx-ext; \
+		python setup.py install --force; \
+		cd docs/source; \
+		sphinx-build -T -E -b readthedocs -d _build/doctrees-readthedocs -D language=en . _build/html
+
 conda-info:
 	source $(conda_activate) $(conda_test_env); conda info
 

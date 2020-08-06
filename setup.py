@@ -18,7 +18,7 @@ sys.path.insert(0,os.path.join(target_prefix,'lib','python%i.%i' % sys.version_i
 
 sys.path.append(os.environ.get('BUILD_DIR',"build"))
 
-Version = "3.1.4"
+Version = "3.1.5"
 
 import cdat_info
 import numpy

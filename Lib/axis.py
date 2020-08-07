@@ -2165,7 +2165,14 @@ class AbstractAxis(CdmsObj):
     def genGenericBounds(self, width=1.0):
         """Generate generic bounds.
 
-        Generates generic bounds where the axis values are midpoints of the bounds.
+        Generate generic bounds. The axis values will be in the center of the
+        bounds.
+
+        If the axis is latitude the endpoints of the bounds are capped at 90
+        and -90 respectively.
+
+        If the axis is longitude the endpoints of the bounds will be adjusted
+        as to ensure they are circular.
 
         Parameters
         ----------
@@ -2176,6 +2183,20 @@ class AbstractAxis(CdmsObj):
         -------
         numpy.ndarray
             2D (n,2) array containing bounds values.
+
+        Examples
+        --------
+        >>> a1 = cdms2.createAxis(np.arange(0, 360, 1), id='lon')
+        >>> a1.designateLongitude()
+        >>> b1 = a1.genGenericBounds()
+        >>> b1[0, 0], b1[-1, 1]
+        (array([-0.5,  0.5]), array([358.5, 359.5]))
+
+        >>> a1 = cdms2.createAxis(np.arange(0, 360, 1), id='lon')
+        >>> a1.designateLongitude()
+        >>> b1 = a1.genGenericBounds()
+        >>> b1[0, 0], b1[-1, 1]
+        (array([90.5, 89.5]), array([-88.5, -89.5]))
         """
         if self._data_ is None:
             self._data_ = self.getData()

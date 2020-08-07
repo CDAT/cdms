@@ -1047,9 +1047,7 @@ class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
 def createVariable(*args, **kargs):
     """Creates variable in-memory.
 
-    >>> v1 = createVariable(np.random.random(size=(200,200)), typecode=float, fill_value=123)
-
-    >>> v2 = createVariable('data.json', fromJSON=True)
+    To enabled automatic bounds generation see ``setAutoBounds``.
 
     Parameters
     ----------
@@ -1093,6 +1091,12 @@ def createVariable(*args, **kargs):
 
     .. _Masked Array:
         https://numpy.org/doc/stable/reference/generated/numpy.ma.array.html
+
+    Examples
+    --------
+    >>> v1 = createVariable(np.random.random(size=(200,200)), typecode=float, fill_value=123)
+
+    >>> v2 = createVariable('data.json', fromJSON=True)
     """
     if kargs.get("fromJSON", False):
         return fromJSON(*args)

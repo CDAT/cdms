@@ -154,21 +154,20 @@ _autobounds = 2
 def setAutoBounds(mode):
     """Sets AutoBounds behavior.
 
-    Automatically generates axis and grid boundaries in ``getBounds``.
+    Automatically generates axis and grid boundaries when ``getBounds``
+    is called.
 
-    Modes:
-    0 : 'off'   (No bounds will be generated)
-    1 : 'on'    (Generate bounds)
-    2 : 'grid'  (Generate bounds for lat/lon grids only)
+    Parameters
+    ----------
+    mode : (str/int)
+        0 : 'off'   (No bounds will be generated)
+        1 : 'on'    (Generate bounds)
+        2 : 'grid'  (Generate bounds for lat/lon grids only)
 
     Notes
     -----
     This only affects 1D axes.
 
-    Parameters
-    ----------
-    mode : (str/int)
-        Mode identifier.
     """
     global _autobounds
     if mode == 'on' or mode == 1:
@@ -192,6 +191,8 @@ def getAutoBounds():
 def createAxis(data, bounds=None, id=None, copy=0, genericBounds=False):
     """ Creates an axis.
 
+    To enabled automatic bounds generation see ``setAutoBounds``.
+
     Parameters
     ----------
     data : (list/:obj:`numpy.ndarray`)
@@ -205,6 +206,11 @@ def createAxis(data, bounds=None, id=None, copy=0, genericBounds=False):
         1: Stores copy of data.
     genericBounds : bool
         True will create generic bounds if ``bounds`` is None.
+
+    Returns
+    -------
+    cdms2.TransientAxis
+        Returns a ``TransientAxis`` containing data.
     """
     return TransientAxis(data, bounds=bounds, id=id,
                          copy=copy, genericBounds=genericBounds)

@@ -82,6 +82,8 @@ def fromJSON(jsn):
 class TransientVariable(AbstractVariable, numpy.ma.MaskedArray):
     """Variable in-memory.
 
+    To enabled automatic bounds generation see ``setAutoBounds``.
+
     Parameters
     ----------
     data : numpy.ndarray

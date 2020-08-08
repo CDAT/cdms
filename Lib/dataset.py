@@ -493,8 +493,10 @@ def openDataset(uri, mode='r', template=None,
             # If the doesn't exist allow it to be created
             # Ok mpi has issues with bellow we need to test this only with 1
             # rank
-            if not os.path.exists(path):
-                return CdmsFile(path, mode, mpiBarrier=CdMpi)
+            # if not os.path.exists(path):
+            #     return CdmsFile(path, mode, mpiBarrier=CdMpi)
+            if mode == "r" and not os.path.exists(path):
+                raise FileNotFoundError(path)
             elif mode == "w":
                 try:
                     os.remove(path)
@@ -502,26 +504,24 @@ def openDataset(uri, mode='r', template=None,
                     pass
                 return CdmsFile(path, mode, mpiBarrier=CdMpi)
 
-            # The file exists
-            file1 = CdmsFile(path, "r")
             if libcf is not None:
-                if hasattr(file1, libcf.CF_FILETYPE):
-                    if getattr(
-                            file1, libcf.CF_FILETYPE) == libcf.CF_GLATT_FILETYPE_HOST:
+                file = CdmsFile(path, mode, hostObj)
+
+                if hasattr(file, libcf.CF_FILETYPE):
+                    if getattr(file, libcf.CF_FILETYPE) == libcf.CF_GLATT_FILETYPE_HOST:
+                        file.close()
                         file = gsHost.open(path, mode)
-                    elif mode == 'r' and hostObj is None:
-                        # helps performance on machines where file open (in
-                        # CdmsFile) is costly
-                        file = file1
-                    else:
-                        file = CdmsFile(path, mode, hostObj=hostObj)
-                    file1.close()
-                else:
-                    file1.close()
-                    file = CdmsFile(path, mode)
+                    # elif mode == 'r' and hostObj is None:
+                    #     # helps performance on machines where file open (in
+                    #     # CdmsFile) is costly
+                    #     file = file1
+                    # else:
+                    #     file1.close()
+                    #     file = CdmsFile(path, mode, hostObj=hostObj)
+                # else:
+                #     file = file1
                 return file
             else:
-                file1.close()
                 return CdmsFile(path, mode)
     elif scheme in ['http', 'gridftp', 'https']:
 

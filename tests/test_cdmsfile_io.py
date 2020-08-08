@@ -1,29 +1,51 @@
 import basetest
 import cdms2
 import numpy
-import string
 import os
-import sys
-from numpy.ma import masked
+import cdat_info
+import hashlib
 
 
 class TestCDMSFileIO(basetest.CDMSBaseTest):
     def setUp(self):
         super(TestCDMSFileIO, self).setUp()
         self.readOnly = self.getDataFile("readonly.nc")
-        self.clt = self.getDataFile("clt.nc")['clt']
+        self.clt = self.getDataFile("clt.nc")["clt"]
         self.u = self.readOnly["u"]
         self.u_masked = self.readOnly["umasked"]
 
     def tearDown(self):
         super(TestCDMSFileIO, self).tearDown()
 
-    def testZSS(self):
-        out_file=cdms2.open('temp.nc', 'w')
-        out_file.write(self.clt[0:10,:])
-        out_file.write(self.clt[10:20,:])
-        out_file.close()
+    def testModes(self):
+        clt = os.path.join(cdat_info.get_sampledata_path(), "clt.nc")
 
+        with cdms2.open(clt):
+            pass
+
+        with cdms2.open(clt, 'r'):
+            pass
+
+        uid = hashlib.sha256().hexdigest()[:8]
+        fname = "{}.nc".format(uid)
+
+        with cdms2.open(fname, 'w'):
+            pass
+
+        uid = hashlib.sha256().hexdigest()[:8]
+        fname = "{}.nc".format(uid)
+
+        with cdms2.open(fname, 'a'):
+            pass
+
+        with cdms2.open(clt, 'a'):
+            pass
+
+    def testZSS(self):
+        out_file = cdms2.open("temp.nc", "w")
+        out_file.write(self.clt[0:10, :])
+        out_file.write(self.clt[10:20, :])
+        out_file.close()
 
     def testSize(self):
         self.assertEqual(self.u.size(), 512)
@@ -48,7 +70,7 @@ class TestCDMSFileIO(basetest.CDMSBaseTest):
 
     def testVarAxis(self):
         t = self.u.getTime()
-        self.assertTrue(numpy.ma.allequal(t[:], [0.]))
+        self.assertTrue(numpy.ma.allequal(t[:], [0.0]))
         self.assertEqual(t.units, "days since 2000-1-1")
 
     def testVarGrid(self):
@@ -66,7 +88,7 @@ class TestCDMSFileIO(basetest.CDMSBaseTest):
         cdms2.setNetcdfDeflateFlag(0)
         self.assertEqual(cdms2.getNetcdfShuffleFlag(), 0)
         self.assertEqual(cdms2.getNetcdfDeflateFlag(), 0)
-      
+
     def testClassicFlags(self):
         cdms2.setNetcdfClassicFlag(1)
         self.assertEqual(cdms2.getNetcdfClassicFlag(), 1)
@@ -86,24 +108,25 @@ class TestCDMSFileIO(basetest.CDMSBaseTest):
 
     def testwith(self):
         try:
-            with cdms2.open('something.nc') as f:
-                 data = f['dd']
-        except cdms2.CDMSError:
+            with cdms2.open("something.nc") as f:
+                f["dd"]
+        except FileNotFoundError:
             pass
 
     def testClosedOperations(self):
         u = self.u
         transient_u = self.u[:]
+        assert transient_u is not None
         self.readOnly.close()
         with self.assertRaises(cdms2.CDMSError):
-            badslice = u[:, 4:12, 8:24]
-            badu = u.getValue()
+            u[:, 4:12, 8:24]
+            u.getValue()
 
         with self.assertRaises(cdms2.CDMSError):
-            badu = u.getValue()
+            u.getValue()
 
         with self.assertRaises(cdms2.CDMSError):
-            badslice = u[0:1]
+            u[0:1]
 
         with self.assertRaises(cdms2.CDMSError):
             u[0, 0, 0] = -99.9
@@ -112,5 +135,5 @@ class TestCDMSFileIO(basetest.CDMSBaseTest):
             u[0:1] = -99.9
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     basetest.run()

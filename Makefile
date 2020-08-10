@@ -1,6 +1,7 @@
 .PHONY: conda-info conda-list setup-build setup-tests conda-rerender \
-	conda-build conda-upload conda-dump-env \
-	run-tests run-coveralls
+	conda-build conda-upload conda-dump-env run-tests run-coveralls \
+	setup-feedstock rerender-feedstock build
+
 SHELL = /bin/bash
 
 os = $(shell uname)
@@ -19,7 +20,6 @@ conda_build_env ?= build-$(pkg_name)
 conda_test_env ?= test-$(pkg_name)
 branch ?= $(shell git rev-parse --abbrev-ref HEAD)
 extra_channels ?= cdat/label/nightly conda-forge
-conda ?= $(or $(CONDA_EXE),$(shell find /opt/*conda*/bin $(HOME)/*conda*/bin -type f -iname conda))
 artifact_dir ?= $(PWD)/artifacts
 conda_env_filename ?= spec-file
 build_version ?= 3.7
@@ -30,11 +30,6 @@ endif
 
 conda_recipes_branch ?= master
 
-conda_base = $(patsubst %/bin/conda,%,$(conda))
-conda_activate = $(conda_base)/bin/activate
-
-conda_build_extra = --copy_conda_package $(artifact_dir)
-
 ifeq ($(workdir),)
 ifeq ($(wildcard $(PWD)/.tempdir),)
 workdir := $(shell mktemp -d "/tmp/build-$(pkg_name).XXXXXXXX")
@@ -44,10 +39,41 @@ endif
 workdir := $(shell cat $(PWD)/.tempdir)
 endif
 
+conda ?= $(or $(CONDA_EXE),$(shell find /opt/*conda*/bin $(HOME)/*conda*/bin -type f -iname conda))
+conda_bin := $(patsubst %/conda,%,$(conda))
+conda_act := source $(conda_bin)/activate
+conda_rc := $(workdir)/condarc
+conda_cmd := CONDARC=$(conda_rc) conda
+feedstock := $(workdir)/cdms2-feedstock
+
+conda_build_extra = --copy_conda_package $(artifact_dir)
+
+setup-feedstock:
+	$(conda) config --file $(conda_rc) --add channels defaults
+	$(conda) config --file $(conda_rc) --add channels conda-forge
+	$(conda) config --file $(conda_rc) --set always_yes true
+
+	git clone https://github.com/conda-forge/cdms2-feedstock $(feedstock) || exit 0
+
+	# Replace source section, uses local path pointed to repo to capture changes.
+	sed -i'' -e "/source:/{N; :loop; N; s/build://; Tloop;{ s/.*/source:\n  path: $(subst /,\/,$(PWD))\n\nbuild:/ }}" \
+		$(feedstock)/recipe/meta.yaml
+
+rerender-feedstock:
+	$(conda_act) base; \
+		conda create -n $(conda_build_env) -c conda-forge conda-build conda-smithy
+
+	$(conda_act) $(conda_build_env); \
+		conda smithy rerender --feedstock_directory $(feedstock)
+
+build: setup-feedstock rerender-feedstock
+	$(conda_act) $(conda_build_env); \
+		conda build -m $(feedstock)/.ci_support/linux_64_python3.7*.yaml -c conda-forge $(feedstock)/recipe
+
 build-docs:
-	source $(conda_activate) base; \
+	$(conda_act) base; \
 		conda env create -n readthedocs-cdms2 -f docs/environment.yaml; \
-		source $(conda_activate) readthedocs-cdms2; \
+		$(conda_act) readthedocs-cdms2; \
 		conda install -y mock pillow sphinx sphinx_rtd_theme; \
 		python -m pip install -U --no-cache-dir recommonmark readthedocs-sphinx-ext; \
 		python setup.py install --force; \
@@ -55,10 +81,10 @@ build-docs:
 		sphinx-build -T -E -b readthedocs -d _build/doctrees-readthedocs -D language=en . _build/html
 
 conda-info:
-	source $(conda_activate) $(conda_test_env); conda info
+	$(conda_act) $(conda_test_env); conda info
 
 conda-list:
-	source $(conda_activate) $(conda_test_env); conda list
+	$(conda_act) $(conda_test_env); conda list
 
 dev-docker: container := dev-$(pkg_name)
 dev-docker:
@@ -79,25 +105,23 @@ dev-environment: run_deps := $(shell cat dependencies_run.txt)
 dev-environment: 
 	git clone https://github.com/conda-forge/cdms2-feedstock $(workdir)/cdms2-feedstock || exit 0
 
-	source $(conda_activate) base; conda create -y -n $(conda_build_env) \
+	$(conda_act) base; conda create -y -n $(conda_build_env) \
 		-c conda-forge conda-build
 
-	source $(conda_activate) $(conda_build_env); \
-		conda render -c conda-forge -m $(workdir)/cdms2-feedstock/.ci_support/$(arch)_python3.7*.yaml $(workdir)/cdms2-feedstock/recipe > dependencies.yaml; \
+	$(conda_act) $(conda_build_env); \
+		conda render -c conda-forge -m $(workdir)/cdms2-feedstock/.ci_support/$(arch)_64_python3.7*.yaml $(workdir)/cdms2-feedstock/recipe > dependencies.yaml; \
 		python -c "import yaml;d=open('dependencies.yaml').read();d=d.split('\n');i=d.index('package:');d=d[i:];y=yaml.load('\n'.join(d),Loader=yaml.SafeLoader);print(' '.join([f'\"{x}\"' for x in y['requirements']['build']]))" > dependencies.txt; \
 		python -c "import yaml;d=open('dependencies.yaml').read();d=d.split('\n');i=d.index('package:');d=d[i:];y=yaml.load('\n'.join(d),Loader=yaml.SafeLoader);print(' '.join([f'\"{x}\"' for x in y['requirements']['run']]))" > dependencies_run.txt
 
 	cat dependencies.txt
 		
-	source $(conda_activate) base; \
+	$(conda_act) base; \
 		conda create -n $(conda_test_env) -y -c conda-forge -c cdat/label/nightly $(build_deps) $(test_pkgs); \
-		source $(conda_activate) $(conda_test_env); \
+		$(conda_act) $(conda_test_env); \
 		conda install -y -c conda-forge -c cdat/label/nightly $(run_deps)
 
-	$(MAKE) dev-install
-
 dev-install:
-	source $(conda_activate) $(conda_test_env); \
+	$(conda_act) $(conda_test_env); \
 		python setup.py build --force; \
 		python setup.py install --force --record files.txt
 
@@ -112,7 +136,7 @@ else
 endif
 
 setup-tests:
-	source $(conda_activate) base; conda create -y -n $(conda_test_env) --use-local \
+	$(conda_act) base; conda create -y -n $(conda_test_env) --use-local \
 		$(foreach x,$(extra_channels),-c $(x)) $(pkg_name) $(foreach x,$(test_pkgs),"$(x)") \
 		$(foreach x,$(extra_pkgs),"$(x)")
 
@@ -129,16 +153,16 @@ conda-build:
 		--conda_activate $(conda_activate) $(conda_build_extra)
 
 conda-upload:
-	source $(conda_activate) $(conda_build_env); \
+	$(conda_act) $(conda_build_env); \
 		anaconda -t $(conda_upload_token) upload -u $(user) -l $(label) --force $(artifact_dir)/*.tar.bz2
 
 conda-dump-env:
 	mkdir -p $(artifact_dir)
 
-	source $(conda_activate) $(conda_test_env); conda list --explicit > $(artifact_dir)/$(conda_env_filename).txt
+	$(conda_act) $(conda_test_env); conda list --explicit > $(artifact_dir)/$(conda_env_filename).txt
 
 run-tests:
-	source $(conda_activate) $(conda_test_env); python run_tests.py -H -v2 -n 1 
+	$(conda_act) $(conda_test_env); python run_tests.py -H -v2 -n 1 
 
 run-coveralls:
-	source $(conda_activate) $(conda_test_env); coveralls;
+	$(conda_act) $(conda_test_env); coveralls;

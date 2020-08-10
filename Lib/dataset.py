@@ -1266,16 +1266,21 @@ class CdmsFile(CdmsObj, cuDataset):
         else:
             self.uri = "file://" + os.path.abspath(os.path.expanduser(path))
         self._mode_ = mode
-        try:
-            if mode[0].lower() == "w":
-                try:
-                    os.remove(path)
-                except BaseException:
-                    pass
-            _fileobj_ = Cdunif.CdunifFile(path, mode)
-        except Exception as err:
-            raise CDMSError('Cannot open file %s (%s)' % (path, err))
-        self._file_ = _fileobj_   # Cdunif file object
+        # try:
+        #     if mode[0].lower() == "w":
+        #         try:
+        #             os.remove(path)
+        #         except BaseException:
+        #             pass
+        #     _fileobj_ = Cdunif.CdunifFile(path, mode)
+        # except Exception as err:
+        #     raise CDMSError('Cannot open file %s (%s)' % (path, err))
+        if mode[0].lower() == "w":
+            try:
+                os.remove(path)
+            except BaseException:
+                pass
+        self._file_ = Cdunif.CdunifFile(path, mode)
         self.variables = {}
         self.axes = {}
         self.grids = {}

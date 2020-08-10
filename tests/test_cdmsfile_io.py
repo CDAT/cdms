@@ -2,7 +2,6 @@ import basetest
 import cdms2
 import numpy
 import os
-import cdat_info
 import hashlib
 
 
@@ -18,28 +17,52 @@ class TestCDMSFileIO(basetest.CDMSBaseTest):
         super(TestCDMSFileIO, self).tearDown()
 
     def testModes(self):
-        clt = os.path.join(cdat_info.get_sampledata_path(), "clt.nc")
+        data = cdms2.createVariable(numpy.random.random(size=(20, 20)))
 
-        with cdms2.open(clt):
+        uid = hashlib.sha256().hexdigest()[:8]
+        test_name = "{}.nc".format(uid)
+
+        with cdms2.open(test_name, 'w') as f:
+            f.write(data)
+
+        # Read
+        with cdms2.open(test_name):
             pass
 
-        with cdms2.open(clt, 'r'):
+        # Explicit read
+        with cdms2.open(test_name, 'r'):
             pass
 
         uid = hashlib.sha256().hexdigest()[:8]
         fname = "{}.nc".format(uid)
 
+        # Write, file does not exist
         with cdms2.open(fname, 'w'):
             pass
 
+        # Write, file exists
+        with cdms2.open(test_name, 'w'):
+            pass
+
         uid = hashlib.sha256().hexdigest()[:8]
         fname = "{}.nc".format(uid)
 
+        # Append, file does not exist
         with cdms2.open(fname, 'a'):
             pass
 
-        with cdms2.open(clt, 'a'):
+        # Append, file exists
+        with cdms2.open(test_name, 'a'):
             pass
+
+        uid = hashlib.sha256().hexdigest()[:8]
+        fname = "{}.nc".format(uid)
+
+        with open(fname, 'w') as f:
+            f.write("bad file")
+
+        with self.assertRaises(cdms2.Cdunif.CdunifError):
+            cdms2.open(fname)
 
     def testZSS(self):
         out_file = cdms2.open("temp.nc", "w")

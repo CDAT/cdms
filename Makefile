@@ -144,14 +144,14 @@ setup-tests:
 conda-rerender: setup-build 
 	python $(workdir)/$(build_script) -w $(workdir) -l $(last_stable) -B 0 -p $(pkg_name) -r $(repo_name) \
 		-b $(branch) --do_rerender --conda_env $(conda_build_env) --ignore_conda_missmatch \
-		--conda_act_cmdivate $(conda_act) $(conda_build_extra)
+		--conda_activate $(conda_act) $(conda_build_extra)
 
 conda-build:
 	mkdir -p $(artifact_dir)
 
 	python $(workdir)/$(build_script) -w $(workdir) -p $(pkg_name) --build_version $(build_version) \
 		--do_build --conda_env $(conda_build_env) --extra_channels $(extra_channels) \
-		--conda_act_cmdivate $(conda_act_cmdivate) $(conda_build_extra)
+		--conda_activate $(conda_act) $(conda_build_extra)
 
 conda-upload:
 	$(conda_act_cmd) $(conda_build_env); \

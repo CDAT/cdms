@@ -41,7 +41,8 @@ endif
 
 conda ?= $(or $(CONDA_EXE),$(shell find /opt/*conda*/bin $(HOME)/*conda*/bin -type f -iname conda))
 conda_bin := $(patsubst %/conda,%,$(conda))
-conda_act := source $(conda_bin)/activate
+conda_act := $(conda_bin)/activate
+conda_act_cmd := source $(conda_act)
 conda_rc := $(workdir)/condarc
 conda_cmd := CONDARC=$(conda_rc) conda
 feedstock := $(workdir)/cdms2-feedstock
@@ -60,20 +61,20 @@ setup-feedstock:
 		$(feedstock)/recipe/meta.yaml
 
 rerender-feedstock:
-	$(conda_act) base; \
+	$(conda_act_cmd) base; \
 		conda create -n $(conda_build_env) -c conda-forge conda-build conda-smithy
 
-	$(conda_act) $(conda_build_env); \
+	$(conda_act_cmd) $(conda_build_env); \
 		conda smithy rerender --feedstock_directory $(feedstock)
 
 build: setup-feedstock rerender-feedstock
-	$(conda_act) $(conda_build_env); \
+	$(conda_act_cmd) $(conda_build_env); \
 		conda build -m $(feedstock)/.ci_support/linux_64_python3.7*.yaml -c conda-forge $(feedstock)/recipe
 
 build-docs:
-	$(conda_act) base; \
+	$(conda_act_cmd) base; \
 		conda env create -n readthedocs-cdms2 -f docs/environment.yaml; \
-		$(conda_act) readthedocs-cdms2; \
+		$(conda_act_cmd) readthedocs-cdms2; \
 		conda install -y mock pillow sphinx sphinx_rtd_theme; \
 		python -m pip install -U --no-cache-dir recommonmark readthedocs-sphinx-ext; \
 		python setup.py install --force; \
@@ -81,10 +82,10 @@ build-docs:
 		sphinx-build -T -E -b readthedocs -d _build/doctrees-readthedocs -D language=en . _build/html
 
 conda-info:
-	$(conda_act) $(conda_test_env); conda info
+	$(conda_act_cmd) $(conda_test_env); conda info
 
 conda-list:
-	$(conda_act) $(conda_test_env); conda list
+	$(conda_act_cmd) $(conda_test_env); conda list
 
 dev-docker: container := dev-$(pkg_name)
 dev-docker:
@@ -105,23 +106,23 @@ dev-environment: run_deps := $(shell cat dependencies_run.txt)
 dev-environment: 
 	git clone https://github.com/conda-forge/cdms2-feedstock $(workdir)/cdms2-feedstock || exit 0
 
-	$(conda_act) base; conda create -y -n $(conda_build_env) \
+	$(conda_act_cmd) base; conda create -y -n $(conda_build_env) \
 		-c conda-forge conda-build
 
-	$(conda_act) $(conda_build_env); \
+	$(conda_act_cmd) $(conda_build_env); \
 		conda render -c conda-forge -m $(workdir)/cdms2-feedstock/.ci_support/$(arch)_64_python3.7*.yaml $(workdir)/cdms2-feedstock/recipe > dependencies.yaml; \
 		python -c "import yaml;d=open('dependencies.yaml').read();d=d.split('\n');i=d.index('package:');d=d[i:];y=yaml.load('\n'.join(d),Loader=yaml.SafeLoader);print(' '.join([f'\"{x}\"' for x in y['requirements']['build']]))" > dependencies.txt; \
 		python -c "import yaml;d=open('dependencies.yaml').read();d=d.split('\n');i=d.index('package:');d=d[i:];y=yaml.load('\n'.join(d),Loader=yaml.SafeLoader);print(' '.join([f'\"{x}\"' for x in y['requirements']['run']]))" > dependencies_run.txt
 
 	cat dependencies.txt
 		
-	$(conda_act) base; \
+	$(conda_act_cmd) base; \
 		conda create -n $(conda_test_env) -y -c conda-forge -c cdat/label/nightly $(build_deps) $(test_pkgs); \
-		$(conda_act) $(conda_test_env); \
+		$(conda_act_cmd) $(conda_test_env); \
 		conda install -y -c conda-forge -c cdat/label/nightly $(run_deps)
 
 dev-install:
-	$(conda_act) $(conda_test_env); \
+	$(conda_act_cmd) $(conda_test_env); \
 		python setup.py build --force; \
 		python setup.py install --force --record files.txt
 
@@ -136,33 +137,33 @@ else
 endif
 
 setup-tests:
-	$(conda_act) base; conda create -y -n $(conda_test_env) --use-local \
+	$(conda_act_cmd) base; conda create -y -n $(conda_test_env) --use-local \
 		$(foreach x,$(extra_channels),-c $(x)) $(pkg_name) $(foreach x,$(test_pkgs),"$(x)") \
 		$(foreach x,$(extra_pkgs),"$(x)")
 
 conda-rerender: setup-build 
 	python $(workdir)/$(build_script) -w $(workdir) -l $(last_stable) -B 0 -p $(pkg_name) -r $(repo_name) \
 		-b $(branch) --do_rerender --conda_env $(conda_build_env) --ignore_conda_missmatch \
-		--conda_activate $(conda_activate) $(conda_build_extra)
+		--conda_act_cmdivate $(conda_act) $(conda_build_extra)
 
 conda-build:
 	mkdir -p $(artifact_dir)
 
 	python $(workdir)/$(build_script) -w $(workdir) -p $(pkg_name) --build_version $(build_version) \
 		--do_build --conda_env $(conda_build_env) --extra_channels $(extra_channels) \
-		--conda_activate $(conda_activate) $(conda_build_extra)
+		--conda_act_cmdivate $(conda_act_cmdivate) $(conda_build_extra)
 
 conda-upload:
-	$(conda_act) $(conda_build_env); \
+	$(conda_act_cmd) $(conda_build_env); \
 		anaconda -t $(conda_upload_token) upload -u $(user) -l $(label) --force $(artifact_dir)/*.tar.bz2
 
 conda-dump-env:
 	mkdir -p $(artifact_dir)
 
-	$(conda_act) $(conda_test_env); conda list --explicit > $(artifact_dir)/$(conda_env_filename).txt
+	$(conda_act_cmd) $(conda_test_env); conda list --explicit > $(artifact_dir)/$(conda_env_filename).txt
 
 run-tests:
-	$(conda_act) $(conda_test_env); python run_tests.py -H -v2 -n 1 
+	$(conda_act_cmd) $(conda_test_env); python run_tests.py -H -v2 -n 1 
 
 run-coveralls:
-	$(conda_act) $(conda_test_env); coveralls;
+	$(conda_act_cmd) $(conda_test_env); coveralls;

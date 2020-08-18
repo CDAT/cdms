@@ -56,14 +56,15 @@ setup-feedstock:
 
 	git clone https://github.com/conda-forge/cdms2-feedstock $(feedstock) || exit 0
 
+	$(conda_act_cmd) base; \
+		$(conda_cmd) create -n $(conda_build_env) -c conda-forge conda-build conda-smithy sed
+
 	# Replace source section, uses local path pointed to repo to capture changes.
-	sed -i'' -e "/source:/{N; :loop; N; s/build://; Tloop;{ s/.*/source:\n  path: $(subst /,\/,$(PWD))\n\nbuild:/ }}" \
+	$(conda_act_cmd) $(conda_build_env); \
+		sed -i'' -e "/source:/{N; :loop; N; s/build://; Tloop;{ s/.*/source:\n  path: $(subst /,\/,$(PWD))\n\nbuild:/ }}" \
 		$(feedstock)/recipe/meta.yaml
 
 rerender-feedstock:
-	$(conda_act_cmd) base; \
-		conda create -n $(conda_build_env) -c conda-forge conda-build conda-smithy
-
 	$(conda_act_cmd) $(conda_build_env); \
 		conda smithy rerender --feedstock_directory $(feedstock)
 

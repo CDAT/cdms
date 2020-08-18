@@ -66,11 +66,13 @@ setup-feedstock:
 
 rerender-feedstock:
 	$(conda_act_cmd) $(conda_build_env); \
-		conda smithy rerender --feedstock_directory $(feedstock)
+		$(conda_cmd) smithy rerender --feedstock_directory $(feedstock)
 
+build: py_variant ?= 3.7
+build: os_variant := $(or $(if $(findstring Darwin,$(os)),osx),linux)
 build: setup-feedstock rerender-feedstock
 	$(conda_act_cmd) $(conda_build_env); \
-		conda build -m $(feedstock)/.ci_support/linux_64_python3.7*.yaml -c conda-forge $(feedstock)/recipe
+		$(conda_cmd) build -m $(feedstock)/.ci_support/$(os_variant)_64_python$(py_variant)*.yaml -c conda-forge $(feedstock)/recipe
 
 build-docs:
 	$(conda_act_cmd) base; \

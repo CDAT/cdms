@@ -71,6 +71,7 @@ PyThread_type_lock Cdunif_lock;
 #endif
 
 static PyObject *CdunifError;
+static PyObject *CDMSError;
 
 /* Set error string */
 static void Cdunif_seterror(void) {
@@ -3494,9 +3495,11 @@ MODULE_INIT_FUNC (Cdunif) {
        PyCapsule_New((void *) PyCdunif_API, "_C_API", NULL));
 
 
-  CdunifError = PyErr_NewException("Cdunif.CdunifError", NULL, NULL);
+  CDMSError = PyErr_NewException("cdms2.CDMSError", NULL, NULL);
+  CdunifError = PyErr_NewException("Cdunif.CdunifError", CDMSError, NULL);
     // CdunifError = PyStr_FromString("CdunifError");
 
+  PyDict_SetItemString(d, "CDMSError", CDMSError);
 	PyDict_SetItemString(d, "CdunifError", CdunifError);
 
 	/* Check for errors */

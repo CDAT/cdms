@@ -1,7 +1,3 @@
-.PHONY: conda-info conda-list setup-build setup-tests conda-rerender \
-	conda-build conda-upload conda-dump-env run-tests run-coveralls \
-	setup-feedstock rerender-feedstock build
-
 SHELL = /bin/bash
 
 os = $(shell uname)
@@ -49,6 +45,7 @@ feedstock := $(workdir)/cdms2-feedstock
 
 conda_build_extra = --copy_conda_package $(artifact_dir)
 
+.PHONY: setup-feedstock
 setup-feedstock:
 	$(conda) config --file $(conda_rc) --add channels defaults
 	$(conda) config --file $(conda_rc) --add channels conda-forge
@@ -64,32 +61,49 @@ setup-feedstock:
 		sed -i'' -e "/source:/{N; :loop; N; s/build://; Tloop;{ s/.*/source:\n  path: $(subst /,\/,$(PWD))\n\nbuild:/ }}" \
 		$(feedstock)/recipe/meta.yaml
 
+.PHONY: rerender-feedstock
 rerender-feedstock:
 	$(conda_act_cmd) $(conda_build_env); \
 		$(conda_cmd) smithy rerender --feedstock_directory $(feedstock)
 
+.PHONY: build
 build: py_variant ?= 3.7
 build: os_variant := $(or $(if $(findstring Darwin,$(os)),osx),linux)
 build: setup-feedstock rerender-feedstock
 	$(conda_act_cmd) $(conda_build_env); \
 		$(conda_cmd) build -m $(feedstock)/.ci_support/$(os_variant)_64_python$(py_variant)*.yaml -c conda-forge $(feedstock)/recipe
 
-build-docs:
+.PHONY: setup-docs
+setup-docs: cdat_pkgs := cdms2 
+setup-docs: extra_pkgs := mock pillow sphinx sphinx_rtd_theme future easydev \
+	numpydoc
+setup-docs:
 	$(conda_act_cmd) base; \
-		conda env create -n readthedocs-cdms2 -f docs/environment.yaml; \
-		$(conda_act_cmd) readthedocs-cdms2; \
-		conda install -y mock pillow sphinx sphinx_rtd_theme; \
-		python -m pip install -U --no-cache-dir recommonmark readthedocs-sphinx-ext; \
-		python setup.py install --force; \
+		$(conda_cmd) create -n rtd-cdms2 -c conda-forge $(cdat_pkgs) $(extra_pkgs); \
+		$(conda_act_cmd) rtd-cdms2; \
+		python -m pip install -U --no-cache-dir recommonmark readthedocs-sphinx-ext
+
+.PHONY: update-docs-environment
+update-docs-environment: setup-docs
+	conda env export -n rtd-cdms2 -f docs/environment.yml
+
+.PHONY: build-docs
+build-docs: setup-docs
+	$(conda_act_cmd) rtd-cdms2; \
+		$(conda_cmd) remove cdms2 --force; \
+		pip install .; \
 		cd docs/source; \
 		sphinx-build -T -E -b readthedocs -d _build/doctrees-readthedocs -D language=en . _build/html
 
+.PHONY: conda-info
 conda-info:
 	$(conda_act_cmd) $(conda_test_env); conda info
 
+.PHONY: conda-list
 conda-list:
 	$(conda_act_cmd) $(conda_test_env); conda list
 
+.PHONY: dev-docker
 dev-docker: container := dev-$(pkg_name)
 dev-docker:
 	docker run -d --name $(container) -v  $(PWD):/src -w /src continuumio/miniconda3 /bin/sleep infinity || exit 0
@@ -99,10 +113,12 @@ dev-docker:
 	docker exec -it $(container) /bin/bash -c "conda init bash; echo 'conda activate $(conda_test_env)' >> ~/.bashrc"
 	docker exec -it $(container) /bin/bash -l
 
+.PHONY: dev-docker-run
 dev-docker-run: container:= dev-$(pkg_name)
 dev-docker-run:
 	docker exec -it $(container) /bin/bash -l
 
+.PHONY: dev-environment
 dev-environment: arch := $(if $(findstring $(os),Darwin),osx,linux)
 dev-environment: build_deps := $(shell cat dependencies.txt)
 dev-environment: run_deps := $(shell cat dependencies_run.txt)
@@ -124,14 +140,17 @@ dev-environment:
 		$(conda_act_cmd) $(conda_test_env); \
 		conda install -y -c conda-forge -c cdat/label/nightly $(run_deps)
 
+.PHONY: dev-install
 dev-install:
 	$(conda_act_cmd) $(conda_test_env); \
 		python setup.py build --force; \
 		python setup.py install --force --record files.txt
 
+.PHONY: dev-build
 dev-build: conda_build_extra += --local_repo $(PWD)
 dev-build: setup-build conda-rerender conda-build
 
+.PHONY: setup-build
 setup-build:
 ifeq ($(wildcard $(workdir)/conda-recipes),)
 	git clone -b $(conda_recipes_branch) https://github.com/CDAT/conda-recipes $(workdir)/conda-recipes
@@ -139,16 +158,19 @@ else
 	cd $(workdir)/conda-recipes; git pull
 endif
 
+.PHONY: setup-tests
 setup-tests:
 	$(conda_act_cmd) base; conda create -y -n $(conda_test_env) --use-local \
 		$(foreach x,$(extra_channels),-c $(x)) $(pkg_name) $(foreach x,$(test_pkgs),"$(x)") \
 		$(foreach x,$(extra_pkgs),"$(x)")
 
+.PHONY: conda-rerender
 conda-rerender: setup-build 
 	python $(workdir)/$(build_script) -w $(workdir) -l $(last_stable) -B 0 -p $(pkg_name) -r $(repo_name) \
 		-b $(branch) --do_rerender --conda_env $(conda_build_env) --ignore_conda_missmatch \
 		--conda_activate $(conda_act) $(conda_build_extra)
 
+.PHONY: conda-build
 conda-build:
 	mkdir -p $(artifact_dir)
 
@@ -156,17 +178,21 @@ conda-build:
 		--do_build --conda_env $(conda_build_env) --extra_channels $(extra_channels) \
 		--conda_activate $(conda_act) $(conda_build_extra)
 
+.PHONY: conda-upload
 conda-upload:
 	$(conda_act_cmd) $(conda_build_env); \
 		anaconda -t $(conda_upload_token) upload -u $(user) -l $(label) --force $(artifact_dir)/*.tar.bz2
 
+.PHONY: conda-dump-env
 conda-dump-env:
 	mkdir -p $(artifact_dir)
 
 	$(conda_act_cmd) $(conda_test_env); conda list --explicit > $(artifact_dir)/$(conda_env_filename).txt
 
+.PHONY: run-tests
 run-tests:
 	$(conda_act_cmd) $(conda_test_env); python run_tests.py -H -v2 -n 1 
 
+.PHONY: run-coveralls
 run-coveralls:
 	$(conda_act_cmd) $(conda_test_env); coveralls;

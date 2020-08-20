@@ -1,3 +1,2 @@
-easydev
-mock
-future
+recommonmark
+readthedocs-sphinx-ext

@@ -79,9 +79,9 @@ setup-docs: extra_pkgs := mock pillow sphinx sphinx_rtd_theme future easydev \
 	numpydoc
 setup-docs:
 	$(conda_act_cmd) base; \
-		$(conda_cmd) create -n rtd-cdms2 -c conda-forge $(cdat_pkgs) $(extra_pkgs); \
+		$(conda_cmd) create -n rtd-cdms2 -c cdat/label/v8.2.1 -c conda-forge $(cdat_pkgs) $(extra_pkgs); \
 		$(conda_act_cmd) rtd-cdms2; \
-		python -m pip install -U --no-cache-dir recommonmark readthedocs-sphinx-ext
+		$(conda_cmd) remove cdms2 --force
 
 .PHONY: update-docs-environment
 update-docs-environment: setup-docs
@@ -89,8 +89,10 @@ update-docs-environment: setup-docs
 
 .PHONY: build-docs
 build-docs: setup-docs
-	$(conda_act_cmd) rtd-cdms2; \
-		$(conda_cmd) remove cdms2 --force; \
+	$(conda_act_cmd) base; \
+		conda env create --name rtd-build-cdms2 --file docs/environment.yml; \
+		$(conda_act_cmd) rtd-build-cdms2; \
+		python -m pip install -U --no-cache-dir -r docs/requirements.txt; \
 		pip install .; \
 		cd docs/source; \
 		sphinx-build -T -E -b readthedocs -d _build/doctrees-readthedocs -D language=en . _build/html

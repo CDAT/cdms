@@ -116,10 +116,4 @@ dependencies:
   - zipp=3.1.0=py_0
   - zlib=1.2.11=h516909a_1007
   - zstd=1.4.5=h6597ccf_2
-  - pip:
-    - cdms2==3.1.5
-    - commonmark==0.9.1
-    - readthedocs-sphinx-ext==2.1.1
-    - recommonmark==0.6.0
-    - regrid2==3.1.5
 prefix: /home/titters/conda/envs/rtd-cdms2

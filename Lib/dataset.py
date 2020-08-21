@@ -493,8 +493,6 @@ def openDataset(uri, mode='r', template=None,
             # If the doesn't exist allow it to be created
             # Ok mpi has issues with bellow we need to test this only with 1
             # rank
-            # if not os.path.exists(path):
-            #     return CdmsFile(path, mode, mpiBarrier=CdMpi)
             if mode == "r" and not os.path.exists(path):
                 raise FileNotFoundError(path)
             elif mode == "w":
@@ -511,15 +509,6 @@ def openDataset(uri, mode='r', template=None,
                     if getattr(file, libcf.CF_FILETYPE) == libcf.CF_GLATT_FILETYPE_HOST:
                         file.close()
                         file = gsHost.open(path, mode)
-                    # elif mode == 'r' and hostObj is None:
-                    #     # helps performance on machines where file open (in
-                    #     # CdmsFile) is costly
-                    #     file = file1
-                    # else:
-                    #     file1.close()
-                    #     file = CdmsFile(path, mode, hostObj=hostObj)
-                # else:
-                #     file = file1
                 return file
             else:
                 return CdmsFile(path, mode)
@@ -1266,15 +1255,6 @@ class CdmsFile(CdmsObj, cuDataset):
         else:
             self.uri = "file://" + os.path.abspath(os.path.expanduser(path))
         self._mode_ = mode
-        # try:
-        #     if mode[0].lower() == "w":
-        #         try:
-        #             os.remove(path)
-        #         except BaseException:
-        #             pass
-        #     _fileobj_ = Cdunif.CdunifFile(path, mode)
-        # except Exception as err:
-        #     raise CDMSError('Cannot open file %s (%s)' % (path, err))
         if mode[0].lower() == "w":
             try:
                 os.remove(path)

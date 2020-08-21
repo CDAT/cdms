@@ -213,7 +213,6 @@ static void Cdunif_seterror(void) {
 		break;
 	}
   PyErr_SetObject(CdunifError, Py_BuildValue("s", error));
-  // PyErr_SetString(PyExc_IOError, error);
 	free(error);
 }
 
@@ -1564,13 +1563,6 @@ PyCdunifFile_Open(char *filename, char *mode) {
 		return NULL;
 	}
 	if (self->id == -1) {
-		/** if (self->filetype == CuUnknown) {
-			PyErr_SetObject(CdunifError,
-					Py_BuildValue("ss", "Cannot open file:", filename));
-		} else {
-			// ncerr = cdgeterr(self);
-			Cdunif_seterror();
-		} **/
     ncerr = cdgeterr(self);
     Cdunif_seterror();
 		PyCdunifFileObject_dealloc(self);
@@ -3497,7 +3489,6 @@ MODULE_INIT_FUNC (Cdunif) {
 
   CDMSError = PyErr_NewException("cdms2.CDMSError", NULL, NULL);
   CdunifError = PyErr_NewException("Cdunif.CdunifError", CDMSError, NULL);
-    // CdunifError = PyStr_FromString("CdunifError");
 
   PyDict_SetItemString(d, "CDMSError", CDMSError);
 	PyDict_SetItemString(d, "CdunifError", CdunifError);

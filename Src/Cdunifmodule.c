@@ -71,6 +71,7 @@ PyThread_type_lock Cdunif_lock;
 #endif
 
 static PyObject *CdunifError;
+static PyObject *ReadOnlyKeyError;
 
 /* Set error string */
 static void Cdunif_seterror(void) {
@@ -2067,10 +2068,10 @@ static int PyCdunifFile_SetAttribute(PyCdunifFileObject *self, PyObject *nameobj
 	char *name = PyStr_AsString(nameobj);
 	if (check_if_open(self, 1)) {
 		if (strcmp(name, "dimensions") == 0
-		        || strcmp(name, "variables") == 0
+        || strcmp(name, "variables") == 0
 				|| strcmp(name, "dimensioninfo") == 0
 				|| strcmp(name, "__dict__") == 0) {
-			PyErr_SetString(PyExc_TypeError, "object has read-only attributes");
+      PyErr_Format(ReadOnlyKeyError, "%s", name);
 			return -1;
 		}
 		define_mode(self, 1);
@@ -2423,9 +2424,10 @@ static int PyCdunifVariable_SetAttribute(PyCdunifVariableObject *self,
 		PyObject *nameobj, PyObject *value) {
     char *name = PyStr_AsString(nameobj);
 	if (check_if_open(self->file, 1)) {
-		if (strcmp(name, "shape") == 0 || strcmp(name, "dimensions") == 0
+		if (strcmp(name, "shape") == 0 
+        || strcmp(name, "dimensions") == 0
 				|| strcmp(name, "__dict__") == 0) {
-			PyErr_SetString(PyExc_TypeError, "object has read-only attributes");
+      PyErr_Format(ReadOnlyKeyError, "%s", name);
 			return -1;
 		}
 		define_mode(self->file, 1);
@@ -3456,9 +3458,11 @@ MODULE_INIT_FUNC (Cdunif) {
        PyCapsule_New((void *) PyCdunif_API, "_C_API", NULL));
 
 
-    CdunifError = PyStr_FromString("CdunifError");
+  CdunifError = PyStr_FromString("CdunifError");
+  ReadOnlyKeyError = PyErr_NewException("Cdunif.ReadOnlyKeyError", NULL, NULL);
 
 	PyDict_SetItemString(d, "CdunifError", CdunifError);
+  PyDict_SetItemString(d, "ReadOnlyKeyError", ReadOnlyKeyError);
 
 	/* Check for errors */
 	if (PyErr_Occurred())

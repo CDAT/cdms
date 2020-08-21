@@ -4,6 +4,7 @@ CDMS module-level API
 
 # Errors
 from .error import CDMSError  # noqa
+from .Cdunif import ReadOnlyKeyError
 from lazy_object_proxy import Proxy
 from . import dataset
 from . import selectors

@@ -72,6 +72,7 @@ PyThread_type_lock Cdunif_lock;
 
 static PyObject *CdunifError;
 static PyObject *ReadOnlyKeyError;
+static PyObject *CDMSError;
 
 /* Set error string */
 static void Cdunif_seterror(void) {
@@ -82,27 +83,33 @@ static void Cdunif_seterror(void) {
 	case NC_NOERR:
 		strncpy(error, "No error", MAXERRLEN);
 		break;
+  case CU_EBADID:
 	case NC_EBADID:
 		strncpy(error, "Not a Cdunif id", MAXERRLEN);
 		break;
+  case CU_OPENFILES:
 	case NC_ENFILE:
 		strncpy(error, "Too many Cdunif files open", MAXERRLEN);
 		break;
 	case NC_EEXIST:
 		strncpy(error, "Cdunif file exists && NC_NOCLOBBER", MAXERRLEN);
 		break;
+  case CU_EINVAL:
 	case NC_EINVAL:
 		strncpy(error, "Invalid argument", MAXERRLEN);
 		break;
 	case NC_EPERM:
 		strncpy(error, "Write to read only", MAXERRLEN);
 		break;
+  case CU_ENOTINDEFINE:
 	case NC_ENOTINDEFINE:
 		strncpy(error, "Operation not allowed in data mode", MAXERRLEN);
 		break;
+  case CU_EINDEFINE:
 	case NC_EINDEFINE:
 		strncpy(error, "Operation not allowed in define mode", MAXERRLEN);
 		break;
+  case CU_EINVALCOORDS:
 	case NC_EINVALCOORDS:
 		strncpy(error, "Index exceeds dimension bound", MAXERRLEN);
 		break;
@@ -112,16 +119,19 @@ static void Cdunif_seterror(void) {
 	case NC_ENAMEINUSE:
 		strncpy(error, "Unicode match to name in use", MAXERRLEN);
 		break;
+  case CU_ENOTATT:
 	case NC_ENOTATT:
 		strncpy(error, "Attribute not found", MAXERRLEN);
 		break;
 	case NC_EMAXATTS:
 		strncpy(error, "NC_MAX_ATTRS exceeded", MAXERRLEN);
 		break;
+  case CU_EBADTYPE:
 	case NC_EBADTYPE:
 		strncpy(error, "Not a Cdunif data type or _FillValue type mismatch",
 				MAXERRLEN);
 		break;
+  case CU_EBADDIM:
 	case NC_EBADDIM:
 		strncpy(error, "Invalid dimension id or name", MAXERRLEN);
 		break;
@@ -131,18 +141,22 @@ static void Cdunif_seterror(void) {
 	case NC_EMAXVARS:
 		strncpy(error, "NC_MAX_VARS exceeded", MAXERRLEN);
 		break;
+  case CU_ENOTVAR:
 	case NC_ENOTVAR:
 		strncpy(error, "Variable not found", MAXERRLEN);
 		break;
+  case CU_EGLOBAL:
 	case NC_EGLOBAL:
 		strncpy(error, "Action prohibited on NC_GLOBAL varid", MAXERRLEN);
 		break;
+  case CU_ENOTCU:
 	case NC_ENOTNC:
 		strncpy(error, "Not a Cdunif file", MAXERRLEN);
 		break;
 	case NC_ESTS:
 		strncpy(error, "In Fortran, string too short", MAXERRLEN);
 		break;
+  case CU_EMAXNAME:
 	case NC_EMAXNAME:
 		strncpy(error, "NC_MAX_NAME exceeded", MAXERRLEN);
 		break;
@@ -174,11 +188,32 @@ static void Cdunif_seterror(void) {
 	case NC_EXDR:
 		strncpy(error, "XDR error", MAXERRLEN);
 		break;
+  case CU_ENOVARS:
+    strncpy(error, "File has no variables", MAXERRLEN);
+    break;
+  case CU_EINTERN:
+    strncpy(error, "cdunif internal error", MAXERRLEN);
+    break;
+  case CU_EBADFORM:
+    strncpy(error, "Format recognized but not supported", MAXERRLEN);
+    break;
+  case CU_DRIVER:
+    strncpy(error, "Driver layer error", MAXERRLEN);
+    break;
+  case CU_EINVLU:
+    strncpy(error, "Invalid logical unit (DRS only)", MAXERRLEN);
+    break;
+  case CU_EOPEN:
+    strncpy(error, "File open error", MAXERRLEN);
+    break;
+  case CU_ENOCAST:
+    strncpy(error, "Cannot cast between user and file datatypes", MAXERRLEN);
+    break;
 	default:
 		snprintf(error, MAXERRLEN, nc_strerror(ncerr));
 		break;
 	}
-	PyErr_SetString(PyExc_IOError, error);
+  PyErr_SetObject(CdunifError, Py_BuildValue("s", error));
 	free(error);
 }
 
@@ -1529,12 +1564,8 @@ PyCdunifFile_Open(char *filename, char *mode) {
 		return NULL;
 	}
 	if (self->id == -1) {
-		if (self->filetype == CuUnknown) {
-			PyErr_SetObject(CdunifError,
-					Py_BuildValue("ss", "Cannot open file:", filename));
-		} else {
-			Cdunif_seterror();
-		}
+    ncerr = cdgeterr(self);
+    Cdunif_seterror();
 		PyCdunifFileObject_dealloc(self);
 		return NULL;
 	}
@@ -3458,9 +3489,11 @@ MODULE_INIT_FUNC (Cdunif) {
        PyCapsule_New((void *) PyCdunif_API, "_C_API", NULL));
 
 
-  CdunifError = PyStr_FromString("CdunifError");
-  ReadOnlyKeyError = PyErr_NewException("Cdunif.ReadOnlyKeyError", NULL, NULL);
+  CDMSError = PyErr_NewException("cdms2.CDMSError", NULL, NULL);
+  CdunifError = PyErr_NewException("Cdunif.CdunifError", CDMSError, NULL);
+  ReadOnlyKeyError = PyErr_NewException("Cdunif.ReadOnlyKeyError", CDMSError, NULL);
 
+  PyDict_SetItemString(d, "CDMSError", CDMSError);
 	PyDict_SetItemString(d, "CdunifError", CdunifError);
   PyDict_SetItemString(d, "ReadOnlyKeyError", ReadOnlyKeyError);
 

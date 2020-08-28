@@ -4,7 +4,8 @@ CDMS module-level API
 
 # Errors
 from .error import CDMSError  # noqa
-from .Cdunif import ReadOnlyKeyError
+from .error import CdunifError  # noqa
+from .error import ReadOnlyKeyError  # noqa
 from lazy_object_proxy import Proxy
 from . import dataset
 from . import selectors
@@ -138,5 +139,3 @@ try:
     from . import dask_protocol  # noqa
 except BaseException:
     pass
-
-from .Cdunif import CdunifError

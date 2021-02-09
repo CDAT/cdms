@@ -6,7 +6,6 @@ aliases:
     command: |
       CIRCLE_WORKING_DIRECTORY=`pwd ${CIRCLE_WORKING_DIRECTORY}`
       MINICONDA_DIR=${CIRCLE_WORKING_DIRECTORY}/miniconda
-      CONDA_PKG_DIR=${CIRCLE_WORKING_DIRECTORY}/conda_pkgs
 
       echo "MINICONDA_DIR ${MINICONDA_DIR}"
 
@@ -23,12 +22,8 @@ aliases:
       source ${MINICONDA_DIR}/etc/profile.d/conda.sh
 
       conda activate base
-      conda config --system --remove-key pkgs_dirs || true
-      conda config --system --append pkgs_dirs ${CONDA_PKG_DIR}
       
       conda info
-
-      ls -la ${CONDA_PKG_DIR}
 
 executors:
   linux:
@@ -49,7 +44,13 @@ jobs:
           at: .
       - checkout:
           path: cdms
+      - restore_cache:
+          key: conda-{{ arch }}
       - run: *setup_miniconda
+      - save_cache:
+          key: conda-{{ arch }}
+          paths:
+            - miniconda
       - persist_to_workspace:
           root: .
           paths:

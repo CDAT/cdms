@@ -23,7 +23,7 @@ aliases:
 
       conda activate base
       
-      conda config --system --set pkgs_dir ${CIRCLE_WORKING_DIRECTORY}/conda_pkgs
+      conda config --system --set pkgs_dirs ${CIRCLE_WORKING_DIRECTORY}/conda_pkgs
       
       conda info
 

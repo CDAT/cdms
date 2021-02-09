@@ -32,9 +32,7 @@ jobs:
       - run:
           command: |
             pwd
-
-            echo `uname` >> test_os
-
+            
             ls -la .
 
             cat test_os

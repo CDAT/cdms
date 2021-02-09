@@ -86,5 +86,5 @@ workflows:
       - build:
           matrix:
             parameters:
-              os [ linux, macos ]
+              os: [ linux, macos ]
           name: build-<< matrix.os >>

@@ -1,12 +1,5 @@
 version: 2.1
 
-aliases:
-  - &setup_env
-    name: setup_env
-    command: | 
-      echo "export CIRCLE_WORKING_DIRECTORY=`pwd ${CIRCLE_WORKING_DIRECTORY}`" >> ${BASH_ENV}
-      echo "export MINICONDA_DIR=${CIRCLE_WORKING_DIRECTORY}/miniconda" >> ${BASH_ENV}
-
 executors:
   linux:
     machine:
@@ -21,75 +14,34 @@ jobs:
       os:
         type: executor
     executor: << parameters.os >>
+    environment:
+      OS: << parameters.os >>
     steps:
-      - attach_workspace:
-          at: .
-      - checkout:
-          path: cdms
-      - restore_cache:
-          key: conda-{{ arch }}-1
       - run:
           command: |
-            export CIRCLE_WORKING_DIRECTORY=`pwd ${CIRCLE_WORKING_DIRECTORY}`
-            export MINICONDA_DIR=${CIRCLE_WORKING_DIRECTORY}/miniconda
+            pwd
 
-            echo "MINICONDA_DIR ${MINICONDA_DIR}"
+            echo "${OS}" >> test_os
 
-            if [[ `uname` == "Darwin" ]]
-            then
-              curl -L -o miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
-            else
-              curl -L -o miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-            fi
+            ls -la .
 
-            chmod +x miniconda.sh
-            ./miniconda.sh -b -u -p ${MINICONDA_DIR}
-
-            source ${MINICONDA_DIR}/etc/profile.d/conda.sh
-
-            conda activate base
-
-            conda config --system --remove-key pkgs_dirs || true
-            conda config --system --append pkgs_dirs ${CIRCLE_WORKING_DIRECTORY}/conda_pkgs
-            
-            conda info
-
-            conda update -n base conda
-      - save_cache:
-          key: conda-{{ arch }}-1
-          paths:
-            - conda_pkgs
-      - persist_to_workspace:
-          root: .
-          paths:
-            - conda_pkgs
-            - miniconda
-            - cdms
   build:
     parameters:
       os:
         type: executor
     executor: << parameters.os >>
+    environment:
+      OS: << parameters.os >>
     steps:
-      - attach_workspace:
-          at: .
       - run:
           command: |
-            export CIRCLE_WORKING_DIRECTORY=`pwd ${CIRCLE_WORKING_DIRECTORY}`
-            export MINICONDA_DIR=${CIRCLE_WORKING_DIRECTORY}/miniconda
-            export WORK_DIR=${CIRCLE_WORKING_DIRECTORY}
+            pwd
 
-            source ${MINICONDA_DIR}/etc/profile.d/conda.sh
+            echo "${OS}" >> test_os
 
-            conda activate base
+            ls -la .
 
-            conda info
-
-            cd cdms
-
-            make list-configs
-            ls -la ../feedstock/.ci_support/
-            make build
+            cat test_os
 
 workflows:
   cdms:
@@ -99,10 +51,10 @@ workflows:
             parameters:
               os: [ linux, macos ]
           name: prep-host-<< matrix.os >>
-      - build:
+      - prep_host:
           matrix:
             parameters:
               os: [ linux, macos ]
-          name: build-<< matrix.os >>
+          name: prep-host-<< matrix.os >>
           requires:
             - prep-host-<< matrix.os >>

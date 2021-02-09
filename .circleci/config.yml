@@ -14,14 +14,12 @@ jobs:
       os:
         type: executor
     executor: << parameters.os >>
-    environment:
-      OS: << parameters.os >>
     steps:
       - run:
           command: |
             pwd
 
-            echo "${OS}" >> test_os
+            echo `uname` >> test_os
 
             ls -la .
 
@@ -30,14 +28,12 @@ jobs:
       os:
         type: executor
     executor: << parameters.os >>
-    environment:
-      OS: << parameters.os >>
     steps:
       - run:
           command: |
             pwd
 
-            echo "${OS}" >> test_os
+            echo `uname` >> test_os
 
             ls -la .
 
@@ -51,10 +47,10 @@ workflows:
             parameters:
               os: [ linux, macos ]
           name: prep-host-<< matrix.os >>
-      - prep_host:
+      - build:
           matrix:
             parameters:
               os: [ linux, macos ]
-          name: prep-host-<< matrix.os >>
+          name: build-<< matrix.os >>
           requires:
             - prep-host-<< matrix.os >>

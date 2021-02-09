@@ -77,6 +77,7 @@ jobs:
           command: |
             export CIRCLE_WORKING_DIRECTORY=`pwd ${CIRCLE_WORKING_DIRECTORY}`
             export MINICONDA_DIR=${CIRCLE_WORKING_DIRECTORY}/miniconda
+            export WORK_DIR=${CIRCLE_WORKING_DIRECTORY}
 
             source ${MINICONDA_DIR}/etc/profile.d/conda.sh
 
@@ -86,7 +87,8 @@ jobs:
 
             cd cdms
 
-            make WORK_DIR=${CIRCLE_WORKING_DIRECTORY}
+            make list-configs
+            make build
 
 workflows:
   cdms:

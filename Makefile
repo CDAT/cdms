@@ -34,7 +34,7 @@ prep-feedstock:
 
 	python build_files/fix_conda_recipe.py $(RECIPE_DIR)/meta.yaml $(PWD)
 
-	cd $(SCRIPTS_DIR); patch -N < $(PWD)/build_files/build_steps.patch || exit 0
+	cd $(SCRIPTS_DIR); patch -N < $(PWD)/build_files/build_steps.patch || true
 
 .PHONY: list-configs
 list-configs: prep-feedstock

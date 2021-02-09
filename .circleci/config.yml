@@ -87,6 +87,8 @@ jobs:
 
             cd cdms
 
+            ls -la ../feedstock/.ci_support/
+
             make list-configs
             make build
 

@@ -22,6 +22,10 @@ jobs:
             echo `uname` >> test_os
 
             ls -la .
+      - persist_to_workspace:
+          root: .
+          paths:
+            - "."
 
   build:
     parameters:
@@ -29,6 +33,8 @@ jobs:
         type: executor
     executor: << parameters.os >>
     steps:
+      - attach_workspace:
+          at: .
       - run:
           command: |
             pwd

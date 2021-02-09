@@ -11,6 +11,8 @@ aliases:
         curl -L -o miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
       fi
 
+      chmod +x miniconda.sh
+
       ./miniconda.sh -b -p ${CIRCLE_WORKING_DIRECTORY}/miniconda
 
 executors:

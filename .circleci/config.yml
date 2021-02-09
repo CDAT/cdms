@@ -82,9 +82,11 @@ workflows:
           matrix:
             parameters:
               os: [ linux, macos ]
-          name: prep-host--<< matrix.os >>
+          name: prep-host-<< matrix.os >>
       - build:
           matrix:
             parameters:
               os: [ linux, macos ]
           name: build-<< matrix.os >>
+          requires:
+            - prep-host-<< matrix.os >>

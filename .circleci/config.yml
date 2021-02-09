@@ -4,7 +4,9 @@ aliases:
   - &setup_miniconda
     name: setup_miniconda
     command: |
-      MINICONDA_DIR=`pwd ${CIRCLE_WORKING_DIRECTORY}`/miniconda
+      CIRCLE_WORKING_DIRECTORY=`pwd ${CIRCLE_WORKING_DIRECTORY}`
+      MINICONDA_DIR=${CIRCLE_WORKING_DIRECTORY}/miniconda
+      CONDA_PKG_DIR=${CIRCLE_WORKING_DIRECTORY}/conda_pkgs
 
       echo "MINICONDA_DIR ${MINICONDA_DIR}"
 
@@ -16,18 +18,17 @@ aliases:
       fi
 
       chmod +x miniconda.sh
-
       ./miniconda.sh -b -p ${MINICONDA_DIR}
 
       source ${MINICONDA_DIR}/etc/profile.d/conda.sh
 
       conda activate base
-      
-      conda config --system --set pkgs_dirs ${CIRCLE_WORKING_DIRECTORY}/conda_pkgs
+      conda config --system --remove-key pkgs_dirs
+      conda config --system --append pkgs_dirs ${CONDA_PKG_DIR}
       
       conda info
 
-      ls -la ${CIRCLE_WORKING_DIRECTORY}/conda_pkgs
+      ls -la ${CONDA_PKG_DIR}
 
 executors:
   linux:

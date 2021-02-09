@@ -15,21 +15,19 @@ aliases:
         curl -L -o miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
       fi
 
-      ls -la .
-
       chmod +x miniconda.sh
 
       ./miniconda.sh -b -p ${MINICONDA_DIR}
 
-      ls -la .
-
-      ls -la ${MINICONDA_DIR}
-
       source ${MINICONDA_DIR}/etc/profile.d/conda.sh
 
       conda activate base
-
+      
+      conda config --system --set pkgs_dir ${CIRCLE_WORKING_DIRECTORY}/conda_pkgs
+      
       conda info
+
+      ls -la ${CIRCLE_WORKING_DIRECTORY}/conda_pkgs
 
 executors:
   linux:
@@ -51,6 +49,8 @@ jobs:
       - checkout:
           path: cdms
       - run: *setup_miniconda
+      - persist_to_workspace
+          root: .
 
 workflows:
   cdms:

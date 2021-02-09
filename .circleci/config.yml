@@ -27,11 +27,11 @@ jobs:
       - checkout:
           path: cdms
       - restore_cache:
-          key: conda-{{ arch }}
-      - run: *setup_env
+          key: conda-{{ arch }}-1
       - run:
           command: |
-            source ${BASH_ENV}
+            export CIRCLE_WORKING_DIRECTORY=`pwd ${CIRCLE_WORKING_DIR}`
+            export MINICONDA_DIR=${CIRCLE_WORKING_DIR}/miniconda
 
             echo "MINICONDA_DIR ${MINICONDA_DIR}"
 
@@ -48,15 +48,21 @@ jobs:
             source ${MINICONDA_DIR}/etc/profile.d/conda.sh
 
             conda activate base
+
+            conda config --system --remove-key pkgs_dirs || true
+            conda config --system --append pkgs_dirs ${CIRCLE_WORKING_DIRECTORY}/conda_pkgs
             
             conda info
+
+            conda update -n base conda
       - save_cache:
-          key: conda-{{ arch }}
+          key: conda-{{ arch }}-1
           paths:
-            - miniconda
+            - conda_pkgs
       - persist_to_workspace:
           root: .
           paths:
+            - conda_pkgs
             - miniconda
             - cdms
   build:
@@ -69,7 +75,8 @@ jobs:
           at: .
       - run:
           command: |
-            source ${BASH_ENV}
+            export CIRCLE_WORKING_DIRECTORY=`pwd ${CIRCLE_WORKING_DIR}`
+            export MINICONDA_DIR=${CIRCLE_WORKING_DIR}/miniconda
 
             source ${MINICONDA_DIR}/etc/profile.d/conda.sh
 

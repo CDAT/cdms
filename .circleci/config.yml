@@ -15,6 +15,8 @@ jobs:
         type: executor
     executor: << parameters.os >>
     steps:
+      - checkout:
+          path: cdms
       - run:
           command: |
             pwd
@@ -22,6 +24,9 @@ jobs:
             echo `uname` >> test_os
 
             ls -la .
+
+            cd cdms
+            make list-config
       - persist_to_workspace:
           root: .
           paths:

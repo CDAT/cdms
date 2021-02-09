@@ -1,5 +1,13 @@
 version: 2.1
 
+executors:
+  linux:
+    machine:
+      image: circleci/classic:latest
+  macos:
+    macos:
+      xcode: "11.4.0"
+
 jobs:
   prep_host:
     parameters:

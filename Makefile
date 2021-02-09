@@ -38,7 +38,7 @@ prep-feedstock:
 
 .PHONY: list-configs
 list-configs: prep-feedstock
-	$(call LIST_CONFIGS,".*")
+	$(foreach item,$(call FIND_VARIANT),echo $(item);)
 
 .PHONY: build
 build: CONDA_ENV := build

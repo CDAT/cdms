@@ -31,7 +31,7 @@ jobs:
       - run: *setup_env
       - run:
           command: |
-            source ${BASE_ENV}
+            source ${BASH_ENV}
 
             echo "MINICONDA_DIR ${MINICONDA_DIR}"
 

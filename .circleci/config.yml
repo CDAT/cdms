@@ -4,7 +4,7 @@ aliases:
   - &setup_miniconda
     name: setup_miniconda
     command: |
-      MINICONDA_DIR=`pwd ${CIRCLE_WORKING_DIRECTORY}/miniconda`
+      MINICONDA_DIR=`pwd ${CIRCLE_WORKING_DIRECTORY}`/miniconda
 
       echo "MINICONDA_DIR ${MINICONDA_DIR}"
 

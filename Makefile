@@ -10,7 +10,7 @@ CI_SUPPORT_DIR := $(FEEDSTOCK_DIR)/.ci_support
 SCRIPTS_DIR := $(FEEDSTOCK_DIR)/.scripts
 
 CONDARC_PATH := $(WORK_DIR)/condarc
-CONDA_ACTIVATE = source $(shell conda info --base)/bin/activate $(1)
+CONDA_ACTIVATE = . $(shell conda info --base)/bin/activate $(1)
 CONDA = $(call CONDA_ACTIVATE,$(CONDA_ENV)); CONDARC=$(CONDARC_PATH) conda
 
 ifeq (Darwin,$(shell uname))
@@ -23,9 +23,10 @@ endif
 prep-conda: CONDA_ENV := base
 prep-conda:
 	echo "conda-build:\n  root-dir: $(WORK_DIR)/conda-bld\n\n" > $(CONDARC_PATH)
+
 	$(CONDA) config --set always_yes true
 
-	# $(CONDA) create -n build conda-build anaconda-client
+	$(CONDA) create -n build conda-build anaconda-client
 
 .PHONY: prep-feedstock
 prep-feedstock:

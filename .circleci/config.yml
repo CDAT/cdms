@@ -17,6 +17,8 @@ aliases:
 
       ./miniconda.sh -b -p ${MINICONDA_DIR}
 
+      ls -la ${MINICODNA_DIR}
+
       source ${MINICONDA_DIR}/etc/profile.d/conda.sh
 
       conda activate base
@@ -43,10 +45,6 @@ jobs:
       - checkout:
           path: cdms
       - run: *setup_miniconda
-      - run:
-          command: |
-            echo ${PWD}
-            ls -la .
 
 workflows:
   cdms:

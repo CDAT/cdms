@@ -49,7 +49,7 @@ jobs:
       - checkout:
           path: cdms
       - run: *setup_miniconda
-      - persist_to_workspace
+      - persist_to_workspace:
           root: .
           paths:
             - miniconda

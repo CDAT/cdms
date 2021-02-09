@@ -13,7 +13,13 @@ aliases:
 
       chmod +x miniconda.sh
 
-      ./miniconda.sh -b -p ${CIRCLE_WORKING_DIRECTORY}/miniconda
+      ./miniconda.sh -b -p ${MINICONDA_DIR}
+
+      source ${MINICONDA_DIR}/etc/profile.d/conda.sh
+
+      conda activate base
+
+      conda info
 
 executors:
   linux:
@@ -29,10 +35,13 @@ jobs:
       os:
         type: executor
     executor: << parameters.os >>
+    environment:
+      MINICONDA_DIR: ${CIRCLE_WORKING_DIRECTORY}/miniconda
     steps:
       - attach_workspace:
           at: .
-      - checkout
+      - checkout:
+          path: cdms
       - run: *setup_miniconda
       - run:
           command: |

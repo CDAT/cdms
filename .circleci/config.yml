@@ -17,12 +17,21 @@ aliases:
       fi
 
       chmod +x miniconda.sh
-      ./miniconda.sh -b -p ${MINICONDA_DIR}
+      ./miniconda.sh -b -u -p ${MINICONDA_DIR}
 
       source ${MINICONDA_DIR}/etc/profile.d/conda.sh
 
       conda activate base
       
+      conda info
+
+  - &build
+    name: build
+    command: |
+      source ${MINICONDA_DIR}/etc/profile.d/conda.sh
+
+      conda activate base
+
       conda info
 
 executors:
@@ -56,6 +65,15 @@ jobs:
           paths:
             - miniconda
             - cdms
+  build:
+    parameters:
+      os:
+        type: executor
+    executor: << parameters.os >>
+    steps:
+      - attach_workspace:
+          at: .
+      - run: *build
 
 workflows:
   cdms:
@@ -64,4 +82,9 @@ workflows:
           matrix:
             parameters:
               os: [ linux, macos ]
-          name: os-<< matrix.os >>
+          name: prep-host--<< matrix.os >>
+      - build:
+          matrix:
+            parameters:
+              os [ linux, macos ]
+          name: build-<< matrix.os >>

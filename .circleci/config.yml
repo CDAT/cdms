@@ -19,6 +19,8 @@ aliases:
 
       ./miniconda.sh -b -p ${MINICONDA_DIR}
 
+      ls -la .
+
       ls -la ${MINICONDA_DIR}
 
       source ${MINICONDA_DIR}/etc/profile.d/conda.sh

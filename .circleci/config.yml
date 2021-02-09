@@ -51,6 +51,9 @@ jobs:
       - run: *setup_miniconda
       - persist_to_workspace
           root: .
+          paths:
+            - miniconda
+            - cdms
 
 workflows:
   cdms:

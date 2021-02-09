@@ -1,5 +1,18 @@
 version: 2.1
 
+aliases:
+  - &setup_miniconda
+    name: setup_miniconda
+    command: |
+      if [[ `uname` == "Darwin" ]]
+      then
+        curl -L -o miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
+      else
+        curl -L -o miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+      fi
+
+      ./miniconda.sh -b -p ${CIRCLE_WORKING_DIRECTORY}/miniconda
+
 executors:
   linux:
     machine:
@@ -18,6 +31,7 @@ jobs:
       - attach_workspace:
           at: .
       - checkout
+      - run: *setup_miniconda
       - run:
           command: |
             echo ${PWD}

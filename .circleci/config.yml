@@ -1,38 +1,11 @@
 version: 2.1
 
 aliases:
-  - &setup_miniconda
-    name: setup_miniconda
-    command: |
+  - &setup_env
+    name: setup_env
+    command: | 
       export CIRCLE_WORKING_DIRECTORY=`pwd ${CIRCLE_WORKING_DIRECTORY}`
       export MINICONDA_DIR=${CIRCLE_WORKING_DIRECTORY}/miniconda
-
-      echo "MINICONDA_DIR ${MINICONDA_DIR}"
-
-      if [[ `uname` == "Darwin" ]]
-      then
-        curl -L -o miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
-      else
-        curl -L -o miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-      fi
-
-      chmod +x miniconda.sh
-      ./miniconda.sh -b -u -p ${MINICONDA_DIR}
-
-      source ${MINICONDA_DIR}/etc/profile.d/conda.sh
-
-      conda activate base
-      
-      conda info
-
-  - &build
-    name: build
-    command: |
-      source ${MINICONDA_DIR}/etc/profile.d/conda.sh
-
-      conda activate base
-
-      conda info
 
 executors:
   linux:
@@ -55,7 +28,26 @@ jobs:
           path: cdms
       - restore_cache:
           key: conda-{{ arch }}
-      - run: *setup_miniconda
+      - run: *setup_env
+      - run:
+          command: |
+            echo "MINICONDA_DIR ${MINICONDA_DIR}"
+
+            if [[ `uname` == "Darwin" ]]
+            then
+              curl -L -o miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
+            else
+              curl -L -o miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+            fi
+
+            chmod +x miniconda.sh
+            ./miniconda.sh -b -u -p ${MINICONDA_DIR}
+
+            source ${MINICONDA_DIR}/etc/profile.d/conda.sh
+
+            conda activate base
+            
+            conda info
       - save_cache:
           key: conda-{{ arch }}
           paths:
@@ -73,7 +65,14 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      - run: *build
+      - run: *setup_env
+      - run:
+          command: |
+            source ${MINICONDA_DIR}/etc/profile.d/conda.sh
+
+            conda activate base
+
+            conda info
 
 workflows:
   cdms:

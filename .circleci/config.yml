@@ -4,6 +4,8 @@ aliases:
   - &setup_miniconda
     name: setup_miniconda
     command: |
+      MINICONDA_DIR=${CIRCLE_WORKING_DIRECTORY}/miniconda
+
       if [[ `uname` == "Darwin" ]]
       then
         curl -L -o miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
@@ -35,8 +37,6 @@ jobs:
       os:
         type: executor
     executor: << parameters.os >>
-    environment:
-      MINICONDA_DIR: ${CIRCLE_WORKING_DIRECTORY}/miniconda
     steps:
       - attach_workspace:
           at: .

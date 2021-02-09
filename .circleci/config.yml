@@ -4,8 +4,8 @@ aliases:
   - &setup_env
     name: setup_env
     command: | 
-      export CIRCLE_WORKING_DIRECTORY=`pwd ${CIRCLE_WORKING_DIRECTORY}`
-      export MINICONDA_DIR=${CIRCLE_WORKING_DIRECTORY}/miniconda
+      echo "export CIRCLE_WORKING_DIRECTORY=`pwd ${CIRCLE_WORKING_DIRECTORY}`" >> ${BASH_ENV}
+      echo "export MINICONDA_DIR=${CIRCLE_WORKING_DIRECTORY}/miniconda" >> ${BASH_ENV}
 
 executors:
   linux:
@@ -31,6 +31,8 @@ jobs:
       - run: *setup_env
       - run:
           command: |
+            source ${BASE_ENV}
+
             echo "MINICONDA_DIR ${MINICONDA_DIR}"
 
             if [[ `uname` == "Darwin" ]]
@@ -65,9 +67,10 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      - run: *setup_env
       - run:
           command: |
+            source ${BASH_ENV}
+
             source ${MINICONDA_DIR}/etc/profile.d/conda.sh
 
             conda activate base

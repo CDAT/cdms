@@ -22,7 +22,6 @@ jobs:
       - run:
           command: |
             export CIRCLE_WORKING_DIRECTORY=`pwd ${CIRCLE_WORKING_DIRECTORY}`
-            export CONDA_DIR=${CIRCLE_WORKING_DIRECTORY}/miniconda
             export WORK_DIR=${CIRCLE_WORKING_DIRECTORY}
 
             cd cdms/

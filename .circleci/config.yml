@@ -23,8 +23,6 @@ jobs:
             export CONDA_DIR=${CIRCLE_WORKING_DIRECTORY}/miniconda
             export WORK_DIR=${CIRCLE_WORKING_DIRECTORY}
 
-            . ${CONDA_DIR}/etc/profile.d/conda.sh
-
             cd cdms/
 
             make list-configs

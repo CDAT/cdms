@@ -41,7 +41,7 @@ list-configs: prep-feedstock
 	$(call FIND_VARIANT)
 
 .PHONY: build
-build: CONDA_ENV := build
+build: export CONDA_ENV := build
 build: export FEEDSTOCK_ROOT=$(FEEDSTOCK_DIR)
 build: export RECIPE_ROOT=$(RECIPE_DIR)
 build: export CONDARC := $(WORK_DIR)/condarc

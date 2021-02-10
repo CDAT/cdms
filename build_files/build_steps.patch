@@ -1,6 +1,6 @@
---- build_steps.sh	2021-02-09 21:16:13.000000000 -0800
-+++ build_steps.sh.new	2021-02-09 22:07:14.000000000 -0800
-@@ -12,19 +12,21 @@
+--- build_steps.sh	2021-02-09 22:42:24.000000000 -0800
++++ build_steps.sh.new	2021-02-09 22:42:48.000000000 -0800
+@@ -12,19 +12,25 @@
  export CI_SUPPORT="${FEEDSTOCK_ROOT}/.ci_support"
  export CONFIG_FILE="${CI_SUPPORT}/${CONFIG}.yaml"
  
@@ -14,11 +14,14 @@
  
 -conda-build:
 - root-dir: ${FEEDSTOCK_ROOT}/build_artifacts
-+conda install -n ${CONDA_ENV} --yes --quiet "conda-forge-ci-setup=3" conda-build pip -c conda-forge
++export PS1=
  
 -CONDARC
--
++. ${CONDA_DIR}/etc/profile.d/conda.sh
+ 
 -conda install --yes --quiet "conda-forge-ci-setup=3" conda-build pip -c conda-forge
++conda install -n ${CONDA_ENV} --yes --quiet "conda-forge-ci-setup=3" conda-build pip -c conda-forge
++
 +conda activate ${CONDA_ENV}
  
  # set up the condarc
@@ -29,7 +32,7 @@
  
  # make the build number clobber
  make_build_number "${FEEDSTOCK_ROOT}" "${RECIPE_ROOT}" "${CONFIG_FILE}"
-@@ -43,11 +45,11 @@
+@@ -43,11 +49,11 @@
      conda build "${RECIPE_ROOT}" -m "${CI_SUPPORT}/${CONFIG}.yaml" \
          --suppress-variables ${EXTRA_CB_OPTIONS:-} \
          --clobber-file "${CI_SUPPORT}/clobber_${CONFIG}.yaml"

@@ -11,25 +11,36 @@ RECIPE_DIR := $(FEEDSTOCK_DIR)/recipe
 CI_SUPPORT_DIR := $(FEEDSTOCK_DIR)/.ci_support
 SCRIPTS_DIR := $(FEEDSTOCK_DIR)/.scripts
 
+CONDA_DIR := $(WORK_DIR)/mininconda
 CONDARC_PATH := $(WORK_DIR)/condarc
-CONDA_ACTIVATE = . $(shell conda info --base)/bin/activate $(1)
+CONDA_ACTIVATE = . $(CONDA_DIR)/bin/activate $(1)
 CONDA = $(call CONDA_ACTIVATE,$(CONDA_ENV)); CONDARC=$(CONDARC_PATH) conda
 
 ifeq (Darwin, $(shell uname))
-CONFIG = $(shell $(call FIND_VARIANT,osx.*version9.*python3.8.*yaml))
+VARIANT_PATTERN := $(if $(VARIANT_PATTERN),$(VARIANT_PATTERN),osx.*version9.*python3.8.*yaml)
+CONFIG = $(shell $(call FIND_VARIANT,$(VARIANT_PATTERN)))
+CONDA_SCRIPT_URL = https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
 else
-CONFIG = $(shell $(call FIND_VARIANT,linux.*version9.*python3.8.*yaml))
+VARIANT_PATTERN := $(if $(VARIANT_PATTERN),$(VARIANT_PATTERN),linux.*version9.*python3.8.*yaml)
+CONFIG = $(shell $(call FIND_VARIANT,$(VARIANT_PATTERN)))
+CONDA_SCRIPT_URL = https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 endif
+
+.PHONY: install-conda
+install-conda:
+	$(if $(wildcard $(WORK_DIR)/miniconda.sh),,curl -L -o $(WORK_DIR)/miniconda.sh $(CONDA_SCRIPT_URL); \
+		chmod +x $(WORK_DIR)/miniconda.sh)
+	$(if $(wildcard $(CONDA_DIR)),,./miniconda.sh -b -p $(CONDA_DIR))
 
 .PHONY: prep-conda
 prep-conda: CONDA_ENV := base
-prep-conda:
+prep-conda: install-conda
 	$(CONDA) config --set always_yes true
 
 	$(CONDA) create -n build conda-build anaconda-client
 
 .PHONY: prep-feedstock
-prep-feedstock:
+prep-feedstock: prep-conda
 	$(if $(wildcard $(FEEDSTOCK_DIR)),,git clone https://github.com/conda-forge/cdms2-feedstock $(FEEDSTOCK_DIR))
 
 	python build_files/fix_conda_recipe.py $(RECIPE_DIR)/meta.yaml $(PWD)
@@ -42,6 +53,7 @@ list-configs: prep-feedstock
 
 .PHONY: build
 build: export CONDA_ENV := build
+build: export CONDA_DIR := $(WORK_DIR)/miniconda
 build: export FEEDSTOCK_ROOT=$(FEEDSTOCK_DIR)
 build: export RECIPE_ROOT=$(RECIPE_DIR)
 build: export CONDARC := $(WORK_DIR)/condarc
@@ -49,5 +61,6 @@ build: export FEEDSTOCK_NAME := cdms2
 build: export UPLOAD_PACKAGES := False
 build: export CONFIG := $(CONFIG)
 build: export EXTRA_CB_OPTIONS := --croot $(WORK_DIR)/conda-bld
-build: prep-conda prep-feedstock
+build: export PS1 :=
+build: prep-feedstock
 	$(FEEDSTOCK_DIR)/.scripts/build_steps.sh

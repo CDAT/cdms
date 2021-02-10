@@ -58,6 +58,8 @@ jobs:
             export CIRCLE_WORKING_DIRECTORY=`pwd ${CIRCLE_WORKING_DIRECTORY}`
             export WORK_DIR=${CIRCLE_WORKING_DIRECTORY}
 
+            cd cdms/
+
             make list-configs
             make build 
 

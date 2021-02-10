@@ -5,7 +5,7 @@ MKTEMP = $(if $(wildcard $(1)),$(shell cat $(1)),$(shell mktemp -d > $(1); cat $
 ifeq (Darwin,$(shell uname))
 VPATTERN = osx.*version9.*python3.8
 else
-VPATTERN = linux.*version8.*python3.8
+VPATTERN = linux.*version9.*python3.8
 endif
 
 SRC_DIR := $(if $(SRC_DIR),$(SRC_DIR),$(PWD))
@@ -33,6 +33,8 @@ endif
 ifeq ($(wildcard $(CONDA_DIR)),)
 	$(SHELL) $(MINICONDA_PATH) -b -p $(CONDA_DIR)
 endif
+
+	$(CONDA) config --set always_yes true
 
 .PHONY: prep-feedstock
 prep-feedstock:

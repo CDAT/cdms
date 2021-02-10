@@ -15,22 +15,35 @@ jobs:
         type: executor
     executor: << parameters.os >>
     steps:
+      - attach_workspace:
+          at: .
       - checkout:
           path: cdms
       - run:
           command: |
-            pwd
+            export CIRCLE_WORKING_DIRECTORY=`pwd ${CIRCLE_WORKING_DIRECTORY}`
+            export CONDA_DIR=${CIRCLE_WORKING_DIRECTORY}/miniconda
 
-            echo `uname` >> test_os
+            if [[ `uname` == "Darwin" ]]
+            then
+              curl -L -o miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
+            else
+              curl -L -o miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+            fi
 
-            ls -la .
+            chmod +x miniconda.sh
+            ./miniconda.sh -b -u -p ${CONDA_DIR}
 
-            cd cdms
-            make list-configs SHELL="sh -x"
+            . $(CONDA_DIR)/etc/profile.d/conda.sh
+
+            conda activate base
+
+            conda info
+
       - persist_to_workspace:
           root: .
           paths:
-            - "."
+            - cdms
 
   build:
     parameters:
@@ -40,13 +53,12 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      - run:
-          command: |
-            pwd
-            
-            ls -la .
-
-            cat test_os
+      - checkout:
+          path: cdms
+      - persist_to_workspace:
+          root: .
+          paths:
+            - cdms
 
 workflows:
   cdms:

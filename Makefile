@@ -30,7 +30,7 @@ endif
 install-conda:
 	$(if $(wildcard $(WORK_DIR)/miniconda.sh),,curl -L -o $(WORK_DIR)/miniconda.sh $(CONDA_SCRIPT_URL); \
 		chmod +x $(WORK_DIR)/miniconda.sh)
-	$(if $(wildcard $(CONDA_DIR)),,./miniconda.sh -b -p $(CONDA_DIR))
+	$(if $(wildcard $(CONDA_DIR)),,./miniconda.sh -b -p $(WORK_DIR)/miniconda.sh)
 
 .PHONY: prep-conda
 prep-conda: CONDA_ENV := base

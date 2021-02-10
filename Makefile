@@ -18,11 +18,11 @@ CONDA = $(call CONDA_ACTIVATE,$(CONDA_ENV)); CONDARC=$(CONDARC_PATH) conda
 
 ifeq (Darwin, $(shell uname))
 VARIANT_PATTERN := $(if $(VARIANT_PATTERN),$(VARIANT_PATTERN),osx.*version9.*python3.8.*yaml)
-CONFIG = $(shell $(call FIND_VARIANT,$(VARIANT_PATTERN)))
+CONFIG = $(call FIND_VARIANT,$(VARIANT_PATTERN))
 CONDA_SCRIPT_URL = https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
 else
 VARIANT_PATTERN := $(if $(VARIANT_PATTERN),$(VARIANT_PATTERN),linux.*version9.*python3.8.*yaml)
-CONFIG = $(shell $(call FIND_VARIANT,$(VARIANT_PATTERN)))
+CONFIG = $(call FIND_VARIANT,$(VARIANT_PATTERN))
 CONDA_SCRIPT_URL = https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 endif
 
@@ -30,7 +30,7 @@ endif
 install-conda:
 	$(if $(wildcard $(WORK_DIR)/miniconda.sh),,curl -L -o $(WORK_DIR)/miniconda.sh $(CONDA_SCRIPT_URL); \
 		chmod +x $(WORK_DIR)/miniconda.sh)
-	$(if $(wildcard $(CONDA_DIR)),,$(WORK_DIR)/miniconda.sh -b -p $(WORK_DIR)/miniconda.sh)
+	$(if $(wildcard $(CONDA_DIR)),,$(WORK_DIR)/miniconda.sh -b -p $(CONDA_DIR))
 
 .PHONY: prep-conda
 prep-conda: CONDA_ENV := base

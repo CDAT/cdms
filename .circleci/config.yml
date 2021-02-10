@@ -43,5 +43,3 @@ workflows:
             parameters:
               os: [ linux, macos ]
           name: build-<< matrix.os >>
-          requires:
-            - prep-host-<< matrix.os >>

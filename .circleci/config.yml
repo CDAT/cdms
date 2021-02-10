@@ -44,6 +44,7 @@ jobs:
           root: .
           paths:
             - cdms
+            - miniconda
 
   build:
     parameters:

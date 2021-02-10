@@ -50,5 +50,4 @@ build: export UPLOAD_PACKAGES := False
 build: export CONFIG := $(CONFIG)
 build: export EXTRA_CB_OPTIONS := --croot $(WORK_DIR)/conda-bld
 build: prep-conda prep-feedstock
-	$(CONDA) info; \
-		$(FEEDSTOCK_DIR)/.scripts/build_steps.sh
+	$(FEEDSTOCK_DIR)/.scripts/build_steps.sh

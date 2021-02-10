@@ -9,43 +9,6 @@ executors:
       xcode: "11.4.0"
 
 jobs:
-  prep_host:
-    parameters:
-      os:
-        type: executor
-    executor: << parameters.os >>
-    steps:
-      - attach_workspace:
-          at: .
-      - checkout:
-          path: cdms
-      - run:
-          command: |
-            export CIRCLE_WORKING_DIRECTORY=`pwd ${CIRCLE_WORKING_DIRECTORY}`
-            export CONDA_DIR=${CIRCLE_WORKING_DIRECTORY}/miniconda
-
-            if [[ `uname` == "Darwin" ]]
-            then
-              curl -L -o miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
-            else
-              curl -L -o miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-            fi
-
-            chmod +x miniconda.sh
-            ./miniconda.sh -b -u -p ${CONDA_DIR}
-
-            . ${CONDA_DIR}/etc/profile.d/conda.sh
-
-            conda activate base
-
-            conda info
-
-      - persist_to_workspace:
-          root: .
-          paths:
-            - cdms
-            - miniconda
-
   build:
     parameters:
       os:
@@ -65,7 +28,7 @@ jobs:
             cd cdms/
 
             make list-configs
-            make build 
+            make build
 
       - persist_to_workspace:
           root: .
@@ -75,11 +38,6 @@ jobs:
 workflows:
   cdms:
     jobs:
-      - prep_host:
-          matrix:
-            parameters:
-              os: [ linux, macos ]
-          name: prep-host-<< matrix.os >>
       - build:
           matrix:
             parameters:

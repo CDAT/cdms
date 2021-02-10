@@ -17,6 +17,8 @@ jobs:
     steps:
       - attach_workspace:
           at: .
+      - checkout:
+          path: cdms
       - run:
           command: |
             export CIRCLE_WORKING_DIRECTORY=`pwd ${CIRCLE_WORKING_DIRECTORY}`
@@ -27,7 +29,6 @@ jobs:
 
             make list-configs
             make build
-
       - persist_to_workspace:
           root: .
           paths:

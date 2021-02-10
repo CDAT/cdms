@@ -1,15 +1,10 @@
---- build_steps.sh	2021-02-09 09:01:08.000000000 -0800
-+++ build_steps.sh.new	2021-02-09 09:03:41.000000000 -0800
-@@ -12,24 +12,23 @@
+--- build_steps.sh	2021-02-09 21:16:13.000000000 -0800
++++ build_steps.sh.new	2021-02-09 21:20:21.000000000 -0800
+@@ -12,19 +12,19 @@
  export CI_SUPPORT="${FEEDSTOCK_ROOT}/.ci_support"
  export CONFIG_FILE="${CI_SUPPORT}/${CONFIG}.yaml"
  
 -cat >~/.condarc <<CONDARC
--
--conda-build:
-- root-dir: ${FEEDSTOCK_ROOT}/build_artifacts
--
--CONDARC
 +# cat >~/.condarc <<CONDARC
 +# 
 +# conda-build:
@@ -17,7 +12,13 @@
 +# 
 +# CONDARC
  
- conda install --yes --quiet "conda-forge-ci-setup=3" conda-build pip -c conda-forge
+-conda-build:
+- root-dir: ${FEEDSTOCK_ROOT}/build_artifacts
+-
+-CONDARC
+-
+-conda install --yes --quiet "conda-forge-ci-setup=3" conda-build pip -c conda-forge
++conda install -n ${CONDA_ENV} --yes --quiet "conda-forge-ci-setup=3" conda-build pip -c conda-forge
  
  # set up the condarc
  setup_conda_rc "${FEEDSTOCK_ROOT}" "${RECIPE_ROOT}" "${CONFIG_FILE}"
@@ -27,12 +28,15 @@
  
  # make the build number clobber
  make_build_number "${FEEDSTOCK_ROOT}" "${RECIPE_ROOT}" "${CONFIG_FILE}"
+@@ -43,11 +43,11 @@
+     conda build "${RECIPE_ROOT}" -m "${CI_SUPPORT}/${CONFIG}.yaml" \
+         --suppress-variables ${EXTRA_CB_OPTIONS:-} \
+         --clobber-file "${CI_SUPPORT}/clobber_${CONFIG}.yaml"
+-    validate_recipe_outputs "${FEEDSTOCK_NAME}"
++#     validate_recipe_outputs "${FEEDSTOCK_NAME}"
  
--
- if [[ "${BUILD_WITH_CONDA_DEBUG:-0}" == 1 ]]; then
-     if [[ "x${BUILD_OUTPUT_ID:-}" != "x" ]]; then
-         EXTRA_CB_OPTIONS="${EXTRA_CB_OPTIONS:-} --output-id ${BUILD_OUTPUT_ID}"
-@@ -50,4 +49,4 @@
+     if [[ "${UPLOAD_PACKAGES}" != "False" ]]; then
+         upload_package --validate --feedstock-name="${FEEDSTOCK_NAME}"  "${FEEDSTOCK_ROOT}" "${RECIPE_ROOT}" "${CONFIG_FILE}"
      fi
  fi
  

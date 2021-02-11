@@ -28,7 +28,7 @@ jobs:
 
             make build
 
-            rm -rf ${WORKDIR}/miniconda/envs/build
+            rm -rf ${WORK_DIR}/miniconda/envs/build
       - persist_to_workspace:
           root: .
           paths:

@@ -51,6 +51,19 @@ jobs:
             cd cdms/
 
             make test
+      - persist_to_workspace
+          root: .
+          paths:
+            - miniconda
+
+  upload:
+    machine:
+      image: circleci/classic:latest
+    steps:
+      - attach_workspace:
+          at: .
+      - run: ls -la miniconda/envs/build/conda-bld/linux-64
+      - run: ls -la miniconda/envs/build/conda-bld/osx-64
 
 workflows:
   cdms:
@@ -67,3 +80,7 @@ workflows:
           name: test-<<matrix.os>>
           requires:
             - build-<< matrix.os >>
+      - upload:
+          name: upload
+          requires:
+            - test

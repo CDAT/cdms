@@ -62,3 +62,5 @@ workflows:
             parameters:
               os: [ linux, macos ]
           name: test-<<matrix.os>>
+          requires:
+            - build-<< matrix.os >>

@@ -20,7 +20,7 @@ FEEDSTOCK_DIR := $(WORK_DIR)/feedstock
 SCRIPTS_DIR := $(FEEDSTOCK_DIR)/.scripts
 CI_SUPPORT_DIR := $(FEEDSTOCK_DIR)/.ci_support
 
-CONDA_CHANNEL := $(CONDA_DIR)/envs/build/conda-bld
+CONDA_CHANNEL := $(WORK_DIR)/conda-bld
 CONDA_ACTIVATE := source $(CONDA_DIR)/etc/profile.d/conda.sh; \
 	source $(CONDA_DIR)/bin/activate; source $(CONDA_DIR)/bin/activate
 CONDA = export CONDARC=$(WORK_DIR)/condarc; \
@@ -77,6 +77,7 @@ endif
 				 RECIPE_ROOT=$(FEEDSTOCK_DIR)/recipe \
 				 UPLOAD_PACKAGES=False \
 				 CONDARC=$(WORK_DIR)/condarc \
+				 EXTRA_CB_OPTIONS='--croot $(WORK_DIR)/conda-bld' \
 				 $(SCRIPTS_DIR)/build_steps.sh | tee $(WORK_DIR)/`cat $(PWD)/.variant`
 
 .PHONY: test

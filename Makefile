@@ -90,6 +90,5 @@ test:
 		-c file://$(CONDA_CHANNEL) -c conda-forge -c cdat/label/nightly \
 		cdms2 testsrunner cdat_info pytest 'python=3.8' pip
 
-	$(CONDA_ACTIVATE) test
-
-	python run_tests.py --html
+	$(CONDA_ACTIVATE) test; \
+		python run_tests.py --html

@@ -32,6 +32,22 @@ jobs:
           root: .
           paths:
             - cdms
+  test:
+    parameters:
+      os:
+        type: executor
+    executor: << parameters.os >>
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          command: |
+            export CIRCLE_WORKING_DIRECTORY=`pwd ${CIRCLE_WORKING_DIRECTORY}`
+            export WORK_DIR=${CIRCLE_WORKING_DIRECTORY}
+
+            cd cdms/
+
+            make test
 
 workflows:
   cdms:
@@ -41,3 +57,8 @@ workflows:
             parameters:
               os: [ linux, macos ]
           name: build-<< matrix.os >>
+      - test:
+          matrix:
+            parameters:
+              os: [ linux, macos ]
+          name: test-<<matrix.os>>

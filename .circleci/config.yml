@@ -26,12 +26,12 @@ jobs:
 
             cd cdms/
 
-            make list-configs
             make build
+
+            rm -rf ${WORKDIR}/miniconda/envs/build
       - persist_to_workspace:
           root: .
           paths:
-            - condarc
             - cdms
             - miniconda
             - feedstock
@@ -51,6 +51,8 @@ jobs:
             cd cdms/
 
             make test
+
+            rm -rf ${WORK_DIR}/miniconda/envs/test
       - persist_to_workspace:
           root: .
           paths:

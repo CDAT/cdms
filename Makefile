@@ -78,7 +78,7 @@ test:
 	# Force conda to install cdms from local channel
 	$(CONDA) config --set channel_priority strict
 
-	$(CONDA) create -n test \
+	$(CONDA) create -n test -y \
 		-c file://$(CONDA_CHANNEL) -c conda-forge -c cdat/label/nightly \
 		cdms2 testsrunner cdat_info pytest 'python=3.8' pip
 

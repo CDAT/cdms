@@ -32,6 +32,8 @@ jobs:
           root: .
           paths:
             - cdms
+            - miniconda
+            - feedstock
   test:
     parameters:
       os:

@@ -90,4 +90,5 @@ test:
 
 	$(CONDA_SETUP); \
 		$(CONDA_ACTIVATE) test; \
-		python run_tests.py --html
+		# CircleCI linux doesn't play nice with activating environments, loads the system python
+		$(CONDA_DIR)/envs/test/bin/python run_tests.py --html

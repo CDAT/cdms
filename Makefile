@@ -1,5 +1,9 @@
 .DEFAULT_GOAL := build
 
+.ONESHELL:
+
+SHELL := /bin/bash
+
 MKTEMP = $(if $(wildcard $(1)),$(shell cat $(1)),$(shell mktemp -d > $(1); cat $(1)))
 
 ifeq (Darwin,$(shell uname))
@@ -17,13 +21,9 @@ SCRIPTS_DIR := $(FEEDSTOCK_DIR)/.scripts
 CI_SUPPORT_DIR := $(FEEDSTOCK_DIR)/.ci_support
 
 CONDA_CHANNEL := $(CONDA_DIR)/envs/build/conda-bld
-CONDA_SH := . $(CONDA_DIR)/etc/profile.d/conda.sh
-CONDA_ACTIVATE := . $(CONDA_DIR)/bin/activate
-CONDA_SETUP = $(CONDA_SH); \
-							$(CONDA_ACTIVATE); \
-							$(CONDA_ACTIVATE) $(CONDA_ENV)
-CONDA = $(CONDA_SETUP); \
-				export CONDARC=$(WORK_DIR)/condarc; \
+CONDA_ACTIVATE := source $(CONDA_DIR)/etc/profile.d/conda.sh; \
+	source $(CONDA_DIR)/bin/activate; source $(CONDA_DIR)/bin/activate
+CONDA = export CONDARC=$(WORK_DIR)/condarc; \
 				$(CONDA_DIR)/bin/conda
 
 .PHONY: install-conda
@@ -59,8 +59,9 @@ list-configs:
 	ls $(CI_SUPPORT_DIR)/*.yaml | awk '{ n=split($$1,a,"/");sub(/\.yaml$//,"",a[n]);print a[n] }'
 
 .PHONY: build
-build: CONDA_ENV := base
 build: install-conda prep-feedstock
+	$(CONDA_ACTIVATE) base
+
 ifeq ($(wildcard $(CONDA_DIR)/envs/build),)
 	$(CONDA) create -n build python=3.8
 endif
@@ -79,8 +80,9 @@ endif
 				 $(SCRIPTS_DIR)/build_steps.sh | tee $(WORK_DIR)/`cat $(PWD)/.variant`
 
 .PHONY: test
-test: CONDA_ENV := base
 test:
+	$(CONDA_ACTIVATE) base
+	
 	# Force conda to install cdms from local channel
 	$(CONDA) config --set channel_priority strict
 
@@ -88,7 +90,6 @@ test:
 		-c file://$(CONDA_CHANNEL) -c conda-forge -c cdat/label/nightly \
 		cdms2 testsrunner cdat_info pytest 'python=3.8' pip
 
-	$(CONDA_SETUP); \
-		$(CONDA_ACTIVATE) test; \
-		# CircleCI linux doesn't play nice with activating environments, loads the system python
-		python run_tests.py --html
+	$(CONDA_ACTIVATE) test
+
+	python run_tests.py --html

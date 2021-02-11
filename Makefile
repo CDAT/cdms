@@ -20,7 +20,7 @@ CONDA_CHANNEL := $(CONDA_DIR)/envs/build/conda-bld
 CONDA_SH := . $(CONDA_DIR)/etc/profile.d/conda.sh
 CONDA_ACTIVATE := . $(CONDA_DIR)/bin/activate
 CONDA_SETUP = $(CONDA_SH); \
-							$(CONDA_ACTIVATE) $(CONDA_ENV); \
+							$(CONDA_ACTIVATE); \
 							$(CONDA_ACTIVATE) $(CONDA_ENV)
 CONDA = $(CONDA_SETUP); \
 				export CONDARC=$(WORK_DIR)/condarc; \
@@ -91,4 +91,4 @@ test:
 	$(CONDA_SETUP); \
 		$(CONDA_ACTIVATE) test; \
 		# CircleCI linux doesn't play nice with activating environments, loads the system python
-		$(CONDA_DIR)/envs/test/bin/python run_tests.py --html
+		python run_tests.py --html

@@ -17,8 +17,14 @@ SCRIPTS_DIR := $(FEEDSTOCK_DIR)/.scripts
 CI_SUPPORT_DIR := $(FEEDSTOCK_DIR)/.ci_support
 
 CONDA_CHANNEL := $(CONDA_DIR)/envs/build/conda-bld
-CONDA_ACTIVATE := $(CONDA_DIR)/bin/activate
-CONDA = . $(CONDA_ACTIVATE) $(CONDA_ENV); CONDARC=$(WORK_DIR)/condarc $(CONDA_DIR)/bin/conda
+CONDA_SH := . $(CONDA_DIR)/etc/profile.d/conda.sh
+CONDA_ACTIVATE := . $(CONDA_DIR)/bin/activate
+CONDA_SETUP = $(CONDA_SH); \
+							$(CONDA_ACTIVATE) $(CONDA_ENV); \
+							$(CONDA_ACTIVATE) $(CONDA_ENV)
+CONDA = $(CONDA_SETUP); \
+				export CONDARC=$(WORK_DIR)/condarc; \
+				$(CONDA_DIR)/bin/conda
 
 .PHONY: install-conda
 install-conda:
@@ -82,5 +88,6 @@ test:
 		-c file://$(CONDA_CHANNEL) -c conda-forge -c cdat/label/nightly \
 		cdms2 testsrunner cdat_info pytest 'python=3.8' pip
 
-	. $(CONDA_ACTIVATE) test; \
+	$(CONDA_SETUP); \
+		$(CONDA_ACTIVATE) test; \
 		python run_tests.py --html

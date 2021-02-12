@@ -46,7 +46,6 @@ endif
 
 	$(CONDA_ENV); \
 		$(CONDA_ACTIVATE) base; \
-		conda config --file $(CONDARC) --set always_yes true; \
 		$(CONDA_RC); \
 		conda info		
 
@@ -72,7 +71,7 @@ ifeq ($(wildcard $(CONDA_DIR)/envs/build),)
 	$(CONDA_ENV); \
 		$(CONDA_ACTIVATE) base; \
 		$(CONDA_RC); \
-		conda create -n build python=3.8
+		conda create -n build --yes python=3.8
 endif
 
 	ls $(CI_SUPPORT_DIR)/*.yaml | grep -E $(VPATTERN) \
@@ -95,7 +94,7 @@ test:
 		$(CONDA_ACTIVATE) base; \
 		$(CONDA_RC); \
 		conda config --set channel_priority strict; \
-		conda create -n test -c file://$(CONDA_CHANNEL) -c conda-forge -c cdat/label/nightly \
+		conda create -n test --yes -c file://$(CONDA_CHANNEL) -c conda-forge -c cdat/label/nightly \
 		cdms2 testsrunner cdat_info pytest 'python=3.8' pip; \
 		conda activate test; \
 		conda info; \

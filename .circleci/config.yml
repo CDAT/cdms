@@ -23,13 +23,15 @@ jobs:
           command: |
             export WORK_DIR=`pwd ${CIRCLE_WORKING_DIRECTORY}`
 
-            cd cdms/
+            pushd cdms
 
             make build
 
-            mkdir -p build_artificats
+            popd
 
-            cp conda-bld/**/*.tar.bz2 build_artifacts/
+            mkdir -p build_artificats/
+
+            cp ${WORK_DIR}/conda-bld/**/*.tar.bz2 ${WORK_DIR}/build_artifacts/
       - persist_to_workspace:
           root: .
           paths:
@@ -54,9 +56,9 @@ jobs:
 
             make test
 
-            mkdir -p test_artifacts/`make list-config`
+            mkdir -p ${WORK_DIR}/test_artifacts/`make list-config`
 
-            cp -rf  tests_html/* test_artifacts/`make list-config`
+            cp -rf  tests_html/* ${WORK_DIR}/test_artifacts/`make list-config`
       - persist_to_workspace:
           root: .
           paths:

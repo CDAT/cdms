@@ -21,44 +21,49 @@ jobs:
           path: cdms
       - run:
           command: |
-            export CIRCLE_WORKING_DIRECTORY=`pwd ${CIRCLE_WORKING_DIRECTORY}`
-            export WORK_DIR=${CIRCLE_WORKING_DIRECTORY}
+            export WORK_DIR=`pwd ${CIRCLE_WORKING_DIRECTORY}`
 
             cd cdms/
 
             make build
 
-            rm -rf ${WORK_DIR}/miniconda/envs/build
+            mkdir -p build_artificats
+
+            cp conda-bld/**/*.tar.bz2 build_artifacts/
       - persist_to_workspace:
           root: .
           paths:
             - cdms
             - miniconda
-            - feedstock
+            - pkgs
             - conda-bld
+            - build_artifacts
   test:
     parameters:
       os:
         type: executor
     executor: << parameters.os >>
+    environment:
+      OS: << parameters.os >>
     steps:
       - attach_workspace:
           at: .
       - run:
           command: |
-            export CIRCLE_WORKING_DIRECTORY=`pwd ${CIRCLE_WORKING_DIRECTORY}`
-            export WORK_DIR=${CIRCLE_WORKING_DIRECTORY}
+            export WORK_DIR=`pwd ${CIRCLE_WORKING_DIRECTORY}`
 
             cd cdms/
 
             make test
 
-            rm -rf ${WORK_DIR}/miniconda/envs/test
+            mkdir -p test_artifacts/`make list-config`
+
+            cp -rf  tests_html/* test_artifacts/`make list-config`
       - persist_to_workspace:
           root: .
           paths:
-            - miniconda
-            - conda-bld
+            - build_artifacts
+            - test_artifacts
 
   upload:
     machine:
@@ -66,8 +71,8 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      - run: ls -la miniconda/envs/build/conda-bld/linux-64
-      - run: ls -la miniconda/envs/build/conda-bld/osx-64
+      - run: ls -la build_artifacts/
+      - run: ls -la test_artifacts/
 
 workflows:
   cdms:

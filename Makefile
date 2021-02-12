@@ -1,7 +1,5 @@
 .DEFAULT_GOAL := build
 
-.ONESHELL:
-
 SHELL := /bin/bash
 
 MKTEMP = $(if $(wildcard $(1)),$(shell cat $(1)),$(shell mktemp -d > $(1); cat $(1)))
@@ -21,28 +19,36 @@ SCRIPTS_DIR := $(FEEDSTOCK_DIR)/.scripts
 CI_SUPPORT_DIR := $(FEEDSTOCK_DIR)/.ci_support
 
 CONDA_CHANNEL := $(WORK_DIR)/conda-bld
-CONDA_ACTIVATE := source $(CONDA_DIR)/etc/profile.d/conda.sh; \
-	source $(CONDA_DIR)/bin/activate; source $(CONDA_DIR)/bin/activate
-CONDA = export CONDARC=$(WORK_DIR)/condarc; \
-				$(CONDA_DIR)/bin/conda
+CONDARC := $(WORK_DIR)/condarc
+CONDA_HOOKS = eval "$$($(CONDA_DIR)/bin/conda 'shell.bash' 'hook')"
+CONDA_ENV = source $(CONDA_DIR)/etc/profile.d/conda.sh
+CONDA_ACTIVATE = source $(CONDA_DIR)/bin/activate
+CONDA_RC = export CONDARC=$(CONDARC)
 
 .PHONY: install-conda
 install-conda:
+	mkdir -p $(WORK_DIR)
+
+	echo -e "envs_dirs:\n  - $(WORK_DIR)/envs\npkgs_dirs:\n  - $(WORK_DIR)/pkgs" > $(CONDARC)
+
 ifeq ($(wildcard $(MINICONDA_PATH)),)
 ifeq (Darwin,$(shell uname))
 	curl -L -o $(MINICONDA_PATH) https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
 else
 	curl -L -o $(MINICONDA_PATH) https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 endif
-else
-	@echo $(MINICONDA_PATH) exists
+	chmod +x $(MINICONDA_PATH)
 endif
 
 ifeq ($(wildcard $(CONDA_DIR)),)
-	$(SHELL) $(MINICONDA_PATH) -b -p $(CONDA_DIR)
+	$(MINICONDA_PATH) -b -p $(CONDA_DIR)
 endif
 
-	$(CONDA) config --set always_yes true
+	$(CONDA_ENV); \
+		$(CONDA_ACTIVATE) base; \
+		conda config --file $(CONDARC) --set always_yes true; \
+		$(CONDA_RC); \
+		conda info		
 
 .PHONY: prep-feedstock
 prep-feedstock:
@@ -56,14 +62,17 @@ endif
 
 .PHONY: list-configs
 list-configs:
-	ls $(CI_SUPPORT_DIR)/*.yaml | awk '{ n=split($$1,a,"/");sub(/\.yaml$//,"",a[n]);print a[n] }'
+	@ls $(CI_SUPPORT_DIR)/*.yaml | \
+		grep -e '$(if $(PATTERN),$(PATTERN),$(VPATTERN))' | \
+		awk '{ n=split($$1,a,"/");sub(/\.yaml$//,"",a[n]);print a[n] }'
 
 .PHONY: build
 build: install-conda prep-feedstock
-	$(CONDA_ACTIVATE) base
-
 ifeq ($(wildcard $(CONDA_DIR)/envs/build),)
-	$(CONDA) create -n build python=3.8
+	$(CONDA_ENV); \
+		$(CONDA_ACTIVATE) base; \
+		$(CONDA_RC); \
+		conda create -n build python=3.8
 endif
 
 	ls $(CI_SUPPORT_DIR)/*.yaml | grep -E $(VPATTERN) \
@@ -82,14 +91,19 @@ endif
 
 .PHONY: test
 test:
-	$(CONDA_ACTIVATE) base
-	
-	# Force conda to install cdms from local channel
-	$(CONDA) config --set channel_priority strict
+	$(CONDA_ENV); \
+		$(CONDA_ACTIVATE) base; \
+		$(CONDA_RC); \
+		conda config --set channel_priority strict; \
+		conda create -n test -c file://$(CONDA_CHANNEL) -c conda-forge -c cdat/label/nightly \
+		cdms2 testsrunner cdat_info pytest 'python=3.8' pip; \
+		conda activate test; \
+		conda info; \
+		python run_tests.py -H -v2 -n 1
 
-	$(CONDA) create -n test -y \
-		-c file://$(CONDA_CHANNEL) -c conda-forge -c cdat/label/nightly \
-		cdms2 testsrunner cdat_info pytest 'python=3.8' pip
-
-	$(CONDA_ACTIVATE) test; \
-		python run_tests.py --html
+.PHONY: clean
+clean:
+ifneq ($(wildcard $(WORK_DIR)),)
+	rm -rf $(WORK_DIR)
+	rm $(PWD)/.workdir
+endif

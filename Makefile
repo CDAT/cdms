@@ -12,13 +12,15 @@ endif
 
 SRC_DIR := $(if $(SRC_DIR),$(SRC_DIR),$(PWD))
 WORK_DIR := $(if $(WORK_DIR),$(WORK_DIR),$(call MKTEMP,$(PWD)/.workdir))
+ENVS_DIR := $(if $(ENVS_DIR),$(ENVS_DIR),$(WORK_DIR)/envs)
+PKGS_DIR := $(if $(PKGS_DIR),$(PKGS_DIR),$(WORK_DIR)/pkgs)
 MINICONDA_PATH := $(WORK_DIR)/miniconda.sh
 CONDA_DIR := $(WORK_DIR)/miniconda
+LOCAL_CHANNEL_DIR := $(if $(LOCAL_CHANNEL_DIR),$(LOCAL_CHANNEL_DIR),$(WORK_DIR)/conda-bld)
 FEEDSTOCK_DIR := $(WORK_DIR)/feedstock
 SCRIPTS_DIR := $(FEEDSTOCK_DIR)/.scripts
 CI_SUPPORT_DIR := $(FEEDSTOCK_DIR)/.ci_support
 
-CONDA_CHANNEL := $(WORK_DIR)/conda-bld
 CONDARC := $(WORK_DIR)/condarc
 CONDA_HOOKS = eval "$$($(CONDA_DIR)/bin/conda 'shell.bash' 'hook')"
 CONDA_ENV = source $(CONDA_DIR)/etc/profile.d/conda.sh
@@ -29,7 +31,7 @@ CONDA_RC = export CONDARC=$(CONDARC)
 install-conda:
 	mkdir -p $(WORK_DIR)
 
-	echo -e "envs_dirs:\n  - $(WORK_DIR)/envs\npkgs_dirs:\n  - $(WORK_DIR)/pkgs" > $(CONDARC)
+	echo -e "envs_dirs:\n  - $(ENVS_DIR)\npkgs_dirs:\n  - $(PKGS_DIR)" > $(CONDARC)
 
 ifeq ($(wildcard $(MINICONDA_PATH)),)
 ifeq (Darwin,$(shell uname))
@@ -85,7 +87,7 @@ endif
 				 RECIPE_ROOT=$(FEEDSTOCK_DIR)/recipe \
 				 UPLOAD_PACKAGES=False \
 				 CONDARC=$(WORK_DIR)/condarc \
-				 EXTRA_CB_OPTIONS='--croot $(WORK_DIR)/conda-bld' \
+				 EXTRA_CB_OPTIONS='--croot $(LOCAL_CHANNEL_DIR)' \
 				 $(SCRIPTS_DIR)/build_steps.sh | tee $(WORK_DIR)/`cat $(PWD)/.variant`
 
 .PHONY: test
@@ -94,7 +96,7 @@ test:
 		$(CONDA_ACTIVATE) base; \
 		$(CONDA_RC); \
 		conda config --set channel_priority strict; \
-		conda create -n test --yes -c file://$(CONDA_CHANNEL) -c conda-forge -c cdat/label/nightly \
+		conda create -n test --yes -c file://$(LOCAL_CHANNEL_DIR) -c conda-forge -c cdat/label/nightly \
 		cdms2 testsrunner cdat_info pytest 'python=3.8' pip; \
 		conda activate test; \
 		conda info; \

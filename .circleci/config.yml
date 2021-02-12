@@ -29,17 +29,19 @@ jobs:
 
             popd
 
-            mkdir -p build_artifacts/
+            mkdir -p ${WORK_DIR}/build_artifacts/
 
             cp ${WORK_DIR}/conda-bld/**/*.tar.bz2 ${WORK_DIR}/build_artifacts/
       - persist_to_workspace:
           root: .
           paths:
             - cdms
-            - miniconda
-            - pkgs
             - conda-bld
             - build_artifacts
+      - save_cache:
+          paths:
+            - pkgs
+          key: conda-pkgs-{{ arch }}
   test:
     parameters:
       os:
@@ -48,6 +50,8 @@ jobs:
     steps:
       - attach_workspace:
           at: .
+      - restore_cache:
+          key: conda-pkgs-{{ arch }} 
       - run:
           command: |
             export WORK_DIR=`pwd ${CIRCLE_WORKING_DIRECTORY}`
@@ -56,14 +60,23 @@ jobs:
 
             make test
 
-            mkdir -p ${WORK_DIR}/test_artifacts/`make list-config`
+            export TEST_ARTIFACTS=${WORK_DIR}/test_artifacts/`make list-config`
+            
+            mkdir -p ${TEST_ARTIFACTS}
 
-            cp -rf  tests_html/* ${WORK_DIR}/test_artifacts/`make list-config`
+            cp -rf tests_html/* ${TEST_ARTIFACTS}
+
+            # Prevent errors when merging workspaces for upload
+            rm -rf ${WORK_DIR}/cdms
+            rm -rf ${WORK_DIR}/conda-bld
       - persist_to_workspace:
           root: .
           paths:
-            - build_artifacts
             - test_artifacts
+      - save_cache:
+          paths:
+            - pkgs
+          key: conda-pkgs-{{ arch }}
 
   upload:
     machine:

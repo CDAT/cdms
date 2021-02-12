@@ -43,8 +43,6 @@ jobs:
       os:
         type: executor
     executor: << parameters.os >>
-    environment:
-      OS: << parameters.os >>
     steps:
       - attach_workspace:
           at: .

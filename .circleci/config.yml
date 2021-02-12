@@ -37,6 +37,7 @@ jobs:
           paths:
             - cdms
             - conda-bld
+            - miniconda
             - build_artifacts
       - save_cache:
           paths:
@@ -69,6 +70,7 @@ jobs:
             # Prevent errors when merging workspaces for upload
             rm -rf ${WORK_DIR}/cdms
             rm -rf ${WORK_DIR}/conda-bld
+            rm -rf ${WORK_DIR}/miniconda
       - persist_to_workspace:
           root: .
           paths:

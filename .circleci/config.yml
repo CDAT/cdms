@@ -21,28 +21,28 @@ jobs:
           path: cdms
       - run:
           command: |
+            [[ `uname` == "Darwin" ]] && ARCH=osx-64 || ARCH=linux-64
+
             export WORK_DIR=`pwd ${CIRCLE_WORKING_DIRECTORY}`
+            export ARTIFACT_DIR=${WORK_DIR}/build_artifacts/${ARCH}
 
-            pushd cdms
-
+            pushd cdms/
             make build
-
             popd
 
-            mkdir -p ${WORK_DIR}/build_artifacts/
+            mkdir -p ${ARTIFACT_DIR}
 
-            cp ${WORK_DIR}/conda-bld/**/*.tar.bz2 ${WORK_DIR}/build_artifacts/
+            cp ${WORK_DIR}/conda-bld/${ARCH}/*.tar.bz2 ${ARTIFACT_DIR}
+      - run: date +%Y%m > date
       - persist_to_workspace:
           root: .
           paths:
-            - cdms
-            - conda-bld
-            - miniconda
             - build_artifacts
       - save_cache:
           paths:
+            - miniconda
             - pkgs
-          key: conda-pkgs-{{ arch }}
+          key: conda-pkgs-{{ arch }}-{{ checksum "date" }}
   test:
     parameters:
       os:
@@ -51,8 +51,11 @@ jobs:
     steps:
       - attach_workspace:
           at: .
+      - run: date +%Y%m > date
       - restore_cache:
-          key: conda-pkgs-{{ arch }} 
+          key: conda-pkgs-{{ arch }}-{{ checksum "date" }}
+      - checkout:
+          path: cdms
       - run:
           command: |
             export WORK_DIR=`pwd ${CIRCLE_WORKING_DIRECTORY}`
@@ -61,24 +64,16 @@ jobs:
 
             make test
 
-            export TEST_ARTIFACTS=${WORK_DIR}/test_artifacts/`make list-config`
-            
-            mkdir -p ${TEST_ARTIFACTS}
-
-            cp -rf tests_html/* ${TEST_ARTIFACTS}
-
-            # Prevent errors when merging workspaces for upload
-            rm -rf ${WORK_DIR}/cdms
-            rm -rf ${WORK_DIR}/conda-bld
-            rm -rf ${WORK_DIR}/miniconda
-      - persist_to_workspace:
-          root: .
-          paths:
-            - test_artifacts
+            mkdir -p test_results/
+            mv tests_html test_results/`make list-config`
+      - store_artifacts:
+          path: test_results/
+          destination: test_results/
       - save_cache:
           paths:
+            - miniconda
             - pkgs
-          key: conda-pkgs-{{ arch }}
+          key: conda-pkgs-{{ arch }}-{{ checksum "date" }}
 
   upload:
     machine:
@@ -87,7 +82,6 @@ jobs:
       - attach_workspace:
           at: .
       - run: ls -la build_artifacts/
-      - run: ls -la test_artifacts/
 
 workflows:
   cdms:

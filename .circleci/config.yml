@@ -68,7 +68,7 @@ jobs:
 
             cd cdms/
 
-            make test LOCAL_CONDA_CHANNEL=${WORK_DIR}/local_conda_channel
+            make test LOCAL_CHANNEL_DIR=${WORK_DIR}/local_conda_channel
 
             mkdir -p test_results/
             mv tests_html test_results/`make list-config`

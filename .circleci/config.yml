@@ -63,6 +63,7 @@ jobs:
             cp -rf ${WORK_DIR}/build_artifacts ${WORK_DIR}/local_conda_channel
             source ${WORK_DIR}/miniconda/etc/profile.d/conda.sh
             conda activate base
+            conda install -c conda-forge conda-build --yes
             conda index ${WORK_DIR}/local_conda_channel
 
             cd cdms/

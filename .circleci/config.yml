@@ -60,7 +60,7 @@ jobs:
           command: |
             export WORK_DIR=`pwd ${CIRCLE_WORKING_DIRECTORY}`
 
-            cp -ef ${WORK_DIR}/build_artifacts ${WORK_DIR}/local_conda_channel
+            cp -rf ${WORK_DIR}/build_artifacts ${WORK_DIR}/local_conda_channel
             source ${WORK_DIR}/miniconda/etc/profile.d/conda.sh
             conda activate base
             conda index ${WORK_DIR}/local_conda_channel

@@ -67,17 +67,23 @@ list-configs:
 		grep -e '$(if $(PATTERN),$(PATTERN),$(VPATTERN))' | \
 		awk '{ n=split($$1,a,"/");sub(/\.yaml$//,"",a[n]);print a[n] }'
 
+.PHONY: debug
+debug:
+	@echo $(ENVS_DIR)/build
+	@echo $(wildcard $(ENVS_DIR)/build)
+
 .PHONY: build
 build: install-conda prep-feedstock
-ifeq ($(wildcard $(CONDA_DIR)/envs/build),)
+ifeq ($(wildcard $(ENVS_DIR)/build),)
 	$(CONDA_ENV); \
 		$(CONDA_ACTIVATE) base; \
 		$(CONDA_RC); \
 		conda create -n build --yes python=3.8
 endif
 
-	ls $(CI_SUPPORT_DIR)/*.yaml | grep -E "$(if $(PATTERN),$(PATTERN),$(VPATTERN))" \
-		| awk '{ n=split($$1,a,"/");sub(/\.yaml$//,"",a[n]);print a[n] }' \
+	ls $(CI_SUPPORT_DIR)/*.yaml | \
+		grep -e '$(if $(PATTERN),$(PATTERN),$(VPATTERN))' | \
+		awk '{ n=split($$1,a,"/");sub(/\.yaml$//,"",a[n]);print a[n] }' \
 		> $(PWD)/.variant
 
 	CONFIG=`cat $(PWD)/.variant` \
@@ -104,7 +110,7 @@ test:
 
 .PHONY: upload
 upload:
-ifeq ($(wildcard $(CONDA_DIR)/envs/upload),)
+ifeq ($(wildcard $(ENVS_DIR)/upload),)
 	$(CONDA_ENV); \
 		$(CONDA_ACTIVATE) base; \
 		$(CONDA_RC); \

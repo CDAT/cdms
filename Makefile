@@ -76,7 +76,7 @@ ifeq ($(wildcard $(CONDA_DIR)/envs/build),)
 		conda create -n build --yes python=3.8
 endif
 
-	ls $(CI_SUPPORT_DIR)/*.yaml | grep -E $(if $(PATTERN),$(PATTERN),$(VPATTERN)) \
+	ls $(CI_SUPPORT_DIR)/*.yaml | grep -E "$(if $(PATTERN),$(PATTERN),$(VPATTERN))" \
 		| awk '{ n=split($$1,a,"/");sub(/\.yaml$//,"",a[n]);print a[n] }' \
 		> $(PWD)/.variant
 

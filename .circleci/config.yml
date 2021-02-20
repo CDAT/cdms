@@ -87,6 +87,9 @@ jobs:
     steps:
       - attach_workspace:
           at: .
+      - run: date +%Y%m > date
+      - restore_cache:
+          key: conda-pkgs-{{ arch }}-{{ checksum "date" }}
       - checkout:
           path: cdms
       - run:

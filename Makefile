@@ -102,6 +102,22 @@ test:
 		conda info; \
 		python run_tests.py -H -v2 -n 1
 
+.PHONY: upload
+upload:
+ifeq ($(wildcard $(CONDA_DIR)/envs/upload),)
+	$(CONDA_ENV); \
+		$(CONDA_ACTIVATE) base; \
+		$(CONDA_RC); \
+		conda create -n upload --yes python=3.8 anaconda-client
+endif
+
+	$(CONDA_ENV); \
+		$(CONDA_ACTIVATE) base; \
+		$(CONDA_RC); \
+		conda activate upload; \
+		conda info; \
+		anaconda -t $(CONDA_TOKEN) upload -u $(CONDA_USER) $(CONDA_UPLOAD_ARGS) $(LOCAL_CHANNEL_DIR)/**/*.tar.bz2
+
 .PHONY: clean
 clean:
 ifneq ($(wildcard $(WORK_DIR)),)

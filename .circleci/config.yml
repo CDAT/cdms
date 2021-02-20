@@ -80,7 +80,7 @@ jobs:
               CONDA_TEST_PACKAGES="python=<< parameters.py >>"
 
             mkdir -p test_results/
-            VARIANT=`make list-config PATTERN="${ARCH}.*version9.*python<< parameters.py >>"`
+            VARIANT=`make list-configs PATTERN="${ARCH}.*version9.*python<< parameters.py >>"`
             mv tests_html test_results/${VARIANT}
       - store_artifacts:
           path: test_results/

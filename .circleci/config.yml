@@ -23,10 +23,11 @@ jobs:
           path: cdms
       - run:
           command: |
-            [[ `uname` == "Darwin" ]] && ARCH=osx-64 || ARCH=linux-64
+            [[ `uname` == "Darwin" ]] && CONDA_ARCH=osx-64 || CONDA_ARCH=linux-64
+            [[ `uname` == "Darwin" ]] && ARCH=osx_64 || ARCH=linux_64
 
             export WORK_DIR=`pwd ${CIRCLE_WORKING_DIRECTORY}`
-            export ARTIFACT_DIR=${WORK_DIR}/build_artifacts/${ARCH}
+            export ARTIFACT_DIR=${WORK_DIR}/build_artifacts/${CONDA_ARCH}
 
             pushd cdms/
             make build PATTERN="${ARCH}.*version9.*python<< parameters.py >>"
@@ -34,7 +35,7 @@ jobs:
 
             mkdir -p ${ARTIFACT_DIR}
 
-            cp ${WORK_DIR}/conda-bld/${ARCH}/*.tar.bz2 ${ARTIFACT_DIR}
+            cp ${WORK_DIR}/conda-bld/${CONDA_ARCH}/*.tar.bz2 ${ARTIFACT_DIR}
       - run: date +%Y%m > date
       - persist_to_workspace:
           root: .
@@ -62,6 +63,8 @@ jobs:
           path: cdms
       - run:
           command: |
+            [[ `uname` == "Darwin" ]] && ARCH=osx_64 || ARCH=linux_64
+
             export WORK_DIR=`pwd ${CIRCLE_WORKING_DIRECTORY}`
 
             cp -rf ${WORK_DIR}/build_artifacts ${WORK_DIR}/local_conda_channel
@@ -75,7 +78,8 @@ jobs:
             make test LOCAL_CHANNEL_DIR=${WORK_DIR}/local_conda_channel
 
             mkdir -p test_results/
-            mv tests_html test_results/`make list-config`
+            VARIANT=`make list-config PATTERN="${ARCH}.*version9.*python<< parameters.py >>"`
+            mv tests_html test_results/${VARIANT}
       - store_artifacts:
           path: test_results/
           destination: test_results/

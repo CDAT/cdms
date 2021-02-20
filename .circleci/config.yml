@@ -75,7 +75,9 @@ jobs:
 
             cd cdms/
 
-            make test LOCAL_CHANNEL_DIR=${WORK_DIR}/local_conda_channel
+            make test \
+              LOCAL_CHANNEL_DIR=${WORK_DIR}/local_conda_channel \
+              CONDA_TEST_PACKAGES="python=<< parameters.py >>"
 
             mkdir -p test_results/
             VARIANT=`make list-config PATTERN="${ARCH}.*version9.*python<< parameters.py >>"`

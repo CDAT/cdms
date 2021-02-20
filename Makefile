@@ -103,7 +103,7 @@ test:
 		$(CONDA_RC); \
 		conda config --set channel_priority strict; \
 		conda create -n test --yes -c file://$(LOCAL_CHANNEL_DIR) -c conda-forge -c cdat/label/nightly \
-		cdms2 testsrunner cdat_info pytest 'python=<< parameters.py >>' pip; \
+		cdms2 testsrunner cdat_info pytest pip $(CONDA_TEST_PACKAGES); \
 		conda activate test; \
 		conda info; \
 		python run_tests.py -H -v2 -n 1

@@ -49,6 +49,8 @@ jobs:
     parameters:
       os:
         type: executor
+      py:
+        type: string
     executor: << parameters.os >>
     steps:
       - attach_workspace:
@@ -113,14 +115,15 @@ workflows:
             parameters:
               os: [ linux, macos ]
               py: [ "3.6", "3.7", "3.8" ]
-          name: build-<< matrix.os >>
+          name: build-<< matrix.os >>-<< matrix.py >>
       - test:
           matrix:
             parameters:
               os: [ linux, macos ]
-          name: test-<<matrix.os>>
+              py: [ "3.6", "3.7", "3.8" ]
+          name: test-<<matrix.os>>-<< matrix.py >>
           requires:
-            - build-<< matrix.os >>
+            - build-<< matrix.os >>-<< matrix.py >>
       - upload:
           name: upload
           requires:

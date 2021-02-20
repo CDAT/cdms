@@ -13,6 +13,8 @@ jobs:
     parameters:
       os:
         type: executor
+      py:
+        type: string
     executor: << parameters.os >>
     steps:
       - attach_workspace:
@@ -27,7 +29,7 @@ jobs:
             export ARTIFACT_DIR=${WORK_DIR}/build_artifacts/${ARCH}
 
             pushd cdms/
-            make build
+            make build PATTERN="${ARCH}.*version9.*python<< parameters.py >>"
             popd
 
             mkdir -p ${ARTIFACT_DIR}
@@ -110,6 +112,7 @@ workflows:
           matrix:
             parameters:
               os: [ linux, macos ]
+              py: [ "3.6", "3.7", "3.8" ]
           name: build-<< matrix.os >>
       - test:
           matrix:

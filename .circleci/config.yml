@@ -89,14 +89,14 @@ jobs:
           at: .
       - checkout:
           path: cdms
-      - run:
-          command: |
-            export WORK_DIR=`pwd ${CIRCLE_WORKING_DIRECTORY}`
+      - run: |
+        command:
+          export WORK_DIR=`pwd ${CIRCLE_WORKING_DIRECTORY}`
 
-            cd cdms/
+          cd cdms/
 
-            make upload CONDA_TOKEN=${CONDA_TEST_TOKEN} CONDA_USER=${CONDA_USER} \
-              CONDA_UPLOAD_ARGS="--force --label nightly"
+          make upload CONDA_TOKEN=${CONDA_TEST_TOKEN} CONDA_USER=${CONDA_USER} \
+            CONDA_UPLOAD_ARGS="--force --label nightly"
 
 workflows:
   cdms:

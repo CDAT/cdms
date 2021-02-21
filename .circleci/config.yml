@@ -82,27 +82,27 @@ jobs:
               CHANNELS="-c conda-forge" \
               PACKAGES='python=3.8'
 
-            if [[ ! -e "${WORK_DIR}/test_data" ]]
+            if [[ ! -e "${WORK_DIR}/sample_data" ]]
             then
-              mkdir -p "${WORK_DIR}/test_data"
-              mkdir -p "${WORK_DIR}/envs/test/share/cdat/sample_data"
+              mkdir -p "${WORK_DIR}/sample_data"
+              mkdir -p "${WORK_DIR}/envs/test/share/cdat"
             fi
 
-            ln -sf "${WORK_DIR}/test_data" "${WORK_DIR}/envs/test/share/cdat/sample_data"
+            ln -sf "${WORK_DIR}/sample_data" "${WORK_DIR}/envs/test/share/cdat"
 
             make test \
               LOCAL_CHANNEL_DIR=${WORK_DIR}/local_conda_channel \
               CONDA_TEST_PACKAGES="python=<< parameters.py >>"
 
-            mkdir -p test_results/
+            mkdir -p "${WORK_DIR}/test_results/"
             VARIANT=`make list-configs PATTERN="${ARCH}.*version9.*python<< parameters.py >>"`
-            mv tests_html test_results/${VARIANT}
+            mv "${WORK_DIR}/cdms/tests_html" "${WORK_DIR}/test_results/${VARIANT}"
       - store_artifacts:
           path: test_results/
           destination: test_results/
       - save_cache:
           paths:
-            - test_data
+            - sample_data
           key: test-data
       - save_cache:
           paths:

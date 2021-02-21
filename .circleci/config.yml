@@ -75,6 +75,8 @@ jobs:
             conda install -c conda-forge conda-build --yes
             conda index ${WORK_DIR}/local_conda_channel
 
+            cd cdms/
+
             make create-conda-env \
               ENV=test \
               CHANNELS="-c conda-forge" \
@@ -86,8 +88,6 @@ jobs:
             fi
 
             ln -sf "${WORK_DIR}/test_data" "${WORK_DIR}/envs/test/share/cdat/sample_data"
-
-            cd cdms/
 
             make test \
               LOCAL_CHANNEL_DIR=${WORK_DIR}/local_conda_channel \

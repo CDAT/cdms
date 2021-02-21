@@ -85,6 +85,7 @@ jobs:
             if [[ ! -e "${WORK_DIR}/test_data" ]]
             then
               mkdir -p "${WORK_DIR}/test_data"
+              mkdir -p "${WORK_DIR}/envs/test/share/cdat/sample_data"
             fi
 
             ln -sf "${WORK_DIR}/test_data" "${WORK_DIR}/envs/test/share/cdat/sample_data"

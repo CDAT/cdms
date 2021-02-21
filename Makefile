@@ -62,25 +62,25 @@ endif
 	python build_files/fix_conda_recipe.py $(FEEDSTOCK_DIR)/recipe/meta.yaml $(SRC_DIR)
 
 .PHONY: list-configs
-list-configs:
+list-configs: prep-feedstock
 	@ls $(CI_SUPPORT_DIR)/*.yaml | \
 		grep -e '$(if $(PATTERN),$(PATTERN),$(VPATTERN))' | \
 		awk '{ n=split($$1,a,"/");sub(/\.yaml$//,"",a[n]);print a[n] }'
 
-.PHONY: debug
-debug:
-	@echo $(ENVS_DIR)/build
-	@echo $(wildcard $(ENVS_DIR)/build)
+.PHONY: create-conda-env
+create-conda-env:
+	[[ ! -e "$(ENVS_DIR)/$(ENV)" ]] && \
+		$(CONDA_ENV) && \
+		$(CONDA_ACTIVATE) base && \
+		$(CONDA_RC) && \
+		conda create -n $(ENV) --yes $(CHANNELS) $(PACKAGES) && \
+		conda activate $(ENV) && \
+		conda info || true
 
 .PHONY: build
-build: install-conda prep-feedstock
-ifeq ($(wildcard $(ENVS_DIR)/build),)
-	$(CONDA_ENV); \
-		$(CONDA_ACTIVATE) base; \
-		$(CONDA_RC); \
-		conda create -n build --yes python=3.8
-endif
-
+build: ENV := build
+build: PACKAGES := 'python=3.8'
+build: install-conda prep-feedstock create-conda-env
 	ls $(CI_SUPPORT_DIR)/*.yaml | \
 		grep -e '$(if $(PATTERN),$(PATTERN),$(VPATTERN))' | \
 		awk '{ n=split($$1,a,"/");sub(/\.yaml$//,"",a[n]);print a[n] }' \
@@ -97,26 +97,23 @@ endif
 				 $(SCRIPTS_DIR)/build_steps.sh | tee $(WORK_DIR)/`cat $(PWD)/.variant`
 
 .PHONY: test
-test:
+test: ENV := test
+test: PACAKGES := $(CONDA_TEST_PACKAGES)
+test: CHANNELS := -c file://$(LOCAL_CHANNEL_DIR) -c conda-forge -c cdat/label/nightly
+test: create-conda-env
 	$(CONDA_ENV); \
 		$(CONDA_ACTIVATE) base; \
 		$(CONDA_RC); \
 		conda config --set channel_priority strict; \
-		conda create -n test --yes -c file://$(LOCAL_CHANNEL_DIR) -c conda-forge -c cdat/label/nightly \
-		cdms2 testsrunner cdat_info pytest pip $(CONDA_TEST_PACKAGES); \
-		conda activate test; \
+		conda activate $(ENV); \
+		conda install --yes $(CHANNELS) cdms2 testsrunner cdat_info pytest pip; \
 		conda info; \
 		python run_tests.py -H -v2 -n 1
 
 .PHONY: upload
-upload:
-ifeq ($(wildcard $(ENVS_DIR)/upload),)
-	$(CONDA_ENV); \
-		$(CONDA_ACTIVATE) base; \
-		$(CONDA_RC); \
-		conda create -n upload --yes python=3.8 anaconda-client
-endif
-
+upload: ENV := upload
+upload: PACKAGES := 'python=3.8' anaconda-client
+upload: create-conda-env
 	$(CONDA_ENV); \
 		$(CONDA_ACTIVATE) base; \
 		$(CONDA_RC); \

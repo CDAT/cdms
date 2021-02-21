@@ -59,6 +59,8 @@ jobs:
       - run: date +%Y%m > date
       - restore_cache:
           key: conda-pkgs-{{ arch }}-{{ checksum "date" }}
+      - restore_cache:
+          key: test-data
       - checkout:
           path: cdms
       - run:
@@ -73,6 +75,18 @@ jobs:
             conda install -c conda-forge conda-build --yes
             conda index ${WORK_DIR}/local_conda_channel
 
+            make create-conda-env \
+              ENV=test \
+              CHANNELS="-c conda-forge" \
+              PACKAGES='python=3.8'
+
+            if [[ ! -e "${WORK_DIR}/test_data" ]]
+            then
+              mkdir -p "${WORK_DIR}/test_data"
+            fi
+
+            ln -sf "${WORK_DIR}/test_data" "${WORK_DIR}/envs/test/share/cdat/sample_data"
+
             cd cdms/
 
             make test \
@@ -85,6 +99,10 @@ jobs:
       - store_artifacts:
           path: test_results/
           destination: test_results/
+      - save_cache:
+          paths:
+            - test_data
+          key: test-data
       - save_cache:
           paths:
             - miniconda
@@ -108,8 +126,8 @@ jobs:
 
             cd cdms/
 
-            make upload CONDA_TOKEN=${CONDA_TEST_TOKEN} \
-              CONDA_USER=${CONDA_USER} \
+            make upload CONDA_TOKEN=${CONDA_UPLOAD_TOKEN} \
+              CONDA_USER=cdat \
               CONDA_UPLOAD_ARGS="--force --label nightly" \
               LOCAL_CHANNEL_DIR=${WORK_DIR}/build_artifacts
 
@@ -134,3 +152,6 @@ workflows:
           name: upload
           requires:
             - test
+          filters:
+            branches:
+              only: master

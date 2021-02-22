@@ -59,8 +59,6 @@ jobs:
       - run: date +%Y%m > date
       - restore_cache:
           key: conda-pkgs-{{ arch }}-{{ checksum "date" }}
-      - restore_cache:
-          key: test-data
       - checkout:
           path: cdms
       - run:
@@ -95,13 +93,11 @@ jobs:
               CONDA_TEST_PACKAGES="python=<< parameters.py >>" \
               TEST_OUTPUT_DIR="${WORK_DIR}/test_results" 
 
+            ls -la "${WORK_DIR}/sample_data"
+
       - store_artifacts:
           path: test_results/
           destination: test_results/
-      - save_cache:
-          paths:
-            - sample_data
-          key: test-data
       - save_cache:
           paths:
             - miniconda

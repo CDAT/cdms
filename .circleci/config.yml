@@ -52,6 +52,8 @@ jobs:
         type: executor
       py:
         type: string
+      libnetcdf:
+        type: string
     executor: << parameters.os >>
     steps:
       - attach_workspace:
@@ -90,7 +92,7 @@ jobs:
 
             make test \
               LOCAL_CHANNEL_DIR=${WORK_DIR}/local_conda_channel \
-              CONDA_TEST_PACKAGES="python=<< parameters.py >>" \
+              CONDA_TEST_PACKAGES="python=<< parameters.py >> << parameters.libnetcdf >>" \
               TEST_OUTPUT_DIR="${WORK_DIR}/test_results" 
 
             ls -la "${WORK_DIR}/sample_data"
@@ -140,7 +142,8 @@ workflows:
             parameters:
               os: [ linux, macos ]
               py: [ "3.6", "3.7", "3.8" ]
-          name: test-<<matrix.os>>-<< matrix.py >>
+              libnetcdf: [ "nompi", "mpich", "openmpi" ]
+          name: test-<<matrix.os>>-<< matrix.py >>-<< matrix.libnetcdf >>
           requires:
             - build-<< matrix.os >>-<< matrix.py >>
       - upload:

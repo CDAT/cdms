@@ -121,8 +121,8 @@ jobs:
 
             cd cdms/
 
-            make upload CONDA_TOKEN=${CONDA_UPLOAD_TOKEN} \
-              CONDA_USER=cdat \
+            make upload CONDA_TOKEN=${CONDA_TEST_TOKEN} \
+              CONDA_USER=${CONDA_USER} \
               CONDA_UPLOAD_ARGS="--force --label nightly" \
               LOCAL_CHANNEL_DIR=${WORK_DIR}/build_artifacts
 
@@ -147,6 +147,3 @@ workflows:
           name: upload
           requires:
             - test
-          filters:
-            branches:
-              only: master

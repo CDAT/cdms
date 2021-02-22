@@ -80,7 +80,7 @@ jobs:
             make create-conda-env \
               ENV=test \
               CHANNELS="-c conda-forge" \
-              PACKAGES='python=3.8'
+              PACKAGES="python=<< parameters.py >>"
 
             if [[ ! -e "${WORK_DIR}/sample_data" ]]
             then

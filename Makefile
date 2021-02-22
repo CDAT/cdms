@@ -99,7 +99,6 @@ build: install-conda prep-feedstock create-conda-env
 
 .PHONY: test
 test: ENV := test
-test: PACAKGES := $(CONDA_TEST_PACKAGES)
 test: CHANNELS := -c file://$(LOCAL_CHANNEL_DIR) -c conda-forge -c cdat/label/nightly
 test: create-conda-env
 	$(CONDA_ENV); \
@@ -107,7 +106,8 @@ test: create-conda-env
 		$(CONDA_RC); \
 		conda config --set channel_priority strict; \
 		conda activate $(ENV); \
-		conda install --yes $(CHANNELS) cdms2 testsrunner cdat_info pytest pip; \
+		conda install --yes $(CHANNELS) cdms2 testsrunner cdat_info pytest pip \
+		$(CONDA_TEST_PACKAGES); \
 		conda info; \
 		python run_tests.py -H -v2 -n 1
 

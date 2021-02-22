@@ -92,7 +92,7 @@ jobs:
 
             make test \
               LOCAL_CHANNEL_DIR=${WORK_DIR}/local_conda_channel \
-              CONDA_TEST_PACKAGES="python=<< parameters.py >> << parameters.libnetcdf >>" \
+              CONDA_TEST_PACKAGES="<< parameters.libnetcdf >>" \
               TEST_OUTPUT_DIR="${WORK_DIR}/test_results" 
 
             ls -la "${WORK_DIR}/sample_data"

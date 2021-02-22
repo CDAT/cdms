@@ -20,6 +20,7 @@ LOCAL_CHANNEL_DIR := $(if $(LOCAL_CHANNEL_DIR),$(LOCAL_CHANNEL_DIR),$(WORK_DIR)/
 FEEDSTOCK_DIR := $(WORK_DIR)/feedstock
 SCRIPTS_DIR := $(FEEDSTOCK_DIR)/.scripts
 CI_SUPPORT_DIR := $(FEEDSTOCK_DIR)/.ci_support
+TEST_OUTPUT_DIR := $(if $(TEST_OUTPUT_DIR),$(TEST_OUTPUT_DIR),$(PWD))
 
 CONDARC := $(WORK_DIR)/condarc
 CONDA_HOOKS = eval "$$($(CONDA_DIR)/bin/conda 'shell.bash' 'hook')"
@@ -109,6 +110,13 @@ test: create-conda-env
 		conda install --yes $(CHANNELS) cdms2 testsrunner cdat_info pytest pip; \
 		conda info; \
 		python run_tests.py -H -v2 -n 1
+
+	ls $(CI_SUPPORT_DIR)/*.yaml | \
+		grep -e '$(if $(PATTERN),$(PATTERN),$(VPATTERN))' | \
+		awk '{ n=split($$1,a,"/");sub(/\.yaml$//,"",a[n]);print a[n] }' \
+		> $(PWD)/.variant
+
+	cp -rf $(PWD)/tests_html $(TEST_OUTPUT_DIR)/`cat $(PWD)/.variant`
 
 .PHONY: upload
 upload: ENV := upload

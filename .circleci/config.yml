@@ -92,11 +92,9 @@ jobs:
 
             make test \
               LOCAL_CHANNEL_DIR=${WORK_DIR}/local_conda_channel \
-              CONDA_TEST_PACKAGES="python=<< parameters.py >>"
+              CONDA_TEST_PACKAGES="python=<< parameters.py >>" \
+              TEST_OUTPUT_DIR="${WORK_DIR}/test_results" 
 
-            mkdir -p "${WORK_DIR}/test_results/"
-            VARIANT=`make list-configs PATTERN="${ARCH}.*version9.*python<< parameters.py >>"`
-            mv "${WORK_DIR}/cdms/tests_html" "${WORK_DIR}/test_results/${VARIANT}"
       - store_artifacts:
           path: test_results/
           destination: test_results/

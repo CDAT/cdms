@@ -118,7 +118,7 @@ clean-docs:
 .PHONY: test
 test: ENV := test
 test: CHANNELS := -c file://$(LOCAL_CHANNEL_DIR) -c conda-forge -c cdat/label/nightly
-test: create-conda-env
+test: prep-feedstock create-conda-env
 	$(CONDA_ENV); \
 		$(CONDA_ACTIVATE) base; \
 		$(CONDA_RC); \

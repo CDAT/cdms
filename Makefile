@@ -97,6 +97,24 @@ build: install-conda prep-feedstock create-conda-env
 				 EXTRA_CB_OPTIONS='--croot $(LOCAL_CHANNEL_DIR)' \
 				 $(SCRIPTS_DIR)/build_steps.sh | tee $(WORK_DIR)/`cat $(PWD)/.variant`
 
+.PHONY: build-docs
+build-docs: ENV := docs
+build-docs: CHANNELS := -c file://$(LOCAL_CHANNEL_DIR) -c conda-forge
+build-docs: PACKAGES := cdms2 mock pillow sphinx recommonmark \
+	numpydoc
+build-docs: create-conda-env
+	$(CONDA_ENV); \
+		$(CONDA_ACTIVATE) docs; \
+		$(CONDA_RC); \
+		conda info; \
+		cd docs/source; \
+		sphinx-build -T -E -d _build/doctrees-readthedocs -D \
+		language=en . _build/html
+
+.PHONY: clean-docs
+clean-docs:
+	rm -rf $(ENVS_DIR)/docs
+
 .PHONY: test
 test: ENV := test
 test: CHANNELS := -c file://$(LOCAL_CHANNEL_DIR) -c conda-forge -c cdat/label/nightly

@@ -20,7 +20,7 @@ LOCAL_CHANNEL_DIR := $(if $(LOCAL_CHANNEL_DIR),$(LOCAL_CHANNEL_DIR),$(WORK_DIR)/
 FEEDSTOCK_DIR := $(WORK_DIR)/feedstock
 SCRIPTS_DIR := $(FEEDSTOCK_DIR)/.scripts
 CI_SUPPORT_DIR := $(FEEDSTOCK_DIR)/.ci_support
-TEST_OUTPUT_DIR := $(if $(TEST_OUTPUT_DIR),$(TEST_OUTPUT_DIR),$(PWD))
+TEST_OUTPUT_DIR := $(if $(TEST_OUTPUT_DIR),$(TEST_OUTPUT_DIR),$(PWD)/test_output)
 
 CONDARC := $(WORK_DIR)/condarc
 CONDA_HOOKS = eval "$$($(CONDA_DIR)/bin/conda 'shell.bash' 'hook')"
@@ -118,7 +118,9 @@ clean-docs:
 .PHONY: test
 test: ENV := test
 test: CHANNELS := -c file://$(LOCAL_CHANNEL_DIR) -c conda-forge -c cdat/label/nightly
-test: prep-feedstock create-conda-env
+test: create-conda-env
+	[[ ! -e "$(TEST_OUTPUT_DIR)" ]] && mkdir -p $(TEST_OUTPUT_DIR) || true
+
 	$(CONDA_ENV); \
 		$(CONDA_ACTIVATE) base; \
 		$(CONDA_RC); \
@@ -130,12 +132,7 @@ test: prep-feedstock create-conda-env
 		conda list --explicit > $(TEST_OUTPUT_DIR)/environment.txt; \
 		python run_tests.py -H -v2 -n 1
 
-	ls $(CI_SUPPORT_DIR)/*.yaml | \
-		grep -e '$(if $(PATTERN),$(PATTERN),$(VPATTERN))' | \
-		awk '{ n=split($$1,a,"/");sub(/\.yaml$//,"",a[n]);print a[n] }' \
-		> $(PWD)/.variant
-
-	cp -rf $(PWD)/tests_html $(TEST_OUTPUT_DIR)/`cat $(PWD)/.variant`
+	cp -rf $(PWD)/tests_html $(TEST_OUTPUT_DIR)/
 
 .PHONY: upload
 upload: ENV := upload

@@ -90,8 +90,6 @@ jobs:
 
             ln -sf "${WORK_DIR}/sample_data" "${WORK_DIR}/envs/test/share/cdat"
 
-            mkdir -p "{WORK_DIR}/test_results"
-
             make test \
               LOCAL_CHANNEL_DIR=${WORK_DIR}/local_conda_channel \
               CONDA_TEST_PACKAGES="libnetcdf=*=*<< parameters.libnetcdf >>*" \

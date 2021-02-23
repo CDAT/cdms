@@ -10,6 +10,7 @@
 ### Install
 ```bash
 conda create -n cdms2 -c conda-forge cdms2
+conda activate cdms2
 ```
 
 ### List build variants

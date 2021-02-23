@@ -1,55 +1,42 @@
 # CDMS2
 
-### Builds
 [![CircleCI](https://circleci.com/gh/CDAT/cdms.svg?style=svg)](https://circleci.com/gh/CDAT/cdms)
-[![Coverage Status](https://coveralls.io/repos/github/CDAT/cdms/badge.svg)](https://coveralls.io/github/CDAT/cdms)
-![platforms](http://img.shields.io/badge/platforms-linux%20|%20osx-lightgrey.svg)
 
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/cdms2/badges/version.svg)](https://anaconda.org/conda-forge/cdms2)
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/cdms2/badges/latest_release_relative_date.svg)](https://anaconda.org/conda-forge/cdms2)
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/cdms2/badges/downloads.svg)](https://anaconda.org/conda-forge/cdms2)
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/cdms2/badges/platforms.svg)](https://anaconda.org/conda-forge/cdms2)
 
-### Anaconda
-[![Anaconda-Server Badge](https://anaconda.org/uvcdat/cdms2/badges/version.svg)](https://anaconda.org/uvcdat/cdms2)
-[![Anaconda-Server Badge](https://anaconda.org/uvcdat/cdms2/badges/downloads.svg)](https://anaconda.org/uvcdat/cdms2)
-[![Anaconda-Server Badge](https://anaconda.org/uvcdat/cdms2/badges/installer/conda.svg)](https://conda.anaconda.org/uvcdat)
-
-# Development
-
-## Building conda package
-
+### Install
 ```bash
-make dev-build
+conda create -n cdms2 -c conda-forge cdms2
 ```
 
-### Build in docker container
+### List build variants
 ```bash
-make dev-docker
+make list-configs
 ```
 
-## Makefile targets
-
-- **build-docs**: Creates environment and builds docs.
-- **conda-info**: Runs `conda info` in the test environment.
-- **conda-list**: Runs `conda list` in the test environment.
-- **dev-docker**: Builds dev environment in a docker container.
-- **dev-docker-run**: Will run docker container.
-- **dev-environment**: Will create dev environment using local conda.
-- **dev-install**: Builds and installs CDMS2 in dev environment. Run this after making any code changes.
-- **setup-build**: Clones CDAT/conda-recipes into workdir.
-- **setup-tests**: Creates test environment using local conda.
-- **conda-rerender**: Rerenders conda recipe using conda smithy.
-- **conda-build**: Builds conda recipe.
-- **conda-upload**: Uploads conda build artifacts.
-- **conda-dump-env**: Dumps test environment using `conda list --explicit`, this generates a file with the specific files installed.
-- **run-tests**: Runs units tests in test environment.
-- **run-coveralls**: Runs coverage in test environment.
-
-## Bumping version
-
-We're using [bump2version](https://github.com/c4urself/bump2version) to manage versioning.
-
-This will update the following files:
-- setup.py
-- docs/source/conf.py
+### Build package
+This will install miniconda in a temporary directory, clone the conda-forge feedstock and build the package.
 
 ```bash
-bumpversion <major,minor,patch>
+make
+```
+
+### Build a specific variant
+You can specifiy the exact variant name returned by `make list-configs` or using a regex pattern.
+
+```bash
+make PATTERN="osx.*version9.*python3.6"
+```
+
+### Test package
+```bash
+make test
+```
+
+### Clean a build
+```bash
+make clean
 ```

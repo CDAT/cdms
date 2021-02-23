@@ -127,6 +127,7 @@ test: create-conda-env
 		conda install --yes $(CHANNELS) cdms2 testsrunner cdat_info pytest pip \
 		$(CONDA_TEST_PACKAGES); \
 		conda info; \
+		conda list --explicit > $(TEST_OUTPUT_DIR)/environment.txt; \
 		python run_tests.py -H -v2 -n 1
 
 	ls $(CI_SUPPORT_DIR)/*.yaml | \

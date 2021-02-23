@@ -150,3 +150,6 @@ workflows:
           name: upload
           requires:
             - test
+          filters:
+            branches:
+              only: master

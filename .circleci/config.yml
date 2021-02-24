@@ -1,171 +1,155 @@
 version: 2.1
 
-aliases:
-  - &setup_env
-    name: setup_env
-    command: |
-       if [[ `uname` == "Darwin" ]]; then
-          export PROJECT_DIR=/Users/distiller/project/workdir/macos
-       else
-          export PROJECT_DIR=/home/circleci/project/workdir/linux
-       fi
-       echo "export WORKDIR=$PROJECT_DIR/$PY_VER" >> $BASH_ENV
-       cat $BASH_ENV
-       source $BASH_ENV
-       mkdir -p $WORKDIR
-
-  - &setup_miniconda
-    name: setup_miniconda
-    command: |
-       source $BASH_ENV
-       git clone https://github.com/CDAT/cdat.git $WORKDIR/cdat
-       # install_miniconda.py installs miniconda3 under $WORKDIR/miniconda
-       python $WORKDIR/cdat/scripts/install_miniconda.py -w $WORKDIR -p 'py3'
-
-
-  - &conda_rerender
-    name: conda_rerender
-    command: |
-       source $BASH_ENV
-       source $WORKDIR/miniconda/etc/profile.d/conda.sh
-       conda activate base
-       make conda-rerender workdir=$WORKDIR conda_build_env=base branch=$CIRCLE_BRANCH
-
-  - &conda_build
-    name: conda_build
-    command: |
-       source $BASH_ENV
-       source $WORKDIR/miniconda/etc/profile.d/conda.sh
-       conda activate base
-       os=`uname`
-       artifacts_dir="artifacts/artifacts.${os}.py_${PY_VER}"
-       make conda-build workdir=$WORKDIR conda_build_env=base artifact_dir=$PWD/$artifacts_dir build_version=$PY_VER
-
-  - &setup_run_tests
-    name: setup_run_tests
-    command: |
-       source $BASH_ENV
-       source $WORKDIR/miniconda/etc/profile.d/conda.sh
-       conda activate base
-       export CONDA_PY_VER="python=$PY_VER"
-       export LIBNETCDF_VER="libnetcdf=*=${LIBNETCDF}_*"
-
-       echo "make setup-tests conda=$WORKDIR/miniconda/bin/conda extra_pkgs=\"$CONDA_PY_VER $LIBNETCDF_VER $COVERAGE_PKGS\""
-       make setup-tests extra_pkgs="$CONDA_PY_VER $LIBNETCDF_VER $COVERAGE_PKGS"
-
-       make conda-dump-env artifact_dir=$PWD/spec_artifacts conda_env_filename=$CIRCLE_JOB
-
-  - &run_tests
-    name: run_tests
-    command: |
-       source $BASH_ENV
-       source $WORKDIR/miniconda/etc/profile.d/conda.sh
-       make run-tests workdir=$WORKDIR
-    no_output_timeout: 10m
-
-  - &conda_upload
-    name: conda_upload
-    command: |
-       source $BASH_ENV
-       source $WORKDIR/miniconda/etc/profile.d/conda.sh
-       conda activate base
-       UPLOAD_OPTIONS="conda_upload_token=$CONDA_UPLOAD_TOKEN"
-       make conda-upload workdir=$WORKDIR $UPLOAD_OPTIONS artifact_dir="$PWD/artifacts/*/"
-
 executors:
-   linux:
-      machine:
-         image: circleci/classic:latest
-   macos:
-      macos:
-         xcode: "11.4.0"
+  linux:
+    machine:
+      image: circleci/classic:latest
+  macos:
+    macos:
+      xcode: "11.4.0"
 
 jobs:
-   build:
-      parameters:
-         os:
-            type: executor
-         py_ver: 
-            type: string
-      executor: << parameters.os >>
-      environment:
-         PY_VER: << parameters.py_ver >>
-      steps:
-         - checkout
-         - attach_workspace:
-              at: .
-         - run: *setup_env
-         - run: *setup_miniconda
-         - run: *conda_rerender
-         - run: *conda_build
-         - persist_to_workspace:
-              root: .
-              paths:
-                 - workdir
-                 - artifacts
+  build:
+    parameters:
+      os:
+        type: executor
+      py:
+        type: string
+    executor: << parameters.os >>
+    steps:
+      - attach_workspace:
+          at: .
+      - checkout:
+          path: cdms
+      - run:
+          command: |
+            [[ `uname` == "Darwin" ]] && CONDA_ARCH=osx-64 || CONDA_ARCH=linux-64
+            [[ `uname` == "Darwin" ]] && ARCH=osx_64 || ARCH=linux_64
 
-   test:
-      parameters:
-         os:
-            type: executor
-         py_ver: 
-            type: string
-         libnetcdf: 
-            type: string
-      executor: << parameters.os >>
-      environment:
-         PY_VER: << parameters.py_ver >>
-         LIBNETCDF: << parameters.libnetcdf >>
-      steps:
-         - checkout
-         - attach_workspace:
-              at: .
-         - run: echo "LIBNETCDF=$LIBNETCDF" >> $BASH_ENV
-         - run: *setup_env
-         - run: *setup_run_tests
-         - run: *run_tests
-         - store_artifacts:
-              path: tests_html
-              destination: tests_html
-         - store_artifacts:
-              path: spec_artifacts
-              destination: spec_artifacts
+            export WORK_DIR=`pwd ${CIRCLE_WORKING_DIRECTORY}`
+            export ARTIFACT_DIR=${WORK_DIR}/build_artifacts/${CONDA_ARCH}
 
-   upload:
-      machine:
-         image: circleci/classic:latest
-      environment:
-         PY_VER: "3.7"
-      steps:
-         - checkout
-         - attach_workspace:
-              at: .
-         - run: *setup_env
-         - run: *conda_upload
+            pushd cdms/
+            make build PATTERN="${ARCH}.*version9.*python<< parameters.py >>"
+            popd
+
+            mkdir -p ${ARTIFACT_DIR}
+
+            cp ${WORK_DIR}/conda-bld/${CONDA_ARCH}/*.tar.bz2 ${ARTIFACT_DIR}
+      - run: date +%Y%m > date
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build_artifacts
+      - save_cache:
+          paths:
+            - miniconda
+            - pkgs
+          key: conda-pkgs-{{ arch }}-{{ checksum "date" }}
+  test:
+    parameters:
+      os:
+        type: executor
+      py:
+        type: string
+      libnetcdf:
+        type: string
+    executor: << parameters.os >>
+    steps:
+      - attach_workspace:
+          at: .
+      - run: date +%Y%m > date
+      - restore_cache:
+          key: conda-pkgs-{{ arch }}-{{ checksum "date" }}
+      - checkout:
+          path: cdms
+      - run:
+          command: |
+            [[ `uname` == "Darwin" ]] && ARCH=osx_64 || ARCH=linux_64
+
+            export WORK_DIR=`pwd ${CIRCLE_WORKING_DIRECTORY}`
+
+            cp -rf ${WORK_DIR}/build_artifacts ${WORK_DIR}/local_conda_channel
+            source ${WORK_DIR}/miniconda/etc/profile.d/conda.sh
+            conda activate base
+            conda install -c conda-forge conda-build --yes
+            conda index ${WORK_DIR}/local_conda_channel
+
+            cd cdms/
+
+            make create-conda-env \
+              ENV=test \
+              CHANNELS="-c conda-forge" \
+              PACKAGES="python=<< parameters.py >>"
+
+            if [[ ! -e "${WORK_DIR}/sample_data" ]]
+            then
+              mkdir -p "${WORK_DIR}/sample_data"
+              mkdir -p "${WORK_DIR}/envs/test/share/cdat"
+            fi
+
+            ln -sf "${WORK_DIR}/sample_data" "${WORK_DIR}/envs/test/share/cdat"
+
+            make test \
+              LOCAL_CHANNEL_DIR=${WORK_DIR}/local_conda_channel \
+              CONDA_TEST_PACKAGES="libnetcdf=*=*<< parameters.libnetcdf >>*" \
+              TEST_OUTPUT_DIR="${WORK_DIR}/test_results" 
+
+            ls -la "${WORK_DIR}/sample_data"
+
+      - store_artifacts:
+          path: test_results/
+          destination: test_results/
+      - save_cache:
+          paths:
+            - miniconda
+            - pkgs
+          key: conda-pkgs-{{ arch }}-{{ checksum "date" }}
+
+  upload:
+    machine:
+      image: circleci/classic:latest
+    steps:
+      - attach_workspace:
+          at: .
+      - run: date +%Y%m > date
+      - restore_cache:
+          key: conda-pkgs-{{ arch }}-{{ checksum "date" }}
+      - checkout:
+          path: cdms
+      - run:
+          command: |
+            export WORK_DIR=`pwd ${CIRCLE_WORKING_DIRECTORY}`
+
+            cd cdms/
+
+            make upload CONDA_TOKEN=${CONDA_TEST_TOKEN} \
+              CONDA_USER=${CONDA_USER} \
+              CONDA_UPLOAD_ARGS="--force --label nightly" \
+              LOCAL_CHANNEL_DIR=${WORK_DIR}/build_artifacts
 
 workflows:
-   cdms:
-      jobs:
-         - build:
-              matrix:
-                 parameters:
-                    os: [ linux, macos ]
-                    py_ver: [ "3.6", "3.7", "3.8" ]
-              name: build-<< matrix.os >>-<< matrix.py_ver >>
-
-         - test:
-              matrix:
-                 parameters:
-                    os: [ linux, macos ]
-                    py_ver: [ "3.6", "3.7", "3.8" ]
-                    libnetcdf: [ "nompi", "mpi_mpich", "mpi_openmpi" ]
-              name: test-<< matrix.os >>-<< matrix.py_ver >>-<< matrix.libnetcdf >>
-              requires:
-                 - build-<< matrix.os >>-<< matrix.py_ver >>
-
-         - upload:
-              requires:
-                 - test
-              filters:
-                 branches:
-                    only: master
+  cdms:
+    jobs:
+      - build:
+          matrix:
+            parameters:
+              os: [ linux, macos ]
+              py: [ "3.6", "3.7", "3.8" ]
+          name: build-<< matrix.os >>-<< matrix.py >>
+      - test:
+          matrix:
+            parameters:
+              os: [ linux, macos ]
+              py: [ "3.6", "3.7", "3.8" ]
+              libnetcdf: [ "nompi", "mpich", "openmpi" ]
+          name: test-<<matrix.os>>-<< matrix.py >>-<< matrix.libnetcdf >>
+          requires:
+            - build-<< matrix.os >>-<< matrix.py >>
+      - upload:
+          name: upload
+          requires:
+            - test
+          filters:
+            branches:
+              only: master

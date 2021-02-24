@@ -137,3 +137,5 @@ try:
     from . import dask_protocol  # noqa
 except BaseException:
     pass
+
+from .Cdunif import CdunifError

@@ -97,6 +97,14 @@ build: install-conda prep-feedstock create-conda-env
 				 EXTRA_CB_OPTIONS='--croot $(LOCAL_CHANNEL_DIR)' \
 				 $(SCRIPTS_DIR)/build_steps.sh | tee $(WORK_DIR)/`cat $(PWD)/.variant`
 
+.PHONY: build-env
+build-env:
+	$(CONDA_ENV); \
+		$(CONDA_ACTIVATE) base; \
+		$(CONDA_RC); \
+		conda activate build; \
+		bash
+
 .PHONY: build-docs
 build-docs: ENV := docs
 build-docs: CHANNELS := -c file://$(LOCAL_CHANNEL_DIR) -c conda-forge
@@ -118,6 +126,7 @@ clean-docs:
 .PHONY: test
 test: ENV := test
 test: CHANNELS := -c file://$(LOCAL_CHANNEL_DIR) -c conda-forge -c cdat/label/nightly
+test: CONDA_TEST_PACKAGES += nco
 test: create-conda-env
 	[[ ! -e "$(TEST_OUTPUT_DIR)" ]] && mkdir -p $(TEST_OUTPUT_DIR) || true
 
@@ -133,6 +142,18 @@ test: create-conda-env
 		python run_tests.py -H -v2 -n 1
 
 	cp -rf $(PWD)/tests_html $(TEST_OUTPUT_DIR)/
+
+.PHONY: test-env
+test-env:
+	$(CONDA_ENV); \
+		$(CONDA_ACTIVATE) base; \
+		$(CONDA_RC); \
+		conda activate test; \
+		bash
+
+.PHONY: test-clean
+test-clean:
+	rm -rf $(ENVS_DIR)/test
 
 .PHONY: upload
 upload: ENV := upload

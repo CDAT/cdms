@@ -157,12 +157,7 @@ class FileVariable(DatasetVariable):
         if hasattr(self, "parent") and self.parent is None:
             raise CDMSError(FileClosedWrite + self.id)
         if (name not in self.__cdms_internals__) and (value is not None):
-            try:
-                setattr(self._obj_, str(name), value)
-            except Exception:
-                raise CDMSError(
-                    "Setting %s.%s=%s" %
-                    (self.id, name, repr(value)))
+            setattr(self._obj_, str(name), value)
             self.attributes[name] = value
         self.__dict__[name] = value
 

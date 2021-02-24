@@ -3,6 +3,9 @@ import numpy
 import string
 import os
 import sys
+import cdat_info
+import subprocess
+import shutil
 
 cdms2.setNetcdfUseParallelFlag(0)
 
@@ -20,6 +23,34 @@ class TestDatasetIO(basetest.CDMSBaseTest):
 
     def testFileAttributes(self):
         self.assertEqual(self.file.id, "test")
+
+    def testWriteReadOnlyAttribute(self):
+        out = self.getTempFile("read_only.nc", "w")
+        out.write(self.u)
+        out.close()
+
+        temp = self.getTempFile("read_only.nc", "a")
+
+        with self.assertRaises(cdms2.ReadOnlyKeyError):
+            setattr(temp, "dimensions", "test")
+
+        with self.assertRaises(cdms2.ReadOnlyKeyError):
+            setattr(temp["u"], "dimensions", "test")
+
+    def testWriteThroughReadOnlyAtttribute(self):
+        iname = os.path.join(cdat_info.get_sampledata_path(), "clt.nc")
+        oname = os.path.join(os.getcwd(), "clt-modded.nc")
+
+        shutil.copyfile(iname, oname)
+
+        subprocess.run(["ncatted", "-a", "dimensions,clt,c,c,'lat lon'", oname])
+
+        ifile = cdms2.open(oname)
+        data = ifile("clt")
+        ifile.close()
+
+        with cdms2.open(oname, "w") as ofile, self.assertRaises(cdms2.CDMSError):
+            ofile.write(data)
 
     def testScalarSlice(self):
         u = self.u

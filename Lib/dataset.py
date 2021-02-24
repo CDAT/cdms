@@ -2090,7 +2090,13 @@ class CdmsFile(CdmsObj, cuDataset):
             if attname not in ["id", "datatype", "parent"]:
                 if isinstance(attval, string_types):
                     attval = str(attval)
-                setattr(newvar, str(attname), attval)
+                try:
+                    setattr(newvar, str(attname), attval)
+                except Cdunif.ReadOnlyKeyError as e:
+                    # Suppress the exception context
+                    err = "Cannot write read-only attribute '{!s}', must be " \
+                        "removed from '{!s}' variable before writing to file".format(e, var.id)
+                    raise CDMSError(err) from None
                 if (attname == "_FillValue") or (attname == "missing_value"):
                     setattr(newvar, "_FillValue", attval)
                     setattr(newvar, "missing_value", attval)

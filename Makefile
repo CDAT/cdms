@@ -97,6 +97,14 @@ build: install-conda prep-feedstock create-conda-env
 				 EXTRA_CB_OPTIONS='--croot $(LOCAL_CHANNEL_DIR)' \
 				 $(SCRIPTS_DIR)/build_steps.sh | tee $(WORK_DIR)/`cat $(PWD)/.variant`
 
+.PHONY: build-env
+build-env:
+	$(CONDA_ENV); \
+		$(CONDA_ACTIVATE) base; \
+		$(CONDA_RC); \
+		conda activate build; \
+		bash
+
 .PHONY: build-docs
 build-docs: ENV := docs
 build-docs: CHANNELS := -c file://$(LOCAL_CHANNEL_DIR) -c conda-forge
@@ -126,13 +134,25 @@ test: create-conda-env
 		$(CONDA_RC); \
 		conda config --set channel_priority strict; \
 		conda activate $(ENV); \
-		conda install --yes $(CHANNELS) cdms2 testsrunner cdat_info pytest pip \
+		conda install --yes $(CHANNELS) cdms2 testsrunner cdat_info pytest pip nco \
 		$(CONDA_TEST_PACKAGES); \
 		conda info; \
 		conda list --explicit > $(TEST_OUTPUT_DIR)/environment.txt; \
 		python run_tests.py -H -v2 -n 1
 
 	cp -rf $(PWD)/tests_html $(TEST_OUTPUT_DIR)/
+
+.PHONY: test-env
+test-env:
+	$(CONDA_ENV); \
+		$(CONDA_ACTIVATE) base; \
+		$(CONDA_RC); \
+		conda activate test; \
+		bash
+
+.PHONY: test-clean
+test-clean:
+	rm -rf $(ENVS_DIR)/test
 
 .PHONY: upload
 upload: ENV := upload

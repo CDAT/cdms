@@ -60,7 +60,7 @@ import MV2
 #]
 extensions = [
     "sphinx.ext.autodoc",
-#    "readthedocs_ext.readthedocs",
+    "readthedocs_ext.readthedocs",
     'easydev.copybutton',
     'sphinx.ext.autosummary',
     'sphinx.ext.todo',

@@ -15,6 +15,7 @@ from .cdmsobj import CdmsObj, Max32int
 from .sliceut import reverseSlice, splitSlice, splitSliceExt
 from .error import CDMSError
 from . import forecast
+from .util import base_doc
 # import warnings
 from six import string_types
 standard_library.install_aliases()
@@ -24,19 +25,63 @@ std_axis_attributes = ['name', 'units', 'length', 'values', 'bounds']
 
 
 class AliasList (UserList):
+    """AliasList.
+    """
+
     def __init__(self, alist):
+        """__init__.
+
+        Parameters
+        ----------
+        alist :
+            alist
+        """
         UserList.__init__(self, alist)
 
     def __setitem__(self, i, value):
+        """__setitem__.
+
+        Parameters
+        ----------
+        i :
+            i
+        value :
+            value
+        """
         self.data[i] = value.lower()
 
     def __setslice(self, i, j, values):
+        """__setslice.
+
+        Parameters
+        ----------
+        i :
+            i
+        j :
+            j
+        values :
+            values
+        """
         self.data[i:j] = [x.lower() for x in values]
 
     def append(self, value):
+        """append.
+
+        Parameters
+        ----------
+        value :
+            value
+        """
         self.data.append(value.lower())
 
     def extend(self, values):
+        """extend.
+
+        Parameters
+        ----------
+        values :
+            values
+        """
         self.data.extend(list(map(str.lower, values)))
 
 
@@ -107,6 +152,23 @@ _autobounds = 2
 
 
 def setAutoBounds(mode):
+    """Sets AutoBounds behavior.
+
+    Automatically generates axis and grid boundaries when ``getBounds``
+    is called.
+
+    Parameters
+    ----------
+    mode : (str/int)
+        0 : 'off'   (No bounds will be generated)
+        1 : 'on'    (Generate bounds)
+        2 : 'grid'  (Generate bounds for lat/lon grids only)
+
+    Notes
+    -----
+    This only affects 1D axes.
+
+    """
     global _autobounds
     if mode == 'on' or mode == 1:
         _autobounds = 1
@@ -117,12 +179,39 @@ def setAutoBounds(mode):
 
 
 def getAutoBounds():
+    """Gets AutoBounds mode.
+
+    See ``setAutoBounds`` for description of modes.
+    """
     return _autobounds
 
 # Create a transient axis
 
 
 def createAxis(data, bounds=None, id=None, copy=0, genericBounds=False):
+    """ Creates an axis.
+
+    To enabled automatic bounds generation see ``setAutoBounds``.
+
+    Parameters
+    ----------
+    data : (list/:obj:`numpy.ndarray`)
+        Values for axis.
+    bounds : ``numpy.ndarray``
+        2D array containing boundaries for ``data``.
+    id : str
+        Axis identifier.
+    copy : int
+        0: Stores reference of data.
+        1: Stores copy of data.
+    genericBounds : bool
+        True will create generic bounds if ``bounds`` is None.
+
+    Returns
+    -------
+    cdms2.TransientAxis
+        Returns a ``TransientAxis`` containing data.
+    """
     return TransientAxis(data, bounds=bounds, id=id,
                          copy=copy, genericBounds=genericBounds)
 
@@ -130,6 +219,18 @@ def createAxis(data, bounds=None, id=None, copy=0, genericBounds=False):
 
 
 def createGaussianAxis(nlat):
+    """Creates Guassian Axis.
+
+    Parameters
+    ----------
+    nlat : int
+        Number of latitudes to generate.
+
+    Returns
+    ------
+    cdms2.TransientAxis
+        ``TransientaAxis`` containing guassian axis of ``nlat``.
+    """
     import regrid2._regrid
 
     lats, wts, bnds = regrid2._regrid.gridattr(nlat, 'gaussian')
@@ -152,6 +253,18 @@ def createGaussianAxis(nlat):
 
 
 def createEqualAreaAxis(nlat):
+    """Creates an equal area axis.
+
+    Parameters
+    ----------
+    nlat : int
+        Number of latitudes to generate.
+
+    Returns
+    -------
+    cdms2.TransientAxis
+        ``TransientAxis`` containing equal area axis of ``nlat``.
+    """
     import regrid2._regrid
 
     lats, wts, bnds = regrid2._regrid.gridattr(nlat, 'equalarea')
@@ -167,6 +280,22 @@ def createEqualAreaAxis(nlat):
 
 
 def createUniformLatitudeAxis(startLat, nlat, deltaLat):
+    """Creates a uniform latitude axis.
+
+    Parameters
+    ----------
+    startLat : float
+        Starting latitude value.
+    nlat :
+        Number of latitudes.
+    deltaLat : float
+        Difference between each latitude point.
+
+    Returns
+    -------
+    cdms2.TransientAxis
+        ``TransientAxis`` containing uniform latitude axis.
+    """
     latArray = startLat + deltaLat * numpy.arange(nlat)
     lat = createAxis(latArray, id="latitude")
     lat.designateLatitude()
@@ -179,6 +308,22 @@ def createUniformLatitudeAxis(startLat, nlat, deltaLat):
 
 
 def createUniformLongitudeAxis(startLon, nlon, deltaLon):
+    """Creates a uniform longitude axis.
+
+    Parameters
+    ----------
+    startLon : float
+        Starting longitude value.
+    nlon : int
+        Number of longitudes.
+    deltaLon : float
+        Difference between each longitude point.
+
+    Returns
+    -------
+    cdms2.TransientAxis
+        ``TransientAxis`` containing uniform longitude axis.
+    """
     lonArray = startLon + deltaLon * numpy.arange(nlon)
     lon = createAxis(lonArray, id="longitude")
     lon.designateLongitude()
@@ -648,6 +793,27 @@ def lookupArray(ar, value):
 
 
 def isSubsetVector(vec1, vec2, tol):
+    """Checks if ``vec1`` is a subset of ``vec2``.
+
+    Parameters
+    ----------
+    vec1 : (cdms2.TransientAxis, cdms2.FileAxis, numpy.ndarray)
+        Subset data.
+    vec2 : (cdms2.TransientAxis, cdms2.FileAxis, numpy.ndarray)
+        Superset data.
+    tol : float
+        Tolerance used when checking for subset.
+
+    Returns
+    -------
+    (bool/int), int
+        First value of ``True`` denotes ``vec1`` is a subset of ``vec2``.
+        A value of 0 or ``False`` denotes the opposite.
+
+        Second value is the starting index of ``vec1`` in ``vec2`` if it
+        is a subset.
+    """
+    # TODO this needs fixing return should be None if not subset otherwise the index value.
     index = lookupArray(vec2, vec1[0])
     if index > (len(vec2) - len(vec1)):
         # vec1 is too large, cannot be a subset
@@ -661,8 +827,7 @@ def isSubsetVector(vec1, vec2, tol):
 
 
 def isOverlapVector(vec1, vec2, atol=1.e-8):
-    """
-    Is Overlap Vector
+    """Is Overlap Vector
 
     Parameters
     ----------
@@ -694,8 +859,7 @@ def isOverlapVector(vec1, vec2, atol=1.e-8):
 
 
 def allclose(ax1, ax2, rtol=1.e-5, atol=1.e-8):
-    """
-    All close
+    """All close
 
     Parameters
     ----------
@@ -728,6 +892,16 @@ def allclose(ax1, ax2, rtol=1.e-5, atol=1.e-8):
 
 
 class AbstractAxis(CdmsObj):
+    """AbstractAxis
+
+    Parameters
+    ----------
+    parent : cdms2.dataset.CdmsFile
+        Reference to ``CdmsFile`` containing axis.
+    node : None
+        Not used.
+    """
+
     def __init__(self, parent, node):
         CdmsObj.__init__(self, node)
         val = self.__cdms_internals__ + ['id', ]
@@ -750,7 +924,14 @@ class AbstractAxis(CdmsObj):
     def _getshape(self):
         return (len(self),)
 
-    def _getdtype(self, name):
+    def _getdtype(self, name=None):
+        """Gets numpy dtype.
+
+        Parameters
+        ----------
+        name : str
+            Name of the dtype
+        """
         tc = self.typecode()
         return numpy.dtype(tc)
 
@@ -767,11 +948,28 @@ class AbstractAxis(CdmsObj):
         raise CDMSError(MethodNotImplemented)
 
     def rank(self):
+        """Gets rank of contained data.
+
+        Returns
+        -------
+        int
+            Number of dimensions.
+        """
         return len(self.shape)
 
     # Designate axis as a latitude axis.
     # If persistent is true, write metadata to the container.
     def designateLatitude(self, persistent=0):
+        """Designate axis as latitude.
+
+        Sets attribute ``axis`` to "Y".
+
+        Parameters
+        ----------
+        persistent : int
+            0: Sets value in memory.
+            1: Sets value in underlying file.
+        """
         if persistent:
             self.axis = "Y"
         else:
@@ -780,6 +978,13 @@ class AbstractAxis(CdmsObj):
 
     # Return true iff the axis is a latitude axis
     def isLatitude(self):
+        """Checks if axis is latitude.
+
+        Returns
+        -------
+        bool
+            True if axis is latitude otherwise false.
+        """
         id = self.id.strip().lower()
         if (hasattr(self, 'axis') and self.axis == 'Y'):
             return True
@@ -794,6 +999,16 @@ class AbstractAxis(CdmsObj):
     # Designate axis as a vertical level axis
     # If persistent is true, write metadata to the container.
     def designateLevel(self, persistent=0):
+        """Designate axis as level.
+
+        Sets attribute ``axis`` to "Z".
+
+        Parameters
+        ----------
+        persistent : int
+            0: Sets value in memory.
+            1: Sets value in underlying file.
+        """
         if persistent:
             self.axis = "Z"
         else:
@@ -802,6 +1017,13 @@ class AbstractAxis(CdmsObj):
 
     # Return true iff the axis is a level axis
     def isLevel(self):
+        """Checks if axis is level.
+
+        Returns
+        -------
+        bool
+            True if axis is level otherwise false.
+        """
         id = self.id.strip().lower()
         if (hasattr(self, 'axis') and self.axis == 'Z'):
             return True
@@ -828,6 +1050,18 @@ class AbstractAxis(CdmsObj):
     # If persistent is true, write metadata to the container.
     # If modulo is defined, set as circular
     def designateLongitude(self, persistent=0, modulo=360.0):
+        """Designate axis as longitude.
+
+        Sets attribute ``axis`` to "X".
+
+        Parameters
+        ----------
+        persistent : int
+            0: Sets value in memory.
+            1: Sets value in underlying file.
+        modulo : float
+            Sets topology of longitude. None will set topology to "linear".
+        """
         if persistent:
             self.axis = "X"
             if modulo is None:
@@ -849,6 +1083,13 @@ class AbstractAxis(CdmsObj):
 
     # Return true iff the axis is a longitude axis
     def isLongitude(self):
+        """Checks if axis is longitude.
+
+        Returns
+        -------
+        bool
+            True if axis is longitude otherwise False.
+        """
         id = self.id.strip().lower()
         if (hasattr(self, 'axis') and self.axis == 'X'):
             return True
@@ -863,6 +1104,18 @@ class AbstractAxis(CdmsObj):
     # Designate axis as a time axis, and optionally set the calendar
     # If persistent is true, write metadata to the container.
     def designateTime(self, persistent=0, calendar=None):
+        """Designate axis as time.
+
+        Sets attribute ``axis`` to "T".
+
+        Parameters
+        ----------
+        persistent : int
+            0: Sets value in memory.
+            1: Sets value in underlying file.
+        calendar : cdtime.Calendar
+            Sets the calendar for the time axis. See ``cdtime`` for valid calendars.
+        """
         if calendar is None:
             calendar = cdtime.DefaultCalendar
         if persistent:
@@ -882,6 +1135,13 @@ class AbstractAxis(CdmsObj):
 
     # Return true iff the axis is a time axis
     def isTime(self):
+        """Checks if axis is time.
+
+        Returns
+        -------
+        bool
+            True if axis is time otherwise false.
+        """
         id = self.id.strip().lower()
         if hasattr(self, 'axis'):
             if self.axis == 'T':
@@ -923,16 +1183,39 @@ class AbstractAxis(CdmsObj):
 
     # Return true iff the axis is a forecast axis
     def isForecast(self):
+        """Checks if axis is forecast.
+
+        Returns
+        -------
+        bool
+            True if axis is forecast otherwise False.
+        """
         id = self.id.strip().lower()
         if (hasattr(self, 'axis') and self.axis == 'F'):
             return True
         return (id[0:6] == 'fctau0') or (id in forecast_aliases)
 
+    # TODO is this needed?
     def isForecastTime(self):
+        """Checks if axis is forecast.
+
+        Returns
+        -------
+        bool
+            True if axis is forecast otherwise False.
+        """
         return self.isForecast()
 
     def asComponentTime(self, calendar=None):
-        "Array version of cdtime tocomp. Returns a list of component times."
+        """Returns values as component time if axis represents time.
+
+        Parameters
+        ----------
+        calendar : cdtime.Calendar
+            Calendar used to convert relative time to component time. If ``None``
+            then the calendar set in attributes will be used. If this is not set
+            then the default calendar will be used.
+        """
         if not hasattr(self, 'units'):
             raise CDMSError("No time units defined")
         if calendar is None:
@@ -949,7 +1232,15 @@ class AbstractAxis(CdmsObj):
     #  mf 20010418 -- output DTGs (YYYYMMDDHH)
     #
     def asDTGTime(self, calendar=None):
-        "Array version of cdtime tocomp. Returns a list of component times in DTG format."
+        """Returns values as DTG if axis represents time.
+
+        Parameters
+        ----------
+        calendar : cdtime.Calendar
+            Calendar used to convert relative time to component time. If ``None``
+            then the calendar set in attributes will be used. If this is not set
+            then the default calendar will be used.
+        """
         if not hasattr(self, 'units'):
             raise CDMSError("No time units defined")
         result = []
@@ -973,7 +1264,15 @@ class AbstractAxis(CdmsObj):
         return result
 
     def asdatetime(self, calendar=None):
-        "Array version of cdtime tocomp. Returns a list of datetime objects."
+        """ Returns values as ``datetime.datetime`` if axis represents time.
+
+        Parameters
+        ----------
+        calendar : cdtime.Calendar
+            Calendar used to convert relative time to component time. If ``None``
+            then the calendar set in attributes will be used. If this is not set
+            then the default calendar will be used.
+        """
         import datetime
         if not hasattr(self, 'units'):
             raise CDMSError("No time units defined")
@@ -989,7 +1288,13 @@ class AbstractAxis(CdmsObj):
         return result
 
     def asRelativeTime(self, units=None):
-        "Array version of cdtime torel. Returns a list of relative times."
+        """ Returns values as relative time if axis represents time.
+
+        Parameters
+        ----------
+        units : str
+            Base units used in conversion of values.
+        """
         sunits = getattr(self, 'units', None)
         if sunits is None or sunits == 'None':
             raise CDMSError("No time units defined")
@@ -1008,7 +1313,17 @@ class AbstractAxis(CdmsObj):
         return result
 
     def toRelativeTime(self, units, calendar=None):
-        "Convert time axis values to another unit possibly in another calendar"
+        """Converts values in-place to relative time.
+
+        Parameters
+        ----------
+        units : str
+            Base units used converting component to relative values.
+        calendar : cdtime.Calendar
+            Calendar used to convert relative time to component time. If ``None``
+            then the calendar set in attributes will be used. If this is not set
+            then the default calendar will be used.
+        """
         if not hasattr(self, 'units'):
             raise CDMSError("No time units defined")
         n = len(self[:])
@@ -1052,7 +1367,17 @@ class AbstractAxis(CdmsObj):
     # (1) self.topology=='circular', or
     # (2) self.topology is undefined, and the axis is a longitude
     def isCircularAxis(self):
+        """Superficial check if axis is circular.
 
+        Returns
+        -------
+        (bool/int)
+            True if axis topology is set to circular.
+            False if axis topology is not circular.
+            1 if axis is longitude.
+            0 if not circular.
+        """
+        # TODO fix the return values no more mixed int/bool
         if hasattr(self, 'topology'):
             iscircle = (self.topology == 'circular')
         elif self.isLongitude():
@@ -1074,6 +1399,17 @@ class AbstractAxis(CdmsObj):
     # (2) self.topology is undefined, and the axis is a longitude
 
     def isCircular(self):
+        """Checks if axis is circular.
+
+        Checks for attribute "realtopology" first. If "realtopology" is not present
+        then the data is checked. Attribute "realtopology" is set from the result of
+        checking the data.
+
+        Returns
+        -------
+        bool
+            True if axis is circular otherwise False.
+        """
         if hasattr(self, 'realtopology'):
             if self.realtopology == 'circular':
                 return True
@@ -1113,6 +1449,16 @@ class AbstractAxis(CdmsObj):
         return iscircle
 
     def designateCircular(self, modulo, persistent=0):
+        """Designates axis as circular.
+
+        Parameters
+        ----------
+        modulo : float
+            Length of cycle.
+        persistent : (bool/int)
+            True: Sets values in underlying file.
+            Flase: Sets values in memory.
+        """
         if persistent:
             self.topology = 'circular'
             self.modulo = modulo
@@ -1123,29 +1469,65 @@ class AbstractAxis(CdmsObj):
             self.attributes['topology'] = 'linear'
 
     def isLinear(self):
+        """Checks if axis is linear.
+
+        Returns
+        -------
+        bool
+            True if axis is linear otherwise False.
+        """
         raise CDMSError(MethodNotImplemented)
 
     def getBounds(self, isGeneric=None):
-        '''
-        isGeneric is a list with one boolean which says if the bounds
-        are read from file (False) or generated (True)
-        '''
+        """Gets axis bounds.
+
+        Parameters
+        ----------
+        isGeneric : bool
+            If True generic bounds will be generated otherwise bounds in file
+            be returned.
+        """
         raise CDMSError(MethodNotImplemented)
 
     def getExplicitBounds(self):
-        '''
-        Return None if not explicitly defined
-        This is a way to determine if attributes are defined at cell
-        or at point level. If this function returns None attributes are
-        defined at points, otherwise they are defined at cells
-        '''
+        """Gets explicit bounds.
+
+        Returns
+        -------
+        numpy.ndarray
+            Returns bounds if they are cells otherise ``None`` is returned.
+        """
+        # Original doc
+        # '''
+        # Return None if not explicitly defined
+        # This is a way to determine if attributes are defined at cell
+        # or at point level. If this function returns None attributes are
+        # defined at points, otherwise they are defined at cells
+        # '''
         raise CDMSError(MethodNotImplemented)
 
     def getBoundsForDualGrid(self, dualGrid):
-        '''
-        dualGrid changes the type of dataset from the current type to the dual.
-        So, if we have a point dataset we switch to a cell dataset and viceversa.
-        '''
+        """Get explicit bounds for dual grid.
+
+        Parameters
+        ----------
+        dualGrid : bool
+            True if targetting dual grids otherwise False.
+
+        Returns
+        -------
+        numpy.ndarray
+            If bounds are explicit and ``dualGrid`` is True then the explicit
+            bounds are returned otherwise ``None`` is.
+
+            If bounds are no explicit and ``dualGrid`` is False then the bounds
+            are returned otherise ``None`` is.
+        """
+        # Original doc
+        # '''
+        # dualGrid changes the type of dataset from the current type to the dual.
+        # So, if we have a point dataset we switch to a cell dataset and viceversa.
+        # '''
         explicitBounds = self.getExplicitBounds()
         if (explicitBounds is None):
             # point data
@@ -1161,12 +1543,28 @@ class AbstractAxis(CdmsObj):
                 return explicitBounds
 
     def setBounds(self, bounds):
+        """Sets the bounds for the axis.
+
+        Parameters
+        ----------
+        bounds : numpy.ndarray
+            2D array containing bounds for the axis.
+        """
         raise CDMSError(MethodNotImplemented)
 
     # Return the cdtime calendar: GregorianCalendar, NoLeapCalendar, JulianCalendar, Calendar360
     # or None. If the axis does not have a calendar attribute, return the global
     # calendar.
     def getCalendar(self):
+        """Gets calendar for axis.
+
+        If the axis represents time then the calendar is return if stored in the attributes.
+
+        Returns
+        -------
+        cdtime.Calendar
+            Returns the calendar for the axis if defined otherwise ``None```
+        """
         if hasattr(self, 'calendar'):
             calendar = self.calendar.lower()
         else:
@@ -1177,6 +1575,15 @@ class AbstractAxis(CdmsObj):
 
     # Set the calendar
     def setCalendar(self, calendar, persistent=1):
+        """Sets calendar for axis.
+
+        Parameters
+        ----------
+        calendar : cdtime.Calendar
+            Calendar to set for the axis.
+        persistent : (bool/int)
+            Sets the calender in the underlying file if True otherwise its set in memory.
+        """
         if persistent:
             self.calendar = calendarToTag.get(calendar, None)
             self.attributes['calendar'] = self.calendar
@@ -1189,17 +1596,53 @@ class AbstractAxis(CdmsObj):
                 raise CDMSError(InvalidCalendar % calendar)
 
     def getData(self):
+        """Get data.
+
+        Returns
+        -------
+        numpy.ndarray
+            Returns the axis data.
+        """
         raise CDMSError(MethodNotImplemented)
 
     # Return the entire array
     def getValue(self):
+        """Gets entire data.
+
+        Returns
+        -------
+        numpy.ndarray
+            Returns the axis data.
+        """
         return self.__getitem__(slice(None))
 
     def assignValue(self, data):
+        """Sets data.
+
+        Parameters
+        ----------
+        data : numpy.ndarray
+            Data representing the axis.
+        """
         self.__setitem__(slice(None), data)
 
     def _time2value(self, value):
-        """ Map value of type comptime, reltime, or string of form "yyyy-mm-dd hh:mi:ss" to value"""
+        """Returns value converted to relative time.
+
+        Uses axis attributes to convert value to relative time.
+
+        Parameters
+        ----------
+        value : (ComptimeType, ReltimeType, str)
+            Value to convert to relative time.
+
+        Returns
+        -------
+        str
+            Relative time value.
+        """
+        # original doc
+        # """ Map value of type comptime, reltime, or string of form "yyyy-mm-dd hh:mi:ss" to value"""
         if self.isTime():
             if type(value) in CdtimeTypes:
                 value = value.torel(self.units, self.getCalendar()).value
@@ -1209,6 +1652,15 @@ class AbstractAxis(CdmsObj):
         return value
 
     def getModuloCycle(self):
+        """Gets axis modulo.
+
+        Defaults to 360.0 if not store in attributes.
+
+        Returns
+        -------
+        float
+            The modulo value for the axis.
+        """
 
         if hasattr(self, 'modulo'):
             cycle = self.modulo
@@ -1226,15 +1678,23 @@ class AbstractAxis(CdmsObj):
         return(cycle)
 
     def getModulo(self):
+        """Get axis modulo.
+
+        Returns
+        -------
+        float
+            The modulo value for the axis if axis is circular.
+        """
 
         if not self.isCircular():
             return(None)
 
         return(self.getModuloCycle())
 
+    # TODO this is a bad signature, too confusing not explicit enough
+    # mapInterval(self, x, y, left_endpoint, right_endpoint, cycle):
     def mapInterval(self, interval, indicator='ccn', cycle=None):
-        """
-        Map coordinate interval to index interval. interval has one of the forms
+        """Map coordinate interval to index interval. interval has one of the forms
 
           * `(x,y)`
           * `(x,y,indicator)`: indicator overrides keywork argument
@@ -1246,6 +1706,17 @@ class AbstractAxis(CdmsObj):
         is closed on the left, `o` if open, and the second character has the
         same meaning for the right-hand point. Set cycle to a nonzero value
         to force wraparound.
+
+        Parameters
+        ----------
+        internval : tuple of float, float, str (optional), float (optional)
+            (x, y) First and last value to map.
+            (x, y, indicator) First and last value to map with indicator for handling endpoints.
+            (x, y, indicator, cycle) First and last value to map with endpoint indicator and cycle length.
+        indicator : str
+            String indicator describing how to handle interval endpoints.
+        cycle : float
+            Length of cycle to use when mapping interval.
 
         Returns
         -------
@@ -1279,10 +1750,31 @@ class AbstractAxis(CdmsObj):
 #
 # mfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmfmf
 
-    def mapIntervalExt(self, interval, indicator='ccn',
-                       cycle=None, epsilon=None):
-        """Like mapInterval, but returns (i,j,k) where k is stride,
-        and (i,j) is not restricted to one cycle."""
+    def mapIntervalExt(self, interval, indicator='ccn', cycle=None, epsilon=None):
+        """Extended ``mapInterval``.
+
+        See ``mapInterval`` for full documentation.
+
+        Parameters
+        ----------
+        internval : tuple of float, float, str (optional), float (optional)
+            (x, y) First and last value to map.
+            (x, y, indicator) First and last value to map with indicator for handling endpoints.
+            (x, y, indicator, cycle) First and last value to map with endpoint indicator and cycle length.
+        indicator : str
+            String indicator describing how to handle interval endpoints.
+        cycle : float
+            Length of cycle to use when mapping interval.
+        epsilon : Not use.
+
+        Returns
+        -------
+        int, int, int
+            Returns tuple containing the first and last index along with the stride.
+        """
+        # original doc
+        # """Like mapInterval, but returns (i,j,k) where k is stride,
+        # and (i,j) is not restricted to one cycle."""
 
         # nCycleMax : max number of cycles a user a specify in wrapping
 
@@ -1477,10 +1969,29 @@ class AbstractAxis(CdmsObj):
         return retval
 
     def subaxis(self, i, j, k=1, wrap=True):
-        """Create a transient axis for the index slice [i:j:k]
-        The stride k can be positive or negative. Wraparound is
-        supported for longitude dimensions or those with a modulus attribute.
+        """Returns subaxis.
+
+        Parameters
+        ----------
+        i : int
+            Positive start index.
+        j : int
+            Positive stop index.
+        k : int
+            Positive/Negative step value.
+        wrap : bool
+            True if subaxis can be wrapper otherwise False to prevent wrapping.
+
+        Returns
+        -------
+        cdms2.TransientAxis
+            Returns ``TransientAxis`` containing sub-axis.
         """
+        # Original doc
+        # """Create a transient axis for the index slice [i:j:k]
+        # The stride k can be positive or negative. Wraparound is
+        # supported for longitude dimensions or those with a modulus attribute.
+        # """
         isGeneric = [False]
         fullBounds = self.getBounds(isGeneric)
         _debug = 0
@@ -1601,11 +2112,28 @@ class AbstractAxis(CdmsObj):
     subAxis = subaxis
 
     def typecode(self):
+        """Data typecode.
+        """
         raise CDMSError(MethodNotImplemented)
 
     # Check that a boundary array is valid, raise exception if not. bounds is
     # an array of shape (n,2)
     def validateBounds(self, bounds):
+        """Checks whether boundaries are valid.
+
+        Performs the following checks:
+        - Bounds shape is correct for axis data.
+        - Bounds values are monotonic.
+
+        Notes
+        -----
+        This method does modify ``bounds`` by reshaping.
+
+        Parameters
+        ----------
+        bounds : numpy.ndarray
+            2D array containing bounds.
+        """
         requiredShape = (len(self), 2)
         requiredShape2 = (len(self) + 1,)
         if bounds.shape != requiredShape and bounds.shape != requiredShape2:
@@ -1616,6 +2144,8 @@ class AbstractAxis(CdmsObj):
                     bounds.shape),
                     repr(requiredShape),
                     repr(requiredShape2)))
+        # Why are we modifying data?
+        # Seems better found in something like fixBounds(bounds) method
         if bounds.shape == requiredShape2:  # case of "n+1" bounds
             bounds2 = numpy.zeros(requiredShape)
             bounds2[:, 0] = bounds[:-1]
@@ -1639,6 +2169,41 @@ class AbstractAxis(CdmsObj):
     # Generate bounds from midpoints. width is the width of the zone if the
     # axis has one value.
     def genGenericBounds(self, width=1.0):
+        """Generate generic bounds.
+
+        Generate generic bounds. The axis values will be in the center of the
+        bounds.
+
+        If the axis is latitude the endpoints of the bounds are capped at 90
+        and -90 respectively.
+
+        If the axis is longitude the endpoints of the bounds will be adjusted
+        as to ensure they are circular.
+
+        Parameters
+        ----------
+        width : float
+            Width of the bounds when axis length is 1.
+
+        Returns
+        -------
+        numpy.ndarray
+            2D (n,2) array containing bounds values.
+
+        Examples
+        --------
+        >>> a1 = cdms2.createAxis(np.arange(0, 360, 1), id='lon')
+        >>> a1.designateLongitude()
+        >>> b1 = a1.genGenericBounds()
+        >>> b1[0, 0], b1[-1, 1]
+        (array([-0.5,  0.5]), array([358.5, 359.5]))
+
+        >>> a1 = cdms2.createAxis(np.arange(0, 360, 1), id='lon')
+        >>> a1.designateLongitude()
+        >>> b1 = a1.genGenericBounds()
+        >>> b1[0, 0], b1[-1, 1]
+        (array([90.5, 89.5]), array([-88.5, -89.5]))
+        """
         if self._data_ is None:
             self._data_ = self.getData()
         ar = self._data_
@@ -1693,9 +2258,23 @@ class AbstractAxis(CdmsObj):
         return retbnds
 
     def clone(self, copyData=1):
-        """clone (self, copyData=1)
-        Return a copy of self as a transient axis.
-        If copyData is 1, make a separate copy of the data."""
+        """Clone axis.
+
+        Parameters
+        ----------
+        copyData : int
+            1 Will copy the data.
+            0 Will use a reference of the axis data.
+
+        Returns
+        -------
+        cdms2.TransientAxis
+            Returns a ``TransientAxis`` containing a clone.
+        """
+        # Original doc
+        # """clone (self, copyData=1)
+        # Return a copy of self as a transient axis.
+        # If copyData is 1, make a separate copy of the data."""
         isGeneric = [False]
         b = self.getBounds(isGeneric)
         if copyData == 1:
@@ -1715,7 +2294,19 @@ class AbstractAxis(CdmsObj):
         return mycopy
 
     def listall(self, all=None):
-        "Get list of info about this axis."
+        """List axis information.
+
+        Parameters
+        ----------
+        all : bool
+            If True values and bounds will be printed.
+
+        Returns
+        -------
+        str
+            Returns a string with all the information about the axis.
+        """
+        # "Get list of info about this axis."
         aname = self.id
         result = []
         result.append('   id: ' + aname)
@@ -1777,6 +2368,16 @@ class AbstractAxis(CdmsObj):
 
 
 class Axis(AbstractAxis):
+    """Base Axis class.
+
+    Parameters
+    ----------
+    parent : cdms2.CdmsFile
+        Underlying file object.
+    axisNode : xml.etree.Element
+        Xml element for axis.
+    """
+
     def __init__(self, parent, axisNode=None):
         if axisNode is not None and axisNode.tag != 'axis':
             raise CDMSError('Creating axis, node is not an axis node.')
@@ -1790,6 +2391,8 @@ class Axis(AbstractAxis):
         self.id = axisNode.id
 
     def typecode(self):
+        """Get typecode.
+        """
         return cdmsNode.CdToNumericType.get(self._node_.datatype)
 
     # Handle slices of the form x[i], x[i:j:k], x[(slice(i,j,k),)], and x[...]
@@ -1823,6 +2426,13 @@ class Axis(AbstractAxis):
 
     # Get axis data
     def getData(self):
+        """Get axis data.
+
+        Returns
+        -------
+        numpy.ndarray
+            Returns axis data.
+        """
         return self._node_.getData()      # Axis data is retrieved from the metafile
 
     # Handle slices of the form x[i:j]
@@ -1836,14 +2446,37 @@ class Axis(AbstractAxis):
 
     # Return true iff the axis representation is linear
     def isLinear(self):
+        """Checks if axis is linear.
+
+        Returns
+        -------
+        bool
+            True if axis is linear otherwise False.
+        """
         return self._node_.dataRepresent == cdmsNode.CdLinear
 
     # Return the bounds array, or generate a default if autoBounds mode is on
     def getBounds(self, isGeneric=None):
-        '''
-        If isGeneric is a list with one element, we set its element to True if the
-        bounds were generated and False if bounds were read from the file.
-        '''
+        """Get axis bounds.
+
+        If bounds are not available and you want them generated set the correct
+        behavior using ``setAutoBounds``.
+
+        Parameters
+        ----------
+        isGeneric : list of bool
+            First value is set True if bounds are generated.
+
+        Returns
+        -------
+        numpy.ndarray
+            Returns bounds if available, generates bounds if ``setAutoBounds`` has been set
+            accordingly otherise ``None`` is returned.
+        """
+        # '''
+        # If isGeneric is a list with one element, we set its element to True if the
+        # bounds were generated and False if bounds were read from the file.
+        # '''
         if (isGeneric):
             isGeneric[0] = False
         boundsArray = self.getExplicitBounds()
@@ -1861,7 +2494,10 @@ class Axis(AbstractAxis):
         return boundsArray
 
     # Return the bounds array, or None
+    @base_doc(AbstractAxis)
     def getExplicitBounds(self):
+        """getExplicitBounds.
+        """
         boundsArray = None
         if hasattr(self, 'bounds'):
             boundsName = self.bounds
@@ -1873,7 +2509,10 @@ class Axis(AbstractAxis):
 
         return boundsArray
 
+    @base_doc(AbstractAxis)
     def getCalendar(self):
+        """getCalendar.
+        """
         if hasattr(self, 'calendar'):
             calendar = self.calendar.lower()
         elif self.parent is not None and hasattr(self.parent, 'calendar'):
@@ -1888,13 +2527,29 @@ class Axis(AbstractAxis):
 
 
 class TransientAxis(AbstractAxis):
+    """Axis in memory.
+
+    Parameters
+    ----------
+    data : numpy.ndarray
+        Array with data for axis.
+    bounds : numpy.ndarray
+        2D array containing bounds, should be shaped (N,2).
+    id : str
+        Identifier for axis.
+    attributes : dict
+        Mapping of attribute names and values.
+    copy : int
+        1: Store copy of data
+        0: Store reference to data
+    genericBounds : bool
+        If ``True`` and bounds is ``None`` generic bounds will be generated.
+    """
+
     axis_count = 0
 
     def __init__(self, data, bounds=None, id=None,
                  attributes=None, copy=0, genericBounds=False):
-        """
-        genericBounds specify if bounds were generated (True) or read from a file (False)
-        """
         AbstractAxis.__init__(self, None, None)
         if id is None:
             TransientAxis.axis_count = TransientAxis.axis_count + 1
@@ -1950,7 +2605,15 @@ class TransientAxis(AbstractAxis):
     def __len__(self):
         return len(self._data_)
 
+    @base_doc(AbstractAxis)
     def getBounds(self, isGeneric=None):
+        """getBounds.
+
+        Parameters
+        ----------
+        isGeneric :
+            isGeneric
+        """
         if (isGeneric):
             isGeneric[0] = self._genericBounds_
         if self._bounds_ is not None:
@@ -1963,10 +2626,16 @@ class TransientAxis(AbstractAxis):
         else:
             return None
 
+    @base_doc(AbstractAxis)
     def getData(self):
+        """getData.
+        """
         return self._data_
 
+    @base_doc(AbstractAxis)
     def getExplicitBounds(self):
+        """getExplicitBounds.
+        """
         if (self._genericBounds_):
             return None
         else:
@@ -1980,6 +2649,28 @@ class TransientAxis(AbstractAxis):
     # a file
     def setBounds(self, bounds, persistent=0, validate=0,
                   index=None, boundsid=None, isGeneric=False):
+        """Sets axis bounds.
+
+        If ``bounds`` is None then generic bounds will be generated. See
+        ``genGenericBounds`` for details.
+
+        Parameters
+        ----------
+        bounds : numpy.ndarray
+            2D array containing bounds for axis.
+        persistent : int
+            0: Stores bounds in memory
+            1: Stores bounds in underlying file.
+        validate : int
+            0: No validation
+            1: Validate bounds
+        index :
+            Not used.
+        boundsid :
+            Not used.
+        isGeneric : bool
+            True if bounds are generic.
+        """
         if bounds is not None:
             if isinstance(bounds, numpy.ma.MaskedArray):
                 bounds = numpy.ma.filled(bounds)
@@ -2011,16 +2702,24 @@ class TransientAxis(AbstractAxis):
             else:
                 self._bounds_ = None
 
+    @base_doc(AbstractAxis)
     def isLinear(self):
         return False
 
+    @base_doc(AbstractAxis)
     def typecode(self):
         return self._data_.dtype.char
 
 
 class TransientVirtualAxis(TransientAxis):
-    """An axis with no explicit representation of data values.
-    It appears to be a float vector with values [0.0, 1.0, ..., float(axislen-1)]
+    """Virtual in-memory axis.
+
+    Parameters
+    ----------
+    axisname : str
+        Name of the axis.
+    axislen : int
+        Length of the axis.
     """
 
     def __init__(self, axisname, axislen):
@@ -2036,26 +2735,26 @@ class TransientVirtualAxis(TransientAxis):
     __repr__ = __str__
 
     def clone(self, copyData=1):
-        """clone (self, copyData=1)
-        Return a copy of self as a transient virtual axis.
-        If copyData is 1, make a separate copy of the data."""
         return TransientVirtualAxis(self.id, len(self))
 
+    @base_doc(AbstractAxis)
     def getData(self):
         return numpy.arange(float(self._virtualLength))
 
+    @base_doc(AbstractAxis)
     def isCircular(self):
         # Circularity doesn't apply to index space.
         return False
 
+    @base_doc(AbstractAxis)
     def isVirtual(self):
-        "Return true iff coordinate values are implicitly defined."
         return True
 
+    @base_doc(AbstractAxis)
     def setBounds(self, bounds, isGeneric=False):
-        "No boundaries on virtual axes"
         self._bounds_ = None
 
+    @base_doc(AbstractAxis)
     def __getitem__(self, key):
         return self.getData()[key]
 
@@ -2068,6 +2767,16 @@ class TransientVirtualAxis(TransientAxis):
 
 
 class FileAxis(AbstractAxis):
+    """Axis stored in a file.
+
+    Parameters
+    ----------
+    parent : cdms2.CdmsFile
+        Underlying file.
+    axisname : str
+        Name of the axis.
+    obj
+    """
 
     def __init__(self, parent, axisname, obj=None):
         AbstractAxis.__init__(self, parent, None)
@@ -2096,6 +2805,7 @@ class FileAxis(AbstractAxis):
                     att[attname] = attval
                     self.attributes = att
 
+    @base_doc(AbstractAxis)
     def getData(self):
         if cdmsobj._debug == 1:
             print('Getting array for axis', self.id)
@@ -2112,6 +2822,7 @@ class FileAxis(AbstractAxis):
             raise CDMSError('Data for dimension %s not found' % self.id)
         return result
 
+    @base_doc(AbstractAxis)
     def typecode(self):
         if self.parent is None:
             raise CDMSError(FileWasClosed + self.id)
@@ -2120,6 +2831,13 @@ class FileAxis(AbstractAxis):
         return typecode
 
     def _setunits(self, value):
+        """Sets axis units.
+
+        Parameters
+        ----------
+        value : str
+            Value to set "units" attribute.
+        """
         self._units = value
         self.attributes['units'] = value
         if self.parent is None:
@@ -2131,9 +2849,18 @@ class FileAxis(AbstractAxis):
             (value, typecode, name_in_file, parent_varname, dimtype, ncid)
 
     def _getunits(self):
+        """Gets units attribute.
+
+        Returns
+        -------
+        str
+            Value of units attribute.
+        """
         return self._units
 
     def _delunits(self):
+        """Delete units attribute.
+        """
         del(self._units)
         del(self.attributes['units'])
         delattr(self._obj_, 'units')
@@ -2281,11 +3008,14 @@ class FileAxis(AbstractAxis):
         return length
 
     def isLinear(self):
+        """isLinear.
+        """
         return False                        # All file axes are vector representation
 
     # Return the bounds array, or generate a default if autobounds mode is set
     # If isGeneric is a list with one element, we set its element to True if the
     # bounds were generated and False if bounds were read from the file.
+    @base_doc(AbstractAxis)
     def getBounds(self, isGeneric=None):
         if (isGeneric):
             isGeneric[0] = False
@@ -2303,6 +3033,7 @@ class FileAxis(AbstractAxis):
         return boundsArray
 
     # Return the bounds array, or None
+    @base_doc(AbstractAxis)
     def getExplicitBounds(self):
         if self._boundsArray_ is None:
             boundsArray = None
@@ -2328,6 +3059,7 @@ class FileAxis(AbstractAxis):
     # If the bounds variable is new, use the name boundsid, or 'bounds_<varid>'
     # if unspecified.
     # isGeneric is only used for TransientAxis
+    @base_doc(AbstractAxis)
     def setBounds(self, bounds, persistent=0, validate=0,
                   index=None, boundsid=None, isGeneric=False):
         if persistent:
@@ -2367,7 +3099,10 @@ class FileAxis(AbstractAxis):
         else:
             self._boundsArray_ = copy.copy(bounds)
 
+    @base_doc(AbstractAxis)
     def getCalendar(self):
+        """getCalendar.
+        """
         if hasattr(self, 'calendar'):
             calendar = self.calendar.lower()
         elif self.parent is not None and hasattr(self.parent, 'calendar'):
@@ -2378,6 +3113,7 @@ class FileAxis(AbstractAxis):
         cdcal = tagToCalendar.get(calendar, cdtime.DefaultCalendar)
         return cdcal
 
+    @base_doc(AbstractAxis)
     def isVirtual(self):
         "Return true iff coordinate values are implicitly defined."
 
@@ -2388,7 +3124,13 @@ class FileAxis(AbstractAxis):
         return (self._obj_ is None)
 
     def isUnlimited(self):
-        "Return true iff the axis is 'Unlimited' (extensible)"
+        """Is axis unlimited.
+
+        Returns
+        -------
+        bool
+            True if axis is unlimited otherwise False.
+        """
         if self.parent is not None and self.id in self.parent._file_.dimensions:
             return (self.parent._file_.dimensions[self.id] is None)
         else:
@@ -2401,11 +3143,16 @@ class FileAxis(AbstractAxis):
 
 
 class FileVirtualAxis(FileAxis):
-    """An axis with no explicit representation of data values in the file.
-    It appears to be a float vector with values [0.0, 1.0, ..., float(axislen-1)]
-    This is especially useful for the bound axis used with boundary variables.
-    For a netCDF file the representation is a dimension with no associated
-    coordinate variable.
+    """Virual FileAxis.
+
+    Parameters
+    ----------
+    parent : CdmsFile
+        Underlying file.
+    axisname : str
+        Name of the axis.
+    axislen : int
+        Length of the axis.
     """
 
     def __init__(self, parent, axisname, axislen):
@@ -2415,11 +3162,18 @@ class FileVirtualAxis(FileAxis):
     def __len__(self):
         return self._virtualLength
 
+    @base_doc(AbstractAxis)
     def getData(self):
         return numpy.arange(float(self._virtualLength))
 
     def isVirtual(self):
-        "Return true iff coordinate values are implicitly defined."
+        """Checks if axis is virtual.
+
+        Returns
+        -------
+        bool
+            True if axis is virtual otherwise False.
+        """
         return True
 
 # PropertiedClasses.initialize_property_class (FileVirtualAxis)

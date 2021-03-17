@@ -458,22 +458,29 @@ def createDataset(path, template=None):
 #   or LDAP URL of a catalog dataset entry.
 # 'mode' is 'r', 'r+', 'a', or 'w'
 
-def openDataset(uri, mode='r', template=None,
-                dods=1, dpath=None, hostObj=None):
-    """
-    Open Dataset
+def openDataset(uri, mode='r', template=None, dods=1, dpath=None, hostObj=None):
+    """Open Dataset
 
     Parameters
     ----------
-    uri : (str) Filename to open
-    mode : (str) Either `r`,`w`,`a` mode to open the file in read/write/append
-    template : A string template for the datafile(s), for dataset creation
-    dods : (int) Default set to 1
-    dpath : (str) Destination path.
+    uri : str
+        Filename to open.
+    mode : str
+        Mode to open file with.
+        'r': Read (default)
+        'w': Write
+        'a': Append
+    template : str
+        Template for the datafile(s) used for dataset creation.
+    dods : int
+        Opens remote/local files when set to 1 or attempts to open local when set 0.
+    dpath : str
+        Destination path.
 
     Returns
     -------
-    file handle.
+    cdms2.CdmsFile
+        Opened handle to file.
     """
     uri = uri.strip()
     (scheme, netloc, path, parameters, query, fragment) = urlparse(uri)
@@ -964,6 +971,21 @@ class Dataset(CdmsObj, cuDataset):
     # Create an implicit rectilinear grid. lat, lon, and mask are objects.
     # order and type are strings
     def createRectGrid(self, id, lat, lon, order, type="generic", mask=None):
+        """Create rectilinear grid.
+
+        Parameters
+        ----------
+        id : str
+            Identifier for the grid.
+        lat : (cdms2.TransientAxis, cdms2.FileAxis)
+            Latitude axis used to generate grid.
+        lon : (cdms2.TransientAxis, cdms2.FileAxis)
+            Longitude axis used to generate grid.
+        order : str
+            Order of axis e.g. "yx"
+        mask : (numpy.ndarray)
+            Array containing mask.
+        """
         node = cdmsNode.RectGridNode(id, lat.id, lon.id, type, order, mask.id)
         grid = RectGrid(self, node)
         grid.initDomain(self.axes, self.variables)
@@ -1508,8 +1530,7 @@ class CdmsFile(CdmsObj, cuDataset):
     # Set unlimited to true to designate the axis as unlimited
     # Return an axis object.
     def createAxis(self, name, ar, unlimited=0):
-        """
-        Create an axis.
+        """ Create an axis.
 
         Parameters
         ----------

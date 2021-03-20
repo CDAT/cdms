@@ -15,7 +15,7 @@ WORK_DIR := $(if $(WORK_DIR),$(WORK_DIR),$(call MKTEMP,$(PWD)/.workdir))
 ENVS_DIR := $(if $(ENVS_DIR),$(ENVS_DIR),$(WORK_DIR)/envs)
 PKGS_DIR := $(if $(PKGS_DIR),$(PKGS_DIR),$(WORK_DIR)/pkgs)
 MINICONDA_PATH := $(WORK_DIR)/miniconda.sh
-CONDA_DIR := $(WORK_DIR)/miniconda
+CONDA_DIR ?= $(WORK_DIR)/miniconda
 LOCAL_CHANNEL_DIR := $(if $(LOCAL_CHANNEL_DIR),$(LOCAL_CHANNEL_DIR),$(WORK_DIR)/conda-bld)
 FEEDSTOCK_DIR := $(WORK_DIR)/feedstock
 SCRIPTS_DIR := $(FEEDSTOCK_DIR)/.scripts
@@ -23,7 +23,6 @@ CI_SUPPORT_DIR := $(FEEDSTOCK_DIR)/.ci_support
 TEST_OUTPUT_DIR := $(if $(TEST_OUTPUT_DIR),$(TEST_OUTPUT_DIR),$(PWD)/test_output)
 
 CONDARC := $(WORK_DIR)/condarc
-CONDA_HOOKS = eval "$$($(CONDA_DIR)/bin/conda 'shell.bash' 'hook')"
 CONDA_ENV = source $(CONDA_DIR)/etc/profile.d/conda.sh
 CONDA_ACTIVATE = source $(CONDA_DIR)/bin/activate
 CONDA_RC = export CONDARC=$(CONDARC)
@@ -32,6 +31,7 @@ CONDA_RC = export CONDARC=$(CONDARC)
 install-conda:
 	mkdir -p $(WORK_DIR)
 
+ifeq ($(wildcard $(CONDA_DIR)),)
 	echo -e "envs_dirs:\n  - $(ENVS_DIR)\npkgs_dirs:\n  - $(PKGS_DIR)" > $(CONDARC)
 
 ifeq ($(wildcard $(MINICONDA_PATH)),)
@@ -45,6 +45,7 @@ endif
 
 ifeq ($(wildcard $(CONDA_DIR)),)
 	$(MINICONDA_PATH) -b -p $(CONDA_DIR)
+endif
 endif
 
 	$(CONDA_ENV); \
@@ -96,6 +97,18 @@ build: install-conda prep-feedstock create-conda-env
 				 CONDARC=$(WORK_DIR)/condarc \
 				 EXTRA_CB_OPTIONS='--croot $(LOCAL_CHANNEL_DIR)' \
 				 $(SCRIPTS_DIR)/build_steps.sh | tee $(WORK_DIR)/`cat $(PWD)/.variant`
+
+.PHONY: build-docker
+build-docker:
+	docker run \
+		--name cdms2-dev \
+		-v $(PWD):/src \
+		-w /src \
+		-d \
+		condaforge/mambaforge:4.9.2-5 /bin/sleep infinity || true
+
+	docker start cdms2-dev || true
+	docker exec -it cdms2-dev /bin/bash
 
 .PHONY: build-docs
 build-docs: ENV := docs

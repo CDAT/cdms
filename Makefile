@@ -131,6 +131,7 @@ clean-docs:
 .PHONY: test
 test: ENV := test
 test: CHANNELS := -c file://$(LOCAL_CHANNEL_DIR) -c conda-forge -c cdat/label/nightly
+test: CONDA_TEST_PACKAGES := mpi4py
 test: create-conda-env
 	[[ ! -e "$(TEST_OUTPUT_DIR)" ]] && mkdir -p $(TEST_OUTPUT_DIR) || true
 
@@ -143,7 +144,7 @@ test: create-conda-env
 		$(CONDA_TEST_PACKAGES); \
 		conda info; \
 		conda list --explicit > $(TEST_OUTPUT_DIR)/environment.txt; \
-		python run_tests.py -H -v2 -n 1
+		python run_tests.py -H -v2 -n 1 | tee test.log
 
 	cp -rf $(PWD)/tests_html $(TEST_OUTPUT_DIR)/
 

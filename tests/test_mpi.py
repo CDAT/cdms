@@ -1,12 +1,14 @@
 import sys
+import functools
 
 import unittest
 
 def revert_modules(func):
-    def wrapper():
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
         before = set(sys.modules)
 
-        func()
+        func(*args, **kwargs)
 
         after = set(sys.modules)
 
@@ -16,13 +18,13 @@ def revert_modules(func):
     return wrapper
 
 class TestMPI(unittest.TestCase):
-    # @revert_modules
+    @revert_modules
     def test_default_mpi(self):
         from cdms2 import dataset
 
         assert hasattr(dataset, "MPI")
 
-    # @revert_modules
+    @revert_modules
     def test_disable_mpi(self):
         import os
         os.environ["CDMS_NO_MPI"] = "true"

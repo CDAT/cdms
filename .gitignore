@@ -13,6 +13,8 @@
 #     Files that git should ignore...
 #****************************************************************
 
+.workdir
+.tempdir
 TAGS
 *~
 *swp

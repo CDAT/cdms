@@ -1,33 +1,39 @@
 #!/usr/bin/env python
 from __future__ import print_function
 from numpy.distutils.core import setup, Extension
-import os, sys
-import subprocess,shutil
-from subprocess import Popen, PIPE
+import os
+import sys
+import subprocess
+import cdat_info
+import numpy
 
 target_prefix = sys.prefix
 for i in range(len(sys.argv)):
     a = sys.argv[i]
-    if a=='--prefix':
-        target_prefix=sys.argv[i+1]
+    if a == "--prefix":
+        target_prefix = sys.argv[i + 1]
     sp = a.split("--prefix=")
-    if len(sp)==2:
-        target_prefix=sp[1]
-        print('Target is:',target_prefix)
-sys.path.insert(0,os.path.join(target_prefix,'lib','python%i.%i' % sys.version_info[:2],'site-packages')) 
+    if len(sp) == 2:
+        target_prefix = sp[1]
+        print("Target is:", target_prefix)
+sys.path.insert(
+    0,
+    os.path.join(
+        target_prefix, "lib", "python%i.%i" % sys.version_info[:2], "site-packages"
+    ),
+)
 
-sys.path.append(os.environ.get('BUILD_DIR',"build"))
+sys.path.append(os.environ.get("BUILD_DIR", "build"))
 
-Version = "3.1.4"
+Version = "3.1.5"
 
-import cdat_info
-import numpy
 macros = []
 try:
-    import mpi4py
-    ## Ok we have mpi4py let's build with support for it
-    macros.append(("PARALLEL",None))
-    import subprocess
+    import mpi4py # noqa F401
+
+    # Ok we have mpi4py let's build with support for it
+    macros.append(("PARALLEL", None))
+
     try:
       mpicc = os.path.join(cdat_info.externals,"bin","mpicc")
       subprocess.check_call([mpicc,"--version"])
@@ -40,6 +46,7 @@ except Exception:
     os.environ["CFLAGS"] = "-w -g -O0"
 
 libs_pth = os.path.join(sys.prefix, "lib")
+
 setup(
     name="cdms2",
     version=Version,

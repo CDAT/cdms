@@ -458,22 +458,29 @@ def createDataset(path, template=None):
 #   or LDAP URL of a catalog dataset entry.
 # 'mode' is 'r', 'r+', 'a', or 'w'
 
-def openDataset(uri, mode='r', template=None,
-                dods=1, dpath=None, hostObj=None):
-    """
-    Open Dataset
+def openDataset(uri, mode='r', template=None, dods=1, dpath=None, hostObj=None):
+    """Open Dataset
 
     Parameters
     ----------
-    uri : (str) Filename to open
-    mode : (str) Either `r`,`w`,`a` mode to open the file in read/write/append
-    template : A string template for the datafile(s), for dataset creation
-    dods : (int) Default set to 1
-    dpath : (str) Destination path.
+    uri : str
+        Filename to open.
+    mode : str
+        Mode to open file with.
+        'r': Read (default)
+        'w': Write
+        'a': Append
+    template : str
+        Template for the datafile(s) used for dataset creation.
+    dods : int
+        Opens remote/local files when set to 1 or attempts to open local when set 0.
+    dpath : str
+        Destination path.
 
     Returns
     -------
-    file handle.
+    cdms2.CdmsFile
+        Opened handle to file.
     """
     uri = uri.strip()
     (scheme, netloc, path, parameters, query, fragment) = urlparse(uri)
@@ -493,8 +500,8 @@ def openDataset(uri, mode='r', template=None,
             # If the doesn't exist allow it to be created
             # Ok mpi has issues with bellow we need to test this only with 1
             # rank
-            if not os.path.exists(path):
-                return CdmsFile(path, mode, mpiBarrier=CdMpi)
+            if mode == "r" and not os.path.exists(path):
+                raise FileNotFoundError(path)
             elif mode == "w":
                 try:
                     os.remove(path)
@@ -502,26 +509,15 @@ def openDataset(uri, mode='r', template=None,
                     pass
                 return CdmsFile(path, mode, mpiBarrier=CdMpi)
 
-            # The file exists
-            file1 = CdmsFile(path, "r")
             if libcf is not None:
-                if hasattr(file1, libcf.CF_FILETYPE):
-                    if getattr(
-                            file1, libcf.CF_FILETYPE) == libcf.CF_GLATT_FILETYPE_HOST:
+                file = CdmsFile(path, mode, hostObj)
+
+                if hasattr(file, libcf.CF_FILETYPE):
+                    if getattr(file, libcf.CF_FILETYPE) == libcf.CF_GLATT_FILETYPE_HOST:
+                        file.close()
                         file = gsHost.open(path, mode)
-                    elif mode == 'r' and hostObj is None:
-                        # helps performance on machines where file open (in
-                        # CdmsFile) is costly
-                        file = file1
-                    else:
-                        file = CdmsFile(path, mode, hostObj=hostObj)
-                    file1.close()
-                else:
-                    file1.close()
-                    file = CdmsFile(path, mode)
                 return file
             else:
-                file1.close()
                 return CdmsFile(path, mode)
     elif scheme in ['http', 'gridftp', 'https']:
 
@@ -975,6 +971,21 @@ class Dataset(CdmsObj, cuDataset):
     # Create an implicit rectilinear grid. lat, lon, and mask are objects.
     # order and type are strings
     def createRectGrid(self, id, lat, lon, order, type="generic", mask=None):
+        """Create rectilinear grid.
+
+        Parameters
+        ----------
+        id : str
+            Identifier for the grid.
+        lat : (cdms2.TransientAxis, cdms2.FileAxis)
+            Latitude axis used to generate grid.
+        lon : (cdms2.TransientAxis, cdms2.FileAxis)
+            Longitude axis used to generate grid.
+        order : str
+            Order of axis e.g. "yx"
+        mask : (numpy.ndarray)
+            Array containing mask.
+        """
         node = cdmsNode.RectGridNode(id, lat.id, lon.id, type, order, mask.id)
         grid = RectGrid(self, node)
         grid.initDomain(self.axes, self.variables)
@@ -1266,16 +1277,12 @@ class CdmsFile(CdmsObj, cuDataset):
         else:
             self.uri = "file://" + os.path.abspath(os.path.expanduser(path))
         self._mode_ = mode
-        try:
-            if mode[0].lower() == "w":
-                try:
-                    os.remove(path)
-                except BaseException:
-                    pass
-            _fileobj_ = Cdunif.CdunifFile(path, mode)
-        except Exception as err:
-            raise CDMSError('Cannot open file %s (%s)' % (path, err))
-        self._file_ = _fileobj_   # Cdunif file object
+        if mode[0].lower() == "w":
+            try:
+                os.remove(path)
+            except BaseException:
+                pass
+        self._file_ = Cdunif.CdunifFile(path, mode)
         self.variables = {}
         self.axes = {}
         self.grids = {}
@@ -1523,8 +1530,7 @@ class CdmsFile(CdmsObj, cuDataset):
     # Set unlimited to true to designate the axis as unlimited
     # Return an axis object.
     def createAxis(self, name, ar, unlimited=0):
-        """
-        Create an axis.
+        """ Create an axis.
 
         Parameters
         ----------

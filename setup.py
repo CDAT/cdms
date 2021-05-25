@@ -36,55 +36,54 @@ try:
       subprocess.check_call([mpicc,"--version"])
     os.environ["CC"]=mpicc
     os.environ["CFLAGS"]="-w -g -O0"
-except:
+except Exception:
     os.environ["CFLAGS"] = "-w -g -O0"
 
-libs_pth = os.path.join(sys.prefix,"lib")
-setup (name = "cdms2",
-       version=Version,
-       description = "Climate Data Management System",
-       url = "http://github.com/CDAT/cdms",
-       packages = ['cdms2'],
-       package_dir = {'cdms2': 'Lib'},
-       include_dirs = ['Include', 'Include/py3c', numpy.lib.utils.get_include()] + cdat_info.cdunif_include_directories,
-       scripts = ['Script/cdscan', 'Script/convertcdms.py',"Script/myproxy_logon"],
-       data_files = [("share/cdms2",["share/test_data_files.txt", "share/test_big_data_files.txt"])],
-       ext_modules = [Extension('cdms2.Cdunif',
-                                ['Src/Cdunifmodule.c'],
-                                library_dirs = cdat_info.cdunif_library_directories,
-                                libraries = cdat_info.cdunif_libraries,
-                                define_macros = macros,
-                                runtime_library_dirs = [libs_pth],
-                                extra_compile_args = [ "-L%s"% libs_pth, "-g", "-O0"],
-                                ),
-                      Extension('cdms2._bindex',
-                                ['Src/_bindexmodule.c', 'Src/bindex.c'],
-                                extra_compile_args = [ "-L%s"% libs_pth, "-g", "-O0"],
-                                runtime_library_dirs = [libs_pth],
-                                ) 
-                     ]
-      )
-
-setup (name = "MV2",
-       version=Version,
-       description="Alias for cdms2.MV",
-       url = "http://cdat.sf.net",
-       py_modules=['MV2']
-       )
-
-setup (name = "regrid2",
-       version=Version,
-       description = "Remap Package",
-       url = "http://github.com/UV-CDAT/cdms",
-       packages = ['regrid2'],
-       package_dir = {'regrid2': 'regrid2/Lib'},
-       include_dirs = ['Include', numpy.lib.utils.get_include()],
-       ext_modules = [Extension('regrid2._regrid', ['regrid2/Src/_regridmodule.c'],
-                                runtime_library_dirs = [libs_pth],
-                                extra_compile_args = [ "-L%s"% libs_pth],
-                                ),
-                      Extension('regrid2._scrip', ['regrid2/Src/scrip.pyf','regrid2/Src/regrid.c'],
-                                runtime_library_dirs = [libs_pth],
-                                extra_compile_args = [ "-L%s"% libs_pth],
-                          )]
-      )
+libs_pth = os.path.join(sys.prefix, "lib")
+setup(
+    name="cdms2",
+    version=Version,
+    description="Climate Data Management System",
+    url="http://github.com/CDAT/cdms",
+    packages=["cdms2", "regrid2"],
+    package_dir={
+        "cdms2": "Lib",
+        "regrid2": "regrid2/Lib"
+    },
+    py_modules=["MV2"],
+    include_dirs=["Include", "Include/py3c", numpy.lib.utils.get_include()]
+    + cdat_info.cdunif_include_directories,
+    scripts=["Script/cdscan", "Script/convertcdms.py", "Script/myproxy_logon"],
+    data_files=[
+        ("share/cdms2", ["share/test_data_files.txt", "share/test_big_data_files.txt"])
+    ],
+    ext_modules=[
+        Extension(
+            "cdms2.Cdunif",
+            ["Src/Cdunifmodule.c"],
+            library_dirs=[sys.prefix+'/lib'],
+            libraries=['netcdf', 'cdms', 'grib2c', 'drs', 'png', 'jasper'],
+            define_macros=macros,
+            runtime_library_dirs=[libs_pth],
+            extra_compile_args=["-L%s" % libs_pth, "-g", "-O0"],
+        ),
+        Extension(
+            "cdms2._bindex",
+            ["Src/_bindexmodule.c", "Src/bindex.c"],
+            extra_compile_args=["-L%s" % libs_pth, "-g", "-O0"],
+            runtime_library_dirs=[libs_pth],
+        ),
+        Extension(
+            "regrid2._regrid",
+            ["regrid2/Src/_regridmodule.c"],
+            runtime_library_dirs=[libs_pth],
+            extra_compile_args=["-L%s" % libs_pth],
+        ),
+        Extension(
+            "regrid2._scrip",
+            ["regrid2/Src/scrip.pyf", "regrid2/Src/regrid.c"],
+            runtime_library_dirs=[libs_pth],
+            extra_compile_args=["-L%s" % libs_pth],
+        ),
+    ],
+)

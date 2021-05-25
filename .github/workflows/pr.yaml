@@ -16,7 +16,7 @@ jobs:
       - name: Cache conda
         uses: actions/cache@v2
         env:
-          CACHE_NUMBER: 0
+          CACHE_NUMBER: 1
         with:
           path: ~/conda_pkgs_dir
           key:
@@ -29,6 +29,7 @@ jobs:
           python-version: 3.6
           auto-activate-base: false
           miniforge-variant: Mambaforge
+          use-only-tar-bz2: true # IMPORTANT: This needs to be set for caching to work properly!
 
       - name: conda info
         run: |

@@ -17,3 +17,5 @@ dependencies:
   - esmf
   - esmpy
   - openblas
+  - pytest
+  - testsrunner

@@ -1,0 +1,19 @@
+name: test
+channels:
+  - conda-forge
+  - cdat/label/nightly
+  - defaults
+dependencies:
+  - cdat_info
+  - libcdms
+  - libdrs_f
+  - libdrs
+  - cdtime
+  - lazy-object-proxy
+  - libnetcdf
+  - libnetcdf * nompi_*
+  - libcf
+  - distarray
+  - esmf
+  - esmpy
+  - openblas

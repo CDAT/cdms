@@ -35,13 +35,13 @@ try:
     macros.append(("PARALLEL", None))
 
     try:
-        mpicc = os.path.join(cdat_info.externals, "bin", "mpicc")
-        subprocess.check_call([mpicc, "--version"])
-    except Exception:
-        mpicc = "mpicc"
-        subprocess.check_call([mpicc, "--version"])
-    os.environ["CC"] = mpicc
-    os.environ["CFLAGS"] = "-w -g -O0"
+      mpicc = os.path.join(cdat_info.externals,"bin","mpicc")
+      subprocess.check_call([mpicc,"--version"])
+    except Exception as err:
+      mpicc="mpicc"
+      subprocess.check_call([mpicc,"--version"])
+    os.environ["CC"]=mpicc
+    os.environ["CFLAGS"]="-w -g -O0"
 except Exception:
     os.environ["CFLAGS"] = "-w -g -O0"
 
@@ -68,8 +68,8 @@ setup(
         Extension(
             "cdms2.Cdunif",
             ["Src/Cdunifmodule.c"],
-            library_dirs=cdat_info.cdunif_library_directories,
-            libraries=cdat_info.cdunif_libraries,
+            library_dirs=[sys.prefix+'/lib'],
+            libraries=['netcdf', 'cdms', 'grib2c', 'drs', 'png', 'jasper'],
             define_macros=macros,
             runtime_library_dirs=[libs_pth],
             extra_compile_args=["-L%s" % libs_pth, "-g", "-O0"],
@@ -94,35 +94,3 @@ setup(
         ),
     ],
 )
-
-# setup(
-#     name="MV2",
-#     version=Version,
-#     description="Alias for cdms2.MV",
-#     url="http://cdat.sf.net",
-#     py_modules=["MV2"],
-# )
-
-# setup(
-#     name="regrid2",
-#     version=Version,
-#     description="Remap Package",
-#     url="http://github.com/UV-CDAT/cdms",
-#     packages=["regrid2"],
-#     package_dir={"regrid2": "regrid2/Lib"},
-#     include_dirs=["Include", numpy.lib.utils.get_include()],
-#     ext_modules=[
-#         Extension(
-#             "regrid2._regrid",
-#             ["regrid2/Src/_regridmodule.c"],
-#             runtime_library_dirs=[libs_pth],
-#             extra_compile_args=["-L%s" % libs_pth],
-#         ),
-#         Extension(
-#             "regrid2._scrip",
-#             ["regrid2/Src/scrip.pyf", "regrid2/Src/regrid.c"],
-#             runtime_library_dirs=[libs_pth],
-#             extra_compile_args=["-L%s" % libs_pth],
-#         ),
-#     ],
-# )

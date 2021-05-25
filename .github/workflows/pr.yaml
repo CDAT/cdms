@@ -1,0 +1,17 @@
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  setup_conda:
+    name: Setup conda
+    runs-on: ubuntu-latest
+    steps:
+      - uses: conda-incubator/setup-miniconda
+        with:
+          python-version: 3.6
+          miniforge-variant: Mambaforge
+      - name: conda info
+        run: |
+          conda info

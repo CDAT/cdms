@@ -19,6 +19,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest,macos-latest]
+        py: [3.6,3.7,3.8,3.9]
     steps:
       - uses: actions/checkout@v2
 
@@ -35,7 +36,7 @@ jobs:
         with:
           activate-environment: test
           environment-file: test-environment.yml
-          python-version: 3.6
+          python-version: ${{ matrix.py }}
           auto-activate-base: false
           miniforge-variant: Mambaforge
           use-only-tar-bz2: true # IMPORTANT: This needs to be set for caching to work properly!

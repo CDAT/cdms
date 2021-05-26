@@ -40,6 +40,15 @@ jobs:
           miniforge-variant: Mambaforge
           use-only-tar-bz2: true # IMPORTANT: This needs to be set for caching to work properly!
 
+      - name: Cache data
+        uses: actions/cache@v2
+        env:
+          CACHE_NUMBER: 0
+        with:
+          path: /usr/share/miniconda3/envs/test/share/cdat/sample_data
+          key:
+            test-data-${{ env.CACHE_NUMBER }}
+
       - name: conda info
         run: |
           conda info

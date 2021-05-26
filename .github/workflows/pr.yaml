@@ -40,4 +40,6 @@ jobs:
         run: |
           python setup.py install
 
-          python -c "import cdms2"
+      - name: run tests
+        run: |
+          python run_tests.py

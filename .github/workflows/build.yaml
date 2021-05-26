@@ -1,4 +1,10 @@
+name: Build workflow
+
 on:
+  push:
+    branches:
+      - master
+
   pull_request:
     branches:
       - master
@@ -42,4 +48,4 @@ jobs:
 
       - name: run tests
         run: |
-          python run_tests.py
+          python run_tests.py -v 2

@@ -10,12 +10,15 @@ on:
       - master
 
 jobs:
-  setup_conda:
-    name: Build conda package
-    runs-on: ubuntu-latest
+  test_package:
+    name: Test CDMS2 package
+    runs-on: ${{ matrix.os }}
     defaults:
       run:
         shell: bash -l {0}
+    strategy:
+      matrix:
+        os: [ubuntu-latest,macos-latest]
     steps:
       - uses: actions/checkout@v2
 

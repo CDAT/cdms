@@ -48,4 +48,4 @@ jobs:
 
       - name: run tests
         run: |
-          python run_tests.py -v 2
+          python run_tests.py -v 2 -n 1

@@ -47,9 +47,9 @@ jobs:
       - name: Cache data
         uses: actions/cache@v2.1.5
         env:
-          CACHE_NUMBER: 3
+          CACHE_NUMBER: 4
         with:
-          path: ~/envs/tests/share/cdat/sample_data
+          path: ~/envs/test/share/cdat/sample_data
           key:
             test-data-${{ env.CACHE_NUMBER }}
 

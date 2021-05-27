@@ -44,7 +44,7 @@ jobs:
       - name: Cache data
         uses: actions/cache@v2.1.5
         env:
-          CACHE_NUMBER: 1
+          CACHE_NUMBER: 2
         with:
           path: /usr/share/miniconda3/envs/test/share/cdat/sample_data
           key:

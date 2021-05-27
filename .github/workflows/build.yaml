@@ -61,6 +61,6 @@ jobs:
 
       - name: run tests
         run: |
-          pytest -vvv -n auto --ignore tests/test_forecast_io.py
+          pytest -vvv tests/ -n auto --ignore tests/test_forecast_io.py
 
           pytest -vvv tests/test_forecast_io.py

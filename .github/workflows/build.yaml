@@ -18,8 +18,10 @@ jobs:
         shell: bash -l {0}
     strategy:
       matrix:
-        os: [ubuntu-latest,macos-latest]
-        py: [3.6,3.7,3.8,3.9]
+        os: [ubuntu-latest]
+        py: [3.6]
+        # os: [ubuntu-latest,macos-latest]
+        # py: [3.6,3.7,3.8,3.9]
     steps:
       - uses: actions/checkout@v2
 
@@ -40,18 +42,14 @@ jobs:
           auto-activate-base: false
           miniforge-variant: Mambaforge
           use-only-tar-bz2: true # IMPORTANT: This needs to be set for caching to work properly!
-
-      - name: Fix conda test data permissions
-        run: |
-          sudo mkdir -p /usr/share/miniconda3/envs/test/share/cdat/sample_data
-          sudo chmod -R a+rwx /usr/share/miniconda3/envs/test/share/cdat/sample_data
+          condarc-file: condarc
 
       - name: Cache data
         uses: actions/cache@v2.1.5
         env:
-          CACHE_NUMBER: 2
+          CACHE_NUMBER: 3
         with:
-          path: /usr/share/miniconda3/envs/test/share/cdat/sample_data
+          path: ~/envs/tests/share/cdat/sample_data
           key:
             test-data-${{ env.CACHE_NUMBER }}
 

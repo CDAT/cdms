@@ -568,13 +568,6 @@ static int cdopen(const char* controlpath, int ncmode, CuFileType *filetype) {
 	if (*filetype == CuUnknown)
 		return -1;
 	if (*filetype == CuNetcdf) {
-		/* Take care for mode flag */
-		if ((cdms_classic == 0) || (cdms_shuffle != 0) || (cdms_deflate != 0)
-				|| (cdms_netcdf4 == 1)) {
-		    if(strstr(controlpath, "http") == NULL){
-		        ncmode = ncmode | NC_NETCDF4;
-		    }
-		}
 #ifdef PARALLEL
 		/* ok we can only use MPIIO if not using shuffle or deflate for reason
 		 * why

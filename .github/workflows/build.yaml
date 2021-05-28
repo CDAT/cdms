@@ -1,0 +1,67 @@
+name: Build workflow
+
+on:
+  push:
+    branches:
+      - master
+
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test_package:
+    name: Test CDMS2 package
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash -l {0}
+    strategy:
+      matrix:
+        os: [ubuntu-latest,macos-latest]
+        py: [3.6,3.7,3.8,3.9]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cache conda
+        uses: actions/cache@v2.1.5
+        env:
+          CACHE_NUMBER: 1
+        with:
+          path: ~/conda_pkgs_dir
+          key:
+            ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('test-environment.yml') }}
+
+      - uses: conda-incubator/setup-miniconda@v2.1.1
+        with:
+          activate-environment: test
+          environment-file: test-environment.yml
+          python-version: ${{ matrix.py }}
+          auto-activate-base: false
+          miniforge-variant: Mambaforge
+          use-only-tar-bz2: true # IMPORTANT: This needs to be set for caching to work properly!
+          condarc-file: condarc
+
+      - name: Cache data
+        uses: actions/cache@v2.1.5
+        env:
+          CACHE_NUMBER: 4
+        with:
+          path: ~/envs/test/share/cdat/sample_data
+          key:
+            test-data-${{ env.CACHE_NUMBER }}
+
+      - name: conda info
+        run: |
+          conda info
+          conda list
+
+      - name: install package
+        run: |
+          python setup.py install
+
+      - name: run tests
+        run: |
+          pytest -vvv tests/ -n auto --ignore tests/test_forecast_io.py
+
+          pytest -vvv tests/test_forecast_io.py

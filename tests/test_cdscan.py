@@ -26,8 +26,8 @@ def diffElements(el1, el2):
         if el2.get(k) != el1.get(k):
             return el1.get(k), el2.get(k)
 
-    el1_kids = el1.getchildren()
-    el2_kids = el2.getchildren()
+    el1_kids = list(el1)
+    el2_kids = list(el2)
     if len(el1_kids) != len(el2_kids):
         return "%d children" % len(el1_kids), "%d children" % len(el2_kids)
 

@@ -48,7 +48,7 @@ clean-docs:
 test:
 	$(CONDA_ENV); \
 		$(CONDA_ACTIVATE) base; \
-		conda env create -f test-environment.yml || exit 0; \
+		conda env create -f test-environment.yml; \
 		$(CONDA_ACTIVATE) test; \
 		python setup.py build; \
 		python setup.py install; \

@@ -22,10 +22,16 @@ from .grid import createRectGrid, AbstractRectGrid
 from .hgrid import AbstractCurveGrid
 from .gengrid import AbstractGenericGrid
 from six import string_types, PY2
+from .util import getenv_bool
+
+mpi_disabled = getenv_bool("CDMS_NO_MPI", "False")
 
 # dist array support
 HAVE_MPI = False
 try:
+    if mpi_disabled:
+        raise Exception()
+
     from mpi4py import MPI
     HAVE_MPI = True
 except BaseException:

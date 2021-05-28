@@ -34,6 +34,7 @@ from . import convention
 import warnings
 from collections import OrderedDict
 from six import string_types
+from .util import getenv_bool
 
 # Default is serial mode until setNetcdfUseParallelFlag(1) is called
 rk = 0
@@ -41,7 +42,13 @@ sz = 1
 Cdunif.CdunifSetNCFLAGS("use_parallel", 0)
 CdMpi = False
 
+mpi_disabled = getenv_bool("CDMS_NO_MPI", "False")
+
 try:
+    # skip trying to load mpi4py module
+    if mpi_disabled:
+        raise Exception()
+
     from mpi4py import rc
     rc.initialize = False
     from mpi4py import MPI
@@ -182,6 +189,9 @@ def setNetcdfUseParallelFlag(value):
        -------
        No return value.
     """
+    if mpi_disabled:
+        raise CDSMError("MPI support is disabled.")
+
     global CdMpi
     if value not in [True, False, 0, 1]:
         raise CDMSError(

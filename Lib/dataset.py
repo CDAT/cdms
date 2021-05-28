@@ -2166,7 +2166,6 @@ class CdmsFile(CdmsObj, cuDataset):
         if _showCompressWarnings:
             if (Cdunif.CdunifGetNCFLAGS("shuffle") != 0) or (Cdunif.CdunifGetNCFLAGS(
                     "deflate") != 0) or (Cdunif.CdunifGetNCFLAGS("deflate_level") != 0):
-                import warnings
                 warnings.warn("Files are written with compression and no shuffling\n" +
                               "You can query different values of compression using the functions:\n" +
                               "cdms2.getNetcdfShuffleFlag() returning 1 if shuffling is enabled, " +

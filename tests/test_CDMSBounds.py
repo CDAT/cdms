@@ -3,6 +3,7 @@ import cdms2
 import unittest
 import numpy
 import os
+import uuid
 
 
 class TestCDMSAutobounds(unittest.TestCase):
@@ -10,7 +11,9 @@ class TestCDMSAutobounds(unittest.TestCase):
     def createFile(self, minLon, maxLon, offset):
         # Create a test netCDF file and load it with one grid of data.
         #
-        testFile = cdms2.open('testFile.nc', 'w')
+        uid = str(uuid.uuid4())[:8]
+        self.filename = f"testFile-{uid}.nc"
+        testFile = cdms2.open(self.filename, 'w')
         latitudes = numpy.linspace(-89.975, 89.975,
                                    num=3600, dtype=numpy.float32)
 
@@ -47,7 +50,7 @@ class TestCDMSAutobounds(unittest.TestCase):
         cdms2.setAutoBounds('on')
 
     def teardown(self):
-        os.remove("testFile.nc")
+        os.remove(self.filename)
 
     def test_Bounds10th(self):
         exponent = -10
@@ -55,7 +58,7 @@ class TestCDMSAutobounds(unittest.TestCase):
         self.createFile(-180, 180, offset)
         # Open the test file and get the CDMS2 longitude axis.
         #
-        testFile = cdms2.open('testFile.nc')
+        testFile = cdms2.open(self.filename)
         var = testFile.variables['tos']
         axes = var.getAxisList()
         for axis in axes:
@@ -66,7 +69,7 @@ class TestCDMSAutobounds(unittest.TestCase):
         self.assertAlmostEqual(bounds[0, 0], -179.999031067, 5)
         self.assertEqual(bounds[-1, 1], 180.00096893310547)
 #        self.assertAlmostEqual(bounds[-1, 1], 180.000984192, 5)
-        os.remove('testFile.nc')
+        os.remove(self.filename)
 
     def test_BoundsReverse11th(self):
         exponent = -11
@@ -74,7 +77,7 @@ class TestCDMSAutobounds(unittest.TestCase):
         self.createFile(180, -180, offset)
         # Open the test file and get the CDMS2 longitude axis.
         #
-        testFile = cdms2.open('testFile.nc')
+        testFile = cdms2.open(self.filename)
         var = testFile.variables['tos']
         axes = var.getAxisList()
         for axis in axes:
@@ -84,7 +87,7 @@ class TestCDMSAutobounds(unittest.TestCase):
         bounds = axis.getBounds()
         self.assertEqual(bounds[0, 0], 180.0)
         self.assertEqual(bounds[-1, 1], -180.0)
-        os.remove('testFile.nc')
+        os.remove(self.filename)
 
     def test_Bounds11th(self):
         exponent = -11
@@ -92,7 +95,7 @@ class TestCDMSAutobounds(unittest.TestCase):
         self.createFile(-180, 180, offset)
         # Open the test file and get the CDMS2 longitude axis.
         #
-        testFile = cdms2.open('testFile.nc')
+        testFile = cdms2.open(self.filename)
         var = testFile.variables['tos']
         axes = var.getAxisList()
         for axis in axes:
@@ -102,7 +105,7 @@ class TestCDMSAutobounds(unittest.TestCase):
         bounds = axis.getBounds()
         self.assertEqual(bounds[0, 0], -180.0)
         self.assertEqual(bounds[-1, 1], 180.0)
-        os.remove('testFile.nc')
+        os.remove(self.filename)
 
     def test_BoundsPolar(self):
         f=cdms2.open(cdat_info.get_sampledata_path() + "/stereographic.nc")

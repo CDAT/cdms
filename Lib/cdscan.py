@@ -18,6 +18,7 @@ from functools import reduce
 from cdms2.error import CDMSError
 from collections import OrderedDict
 from six import string_types
+from cdsm2.util import getenv_bool
 usage = """Usage:
     cdscan [options] <files>
 
@@ -1840,7 +1841,12 @@ def main(argv):
 # ------------------------------------------------------------------------
 if __name__ == '__main__':
     main(sys.argv)
+    mpi_disabled = getenv_bool("CDMS_NO_MPI", "False")
     try:
+        # skip trying to load mpi4py module
+        if mpi_disabled:
+            raise Exception()
+
         from mpi4py import MPI
         comm = MPI.Comm.Get_parent()
         comm.send('done', dest=0)

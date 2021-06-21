@@ -18,7 +18,7 @@ from functools import reduce
 from cdms2.error import CDMSError
 from collections import OrderedDict
 from six import string_types
-from cdsm2.util import getenv_bool
+from cdms2.util import getenv_bool
 usage = """Usage:
     cdscan [options] <files>
 

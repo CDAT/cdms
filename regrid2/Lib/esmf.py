@@ -18,6 +18,9 @@ from regrid2 import RegridError
 import ESMF
 from functools import reduce
 
+from .util import getenv_bool
+
+
 # constants
 R8 = ESMF.TypeKind.R8
 R4 = ESMF.TypeKind.R4
@@ -463,7 +466,13 @@ class EsmfStructField:
         # communicator
         self.comm = None
 
+        mpi_disabled = getenv_bool("CDMS_NO_MPI", "False")
+
         try:
+            # skip trying to load mpi4py module
+            if mpi_disabled:
+                raise Exception()
+
             from mpi4py import MPI
             self.comm = MPI.COMM_WORLD
         except BaseException:

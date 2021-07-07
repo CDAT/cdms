@@ -22,9 +22,16 @@ try:
 except Exception:
     os.environ['MPICH_INTERFACE_HOSTNAME'] = 'localhost'
 
+from .util import getenv_bool
+
 ESMF.Manager(debug=False)
 HAVE_MPI = False
+mpi_disabled = getenv_bool("CDMS_NO_MPI", "False")
+
 try:
+    # skip trying to load mpi4py module
+    if mpi_disabled:
+        raise Exception()
     from mpi4py import MPI
     HAVE_MPI = True
 except BaseException:

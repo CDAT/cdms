@@ -189,9 +189,6 @@ def setNetcdfUseParallelFlag(value):
        -------
        No return value.
     """
-    if mpi_disabled:
-        raise CDSMError("MPI support is disabled.")
-
     global CdMpi
     if value not in [True, False, 0, 1]:
         raise CDMSError(
@@ -199,6 +196,9 @@ def setNetcdfUseParallelFlag(value):
     if value in [0, False]:
         Cdunif.CdunifSetNCFLAGS("use_parallel", 0)
     else:
+        if mpi_disabled:
+            raise CDMSError("MPI support is disabled.")
+
         Cdunif.CdunifSetNCFLAGS("use_parallel", 1)
         CdMpi = True
         if not MPI.Is_initialized():

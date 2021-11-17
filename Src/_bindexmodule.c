@@ -258,10 +258,10 @@ _bindex_bindex (PyObject* unused, PyObject* args) {
     int eLONS[1];
     PyObject* HEAD;
     PyArrayObject* aHEAD;
-    int eHEAD[1];
+    Py_ssize_t eHEAD[1];
     PyObject* NEXT;
     PyArrayObject* aNEXT;
-    int eNEXT[1];
+    Py_ssize_t eNEXT[1];
     aLATS = (PyArrayObject*) 0;
     aLONS = (PyArrayObject*) 0;
     aHEAD = (PyArrayObject*) 0;

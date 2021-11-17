@@ -16,6 +16,8 @@
 .workdir
 .tempdir
 TAGS
+*.so
+*.a
 *~
 *swp
 *.cache

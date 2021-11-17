@@ -18,7 +18,7 @@ from regrid2 import RegridError
 import ESMF
 from functools import reduce
 
-from .util import getenv_bool
+from cdms2.util import getenv_bool
 
 
 # constants

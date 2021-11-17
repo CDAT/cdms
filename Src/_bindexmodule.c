@@ -391,9 +391,9 @@ _bindex_intersect (PyObject* unused, PyObject* args) {
     PyArrayObject* aPOINTS;
     int ePOINTS[1];
     char* LATIND;
-    int nLATIND;
+    Py_ssize_t nLATIND;
     char* LONIND;
-    int nLONIND;
+    Py_ssize_t nLONIND;
     aLATS = (PyArrayObject*) 0;
     aLONS = (PyArrayObject*) 0;
     aHEAD = (PyArrayObject*) 0;

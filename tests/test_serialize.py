@@ -12,23 +12,23 @@ from nose.plugins.attrib import attr
 
 @attr("cdms_dask")
 @gen_cluster(client=True)
-def testDaskArrayFV(c, s, a, b):
+async def testDaskArrayFV(c, s, a, b):
     f = cdms2.open(cdat_info.get_sampledata_path()+"/clt.nc")
     dataFV=f["clt"]
     myDaskArray= da.from_array(dataFV, chunks=(1,46,72)) 
     x=c.compute(myDaskArray)
-    myResult = yield x
+    myResult = await x
     assert MV2.allclose(myResult, dataFV)==True
     f.close()
 
 @attr("cdms_dask")
 @gen_cluster(client=True)
-def testDaskArrayTV(c, s, a, b):
+async def testDaskArrayTV(c, s, a, b):
     f = cdms2.open(cdat_info.get_sampledata_path()+"/clt.nc")
     dataTV=f("clt")
     myDaskArray= da.from_array(dataTV, chunks=(1,46,72)) 
     y=c.compute(myDaskArray)
-    myTVResult = yield y
+    myTVResult = await y
     assert MV2.allclose(myTVResult, dataTV)==True
     f.close()
 

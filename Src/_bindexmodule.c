@@ -1,6 +1,7 @@
 #ifdef __CPLUSPLUS__
 extern "C" {
 #endif
+#define PY_SSIZE_T_CLEAN
 #include "Python.h"
 #include "numpy/arrayobject.h"
 #include "py3c.h"

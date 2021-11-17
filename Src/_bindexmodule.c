@@ -1,6 +1,7 @@
 #ifdef __CPLUSPLUS__
 extern "C" {
 #endif
+#define PY_SSIZE_T_CLEAN
 #include "Python.h"
 #include "numpy/arrayobject.h"
 #include "py3c.h"
@@ -390,9 +391,9 @@ _bindex_intersect (PyObject* unused, PyObject* args) {
     PyArrayObject* aPOINTS;
     int ePOINTS[1];
     char* LATIND;
-    int nLATIND;
+    Py_ssize_t nLATIND;
     char* LONIND;
-    int nLONIND;
+    Py_ssize_t nLONIND;
     aLATS = (PyArrayObject*) 0;
     aLONS = (PyArrayObject*) 0;
     aHEAD = (PyArrayObject*) 0;

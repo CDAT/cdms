@@ -22,7 +22,7 @@ try:
 except Exception:
     os.environ['MPICH_INTERFACE_HOSTNAME'] = 'localhost'
 
-from .util import getenv_bool
+from cdms2.util import getenv_bool
 
 ESMF.Manager(debug=False)
 HAVE_MPI = False

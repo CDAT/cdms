@@ -1490,7 +1490,7 @@ avariable.regrid: We chose regridMethod = %s for you among the following choices
         slicelist = []
         for i in range(self.rank()):
             key = speclist[i]
-            if isinstance(key, int):  # x[i]
+            if isinstance(key, (int, numpy.int32, numpy.int64)):  # x[i]
                 slicelist.append(slice(key, key + 1))
             elif isinstance(key, slice):  # x[i:j:k]
                 slicelist.append(key)
